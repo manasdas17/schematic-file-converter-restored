@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Basic Strategy
 # 0) Ignore data except the useful
 # 1) Read in all of the segments (and junctions and components)
@@ -69,12 +67,21 @@ class KiCAD:
                 # TODO(ajray): ignore all the fields for now, probably
                 # could make these annotations
 
-                while f.readline().strip() not in ("$EndComp", ''):
-                    pass
+                line = f.readline()
+                rotation = 0
+
+                while line.strip() not in ("$EndComp", ''):
+                    if line.startswith('\t'):
+                        parts = line.strip().split()
+                        if len(parts) == 4:
+                            key = tuple(int(i) for i in parts)
+                            rotation = _matrix2rotation.get(key, 0)
+                    line = f.readline()
 
                 # TODO: calculate rotation
                 inst = ComponentInstance(reference, name, 0)
-                inst.add_symbol_attribute(SymbolAttribute(compx, compy, 0))
+                inst.add_symbol_attribute(SymbolAttribute(compx, compy,
+                                                          rotation))
 
                 circuit.add_component_instance(inst)
 
@@ -131,9 +138,10 @@ class KiCAD:
                 angle, x, y = [int(i) for i in parts[1:4]]
                 angle = round(angle / 1800.0, 1)
                 text = parts[8].replace('~', ' ')
-                body.add_shape(shape.Label(x, y, text, 'left', angle))
+                align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+                body.add_shape(shape.Label(x, y, text, align, angle))
             elif prefix == 'X': # Pin
-                num, direction = int(parts[2]), parts[6]
+                num, direction = parts[2], parts[6]
                 p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
                 if direction == 'U': # up
                     p1x = p2x
@@ -224,3 +232,9 @@ class KiCAD:
             nets.append(newnet)
 
         return nets
+
+
+_matrix2rotation = {(1, 0, 0, -1): 0,
+                    (0, 1, 1, 0): 0.5,
+                    (-1, 0, 0, 1): 1,
+                    (0, -1, -1, 0): 1.5}
