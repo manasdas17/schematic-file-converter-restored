@@ -12,18 +12,20 @@
 #   ./upconvert.py -i test.upv -o test.json 
 
 
-import parser.openjson, parser.kicad
-import writer.openjson, writer.kicad
+import parser.openjson, parser.kicad, parser.geda
+import writer.openjson, writer.kicad, writer.geda
 from argparse import ArgumentParser
 
 parsers = {
     'openjson': parser.openjson.JSON,
-    'kicad': parser.kicad.KiCAD
+    'kicad': parser.kicad.KiCAD,
+    'geda': parser.geda.GEDA,
 }
 
 writers = {
     'openjson': writer.openjson.JSON,
-    'kicad': writer.kicad.KiCAD
+    'kicad': writer.kicad.KiCAD,
+    'geda': writer.geda.GEDA,
 }
 
 
