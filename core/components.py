@@ -89,9 +89,9 @@ class Body:
 
     def bounds(self):
         """ Return the in and max points of the bounding box around a body """
-        limits = [s.bounds() for s in self.shapes + self.pins]
-        x_values = sum([list(b[0::2]) for b in limits], [])
-        y_values = sum([list(b[1::2]) for b in limits], [])
+        points = sum([s.bounds() for s in self.shapes + self.pins], [])
+        x_values = [pt.x for pt in points]
+        y_values = [pt.y for pt in points]
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 
@@ -131,8 +131,8 @@ class Pin:
         x_values = [self.p1.x, self.p2.x]
         y_values = [self.p2.y, self.p2.y]
         if self.label is not None:
-            x_values += self.label.bounds()[0::2]
-            y_values += self.label.bounds()[1::2]
+            x_values.extend([pt.x for pt in self.label.bounds()])
+            y_values.extend([pt.y for pt in self.label.bounds()])
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 

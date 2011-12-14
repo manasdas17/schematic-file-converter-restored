@@ -19,9 +19,10 @@ class Net:
         """ Return the min and max points of the bounding box """
         x_values = [p.x for p in self.points.values()]
         y_values = [p.y for p in self.points.values()]
-        bounds = [ann.bounds() for ann in self.annotations]
-        x_values += sum([list(bound[0::2]) for bound in bounds], [])
-        y_values += sum([list(bound[1::2]) for bound in bounds], [])
+        # get a list of all the bounding points for annotations
+        bounds = sum([ann.bounds() for ann in self.annotations], [])
+        x_values.extend([pt.x for pt in bounds])
+        y_values.extend([pt.y for pt in bounds])
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 
