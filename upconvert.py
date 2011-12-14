@@ -14,13 +14,15 @@ Upverter's Open JSON Interchange Format """
 #   ./upconvert.py -i test.upv -o test.json 
 
 
-import parser.openjson, parser.kicad
+import os, re, copy, json
+import parser.openjson, parser.kicad, parser.eaglexml
 import writer.openjson, writer.kicad
 from argparse import ArgumentParser
 
 PARSERS = {
     'openjson': parser.openjson.JSON,
-    'kicad': parser.kicad.KiCAD
+    'kicad': parser.kicad.KiCAD,
+    'eaglexml': parser.eaglexml.EagleXML,
 }
 
 WRITERS = {
@@ -80,4 +82,8 @@ if __name__ == "__main__":
 
     # parse and export the data
     design = parse(inputfile, inputtype)
-    write(design, outputfile, outputtype)
+    if design is not None: # we got a good result
+        write(design, outputfile, outputtype)
+    else: # parse returned None -> something went wrong
+        print "Output cancelled due to previous errors."
+        exit(1)
