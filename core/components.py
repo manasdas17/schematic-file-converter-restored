@@ -1,4 +1,8 @@
-from shape import Point
+#!/usr/bin/env python
+""" The component class """
+
+from core.shape import Point
+
 
 class Components:
     """ Container class for individual 'Component's.

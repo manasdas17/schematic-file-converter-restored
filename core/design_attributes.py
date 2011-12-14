@@ -1,5 +1,8 @@
 #!/usr/bin/env python
+""" The attributes class """
+
 import time
+
 
 class DesignAttributes:
     """ The DesignAttributes class corresponds to the design_attributes

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+""" The instance class """
+
 
 class ComponentInstance:
     """ An instance of a component with a specific symbol """

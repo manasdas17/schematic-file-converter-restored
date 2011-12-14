@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+""" The annotation class """
 
-from shape import Point
+from core.shape import Point
 
 
 class Annotation:

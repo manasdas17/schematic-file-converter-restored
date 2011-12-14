@@ -1,7 +1,10 @@
 #!/usr/bin/env python
-from design_attributes import DesignAttributes
-from components import Components
-from shape import Point
+""" The design class """
+
+from core.design_attributes import DesignAttributes
+from core.components import Components
+from core.shape import Point
+
 
 class Design:
     """ The Design class represents the whole schematic, which is also
@@ -27,7 +30,8 @@ class Design:
             lib_comp = self.components.components[comp.library_id]
             bbounds = [b.bounds() for b in
                        lib_comp.symbols[comp.symbol_index].bodies]
-            bounds.extend([offset_bounds(b, o) for b, o in zip(bbounds, offsets)])
+            bounds.extend([offset_bounds(b, o) for b, o in zip(bbounds,
+                       offsets)])
             xs = sum([list(b[0::2]) for b in bounds], [])
             ys = sum([list(b[1::2]) for b in bounds], [])
         return [Point(min(xs), min(ys)), Point(max(xs), max(ys))]

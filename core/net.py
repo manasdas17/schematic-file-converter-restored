@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-from shape import Point
+""" The net class """
+
+from core.shape import Point
+
 
 class Net:
     """ a Net with metadata and a list of points (with connections)

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+""" The shape class """
+
 
 class Shape:
     """a Shape with metadata and a list of shape parts
@@ -81,7 +83,8 @@ class Rectangle(Shape):
 
 
 class RoundedRectangle(Shape):
-    """ A rectangle with rounded corners, defined by x,y of top left corner and width, height and corner radius"""
+    """ A rectangle with rounded corners, defined by x,y of top left corner
+    and width, height and corner radius"""
 
     def __init__(self, x, y, width, height, radius):
         """ x and y are from the top left corner of the rectangle """
@@ -145,7 +148,8 @@ class RoundedRectangle(Shape):
 
 
 class Arc(Shape):
-    """ arc defined by center point x,y and two angles between which an arc is drawn """
+    """ arc defined by center point x,y and two angles between which an
+    arc is drawn """
 
     def __init__(self, x, y, start_angle, end_angle, radius):
         self.type = "arc"

@@ -16,7 +16,7 @@ import tarfile
 ###################
 
 def build_lint(target, source, env):
-    args = ['pylint', '--reports=n', '--disable=C0103']
+    args = ['pylint', '--reports=n', '--disable=C0103', '--disable=W0511']
     args.extend([str(py) for py in source])
     return subprocess.call(args)
 bld_lint = Builder(action=build_lint)
