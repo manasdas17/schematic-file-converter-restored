@@ -2,7 +2,7 @@
 """ The shape class """
 
 
-class Shape:
+class Shape(object):
     """a Shape with metadata and a list of shape parts
     Iternal representation of the shapes closely matches JSON shapes """
 
