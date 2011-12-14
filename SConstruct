@@ -29,6 +29,7 @@ bld_check = Builder(action=build_check)
 
 def build_test(target, source, env):
     args = ['nosetests', '--all-modules', 'core', 'parser', 'writer']
+    args.extend([str(py) for py in source])
     return subprocess.call(args)
 bld_test = Builder(action=build_test)
 
@@ -68,14 +69,19 @@ all_source.extend([str(py) for py in core_source])
 all_source.extend([str(py) for py in parser_source])
 all_source.extend([str(py) for py in writer_source])
 
-all_tests = []
-os.path.walk('.', filter_test, all_tests)
+core_tests = []
+os.path.walk('./core', filter_test, core_tests)
 
 parser_tests = []
 os.path.walk('./parser', filter_test, parser_tests)
 
 writer_tests = []
 os.path.walk('./writer', filter_test, writer_tests)
+
+all_tests = []
+all_tests.extend([str(py) for py in core_tests])
+all_tests.extend([str(py) for py in parser_tests])
+all_tests.extend([str(py) for py in writer_tests])
 
 
 ###################
