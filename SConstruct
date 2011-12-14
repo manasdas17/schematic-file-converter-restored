@@ -33,6 +33,13 @@ def build_test(target, source, env):
     return subprocess.call(args)
 bld_test = Builder(action=build_test)
 
+def build_coverage(target, source, env):
+    args = ['nosetests', '--with-coverage', '--all-modules',
+            'core', 'parser', 'writer']
+    args.extend([str(py) for py in source])
+    return subprocess.call(args)
+bld_coverage = Builder(action=build_coverage)
+
 
 ###################
 # Filters
@@ -91,6 +98,7 @@ all_tests.extend([str(py) for py in writer_tests])
 env = Environment(BUILDERS = {'test': bld_test,
                               'lint': bld_lint,
                               'check': bld_check,
+                              'coverage': bld_coverage,
                              },
                   ENV = {'PATH' : os.environ['PATH']},
                   tools = ['default'])
@@ -98,8 +106,10 @@ env = Environment(BUILDERS = {'test': bld_test,
 lint = env.lint(['fake_target_to_force_lint'], all_source)
 check = env.check(['fake_target_to_force_check'], all_source)
 test = env.test(['fake_target_to_force_test'], all_tests)
+coverage = env.coverage(['fake_target_to_force_coverage'], all_tests)
 
 env.Alias('lint', lint)
 env.Alias('check', check)
 env.Alias('test', test)
+env.Alias('coverage', coverage)
 env.Alias('all', '.')
