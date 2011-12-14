@@ -2,6 +2,9 @@
 """ The shape class """
 
 
+from math import sqrt
+
+
 class Shape(object):
     """a Shape with metadata and a list of shape parts
     Iternal representation of the shapes closely matches JSON shapes """
@@ -370,10 +373,48 @@ class BezierCurve(Shape):
         self.p1 = Point(p1)
         self.p2 = Point(p2)
     
+
+    def _line(self):
+        segments = [(self.p1, self.control1),
+                    (self.control1, self.control2),
+                    (self.control2, self.p1)]
+        # calculate maximum path length as straight lines between each point,
+        # (think the curve itself can be no longer than that) then double it so
+        # as not to skip points, and use that to decide t step size. Quite
+        # possible too many points will result.
+        maxpath = sum([sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) for
+                       p1, p2 in segments]) * 2
+        # textbook Bezier interpolation
+        Bx = lambda t: int(round((1-t) * (1-t) * (1-t) * self.p1.x +
+                                 3 * (1-t) * (1-t) * t * self.control1.x +
+                                 3 * (1-t) * t * t * self.control2.x +
+                                 t * t * t * self.p2.x))
+        By = lambda t: int(round((1-t) * (1-t) * (1-t) * self.p1.y +
+                                 3 * (1-t) * (1-t) * t * self.control1.y +
+                                 3 * (1-t) * t * t * self.control2.y +
+                                 t * t * t * self.p2.y))
+        points = [Point(Bx(t), By(t)) for t in [float(s)/maxpath for s in
+                                                range(int(maxpath) + 1)]]
+        return points
+
     
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
+
+
+    def min_point(self):
+        pts = self._line()
+        x_pts = [pt.x for pt in pts]
+        y_pts = [pt.y for pt in pts]
+        return Point(min(x_pts), min(y_pts))
+
+
+    def max_point(self):
+        pts = self._line()
+        x_pts = [pt.x for pt in pts]
+        y_pts = [pt.y for pt in pts]
+        return Point(max(x_pts), max(y_pts))
 
 
     def build(self, control1x, control1y, control2x, control2y, p1x,
