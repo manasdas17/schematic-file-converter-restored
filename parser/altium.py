@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-#
-# Basic Strategy
-# 0) ...
+""" The Altium Format Parser """
 
 from core.design import Design
 
 
 class Altium:
-""" The Altium Format Parser """
+    """ The Altium Format Parser """
 
     def __init__(self):
         pass
@@ -15,7 +13,7 @@ class Altium:
 
     def parse(self, filename):
         """ Parse an Altium file into a design """
-        design = design()
+        design = Design()
         f = open(filename, "w")
         #TODO: Read!
         f.close()

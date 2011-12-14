@@ -1,3 +1,5 @@
+""" The KiCAD Format Writer """
+
 import time
 
 from os.path import splitext
