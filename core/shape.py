@@ -128,11 +128,8 @@ class RoundedRectangle(Shape):
     def from_corners(cls, x, y, x2, y2, radius):
         """ x and y are the top left corner of the rectangle, x2 and y2 are the
         bottom right corner of the rectangle """
-        x = x
-        y = y
         width = x2-x
         height = y2-y
-        radius = radius
         return cls(x, y, width, height, radius)
 
 
@@ -165,18 +162,6 @@ class Arc(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-
-
-    def min_point(self):
-        """ Return the min point of the shape """
-        # FIXME This is too big right now
-        raise NotImplementedError("Not implemented")
-    
-    
-    def max_point(self):
-        """ Return the max point of the shape """
-        # FIXME This is too big right now
-        raise NotImplementedError("Not implemented")
 
 
     def json(self):
@@ -259,18 +244,6 @@ class Label(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-
-
-    def min_point(self):
-        """ Return the min point of the shape """
-        # FIXME Absolutely no clue how to make this dependably correct
-        raise NotImplementedError("Not implemented")
-    
-    
-    def max_point(self):
-        """ Return the max point of the shape """
-        # FIXME Absolutely no clue how to make this dependably correct
-        raise NotImplementedError("Not implemented")
 
 
     def json(self):
@@ -403,18 +376,6 @@ class BezierCurve(Shape):
         return [self.min_point(), self.max_point()]
 
 
-    def min_point(self):
-        """ Return the min point of the shape """
-        # FIXME This needs to be implemented
-        raise NotImplementedError("Not implemented")
-    
-    
-    def max_point(self):
-        """ Return the max point of the shape """
-        # FIXME This needs to be implemented
-        raise NotImplementedError("Not implemented")
-
-
     def build(self, control1x, control1y, control2x, control2y, p1x,
             p1y, p2x, p2y):
         """ Build the bezier curve """
@@ -450,11 +411,6 @@ class Point:
         # Allow for instantiation from a tuple
         else:
             self.x, self.y = x
-    
-    
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        raise NotImplementedError("Not implemented")
 
 
     def json(self):

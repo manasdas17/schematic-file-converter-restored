@@ -5,7 +5,6 @@
 # 0) 1:1 Input of the data model
 
 import json
-import core
 from core.annotation import *
 from core.component_instance import *
 from core.components import *
@@ -189,7 +188,7 @@ class JSON:
         elif 'polygon' == typ:
             p = Polygon()
             for point in shape.get('points'):
-                p.addPoint(self.parse_point(point))
+                p.add_point(self.parse_point(point))
             return p
         elif 'bezier' == typ:
             control1 = self.parse_point(shape.get('control1'))

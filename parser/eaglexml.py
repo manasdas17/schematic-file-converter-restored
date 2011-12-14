@@ -70,7 +70,8 @@ class EagleXML:
         if root.tag.lower() != "eagle":
             print "ERROR reading eagle XML file, root tag is not 'eagle'"
             return None
-        eagle = Eagle(root)
+        return Eagle(root)
+
 
 class Eagle:
     def __init__(self, eagle):
@@ -83,10 +84,12 @@ class Eagle:
         for d in eagle.findall('drawing'): #TODO: warn if multiples
             self.drawing = Drawing(d)
 
+
 class Note:
     def __init__(self, note):
         self.version  = note.get("version")  #TODO: warn if absent
         self.severity = note.get("severity") #TODO: warn if absent
+
 
 class Drawing:
     def __init__(self, drawing):
@@ -116,8 +119,8 @@ class Library:
         #
         for d in library.findall('description'): #TODO: warn if multiples
             self.description = d.text 
-        for p in library.findall('packages'):
-            for p in packaddges.findall('package'):
+        for packages in library.findall('packages'):
+            for p in packages.findall('package'):
                 self.package[p.get("name")]=Package(p)
         for symbols in library.findall('symbols'):
             for s in symbols.findall('symbol'):
@@ -135,6 +138,7 @@ class Schematic:
         self.class_     = dict() # Python has a cluttered namespace
         self.part       = list()
         self.sheet      = list()
+        self.error      = list()
         self.xreflabel  = schematic.get("xreflabel")
         self.xrefpart   = schematic.get("xrefpart")
         # Someone needs to teach CADSoft how to do proper XML plurality
@@ -179,6 +183,7 @@ class Board:
         for d in board.findall('description'): #TODO: warn if multiples
             self.description = d.text
         for plain in board.findall('plain'):
+            self.plain = plain
             pass
         for libraries in board.findall('libraries'):
             for l in libraries.findall('library'):
@@ -217,6 +222,7 @@ class Sheet:
         for d in sheet.findall('description'): #TODO: warn if multiples
             self.description = d.text
         for plain in sheet.findall('plain'):
+            self.plain = plain
             pass
         for instances in sheet.findall('instances'):
             for i in instances.findall('instance'):
@@ -236,15 +242,24 @@ class Package:
         #TODO: populate the symbols
         for d in package.findall('description'): #TODO: warn if multiples
             self.description = d.text
-        for p in package.findall('polygon'):   self.package.append(Polygon(p))
-        for w in package.findall('wire'):      self.package.append(Wire(w))
-        for t in package.findall('text'):      self.package.append(Text(t))
-        for c in package.findall('circle'):    self.package.append(Circle(c))
-        for r in package.findall('rectangle'): self.package.append(Rectangle(r))
-        for f in package.findall('frame'):     self.package.append(Frame(f))
-        for h in package.findall('hole'):      self.package.append(Hole(h))
-        for p in package.findall('pad'):       self.package.append(Pad(p))
-        for s in package.findall('smd'):       self.package.append(Smd(s))
+        for p in package.findall('polygon'):   
+            self.symbol.append(Polygon(p))
+        for w in package.findall('wire'):      
+            self.symbol.append(Wire(w))
+        for t in package.findall('text'):      
+            self.symbol.append(Text(t))
+        for c in package.findall('circle'):    
+            self.symbol.append(Circle(c))
+        for r in package.findall('rectangle'): 
+            self.symbol.append(Rectangle(r))
+        for f in package.findall('frame'):     
+            self.symbol.append(Frame(f))
+        for h in package.findall('hole'):      
+            self.symbol.append(Hole(h))
+        for p in package.findall('pad'):       
+            self.symbol.append(Pad(p))
+        for s in package.findall('smd'):       
+            self.symbol.append(Smd(s))
 
 class Symbol:
     def __init__(self, symbol):
@@ -253,13 +268,20 @@ class Symbol:
         self.name        = symbol.get("name") #TODO: warn if not present
         for d in symbol.findall('description'):
             self.description = d.text
-        for p in symbol.findall('polygon'):   self.shape.append(Polygon(p))
-        for w in symbol.findall('wire'):      self.shape.append(Wire(w))
-        for t in symbol.findall('text'):      self.shape.append(Text(t))
-        for p in symbol.findall('pin'):       self.shape.append(Pin(p))
-        for c in symbol.findall('circle'):    self.shape.append(Circle(c))
-        for r in symbol.findall('rectangle'): self.shape.append(Rectangle(r))
-        for f in symbol.findall('frame'):     self.shape.append(Frame(f))
+        for p in symbol.findall('polygon'):   
+            self.shape.append(Polygon(p))
+        for w in symbol.findall('wire'):      
+            self.shape.append(Wire(w))
+        for t in symbol.findall('text'):      
+            self.shape.append(Text(t))
+        for p in symbol.findall('pin'):       
+            self.shape.append(Pin(p))
+        for c in symbol.findall('circle'):    
+            self.shape.append(Circle(c))
+        for r in symbol.findall('rectangle'): 
+            self.shape.append(Rectangle(r))
+        for f in symbol.findall('frame'):     
+            self.shape.append(Frame(f))
 
 class Deviceset:
     def __init__(self, deviceset):
@@ -272,10 +294,10 @@ class Deviceset:
         for d in deviceset.findall('description'):
             self.description = d.text
         for gates in deviceset.findall('gates'):
-            for g in deviceset.findall('gate'):
+            for g in gates.findall('gate'):
                 self.gate[g.get("name")]=Gate(g)
         for devices in deviceset.findall('devices'):
-            for d in deviceset.findall('device'):
+            for d in devices.findall('device'):
                 self.device.append(Device(d))
 
 class Device:
@@ -286,7 +308,7 @@ class Device:
         self.package     = device.get("package") 
         for connects in device.findall('connects'):
             for c in connects.findall('connect'):
-                self.device.append(Connect(c))
+                self.connect.append(Connect(c))
         for technologies in device.findall('technologies'):
             for t in technologies.findall('technology'):
                 self.technology[t.get("name")]=Technology(t)
@@ -329,14 +351,18 @@ class Signal:
         self.name           = signal.get("name") #TODO: warn if not present
         self.class_         = signal.get("class") #TODO: warn if not present
         self.airwireshidden = signal.get("airwireshidden") #TODO: warn if not 
-        for c in segment.findall('contactref'):
+        for c in signal.findall('contactref'):
             self.contactref.append(Contactref(c))
-        for p in segment.findall('polygon'):
+        for p in signal.findall('polygon'):
             self.polygon.append(Polygon(p))
-        for w in segment.findall('wire'):
+        for w in signal.findall('wire'):
             self.wire.append(Wire(w))
-        for v in segment.findall('via'):
+        for v in signal.findall('via'):
             self.via.append(Via(v))
+
+class Error:
+    def __init__(self, name):
+        pass
 
 class Variantdef:
     def __init__(self, variantdef):
@@ -384,7 +410,7 @@ class Dimension:
 
 class Text:
     def __init__(self, text):
-        self.pcdata         = description.findall('#PCDATA') #TODO:check me!
+        self.pcdata         = text.get('#PCDATA') #TODO:check me!
         self.x              = text.get("x")
         self.y              = text.get("y")
         self.size           = text.get("size")
@@ -618,7 +644,7 @@ class Grid:
         self.altunitdist    = grid.get("altunitdist")
         self.altunit        = grid.get("altunit")
 
-class layer:
+class Layer:
     def __init__(self, layer):
         self.number         = layer.get("number")
         self.name           = layer.get("name")

@@ -22,7 +22,7 @@ def build_lint(target, source, env):
 bld_lint = Builder(action=build_lint)
 
 def build_check(target, source, env):
-    args = ['pychecker']
+    args = ['pychecker', '--limit=100']
     args.extend([str(py) for py in source])
     return subprocess.call(args)
 bld_check = Builder(action=build_check)
