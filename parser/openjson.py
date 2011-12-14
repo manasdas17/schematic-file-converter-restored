@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#
+""" The Open JSON Format Parser """
+
 # Basic Strategy
 # 0) 1:1 Input of the data model
 
@@ -12,6 +13,7 @@ from core.design import *
 from core.design_attributes import *
 from core.shape import *
 from core.net import *
+
 
 class JSON:
     """ The Open JSON Format Parser

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-#
-# Basic Strategy
-# 0) ...
+""" The GEDA Format Parser """
 
 from core.design import Design
 

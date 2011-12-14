@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#
+""" The Eagle XML Format Parser """
+
 # Basic Strategy
 # 1) read all symbols into self.symbols
 # 2) read all gates (instances of symbols) into self.gates
@@ -37,7 +38,6 @@
 # TODO(ajray): I have the hierarchy of bodies and symbols in the parsed schematic wonky
 # TODO(ajray): Having each class check it's tag to verify would be great. Though I
 #     can't imagine them being called outside of this file (so that shouldnt happen)
-
 
 import math
 from core.design import *

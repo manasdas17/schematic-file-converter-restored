@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#
+""" The KiCAD Format Parser """
+
 # Basic Strategy
 # 0) Ignore data except the useful
 # 1) Read in all of the segments (and junctions and components)
