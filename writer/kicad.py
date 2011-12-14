@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#
+""" The KiCAD Format Writer """
+
 # Basic Strategy
 # 0) ...
 

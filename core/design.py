@@ -32,9 +32,10 @@ class Design:
                        lib_comp.symbols[comp.symbol_index].bodies]
             bounds.extend([offset_bounds(b, o) for b, o in zip(bbounds,
                        offsets)])
-            xs = sum([list(b[0::2]) for b in bounds], [])
-            ys = sum([list(b[1::2]) for b in bounds], [])
-        return [Point(min(xs), min(ys)), Point(max(xs), max(ys))]
+            x_values = sum([list(b[0::2]) for b in bounds], [])
+            y_values = sum([list(b[1::2]) for b in bounds], [])
+        return [Point(min(x_values), min(y_values)),
+                Point(max(x_values), max(y_values))]
 
 
     def set_version(self, file_version, exporter):

@@ -55,9 +55,9 @@ class Metadata:
         self.name = name
 
 
-    def set_license(self, license):
+    def set_license(self, lic):
         """ Set the licence """
-        self.license = license
+        self.license = lic
 
 
     def set_owner(self, owner):

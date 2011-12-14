@@ -47,12 +47,12 @@ class KiCAD:
         while line:
             element = line.split()[0] # whats next on the list
             if element == "Wire": # Wire Segment, coords on 2nd line
-                x1,y1,x2,y2 = [int(i) for i in f.readline().split()]
+                x1, y1, x2, y2 = [int(i) for i in f.readline().split()]
                 if not(x1 == x2 and y1 == y2): # ignore zero-length segments
-                    segments.add(((x1,y1),(x2,y2)))
+                    segments.add(((x1, y1),(x2, y2)))
             elif element == "Connection": # Store these to apply later
-                x,y = [int(i) for i in line.split()[2:4]]
-                junctions.add((x,y))
+                x, y = [int(i) for i in line.split()[2:4]]
+                junctions.add((x, y))
             elif element == "$Comp": # Component Instance
                 # name & reference
                 prefix, name, reference = f.readline().split()
@@ -122,7 +122,7 @@ class KiCAD:
                 poly = shape.Polygon()
                 for i in xrange(num_points):
                     x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-                    poly.addPoint(x, y)
+                    poly.add_point(x, y)
                 body.add_shape(poly)
             elif prefix == 'S': # Rectangle
                 x, y, x2, y2 = [int(i) for i in parts[1:5]]
@@ -160,16 +160,16 @@ class KiCAD:
 
     def intersect(self, segment, c):
         """ Does point c intersect the segment """
-        a,b = segment
-        ax,ay, bx,by, cx,cy = a + b + c
+        a, b = segment
+        ax, ay, bx, by, cx, cy = a + b + c
         if ax == bx == cx: # Vertical
-            if cy > min(ay,by) and cy < max(ay,by): # between a and b
+            if cy > min(ay, by) and cy < max(ay, by): # between a and b
                 return True
         elif ay == by == cy: # Horizontal
-            if cx > min(ax,bx) and cx < max(ax,bx): # between a and b
+            if cx > min(ax, bx) and cx < max(ax, bx): # between a and b
                 return True
         elif (cx-ax)*(by-ay)==(bx-ax)*(cy-ay): # Diagonal
-            if cx > min(ax,bx) and cx < max(ax,bx): # between a and b
+            if cx > min(ax, bx) and cx < max(ax, bx): # between a and b
                 return True
         return False
 
@@ -180,11 +180,11 @@ class KiCAD:
             toremove = set()
             toadd = set()
             for seg in segments:
-                if self.intersect(seg,c):
-                    a,b = seg
-                    toremove.add((a,b))
-                    toadd.add((a,c))
-                    toadd.add((c,b))
+                if self.intersect(seg, c):
+                    a, b = seg
+                    toremove.add((a, b))
+                    toadd.add((a, c))
+                    toadd.add((c, b))
             segments -= toremove
             segments |= toadd
         return segments
@@ -193,7 +193,7 @@ class KiCAD:
     def calc_nets(self, segments):
         """ Return a set of Nets from segments """
 
-        points = {} # (x,y) -> NetPoint
+        points = {} # (x, y) -> NetPoint
 
         def get_point(p):
             if p not in points:

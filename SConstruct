@@ -16,7 +16,7 @@ import tarfile
 ###################
 
 def build_lint(target, source, env):
-    args = ['pylint', '--reports=n', '--disable=C0103', '--disable=W0511']
+    args = ['pylint', '--rcfile=.pylintrc']
     args.extend([str(py) for py in source])
     return subprocess.call(args)
 bld_lint = Builder(action=build_lint)
@@ -54,8 +54,19 @@ def filter_test(arg, top, names):
 # File Lists
 ###################
 
+core_source = []
+os.path.walk('./core', filter_source, core_source)
+
+parser_source = []
+os.path.walk('./parser', filter_source, parser_source)
+
+writer_source = []
+os.path.walk('./writer', filter_source, writer_source)
+
 all_source = []
-os.path.walk('.', filter_source, all_source)
+all_source.extend([str(py) for py in core_source])
+all_source.extend([str(py) for py in parser_source])
+all_source.extend([str(py) for py in writer_source])
 
 all_tests = []
 os.path.walk('.', filter_test, all_tests)

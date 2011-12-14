@@ -17,12 +17,13 @@ class Net:
 
     def bounds(self):
         """ Return the min and max points of the bounding box """
-        xs = [p.x for p in self.points.values()]
-        ys = [p.y for p in self.points.values()]
-        bounds = [a.bounds() for a in self.annotations]
-        xs += sum([list(b[0::2]) for b in bounds], [])
-        ys += sum([list(b[1::2]) for b in bounds], [])
-        return [Point(min(xs), min(ys)), Point(max(xs), max(ys))]
+        x_values = [p.x for p in self.points.values()]
+        y_values = [p.y for p in self.points.values()]
+        bounds = [ann.bounds() for ann in self.annotations]
+        x_values += sum([list(bound[0::2]) for bound in bounds], [])
+        y_values += sum([list(bound[1::2]) for bound in bounds], [])
+        return [Point(min(x_values), min(y_values)),
+                Point(max(x_values), max(y_values))]
 
 
     def add_annotation(self, annotation):
@@ -35,38 +36,38 @@ class Net:
         self.attributes[key] = value
 
 
-    def add_point(self, p):
+    def add_point(self, point):
         """ Add a point p to the net """
-        self.points[p.point_id] = p
+        self.points[point.point_id] = point
 
-    def conn_point(self, a, b):
+    def conn_point(self, point_a, point_b):
         """ connect point b to point a """
-        self.points[a.point_id].connected_points.append(b.point_id)
+        self.points[point_a.point_id].connected_points.append(point_b.point_id)
 
 
     def connected(self, seg):
         """ is segment connected to this net """
-        a, b = seg
-        return a.point_id in self.points or b.point_id in self.points
+        point_a, point_b = seg
+        return point_a.point_id in self.points or point_b.point_id in self.points
 
 
     def connect(self, seg):
         """ connect segment to this net """
-        a, b = seg
-        if a.point_id not in self.points:
-            self.add_point(a)
-        self.conn_point(a, b)
-        if b.point_id not in self.points:
-            self.add_point(b)
-        self.conn_point(b, a)
+        point_a, point_b = seg
+        if point_a.point_id not in self.points:
+            self.add_point(point_a)
+        self.conn_point(point_a, point_b)
+        if point_b.point_id not in self.points:
+            self.add_point(point_b)
+        self.conn_point(point_b, point_a)
 
     def json(self):
         """ Return a net as JSON """
         return {
             "net_id":self.net_id,
             "attributes":self.attributes,
-            "annotations":[a.json() for a in self.annotations],
-            "points":[p.json() for p in self.points.values()]
+            "annotations":[ann.json() for ann in self.annotations],
+            "points":[point.json() for point in self.points.values()]
             }
 
 
@@ -99,7 +100,7 @@ class NetPoint:
             "y" : self.y,
             "connected_points" : self.connected_points,
             "connected_components" :
-                [cc.json() for cc in self.connected_components]
+                [comp.json() for comp in self.connected_components]
             }
 
 

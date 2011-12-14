@@ -41,7 +41,7 @@ class JSON:
     def parse_version(self, version):
         file_version = version.get('file_version')
         exporter = version.get('exporter')
-        self.design.set_version(file_version,exporter)
+        self.design.set_version(file_version, exporter)
 
 
     def parse_component_instances(self, component_instances):
@@ -59,7 +59,7 @@ class JSON:
                 inst.add_symbol_attribute(sa)
 
             # Get the Attributes
-            for key,value in instance.get('attributes').items():
+            for key, value in instance.get('attributes').items():
                 inst.add_attribute(key, value)
 
             # Add the ComponentInstance
@@ -71,7 +71,7 @@ class JSON:
         y = int(symbol_attribute.get('y'))
         rotation = float(symbol_attribute.get('rotation'))
         # Make SymbolAttribute
-        sa = SymbolAttribute(x,y,rotation)
+        sa = SymbolAttribute(x, y, rotation)
         # Add Annotations
         for annotation in symbol_attribute.get('annotations'):
             a = self.parse_annotation(annotation)
@@ -90,20 +90,20 @@ class JSON:
             visible = 'false'
         else:
             visible = 'true'
-        return Annotation(value,x,y,rotation,visible)
+        return Annotation(value, x, y, rotation, visible)
 
 
     def parse_components(self, components):
-        for library_id,component in components.items():
+        for library_id, component in components.items():
             name = component.get('name')
             c = Component(name)
             # Get attributes
-            for key,value in component.get('attributes').items():
-                c.add_attribute(key,value)
+            for key, value in component.get('attributes').items():
+                c.add_attribute(key, value)
             for symbol in component.get('symbols'):
                 s = self.parse_symbol(symbol)
                 c.add_symbol(s)
-            self.design.add_component(library_id,c)
+            self.design.add_component(library_id, c)
 
 
     def parse_symbol(self, symbol):
@@ -125,67 +125,67 @@ class JSON:
         return b
 
 
-    def parse_pin(self,pin):
+    def parse_pin(self, pin):
         pin_number = pin.get('pin_number')
         p1 = self.parse_point(pin.get('p1'))
         p2 = self.parse_point(pin.get('p2'))
         if None != pin.get('pin_label'):
             pin_label = self.parse_label(pin.get('pin_label'))
-            return Pin(pin_number,p1,p2,pin_label)
-        return Pin(pin_number,p1,p2)
+            return Pin(pin_number, p1, p2, pin_label)
+        return Pin(pin_number, p1, p2)
 
 
-    def parse_point(self,point):
+    def parse_point(self, point):
         x = int(point.get('x'))
         y = int(point.get('y'))
-        return Point(x,y)
+        return Point(x, y)
 
-    def parse_label(self,label):
+    def parse_label(self, label):
         x = int(label.get('x'))
         y = int(label.get('y'))
         text = label.get('text')
         align = label.get('align')
         rotation = float(label.get('rotation'))
-        return Label(x,y,text,align,rotation)
+        return Label(x, y, text, align, rotation)
 
-    def parse_shape(self,shape):
+    def parse_shape(self, shape):
         typ = shape.get('type')
         if 'rectangle' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
-            return Rectangle(x,y,width,height)
+            return Rectangle(x, y, width, height)
         elif 'rounded_rectangle' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
             radius = int(shape.get('radius'))
-            return RoundedRectangle(x,y,width,height,radius)
+            return RoundedRectangle(x, y, width, height, radius)
         elif 'arc' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             start_angle = float(shape.get('start_angle'))
             end_angle = float(shape.get('end_angle'))
             radius = int(shape.get('radius'))
-            return Arc(x,y,start_angle,end_angle,radius)
+            return Arc(x, y, start_angle, end_angle, radius)
         elif 'circle' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             radius = int(shape.get('radius'))
-            return Circle(x,y,radius)
+            return Circle(x, y, radius)
         elif 'label' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             rotation = float(shape.get('rotation'))
             text = shape.get('text')
             align = shape.get('align')
-            return Label(x,y,text,align,rotation)
+            return Label(x, y, text, align, rotation)
         elif 'line' == typ:
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
-            return Line(p1,p2)
+            return Line(p1, p2)
         elif 'polygon' == typ:
             p = Polygon()
             for point in shape.get('points'):
@@ -196,7 +196,7 @@ class JSON:
             control2 = self.parse_point(shape.get('control2'))
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
-            return BezierCurve(control1,control2,p1,p2)
+            return BezierCurve(control1, control2, p1, p2)
 
 
     def parse_design_attributes(self, design_attributes):
@@ -207,7 +207,7 @@ class JSON:
             da.add_annotation(a)
 
         # Get the Attributes
-        for key,value in design_attributes.get('attributes').items():
+        for key, value in design_attributes.get('attributes').items():
             da.add_attribute(key, value)
 
         # Get the Metadata
@@ -239,7 +239,7 @@ class JSON:
                 a = self.parse_annotation(annotation)
                 n.add_annotation(a)
             # Get the Attributes
-            for key,value in net.get('attributes').items():
+            for key, value in net.get('attributes').items():
                 n.add_attribute(key, value)
             # Get the Points
             for net_point in net.get('points'):
@@ -248,11 +248,11 @@ class JSON:
             self.design.add_net(n)
 
 
-    def parse_net_point(self,net_point):
+    def parse_net_point(self, net_point):
         point_id = net_point.get('point_id')
         x = int(net_point.get('x'))
         y = int(net_point.get('y'))
-        np = NetPoint(point_id,x,y)
+        np = NetPoint(point_id, x, y)
         # Get the connected points
         for point in net_point.get('connected_points'):
             np.add_connected_point(point)
@@ -263,13 +263,13 @@ class JSON:
         return np
 
 
-    def parse_connected_component(self,connectedcomponent):
+    def parse_connected_component(self, connectedcomponent):
         instance_id = connectedcomponent.get('instance_id')
         pin_number = connectedcomponent.get('pin_number')
         return ConnectedComponent(instance_id, pin_number)
 
 if __name__ == '__main__':
-  #Test case
-  test = JSON()
-  test.parse('/home/m/Downloads/High-Voltage-Converter-90V-From-15V.upv')
-  open('./trololoTest.json', 'w').write(test.design.json())
+    #Test case
+    test = JSON()
+    test.parse('/home/m/Downloads/High-Voltage-Converter-90V-From-15V.upv')
+    open('./trololoTest.json', 'w').write(test.design.json())

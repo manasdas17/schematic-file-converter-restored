@@ -58,8 +58,8 @@ class EagleXML:
         self.design = Design()
         # In the order they are parsed:
         self.symbols = dict()   # key:library_id  val:Symbol()
-        self.gates = dict()     # key:gate_id     val:{lib,devset,sym}
-        self.parts = dict()     # key:instance_id val:{lib,devset,dev}
+        self.gates = dict()     # key:gate_id     val:{lib, devset, sym}
+        self.parts = dict()     # key:instance_id val:{lib, devset, dev}
         self.version = None     # EAGLE program version that generated this file ('V.RR')
 
     def parse(self, filename):
@@ -107,7 +107,7 @@ class Drawing:
 
 
 class Library:
-    def __init__(self,library):
+    def __init__(self, library):
         self.description = None
         self.package     = dict()
         self.symbol      = dict()
@@ -148,7 +148,7 @@ class Schematic:
                 self.attribute[a.get("name")]=Attribute(a)
         for variantdefs in schematic.findall('variantdefs'):
             for v in variantdefs.findall('variantdef'):
-				self.variantdef[v.get("name")]=Variantdef(v)
+                self.variantdef[v.get("name")]=Variantdef(v)
         for classes in schematic.findall('classes'):
             for c in classes.findall('class'):
                 self.class_[c.get("name")]=Class(c)
@@ -188,7 +188,7 @@ class Board:
                 self.attribute[a.get("name")]=Attribute(a)
         for variantdefs in board.findall('variantdefs'):
             for v in variantdefs.findall('variantdef'):
-				self.variantdef[v.get("name")]=Variantdef(v)
+                self.variantdef[v.get("name")]=Variantdef(v)
         for classes in board.findall('classes'):
             for c in classes.findall('class'):
                 self.class_[c.get("name")]=Class(c)
@@ -247,7 +247,7 @@ class Package:
         for s in package.findall('smd'):       self.package.append(Smd(s))
 
 class Symbol:
-    def __init__(self,symbol):
+    def __init__(self, symbol):
         self.description = None
         self.shape       = list()
         self.name        = symbol.get("name") #TODO: warn if not present
@@ -262,7 +262,7 @@ class Symbol:
         for f in symbol.findall('frame'):     self.shape.append(Frame(f))
 
 class Deviceset:
-    def __init__(self,deviceset):
+    def __init__(self, deviceset):
         self.description = None
         self.gate        = dict()
         self.device      = list()
@@ -279,7 +279,7 @@ class Deviceset:
                 self.device.append(Device(d))
 
 class Device:
-    def __init__(self,device):
+    def __init__(self, device):
         self.connect     = list()
         self.technology  = dict()
         self.name        = device.get("name") 
@@ -292,14 +292,14 @@ class Device:
                 self.technology[t.get("name")]=Technology(t)
 
 class Bus:
-    def __init__(self,bus):
+    def __init__(self, bus):
         self.segment    = list()
         self.name       = bus.get("name") #TODO: warn if not present
         for s in bus.findall('segment'):
             self.segment.append(Segment(s))
 
 class Net:
-    def __init__(self,net):
+    def __init__(self, net):
         self.segment    = list()
         self.name       = net.get("name") #TODO: warn if not present
         for s in net.findall('segment'):
@@ -321,7 +321,7 @@ class Segment:
             self.label.append(Label(l))
 
 class Signal:
-    def __init__(self,signal):
+    def __init__(self, signal):
         self.contactref     = list()
         self.polygon        = list()
         self.wire           = list()
@@ -487,7 +487,7 @@ class Via:
         self.alwaysstop     = via.get("alwaysstop")
 
 class Polygon:
-    def __init__(self,polygon):
+    def __init__(self, polygon):
         self.vertex         = list()
         self.width          = polygon.get("width")
         self.layer          = polygon.get("layer")
@@ -501,13 +501,13 @@ class Polygon:
             self.vertex.append(Vertex(v))
 
 class Vertex:
-    def __init__(self,vertex):
+    def __init__(self, vertex):
         self.x              = vertex.get("x")
         self.y              = vertex.get("y")
         self.curve          = vertex.get("curve")
 
 class Pin:
-    def __init__(self,pin):
+    def __init__(self, pin):
         self.name           = pin.get("name")
         self.x              = pin.get("x")
         self.y              = pin.get("y")
@@ -519,7 +519,7 @@ class Pin:
         self.rot            = pin.get("rot")
 
 class Part:
-    def __init__(self,part):
+    def __init__(self, part):
         self.attribute      = list()
         self.variant        = list()
         self.name           = part.get("name")
@@ -534,7 +534,7 @@ class Part:
             self.variant.append(Variant(v))
 
 class Instance:
-    def __init__(self,instance):
+    def __init__(self, instance):
         self.attribute      = list()
         self.part           = instance.get("part")
         self.gate           = instance.get("gate")
@@ -546,7 +546,7 @@ class Instance:
             self.attribute.append(Attribute(a))
 
 class Label:
-    def __init__(self,label):
+    def __init__(self, label):
         self.x              = label.get("x")
         self.y              = label.get("y")
         self.size           = label.get("size")
@@ -557,26 +557,26 @@ class Label:
         self.xref           = label.get("xref")
 
 class Junction:
-    def __init__(self,junction):
+    def __init__(self, junction):
         self.x              = junction.get("x")
         self.y              = junction.get("y")
 
 class Connect:
-    def __init__(self,connect):
+    def __init__(self, connect):
         self.gate           = connect.get("gate")
         self.pin            = connect.get("pin")
         self.pad            = connect.get("pad")
         self.route          = connect.get("route")
 
 class Technology:
-    def __init__(self,technology):
+    def __init__(self, technology):
         self.attribute      = list()
         self.name           = technology.get("name")
         for a in technology.findall('attribute'):
             self.attribute.append(Attribute(a))
 
 class Attribute:
-    def __init__(self,attribute):
+    def __init__(self, attribute):
         self.name           = attribute.get("name")
         self.value          = attribute.get("value")
         self.x              = attribute.get("x")
@@ -590,24 +590,24 @@ class Attribute:
         self.constant       = attribute.get("constant")
 
 class Pinref:
-    def __init__(self,pinref):
+    def __init__(self, pinref):
         self.part           = pinref.get("part")
         self.gate           = pinref.get("gate")
         self.pin            = pinref.get("pin")
 
 class Contactref:
-    def __init__(self,contactref):
+    def __init__(self, contactref):
         self.element        = contactref.get("element")
         self.pad            = contactref.get("pad")
         self.route          = contactref.get("route")
 
 class Setting:
-    def __init__(self,setting):
+    def __init__(self, setting):
         self.alwaysvectorfont = setting.get("alwaysvectorfont")
         self.verticaltext   = setting.get("verticaltext")
 
 class Grid:
-    def __init__(self,grid):
+    def __init__(self, grid):
         self.distance       = grid.get("distance")
         self.unitdist       = grid.get("unitdist")
         self.unit           = grid.get("unit")
@@ -619,7 +619,7 @@ class Grid:
         self.altunit        = grid.get("altunit")
 
 class layer:
-    def __init__(self,layer):
+    def __init__(self, layer):
         self.number         = layer.get("number")
         self.name           = layer.get("name")
         self.color          = layer.get("color")
@@ -628,7 +628,7 @@ class layer:
         self.active         = layer.get("active")
 
 class Class:
-    def __init__(self,class_):
+    def __init__(self, class_):
         self.clearance      = list()
         self.number         = class_.get("number")
         self.name           = class_.get("name")
@@ -638,22 +638,22 @@ class Class:
             self.clearance.append(Clearance(c))
 
 class Clearance:
-    def __init__(self,clearance):
+    def __init__(self, clearance):
         self.class_         = clearance.get('class')
         self.value          = clearance.get("value")
 
 class Description:
-    def __init__(self,description):
+    def __init__(self, description):
         self.pcdata         = description.findall('#PCDATA') #TODO:check me!
         self.language       = description.get("language")
 
 class Param:
-    def __init__(self,param):
+    def __init__(self, param):
         self.name           = param.get("name")
         self.value          = param.get("value")
 
 class Pass:
-    def __init__(self,pass_):
+    def __init__(self, pass_):
         self.param          = list()
         self.name           = pass_.get("param")
         self.refer          = pass_.get("refer")
@@ -662,6 +662,6 @@ class Pass:
             self.param.append(Param(p))
 
 class Approved:
-    def __init__(self,approved):
+    def __init__(self, approved):
         self.hash_          = approved.get('hash')
 

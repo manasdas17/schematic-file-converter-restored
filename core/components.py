@@ -19,10 +19,10 @@ class Components:
 
     def json(self):
         """ Copy to a new dictionary to return """
-        d = dict()
+        ret = dict()
         for library_id, component in self.components.items():
-            d[library_id] = component.json()
-        return d
+            ret[library_id] = component.json()
+        return ret
 
 
 class Component:
@@ -90,9 +90,10 @@ class Body:
     def bounds(self):
         """ Return the in and max points of the bounding box around a body """
         limits = [s.bounds() for s in self.shapes + self.pins]
-        xs = sum([list(b[0::2]) for b in limits], [])
-        ys = sum([list(b[1::2]) for b in limits], [])
-        return [Point(min(xs), min(ys)), Point(max(xs), max(ys))]
+        x_values = sum([list(b[0::2]) for b in limits], [])
+        y_values = sum([list(b[1::2]) for b in limits], [])
+        return [Point(min(x_values), min(y_values)),
+                Point(max(x_values), max(y_values))]
 
 
     def add_pin(self, pin):
@@ -127,21 +128,22 @@ class Pin:
 
     def bounds(self):
         """ Return the min and max points of a pin """
-        xs = [self.p1.x, self.p2.x]
-        ys = [self.p2.y, self.p2.y]
+        x_values = [self.p1.x, self.p2.x]
+        y_values = [self.p2.y, self.p2.y]
         if self.label is not None:
-            xs += self.label.bounds()[0::2]
-            ys += self.label.bounds()[1::2]
-        return [Point(min(xs), min(ys)), Point(max(xs), max(ys))]
+            x_values += self.label.bounds()[0::2]
+            y_values += self.label.bounds()[1::2]
+        return [Point(min(x_values), min(y_values)),
+                Point(max(x_values), max(y_values))]
 
 
     def json(self):
         """ Return a pin as JSON """
-        d = {
+        ret = {
             "pin_number":self.pin_number,
             "p1":self.p1.json(),
             "p2":self.p2.json()
             }
         if self.label is not None:
-            d["label"] = self.label.json()
-        return d
+            ret["label"] = self.label.json()
+        return ret
