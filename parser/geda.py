@@ -2,6 +2,8 @@
 """ The gEDA schematics are based on a grid in MILS (1/1000 of an inch).
 """
 
+import os
+
 from core.design import Design
 
 
@@ -39,9 +41,27 @@ class GEDA:
         'z': None, # closepath
     }
 
-    def __init__(self):
-        pass
+    def __init__(self, symbol_dirs=None):
+        if symbol_dirs is None:
+            ##TODO: should default symdirs be used??
+            symbol_dirs = []
+            #    '/usr/share/gEDA/sym',
+            #    '/usr/local/share/gEDA/sym',
+            #]
 
+        self.symbol_lookup = {}
+
+        for symbol_dir in symbol_dirs:
+            if os.path.exists(symbol_dir):
+                for dirpath, files, filenames in os.walk(symbol_dir):
+                    for filename in filenames:
+                        if filename.endswith('.sym'):
+                            filepath = os.path.join(dirpath, filename)
+                            self.symbol_lookup[filename] = filepath
+
+        print """WARNING: conversion will ignore style and color data in gEDA \
+format!"""
+    
     def parse(self, filename):
         """ Parse a gEDA file into a design """
         design = Design()
@@ -53,7 +73,7 @@ class GEDA:
     def parse_object(self, stream):
         line = stream.readline().split(self.DELIMITER)
 
-        if line[0] not in self.
+        #if line[0] not in self.
         print line
          
 
