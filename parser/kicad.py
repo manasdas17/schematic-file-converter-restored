@@ -16,7 +16,7 @@ from core import shape
 from os.path import exists, splitext
 
 
-class KiCAD:
+class KiCAD(object):
     """ The KiCAD Format Parser """
 
     def parse(self, filename, library_filename=None):
@@ -43,49 +43,17 @@ class KiCAD:
         # connectivity from wire segments
 
         line = f.readline()
+
         while line:
             element = line.split()[0] # whats next on the list
-            if element == "Wire": # Wire Segment, coords on 2nd line
-                x1, y1, x2, y2 = [int(i) for i in f.readline().split()]
-                if not(x1 == x2 and y1 == y2): # ignore zero-length segments
-                    segments.add(((x1, y1),(x2, y2)))
+
+            if element == "Wire":
+                self.parse_wire(f, segments)
             elif element == "Connection": # Store these to apply later
-                x, y = [int(i) for i in line.split()[2:4]]
-                junctions.add((x, y))
+                self.parse_connection(line, junctions)
             elif element == "$Comp": # Component Instance
-                # name & reference
-                prefix, name, reference = f.readline().split()
-                assert prefix == 'L'
-
-                # timestamp
-                prefix, _ = f.readline().split(None, 1)
-                assert prefix == 'U'
-
-                # position
-                prefix, compx, compy = f.readline().split()
-                assert prefix == 'P'
-                compx, compy = int(compx), int(compy)
-
-                # TODO(ajray): ignore all the fields for now, probably
-                # could make these annotations
-
-                line = f.readline()
-                rotation = 0
-
-                while line.strip() not in ("$EndComp", ''):
-                    if line.startswith('\t'):
-                        parts = line.strip().split()
-                        if len(parts) == 4:
-                            key = tuple(int(i) for i in parts)
-                            rotation = _matrix2rotation.get(key, 0)
-                    line = f.readline()
-
-                # TODO: calculate rotation
-                inst = ComponentInstance(reference, name, 0)
-                inst.add_symbol_attribute(SymbolAttribute(compx, compy,
-                                                          rotation))
-
-                circuit.add_component_instance(inst)
+                circuit.add_component_instance(
+                    self.parse_component_instance(f))
 
             line = f.readline()
 
@@ -96,6 +64,55 @@ class KiCAD:
 
         return circuit
 
+
+    def parse_wire(self, f, segments):
+        """ Parse a Wire segment line """
+        # coords on 2nd line
+        x1, y1, x2, y2 = [int(i) for i in f.readline().split()]
+
+        if not(x1 == x2 and y1 == y2): # ignore zero-length segments
+            segments.add(((x1, y1),(x2, y2)))
+
+
+    def parse_connection(self, line, junctions):
+        """ Parse a Connection line """
+        x, y = [int(i) for i in line.split()[2:4]]
+        junctions.add((x, y))
+
+
+    def parse_component_instance(self, f):
+        """ Parse a component instance from a $Comp block """
+        # name & reference
+        prefix, name, reference = f.readline().split()
+        assert prefix == 'L'
+
+        # timestamp
+        prefix, _ = f.readline().split(None, 1)
+        assert prefix == 'U'
+
+        # position
+        prefix, compx, compy = f.readline().split()
+        assert prefix == 'P'
+        compx, compy = int(compx), int(compy)
+
+        # TODO(ajray): ignore all the fields for now, probably
+        # could make these annotations
+
+        line = f.readline()
+        rotation = 0
+
+        while line.strip() not in ("$EndComp", ''):
+            if line.startswith('\t'):
+                parts = line.strip().split()
+                if len(parts) == 4:
+                    key = tuple(int(i) for i in parts)
+                    rotation = MATRIX2ROTATION.get(key, 0)
+            line = f.readline()
+
+        inst = ComponentInstance(reference, name, 0)
+        inst.add_symbol_attribute(SymbolAttribute(compx, compy, rotation))
+
+        return inst
 
     def parse_library(self, filename, circuit):
         """
@@ -117,83 +134,112 @@ class KiCAD:
                 body = Body()
                 symbol.add_body(body)
             elif prefix == 'A': # Arc
-                x, y, radius, start, end = [int(i) for i in parts[1:6]]
-                # convert tenths of degrees to pi radians
-                start = round(start / 1800.0, 1)
-                end = round(end / 1800.0, 1)
-                body.add_shape(shape.Arc(x, y, start, end, radius))
+                body.add_shape(self.parse_arc(parts))
             elif prefix == 'C': # Circle
-                x, y, radius = [int(i) for i in parts[1:4]]
-                body.add_shape(shape.Circle(x, y, radius))
+                body.add_shape(self.parse_circle(parts))
             elif prefix == 'P': # Polyline
-                num_points = int(parts[1])
-                poly = shape.Polygon()
-                for i in xrange(num_points):
-                    x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-                    poly.add_point(x, y)
-                body.add_shape(poly)
+                body.add_shape(self.parse_polyline(parts))
             elif prefix == 'S': # Rectangle
-                x, y, x2, y2 = [int(i) for i in parts[1:5]]
-                rec = shape.Rectangle(x, y, x2 - x, y2 - y)
-                body.add_shape(rec)
+                body.add_shape(self.parse_rectangle(parts))
             elif prefix == 'T': # Text
-                angle, x, y = [int(i) for i in parts[1:4]]
-                angle = round(angle / 1800.0, 1)
-                text = parts[8].replace('~', ' ')
-                align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
-                body.add_shape(shape.Label(x, y, text, align, angle))
+                body.add_shape(self.parse_text(parts))
             elif prefix == 'X': # Pin
-                num, direction = parts[2], parts[6]
-                p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
-                if direction == 'U': # up
-                    p1x = p2x
-                    p1y = p2y - pinlen
-                elif direction == 'D': # down
-                    p1x = p2x
-                    p1y = p2y + pinlen
-                elif direction == 'L': # left
-                    p1x = p2x - pinlen
-                    p1y = p2y
-                elif direction == 'R': # right
-                    p1x = p2x + pinlen
-                    p1y = p2y
-                else:
-                    raise ValueError('unexpected pin direction', direction)
-                # TODO: label?
-                body.add_pin(Pin(num, (p1x, p1y), (p2x, p2y)))
+                body.add_pin(self.parse_pin(parts))
             elif prefix == 'ENDDEF':
                 circuit.add_component(component.name, component)
 
         f.close()
 
 
-    def intersect(self, segment, c):
+    def parse_arc(self, parts):
+        """ Parse an A (Arc) line """
+        x, y, radius, start, end = [int(i) for i in parts[1:6]]
+        # convert tenths of degrees to pi radians
+        start = round(start / 1800.0, 1)
+        end = round(end / 1800.0, 1)
+        return shape.Arc(x, y, start, end, radius)
+
+
+    def parse_circle(self, parts):
+        """ Parse a C (Circle) line """
+        x, y, radius = [int(i) for i in parts[1:4]]
+        return shape.Circle(x, y, radius)
+
+
+    def parse_polyline(self, parts):
+        """ Parse a P (Polyline) line """
+        num_points = int(parts[1])
+        poly = shape.Polygon()
+        for i in xrange(num_points):
+            x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
+            poly.add_point(x, y)
+        return poly
+
+
+    def parse_rectangle(self, parts):
+        """ Parse an S (Rectangle) line """
+        x, y, x2, y2 = [int(i) for i in parts[1:5]]
+        return shape.Rectangle(x, y, x2 - x, y2 - y)
+
+
+    def parse_text(self, parts):
+        """ Parse a T (Text) line """
+        angle, x, y = [int(i) for i in parts[1:4]]
+        angle = round(angle / 1800.0, 1)
+        text = parts[8].replace('~', ' ')
+        align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+        return shape.Label(x, y, text, align, angle)
+
+
+    def parse_pin(self, parts):
+        """ Parse an X (Pin) line """
+        num, direction = parts[2], parts[6]
+        p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
+        if direction == 'U': # up
+            p1x = p2x
+            p1y = p2y - pinlen
+        elif direction == 'D': # down
+            p1x = p2x
+            p1y = p2y + pinlen
+        elif direction == 'L': # left
+            p1x = p2x - pinlen
+            p1y = p2y
+        elif direction == 'R': # right
+            p1x = p2x + pinlen
+            p1y = p2y
+        else:
+            raise ValueError('unexpected pin direction', direction)
+        # TODO: label?
+        return Pin(num, (p1x, p1y), (p2x, p2y))
+
+
+    def intersect(self, segment, ptc):
         """ Does point c intersect the segment """
-        a, b = segment
-        ax, ay, bx, by, cx, cy = a + b + c
-        if ax == bx == cx: # Vertical
-            if cy > min(ay, by) and cy < max(ay, by): # between a and b
+        pta, ptb = segment
+        ptax, ptay, ptbx, ptby, ptcx, ptcy = pta + ptb + ptc
+        if ptax == ptbx == ptcx: # Vertical
+            if min(ptay, ptby) < ptcy < max(ptay, ptby): # between a and b
                 return True
-        elif ay == by == cy: # Horizontal
-            if cx > min(ax, bx) and cx < max(ax, bx): # between a and b
+        elif ptay == ptby == ptcy: # Horizontal
+            if min(ptax, ptbx) < ptcx < max(ptax, ptbx): # between a and b
                 return True
-        elif (cx-ax)*(by-ay)==(bx-ax)*(cy-ay): # Diagonal
-            if cx > min(ax, bx) and cx < max(ax, bx): # between a and b
+        elif (ptcx-ptax)*(ptby-ptay)==(ptbx-ptax)*(ptcy-ptay): # Diagonal
+            if min(ptax, ptbx) < ptcx < max(ptax, ptbx): # between a and b
                 return True
         return False
 
 
     def divide(self, segments, junctions):
         """ Divide segments by junctions """
-        for c in junctions:
+        for ptc in junctions:
             toremove = set()
             toadd = set()
             for seg in segments:
-                if self.intersect(seg, c):
-                    a, b = seg
-                    toremove.add((a, b))
-                    toadd.add((a, c))
-                    toadd.add((c, b))
+                if self.intersect(seg, ptc):
+                    pta, ptb = seg
+                    toremove.add((pta, ptb))
+                    toadd.add((pta, ptc))
+                    toadd.add((ptc, ptb))
             segments -= toremove
             segments |= toadd
         return segments
@@ -204,10 +250,11 @@ class KiCAD:
 
         points = {} # (x, y) -> NetPoint
 
-        def get_point(p):
-            if p not in points:
-                points[p] = NetPoint('%da%d' % p, *p)
-            return points[p]
+        def get_point(point):
+            """ Return a new or existing NetPoint for an (x,y) point """
+            if point not in points:
+                points[point] = NetPoint('%da%d' % point, point[0], point[1])
+            return points[point]
 
         # turn the (x, y) points into unique NetPoint objects
         segments = set((get_point(p1), get_point(p2)) for p1, p2 in segments)
@@ -236,7 +283,7 @@ class KiCAD:
         return nets
 
 
-_matrix2rotation = {(1, 0, 0, -1): 0,
-                    (0, 1, 1, 0): 0.5,
-                    (-1, 0, 0, 1): 1,
-                    (0, -1, -1, 0): 1.5}
+MATRIX2ROTATION = {(1, 0, 0, -1): 0,
+                   (0, 1, 1, 0): 0.5,
+                   (-1, 0, 0, 1): 1,
+                   (0, -1, -1, 0): 1.5}
