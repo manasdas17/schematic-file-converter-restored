@@ -1,9 +1,7 @@
 import unittest
 import StringIO
 
-from os.path import dirname, join
-
-from parser.geda import GEDA 
+from parser.geda import GEDA, GEDAParserError
 from parser.openjson import JSON
 
 #TEST_INPUT_FILE = join(dirname(__file__), 'test.sch')
@@ -39,21 +37,77 @@ class TestGEDA(unittest.TestCase):
         self.assertGreater(len(geda_parser.symbol_lookup), 0)
         self.assertTrue('title-B.sym' in geda_parser.symbol_lookup)
 
-    def test_parse_version(self):
-        sample_file = 'v 20040111 2'
-        result = self.geda_parser.parse_object(
-            StringIO.StringIO(sample_file)
-        )
+    def test_convert_text(self):
+        valid_text = """T 16900 35800 3 10 1 0 0 0 1
+Text string!"""
 
-        self.assertEquals(type(result), tuple)
+        text_stream = StringIO.StringIO(valid_text)
+        params = text_stream.readline().split(' ')[1:]
+        annotation = self.geda_parser.convert_text(text_stream, *params)
 
-        self.assertEquals(result['version'], '20040111')
-        self.assertEquals(result['fileformat_version'], '2')
+        self.assertEquals(annotation.value, "Text string!")
+        self.assertEquals(annotation.x, 1690)
+        self.assertEquals(annotation.y, 3580)
+        self.assertEquals(annotation.visible, 'true')
+        self.assertEquals(annotation.rotation, 0)
 
-    def test_parse_line(self):
-        pass
         
+        valid_text = """T 16900 35800 3 10 1 0 0 0 4
+Text string!
+And more ...
+and more ...
+text!"""
 
+        text_stream = StringIO.StringIO(valid_text)
+        params = text_stream.readline().split(' ')[1:]
+        annotation = self.geda_parser.convert_text(text_stream, *params)
+
+        text = """Text string!
+And more ...
+and more ...
+text!"""
+        self.assertEquals(annotation.value, text)
+        self.assertEquals(annotation.x, 1690)
+        self.assertEquals(annotation.y, 3580)
+        self.assertEquals(annotation.visible, 'true')
+        self.assertEquals(annotation.rotation, 0)
+
+    def test_conv_angle(self):
+        angles = [
+            (0, 0), 
+            ('90', 0.5), 
+            (180, 1.0), 
+            (220, 1.0), 
+            (270, 1.5), 
+        ]
+    
+        for angle, expected in angles:
+            converted = self.geda_parser.conv_angle(angle)
+            self.assertEquals(expected, converted)
+
+    def test_conv_bool(self):
+        for test_bool in ['1', 1, True, 'true']:
+            self.assertEquals('true', self.geda_parser.conv_bool(test_bool))
+
+        for test_bool in ['0', 0, False, 'false']:
+            self.assertEquals('false', self.geda_parser.conv_bool(test_bool))
+
+    def test_conv_mils(self):
+        test_mils = [
+            (2, 0),
+            (100, 10),
+            (3429, 340),
+            (0, 0),
+            (-50, 0),
+            (-1238, -120),
+        ]
+
+        for mils, expected in test_mils:
+            print mils
+            self.assertEquals(
+                self.geda_parser.conv_mils(mils),
+                expected
+            )
 
 if __name__ == '__main__':
     unittest.main()
