@@ -4,6 +4,8 @@
 
 import os
 
+from core import shape
+
 from core.design import Design
 from core.annotation import Annotation
 
@@ -87,9 +89,15 @@ format!"""
         self.design = Design()
         self.segments = set()
 
-        f = open(filename, "r")
+        fh = open(filename, "r")
 
-        f.close()
+        version_line = fh.readline().split(self.DELIMITER)
+        if version_line[0] != 'v':
+            raise GEDAParserError("cannot convert file, not in gEDA format")
+
+
+
+        fh.close()
         return design
 
     def parse_object(self, stream):
@@ -100,27 +108,28 @@ format!"""
             raise GEDAParserError("unknown type '%s' in file", obj_type)
 
         if obj_type == 'T':
-            ##FIXME: if text has key=value form -> design level attribute
+            ##FIXME(elbaschid): if text has key=value form -> design level attribute
 
             ##Convert regular text into annotation
-            annotation = self.convert_text(stream, *params)
+            annotation = self.parse_text(stream, *params)
 
         elif obj_type == 'G':
-            ##IGNORE: pictures are not supported in upverter
+            ##(elbaschid): pictures are not supported in upverter
             print "WARNING: ignoring picture in gEDA file. Not supported!"
         elif obj_type == 'C':
-            ##TODO: check if sym file is embedded or not 
-            ##TODO: if EMBEDDED check for [] holding embedded definition
-            ##TODO: check for optional attribute definition in {}
+            ##TODO(elbaschid): check if sym file is embedded or not 
+            ##TODO(elbaschid): if EMBEDDED check for [] holding embedded definition
+            ##TODO(elbaschid): check for optional attribute definition in {}
             raise NotImplementedError()
         elif obj_type == 'N':
-            ##TODO: process net segment into NET
-            ##TODO: check for optional attribute definition in {}
+            self.parse_segment(*params)
+            ##TODO(elbaschid): process net segment into NET
+            ##TODO(elbaschid): check for optional attribute definition in {}
             raise NotImplementedError()
         elif obj_type == 'U':
             ## bus (only graphical feature NOT component)
-            ##TODO: process bus into NET
-            ##TODO: check for optional attribute definition in {}
+            ##TODO(elbaschid): process bus into NET
+            ##TODO(elbaschid): check for optional attribute definition in {}
             raise NotImplementedError()
 
         ## object types of different environemnts
@@ -130,9 +139,8 @@ format!"""
         elif obj_type == '[':
             ##embedded component
             raise NotImplementedError()
-
     
-    def convert_text(self, stream, x, y, color, size, visiblity, 
+    def parse_text(self, stream, x, y, color, size, visiblity, 
                      show_name_value, angle, alignment, num_lines):
 
         text = []
@@ -148,6 +156,55 @@ format!"""
             self.conv_angle(angle),
             self.conv_bool(visiblity),
         )
+
+    def parse_environment(self):
+        raise NotImplementedError()
+
+    def parse_embedded_component(self):
+        raise NotImplementedError()
+
+    def parse_component(self):
+        raise NotImplementedError()
+
+    def parse_segement(self):
+        raise NotImplementedError()
+
+    def parse_bus(self):
+        raise NotImplementedError()
+
+    def parse_path(self):
+        raise NotImplementedError()
+
+    def parse_arc(self, center_x, center_y, radius, start_angle, sweep_angle, *args):
+        return shape.Arc(
+            self.conv_mils(center_x),
+            self.conv_mils(center_y),
+            self.conv_angle(start_angle),
+            self.conv_angle(start_angle + sweep_angle),
+            self.conv_mils(radius),
+        )
+        raise NotImplementedError()
+
+    def parse_line(self):
+        raise NotImplementedError()
+
+    def parse_box(self):
+        raise NotImplementedError()
+
+    def parse_circle(self):
+        raise NotImplementedError()
+
+    def parse_pin(self):
+        raise NotImplementedError()
+
+    def parse_element(self, stream):
+        element_items = stream.readline().split(self.DELIMITER)
+        object_type = element_items[0]
+        params = [int(x) for x in element_items[1:]]
+
+        ##TODO(elbaschid): check for valid object types
+        
+        return object_type, params 
 
     def conv_mils(self, mils):
         """ Converts *mils* from MILS (1/1000 of an inch) to 
@@ -175,11 +232,9 @@ format!"""
         """
         if value in ['true', 'false']:
             return value
-        return str(bool(int(value)) == True).lower()
+        return str(bool(value) == True).lower()
 
     def conv_angle(self, angle):
-        """ Converts *angle* (in degrees) to radians in 
-            steps of 0.5 as used in OpenJSON.
-        """
-        angle = int(angle)
-        return ((angle / 180.0) // 0.5) * 0.5
+        """ Converts *angle* (in degrees) to pi radians."""
+        angle = angle % 360.0
+        return round(angle/180.0, 1)
