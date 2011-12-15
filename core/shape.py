@@ -2,7 +2,7 @@
 """ The shape class """
 
 
-from math import sqrt
+from math import sqrt, pi, sin, cos
 
 
 class Shape(object):
@@ -166,6 +166,52 @@ class Arc(Shape):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
 
+
+    def _contains_angle(self, theta):
+        # normalize angles to the interval [0, 2)
+        start = self.start_angle % 2.0
+        end = self.end_angle % 2.0
+        theta = theta % 2.0
+
+        if start == end:
+            # arc is really a dot, I suppose?
+            return theta == start
+        elif start < end:
+            return start <= theta and theta <= end
+        else:
+            # arc spans [start, 2.0), wraps around, and also spans [0, end]
+            return start <= theta or theta <= end
+
+
+    def max_point(self):
+        # assuming angle is in radians/pi, such that an angle of 1.0 is 180
+        # degrees, assuming 0 is 3 o'clock, and angles increase clockwise.
+        # normalize angles to the interval [0, 2)
+        start, end = (self.start_angle % 2.0) * pi, (self.end_angle % 2.0) * pi
+        if self._contains_angle(0.5):
+            # the bottom of the circle is included
+            y = self.y + self.radius
+        else:
+            y = self.y + max([sin(start), sin(end)]) * self.radius
+        if self._contains_angle(0):
+            x = self.x + self.radius
+        else:
+            x = self.x + max([cos(start), cos(end)]) * self.radius
+        return Point(int(round(x)), int(round(y)))
+
+
+    def min_point(self):
+        start, end = (self.start_angle % 2.0) * pi, (self.end_angle % 2.0) * pi
+        if self._contains_angle(1.5):
+            # the top of the circle is included
+            y = self.y - self.radius
+        else:
+            y = self.y + min([sin(start), sin(end)]) * self.radius
+        if self._contains_angle(1):
+            x = self.x - self.radius
+        else:
+            x = self.x + min([cos(start), cos(end)]) * self.radius
+        return Point(int(round(x)), int(round(y)))
 
     def json(self):
         """ Return the arc as JSON """
