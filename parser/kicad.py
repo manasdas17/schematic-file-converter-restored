@@ -155,8 +155,8 @@ class KiCAD(object):
         """ Parse an A (Arc) line """
         x, y, radius, start, end = [int(i) for i in parts[1:6]]
         # convert tenths of degrees to pi radians
-        start = round(start / 1800.0, 1)
-        end = round(end / 1800.0, 1)
+        start = start / 1800.0
+        end = end / 1800.0
         return shape.Arc(x, y, start, end, radius)
 
 
@@ -185,7 +185,7 @@ class KiCAD(object):
     def parse_text(self, parts):
         """ Parse a T (Text) line """
         angle, x, y = [int(i) for i in parts[1:4]]
-        angle = round(angle / 1800.0, 1)
+        angle = angle / 1800.0
         text = parts[8].replace('~', ' ')
         align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
         return shape.Label(x, y, text, align, angle)
