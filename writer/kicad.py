@@ -196,9 +196,9 @@ $EndDescr
         if x == pin.p1.x: # vertical
             length = y - pin.p1.y
             if length > 0:
-                direction = 'U' # up
-            else:
                 direction = 'D' # down
+            else:
+                direction = 'U' # up
         else:
             length = x - pin.p1.x
             if length > 0:
@@ -207,7 +207,7 @@ $EndDescr
                 direction = 'R' # right
 
         f.write('X ~ %s %d %d %d %s 60 60 1 1 B\n' %
-                (pin.pin_number, x, y, length, direction))
+                (pin.pin_number, x, y, abs(length), direction))
 
 
     def write_library_footer(self, f):
