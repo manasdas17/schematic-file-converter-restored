@@ -197,10 +197,10 @@ class KiCAD(object):
         p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
         if direction == 'U': # up
             p1x = p2x
-            p1y = p2y - pinlen
+            p1y = p2y + pinlen
         elif direction == 'D': # down
             p1x = p2x
-            p1y = p2y + pinlen
+            p1y = p2y - pinlen
         elif direction == 'L': # left
             p1x = p2x - pinlen
             p1y = p2y
