@@ -29,7 +29,7 @@ class vdparser:
         tree = defaultdict(list)
         for phrase in self.stream:
             cmd, sep, args = phrase.partition(' ')
-            k,v = self.parsenode(cmd)(args)
+            k, v = self.parsenode(cmd)(args)
             tree[k].append(v)
         return tree
 
@@ -53,7 +53,7 @@ class vdparser:
                 self.stream.push(phrase)
                 break
             # Q cmd is ignored for now anyway, but need to get it out of the way
-            k,v = self.parsenode(cmd)(args)
+            k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         display = True
         if viz == '1':
@@ -120,13 +120,13 @@ class vdparser:
         # To find the centre: construct two chords using the three points. Lines
         # drawn perpendicular to and bisecting these chords will intersect at
         # the circle's centre.
-        x0,y0,x1,y1,x2,y2 = map(float, args.split())
+        x0, y0, x1, y1, x2, y2 = map(float, args.split())
         # can't allow for infinite slopes (ma and mb), and can't allow ma to be
         # a zero slope.
         while abs(x0 - x1) < 0.1 or abs(x1 - x2) < 0.1 or abs(y0 - y1) < 0.1:
-            x0,y0,x1,y1,x2,y2 = x1,y1,x2,y2,x0,y0
+            x0, y0, x1, y1, x2, y2 = x1, y1, x2, y2, x0, y0
         # slopes of the chords
-        ma,mb = (y1-y0)/(x1-x0), (y2-y1)/(x2-x1)
+        ma, mb = (y1-y0)/(x1-x0), (y2-y1)/(x2-x1)
         # find the centre
         xc = (ma*mb*(y0-y2) + mb*(x0+x1) - ma*(x1+x2)) / (2*(mb-ma))
         yc = (-1/ma) * (xc - (x0+x1)/2) + (y0+y1)/2
@@ -134,7 +134,7 @@ class vdparser:
         r = sqrt((xc-x0)**2 + (yc-y0)**2)
 
         # re-init xs,ys so that start and end points don't get confused.
-        x0,y0,x1,y1,x2,y2 = map(float, args.split())
+        x0, y0, x1, y1, x2, y2 = map(float, args.split())
 
         def angle(x, y):
             # correcting for the y-origin will flip the angle through the y=x
@@ -201,8 +201,8 @@ class ViewDrawSch(vdparser):
             ann = Annotation(lbl.text, lbl.x, lbl.y, lbl.rotation, True)
             ckt.design_attributes.add_annotation(ann)
         
-        for k,v in tree['attr']:
-            ckt.design_attributes.add_attribute(k,v)
+        for k, v in tree['attr']:
+            ckt.design_attributes.add_attribute(k, v)
 
         self.correct_y(ckt, tree['Dbounds'][0])
         return ckt
@@ -212,10 +212,10 @@ class ViewDrawSch(vdparser):
         subdata = defaultdict(list)
         for phrase in self.stream:
             cmd, sep, args = phrase.partition(' ')
-            if cmd not in ('J','S','A','L','Q','B'):
+            if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
                 self.stream.push(phrase)
                 break
-            k,v = self.parsenode(cmd)(args)
+            k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         # finish building thisnet
         for netpt in subdata['netpoint'][:]:
@@ -237,7 +237,7 @@ class ViewDrawSch(vdparser):
         thisnet.ibpts = subdata['netpoint']
 
         map(thisnet.add_point, subdata['netpoint'])
-        for a,b in subdata['segment']:
+        for a, b in subdata['segment']:
             thisnet.connect((subdata['netpoint'][a - 1],
                              subdata['netpoint'][b - 1]))
         for annot in subdata['annot']:
@@ -256,7 +256,7 @@ class ViewDrawSch(vdparser):
 
     def parse_seg(self, args):
         a, b = map(int, args.split())
-        return ('segment', (a,b))
+        return ('segment', (a, b))
 
     def parse_inst(self, args):
         inst, libname, libnum, x, y, rot, scale, b = args.split()
@@ -273,10 +273,10 @@ class ViewDrawSch(vdparser):
         subdata = defaultdict(list)
         for phrase in self.stream:
             cmd, sep, args = phrase.partition(' ')
-            if cmd not in ('|R','A','C'):
+            if cmd not in ('|R', 'A', 'C'):
                 self.stream.push(phrase)
                 break
-            k,v = self.parsenode(cmd)(args)
+            k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)
@@ -389,7 +389,7 @@ class ViewDrawSym(vdparser):
             if cmd not in ('L'):
                 self.stream.push(phrase)
                 break
-            k,v = self.parsenode(cmd)(args)
+            k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         if len(subdata['label']) > 0:
             # I suppose if there's more than one label, just go with the first
@@ -433,12 +433,12 @@ class ViewDraw:
         # All the symbol files I have seen have a filename like partname.n
         # where n is a number, for multi-versioned parts I'm guessing
         for libname, libdir in self.symdirs.items():
-           files = [f for f in listdir(libdir)
-                    if f.rpartition('.')[-1].isdigit()]
-    
-           sym = ViewDrawSym(libdir)
-           for f in files:
-               lib.add_component((libname + ':' + f).lower(), sym.parse(f))
+            files = [f for f in listdir(libdir)
+                     if f.rpartition('.')[-1].isdigit()]
+     
+            sym = ViewDrawSym(libdir)
+            for f in files:
+                lib.add_component((libname + ':' + f).lower(), sym.parse(f))
 
         sheets = list()
         schfiles = [f for f in listdir(self.schdir)
