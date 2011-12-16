@@ -11,7 +11,7 @@ from core.design import Design
 from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
 from core.net import Net, NetPoint
-from core import shape
+from core.shape import Arc, Circle, Polygon, Rectangle, Label
 
 from os.path import exists, splitext
 
@@ -53,7 +53,7 @@ class KiCAD(object):
                 self.parse_connection(line, junctions)
             elif element == "$Comp": # Component Instance
                 circuit.add_component_instance(
-                    self.parse_component_instance(f))
+                    self.parse_component_instance(f, circuit.components))
 
             line = f.readline()
 
@@ -80,14 +80,15 @@ class KiCAD(object):
         junctions.add((x, y))
 
 
-    def parse_component_instance(self, f):
+    def parse_component_instance(self, f, components):
         """ Parse a component instance from a $Comp block """
         # name & reference
         prefix, name, reference = f.readline().split()
         assert prefix == 'L'
 
-        # timestamp
-        prefix, _ = f.readline().split(None, 1)
+        # unit & convert
+        prefix, unit, convert, _ = f.readline().split(None, 3)
+        unit, convert = int(unit), int(convert)
         assert prefix == 'U'
 
         # position
@@ -109,7 +110,13 @@ class KiCAD(object):
                     rotation = MATRIX2ROTATION.get(key, 0)
             line = f.readline()
 
-        inst = ComponentInstance(reference, name, 0)
+        if name in components.components:
+            num_units = len(components.components[name].symbols)
+            symbol_index = (unit - 1) + (num_units / 2 if convert == 2 else 0)
+        else:
+            symbol_index = 0
+
+        inst = ComponentInstance(reference, name, symbol_index)
         inst.add_symbol_attribute(SymbolAttribute(compx, compy, rotation))
 
         return inst
@@ -123,94 +130,11 @@ class KiCAD(object):
         f = open(filename)
 
         for line in f:
-            parts = line.strip().split()
-            prefix = parts[0]
-
-            if prefix == 'DEF':
-                component = Component(parts[1])
-                component.add_attribute('_prefix', parts[2])
-                symbol = Symbol()
-                component.add_symbol(symbol)
-                body = Body()
-                symbol.add_body(body)
-            elif prefix == 'A': # Arc
-                body.add_shape(self.parse_arc(parts))
-            elif prefix == 'C': # Circle
-                body.add_shape(self.parse_circle(parts))
-            elif prefix == 'P': # Polyline
-                body.add_shape(self.parse_polyline(parts))
-            elif prefix == 'S': # Rectangle
-                body.add_shape(self.parse_rectangle(parts))
-            elif prefix == 'T': # Text
-                body.add_shape(self.parse_text(parts))
-            elif prefix == 'X': # Pin
-                body.add_pin(self.parse_pin(parts))
-            elif prefix == 'ENDDEF':
-                circuit.add_component(component.name, component)
+            if line.startswith('DEF '):
+                cpt = ComponentParser(line).parse(f)
+                circuit.add_component(cpt.name, cpt)
 
         f.close()
-
-
-    def parse_arc(self, parts):
-        """ Parse an A (Arc) line """
-        x, y, radius, start, end = [int(i) for i in parts[1:6]]
-        # convert tenths of degrees to pi radians
-        start = start / 1800.0
-        end = end / 1800.0
-        return shape.Arc(x, y, start, end, radius)
-
-
-    def parse_circle(self, parts):
-        """ Parse a C (Circle) line """
-        x, y, radius = [int(i) for i in parts[1:4]]
-        return shape.Circle(x, y, radius)
-
-
-    def parse_polyline(self, parts):
-        """ Parse a P (Polyline) line """
-        num_points = int(parts[1])
-        poly = shape.Polygon()
-        for i in xrange(num_points):
-            x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-            poly.add_point(x, y)
-        return poly
-
-
-    def parse_rectangle(self, parts):
-        """ Parse an S (Rectangle) line """
-        x, y, x2, y2 = [int(i) for i in parts[1:5]]
-        return shape.Rectangle(x, y, x2 - x, y2 - y)
-
-
-    def parse_text(self, parts):
-        """ Parse a T (Text) line """
-        angle, x, y = [int(i) for i in parts[1:4]]
-        angle = angle / 1800.0
-        text = parts[8].replace('~', ' ')
-        align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
-        return shape.Label(x, y, text, align, angle)
-
-
-    def parse_pin(self, parts):
-        """ Parse an X (Pin) line """
-        num, direction = parts[2], parts[6]
-        p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
-        if direction == 'U': # up
-            p1x = p2x
-            p1y = p2y + pinlen
-        elif direction == 'D': # down
-            p1x = p2x
-            p1y = p2y - pinlen
-        elif direction == 'L': # left
-            p1x = p2x - pinlen
-            p1y = p2y
-        elif direction == 'R': # right
-            p1x = p2x + pinlen
-            p1y = p2y
-        else:
-            raise ValueError('unexpected pin direction', direction)
-        # TODO: label?
-        return Pin(num, (p1x, p1y), (p2x, p2y))
 
 
     def intersect(self, segment, ptc):
@@ -287,3 +211,149 @@ MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, 1, 1, 0): 0.5,
                    (-1, 0, 0, 1): 1,
                    (0, -1, -1, 0): 1.5}
+
+
+class ComponentParser(object):
+    """I parse components from KiCAD libraries."""
+
+    # the column positions of the unit and convert fields
+    unit_cols = dict(A=6, C=4, P=2, S=5, T=6, X=9)
+    convert_cols = dict((k,v+1) for k,v in unit_cols.items())
+
+    def __init__(self, line):
+        parts = line.split()
+        self.component = Component(parts[1])
+        self.component.add_attribute('_prefix', parts[2])
+        self.num_units = int(parts[7])
+
+
+    def build_symbols(self, has_convert):
+        """ Build all Symbols (with one Body) for this component. The
+        has_convert argument should be True if there are DeMorgan
+        convert bodies."""
+
+        for _ in range(self.num_units * (2 if has_convert else 1)):
+            symbol = Symbol()
+            self.component.add_symbol(symbol)
+            body = Body()
+            symbol.add_body(body)
+
+
+    def iter_bodies(self, unit, convert, has_convert):
+        """ Return an iterator over all the bodies implied by the
+        given unit and convert options. A unit of 0 means all units
+        for the given convert. A convert of 0 means both converts for
+        the given unit. If both are 0 it applies to all bodies."""
+
+        if unit == 0:
+            indices = range(self.num_units)
+        else:
+            indices = [unit-1]
+
+        if convert == 0 and has_convert:
+            offsets = [0, self.num_units]
+        elif convert in (0, 1):
+            offsets = [0]
+        else:
+            offsets = [self.num_units]
+
+        for index in indices:
+            for offset in offsets:
+                yield self.component.symbols[index + offset].bodies[0]
+
+
+    def parse(self, f):
+        """ Parse a DEF block and return the Component """
+
+        draw_lines = [] # (unit, convert, prefix, parts)
+
+        for line in f:
+            parts = line.split()
+            prefix = parts[0]
+
+            if prefix in ('A', 'C', 'P', 'S', 'T', 'X'):
+                draw_lines.append((int(parts[self.unit_cols[prefix]]),
+                                   int(parts[self.convert_cols[prefix]]),
+                                   prefix, parts))
+            elif prefix == 'ENDDEF':
+                break
+
+        has_convert = any(convert == 2 for _, convert, _, _ in draw_lines)
+
+        self.build_symbols(has_convert)
+
+        for unit, convert, prefix, parts in draw_lines:
+            method = getattr(self, 'parse_%s_line' % (prefix.lower(),))
+
+            for body in self.iter_bodies(unit, convert, has_convert):
+                obj = method(parts)
+
+                if prefix == 'X':
+                    body.add_pin(obj)
+                else:
+                    body.add_shape(obj)
+
+        return self.component
+
+
+    def parse_a_line(self, parts):
+        """ Parse an A (Arc) line """
+        x, y, radius, start, end = [int(i) for i in parts[1:6]]
+        # convert tenths of degrees to pi radians
+        start = start / 1800.0
+        end = end / 1800.0
+        return Arc(x, y, start, end, radius)
+
+
+    def parse_c_line(self, parts):
+        """ Parse a C (Circle) line """
+        x, y, radius = [int(i) for i in parts[1:4]]
+        return Circle(x, y, radius)
+
+
+    def parse_p_line(self, parts):
+        """ Parse a P (Polyline) line """
+        num_points = int(parts[1])
+        poly = Polygon()
+        for i in xrange(num_points):
+            x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
+            poly.add_point(x, y)
+        return poly
+
+
+    def parse_s_line(self, parts):
+        """ Parse an S (Rectangle) line """
+        x, y, x2, y2 = [int(i) for i in parts[1:5]]
+        return Rectangle(x, y, x2 - x, y2 - y)
+
+
+    def parse_t_line(self, parts):
+        """ Parse a T (Text) line """
+        angle, x, y = [int(i) for i in parts[1:4]]
+        angle = angle / 1800.0
+        text = parts[8].replace('~', ' ')
+        align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+        return Label(x, y, text, align, angle)
+
+
+    def parse_x_line(self, parts):
+        """ Parse an X (Pin) line """
+        num, direction = parts[2], parts[6]
+        p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
+
+        if direction == 'U': # up
+            p1x = p2x
+            p1y = p2y + pinlen
+        elif direction == 'D': # down
+            p1x = p2x
+            p1y = p2y - pinlen
+        elif direction == 'L': # left
+            p1x = p2x - pinlen
+            p1y = p2y
+        elif direction == 'R': # right
+            p1x = p2x + pinlen
+            p1y = p2y
+        else:
+            raise ValueError('unexpected pin direction', direction)
+
+        return Pin(num, (p1x, p1y), (p2x, p2y)) # TODO: label

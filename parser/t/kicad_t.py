@@ -85,7 +85,7 @@ class KiCADTests(unittest.TestCase):
 
             self.assertEqual(cpt.name, goodcpt.name)
             self.assertEqual(cpt.attributes, goodcpt.attributes)
-            self.assertEqual(len(cpt.symbols), 1)
+            self.assertEqual(len(cpt.symbols), len(goodcpt.symbols))
             self.assertEqual(len(cpt.symbols[0].bodies), 1)
 
             body = cpt.symbols[0].bodies[0]
