@@ -91,7 +91,7 @@ class vdparser:
 
     def parse_box(self, args):
         x1, y1, x2, y2 = map(int, args.split())
-        return ('shape', Rectangle.fromCorners(x1, y1, x2, y2))
+        return ('shape', Rectangle.from_corners(x1, y1, x2, y2))
 
     def parse_text(self, args):
         x, y, size, rot, anchor, text = args.split(' ', 5)
@@ -414,8 +414,13 @@ class ViewDrawSym(vdparser):
                     p.p1.y = -p.p1.y
                     p.p2.y = -p.p2.y
                 for sh in b.shapes:
-                    for pt in sh.points:
-                        pt.y = -pt.y
+                    if isinstance(sh, (Arc, Circle, Label, Rectangle)):
+                        sh.y = -sh.y
+                    if isinstance(sh, Rectangle):
+                        sh.height = -sh.height
+                    if isinstance(sh, Line):
+                        sh.p1.y = -sh.p1.y
+                        sh.p2.y = -sh.p2.y
 
 class ViewDraw:
     def __init__(self, schdir, symdirs):
