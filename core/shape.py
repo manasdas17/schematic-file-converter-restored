@@ -428,6 +428,7 @@ class BezierCurve(Shape):
         self.control2 = Point(control2)
         self.p1 = Point(p1)
         self.p2 = Point(p2)
+        self._memo_cache = {'min_point': {}, 'max_point': {}}
     
 
     def _line(self):
@@ -460,17 +461,27 @@ class BezierCurve(Shape):
 
 
     def min_point(self):
-        pts = self._line()
-        x_pts = [pt.x for pt in pts]
-        y_pts = [pt.y for pt in pts]
-        return Point(min(x_pts), min(y_pts))
+        # key the memoization cache on the actual (x,y) co-ords of our points
+        cache_key = tuple([(p.x, p.y) for p in [self.p1, self.control1,
+                                                self.control2, self.p2]])
+        if cache_key not in self._memo_cache['min_point']:
+            pts = self._line()
+            x_pts = [pt.x for pt in pts]
+            y_pts = [pt.y for pt in pts]
+            self._memo_cache['min_point'][cache_key] = (min(x_pts), min(y_pts))
+        # create a new Point each time, in case the caller modifies them
+        return Point(self._memo_cache['min_point'][cache_key])
 
 
     def max_point(self):
-        pts = self._line()
-        x_pts = [pt.x for pt in pts]
-        y_pts = [pt.y for pt in pts]
-        return Point(max(x_pts), max(y_pts))
+        cache_key = tuple([(p.x, p.y) for p in [self.p1, self.control1,
+                                                self.control2, self.p2]])
+        if cache_key not in self._memo_cache['max_point']:
+            pts = self._line()
+            x_pts = [pt.x for pt in pts]
+            y_pts = [pt.y for pt in pts]
+            self._memo_cache['max_point'][cache_key] = (max(x_pts), max(y_pts))
+        return Point(self._memo_cache['max_point'][cache_key])
 
 
     def build(self, control1x, control1y, control2x, control2y, p1x,
