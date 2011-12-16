@@ -295,16 +295,6 @@ class Label(Shape):
         return [self.min_point(), self.max_point()]
 
 
-    def min_point(self):
-        # still no clue how this could be done properly. This seems good enough
-        # for Annotation.bounds() though? Is that a fair excuse?
-        return Point(self.x - 10, self.y - 10)
-
-
-    def max_point(self):
-        return Point(self.x + 10, self.y + 10)
-
-
     def json(self):
         """ Return the label as JSON """
         return {
