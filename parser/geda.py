@@ -10,6 +10,8 @@ from core import net
 
 from core.design import Design
 from core.annotation import Annotation
+from core.component_instance import ComponentInstance
+from core.component_instance import SymbolAttribute
 
 
 class GEDAParserError(Exception):
@@ -33,7 +35,6 @@ class GEDA:
         'V', # circle
         'A', # arc
         'H', # SVG-like path
-        'H', # SVG-like path
         ## path related types
         'M', # moveto (absolute)
         'm', # moveto (relative)
@@ -44,10 +45,9 @@ class GEDA:
         'Z', # closepath
         'z', # closepath
         ## environments
-        '{', # attributes
-        '[', # embedded component
+        '{', '}', # attributes
+        '[', ']', # embedded component
         ## valid types but are ignored
-        'F', #font
         'G', #picture
     ])
 
@@ -105,44 +105,171 @@ format!"""
         fh.close()
         return design
 
-    def parse_stream(self, stream):
+    def parse_schematic_file(self, filename):
+        fh = open(filename, "r")
+
+        typ, params = self.parse_element(fh)
+        if typ != 'v':
+            raise GEDAParserError("cannot convert file, not in gEDA format")
+
+        self.parse_schematic(fh)
+
+        fh.close()
+
+    def parse_schematic(self, stream):
+        self.design = Design()
         obj_type, params = self.parse_element(stream)
 
-        while obj_type != None:
+        while obj_type is not None:
 
             if obj_type == 'T':
-                ##FIXME(elbaschid): if text has key=value form -> design level attribute
+                ##Convert regular text or attribute
+                key, value = self.parse_text(stream, *params)
+                
+                if key is None:
+                    ## text is annotation
+                    self.design.design_attributes.add_annotation(value)
+                else:
+                    ## text is attribute
+                    self.design.add_design_attributes(key, value)
 
-                ##Convert regular text into annotation
-                annotation = self.parse_text(stream, *params)
-
-            elif obj_type in ['G', 'F'] :
+            elif obj_type == 'G' :
                 ## picture/font types are not supported in upverter
                 print "WARNING: ignoring picture/font in gEDA file. Not supported!"
             elif obj_type == 'C':
-                ##TODO(elbaschid): check if sym file is embedded or not 
-                ##TODO(elbaschid): if EMBEDDED check for [] holding embedded definition
-                ##TODO(elbaschid): check for optional attribute definition in {}
-                raise NotImplementedError()
+                ## ignore title components (not real components)
+                if not params[-1].startswith('title'):
+                    component, instance = self.parse_component(stream, *params)
+
             elif obj_type == 'N':
                 self.parse_segment(stream, *params)
-                ##TODO(elbaschid): process net segment into NET
-                ##TODO(elbaschid): check for optional attribute definition in {}
+                ##TODO(elbaschid): check for attribute definitions in {}
+
             elif obj_type == 'U':
                 ## bus (only graphical feature NOT component)
                 ##TODO(elbaschid): process bus into NET
                 ##TODO(elbaschid): check for optional attribute definition in {}
                 raise NotImplementedError()
 
-            ## object types of different environemnts
-            elif obj_type == '{':
-                ##Attribute lists
-                raise NotImplementedError()
-            elif obj_type == '[':
-                ##embedded component
-                raise NotImplementedError()
-
             obj_type, params = self.parse_element(stream)
+
+    def parse_component(self, stream, x, y, selectable, angle, mirror, basename):
+
+        ## component has not been parsed yet
+        if basename in self.design.components.components:
+            component = self.design.components.components[basename]
+
+        else:
+            ##check if sym file is embedded or referenced 
+            if basename.startswith('EMBEDDED'):
+                ## embedded only has to be processed when NOT in symbol lookup
+                if basename not in self.symbol_lookup:
+                    component = self.parse_embedded_component(stream, x, y, selectable, angle, mirror, basename)
+            else:
+                if basename not in self.symbol_lookup:
+                    raise GEDAParserError(
+                        "referenced symbol file '%s' unkown" % basename
+                    )
+
+                ## requires parsing of referenced symbol file
+                fh = open(self.symbol_lookup[basename], "r")
+
+                typ, params = self.parse_element(fh)
+                if typ != 'v':
+                    raise GEDAParserError("cannot convert file, not in gEDA format")
+
+                component = self.parse_embedded_component(fh, x, y, selectable, angle, mirror, basename)
+
+                fh.close()
+                        
+            self.design.add_component(component.name, component)
+
+        ## generate a component instance using attributes
+        instance = ComponentInstance(component.name, basename, 0)
+        self.design.add_component_instance(instance)
+
+        comp_x, comp_y = self.conv_coords(x, y)
+
+        symbol = SymbolAttribute(comp_x, comp_y, self.conv_angle(angle))
+        instance.add_symbol_attribute(symbol)
+
+        ##TODO(elbachid): add annotation for refdes
+        symbol.add_annotation(
+            Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
+        )
+        symbol.add_annotation(
+            Annotation('{{device}}', comp_x, comp_y, 0.0, 'true')
+        )
+
+        attributes = self.parse_environment(stream)
+        for key, value in attributes.items():
+            instance.add_attribute(key, value)
+
+        return component, instance
+
+    def parse_embedded_component(self, stream, x, y, selectable, angle, mirror, basename, normalise=False):
+        ## grab next line (should be '[' or 
+        typ, params = self.parse_element(stream)
+
+        if typ == '[':
+            typ, params = self.parse_element(stream)
+
+        component = components.Component(basename)
+        symbol = components.Symbol()
+        component.add_symbol(symbol)
+        body = components.Body()
+        symbol.add_body(body)
+
+        while typ is not None:
+
+            if typ == 'T':
+                key, value = self.parse_text(stream, *params)
+                if key is None:
+                    ##TODO(elbaschid): not sure what to do with text here??
+                    pass
+                elif key == 'device':
+                    component.name = value
+                else:
+                    component.add_attribute(key, value)
+
+            elif typ == 'L':
+                body.add_shape(
+                    self.parse_line(*params)
+                )
+
+            elif typ == 'B':
+                body.add_shape(
+                    self.parse_box(*params)
+                )
+
+            elif typ == 'C':
+                body.add_shape(
+                    self.parse_circle(*params) 
+                )
+
+            elif typ == 'A':
+                body.add_shape(
+                    arc = self.parse_arc(*params)
+                )
+
+            elif typ == 'P':
+                body.add_pin(
+                    self.parse_pin(stream, *params)
+                )
+
+            elif typ == 'H':
+                #path
+                raise NotImplementedError()   
+
+            elif typ == 'G':
+                print "WARNING: ignoring picture/font in gEDA file. Not supported!"
+
+            else:
+                pass
+
+            typ, params = self.parse_element(stream)
+
+        return component
 
     def divide_segments(self):
         ## check if segments need to be divided
@@ -170,13 +297,13 @@ format!"""
         for idx in range(int(num_lines)):
             text.append(stream.readline())
 
-        text_str = ''.join(text)
+        text_str = ''.join(text).strip()
 
         if num_lines == 1 and '=' in text_str:
             key, value = text_str.split('=', 1)
             return key.strip(), value.strip()
 
-        return Annotation(
+        return None, Annotation(
             text_str,
             self.conv_mils(x),
             self.conv_mils(y),
@@ -209,12 +336,6 @@ format!"""
             typ, params = self.parse_element(stream)
 
         return attributes
-
-    def parse_embedded_component(self):
-        raise NotImplementedError()
-
-    def parse_component(self):
-        raise NotImplementedError()
 
     def store_netpoint(self, x, y):
         if (x, y) not in self.net_points:
@@ -339,11 +460,20 @@ format!"""
             null_end = self.conv_coords(x1, y1) 
             connect_end = self.conv_coords(x2, y2) 
 
+        label = None
+        if 'pinlabel' in attributes:
+            label = shape.Label(
+                attributes.get('pinlabel'), 
+                connect_end[0],
+                connect_end[1],
+                'left',
+                0.0
+            )
         return components.Pin(
             attributes['pinnumber'], #pin number
             null_end,
             connect_end,
-            label=attributes.get('pinlabel', None),
+            label=label
         )
 
     def parse_element(self, stream):

@@ -1,3 +1,4 @@
+import os
 import unittest
 import StringIO
 
@@ -407,6 +408,23 @@ pintype=in
         )
         self.assertEquals(typ, 'C')
         self.assertEquals(params, expected_params)
+
+    def test_parse_schematic_file(self):
+        self.geda_parser = GEDA([
+            '/usr/share/gEDA/sym',
+            './test/geda/simple_example/symbols',
+        ])
+
+        filenames = [
+            'test/geda/component.sch',
+            #'test/geda/embedded_component.sch',
+        ]
+
+        for filename in filenames:
+            filename = os.path.join(os.getcwd(),filename)
+            self.geda_parser.parse_schematic_file(filename)
+
+            #print self.geda_parser.design.json()
 
 if __name__ == '__main__':
     unittest.main()
