@@ -192,8 +192,8 @@ class ViewDrawSch(vdparser):
                 cc = ConnectedComponent(inst.instance_id, pinid)
                 net.ibpts[netpt - 1].add_connected_component(cc)
             del inst.conns
-        for n in ckt.nets:
-            del n.ibpts
+        for net in ckt.nets:
+            del net.ibpts
 
         # too bad designs don't have top-level shapes (yet?)
         #map(ckt.add_shape, tree['shape'])
@@ -252,8 +252,7 @@ class ViewDrawSch(vdparser):
         # unknown is suspected to be drawing style for the net at this
         # point (right-angle corner? T-section? Solder dot?) ATM not very
         # useful, not really our responsibility.
-        np = NetPoint(x + 'x' + y, int(x), int(y))
-        return ('netpoint', np)
+        return ('netpoint', NetPoint(x + 'x' + y, int(x), int(y)))
 
     def parse_seg(self, args):
         a, b = [int(n) for n in args.split()]
@@ -322,18 +321,18 @@ class ViewDrawSch(vdparser):
                 sym.y = ymax - sym.y
                 for ann in sym.annotations:
                     ann.y = ymax - ann.y
-        for n in des.nets:
-            for p in n.points.values():
-                p.y = ymax - p.y
-                p.point_id = str(p.x) + 'x' + str(p.y)
-            for p in n.points.values():
+        for net in des.nets:
+            for pt in net.points.values():
+                pt.y = ymax - pt.y
+                pt.point_id = str(pt.x) + 'x' + str(pt.y)
+            for pt in net.points.values():
                 # yes, this needs to be two-pass
                 # update all the point_ids, n.points still indexes them by their
                 # old point_ids
-                p.connected_points = [n.points[pt].point_id for pt in
-                                      p.connected_points]
-            n.points = dict([(pt.point_id, pt) for pt in n.points.values()])
-            for ann in n.annotations:
+                pt.connected_points = [net.points[p].point_id for p in
+                                       pt.connected_points]
+            net.points = dict([(pt.point_id, pt) for pt in net.points.values()])
+            for ann in net.annotations:
                 ann.y = ymax - ann.y
 
 class ViewDrawSym(vdparser):
@@ -357,8 +356,8 @@ class ViewDrawSym(vdparser):
         tree = vdparser.parse(self, self.libdir + filename)
         for attr in tree['attr']:
             part.add_attribute(*attr)
-        for sh in tree['shape'] + sum(tree['lines'], []):
-            part.symbols[0].bodies[0].add_shape(sh)
+        for shape in tree['shape'] + sum(tree['lines'], []):
+            part.symbols[0].bodies[0].add_shape(shape)
         for pin in tree['pin']:
             part.symbols[0].bodies[0].add_pin(pin)
 
@@ -372,7 +371,7 @@ class ViewDrawSym(vdparser):
     def parse_attr(self, args):
         # part properties, some of which look in need of further
         # processing to properly extract the part
-        key, drop, val = args.split(' ', 6)[-1].partition('=')
+        key, sep, val = args.split(' ', 6)[-1].partition('=')
         # I have seen some properties that have no value set, and don't
         # have '=' in the string. partition() will set val = ''
 
@@ -409,19 +408,19 @@ class ViewDrawSym(vdparser):
         # vertical alignment thing
 
     def correct_y(self, comp):
-        for s in comp.symbols:
-            for b in s.bodies:
-                for p in b.pins:
-                    p.p1.y = -p.p1.y
-                    p.p2.y = -p.p2.y
-                for sh in b.shapes:
-                    if isinstance(sh, (Arc, Circle, Label, Rectangle)):
-                        sh.y = -sh.y
-                    if isinstance(sh, Rectangle):
-                        sh.height = -sh.height
-                    if isinstance(sh, Line):
-                        sh.p1.y = -sh.p1.y
-                        sh.p2.y = -sh.p2.y
+        for sym in comp.symbols:
+            for bod in sym.bodies:
+                for pin in bod.pins:
+                    pin.p1.y = -pin.p1.y
+                    pin.p2.y = -pin.p2.y
+                for shape in bod.shapes:
+                    if isinstance(shape, (Arc, Circle, Label, Rectangle)):
+                        shape.y = -shape.y
+                    if isinstance(shape, Rectangle):
+                        shape.height = -shape.height
+                    if isinstance(shape, Line):
+                        shape.p1.y = -shape.p1.y
+                        shape.p2.y = -shape.p2.y
 
 class ViewDraw:
     def __init__(self, schdir, symdirs):
@@ -465,7 +464,7 @@ class FileStack:
         tok = self.subpop()
         nexttok = self.subpop()
         while nexttok.startswith(' ') or nexttok.startswith('+'):
-            tok = self.lc(tok, nexttok)
+            tok = self.continuation(tok, nexttok)
             nexttok = self.subpop()
         self.push(nexttok)
         return tok.strip('\r\n')
@@ -476,7 +475,7 @@ class FileStack:
             return self.fstack.pop()
         return self.f.next()
 
-    def lc(self, tok, cont):
+    def continuation(self, tok, cont):
         if cont.startswith('+'):
             cont = cont[2:]
         return tok.strip('\r\n') + cont
