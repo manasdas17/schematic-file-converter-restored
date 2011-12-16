@@ -86,11 +86,11 @@ class vdparser:
                               self.sheetsizes[size] or 'unknown'))
 
     def parse_circle(self, args):
-        x, y, r = map(int, args.split())
+        x, y, r = [int(a) for a in args.split()]
         return ('shape', Circle(x, y, r))
 
     def parse_box(self, args):
-        x1, y1, x2, y2 = map(int, args.split())
+        x1, y1, x2, y2 = [int(a) for a in args.split()]
         return ('shape', Rectangle.from_corners(x1, y1, x2, y2))
 
     def parse_text(self, args):
@@ -102,8 +102,8 @@ class vdparser:
         return ('fileversion', args)
 
     def parse_line(self, args):
-        numpts, drop, pts = args.partition(' ')
-        pts = map(int, pts.split())
+        numpts, sep, pts = args.partition(' ')
+        pts = [int(p) for p in pts.split()]
         numpts = int(numpts)
         # this next bit would be much easier if open polygons were
         # explicitly acceptable
@@ -120,7 +120,7 @@ class vdparser:
         # To find the centre: construct two chords using the three points. Lines
         # drawn perpendicular to and bisecting these chords will intersect at
         # the circle's centre.
-        x0, y0, x1, y1, x2, y2 = map(float, args.split())
+        x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
         # can't allow for infinite slopes (ma and mb), and can't allow ma to be
         # a zero slope.
         while abs(x0 - x1) < 0.1 or abs(x1 - x2) < 0.1 or abs(y0 - y1) < 0.1:
@@ -134,7 +134,7 @@ class vdparser:
         r = sqrt((xc-x0)**2 + (yc-y0)**2)
 
         # re-init xs,ys so that start and end points don't get confused.
-        x0, y0, x1, y1, x2, y2 = map(float, args.split())
+        x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
 
         def angle(x, y):
             # correcting for the y-origin will flip the angle through the y=x
@@ -182,7 +182,8 @@ class ViewDrawSch(vdparser):
         # TODO little weak here, a copy instead?
         ckt.components = self.lib
         
-        map(ckt.add_net, tree['net'])
+        for net in tree['net']:
+            ckt.add_net(net)
         for inst in tree['inst']:
             ckt.add_component_instance(inst)
             # hold on tight, this is ugly
@@ -225,18 +226,18 @@ class ViewDrawSch(vdparser):
             else:
                 # oh yeah, a net can have a point more than once, because that
                 # makes *great* sense.
-                map(thisnet.points[netpt.point_id].add_connected_point,
-                    netpt.connected_points)
-                map(thisnet.points[netpt.point_id].add_connected_component,
-                    netpt.connected_components)
+                for pt in netpt.connected_points:
+                    thisnet.points[netpt.point_id].add_connected_point(pt)
+                for comp in netpt.connected_components:
+                    thisnet.points[netpt.point_id].add_connected_component(comp)
                 # update subdata['netpoint'] so that ref to netpt points to the
                 # new combined point
                 i = subdata['netpoint'].index(netpt)
                 subdata['netpoint'][i] = thisnet.points[netpt.point_id]
+
         # yuck, passing in-band
         thisnet.ibpts = subdata['netpoint']
 
-        map(thisnet.add_point, subdata['netpoint'])
         for a, b in subdata['segment']:
             thisnet.connect((subdata['netpoint'][a - 1],
                              subdata['netpoint'][b - 1]))
@@ -255,7 +256,7 @@ class ViewDrawSch(vdparser):
         return ('netpoint', np)
 
     def parse_seg(self, args):
-        a, b = map(int, args.split())
+        a, b = [int(n) for n in args.split()]
         return ('segment', (a, b))
 
     def parse_inst(self, args):
@@ -297,7 +298,7 @@ class ViewDrawSch(vdparser):
     
     def parse_bounds(self, args):
         # Not sure if this is quite valid.
-        return ('Dbounds', map(int, args.split()))
+        return ('Dbounds', [int(a) for a in args.split()])
 
     def parse_attr(self, args):
         x, y, font_size, rot, anchor, viz, kv = args.split(' ', 6)
@@ -381,7 +382,7 @@ class ViewDrawSym(vdparser):
 
     def parse_pin(self, args):
         # Pin declaration, seems to only be done once per pin
-        pid, xe, ye, xb, yb, rot, side, inv = map(int, args.split())
+        pid, xe, ye, xb, yb, rot, side, inv = [int(a) for a in args.split()]
         thispin = Pin(pid, (xb, yb), (xe, ye))
         subdata = defaultdict(list)
         for phrase in self.stream:
