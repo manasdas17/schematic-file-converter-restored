@@ -22,7 +22,7 @@ class GEDA:
     """ The GEDA Format Parser """
 
     DELIMITER = ' '
-    SCALE_FACTOR = 10 #maps 100 MILS to 10 pixels
+    SCALE_FACTOR = 10 #maps 1000 MILS to 10 pixels
     OBJECT_TYPES = set([ 
         'v', # gEDA version
         'C', # component
@@ -88,36 +88,23 @@ format!"""
     def parse(self, filename):
         """ Parse a gEDA file into a design """
 
-        self.design = Design()
-
-        self.segments = set()
-        self.net_point = dict()
-        self.net_names = dict()
-
         fh = open(filename, "r")
 
         typ, params = self.parse_element(fh)
         if typ != 'v':
             raise GEDAParserError("cannot convert file, not in gEDA format")
 
-        ##TODO(elbaschid): handle parsing of the input file
+        design = self.parse_schematic(fh)
 
         fh.close()
+
         return design
-
-    def parse_schematic_file(self, filename):
-        fh = open(filename, "r")
-
-        typ, params = self.parse_element(fh)
-        if typ != 'v':
-            raise GEDAParserError("cannot convert file, not in gEDA format")
-
-        self.parse_schematic(fh)
-
-        fh.close()
 
     def parse_schematic(self, stream):
         self.design = Design()
+        self.segments = set()
+        self.net_points = dict() 
+
         obj_type, params = self.parse_element(stream)
 
         while obj_type is not None:
@@ -131,7 +118,7 @@ format!"""
                     self.design.design_attributes.add_annotation(value)
                 else:
                     ## text is attribute
-                    self.design.add_design_attributes(key, value)
+                    self.design.design_attributes.add_attribute(key, value)
 
             elif obj_type == 'G' :
                 ## picture/font types are not supported in upverter
@@ -143,7 +130,6 @@ format!"""
 
             elif obj_type == 'N':
                 self.parse_segment(stream, *params)
-                ##TODO(elbaschid): check for attribute definitions in {}
 
             elif obj_type == 'U':
                 ## bus (only graphical feature NOT component)
@@ -153,11 +139,23 @@ format!"""
 
             obj_type, params = self.parse_element(stream)
 
+        self.divide_segments()
+        nets = self.calculate_nets(self.segments)
+
+        for net in nets:
+            self.design.add_net(net)
+
+        return self.design
+
     def parse_component(self, stream, x, y, selectable, angle, mirror, basename):
 
         ## component has not been parsed yet
         if basename in self.design.components.components:
             component = self.design.components.components[basename]
+            ## skipping embedded data is required
+
+            if basename.startswith('EMBEDDED'):
+                self.skip_embedded_section(stream)
 
         else:
             ##check if sym file is embedded or referenced 
@@ -182,18 +180,31 @@ format!"""
 
                 fh.close()
                         
-            self.design.add_component(component.name, component)
+            self.design.add_component(basename, component)
+
+        ## get all attributes assigned to component instance
+        attributes = self.parse_environment(stream)
+
+        ## refdes attribute is name of component (mandatory as of gEDA doc)
+        ## examples if gaf repo have components without refdes, use part of basename
+        refdes = component.name.replace('.sym', '')
+        if attributes is not None:
+            refdes = attributes.get('refdes', refdes)
 
         ## generate a component instance using attributes
-        instance = ComponentInstance(component.name, basename, 0)
+        instance = ComponentInstance(refdes, component.name, 0)
         self.design.add_component_instance(instance)
+
+        if attributes is not None:
+            for key, value in attributes.items():
+                instance.add_attribute(key, value)
 
         comp_x, comp_y = self.conv_coords(x, y)
 
         symbol = SymbolAttribute(comp_x, comp_y, self.conv_angle(angle))
         instance.add_symbol_attribute(symbol)
 
-        ##TODO(elbachid): add annotation for refdes
+        ##TODO(elbaschid): add annotation for refdes
         symbol.add_annotation(
             Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
         )
@@ -201,18 +212,18 @@ format!"""
             Annotation('{{device}}', comp_x, comp_y, 0.0, 'true')
         )
 
-        attributes = self.parse_environment(stream)
-        for key, value in attributes.items():
-            instance.add_attribute(key, value)
-
         return component, instance
 
-    def parse_embedded_component(self, stream, x, y, selectable, angle, mirror, basename, normalise=False):
+    def parse_embedded_component(self, stream, x, y, selectable, angle, mirror, basename):
+        move_to = None
+        if basename.startswith('EMBEDDED'):
+            move_to = (x, y)
+
         ## grab next line (should be '[' or 
-        typ, params = self.parse_element(stream)
+        typ, params = self.parse_element(stream, move_to)
 
         if typ == '[':
-            typ, params = self.parse_element(stream)
+            typ, params = self.parse_element(stream, move_to)
 
         component = components.Component(basename)
         symbol = components.Symbol()
@@ -227,38 +238,31 @@ format!"""
                 if key is None:
                     ##TODO(elbaschid): not sure what to do with text here??
                     pass
-                elif key == 'device':
-                    component.name = value
                 else:
                     component.add_attribute(key, value)
 
             elif typ == 'L':
-                body.add_shape(
-                    self.parse_line(*params)
-                )
+                line = self.parse_line(*params)
+                body.add_shape(line)
 
             elif typ == 'B':
-                body.add_shape(
-                    self.parse_box(*params)
-                )
+                rect = self.parse_box(*params)
+                body.add_shape(rect)
 
             elif typ == 'C':
-                body.add_shape(
-                    self.parse_circle(*params) 
-                )
+                circle = self.parse_circle(*params)
+                body.add_shape(circle)
 
             elif typ == 'A':
-                body.add_shape(
-                    arc = self.parse_arc(*params)
-                )
+                arc = self.parse_arc(*params)
+                body.add_shape(arc)
 
             elif typ == 'P':
-                body.add_pin(
-                    self.parse_pin(stream, *params)
-                )
+                pin = self.parse_pin(stream, *params)
+                body.add_pin(pin)
 
             elif typ == 'H':
-                #path
+                #path, offset=offset
                 raise NotImplementedError()   
 
             elif typ == 'G':
@@ -267,7 +271,7 @@ format!"""
             else:
                 pass
 
-            typ, params = self.parse_element(stream)
+            typ, params = self.parse_element(stream, move_to)
 
         return component
 
@@ -311,6 +315,12 @@ format!"""
             self.conv_bool(visiblity),
         )
 
+    def skip_embedded_section(self, stream):
+        typ = stream.readline().split(self.DELIMITER, 1)[0].strip()
+
+        while typ != ']':
+            typ = stream.readline().split(self.DELIMITER, 1)[0].strip()
+
     def parse_environment(self, stream):
         """ Checks if attribute environment starts in the next line
             (marked by '{'). Environment only contains text elements
@@ -328,7 +338,7 @@ format!"""
         typ, params = self.parse_element(stream)
 
         attributes = {}
-        while typ != '}':
+        while typ is not None:
             if typ == 'T':
                 key, value = self.parse_text(stream, *params)
                 attributes[key] = value
@@ -368,7 +378,7 @@ format!"""
         ## add segment to global list for later processing
         self.segments.add((pt_a, pt_b))
 
-        #attributes = self.parse_environment(stream)
+        attributes = self.parse_environment(stream)
         #if attributes is not None:
         #    #TODO(elbaschid): create net with name in attributes 
         #    pass
@@ -463,9 +473,9 @@ format!"""
         label = None
         if 'pinlabel' in attributes:
             label = shape.Label(
-                attributes.get('pinlabel'), 
                 connect_end[0],
                 connect_end[1],
+                attributes.get('pinlabel'), 
                 'left',
                 0.0
             )
@@ -476,10 +486,10 @@ format!"""
             label=label
         )
 
-    def parse_element(self, stream):
+    def parse_element(self, stream, move_to=None):
         element_items = stream.readline().strip().split(self.DELIMITER)
 
-        if len(element_items[0]) == 0:
+        if len(element_items[0]) == 0 or element_items[0] in [']', '}']:
             return None, []
 
         object_type = element_items[0].strip()
@@ -491,6 +501,18 @@ format!"""
         else:
             params = [int(x) for x in element_items[1:]]
 
+        if move_to is not None:
+            ## element in EMBEDDED component need to be moved
+            ## to origin (0, 0) from component origin
+            if object_type in ['T', 'B', 'C', 'A']:
+                params[0] = params[0] - move_to[0]
+                params[1] = params[1] - move_to[1]
+            elif object_type in ['L', 'P']:
+                params[0] = params[0] - move_to[0]
+                params[1] = params[1] - move_to[1]
+                params[2] = params[2] - move_to[0]
+                params[3] = params[3] - move_to[1]
+
         if object_type not in self.OBJECT_TYPES:
             raise GEDAParserError("unknown type '%s' in file" % object_type)
         
@@ -501,8 +523,8 @@ format!"""
             pixel units based on a scale factor. The converted 
             value is a multiple of 10px.
         """
-        scaled = int(mils) / self.SCALE_FACTOR
-        return int(scaled / 10.0) * 10
+        scaled = int(mils) / float(self.SCALE_FACTOR)
+        return int(scaled)
 
     def conv_coords(self, orig_x, orig_y):
         """ Converts coordinats *orig_x* and *orig_y* from MILS

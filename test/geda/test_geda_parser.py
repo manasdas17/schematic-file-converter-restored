@@ -46,8 +46,9 @@ Text string!"""
 
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser.parse_element(text_stream)
-        annotation = self.geda_parser.parse_text(text_stream, *params)
+        success, annotation = self.geda_parser.parse_text(text_stream, *params)
 
+        self.assertEquals(success, None)
         self.assertEquals(annotation.value, "Text string!")
         self.assertEquals(annotation.x, 1690)
         self.assertEquals(annotation.y, 3580)
@@ -62,7 +63,7 @@ and more ...
 text!"""
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser.parse_element(text_stream)
-        annotation = self.geda_parser.parse_text(text_stream, *params)
+        success, annotation = self.geda_parser.parse_text(text_stream, *params)
 
         text = """Text string!
 And more ...
@@ -98,10 +99,10 @@ text!"""
         test_mils = [
             (2, 0),
             (100, 10),
-            (3429, 340),
+            (3429, 342),
             (0, 0),
-            (-50, 0),
-            (-1238, -120),
+            (-50, -5),
+            (-1238, -123),
         ]
 
         for mils, expected in test_mils:
@@ -118,7 +119,6 @@ text!"""
         self.assertEquals(stream.tell(), 0)
 
         valid_env = """{
-W 150 650 5
 T 150 650 5 8 1 1 0 6 1
 pinnumber=3
 T 150 650 5 8 0 1 0 6 1
@@ -147,24 +147,94 @@ _sometype=in
 
     def test_calculate_nets(self):
         net_sample = """N 52100 44400 54300 44400 4
+N 54300 44400 54300 46400 4
 N 53200 45100 53200 43500 4
 N 55000 44400 56600 44400 4
 N 55700 45100 55700 44400 4
 N 55700 44400 55700 43500 4"""
 
-        self.geda_parser.segments = set()
-        self.geda_parser.net_points = dict()
-
         stream = StringIO.StringIO(net_sample)
-        self.geda_parser.parse_stream(stream)
+        design = self.geda_parser.parse_schematic(stream)
 
-        self.geda_parser.divide_segments()
+        ## check nets from design
+        self.assertEquals(len(design.nets), 3)
 
-        self.assertEquals(len(self.geda_parser.segments), 6)
+        sorted_nets = {}
+        for net in design.nets:
+            sorted_nets[len(net.points)] = net.points
 
-        nets = self.geda_parser.calculate_nets(self.geda_parser.segments)
+        self.assertEquals(sorted_nets.keys(), [2, 3, 5])
 
-        self.assertEquals(len(nets), 3)
+        points_n1 = sorted_nets[2]
+        points_n2 = sorted_nets[3]
+        points_n3 = sorted_nets[5]
+
+        self.assertEquals(
+            sorted(points_n1.keys()), 
+            sorted([
+                '5320a4510', '5320a4350'
+            ])
+        )
+        self.assertEquals(
+            points_n1['5320a4510'].connected_points,
+            ['5320a4350']
+        )
+        self.assertEquals(
+            points_n1['5320a4350'].connected_points,
+            ['5320a4510']
+        )
+
+
+        self.assertEquals(
+            sorted(points_n2.keys()), 
+            sorted([
+                '5210a4440', '5430a4640', '5430a4440'
+            ])
+        )
+        self.assertEquals(
+            sorted(points_n2['5210a4440'].connected_points),
+            ['5430a4440']
+        )
+        self.assertEquals(
+            sorted(points_n2['5430a4640'].connected_points),
+            ['5430a4440']
+        )
+        self.assertEquals(
+            sorted(points_n2['5430a4440'].connected_points),
+            ['5210a4440', '5430a4640']
+        )
+
+        self.assertEquals(
+            sorted(points_n3.keys()), 
+            sorted([
+                '5500a4440', '5660a4440', '5570a4510',
+                '5570a4440', '5570a4350'
+            ])
+        )
+        self.assertEquals(
+            sorted(points_n3['5500a4440'].connected_points),
+            ['5570a4440'],
+        )
+        self.assertEquals(
+            sorted(points_n3['5660a4440'].connected_points),
+            ['5570a4440'],
+        )
+        self.assertEquals(
+            sorted(points_n3['5570a4510'].connected_points),
+            ['5570a4440'],
+        )
+        self.assertEquals(
+            sorted(points_n3['5570a4440'].connected_points),
+            ['5500a4440', '5570a4350', '5570a4510', '5660a4440'],
+        )
+        self.assertEquals(
+            sorted(points_n3['5570a4350'].connected_points),
+            ['5570a4440'],
+        )
+
+        #run more complex test with nets sample file
+        net_schematic = 'test/geda/nets.sch'
+        design = self.geda_parser.parse(net_schematic)
 
 
     def test_parse_segment(self):
@@ -177,8 +247,14 @@ N 55700 44400 55700 43500 4"""
         typ, params = self.geda_parser.parse_element(stream)
         self.geda_parser.parse_segment(stream, *params)
 
-        segment = self.geda_parser.segments.pop()
-        self.assertEquals(segment, ((4730, 4850), (4350, 4850)))
+        np_a, np_b = self.geda_parser.segments.pop()
+        self.assertEquals(np_a.point_id, '4730a4850')
+        self.assertEquals(np_a.x, 4730)
+        self.assertEquals(np_a.y, 4850)
+
+        self.assertEquals(np_b.point_id, '4350a4850')
+        self.assertEquals(np_b.x, 4350)
+        self.assertEquals(np_b.y, 4850)
 
         expected_points = [(4730, 4850), (4350, 4850)]
         for x, y in expected_points:
@@ -359,7 +435,7 @@ pintype=in
             pin = self.geda_parser.parse_pin(stream, *params)
 
             self.assertEquals(pin.pin_number, '3')
-            self.assertEquals(pin.label, '+')
+            self.assertEquals(pin.label.text, '+')
             ## null_end
             self.assertEquals(pin.p1.x, 20)
             self.assertEquals(pin.p1.y, 60)
@@ -409,22 +485,69 @@ pintype=in
         self.assertEquals(typ, 'C')
         self.assertEquals(params, expected_params)
 
-    def test_parse_schematic_file(self):
+    def test_parse(self):
         self.geda_parser = GEDA([
             '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
 
-        filenames = [
-            'test/geda/component.sch',
-            #'test/geda/embedded_component.sch',
+        ## testing EMBEDDED component
+        design = self.geda_parser.parse('./test/geda/embedded_component.sch')
+
+        components = design.components.components #test components dictionary
+        self.assertEquals(components.keys(), ['EMBEDDEDbattery-1.sym'])
+
+        component = components['EMBEDDEDbattery-1.sym']
+        self.assertEquals(component.name, 'EMBEDDEDbattery-1.sym')
+
+        keys = ['p1x', 'p1y', 'p2x', 'p2y', 'num', 'seq', 'label', 'type']
+        expected_pins = [
+            dict(zip(keys, [0, 200, 200, 200, '1', 1, '+', 'pwr'])),
+            dict(zip(keys, [700, 200, 500, 200, '2', 2, '-', 'pwr'])),
         ]
+        for pin, expected_pin in zip(component.symbols[0].bodies[0].pins, expected_pins):
+            self.assertEquals(pin.label.text, expected_pin['label'])
+            ## test reversed pin order due to different handling in direction
+            self.assertEquals(pin.p1.x, expected_pin['p2x'] / self.geda_parser.SCALE_FACTOR)
+            self.assertEquals(pin.p1.y, expected_pin['p2y'] / self.geda_parser.SCALE_FACTOR)
+            self.assertEquals(pin.p2.x, expected_pin['p1x'] / self.geda_parser.SCALE_FACTOR)
+            self.assertEquals(pin.p2.y, expected_pin['p1y'] / self.geda_parser.SCALE_FACTOR)
+            
+            self.assertEquals(pin.pin_number, expected_pin['num'])
 
-        for filename in filenames:
-            filename = os.path.join(os.getcwd(),filename)
-            self.geda_parser.parse_schematic_file(filename)
+        ## testing referenced component 
+        design = self.geda_parser.parse('test/geda/component.sch')
 
-            #print self.geda_parser.design.json()
+        components = design.components.components #test components dictionary
+        self.assertEquals(components.keys(), ['battery-1.sym'])
+
+        component = components['battery-1.sym']
+        self.assertEquals(component.name, 'battery-1.sym')
+
+        keys = ['p1x', 'p1y', 'p2x', 'p2y', 'num', 'seq', 'label', 'type']
+        expected_pins = [
+            dict(zip(keys, [0, 200, 200, 200, '1', 1, '+', 'pwr'])),
+            dict(zip(keys, [700, 200, 500, 200, '2', 2, '-', 'pwr'])),
+        ]
+        for pin, expected_pin in zip(component.symbols[0].bodies[0].pins, expected_pins):
+            self.assertEquals(pin.label.text, expected_pin['label'])
+            ## test reversed pin order due to different handling in direction
+            self.assertEquals(pin.p1.x, expected_pin['p2x'] / self.geda_parser.SCALE_FACTOR)
+            self.assertEquals(pin.p1.y, expected_pin['p2y'] / self.geda_parser.SCALE_FACTOR)
+            self.assertEquals(pin.p2.x, expected_pin['p1x'] / self.geda_parser.SCALE_FACTOR)
+            self.assertEquals(pin.p2.y, expected_pin['p1y'] / self.geda_parser.SCALE_FACTOR)
+            
+            self.assertEquals(pin.pin_number, expected_pin['num'])
+
+
+
+    def test_parse_full(self):
+        self.geda_parser = GEDA([
+            '/usr/share/gEDA/sym',
+            './test/geda/simple_example/symbols',
+        ])
+
+        design = self.geda_parser.parse('test/geda/simple_example/simple_example.sch')
 
 if __name__ == '__main__':
     unittest.main()
