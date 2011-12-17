@@ -4,15 +4,28 @@ from core.design import Design
 from core.components import Pin
 from core.net import Net, NetPoint
 from core.component_instance import ComponentInstance, SymbolAttribute
+from parser.openjson import JSON
+
+import os
 import unittest
+import tempfile
 
 from cStringIO import StringIO
 
 
+from parser.t.kicad_t import GOOD_OUTPUT_FILE as TEST_UPV_FILE
+
+
 class KiCADTests(unittest.TestCase):
 
-    def test_create_new_kicad_writer(self):
-        assert KiCAD() is not None
+    def test_write(self):
+        design = JSON().parse(TEST_UPV_FILE)
+        writer = KiCAD()
+        fd, filename = tempfile.mkstemp()
+        os.close(fd)
+        os.remove(filename)
+        writer.write(design, filename)
+        self.assertTrue(os.path.exists(filename))
 
     def test_write_header(self):
         design = Design()

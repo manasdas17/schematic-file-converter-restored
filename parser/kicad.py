@@ -230,6 +230,7 @@ class KiCAD(object):
                     point.add_connected_component(conncpt)
 
 
+# map kicad rotation matrices to pi radians
 MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, 1, 1, 0): 0.5,
                    (-1, 0, 0, 1): 1,
