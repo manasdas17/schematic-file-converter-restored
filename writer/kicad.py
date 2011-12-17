@@ -108,7 +108,7 @@ $EndDescr
                 seg.sort() # canonical order
                 segments.add(tuple(seg))
 
-        for seg in segments:
+        for seg in sorted(segments):
             f.write('Wire Wire Line\n')
             f.write('\t%d %d %d %d\n' % (seg[0][0], seg[0][1],
                                          seg[1][0], seg[1][1]))
