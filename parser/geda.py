@@ -3,6 +3,7 @@
 """
 
 import os
+import warnings
 
 from core import shape
 from core import components
@@ -23,33 +24,26 @@ class GEDA:
 
     DELIMITER = ' '
     SCALE_FACTOR = 10 #maps 1000 MILS to 10 pixels
-    OBJECT_TYPES = set([ 
-        'v', # gEDA version
-        'C', # component
-        'N', # net segment
-        'U', # bus (only graphical aid, not a component)
-        'T', # text or attribute (context)
-        'P', # pin (in sym)
-        'L', # line
-        'B', # box
-        'V', # circle
-        'A', # arc
-        'H', # SVG-like path
-        ## path related types
-        'M', # moveto (absolute)
-        'm', # moveto (relative)
-        'L', # lineto (absolute)
-        'l', # lineto (relative)
-        'C', # curveto (absolute)
-        'c', # curveto (relative)
-        'Z', # closepath
-        'z', # closepath
+    OBJECT_TYPES = { 
+        'v': [int] * 2, # gEDA version
+        'C': [int] * 5 + [str], # component
+        'N': [int] * 5, # net segment
+        'U': [int] * 6, # bus (only graphical aid, not a component)
+        'T': [int] * 9, # text or attribute (context)
+        'P': [int] * 7, # pin (in sym)
+        'L': [int] * 10, # line
+        'B': [int] * 16, # box
+        'V': [int] * 15, # circle
+        'A': [int] * 11, # arc
+        'H': [int] * 13, # SVG-like path
         ## environments
-        '{', '}', # attributes
-        '[', ']', # embedded component
+        '{': [], 
+        '}': [], # attributes
+        '[': [], 
+        ']': [], # embedded component
         ## valid types but are ignored
-        'G', #picture
-    ])
+        'G': [], #picture
+    }
 
     def __init__(self, symbol_dirs=None):
         """ Constuct a gEDA parser object. Specifying a list of symbol 
@@ -82,8 +76,9 @@ class GEDA:
                             filepath = os.path.join(dirpath, filename)
                             self.symbol_lookup[filename] = filepath
 
-        print """WARNING: conversion will ignore style and color data in gEDA \
-format!"""
+        warnings.warn(
+            "converter will ignore style and color data in gEDA format!"
+        )
     
     def parse(self, filename):
         """ Parse a gEDA file into a design """
@@ -122,7 +117,9 @@ format!"""
 
             elif obj_type == 'G' :
                 ## picture/font types are not supported in upverter
-                print "WARNING: ignoring picture/font in gEDA file. Not supported!"
+                warnings.warn(
+                    "ignoring picture/font in gEDA file. Not supported!"
+                )
             elif obj_type == 'C':
                 ## ignore title components (not real components)
                 if not params[-1].startswith('title'):
@@ -131,8 +128,18 @@ format!"""
             elif obj_type == 'N':
                 self.parse_segment(stream, *params)
 
+            elif obj_type == 'H':
+                warnings.warn(
+                    'ommiting path outside of component.'
+                )
+                ## skip description of path
+                num_lines = params[-1]
+                for idx in range(num_lines):
+                    line = stream.readline()
+
             elif obj_type == 'U':
                 ## bus (only graphical feature NOT component)
+                self.parse_bus(*params)
                 ##TODO(elbaschid): process bus into NET
                 ##TODO(elbaschid): check for optional attribute definition in {}
                 raise NotImplementedError()
@@ -262,11 +269,15 @@ format!"""
                 body.add_pin(pin)
 
             elif typ == 'H':
-                #path, offset=offset
-                raise NotImplementedError()   
+                shapes = self.parse_path(stream, *params)
+
+                for shape in shapes:
+                    body.add_shape(shape)
 
             elif typ == 'G':
-                print "WARNING: ignoring picture/font in gEDA file. Not supported!"
+                warnings.warn(
+                    "ignoring picture/font in gEDA file. Not supported!"
+                )
 
             else:
                 pass
@@ -408,12 +419,76 @@ format!"""
 
         return nets
 
-    def parse_bus(self):
+    def parse_bus(self, x1, y1, x2, y2, color, ripperdir):
+        """ Processing a bus instance with start end end coordinates
+            at (x1, y1) and (x2, y2). *color* is ignored. *ripperdir*
+            defines the direction in which the bus rippers are oriented
+            relative to the direction of the bus. 
+        """
+        ## ignore bus when length or ripperdir is zero
+        if (x1 == x2 and y1 == y2) or ripperdir == 0:
+            return 
+
         raise NotImplementedError()
 
-    def parse_path(self):
-        raise NotImplementedError()
+    def parse_path(self, stream, *args):
+        num_lines = args[-1]
+        command = stream.readline().strip().split(self.DELIMITER)
 
+        if command[0] != 'M':
+            raise GEDAParserError('found invalid path in gEDA file')
+
+        def get_coords(string):
+            x, y = string.strip().split(',')
+            return (self.conv_mils(int(x)), self.conv_mils(int(y)))
+
+        shapes = []
+        current_pos = initial_pos = (get_coords(command[1]))
+
+        ## loop over the remaining lines of commands (after 'M')
+        for command_idx in range(num_lines-1):
+            command = stream.readline().strip().split(self.DELIMITER)
+
+            ## draw line from current to given position
+            if command[0] == 'L':
+                assert(len(command) == 2)
+                end_pos = get_coords(command[1])
+
+                line = shape.Line(current_pos, end_pos)
+                shapes.append(line)
+
+                current_pos = end_pos
+
+            ## draw curve from current to given position
+            elif command[0] == 'C':
+                assert(len(command) == 4)
+                control1 = get_coords(command[1])
+                control2 = get_coords(command[2])
+                end_pos = get_coords(command[3])
+
+                curve = shape.BezierCurve(
+                    control1,
+                    control2,
+                    current_pos,
+                    end_pos
+                )
+                shapes.append(curve)
+
+                current_pos = end_pos
+
+            ## end of sub-path, straight line from current to initial position
+            elif command[0] in ['z', 'Z']:
+                shapes.append(
+                    shape.Line(current_pos, initial_pos)
+                )
+
+            else:
+                raise GEDAParserError(
+                    "invalid command type in path '%s'" % command[0]
+                )
+
+        return shapes 
+    
     def parse_arc(self, center_x, center_y, radius, start_angle, sweep_angle, *style_args):
         return shape.Arc(
             self.conv_mils(center_x),
@@ -494,12 +569,12 @@ format!"""
 
         object_type = element_items[0].strip()
 
-        if object_type == 'C':
-            ## last parameter is string, do not convert
-            params = [int(x) for x in element_items[1:-1]]
-            params.append(element_items[-1])
-        else:
-            params = [int(x) for x in element_items[1:]]
+        params = []
+        for idx, param in enumerate(element_items[1:]):
+            params.append(
+                self.OBJECT_TYPES[object_type][idx](param)
+            )
+        assert(len(params) == len(element_items)-1)
 
         if move_to is not None:
             ## element in EMBEDDED component need to be moved

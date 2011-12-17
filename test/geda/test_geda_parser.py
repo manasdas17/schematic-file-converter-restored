@@ -383,6 +383,58 @@ netname=+_1
                 params[3]/self.geda_parser.SCALE_FACTOR
             )
 
+    def test_parse_path(self):
+        simple_example = """H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5
+M 510,240
+L 601,200
+L 555,295
+L 535,265
+z"""
+
+        stream = StringIO.StringIO(simple_example)
+        typ, params = self.geda_parser.parse_element(stream)
+        self.assertEquals(typ, 'H')
+
+        shapes = self.geda_parser.parse_path(stream, *params)
+        
+        expected_results = [
+            ['line', (51, 24), (60, 20)],
+            ['line', (60, 20), (55, 29)],
+            ['line', (55, 29), (53, 26)],
+            ['line', (53, 26), (51, 24)],
+        ]
+
+        self.assertEquals(len(shapes), 4)
+
+        for shape, expected in zip(shapes, expected_results):
+            self.assertEquals(shape.type, expected[0])
+            start_x, start_y = expected[1]
+            self.assertEquals(shape.p1.x, start_x)
+            self.assertEquals(shape.p1.y, start_y)
+            end_x, end_y = expected[2]
+            self.assertEquals(shape.p2.x, end_x) 
+            self.assertEquals(shape.p2.y, end_y) 
+
+
+        curve_example = """H 3 0 0 0 -1 -1 0 2 20 100 -1 -1 6
+M 100,100
+L 500,100
+C 700,100 800,275 800,400
+C 800,500 700,700 500,700
+L 100,700
+z"""
+        stream = StringIO.StringIO(curve_example)
+        typ, params = self.geda_parser.parse_element(stream)
+        self.assertEquals(typ, 'H')
+
+        shapes = self.geda_parser.parse_path(stream, *params)
+
+        self.assertEquals(len(shapes), 5)
+
+        expected_shapes = ['line', 'bezier', 'bezier', 'line', 'line']
+        for shape, expected in zip(shapes, expected_shapes):
+            self.assertEquals(shape.type, expected)
+
 
     def test_parse_circle(self):
         test_strings = [
