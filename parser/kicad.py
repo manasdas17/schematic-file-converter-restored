@@ -10,9 +10,10 @@
 from core.design import Design
 from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
-from core.net import Net, NetPoint
+from core.net import Net, NetPoint, ConnectedComponent
 from core.shape import Arc, Circle, Polygon, Rectangle, Label
 
+from collections import defaultdict
 from os.path import exists, splitext
 
 
@@ -61,6 +62,7 @@ class KiCAD(object):
 
         segments = self.divide(segments, junctions)
         circuit.nets = self.calc_nets(segments)
+        self.calc_connected_components(circuit)
 
         return circuit
 
@@ -205,6 +207,27 @@ class KiCAD(object):
             nets.append(newnet)
 
         return nets
+
+
+    def calc_connected_components(self, circuit):
+        """ Add all the connected components to the nets """
+
+        pins = defaultdict(set) # (x, y) -> set([(instance_id, pin_number)])
+
+        for inst in circuit.component_instances:
+            if inst.library_id in circuit.components.components:
+                cpt = circuit.components.components[inst.library_id]
+                for symba, body in zip(inst.symbol_attributes,
+                                       cpt.symbols[inst.symbol_index].bodies):
+                    for pin in body.pins:
+                        pins[symba.x + pin.p2.x, symba.y - pin.p2.y].add(
+                            (inst.instance_id, pin.pin_number))
+
+        for net in circuit.nets:
+            for point in net.points.values():
+                for instance_id, pin_number in pins.get((point.x, point.y), ()):
+                    conncpt = ConnectedComponent(instance_id, pin_number)
+                    point.add_connected_component(conncpt)
 
 
 MATRIX2ROTATION = {(1, 0, 0, -1): 0,

@@ -25,7 +25,7 @@ class KiCADTests(unittest.TestCase):
     def test_write_libs(self):
         writer = KiCAD()
         buf = StringIO()
-        writer.write_libs(buf, 'test.sch')
+        writer.write_libs(buf, 'test-cache.sch')
         self.assertEqual(buf.getvalue(), 'LIBS:test-cache\n')
 
     def test_write_eelayer(self):

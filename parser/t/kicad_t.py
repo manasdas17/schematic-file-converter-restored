@@ -28,7 +28,7 @@ class KiCADTests(unittest.TestCase):
     def test_points(self):
         """
         Test that all the points are present and have the right
-        positions and connected points.
+        positions and connected points and components.
         """
 
         good_points = {}
@@ -47,6 +47,11 @@ class KiCADTests(unittest.TestCase):
                 self.assertEqual(p.y, goodp.y)
                 self.assertEqual(set(p.connected_points),
                                  set(goodp.connected_points))
+                self.assertEqual(
+                    set((cc.instance_id, cc.pin_number)
+                        for cc in p.connected_components),
+                    set((cc.instance_id, cc.pin_number)
+                        for cc in goodp.connected_components))
 
         self.assertEqual(good_points, {})
 

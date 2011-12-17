@@ -54,7 +54,7 @@ class KiCAD(object):
 
     def write_libs(self, f, library_filename):
         """ Write the LIBS section of a kiCAD schematic """
-        f.write('LIBS:%s-cache\n' % (splitext(library_filename)[0],))
+        f.write('LIBS:%s\n' % (splitext(library_filename)[0],))
 
 
     def write_eelayer(self, f):
