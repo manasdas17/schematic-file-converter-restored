@@ -15,16 +15,16 @@ class TestGEDA(unittest.TestCase):
 
     def test_constructor(self):
         geda_parser = GEDA()
-        self.assertEquals(len(geda_parser.symbol_lookup), 0)
+        self.assertEquals(len(geda_parser.known_symbols), 0)
 
         geda_parser = GEDA([
             './test/geda/simple_example/symbols',
             '/invalid/dir/gEDA',
         ])
 
-        self.assertEquals(len(geda_parser.symbol_lookup), 1)
+        self.assertEquals(len(geda_parser.known_symbols), 1)
         self.assertEquals(
-            geda_parser.symbol_lookup['opamp.sym'],
+            geda_parser.known_symbols['opamp.sym'],
             './test/geda/simple_example/symbols/opamp.sym'
         )
 
@@ -34,8 +34,8 @@ class TestGEDA(unittest.TestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertGreater(len(geda_parser.symbol_lookup), 0)
-        self.assertTrue('title-B.sym' in geda_parser.symbol_lookup)
+        self.assertGreater(len(geda_parser.known_symbols), 0)
+        self.assertTrue('title-B.sym' in geda_parser.known_symbols)
 
     def test_parse_text(self):
         valid_text = """T 16900 35800 3 10 1 0 0 0 1
@@ -139,9 +139,21 @@ _sometype=in
     def test_calculate_nets(self):
         net_sample = """N 52100 44400 54300 44400 4
 N 54300 44400 54300 46400 4
+{
+T 54300 44400 5 8 0 1 0 8 1
+netname=test
+}
 N 53200 45100 53200 43500 4
 N 55000 44400 56600 44400 4
+{
+T 55000 44400 5 8 0 1 0 8 1
+netname=another name
+}
 N 55700 45100 55700 44400 4
+{
+T 55700 45100 5 8 0 1 0 8 1
+netname=another name
+}
 N 55700 44400 55700 43500 4"""
 
         stream = StringIO.StringIO(net_sample)
@@ -149,6 +161,11 @@ N 55700 44400 55700 43500 4"""
 
         ## check nets from design
         self.assertEquals(len(design.nets), 3)
+
+        self.assertEquals(
+            sorted([net.net_id for net in design.nets]),
+            sorted(['another name', 'test', ''])
+        )
 
         sorted_nets = {}
         for net in design.nets:
@@ -227,6 +244,16 @@ N 55700 44400 55700 43500 4"""
         net_schematic = 'test/geda/nets.sch'
         design = self.geda_parser.parse(net_schematic)
 
+        self.assertEquals(len(design.nets), 4)
+
+        net_names = [net.net_id for net in design.nets]
+        self.assertEquals(
+            sorted(net_names),
+            sorted(['advanced', 'long test', 'short_test', 'simple']),
+        )
+
+
+
     def test_parse_buses_from_stream(self):
         bus_data = """U 800 0 800 1000 10 -1
 N 1000 800 1200 800 4
@@ -264,6 +291,7 @@ device=none
 
         self.geda_parser.segments = set()
         self.geda_parser.net_points = dict()
+        self.geda_parser.net_names = dict()
 
         stream = StringIO.StringIO(simple_segment)
         typ, params = self.geda_parser.parse_element(stream)
@@ -293,6 +321,7 @@ netname=+_1
 }"""
         self.geda_parser.segments = set()
         self.geda_parser.net_points = dict()
+        self.geda_parser.net_names = dict()
 
         stream = StringIO.StringIO(complex_segment)
         typ, params = self.geda_parser.parse_element(stream)
@@ -636,6 +665,14 @@ pintype=in
         ])
 
         design = self.geda_parser.parse('test/geda/simple_example/simple_example.sch')
+        
+        self.assertEquals(len(design.nets), 2)
+
+        net_names = [net.net_id for net in design.nets]
+        self.assertEquals(
+            sorted(net_names),
+            sorted(['+_1', '-_In+']),
+        )
 
 if __name__ == '__main__':
     unittest.main()

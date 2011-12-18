@@ -67,6 +67,7 @@ class GEDA:
         self.design = None 
         self.segments = None
         self.net_points = None
+        self.net_names = None
 
         for symbol_dir in symbol_dirs:
             if os.path.exists(symbol_dir):
@@ -99,6 +100,7 @@ class GEDA:
         self.design = Design()
         self.segments = set()
         self.net_points = dict() 
+        self.net_names = dict() 
 
         obj_type, params = self.parse_element(stream)
 
@@ -439,9 +441,12 @@ class GEDA:
         self.segments.add((pt_a, pt_b))
 
         attributes = self.parse_environment(stream)
-        #if attributes is not None:
-        #    #TODO(elbaschid): create net with name in attributes 
-        #    pass
+        if attributes is not None:
+            #TODO(elbaschid): create net with name in attributes 
+            if attributes.has_key('netname'):
+                net_name = attributes['netname']
+                if net_name not in self.net_names.values():
+                    self.net_names[pt_a.point_id] = net_name
 
     def calculate_nets(self, segments):
         """ Calculate connected nets from previously stored segments
@@ -453,7 +458,15 @@ class GEDA:
         # Iterate over the segments, removing segments when added to a net
         while segments:
             seg = segments.pop() # pick a point
-            new_net = net.Net('')
+
+            net_name = '' 
+            pt_a, pt_b = seg
+            if pt_a.point_id in self.net_names:
+                net_name = self.net_names[pt_a.point_id]
+            elif pt_b.point_id in self.net_names:
+                net_name = self.net_names[pt_b.point_id]
+
+            new_net = net.Net(net_name)
             new_net.connect(seg)
             found = True
 
@@ -469,6 +482,12 @@ class GEDA:
                     segments.remove(seg)
 
             nets.append(new_net)
+
+        ## check if names are available for calculated nets 
+        for net_obj in nets:
+            for point_id in net_obj.points:
+                if point_id in self.net_names:
+                    net_obj.net_id = self.net_names[point_id]
 
         return nets
 
