@@ -62,7 +62,7 @@ class GEDA:
             #    '/usr/local/share/gEDA/sym',
             #]
 
-        self.symbol_lookup = {}
+        self.known_symbols = {}
 
         self.design = None 
         self.segments = None
@@ -74,7 +74,7 @@ class GEDA:
                     for filename in filenames:
                         if filename.endswith('.sym'):
                             filepath = os.path.join(dirpath, filename)
-                            self.symbol_lookup[filename] = filepath
+                            self.known_symbols[filename] = filepath
 
         warnings.warn(
             "converter will ignore style and color data in gEDA format!"
@@ -210,16 +210,16 @@ class GEDA:
             ##check if sym file is embedded or referenced 
             if basename.startswith('EMBEDDED'):
                 ## embedded only has to be processed when NOT in symbol lookup
-                if basename not in self.symbol_lookup:
+                if basename not in self.known_symbols:
                     component = self.parse_component_data(stream, x, y, selectable, angle, mirror, basename)
             else:
-                if basename not in self.symbol_lookup:
+                if basename not in self.known_symbols:
                     raise GEDAParserError(
                         "referenced symbol file '%s' unkown" % basename
                     )
 
                 ## requires parsing of referenced symbol file
-                fh = open(self.symbol_lookup[basename], "r")
+                fh = open(self.known_symbols[basename], "r")
 
                 typ, params = self.parse_element(fh)
                 if typ != 'v':
