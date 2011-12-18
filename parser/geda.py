@@ -121,8 +121,29 @@ class GEDA:
                     "ignoring picture/font in gEDA file. Not supported!"
                 )
             elif obj_type == 'C':
-                ## ignore title components (not real components)
-                if not params[-1].startswith('title'):
+                basename = params[-1]
+
+                ## busripper are virtual components that need separate processing 
+                if basename.startswith('busripper'):
+                    segment = self.segment_from_ripper(*params)
+                    self.segments.add(segment)
+
+                    ## make sure following environment is ignored
+                    self.parse_environment(stream)
+
+                elif basename.startswith('EMBEDDEDbusripper'):
+                    segment = self.segment_from_ripper(*params)
+                    self.segments.add(segment)
+
+                    ## make sure following environments are ignored
+                    self.skip_embedded_section(stream)
+                    self.parse_environment(stream)
+
+                ## title component defines page size/frame
+                elif basename.startswith('title'):
+                    ##TODO(elbaschid): get offset to be used in correcting coordinates
+                    offset_x, offset_y = params[0], params[1]
+                else:
                     component, instance = self.parse_component(stream, *params)
 
             elif obj_type == 'N':
@@ -142,7 +163,6 @@ class GEDA:
                 self.parse_bus(*params)
                 ##TODO(elbaschid): process bus into NET
                 ##TODO(elbaschid): check for optional attribute definition in {}
-                raise NotImplementedError()
 
             obj_type, params = self.parse_element(stream)
 
@@ -154,8 +174,30 @@ class GEDA:
 
         return self.design
 
-    def parse_component(self, stream, x, y, selectable, angle, mirror, basename):
+    def segment_from_ripper(self, x, y, selectable, angle, mirror, basename):
+        if mirror == 1:
+            angle = abs(angle - 90)
 
+        x, y = self.conv_coords(x, y)
+        pt_a = self.get_netpoint(x, y)
+
+        ripper_size = self.conv_mils(200)
+
+        ## create second point for busripper segment on bus 
+        if angle == 0:
+            pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y+ripper_size)
+        elif angle == 90:
+            pt_b = self.get_netpoint(pt_a.x-ripper_size, pt_a.y+ripper_size)
+        elif angle == 180:
+            pt_b = self.get_netpoint(pt_a.x-ripper_size, pt_a.y-ripper_size)
+        elif angle == 270:
+            pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y-ripper_size)
+        else:
+            raise GEDAParserError("invalid angle in component '%s'" % basename)
+
+        return pt_a, pt_b
+
+    def parse_component(self, stream, x, y, selectable, angle, mirror, basename):
         ## component has not been parsed yet
         if basename in self.design.components.components:
             component = self.design.components.components[basename]
@@ -169,7 +211,7 @@ class GEDA:
             if basename.startswith('EMBEDDED'):
                 ## embedded only has to be processed when NOT in symbol lookup
                 if basename not in self.symbol_lookup:
-                    component = self.parse_embedded_component(stream, x, y, selectable, angle, mirror, basename)
+                    component = self.parse_component_data(stream, x, y, selectable, angle, mirror, basename)
             else:
                 if basename not in self.symbol_lookup:
                     raise GEDAParserError(
@@ -183,7 +225,7 @@ class GEDA:
                 if typ != 'v':
                     raise GEDAParserError("cannot convert file, not in gEDA format")
 
-                component = self.parse_embedded_component(fh, x, y, selectable, angle, mirror, basename)
+                component = self.parse_component_data(fh, x, y, selectable, angle, mirror, basename)
 
                 fh.close()
                         
@@ -221,7 +263,7 @@ class GEDA:
 
         return component, instance
 
-    def parse_embedded_component(self, stream, x, y, selectable, angle, mirror, basename):
+    def parse_component_data(self, stream, x, y, selectable, angle, mirror, basename):
         move_to = None
         if basename.startswith('EMBEDDED'):
             move_to = (x, y)
@@ -358,12 +400,15 @@ class GEDA:
 
         return attributes
 
-    def store_netpoint(self, x, y):
+    def get_netpoint(self, x, y):
         if (x, y) not in self.net_points:
             self.net_points[(x, y)] = net.NetPoint('%da%d' % (x, y), x, y)
         return self.net_points[(x, y)]
 
     def intersects_segment(self, segment, pt_c):
+        """ Checks if point *pt_c* lays on the *segment*.
+            (code adapted from kicad parser).
+        """
         pt_a, pt_b = segment
 
         #check vertical segment
@@ -374,17 +419,21 @@ class GEDA:
         elif pt_a.y == pt_b.y == pt_c.y:
             if min(pt_a.x, pt_b.x) < pt_c.x < max(pt_a.x, pt_b.x):
                 return True
+        #check diagonal segment
+        elif (pt_c.x-pt_a.x)*(pt_b.y-pt_a.y) == (pt_b.x-pt_a.x)*(pt_c.y-pt_a.y):
+            if min(pt_a.x, pt_b.x) < pt_c.x < max(pt_a.x, pt_b.x):
+                return True
         ## point C not on segment
         return False
 
     def parse_segment(self, stream, x1, y1, x2, y2, color):
-        #TODO(elbaschid): store segement for processing later
+        ## store segement for processing later
         x1, y1 = self.conv_coords(x1, y1)
         x2, y2 = self.conv_coords(x2, y2)
 
         ## store segment points in global point list
-        pt_a = self.store_netpoint(x1, y1)
-        pt_b = self.store_netpoint(x2, y2)
+        pt_a = self.get_netpoint(x1, y1)
+        pt_b = self.get_netpoint(x2, y2)
 
         ## add segment to global list for later processing
         self.segments.add((pt_a, pt_b))
@@ -395,6 +444,10 @@ class GEDA:
         #    pass
 
     def calculate_nets(self, segments):
+        """ Calculate connected nets from previously stored segments
+            and netpoints.
+            (code adapted from kicad parser).
+        """
         nets = []
 
         # Iterate over the segments, removing segments when added to a net
@@ -429,7 +482,13 @@ class GEDA:
         if (x1 == x2 and y1 == y2) or ripperdir == 0:
             return 
 
-        raise NotImplementedError()
+        pta_x, pta_y = self.conv_coords(x1, y1)
+        ptb_x, ptb_y = self.conv_coords(x2, y2)
+
+        self.segments.add((
+            self.get_netpoint(pta_x, pta_y),
+            self.get_netpoint(ptb_x, ptb_y)
+        ))
 
     def parse_path(self, stream, *args):
         num_lines = args[-1]

@@ -5,9 +5,6 @@ import StringIO
 from parser.geda import GEDA, GEDAParserError
 from parser.openjson import JSON
 
-#TEST_INPUT_FILE = join(dirname(__file__), 'test.sch')
-#GOOD_OUTPUT_FILE = join(dirname(__file__), 'test.upv')
-
 
 class TestGEDA(unittest.TestCase):
 
@@ -139,12 +136,6 @@ _sometype=in
 
         self.assertEquals(attributes, expected_attributes)
 
-    #def test_parse_embedded_component(self):
-    #    raise NotImplementedError()
-
-    #def test_parse_component(self):
-    #    raise NotImplementedError()
-
     def test_calculate_nets(self):
         net_sample = """N 52100 44400 54300 44400 4
 N 54300 44400 54300 46400 4
@@ -235,6 +226,37 @@ N 55700 44400 55700 43500 4"""
         #run more complex test with nets sample file
         net_schematic = 'test/geda/nets.sch'
         design = self.geda_parser.parse(net_schematic)
+
+    def test_parse_buses_from_stream(self):
+        bus_data = """U 800 0 800 1000 10 -1
+N 1000 800 1200 800 4
+C 1000 800 1 180 0 busripper-1.sym
+{
+T 1000 400 5 8 0 0 180 0 1
+device=none
+}
+N 600 400 300 400 4
+C 600 400 1 270 0 busripper-1.sym
+{
+T 1000 400 5 8 0 0 270 0 1
+device=none
+}"""
+        stream = StringIO.StringIO(bus_data)
+        design = self.geda_parser.parse_schematic(stream)
+
+        ## check nets from design
+        self.assertEquals(len(design.nets), 1)
+
+        point_ids = design.nets[0].points.keys()
+        expected_points = [
+            '80a100', '80a0', '120a80', '100a80', '80a60',
+            '30a40', '60a40', '80a20'
+        ]
+
+        self.assertEquals(
+            sorted(point_ids),
+            sorted(expected_points),
+        )
 
 
     def test_parse_segment(self):
@@ -434,6 +456,20 @@ z"""
         expected_shapes = ['line', 'bezier', 'bezier', 'line', 'line']
         for shape, expected in zip(shapes, expected_shapes):
             self.assertEquals(shape.type, expected)
+
+    def test_segment_from_ripper(self):
+        pass
+        #samples = [
+        #    [46800, 46900, 1, 180, 0, 'busripper-1.sym']
+        #    [46800, 46500, 1, 180, 0, 'busripper-1.sym']
+        #    [46400, 46700, 1, 270, 1, 'busripper-1.sym']
+        #    [47000, 46000, 1, 270, 0, 'busripper-1.sym']
+        #    [46500, 45600, 1, 0, 0, 'busripper-1.sym']
+        #]
+        #expected = [
+        #    [
+        #]
+        #self.geda_parser.segment_from_ripper(
 
 
     def test_parse_circle(self):
