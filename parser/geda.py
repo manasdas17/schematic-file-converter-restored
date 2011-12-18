@@ -163,8 +163,6 @@ class GEDA:
             elif obj_type == 'U':
                 ## bus (only graphical feature NOT component)
                 self.parse_bus(*params)
-                ##TODO(elbaschid): process bus into NET
-                ##TODO(elbaschid): check for optional attribute definition in {}
 
             obj_type, params = self.parse_element(stream)
 
@@ -255,7 +253,7 @@ class GEDA:
         symbol = SymbolAttribute(comp_x, comp_y, self.conv_angle(angle))
         instance.add_symbol_attribute(symbol)
 
-        ##TODO(elbaschid): add annotation for refdes
+        ## add annotation for refdes
         symbol.add_annotation(
             Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
         )
@@ -442,7 +440,7 @@ class GEDA:
 
         attributes = self.parse_environment(stream)
         if attributes is not None:
-            #TODO(elbaschid): create net with name in attributes 
+            ## create net with name in attributes 
             if attributes.has_key('netname'):
                 net_name = attributes['netname']
                 if net_name not in self.net_names.values():
