@@ -2,7 +2,7 @@ ViewDraw (and descendents) Schematic Parser
 ==========================================
 As best I (Patrick Yeon) can tell, ViewDraw has been associated with ViewLogic, Innoveda Corp., and now with Mentor under their ePD and DxDesigner tools. The format, extended as needed, still shows up in some places in the latest version of DxDesigner I have seen, even though the iCDB is meant to be the project database.
 
-This work is based off Stuart Brorson and Steven Salkow's earlier "ViewDraw File Formats" documentation, with Patrick Yeon working out further extended details based on ViewDraw output files strewn about online.
+The work to understand the format is based off Stuart Brorson and Steven Salkow's earlier "ViewDraw File Formats" documentation, with Patrick Yeon working out further extended details based on ViewDraw output files strewn about online.
 
 Current Status
 --------------
