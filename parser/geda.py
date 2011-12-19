@@ -428,8 +428,15 @@ class GEDA:
                     ##TODO(elbaschid): annotation text in component. what to do?
                     pass
                 else:
-                    component.add_attribute(key, value)
+                    if key == 'refdes':
+                        print key, value
+                        if '?' in value:
+                            prefix, suffix = value.split('?') 
+                            component.add_attribute('_prefix', prefix)
+                            component.add_attribute('_suffix', suffix)
 
+                    else:
+                        component.add_attribute(key, value)
             elif typ == 'L':
                 line = self._parse_line(params)
                 body.add_shape(line)
