@@ -24,7 +24,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(len(geda_parser.known_symbols), 1)
         self.assertEquals(
-            geda_parser.known_symbols['opamp.sym'],
+            geda_parser.known_symbols['opamp'],
             './test/geda/simple_example/symbols/opamp.sym'
         )
 
@@ -35,7 +35,7 @@ class TestGEDA(unittest.TestCase):
         ])
 
         self.assertGreater(len(geda_parser.known_symbols), 0)
-        self.assertTrue('title-B.sym' in geda_parser.known_symbols)
+        self.assertTrue('title-B' in geda_parser.known_symbols)
 
     def test_parse_text(self):
         valid_text = """T 16900 35800 3 10 1 0 0 0 1
@@ -43,7 +43,7 @@ Text string!"""
 
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser.parse_element(text_stream)
-        success, annotation = self.geda_parser.parse_text(text_stream, *params)
+        success, annotation = self.geda_parser.parse_text(text_stream, params)
 
         self.assertEquals(success, None)
         self.assertEquals(annotation.value, "Text string!")
@@ -60,7 +60,7 @@ and more ...
 text!"""
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser.parse_element(text_stream)
-        success, annotation = self.geda_parser.parse_text(text_stream, *params)
+        success, annotation = self.geda_parser.parse_text(text_stream, params)
 
         text = """Text string!
 And more ...
@@ -123,13 +123,13 @@ pinseq=3
 T 250 500 9 16 0 1 0 0 1
 pinlabel=+=?
 T 150 550 5 8 0 1 0 8 1
-_sometype=in
+sometype=in
 }"""
         expected_attributes = {
             'pinnumber': '3',
             'pinseq': '3',
             'pinlabel': '+=?',
-            '_sometype': 'in',
+            'sometype': 'in',
         }
         stream = StringIO.StringIO(valid_env)
         attributes = self.geda_parser.parse_environment(stream)
@@ -295,7 +295,7 @@ device=none
 
         stream = StringIO.StringIO(simple_segment)
         typ, params = self.geda_parser.parse_element(stream)
-        self.geda_parser.parse_segment(stream, *params)
+        self.geda_parser.parse_segment(stream, params)
 
         np_a, np_b = self.geda_parser.segments.pop()
         self.assertEquals(np_a.point_id, '4730a4850')
@@ -325,7 +325,7 @@ netname=+_1
 
         stream = StringIO.StringIO(complex_segment)
         typ, params = self.geda_parser.parse_element(stream)
-        self.geda_parser.parse_segment(stream, *params)
+        self.geda_parser.parse_segment(stream, params)
 
         expected_points = [(4730, 4850), (4350, 4850)]
         for x, y in expected_points:
@@ -344,7 +344,7 @@ netname=+_1
         typ, params =  self.geda_parser.parse_element(
             StringIO.StringIO("A 41100 48500 1900 0 90 3 0 0 0 -1 -1")
         )
-        arc_obj = self.geda_parser.parse_arc(*params)
+        arc_obj = self.geda_parser.parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 4110)
         self.assertEquals(arc_obj.y, 4850)
@@ -355,7 +355,7 @@ netname=+_1
         typ, params =  self.geda_parser.parse_element(
             StringIO.StringIO("A 44300 49800 500 30 200 3 0 0 0 -1 -1")
         )
-        arc_obj = self.geda_parser.parse_arc(*params)
+        arc_obj = self.geda_parser.parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 4430)
         self.assertEquals(arc_obj.y, 4980)
@@ -367,7 +367,7 @@ netname=+_1
         typ, params =  self.geda_parser.parse_element(
             StringIO.StringIO("A 45100 48400 700 123 291 3 0 0 0 -1 -1")
         )
-        arc_obj = self.geda_parser.parse_arc(*params)
+        arc_obj = self.geda_parser.parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 4510)
         self.assertEquals(arc_obj.y, 4840)
@@ -386,23 +386,23 @@ netname=+_1
             typ, params =  self.geda_parser.parse_element(
                 StringIO.StringIO(line_string)
             )
-            line_obj = self.geda_parser.parse_line(*params)
+            line_obj = self.geda_parser.parse_line(params)
             self.assertEquals(line_obj.type, 'line')
             self.assertEquals(
                 line_obj.p1.x, 
-                params[0]/self.geda_parser.SCALE_FACTOR
+                params['x1']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 line_obj.p1.y, 
-                params[1]/self.geda_parser.SCALE_FACTOR
+                params['y1']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 line_obj.p2.x, 
-                params[2]/self.geda_parser.SCALE_FACTOR
+                params['x2']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 line_obj.p2.y, 
-                params[3]/self.geda_parser.SCALE_FACTOR
+                params['y2']/self.geda_parser.SCALE_FACTOR
             )
 
     def test_parse_box(self):
@@ -415,23 +415,23 @@ netname=+_1
             typ, params =  self.geda_parser.parse_element(
                 StringIO.StringIO(rect_string)
             )
-            rect_obj = self.geda_parser.parse_box(*params)
+            rect_obj = self.geda_parser.parse_box(params)
             self.assertEquals(rect_obj.type, 'rectangle')
             self.assertEquals(
                 rect_obj.x, 
-                (params[0]+params[3])/self.geda_parser.SCALE_FACTOR
+                (params['x']+params['height'])/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 rect_obj.y, 
-                params[1]/self.geda_parser.SCALE_FACTOR
+                params['y']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 rect_obj.width, 
-                params[2]/self.geda_parser.SCALE_FACTOR
+                params['width']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 rect_obj.height, 
-                params[3]/self.geda_parser.SCALE_FACTOR
+                params['height']/self.geda_parser.SCALE_FACTOR
             )
 
     def test_parse_path(self):
@@ -446,7 +446,7 @@ z"""
         typ, params = self.geda_parser.parse_element(stream)
         self.assertEquals(typ, 'H')
 
-        shapes = self.geda_parser.parse_path(stream, *params)
+        shapes = self.geda_parser.parse_path(stream, params)
         
         expected_results = [
             ['line', (51, 24), (60, 20)],
@@ -478,7 +478,7 @@ z"""
         typ, params = self.geda_parser.parse_element(stream)
         self.assertEquals(typ, 'H')
 
-        shapes = self.geda_parser.parse_path(stream, *params)
+        shapes = self.geda_parser.parse_path(stream, params)
 
         self.assertEquals(len(shapes), 5)
 
@@ -511,29 +511,29 @@ z"""
             typ, params =  self.geda_parser.parse_element(
                 StringIO.StringIO(circle_string)
             )
-            circle_obj = self.geda_parser.parse_circle(*params)
+            circle_obj = self.geda_parser.parse_circle(params)
             self.assertEquals(circle_obj.type, 'circle')
             self.assertEquals(
                 circle_obj.x, 
-                params[0]/self.geda_parser.SCALE_FACTOR
+                params['x']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 circle_obj.y, 
-                params[1]/self.geda_parser.SCALE_FACTOR
+                params['y']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 circle_obj.radius, 
-                params[2]/self.geda_parser.SCALE_FACTOR
+                params['radius']/self.geda_parser.SCALE_FACTOR
             )
 
     def test_parse_pin(self):
-            stream = StringIO.StringIO('P 100 600 200 600 1 0 0\nM')
+            stream = StringIO.StringIO('P 100 600 200 600 1 0 0\n')
             typ, params =  self.geda_parser.parse_element(stream)
             self.assertRaises(
                 GEDAParserError,
                 self.geda_parser.parse_pin,
                 stream, 
-                *params
+                params
             )
 
             pin_sample = """P 100 600 200 600 1 0 0
@@ -549,7 +549,7 @@ pintype=in
 }"""
             stream = StringIO.StringIO(pin_sample)
             typ, params =  self.geda_parser.parse_element(stream)
-            pin = self.geda_parser.parse_pin(stream, *params)
+            pin = self.geda_parser.parse_pin(stream, params)
 
             self.assertEquals(pin.pin_number, '3')
             self.assertEquals(pin.label.text, '+')
@@ -571,7 +571,7 @@ pintype=in
 }"""
             stream = StringIO.StringIO(reversed_pin_sample)
             typ, params =  self.geda_parser.parse_element(stream)
-            pin = self.geda_parser.parse_pin(stream, *params)
+            pin = self.geda_parser.parse_pin(stream, params)
 
             self.assertEquals(pin.pin_number, 'E')
             self.assertEquals(pin.label, None) 
@@ -585,17 +585,30 @@ pintype=in
     def test_parse_element(self):
         typ, params = self.geda_parser.parse_element(StringIO.StringIO('{'))
         self.assertEquals(typ, '{')
-        self.assertEquals(params, [])
+        self.assertEquals(params, {})
 
         typ, params = self.geda_parser.parse_element(
-            StringIO.StringIO('A 49 34 223')
+            StringIO.StringIO('A 49 34 223 30 90')
         )
         self.assertEquals(typ, 'A')
-        self.assertEquals(params, [49, 34, 223])
-        self.assertEquals(len(params), 3)
+        self.assertEquals(params, {
+            'x': 49, 
+            'y': 34, 
+            'radius': 223,
+            'startangle': 30,
+            'sweepangle': 90,
+        })
+        self.assertEquals(len(params), 5)
 
-        expected_params = [18600, 21500, 1, 0, 0, 'EMBEDDED555-1.sym']
-        string = " ".join(['C'] + [str(x) for x in expected_params])
+        expected_params = {
+            'x': 18600, 
+            'y': 21500, 
+            'selectable': 1, 
+            'angle': 0, 
+            'mirror': 0, 
+            'basename': 'EMBEDDED555-1',
+        }
+        string = 'C 18600 21500 1 0 0 EMBEDDED555-1'
         typ, params = self.geda_parser.parse_element(
             StringIO.StringIO(string)
         )
@@ -612,10 +625,10 @@ pintype=in
         design = self.geda_parser.parse('./test/geda/embedded_component.sch')
 
         components = design.components.components #test components dictionary
-        self.assertEquals(components.keys(), ['EMBEDDEDbattery-1.sym'])
+        self.assertEquals(components.keys(), ['EMBEDDEDbattery-1'])
 
-        component = components['EMBEDDEDbattery-1.sym']
-        self.assertEquals(component.name, 'EMBEDDEDbattery-1.sym')
+        component = components['EMBEDDEDbattery-1']
+        self.assertEquals(component.name, 'EMBEDDEDbattery-1')
 
         keys = ['p1x', 'p1y', 'p2x', 'p2y', 'num', 'seq', 'label', 'type']
         expected_pins = [
@@ -636,10 +649,10 @@ pintype=in
         design = self.geda_parser.parse('test/geda/component.sch')
 
         components = design.components.components #test components dictionary
-        self.assertEquals(components.keys(), ['battery-1.sym'])
+        self.assertEquals(components.keys(), ['battery-1'])
 
-        component = components['battery-1.sym']
-        self.assertEquals(component.name, 'battery-1.sym')
+        component = components['battery-1']
+        self.assertEquals(component.name, 'battery-1')
 
         keys = ['p1x', 'p1y', 'p2x', 'p2y', 'num', 'seq', 'label', 'type']
         expected_pins = [
