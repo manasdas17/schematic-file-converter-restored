@@ -8,10 +8,19 @@ from os import listdir
 from math import pi, sqrt, atan
 from collections import defaultdict
 
+# ViewDraw files are line-based, where the first character of a line is a
+# command, and the rest of the line is arguments for that command. '|' was
+# originally a comment, but seems to have ben co-opted to get even more commands
+# out of the format, such that |R, |Q, |FNTSTL, and others are now also used.
+
 class vdparser:
+    '''base class for the parsers. Includes parsing code for commands that are
+    shared between the different files'''
     sheetsizes = ('ASIZE', 'BSIZE', 'CSIZE', 'DSIZE', 'ESIZE', 'A4', 'A3',
                   'A2', 'A1', 'A0', 'CUSTOM')
-    def __init__(self):
+    def __init__(self, filename):
+        self.filename = filename
+        self.stream = None
         self.parsers = {'A': 'parse_annot',
                         'L': 'parse_label',
                         '|R': 'parse_rev',
@@ -24,8 +33,9 @@ class vdparser:
                         'l': 'parse_line',
                        }
 
-    def parse(self, filename):
-        self.stream = FileStack(filename)
+    def parse(self):
+        '''Returns a dict of elements that have been parsed out of the file'''
+        self.stream = FileStack(self.filename)
         tree = defaultdict(list)
         for phrase in self.stream:
             cmd, sep, args = phrase.partition(' ')
@@ -34,10 +44,17 @@ class vdparser:
         return tree
 
     def parsenode(self, cmd):
+        '''Returns the method used to parse the given command. Parse methods
+        return a key and a properly parsed element (unspecified type)'''
+        # this would be the place to override or decorate if you want additional
+        # info or control on every single action taken.
         parser = self.parsers.get(cmd, 'parse_null')
         return getattr(self, parser)
 
     def parse_null(self, args):
+        '''A do-nothing parser for commands to be ignored'''
+        # override/decorate this if you have a method you want to have called
+        # for every unhandled command.
         # get that token off the stack, and ignore it
         return (None, [])
 
@@ -77,7 +94,7 @@ class vdparser:
         return ('annot', Annotation(text, int(x), int(y), 0, True))
 
     def parse_rev(self, args):
-        # Gahh, ugly.
+        # File revision date. Gahh, ugly.
         return ('annot', Annotation('rev=' + args, 0, 0, 0, False))
 
     def parse_size(self, args):
@@ -99,6 +116,7 @@ class vdparser:
         return ('shape', Label(int(x), int(y), text, 'left', 0))
 
     def parse_ver(self, args):
+        # Viewdraw file version. So far have only dealt with 50, 51.
         return ('fileversion', args)
 
     def parse_line(self, args):
@@ -161,8 +179,8 @@ class vdparser:
                              int(round(r))))
 
 class ViewDrawSch(vdparser):
-    def __init__(self, lib):
-        vdparser.__init__(self)
+    def __init__(self, lib, filename):
+        vdparser.__init__(self, filename)
         self.parsers.update({'N': 'parse_net',
                              'J': 'parse_junc',
                              'S': 'parse_seg',
@@ -174,8 +192,10 @@ class ViewDrawSch(vdparser):
                             })
         self.lib = lib
 
-    def parse_sch(self, filename):
-        tree = vdparser.parse(self, filename)
+    def parse(self):
+        '''Returns a Design built up from a schematic file that represents one
+        sheet of the original schematic'''
+        tree = vdparser.parse(self)
         # tree['lines'] is a [list of [list of lines]]
         tree['shape'].extend(sum(tree['lines'], []))
         ckt = Design()
@@ -339,8 +359,8 @@ class ViewDrawSym(vdparser):
     symtypes = ('composite', 'module', 'annotate', 'pin', 'power')
     # TODO A command
 
-    def __init__(self, libdir):
-        vdparser.__init__(self)
+    def __init__(self, libdir, filename):
+        vdparser.__init__(self, libdir + filename)
         self.parsers.update({'Y': 'parse_type',
                              'U': 'parse_attr',
                              'P': 'parse_pin',
@@ -348,12 +368,12 @@ class ViewDrawSym(vdparser):
                             })
         self.libdir = libdir
 
-    def parse(self, filename):
-        part = Component(filename)
+    def parse(self):
+        part = Component(self.filename)
         part.add_symbol(Symbol())
         part.symbols[0].add_body(Body())
         
-        tree = vdparser.parse(self, self.libdir + filename)
+        tree = vdparser.parse(self)
         for attr in tree['attr']:
             part.add_attribute(*attr)
         for shape in tree['shape'] + sum(tree['lines'], []):
@@ -436,16 +456,15 @@ class ViewDraw:
             files = [f for f in listdir(libdir)
                      if f.rpartition('.')[-1].isdigit()]
      
-            sym = ViewDrawSym(libdir)
             for f in files:
-                lib.add_component((libname + ':' + f).lower(), sym.parse(f))
+                lib.add_component((libname + ':' + f).lower(),
+                                  ViewDrawSym(libdir, f).parse())
 
         sheets = list()
         schfiles = [f for f in listdir(self.schdir)
                     if f.split('.')[-1].isdigit()]
         for sch in sorted(schfiles, key=lambda s: int(s.split('.')[-1])):
-            sheet = ViewDrawSch(lib)
-            sheets.append(sheet.parse_sch(self.schdir + sch))
+            sheets.append(ViewDrawSch(lib, self.schdir + sch).parse())
 
         # For now, we'll return a list of designs, each one represents one
         # sheet in the viewdraw schematic.
