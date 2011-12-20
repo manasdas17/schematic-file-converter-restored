@@ -17,6 +17,24 @@ import types
 
 from core.shape import Point
 
+class GEDAColor:
+    BACKGROUND_COLOR = 0
+    PIN_COLOR = 1 
+    NET_ENDPOINT_COLOR = 2
+    GRAPHIC_COLOR = 3
+    NET_COLOR = 4
+    ATTRIBUTE_COLOR = 5
+    LOGIC_BUBBLE_COLOR = 6
+    DOTS_GRID_COLOR = 7
+    DETACHED_ATTRIBUTE_COLOR = 8
+    TEXT_COLOR = 9
+    BUS_COLOR = 10
+    SELECT_COLOR = 11
+    BOUNDINGBOX_COLOR = 12
+    ZOOM_BOX_COLOR = 13
+    STROKE_COLOR = 14
+    LOCK_COLOR = 15
+
 
 class GEDAWriterError(Exception):
     pass
@@ -32,7 +50,8 @@ class GEDA:
     def __init__(self):
         ## offset used as bottom left origin as default
         ## in gEDA when starting new file
-        self.offset = Point(40000, 40000)
+        self.offset = Point(0, 0)
+        #self.offset = Point(40000, 40000)
 
         self.project_dirs = {
             'symbol': None,
@@ -94,7 +113,7 @@ class GEDA:
 
         return output
 
-    def create_title(self, design_attributes):
+    def _create_title(self, design_attributes):
         title_data = ['v 20110115 2',]
 
         title_data.append(
@@ -109,26 +128,13 @@ class GEDA:
 
         ## set coordinates at offset for design attributes
         for key, value in design_attributes.attributes:
-            visibility = 1  
+            attribute = self._create_attribute(key, value, x, y)
 
-            if key.startswith('_'):
-                visibility = 0
-                key = key[1:]    
-
-            attribute_text = '%s=%s' % (key, value)
-
-            title_data.append(
-                self.create_text(
-                    self.to_mils(0),
-                    self.to_mils(0),
-                    attribute_text,
-                    visibility=visibility
-                )
-            )
+            title_data.append(attribute)
 
         return title_data
 
-    def create_component(self, x, y, basename, selectable=0, angle=0, mirror=0):
+    def _create_component(self, x, y, basename, selectable=0, angle=0, mirror=0):
         return 'C %d %d %d %d %d %s' % (
             self.to_mils(x),
             self.to_mils(y),
@@ -138,29 +144,44 @@ class GEDA:
             basename
         )
 
-    def create_text(self, text, x, y, size=10, visibility=1, show_name_value=1,
-            angle=0, alignment=0):
+    def _create_attribute(self, key, value, x, y, **kwargs):
 
+        visibility = kwargs.get('visibility', 1)
+        ## make private attribute invisible in gEDA
+        if key.startswith('_'): 
+            key = key[1:]
+            visibility = 0
+
+        text = "%s=%s" % (str(key), str(value))
+
+        return self._create_text(text, x, y, visibility=visibility, **kwargs)
+
+    def _create_text(self, text, x, y, **kwargs):
+        
         if isinstance(text, basestring):
-            numlines = text.split('\n')
+            text = text.split('\n')
 
         assert(isinstance(text, types.ListType))
 
-        text_line =  'T %d %d %d %d %d %d %d %d %d %d' % (
+        text_line =  'T %d %d %d %d %d %d %d %d %d' % (
             self.to_mils(x) + self.offset.x,
             self.to_mils(y) + self.offset.y,
-            color,
-            size,
-            visibility,
-            show_name_value,
-            angle, 
-            alignment, 
+            GEDAColor.TEXT_COLOR,
+            kwargs.get('size', 10),
+            kwargs.get('visibility', 1),
+            0, #show_name_value is always '0'
+            self.conv_angle(kwargs.get('angle', 0)),
+            kwargs.get('alignment', 0),
             len(text),
         )
         return [text_line] + text
 
     def to_mils(self, px):
         return self.offset.x + (px * self.SCALE_FACTOR)
+
+    def conv_angle(self, angle, steps=1):
+        converted_angle = int(angle * 180)
+        return (converted_angle // int(steps)) * steps
 
     def conv_coords(self, x, y):
         return (
