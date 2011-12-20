@@ -5,7 +5,12 @@
 # 1) Read in all of the segments (and junctions and components)
 # 2) Divide all the segments by the junctions
 # 3) Calculate the nets from the segments
-# 4) Read the part library to figure out pin connectivity [TODO]
+# 4) Read the part library to figure out components and pin connectivity
+#
+# Note: in a KiCAD schematic, the y coordinates increase downwards. In
+# OpenJSON, y coordinates increase upwards, so we negate them. In the
+# KiCAD library file (where components are stored) y coordinates
+# increase upwards as in OpenJSON and no transformation is needed.
 
 from core.design import Design
 from core.components import Component, Symbol, Body, Pin
@@ -69,17 +74,16 @@ class KiCAD(object):
 
     def parse_wire(self, f, segments):
         """ Parse a Wire segment line """
-        # coords on 2nd line
         x1, y1, x2, y2 = [int(i) for i in f.readline().split()]
 
         if not(x1 == x2 and y1 == y2): # ignore zero-length segments
-            segments.add(((x1, y1),(x2, y2)))
+            segments.add(((x1, -y1), (x2, -y2)))
 
 
     def parse_connection(self, line, junctions):
         """ Parse a Connection line """
         x, y = [int(i) for i in line.split()[2:4]]
-        junctions.add((x, y))
+        junctions.add((x, -y))
 
 
     def parse_component_instance(self, f, components):
@@ -98,8 +102,7 @@ class KiCAD(object):
         assert prefix == 'P'
         compx, compy = int(compx), int(compy)
 
-        # TODO(ajray): ignore all the fields for now, probably
-        # could make these annotations
+        # TODO: turn the fields into annotations
 
         line = f.readline()
         rotation = 0
@@ -113,7 +116,7 @@ class KiCAD(object):
             line = f.readline()
 
         inst = ComponentInstance(reference, name, 0)
-        inst.add_symbol_attribute(SymbolAttribute(compx, compy, rotation))
+        inst.add_symbol_attribute(SymbolAttribute(compx, -compy, rotation))
 
         return inst
 

@@ -57,8 +57,8 @@ class KiCADTests(unittest.TestCase):
 $Comp
 L libid id
 U 1 1 00000000
-P 3 4
-\t1    3 4
+P 3 -4
+\t1    3 -4
 \t0    1    1    0
 $EndComp
 ''')
@@ -81,7 +81,7 @@ $EndComp
         writer.write_net(buf, net)
         self.assertEqual(
             buf.getvalue(),
-            'Wire Wire Line\n\t0 0 0 1\nWire Wire Line\n\t0 0 1 0\n')
+            'Wire Wire Line\n\t0 0 0 -1\nWire Wire Line\n\t0 0 1 0\n')
 
     def test_write_footer(self):
         writer = KiCAD()

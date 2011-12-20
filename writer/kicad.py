@@ -1,5 +1,10 @@
 """ The KiCAD Format Writer """
 
+# Note: in a KiCAD schematic, the y coordinates increase downwards. In
+# OpenJSON, y coordinates increase upwards, so we negate them. In the
+# KiCAD library file (where components are stored) y coordinates
+# increase upwards as in OpenJSON and no transformation is needed.
+
 import time
 
 from os.path import splitext
@@ -89,9 +94,9 @@ $EndDescr
         f.write('L %s %s\n' % (inst.library_id, inst.instance_id))
         f.write('U %d 1 00000000\n' % (inst.symbol_index,))
         f.write('P %d %d\n' % (inst.symbol_attributes[0].x,
-                               inst.symbol_attributes[0].y))
+                               -inst.symbol_attributes[0].y))
         f.write('\t1    %d %d\n' % (inst.symbol_attributes[0].x,
-                                    inst.symbol_attributes[0].y))
+                                    -inst.symbol_attributes[0].y))
         f.write('\t%d    %d    %d    %d\n' %
                 ROTATION2MATRIX[inst.symbol_attributes[0].rotation])
         f.write('$EndComp\n')
@@ -110,8 +115,8 @@ $EndDescr
 
         for seg in sorted(segments):
             f.write('Wire Wire Line\n')
-            f.write('\t%d %d %d %d\n' % (seg[0][0], seg[0][1],
-                                         seg[1][0], seg[1][1]))
+            f.write('\t%d %d %d %d\n' % (seg[0][0], -seg[0][1],
+                                         seg[1][0], -seg[1][1]))
 
 
     def write_footer(self, f):
