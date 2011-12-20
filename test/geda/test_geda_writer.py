@@ -43,12 +43,12 @@ class TestGEDA(unittest.TestCase):
         attribute = self.geda_writer._create_attribute('_refdes', 'U1', 0, 0) 
         self.assertEquals(
             attribute,
-            ['T 0 0 9 10 0 0 0 0 1', 'refdes=U1']
+            ['T 0 0 5 10 0 0 0 0 1', 'refdes=U1']
         )
         attribute = self.geda_writer._create_attribute('refdes', 'U1', 0, 0, size=25) 
         self.assertEquals(
             attribute,
-            ['T 0 0 9 25 1 0 0 0 1', 'refdes=U1']
+            ['T 0 0 5 25 1 0 0 0 1', 'refdes=U1']
         )
 
     def test_create_text(self):
@@ -78,9 +78,9 @@ class TestGEDA(unittest.TestCase):
             [
                 'P 0 300 0 0 1 0 0', 
                 '{',
-                'T 100 400 9 10 0 0 0 0 1',
+                'T 100 400 5 10 0 0 0 0 1',
                 'pinseq=1',
-                'T 100 500 9 10 0 0 0 0 1',
+                'T 100 500 5 10 0 0 0 0 1',
                 'pinnumber=E',
                 '}'
             ]
@@ -96,19 +96,41 @@ class TestGEDA(unittest.TestCase):
             [
                 'P 0 300 0 0 1 0 0', 
                 '{',
-                'T 100 0 9 10 1 0 90 0 1',
+                'T 100 0 5 10 1 0 90 0 1',
                 'pinlabel=p1',
-                'T 100 400 9 10 0 0 0 0 1',
+                'T 100 400 5 10 0 0 0 0 1',
                 'pinseq=1',
-                'T 100 500 9 10 0 0 0 0 1',
+                'T 100 500 5 10 0 0 0 0 1',
                 'pinnumber=E',
                 '}'
             ]
         )
 
 
-    #def test_create_arc(self):
-    #    raise NotImplementedError()
+    def test_create_arc(self):
+        arc = shape.Arc(0, 0, 0.0, 0.7, 30)
+        command = self.geda_writer._create_arc(arc)
+        
+        self.assertEquals(
+            command,
+            ['A 0 0 300 0 125 3 0 0 0 -1 -1'] 
+        )
+
+        arc = shape.Arc(200, 400, 1.0, 0.5, 10)
+        command = self.geda_writer._create_arc(arc)
+        
+        self.assertEquals(
+            command,
+            ['A 2000 4000 100 180 270 3 0 0 0 -1 -1'] 
+        )
+
+        arc = shape.Arc(200, 400, 0.2, 0.1, 10)
+        command = self.geda_writer._create_arc(arc)
+        
+        self.assertEquals(
+            command,
+            ['A 2000 4000 100 36 342 3 0 0 0 -1 -1'] 
+        )
 
     #def test_create_circle(self):
     #    raise NotImplementedError()

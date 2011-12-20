@@ -160,6 +160,8 @@ class GEDA:
             kwargs['visibility'] = 0
 
         text = "%s=%s" % (str(key), str(value))
+        
+        kwargs['color'] = GEDAColor.ATTRIBUTE_COLOR
 
         return self._create_text(text, x, y, **kwargs)
 
@@ -173,7 +175,7 @@ class GEDA:
         text_line =  'T %d %d %d %d %d %d %d %d %d' % (
             self.to_mils(x) + self.offset.x,
             self.to_mils(y) + self.offset.y,
-            GEDAColor.TEXT_COLOR,
+            kwargs.get('color', GEDAColor.TEXT_COLOR),
             kwargs.get('size', 10),
             kwargs.get('visibility', 1),
             0, #show_name_value is always '0'
@@ -228,8 +230,25 @@ class GEDA:
         command.append('}')
         return command
 
-    def _create_arc(self):
-        raise NotImplementedError()
+    def _create_arc(self, arc):
+
+        x, y = self.conv_coords(arc.x, arc.y)
+        start_angle = self.conv_angle(arc.start_angle)
+
+        sweep_angle = self.conv_angle(arc.end_angle) - start_angle
+        if sweep_angle < 0:
+            sweep_angle = 360 + sweep_angle
+
+        return [
+            'A %d %d %d %d %d %d %d %d %d %d %d' % (
+                x, y,
+                self.to_mils(arc.radius),
+                start_angle, 
+                sweep_angle,
+                GEDAColor.GRAPHIC_COLOR,
+                0, 0, 0, -1, -1 ## default style values
+            )
+        ]
 
     def _create_circle(self):
         raise NotImplementedError()
