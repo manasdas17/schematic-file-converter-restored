@@ -5,7 +5,7 @@ import tempfile
 
 from core import shape
 from core import components 
-from writer.geda import GEDA
+from writer.geda import GEDA, GEDAWriterError
 
 class TestGEDA(unittest.TestCase):
 
@@ -207,8 +207,112 @@ class TestGEDA(unittest.TestCase):
     #def test_create_segment(self):
     #    raise NotImplementedError()
 
-    #def test_create_path(self):
-    #    raise NotImplementedError()
+    def test_create_path(self):
+        self.assertRaises(
+            GEDAWriterError,
+            self.geda_writer._create_path,
+            components.Symbol()
+        )
+
+        self.assertRaises(
+            GEDAWriterError,
+            self.geda_writer._create_path,
+            components.Body().add_shape(shape.Circle(0, 0, 20))
+        )
+
+        polygon = shape.Polygon()
+        polygon.add_point((0, 0))
+        polygon.add_point((100, 200))
+        polygon.add_point((150, 200))
+        polygon.add_point((200, 100))
+
+        self.assertEquals(
+            self.geda_writer._create_path(polygon),
+            [
+                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5',
+                'M 0,0',
+                'L 1000,2000',
+                'L 1500,2000',
+                'L 2000,1000',
+                'z'
+            ]
+        )
+    
+        curve = shape.BezierCurve((9, -10), (11, -10), (3, -12), (17, -12))
+
+        self.assertEquals(
+            self.geda_writer._create_path(curve),
+            [
+                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2',
+                'M 30,-120',
+                'C 90,-100 110,-100 170,-120',
+            ]
+        )
+
+        #H 3 0 0 0 -1 -1 0 2 20 100 -1 -1 6
+        #M 100,100
+        shapes = [
+            shape.Line((10, 10), (50, 10)), #L 500,100
+            shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)), #C 700,100 800,300 800,400
+            shape.BezierCurve((80, 50), (70, 70), (80, 40), (50, 70)), #C 800,500 700,700 500,700
+            shape.Line((50, 70), (10, 70)), #L 100,700
+        ]
+        
+        body = components.Body()
+        body.shapes = shapes
+
+        self.assertEquals(
+            self.geda_writer._create_path(body),
+            [
+                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5',
+                'M 100,100',
+                'L 500,100',
+                'C 700,100 800,300 800,400',
+                'C 800,500 700,700 500,700',
+                'L 100,700',
+            ]
+        )
+
+        body.add_shape(shape.Line((10, 70), (10, 10)))
+
+        self.assertEquals(
+            self.geda_writer._create_path(body),
+            [
+                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 6',
+                'M 100,100',
+                'L 500,100',
+                'C 700,100 800,300 800,400',
+                'C 800,500 700,700 500,700',
+                'L 100,700',
+                'z',
+            ]
+        )
+
+    def test_is_valid_path(self):
+        shapes = [
+            shape.Line((10, 10), (50, 10)), #L 500,100
+            shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)), #C 700,100 800,300 800,400
+            shape.BezierCurve((80, 50), (70, 70), (80, 40), (50, 70)), #C 800,500 700,700 500,700
+            shape.Line((50, 70), (10, 70)), #L 100,700
+        ]
+        
+        body = components.Body()
+        body.shapes = shapes
+        self.assertTrue(self.geda_writer.is_valid_path(body))
+
+        body.add_shape(shape.Line((10, 70), (10, 10)))
+        self.assertTrue(self.geda_writer.is_valid_path(body))
+
+        shapes = [
+            shape.Line((10, 10), (50, 10)), #L 500,100
+            shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)), #C 700,100 800,300 800,400
+            shape.Line((50, 70), (10, 70)), #L 100,700
+        ]
+        body.shapes = shapes
+        self.assertFalse(self.geda_writer.is_valid_path(body))
+
+        body.add_shape(shape.Circle(0, 0, 10))
+        self.assertFalse(self.geda_writer.is_valid_path(body))
 
     def test_conv_angle(self):
         angle_samples = [

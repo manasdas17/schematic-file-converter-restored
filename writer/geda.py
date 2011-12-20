@@ -280,12 +280,6 @@ class GEDA:
             )
         ]
 
-    def _create_polygon(self):
-        raise NotImplementedError()
-
-    def _create_bezier_curve(self):
-        raise NotImplementedError()
-
     def _create_line(self, line):
         assert(issubclass(line.__class__, shape.Line))
 
@@ -303,8 +297,127 @@ class GEDA:
     def _create_segment(self):
         raise NotImplementedError()
 
-    def _create_path(self):
-        raise NotImplementedError()
+    def _create_path(self, path):
+        if issubclass(path.__class__, shape.Polygon):
+            num_lines = len(path.points)+1 ##add closing command to path
+            command= ['H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines]
+
+            start_x, start_y = path.points[0].x, path.points[0].y
+            command.append('M %d,%d' % self.conv_coords(start_x, start_y))
+
+            for point in path.points[1:]:
+                command.append('L %d,%d' % self.conv_coords(point.x, point.y))
+
+            command.append('z') #closes the path
+
+        elif issubclass(path.__class__, shape.BezierCurve):
+            command = self._create_bezier_curve(path)
+
+        elif issubclass(path.__class__, components.Body):
+            ## line will be modified at the end
+            #command= ['H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d']
+
+            num_lines = 1
+
+            shapes = list(path.shapes) #create new list to be able to modify
+
+            start_shape = shapes[0]
+            current_x, current_y = self.conv_coords(
+                start_shape.p1.x, 
+                start_shape.p1.y
+            )
+            start_x, start_y = current_x, current_y
+            command = ['M %d,%d' % (start_x, start_y)]
+
+            close_command = []
+
+            ## check if last element is line back to starting point
+            end_shape = shapes[-1]
+            if end_shape.type == 'line':
+                if end_shape.p2.x == start_shape.p1.x \
+                    and end_shape.p2.y == start_shape.p1.y:
+                    ## discard line and close path instead
+                    close_command = ['z']
+                    shapes.remove(end_shape)
+                    num_lines += 1
+                    
+            for shape_obj in shapes:
+                if shape_obj.type == 'line':
+                    current_x, current_y = self.conv_coords(
+                        shape_obj.p2.x,
+                        shape_obj.p2.y
+                    )
+                    command.append("L %d,%d" % (current_x, current_y))
+
+                elif shape_obj.type == 'bezier':
+                    c1_x, c1_y = self.conv_coords(
+                        shape_obj.control1.x, 
+                        shape_obj.control1.y
+                    )
+                    c2_x, c2_y = self.conv_coords(
+                        shape_obj.control2.x, 
+                        shape_obj.control2.y
+                    )
+                    current_x, current_y = self.conv_coords(
+                        shape_obj.p2.x, 
+                        shape_obj.p2.y
+                    )
+
+                    command += [
+                        'C %d,%d %d,%d %d,%d' % (
+                            c1_x, c1_y, 
+                            c2_x, c2_y,
+                            current_x, current_y
+                        )
+                    ]
+
+                else:
+                    raise GEDAWriterError(
+                        "shape type '%s' can not be used to create path" % shape_obj.type
+                    )
+
+                num_lines += 1
+
+            path_command = 'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines
+            command = [path_command] + command + close_command
+
+        else:
+            raise GEDAWriterError(
+                "unrecognised path object '%s' found" % path.__class__
+            )
+
+        return command
+
+    def _create_bezier_curve(self, curve):
+        assert(issubclass(curve.__class__, shape.BezierCurve))
+        p1_x, p1_y = self.conv_coords(curve.p1.x, curve.p1.y)
+        c1_x, c1_y = self.conv_coords(curve.control1.x, curve.control1.y)
+
+        p2_x, p2_y = self.conv_coords(curve.p2.x, curve.p2.y)
+        c2_x, c2_y = self.conv_coords(curve.control2.x, curve.control2.y)
+        command= [
+            'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2',
+            'M %d,%d' % (p1_x, p1_y),
+            'C %d,%d %d,%d %d,%d' % (c1_x, c1_y, c2_x, c2_y, p2_x, p2_y)
+        ]
+
+        return command
+
+    def is_valid_path(self, body):
+        assert(issubclass(body.__class__, components.Body))
+
+        current_pt = body.shapes[0].p1
+        for shape_obj in body.shapes:
+            if shape_obj.type not in ['line', 'bezier']:
+                return False
+            
+            if not (current_pt.x == shape_obj.p1.x \
+                and current_pt.y == shape_obj.p1.y):
+                return False
+
+            current_pt = shape_obj.p2
+
+        return True 
 
     def to_mils(self, px):
         return self.offset.x + (px * self.SCALE_FACTOR)
