@@ -143,7 +143,7 @@ $EndDescr
         f.write('# ' + cpt.name + '\n')
         f.write('#\n')
         f.write('DEF %s %s 0 30 Y Y %d F N\n' %
-                (cpt.name, ref, len(cpt.symbols)))
+                (cpt.name, ref, len(cpt.symbols[0].bodies)))
         f.write('F0 "%s" 0 0 60 H V L CNN\n' % (ref,))
         f.write('F1 "%s" 0 60 60 H V L CNN\n' % (cpt.name,))
         self.write_symbols(f, cpt.symbols)
@@ -151,7 +151,7 @@ $EndDescr
 
 
     def write_symbols(self, f, symbols):
-        """ Write the DRAW portion (shapes and pins) of a kiCAD component """
+        """ Write the DRAW portion (shapes and pins) of a kiCAD component symbol """
         f.write('DRAW\n')
 
         lines = {} # line template -> (set([units]), set([converts]))
@@ -163,16 +163,17 @@ $EndDescr
             lines[line][0].add(unit)
             lines[line][1].add(convert)
 
-        for unit, symbol in enumerate(symbols, 1):
-            for body in symbol.bodies:
+        for convert, symbol in enumerate(symbols[:2], 1):
+            for unit, body in enumerate(symbol.bodies, 1):
                 for shape in body.shapes:
-                    add_line(self.get_shape_line(shape), unit, 1)
+                    add_line(self.get_shape_line(shape),
+                             unit, convert)
 
                 for pin in body.pins:
-                    add_line(self.get_pin_line(pin), unit, 1)
+                    add_line(self.get_pin_line(pin), unit, convert)
 
         for line, (units, converts) in lines.items():
-            if len(units) == len(symbols):
+            if len(units) == len(symbol.bodies):
                 units = (0,)
             if len(converts) == 2:
                 converts = (0,)

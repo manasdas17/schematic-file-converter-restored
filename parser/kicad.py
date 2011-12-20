@@ -112,13 +112,7 @@ class KiCAD(object):
                     rotation = MATRIX2ROTATION.get(key, 0)
             line = f.readline()
 
-        if name in components.components:
-            num_units = len(components.components[name].symbols)
-            symbol_index = (unit - 1) + (num_units / 2 if convert == 2 else 0)
-        else:
-            symbol_index = 0
-
-        inst = ComponentInstance(reference, name, symbol_index)
+        inst = ComponentInstance(reference, name, 0)
         inst.add_symbol_attribute(SymbolAttribute(compx, compy, rotation))
 
         return inst
@@ -252,15 +246,15 @@ class ComponentParser(object):
 
 
     def build_symbols(self, has_convert):
-        """ Build all Symbols (with one Body) for this component. The
+        """ Build all Symbols and Bodies for this component. The
         has_convert argument should be True if there are DeMorgan
-        convert bodies."""
+        convert bodies. """
 
-        for _ in range(self.num_units * (2 if has_convert else 1)):
+        for _ in range(2 if has_convert else 1):
             symbol = Symbol()
+            for _ in range(self.num_units):
+                symbol.add_body(Body())
             self.component.add_symbol(symbol)
-            body = Body()
-            symbol.add_body(body)
 
 
     def iter_bodies(self, unit, convert, has_convert):
@@ -269,21 +263,21 @@ class ComponentParser(object):
         for the given convert. A convert of 0 means both converts for
         the given unit. If both are 0 it applies to all bodies."""
 
-        if unit == 0:
-            indices = range(self.num_units)
-        else:
-            indices = [unit-1]
-
         if convert == 0 and has_convert:
-            offsets = [0, self.num_units]
+            symbol_indices = [0, 1] # both regular and convert
         elif convert in (0, 1):
-            offsets = [0]
+            symbol_indices = [0] # just regular
         else:
-            offsets = [self.num_units]
+            symbol_indices = [1] # just convert
 
-        for index in indices:
-            for offset in offsets:
-                yield self.component.symbols[index + offset].bodies[0]
+        if unit == 0:
+            body_indices = range(self.num_units) # all bodies
+        else:
+            body_indices = [unit-1] # one body
+
+        for symbol_index in symbol_indices:
+            for body_index in body_indices:
+                yield self.component.symbols[symbol_index].bodies[body_index]
 
 
     def parse(self, f):
