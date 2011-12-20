@@ -15,6 +15,8 @@
 import os
 import types
 
+from core import shape
+from core import components
 from core.shape import Point
 
 class GEDAColor:
@@ -186,6 +188,7 @@ class GEDA:
         return [text_line] + text
 
     def _create_pin(self, pin_seq, pin):
+        assert(issubclass(pin.__class__, components.Pin))
 
         connected_x, connected_y = pin.p2.x, pin.p2.y
         
@@ -231,6 +234,7 @@ class GEDA:
         return command
 
     def _create_arc(self, arc):
+        assert(issubclass(arc.__class__, shape.Arc))
 
         x, y = self.conv_coords(arc.x, arc.y)
         start_angle = self.conv_angle(arc.start_angle)
@@ -250,10 +254,28 @@ class GEDA:
             )
         ]
 
-    def _create_circle(self):
+    def _create_circle(self, circle):
+        assert(issubclass(circle.__class__, shape.Circle))
+
+        center_x, center_y = self.conv_coords(circle.x, circle.y)
+        return [
+            'V %d %d %d 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
+                center_x,
+                center_y,
+                self.to_mils(circle.radius)
+            )
+        ]
+
+    def _create_rectangle(self):
         raise NotImplementedError()
 
-    def _create_box(self):
+    def _create_rounded_rectangle(self):
+        raise NotImplementedError()
+
+    def _create_polygon(self):
+        raise NotImplementedError()
+
+    def _create_bezier_curve(self):
         raise NotImplementedError()
 
     def _create_line(self):

@@ -132,8 +132,22 @@ class TestGEDA(unittest.TestCase):
             ['A 2000 4000 100 36 342 3 0 0 0 -1 -1'] 
         )
 
-    #def test_create_circle(self):
-    #    raise NotImplementedError()
+    def test_create_circle(self):
+        circle = shape.Circle(0, 0, 300)
+        command = self.geda_writer._create_circle(circle)
+
+        self.assertEquals(
+            command,
+            ['V 0 0 3000 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+        )
+
+        circle = shape.Circle(10, 30, 10)
+        command = self.geda_writer._create_circle(circle)
+
+        self.assertEquals(
+            command,
+            ['V 100 300 100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+        )
 
     #def test_create_box(self):
     #    raise NotImplementedError()
