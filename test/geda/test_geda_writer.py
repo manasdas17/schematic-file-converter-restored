@@ -182,8 +182,27 @@ class TestGEDA(unittest.TestCase):
             ['B 700 500 1500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
-    #def test_create_line(self):
-    #    raise NotImplementedError()
+    def test_create_line(self):
+        line = shape.Line((0, 0), (0, 50))
+        command = self.geda_writer._create_line(line)
+        self.assertEquals(
+            command,
+            ['L 0 0 0 500 3 0 0 0 -1 -1']
+        )
+
+        line = shape.Line((20, 40), (-20, 40))
+        command = self.geda_writer._create_line(line)
+        self.assertEquals(
+            command,
+            ['L 200 400 -200 400 3 0 0 0 -1 -1']
+        )
+
+        line = shape.Line((20, 40), (-30, 50))
+        command = self.geda_writer._create_line(line)
+        self.assertEquals(
+            command,
+            ['L 200 400 -300 500 3 0 0 0 -1 -1']
+        )
 
     #def test_create_segment(self):
     #    raise NotImplementedError()

@@ -279,7 +279,6 @@ class GEDA:
                 height
             )
         ]
-        raise NotImplementedError()
 
     def _create_polygon(self):
         raise NotImplementedError()
@@ -287,8 +286,19 @@ class GEDA:
     def _create_bezier_curve(self):
         raise NotImplementedError()
 
-    def _create_line(self):
-        raise NotImplementedError()
+    def _create_line(self, line):
+        assert(issubclass(line.__class__, shape.Line))
+
+        start_x, start_y = self.conv_coords(line.p1.x, line.p1.y)
+        end_x, end_y = self.conv_coords(line.p2.x, line.p2.y)
+        return [
+            'L %d %d %d %d 3 0 0 0 -1 -1' % (
+                start_x, 
+                start_y,
+                end_x, 
+                end_y
+            )
+        ]
 
     def _create_segment(self):
         raise NotImplementedError()
