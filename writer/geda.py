@@ -294,8 +294,32 @@ class GEDA:
             )
         ]
 
-    def _create_segment(self):
-        raise NotImplementedError()
+    def _create_segment(self, np1, np2=None, attributes=None):
+        if np2 is None:
+            np1, np2 = np1
+        
+        np1_x, np1_y = self.conv_coords(np1.x, np1.y)
+        np2_x, np2_y = self.conv_coords(np2.x, np2.y)
+        command = [
+            'N %d %d %d %d %d' % (
+                np1_x, np1_y,
+                np2_x, np2_y,
+                GEDAColor.NET_COLOR
+            )
+        ]
+
+        if attributes is not None:
+            command.append('{')
+            for key, value in attributes.items():
+                command += self._create_attribute(
+                    key, 
+                    value, 
+                    np1.x+10, 
+                    np1.y+10
+                )
+            command.append('}')
+
+        return command
 
     def _create_path(self, path):
         if issubclass(path.__class__, shape.Polygon):

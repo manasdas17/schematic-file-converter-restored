@@ -3,6 +3,7 @@ import os
 import unittest
 import tempfile
 
+from core import net 
 from core import shape
 from core import components 
 from writer.geda import GEDA, GEDAWriterError
@@ -204,8 +205,26 @@ class TestGEDA(unittest.TestCase):
             ['L 200 400 -300 500 3 0 0 0 -1 -1']
         )
 
-    #def test_create_segment(self):
-    #    raise NotImplementedError()
+    def test_create_segment(self):
+        np1 = net.NetPoint('0a0', 0, 0)
+        np2 = net.NetPoint('0a10', 0, 10)
+        self.assertEquals(
+            self.geda_writer._create_segment(np1, np2),
+            ['N 0 0 0 100 4']
+        )
+        np1 = net.NetPoint('100a40', 100, 40)
+        np2 = net.NetPoint('50a40', 50, 40)
+        attrs = {'netname': 'test_net'}
+        self.assertEquals(
+            self.geda_writer._create_segment(np1, np2, attributes=attrs),
+            [
+                'N 1000 400 500 400 4',
+                '{',
+                'T 1100 500 5 10 1 0 0 0 1',
+                'netname=test_net',
+                '}',
+            ]
+        )
 
     def test_create_path(self):
         self.assertRaises(
@@ -249,13 +268,11 @@ class TestGEDA(unittest.TestCase):
             ]
         )
 
-        #H 3 0 0 0 -1 -1 0 2 20 100 -1 -1 6
-        #M 100,100
         shapes = [
-            shape.Line((10, 10), (50, 10)), #L 500,100
-            shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)), #C 700,100 800,300 800,400
-            shape.BezierCurve((80, 50), (70, 70), (80, 40), (50, 70)), #C 800,500 700,700 500,700
-            shape.Line((50, 70), (10, 70)), #L 100,700
+            shape.Line((10, 10), (50, 10)),
+            shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)),
+            shape.BezierCurve((80, 50), (70, 70), (80, 40), (50, 70)),
+            shape.Line((50, 70), (10, 70)),
         ]
         
         body = components.Body()
