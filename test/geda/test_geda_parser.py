@@ -122,13 +122,13 @@ T 150 650 5 8 0 1 0 6 1
 pinseq=3
 T 250 500 9 16 0 1 0 0 1
 pinlabel=+=?
-T 150 550 5 8 0 1 0 8 1
+T 150 550 5 8 1 1 0 8 1
 sometype=in
 }"""
         expected_attributes = {
-            'pinnumber': '3',
-            'pinseq': '3',
-            'pinlabel': '+=?',
+            '_pinnumber': '3',
+            '_pinseq': '3',
+            '_pinlabel': '+=?',
             'sometype': 'in',
         }
         stream = StringIO.StringIO(valid_env)

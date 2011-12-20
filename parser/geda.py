@@ -362,7 +362,7 @@ class GEDA:
         ## basename
         instance_id = component.name
         if attributes is not None:
-            instance_id = attributes.get('refdes', component.name)
+            instance_id = attributes.get('_refdes', component.name)
 
         instance_id = instance_id + str(self.instance_counter.next())
 
@@ -384,10 +384,10 @@ class GEDA:
 
         ## add annotation for refdes
         symbol.add_annotation(
-            Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
+            Annotation('{{_refdes}}', comp_x, comp_y, 0.0, 'true')
         )
         symbol.add_annotation(
-            Annotation('{{device}}', comp_x, comp_y, 0.0, 'true')
+            Annotation('{{device}}', comp_x, comp_y+10, 0.0, 'true')
         )
 
         return component, instance
@@ -427,7 +427,7 @@ class GEDA:
                 if key is None:
                     ##TODO(elbaschid): annotation text in component. what to do?
                     pass
-                elif key == 'refdes' and '?' in value:
+                elif key == '_refdes' and '?' in value:
                     prefix, suffix = value.split('?') 
                     component.add_attribute('_prefix', prefix)
                     component.add_attribute('_suffix', suffix)
@@ -507,10 +507,7 @@ class GEDA:
         text_str = ''.join(text).strip()
 
         if num_lines == 1 and '=' in text_str:
-            key, value = text_str.split('=', 1)
-
-            #TODO(elbaschid): should invisible attributes be have '_' prefix??
-            return key.strip(), value.strip()
+            return self._parse_attribute(text_str, params['visibility'])
 
         return None, Annotation(
             text_str,
@@ -519,6 +516,22 @@ class GEDA:
             self.conv_angle(params['angle']),
             self.conv_bool(params['visibility']),
         )
+
+    def _parse_attribute(self, text, visibility):
+        """ Creates a tuple of (key, value) from the attribute text.
+            If visibility is '0' the attribute key is prefixed with '_'
+            to make it a hidden attribute.
+            Returns a tuple of key and value.
+        """
+        key, value = text.split('=', 1)
+        ## prefix attributes that are marked as invisible
+        if visibility == 0:
+            key = "_"+key
+        ## these are special attributes that are treated differently
+        elif key in ['netname', 'pinnumber', 'pinlabel', 'refdes']:
+            key = "_"+key
+
+        return key.strip(), value.strip()
 
     def skip_embedded_section(self, stream):
         """ Reads the *stream* line by line until the end of an
@@ -683,8 +696,8 @@ class GEDA:
         attributes = self._parse_environment(stream)
         if attributes is not None:
             ## create net with name in attributes 
-            if attributes.has_key('netname'):
-                net_name = attributes['netname']
+            if attributes.has_key('_netname'):
+                net_name = attributes['_netname']
                 if net_name not in self.net_names.values():
                     self.net_names[pt_a.point_id] = net_name
 
@@ -819,9 +832,9 @@ class GEDA:
         if attributes is None:
             raise GEDAParserError('mandatory pin attributes missing')
 
-        if 'pinnumber' not in attributes:
+        if '_pinnumber' not in attributes:
             raise GEDAParserError(
-                "mandatory attribute 'pinnumber' not assigned to pin"
+                "mandatory attribute '_pinnumber' not assigned to pin"
             )
 
         whichend = params['whichend']
@@ -837,17 +850,17 @@ class GEDA:
             connect_end = self.conv_coords(params['x2'], params['y2'])
 
         label = None
-        if 'pinlabel' in attributes:
+        if '_pinlabel' in attributes:
             label = shape.Label(
                 connect_end[0],
                 connect_end[1],
-                attributes.get('pinlabel'), 
+                attributes.get('_pinlabel'), 
                 'left',
                 0.0
             )
         ##TODO(elbaschid): should all pin attributes be ignored?
         return components.Pin(
-            attributes['pinnumber'], #pin number
+            attributes['_pinnumber'], #pin number
             null_end,
             connect_end,
             label=label
