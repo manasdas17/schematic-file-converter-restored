@@ -47,11 +47,16 @@ class GEDA:
     ## to 10px in openjson format 
     SCALE_FACTOR = 10
 
+    ALIGNMENT = {
+        'left': 0,
+        'center': 3,
+        'right': 4,
+    }
+
     def __init__(self):
         ## offset used as bottom left origin as default
         ## in gEDA when starting new file
         self.offset = Point(0, 0)
-        #self.offset = Point(40000, 40000)
 
         self.project_dirs = {
             'symbol': None,
@@ -60,6 +65,8 @@ class GEDA:
 
     def write(self, design, filename):
         """ Write the design to the gEDA format """
+        ##TODO(elbaschid): get offset from design bounds
+
         ##TODO(elbaschid): setup project environment
         self.create_project_files(filename)
 
@@ -116,6 +123,7 @@ class GEDA:
     def _create_title(self, design_attributes):
         title_data = ['v 20110115 2',]
 
+        ##TODO(elbaschid): use offset from design bounds
         title_data.append(
             self.create_component(self.offset.x, self.offset.y, 'title-B.sym')
         )
@@ -146,15 +154,14 @@ class GEDA:
 
     def _create_attribute(self, key, value, x, y, **kwargs):
 
-        visibility = kwargs.get('visibility', 1)
         ## make private attribute invisible in gEDA
         if key.startswith('_'): 
             key = key[1:]
-            visibility = 0
+            kwargs['visibility'] = 0
 
         text = "%s=%s" % (str(key), str(value))
 
-        return self._create_text(text, x, y, visibility=visibility, **kwargs)
+        return self._create_text(text, x, y, **kwargs)
 
     def _create_text(self, text, x, y, **kwargs):
         
@@ -175,6 +182,69 @@ class GEDA:
             len(text),
         )
         return [text_line] + text
+
+    def _create_pin(self, pin_seq, pin):
+
+        connected_x, connected_y = pin.p2.x, pin.p2.y
+        
+        command = ['P %d %d %d %d %d %d %d' % (
+            self.to_mils(connected_x),
+            self.to_mils(connected_y),
+            self.to_mils(pin.p1.x),
+            self.to_mils(pin.p1.y),
+            GEDAColor.PIN_COLOR,
+            0, #pin type is always 0
+            0, #first point is active/connected pin
+        )]
+
+        command.append('{')
+
+        if pin.label is not None:
+            attribute = self._create_attribute(
+                'pinlabel',
+                pin.label.text, 
+                pin.label.x,
+                pin.label.y,
+                alignment=self.ALIGNMENT[pin.label.align],
+                angle=pin.label.rotation
+            )
+            command += attribute
+
+        command += self._create_attribute(
+            'pinseq', 
+            pin_seq, 
+            connected_x+10,
+            connected_y+10,
+            visibility=0,
+        )
+        command += self._create_attribute(
+            'pinnumber', 
+            pin.pin_number, 
+            connected_x+10,
+            connected_y+20,
+            visibility=0,
+        )
+
+        command.append('}')
+        return command
+
+    def _create_arc(self):
+        raise NotImplementedError()
+
+    def _create_circle(self):
+        raise NotImplementedError()
+
+    def _create_box(self):
+        raise NotImplementedError()
+
+    def _create_line(self):
+        raise NotImplementedError()
+
+    def _create_segment(self):
+        raise NotImplementedError()
+
+    def _create_path(self):
+        raise NotImplementedError()
 
     def to_mils(self, px):
         return self.offset.x + (px * self.SCALE_FACTOR)

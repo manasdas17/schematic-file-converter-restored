@@ -3,6 +3,8 @@ import os
 import unittest
 import tempfile
 
+from core import shape
+from core import components 
 from writer.geda import GEDA
 
 class TestGEDA(unittest.TestCase):
@@ -66,6 +68,62 @@ class TestGEDA(unittest.TestCase):
             text,
             ['T 0 0 9 25 0 0 0 8 3', "some text", "multi line", "text"]
         )
+
+    def test_create_pin(self):
+        pin = components.Pin('E', (0, 0), (0, 30))
+        command = self.geda_writer._create_pin(1, pin) 
+
+        self.assertEquals(
+            command,
+            [
+                'P 0 300 0 0 1 0 0', 
+                '{',
+                'T 100 400 9 10 0 0 0 0 1',
+                'pinseq=1',
+                'T 100 500 9 10 0 0 0 0 1',
+                'pinnumber=E',
+                '}'
+            ]
+        )
+
+        label = shape.Label(10, 0, 'p1', 'left', 0.5)
+
+        pin = components.Pin('E', (0, 0), (0, 30), label=label)
+        command = self.geda_writer._create_pin(1, pin) 
+
+        self.assertEquals(
+            command,
+            [
+                'P 0 300 0 0 1 0 0', 
+                '{',
+                'T 100 0 9 10 1 0 90 0 1',
+                'pinlabel=p1',
+                'T 100 400 9 10 0 0 0 0 1',
+                'pinseq=1',
+                'T 100 500 9 10 0 0 0 0 1',
+                'pinnumber=E',
+                '}'
+            ]
+        )
+
+
+    #def test_create_arc(self):
+    #    raise NotImplementedError()
+
+    #def test_create_circle(self):
+    #    raise NotImplementedError()
+
+    #def test_create_box(self):
+    #    raise NotImplementedError()
+
+    #def test_create_line(self):
+    #    raise NotImplementedError()
+
+    #def test_create_segment(self):
+    #    raise NotImplementedError()
+
+    #def test_create_path(self):
+    #    raise NotImplementedError()
 
     def test_conv_angle(self):
         angle_samples = [
