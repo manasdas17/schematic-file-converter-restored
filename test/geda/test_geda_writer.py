@@ -149,8 +149,38 @@ class TestGEDA(unittest.TestCase):
             ['V 100 300 100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
-    #def test_create_box(self):
-    #    raise NotImplementedError()
+    def test_create_box(self):
+        rect = shape.Rectangle(0, 0, 40, 50)
+        command = self.geda_writer._create_box(rect)
+
+        self.assertEquals(
+            command,
+            ['B -500 0 400 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+        )
+
+        rect = shape.Rectangle(100, 50, 150, 30)
+        command = self.geda_writer._create_box(rect)
+
+        self.assertEquals(
+            command,
+            ['B 700 500 1500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+        )
+
+        rect = shape.RoundedRectangle(0, 0, 40, 50, 0.5)
+        command = self.geda_writer._create_box(rect)
+
+        self.assertEquals(
+            command,
+            ['B -500 0 400 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+        )
+
+        rect = shape.RoundedRectangle(100, 50, 150, 30, 0.1)
+        command = self.geda_writer._create_box(rect)
+
+        self.assertEquals(
+            command,
+            ['B 700 500 1500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+        )
 
     #def test_create_line(self):
     #    raise NotImplementedError()

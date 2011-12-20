@@ -266,10 +266,19 @@ class GEDA:
             )
         ]
 
-    def _create_rectangle(self):
-        raise NotImplementedError()
-
-    def _create_rounded_rectangle(self):
+    def _create_box(self, rect):
+        assert(issubclass(rect.__class__, (shape.Rectangle, shape.RoundedRectangle)))
+        top_x, top_y = self.conv_coords(rect.x, rect.y)
+        width, height = self.to_mils(rect.width), self.to_mils(rect.height)
+        ## gEDA uses bottom-left corner as rectangle origin
+        return [
+            'B %d %d %d %d 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
+                (top_x - height),
+                top_y,
+                width,
+                height
+            )
+        ]
         raise NotImplementedError()
 
     def _create_polygon(self):
