@@ -135,9 +135,17 @@ class KiCADTests(unittest.TestCase):
 
             for test_sa, good_sa in zip(test_inst.symbol_attributes,
                                         good_inst.symbol_attributes):
-                self.assertEqual(test_sa.annotations, good_sa.annotations)
-                self.assertEqual(test_sa.rotation, good_sa.rotation)
                 self.assertEqual(test_sa.x, good_sa.x)
                 self.assertEqual(test_sa.y, good_sa.y)
+                self.assertEqual(test_sa.rotation, good_sa.rotation)
+                self.assertEqual(len(test_sa.annotations),
+                                 len(good_sa.annotations))
+                for test_ann, good_ann in zip(test_sa.annotations,
+                                              good_sa.annotations):
+                    self.assertEqual(test_ann.value, good_ann.value)
+                    self.assertEqual(test_ann.x, good_ann.x)
+                    self.assertEqual(test_ann.y, good_ann.y)
+                    self.assertEqual(test_ann.rotation, good_ann.rotation)
+                    self.assertEqual(test_ann.visible, good_ann.visible)
 
         self.assertEqual(test_insts, [])

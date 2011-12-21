@@ -17,6 +17,7 @@ from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
 from core.net import Net, NetPoint, ConnectedComponent
 from core.shape import Arc, Circle, Polygon, Rectangle, Label
+from core.annotation import Annotation
 
 from collections import defaultdict
 from os.path import exists, splitext
@@ -102,13 +103,17 @@ class KiCAD(object):
         assert prefix == 'P'
         compx, compy = int(compx), int(compy)
 
-        # TODO: turn the fields into annotations
-
         line = f.readline()
         rotation = 0
+        annotations = []
 
         while line.strip() not in ("$EndComp", ''):
-            if line.startswith('\t'):
+            if line.startswith('F '):
+                parts = line.split()
+                annotations.append(
+                    Annotation(parts[2][1:-1], int(parts[4]), -int(parts[5]),
+                               0 if parts[1] == 'H' else 1, 'true'))
+            elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
                     key = tuple(int(i) for i in parts)
@@ -116,7 +121,10 @@ class KiCAD(object):
             line = f.readline()
 
         inst = ComponentInstance(reference, name, 0)
-        inst.add_symbol_attribute(SymbolAttribute(compx, -compy, rotation))
+        symbattr = SymbolAttribute(compx, -compy, rotation)
+        for ann in annotations:
+            symbattr.add_annotation(ann)
+        inst.add_symbol_attribute(symbattr)
 
         return inst
 
