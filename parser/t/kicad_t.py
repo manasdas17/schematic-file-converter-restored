@@ -19,16 +19,18 @@ class KiCADTests(unittest.TestCase):
         self.actual = KiCAD().parse(TEST_INPUT_FILE)
 
 
-    def test_create_new_kicad_parser(self):
-        """ We can make a new parser """
-        p = KiCAD()
-        assert p != None
+    def test_design_attributes(self):
+        """ All the design attributes are correct """
+
+        self.assert_annotations_equal(
+            self.actual.design_attributes.annotations,
+            self.good.design_attributes.annotations)
 
 
     def test_points(self):
         """
         Test that all the points are present and have the right
-        positions and connected points.
+        positions and connected points and components.
         """
 
         good_points = {}
@@ -47,6 +49,11 @@ class KiCADTests(unittest.TestCase):
                 self.assertEqual(p.y, goodp.y)
                 self.assertEqual(set(p.connected_points),
                                  set(goodp.connected_points))
+                self.assertEqual(
+                    set((cc.instance_id, cc.pin_number)
+                        for cc in p.connected_components),
+                    set((cc.instance_id, cc.pin_number)
+                        for cc in goodp.connected_components))
 
         self.assertEqual(good_points, {})
 
@@ -85,21 +92,21 @@ class KiCADTests(unittest.TestCase):
 
             self.assertEqual(cpt.name, goodcpt.name)
             self.assertEqual(cpt.attributes, goodcpt.attributes)
-            self.assertEqual(len(cpt.symbols), 1)
-            self.assertEqual(len(cpt.symbols[0].bodies), 1)
+            self.assertEqual(len(cpt.symbols), len(goodcpt.symbols))
 
-            body = cpt.symbols[0].bodies[0]
-            goodbody = goodcpt.symbols[0].bodies[0]
+            for sym, goodsym in zip(cpt.symbols, goodcpt.symbols):
+                self.assertEqual(len(sym.bodies), len(goodsym.bodies))
 
-            self.assertEqual(len(body.shapes), len(goodbody.shapes))
-            for shape, goodshape in zip(body.shapes, goodbody.shapes):
-                self.assertEqual(shape.__class__, goodshape.__class__)
-                self.assertEqual(shape.json(), goodshape.json())
+                for body, goodbody in zip(sym.bodies, goodsym.bodies):
+                    self.assertEqual(len(body.shapes), len(goodbody.shapes))
+                    for shape, goodshape in zip(body.shapes, goodbody.shapes):
+                        self.assertEqual(shape.__class__, goodshape.__class__)
+                        self.assertEqual(shape.json(), goodshape.json())
 
-            self.assertEqual(len(body.pins), len(goodbody.pins))
-            for pin, goodpin in zip(body.pins, goodbody.pins):
-                self.assertEqual(pin.__class__, goodpin.__class__)
-                self.assertEqual(pin.json(), goodpin.json())
+                    self.assertEqual(len(body.pins), len(goodbody.pins))
+                    for pin, goodpin in zip(body.pins, goodbody.pins):
+                        self.assertEqual(pin.__class__, goodpin.__class__)
+                        self.assertEqual(pin.json(), goodpin.json())
 
         self.assertEqual(good_cpts, {})
 
@@ -130,9 +137,19 @@ class KiCADTests(unittest.TestCase):
 
             for test_sa, good_sa in zip(test_inst.symbol_attributes,
                                         good_inst.symbol_attributes):
-                self.assertEqual(test_sa.annotations, good_sa.annotations)
-                self.assertEqual(test_sa.rotation, good_sa.rotation)
                 self.assertEqual(test_sa.x, good_sa.x)
                 self.assertEqual(test_sa.y, good_sa.y)
+                self.assertEqual(test_sa.rotation, good_sa.rotation)
+                self.assert_annotations_equal(test_sa.annotations,
+                                              good_sa.annotations)
 
         self.assertEqual(test_insts, [])
+
+    def assert_annotations_equal(self, test_anns, good_anns):
+        self.assertEqual(len(test_anns), len(good_anns))
+        for test_ann, good_ann in zip(test_anns, good_anns):
+            self.assertEqual(test_ann.value, good_ann.value)
+            self.assertEqual(test_ann.x, good_ann.x)
+            self.assertEqual(test_ann.y, good_ann.y)
+            self.assertEqual(test_ann.rotation, good_ann.rotation)
+            self.assertEqual(test_ann.visible, good_ann.visible)
