@@ -52,13 +52,13 @@ class KiCAD(object):
         line = f.readline()
 
         while line:
-            element = line.split()[0] # whats next on the list
+            prefix = line.split()[0]
 
-            if element == "Wire":
+            if line.startswith('Wire Wire Line'):
                 self.parse_wire(f, segments)
-            elif element == "Connection": # Store these to apply later
+            elif prefix == "Connection": # Store these to apply later
                 self.parse_connection(line, junctions)
-            elif element == "$Comp": # Component Instance
+            elif prefix == "$Comp": # Component Instance
                 circuit.add_component_instance(
                     self.parse_component_instance(f, circuit.components))
 
