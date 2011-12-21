@@ -16,6 +16,20 @@ class TestGEDA(unittest.TestCase):
         self.geda_writer = GEDA()
         self.oj_parser = JSON()
 
+    def test_converter_methods(self):
+        shape_types = [
+            'line', 
+            'bezier',
+            'label',
+            'rectangle',
+            'rounded_rectangle',
+            'circle',
+            'polygon',
+        ]
+
+        for typ in shape_types:
+            self.assertTrue(hasattr(self.geda_writer, "_convert_"+typ))
+
     def test_create_project_files(self):
         geda_filename = '/tmp/test_geda.sch'
 
@@ -35,6 +49,26 @@ class TestGEDA(unittest.TestCase):
         data = ''.join(fh.readlines())
         fh.close()
         self.assertEquals(data, '(component-library "./symbols")') 
+
+    #def test_write_schematic_file(self):
+    #    raise NotImplementedError()
+
+    #def test_create_symbols(self):
+    #    raise NotImplementedError()
+
+    def test_write_component_to_file(self):
+        sym_dir = '/tmp/sym'
+        if not os.path.exists(sym_dir):
+            os.mkdir(sym_dir)
+
+        self.geda_writer.project_dirs['symbol'] = sym_dir 
+
+        simple_design = self.oj_parser.parse('test/openjson/simple.upv')
+
+        component = simple_design.components.components['0000000000000001']
+        commands = self.geda_writer.write_component_to_file(component)
+
+        print '\n'.join(commands)
 
     def test_write_nets(self):
         design = self.oj_parser.parse('test/geda/nets_exported.upv')
@@ -97,12 +131,13 @@ class TestGEDA(unittest.TestCase):
 
         text = self.geda_writer._create_text(
             "some text\nmulti line\ntext", 
-            0, 0, size=25, visibility=0, alignment=8,
+            0, 0, size=25, visibility=0, 
+            alignment='right',
         )
         self.assertEquals(len(text), 4)
         self.assertEquals(
             text,
-            ['T 0 0 9 25 0 0 0 8 3', "some text", "multi line", "text"]
+            ['T 0 0 9 25 0 0 0 4 3', "some text", "multi line", "text"]
         )
 
     def test_create_pin(self):
@@ -143,9 +178,9 @@ class TestGEDA(unittest.TestCase):
         )
 
 
-    def test_create_arc(self):
+    def test_convert_arc(self):
         arc = shape.Arc(0, 0, 0.0, 0.7, 30)
-        command = self.geda_writer._create_arc(arc)
+        command = self.geda_writer._convert_arc(arc)
         
         self.assertEquals(
             command,
@@ -153,7 +188,7 @@ class TestGEDA(unittest.TestCase):
         )
 
         arc = shape.Arc(200, 400, 1.0, 0.5, 10)
-        command = self.geda_writer._create_arc(arc)
+        command = self.geda_writer._convert_arc(arc)
         
         self.assertEquals(
             command,
@@ -161,16 +196,16 @@ class TestGEDA(unittest.TestCase):
         )
 
         arc = shape.Arc(200, 400, 0.2, 0.1, 10)
-        command = self.geda_writer._create_arc(arc)
+        command = self.geda_writer._convert_arc(arc)
         
         self.assertEquals(
             command,
             ['A 2000 4000 100 36 342 3 0 0 0 -1 -1'] 
         )
 
-    def test_create_circle(self):
+    def test_convert_circle(self):
         circle = shape.Circle(0, 0, 300)
-        command = self.geda_writer._create_circle(circle)
+        command = self.geda_writer._convert_circle(circle)
 
         self.assertEquals(
             command,
@@ -178,16 +213,16 @@ class TestGEDA(unittest.TestCase):
         )
 
         circle = shape.Circle(10, 30, 10)
-        command = self.geda_writer._create_circle(circle)
+        command = self.geda_writer._convert_circle(circle)
 
         self.assertEquals(
             command,
             ['V 100 300 100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
-    def test_create_box(self):
+    def test_convert_rectangle(self):
         rect = shape.Rectangle(0, 0, 40, 50)
-        command = self.geda_writer._create_box(rect)
+        command = self.geda_writer._convert_rectangle(rect)
 
         self.assertEquals(
             command,
@@ -195,7 +230,7 @@ class TestGEDA(unittest.TestCase):
         )
 
         rect = shape.Rectangle(100, 50, 150, 30)
-        command = self.geda_writer._create_box(rect)
+        command = self.geda_writer._convert_rectangle(rect)
 
         self.assertEquals(
             command,
@@ -203,7 +238,7 @@ class TestGEDA(unittest.TestCase):
         )
 
         rect = shape.RoundedRectangle(0, 0, 40, 50, 0.5)
-        command = self.geda_writer._create_box(rect)
+        command = self.geda_writer._convert_rectangle(rect)
 
         self.assertEquals(
             command,
@@ -211,33 +246,54 @@ class TestGEDA(unittest.TestCase):
         )
 
         rect = shape.RoundedRectangle(100, 50, 150, 30, 0.1)
-        command = self.geda_writer._create_box(rect)
+        command = self.geda_writer._convert_rectangle(rect)
 
         self.assertEquals(
             command,
             ['B 700 500 1500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
-    def test_create_line(self):
+    def test_convert_line(self):
         line = shape.Line((0, 0), (0, 50))
-        command = self.geda_writer._create_line(line)
+        command = self.geda_writer._convert_line(line)
         self.assertEquals(
             command,
             ['L 0 0 0 500 3 0 0 0 -1 -1']
         )
 
         line = shape.Line((20, 40), (-20, 40))
-        command = self.geda_writer._create_line(line)
+        command = self.geda_writer._convert_line(line)
         self.assertEquals(
             command,
             ['L 200 400 -200 400 3 0 0 0 -1 -1']
         )
 
         line = shape.Line((20, 40), (-30, 50))
-        command = self.geda_writer._create_line(line)
+        command = self.geda_writer._convert_line(line)
         self.assertEquals(
             command,
             ['L 200 400 -300 500 3 0 0 0 -1 -1']
+        )
+
+    def test_convert_label(self):
+        label = shape.Label(0, 0, 'test label', 'center', 0.0)
+        command = self.geda_writer._convert_label(label)
+        self.assertEquals(
+            command,
+            [
+                'T 0 0 9 10 1 0 0 3 1',
+                'test label'
+            ]
+        )
+
+        label = shape.Label(0, 0, 'test label', 'left', 0.5)
+        command = self.geda_writer._convert_label(label)
+        self.assertEquals(
+            command,
+            [
+                'T 0 0 9 10 1 0 90 0 1',
+                'test label'
+            ]
         )
 
     def test_create_segment(self):
@@ -261,19 +317,7 @@ class TestGEDA(unittest.TestCase):
             ]
         )
 
-    def test_create_path(self):
-        self.assertRaises(
-            GEDAWriterError,
-            self.geda_writer._create_path,
-            components.Symbol()
-        )
-
-        self.assertRaises(
-            GEDAWriterError,
-            self.geda_writer._create_path,
-            components.Body().add_shape(shape.Circle(0, 0, 20))
-        )
-
+    def test_convert_polygon(self):
         polygon = shape.Polygon()
         polygon.add_point((0, 0))
         polygon.add_point((100, 200))
@@ -281,7 +325,7 @@ class TestGEDA(unittest.TestCase):
         polygon.add_point((200, 100))
 
         self.assertEquals(
-            self.geda_writer._create_path(polygon),
+            self.geda_writer._convert_polygon(polygon),
             [
                 'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5',
                 'M 0,0',
@@ -292,10 +336,11 @@ class TestGEDA(unittest.TestCase):
             ]
         )
     
+    def test_convert_bezier(self):
         curve = shape.BezierCurve((9, -10), (11, -10), (3, -12), (17, -12))
 
         self.assertEquals(
-            self.geda_writer._create_path(curve),
+            self.geda_writer._convert_bezier(curve),
             [
                 'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2',
                 'M 30,-120',
@@ -303,6 +348,7 @@ class TestGEDA(unittest.TestCase):
             ]
         )
 
+    def test_create_path(self):
         shapes = [
             shape.Line((10, 10), (50, 10)),
             shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)),

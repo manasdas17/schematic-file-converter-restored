@@ -7,11 +7,6 @@
 # 3) Write component instances to .sch file [TODO]
 # 4) Store net segments at the end of .sch file
 
-## v 20110115 2
-## C 40000 40000 0 0 0 title-B.sym
-## T 50300 40900 9 10 1 0 0 0 1
-## title text
-
 import os
 import types
 
@@ -103,11 +98,79 @@ class GEDA:
         self.project_dirs['symbol'] = symbol_dir
         self.project_dirs['project'] = project_dir 
 
+    def write_schematic_file(self, design):
+        output = []
+
+        ## create page frame & write name and owner 
+        output.extend(
+            self._create_schematic_title(design.design_attributes)
+        )
+
+        ##TODO(elbaschid): create component instances
+
+        ## create gEDA commands for all nets
+        output += self.generate_net_commands(design.nets)
+
+        return output
+
     def create_symbols(self, components):
         raise NotImplementedError()
 
     def write_component_to_file(self, component):
-        raise NotImplementedError()
+
+        geda_imported = False
+        ##NOTE: extract and remove gEDA internal attribute
+        if '_geda-imported' in component.attributes: 
+            geda_imported = component.attributes['_geda-imported'] == "true"
+            del component.attributes['_geda-imported']
+
+        if geda_imported:
+            ##TODO: check if component is known sym file in OS dirs
+            raise NotImplementedError()
+        else:
+            ## write symbol file for each symbol in component
+            for sym_idx, symbol in enumerate(component.symbols):
+
+                symbol_attr = "_symbol_%d_0" % sym_idx
+                if symbol_attr in component.attributes:
+                    prefix = component.attributes[symbol_attr]
+                    del component.attributes[symbol_attr]
+                else:
+                    prefix = component.name
+
+                prefix = prefix.replace(' ', '_')
+                symbol_name = "%s-%d.sym" % (prefix, sym_idx)
+                print symbol_name
+
+                
+                commands = []
+                for body in symbol.bodies:
+                    commands += self.generate_body_commands(body)
+
+                
+        ##TODO: special attributes: _prefix && _suffix -> refdes
+        return []
+
+    def generate_body_commands(self, body):
+        commands = []
+        
+        if self.is_valid_path(body):
+            commands += self._create_path(body)
+        else:
+            for shape in body.shapes:
+                method_name = '_convert_%s' % shape.type
+                if hasattr(self, method_name):
+                    commands += getattr(self, method_name)(shape)
+                else:
+                    raise GEDAWriterError(
+                        "invalid shape '%s' in component" % shape.type
+                    )
+
+        ##TODO: process body pin
+        for pin_seq, pin in enumerate(body.pins):
+            commands += self._create_pin(pin_seq, pin)
+
+        return commands
 
     def generate_net_commands(self, nets):
         commands = []
@@ -167,21 +230,6 @@ class GEDA:
 
         return commands
 
-    def write_schematic_file(self, design):
-        output = []
-
-        ## create page frame & write name and owner 
-        output.extend(
-            self._create_schematic_title(design.design_attributes)
-        )
-
-        ##TODO(elbaschid): create component instances
-
-        ## create gEDA commands for all nets
-        output += self.generate_net_commands(design.nets)
-
-        return output
-
     def _create_schematic_title(self, design_attributes):
         title_data = ['v 20110115 2',]
 
@@ -233,6 +281,7 @@ class GEDA:
 
         assert(isinstance(text, types.ListType))
 
+        alignment = self.ALIGNMENT[kwargs.get('alignment', 'left')]
         text_line =  'T %d %d %d %d %d %d %d %d %d' % (
             self.x_to_mils(x),
             self.y_to_mils(y),
@@ -241,7 +290,7 @@ class GEDA:
             kwargs.get('visibility', 1),
             0, #show_name_value is always '0'
             self.conv_angle(kwargs.get('angle', 0)),
-            kwargs.get('alignment', 0),
+            alignment,
             len(text),
         )
         return [text_line] + text
@@ -269,7 +318,7 @@ class GEDA:
                 pin.label.text, 
                 pin.label.x,
                 pin.label.y,
-                alignment=self.ALIGNMENT[pin.label.align],
+                alignment=pin.label.align,
                 angle=pin.label.rotation
             )
             command += attribute
@@ -292,7 +341,7 @@ class GEDA:
         command.append('}')
         return command
 
-    def _create_arc(self, arc):
+    def _convert_arc(self, arc):
         assert(issubclass(arc.__class__, shape.Arc))
 
         x, y = self.conv_coords(arc.x, arc.y)
@@ -313,7 +362,7 @@ class GEDA:
             )
         ]
 
-    def _create_circle(self, circle):
+    def _convert_circle(self, circle):
         assert(issubclass(circle.__class__, shape.Circle))
 
         center_x, center_y = self.conv_coords(circle.x, circle.y)
@@ -325,7 +374,10 @@ class GEDA:
             )
         ]
 
-    def _create_box(self, rect):
+    def _convert_rounded_rectangle(self, rect):
+        return self._convert_rectangle(rect)
+
+    def _convert_rectangle(self, rect):
         assert(issubclass(rect.__class__, (shape.Rectangle, shape.RoundedRectangle)))
         top_x, top_y = self.conv_coords(rect.x, rect.y)
         width, height = self.to_mils(rect.width), self.to_mils(rect.height)
@@ -339,7 +391,7 @@ class GEDA:
             )
         ]
 
-    def _create_line(self, line):
+    def _convert_line(self, line):
         assert(issubclass(line.__class__, shape.Line))
 
         start_x, start_y = self.conv_coords(line.p1.x, line.p1.y)
@@ -352,6 +404,16 @@ class GEDA:
                 end_y
             )
         ]
+
+    def _convert_label(self, label):
+        assert(issubclass(label.__class__, shape.Label))
+        return self._create_text(
+            label.text,
+            label.x, 
+            label.y,
+            alignment=label.align,
+            angle=label.rotation,
+        )
 
     def _create_segment(self, np1, np2, attributes=None):
         np1_x, np1_y = self.conv_coords(np1.x, np1.y)
@@ -377,98 +439,86 @@ class GEDA:
 
         return command
 
+    def _convert_polygon(self, polygon):
+        num_lines = len(polygon.points)+1 ##add closing command to polygon
+        commands = ['H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines]
+
+        start_x, start_y = polygon.points[0].x, polygon.points[0].y
+        commands.append('M %d,%d' % self.conv_coords(start_x, start_y))
+
+        for point in polygon.points[1:]:
+            commands.append('L %d,%d' % self.conv_coords(point.x, point.y))
+
+        commands.append('z') #closes the polygon
+
+        return commands
+
     def _create_path(self, path):
-        if issubclass(path.__class__, shape.Polygon):
-            num_lines = len(path.points)+1 ##add closing command to path
-            command= ['H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines]
+        num_lines = 1
 
-            start_x, start_y = path.points[0].x, path.points[0].y
-            command.append('M %d,%d' % self.conv_coords(start_x, start_y))
+        shapes = list(path.shapes) #create new list to be able to modify
 
-            for point in path.points[1:]:
-                command.append('L %d,%d' % self.conv_coords(point.x, point.y))
+        start_shape = shapes[0]
+        current_x, current_y = self.conv_coords(
+            start_shape.p1.x, 
+            start_shape.p1.y
+        )
+        start_x, start_y = current_x, current_y
+        command = ['M %d,%d' % (start_x, start_y)]
 
-            command.append('z') #closes the path
+        close_command = []
 
-        elif issubclass(path.__class__, shape.BezierCurve):
-            command = self._create_bezier_curve(path)
-
-        elif issubclass(path.__class__, components.Body):
-            ## line will be modified at the end
-            #command= ['H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d']
-
-            num_lines = 1
-
-            shapes = list(path.shapes) #create new list to be able to modify
-
-            start_shape = shapes[0]
-            current_x, current_y = self.conv_coords(
-                start_shape.p1.x, 
-                start_shape.p1.y
-            )
-            start_x, start_y = current_x, current_y
-            command = ['M %d,%d' % (start_x, start_y)]
-
-            close_command = []
-
-            ## check if last element is line back to starting point
-            end_shape = shapes[-1]
-            if end_shape.type == 'line':
-                if end_shape.p2.x == start_shape.p1.x \
-                    and end_shape.p2.y == start_shape.p1.y:
-                    ## discard line and close path instead
-                    close_command = ['z']
-                    shapes.remove(end_shape)
-                    num_lines += 1
-                    
-            for shape_obj in shapes:
-                if shape_obj.type == 'line':
-                    current_x, current_y = self.conv_coords(
-                        shape_obj.p2.x,
-                        shape_obj.p2.y
-                    )
-                    command.append("L %d,%d" % (current_x, current_y))
-
-                elif shape_obj.type == 'bezier':
-                    c1_x, c1_y = self.conv_coords(
-                        shape_obj.control1.x, 
-                        shape_obj.control1.y
-                    )
-                    c2_x, c2_y = self.conv_coords(
-                        shape_obj.control2.x, 
-                        shape_obj.control2.y
-                    )
-                    current_x, current_y = self.conv_coords(
-                        shape_obj.p2.x, 
-                        shape_obj.p2.y
-                    )
-
-                    command += [
-                        'C %d,%d %d,%d %d,%d' % (
-                            c1_x, c1_y, 
-                            c2_x, c2_y,
-                            current_x, current_y
-                        )
-                    ]
-
-                else:
-                    raise GEDAWriterError(
-                        "shape type '%s' can not be used to create path" % shape_obj.type
-                    )
-
+        ## check if last element is line back to starting point
+        end_shape = shapes[-1]
+        if end_shape.type == 'line':
+            if end_shape.p2.x == start_shape.p1.x \
+                and end_shape.p2.y == start_shape.p1.y:
+                ## discard line and close path instead
+                close_command = ['z']
+                shapes.remove(end_shape)
                 num_lines += 1
+                
+        for shape_obj in shapes:
+            if shape_obj.type == 'line':
+                current_x, current_y = self.conv_coords(
+                    shape_obj.p2.x,
+                    shape_obj.p2.y
+                )
+                command.append("L %d,%d" % (current_x, current_y))
 
-            path_command = 'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines
-            command = [path_command] + command + close_command
+            elif shape_obj.type == 'bezier':
+                c1_x, c1_y = self.conv_coords(
+                    shape_obj.control1.x, 
+                    shape_obj.control1.y
+                )
+                c2_x, c2_y = self.conv_coords(
+                    shape_obj.control2.x, 
+                    shape_obj.control2.y
+                )
+                current_x, current_y = self.conv_coords(
+                    shape_obj.p2.x, 
+                    shape_obj.p2.y
+                )
 
-        else:
-            raise GEDAWriterError(
-                "unrecognised path object '%s' found" % path.__class__
-            )
+                command += [
+                    'C %d,%d %d,%d %d,%d' % (
+                        c1_x, c1_y, 
+                        c2_x, c2_y,
+                        current_x, current_y
+                    )
+                ]
 
-        return command
+            else:
+                raise GEDAWriterError(
+                    "shape type '%s' can not be used to create path" % shape_obj.type
+                )
 
-    def _create_bezier_curve(self, curve):
+            num_lines += 1
+
+        path_command = 'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines
+        return [path_command] + command + close_command
+
+    def _convert_bezier(self, curve):
         assert(issubclass(curve.__class__, shape.BezierCurve))
         p1_x, p1_y = self.conv_coords(curve.p1.x, curve.p1.y)
         c1_x, c1_y = self.conv_coords(curve.control1.x, curve.control1.y)
