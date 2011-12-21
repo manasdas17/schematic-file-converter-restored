@@ -1,0 +1,20 @@
+v 20110115 2
+C 40000 40000 0 0 0 title-B.sym
+C 45400 47900 1 0 0 battery-1.sym
+{
+T 45700 48800 5 10 0 0 0 0 1
+device=BATTERY
+T 45700 48400 5 10 1 1 0 0 1
+refdes=B1
+T 45700 49200 5 10 0 0 0 0 1
+symversion=0.1
+}
+C 46200 46200 1 0 0 battery-1.sym
+{
+T 46500 47100 5 10 0 0 0 0 1
+device=BATTERY
+T 46500 46700 5 10 1 1 0 0 1
+refdes=B2
+T 46500 47500 5 10 0 0 0 0 1
+symversion=0.1
+}
