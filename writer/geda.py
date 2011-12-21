@@ -5,7 +5,7 @@
 # 1) create subdirectory, symbol and project file [TODO]
 # 2) Write each component into a .sym file [TODO]
 # 3) Write component instances to .sch file [TODO]
-# 4) Store net segments at the end of .sch file [TODO]
+# 4) Store net segments at the end of .sch file
 
 ## v 20110115 2
 ## C 40000 40000 0 0 0 title-B.sym
@@ -72,15 +72,14 @@ class GEDA:
 
     def write(self, design, filename):
         """ Write the design to the gEDA format """
-        ##TODO(elbaschid): get offset from design bounds
-
         ##TODO(elbaschid): setup project environment
         self.create_project_files(filename)
 
         ##TODO(elbaschid): create symbol files for components
         self.create_symbols(design.components)
 
-        ##TODO(elbaschid): generate schematic from design
+        ## generate commands for schematic file from design
+        ## output is a list of lines 
         output = self.create_schematic_file(design)
 
         f = open(filename, "w")
@@ -110,16 +109,12 @@ class GEDA:
     def write_component_to_file(self, component):
         raise NotImplementedError()
 
-    def _parse_annotation(self, annotation):
-        raise NotImplementedError()
-
-    def write_nets(self, nets):
-
+    def generate_net_commands(self, nets):
         commands = []
         
         for net in nets:
 
-            #TODO(elbaschid): extract net name
+            ## check if '_name' attribute carries net name 
             if net.attributes.has_key('_name') and net.attributes['_name']:
                 net.attributes['netname'] = net.attributes['_name']
 
@@ -166,6 +161,7 @@ class GEDA:
                     attributes=attributes
                 )
 
+                ## it's enough to store net name only in first element
                 if attributes is not None:
                     attributes = None
 
@@ -176,19 +172,19 @@ class GEDA:
 
         ## create page frame & write name and owner 
         output.extend(
-            self.create_title(design.design_attributes)
+            self._create_schematic_title(design.design_attributes)
         )
 
         ##TODO(elbaschid): create component instances
 
-        ##TODO(elbaschid): create nets
+        ## create gEDA commands for all nets
+        output += self.generate_net_commands(design.nets)
 
         return output
 
-    def _create_title(self, design_attributes):
+    def _create_schematic_title(self, design_attributes):
         title_data = ['v 20110115 2',]
 
-        ##TODO(elbaschid): use offset from design bounds
         title_data.append(
             self.create_component(self.offset.x, self.offset.y, 'title-B.sym')
         )

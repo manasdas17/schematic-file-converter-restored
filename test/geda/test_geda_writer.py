@@ -41,7 +41,7 @@ class TestGEDA(unittest.TestCase):
 
         self.geda_writer.set_offset(design.bounds()[0])
 
-        commands = self.geda_writer.write_nets(design.nets)
+        commands = self.geda_writer.generate_net_commands(design.nets)
         self.assertTrue(len(commands) > 0)
 
         segment_count = 0
