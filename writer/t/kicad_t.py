@@ -4,6 +4,7 @@ from core.design import Design
 from core.components import Pin
 from core.net import Net, NetPoint
 from core.component_instance import ComponentInstance, SymbolAttribute
+from core.annotation import Annotation
 from parser.openjson import JSON
 
 import os
@@ -46,6 +47,14 @@ class KiCADTests(unittest.TestCase):
         buf = StringIO()
         writer.write_eelayer(buf)
         self.assertEqual(buf.getvalue(), 'EELAYER 25  0\nEELAYER END\n')
+
+    def test_write_annotation(self):
+        writer = KiCAD()
+        buf = StringIO()
+        ann = Annotation('test', 1, 2, .5, 'true')
+        writer.write_annotation(buf, ann)
+        self.assertEqual(buf.getvalue(),
+                         'Text Label 1 -2 900 60 ~ 0\ntest\n')
 
     def test_write_instance(self):
         inst = ComponentInstance('id', 'libid', 1)

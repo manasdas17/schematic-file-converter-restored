@@ -31,6 +31,8 @@ class KiCAD(object):
         self.write_libs(f, library_filename)
         self.write_eelayer(f)
         self.write_descr(f, design)
+        for ann in design.design_attributes.annotations:
+            self.write_annotation(f, ann)
         for inst in design.component_instances:
             self.write_instance(f, inst)
         for net in design.nets:
@@ -87,6 +89,12 @@ Comment4 ""
 $EndDescr
 ''' % (datestr,))
 
+
+    def write_annotation(self, f, ann):
+        """ Write a design annotation to a kiCAD schematic """
+        f.write('Text Label %d %d %d 60 ~ 0\n' %
+                (ann.x, -ann.y, int(ann.rotation * 1800)))
+        f.write(ann.value + '\n')
 
     def write_instance(self, f, inst):
         """ Write a $Comp component to a kiCAD schematic """
