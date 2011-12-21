@@ -627,6 +627,7 @@ class GEDA:
                 net_name = self.net_names[pt_b.point_id]
 
             new_net = net.Net(net_name)
+            new_net.attributes['_name'] = net_name
             new_net.connect(seg)
             found = True
 
@@ -645,11 +646,24 @@ class GEDA:
 
         ## check if names are available for calculated nets 
         for net_obj in nets:
-            for point_id in net_obj.points:
+            annotation_x = annotation_y = 0
+            for point_id, net_point in net_obj.points.items():
+                ## check for stored net names based on pointIDs
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
                     net_obj.attributes['_name'] = self.net_names[point_id]
-                    ##TODO(elbaschid): add annotation to {{_name}}
+
+                    annotation_x, annotation_y = net_point.x, net_point.y
+
+            if '_name' in net_obj.attributes:
+                annotation = Annotation(
+                    "{{_name}}", ## annotation referencing the attribute '_name' 
+                    self.conv_mils(annotation_x),
+                    self.conv_mils(annotation_y),
+                    self.conv_angle(0.0),
+                    self.conv_bool(1),
+                )
+                net_obj.add_annotation(annotation)
 
         return nets
 

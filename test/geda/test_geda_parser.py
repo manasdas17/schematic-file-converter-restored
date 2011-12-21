@@ -166,6 +166,10 @@ N 55700 44400 55700 43500 4"""
             sorted([net.net_id for net in design.nets]),
             sorted(['another name', 'test', ''])
         )
+        self.assertEquals(
+            sorted([net.attributes['_name'] for net in design.nets]),
+            sorted(['another name', 'test', ''])
+        )
 
         sorted_nets = {}
         for net in design.nets:
