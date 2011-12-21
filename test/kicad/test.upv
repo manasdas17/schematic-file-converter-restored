@@ -2730,7 +2730,22 @@
         }
     }, 
     "design_attributes": {
-        "annotations": [], 
+        "annotations": [
+            {
+                "rotation": 0.0, 
+                "value": "I'm a net label", 
+                "visible": "true", 
+                "x": 3350, 
+                "y": -2300
+            }, 
+            {
+                "rotation": 0.0, 
+                "value": "PWR", 
+                "visible": "true", 
+                "x": 6350, 
+                "y": -4050
+            }
+        ], 
         "attributes": {}, 
         "metadata": {
             "attached_urls": [], 
@@ -2740,105 +2755,10 @@
             "name": "", 
             "owner": "", 
             "slug": "", 
-            "updated_timestamp": 1324429973
+            "updated_timestamp": 1324440292
         }
     }, 
     "nets": [
-        {
-            "annotations": [], 
-            "attributes": {}, 
-            "net_id": "", 
-            "points": [
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6900a-4950", 
-                        "6100a-4650", 
-                        "6100a-5350"
-                    ], 
-                    "point_id": "6100a-4950", 
-                    "x": 6100, 
-                    "y": -4950
-                }, 
-                {
-                    "connected_components": [
-                        {
-                            "instance_id": "IC1", 
-                            "pin_number": "15"
-                        }
-                    ], 
-                    "connected_points": [
-                        "6900a-4050"
-                    ], 
-                    "point_id": "5150a-4050", 
-                    "x": 5150, 
-                    "y": -4050
-                }, 
-                {
-                    "connected_components": [
-                        {
-                            "instance_id": "IC1", 
-                            "pin_number": "6"
-                        }
-                    ], 
-                    "connected_points": [
-                        "6100a-4650"
-                    ], 
-                    "point_id": "5150a-4650", 
-                    "x": 5150, 
-                    "y": -4650
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6100a-4950", 
-                        "5150a-4650"
-                    ], 
-                    "point_id": "6100a-4650", 
-                    "x": 6100, 
-                    "y": -4650
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6100a-5350"
-                    ], 
-                    "point_id": "5150a-5350", 
-                    "x": 5150, 
-                    "y": -5350
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6100a-4950", 
-                        "5150a-5350"
-                    ], 
-                    "point_id": "6100a-5350", 
-                    "x": 6100, 
-                    "y": -5350
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "5150a-4050", 
-                        "6900a-4950"
-                    ], 
-                    "point_id": "6900a-4050", 
-                    "x": 6900, 
-                    "y": -4050
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6900a-4050", 
-                        "6100a-4950"
-                    ], 
-                    "point_id": "6900a-4950", 
-                    "x": 6900, 
-                    "y": -4950
-                }
-            ]
-        }, 
         {
             "annotations": [], 
             "attributes": {}, 
@@ -2892,95 +2812,90 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a-2000", 
-                        "5900a-2700"
+                        "6100a-5350", 
+                        "6900a-4950", 
+                        "6100a-4650"
                     ], 
-                    "point_id": "6450a-2700", 
-                    "x": 6450, 
-                    "y": -2700
+                    "point_id": "6100a-4950", 
+                    "x": 6100, 
+                    "y": -4950
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a-2000", 
-                        "5000a-3000"
+                        "6100a-5350"
                     ], 
-                    "point_id": "5000a-2000", 
-                    "x": 5000, 
-                    "y": -2000
+                    "point_id": "5150a-5350", 
+                    "x": 5150, 
+                    "y": -5350
+                }, 
+                {
+                    "connected_components": [
+                        {
+                            "instance_id": "IC1", 
+                            "pin_number": "6"
+                        }
+                    ], 
+                    "connected_points": [
+                        "6100a-4650"
+                    ], 
+                    "point_id": "5150a-4650", 
+                    "x": 5150, 
+                    "y": -4650
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "5000a-2000"
+                        "6100a-4950", 
+                        "5150a-4650"
                     ], 
-                    "point_id": "5000a-3000", 
-                    "x": 5000, 
-                    "y": -3000
+                    "point_id": "6100a-4650", 
+                    "x": 6100, 
+                    "y": -4650
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a-2700"
+                        "5150a-5350", 
+                        "6100a-4950"
                     ], 
-                    "point_id": "5900a-2700", 
-                    "x": 5900, 
-                    "y": -2700
+                    "point_id": "6100a-5350", 
+                    "x": 6100, 
+                    "y": -5350
+                }, 
+                {
+                    "connected_components": [
+                        {
+                            "instance_id": "IC1", 
+                            "pin_number": "15"
+                        }
+                    ], 
+                    "connected_points": [
+                        "6900a-4050"
+                    ], 
+                    "point_id": "5150a-4050", 
+                    "x": 5150, 
+                    "y": -4050
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a-2700", 
-                        "5000a-2000"
+                        "6900a-4950", 
+                        "5150a-4050"
                     ], 
-                    "point_id": "6450a-2000", 
-                    "x": 6450, 
-                    "y": -2000
-                }
-            ]
-        }, 
-        {
-            "annotations": [], 
-            "attributes": {}, 
-            "net_id": "", 
-            "points": [
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "2950a-4450", 
-                        "2700a-6650"
-                    ], 
-                    "point_id": "2950a-6650", 
-                    "x": 2950, 
-                    "y": -6650
+                    "point_id": "6900a-4050", 
+                    "x": 6900, 
+                    "y": -4050
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2950a-4450"
+                        "6100a-4950", 
+                        "6900a-4050"
                     ], 
-                    "point_id": "3250a-4450", 
-                    "x": 3250, 
-                    "y": -4450
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "2950a-6650"
-                    ], 
-                    "point_id": "2700a-6650", 
-                    "x": 2700, 
-                    "y": -6650
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "3250a-4450", 
-                        "2950a-6650"
-                    ], 
-                    "point_id": "2950a-4450", 
-                    "x": 2950, 
-                    "y": -4450
+                    "point_id": "6900a-4950", 
+                    "x": 6900, 
+                    "y": -4950
                 }
             ]
         }, 
@@ -3016,6 +2931,106 @@
                     "point_id": "3250a-3950", 
                     "x": 3250, 
                     "y": -3950
+                }
+            ]
+        }, 
+        {
+            "annotations": [], 
+            "attributes": {}, 
+            "net_id": "", 
+            "points": [
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "6450a-2000", 
+                        "5900a-2700"
+                    ], 
+                    "point_id": "6450a-2700", 
+                    "x": 6450, 
+                    "y": -2700
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "5000a-3000", 
+                        "6450a-2000"
+                    ], 
+                    "point_id": "5000a-2000", 
+                    "x": 5000, 
+                    "y": -2000
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "5000a-2000"
+                    ], 
+                    "point_id": "5000a-3000", 
+                    "x": 5000, 
+                    "y": -3000
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "6450a-2700"
+                    ], 
+                    "point_id": "5900a-2700", 
+                    "x": 5900, 
+                    "y": -2700
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "5000a-2000", 
+                        "6450a-2700"
+                    ], 
+                    "point_id": "6450a-2000", 
+                    "x": 6450, 
+                    "y": -2000
+                }
+            ]
+        }, 
+        {
+            "annotations": [], 
+            "attributes": {}, 
+            "net_id": "", 
+            "points": [
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2950a-4450"
+                    ], 
+                    "point_id": "3250a-4450", 
+                    "x": 3250, 
+                    "y": -4450
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2700a-6650", 
+                        "2950a-4450"
+                    ], 
+                    "point_id": "2950a-6650", 
+                    "x": 2950, 
+                    "y": -6650
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2950a-6650"
+                    ], 
+                    "point_id": "2700a-6650", 
+                    "x": 2700, 
+                    "y": -6650
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2950a-6650", 
+                        "3250a-4450"
+                    ], 
+                    "point_id": "2950a-4450", 
+                    "x": 2950, 
+                    "y": -4450
                 }
             ]
         }

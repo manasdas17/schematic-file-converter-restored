@@ -19,10 +19,12 @@ class KiCADTests(unittest.TestCase):
         self.actual = KiCAD().parse(TEST_INPUT_FILE)
 
 
-    def test_create_new_kicad_parser(self):
-        """ We can make a new parser """
-        p = KiCAD()
-        assert p != None
+    def test_design_attributes(self):
+        """ All the design attributes are correct """
+
+        self.assert_annotations_equal(
+            self.actual.design_attributes.annotations,
+            self.good.design_attributes.annotations)
 
 
     def test_points(self):
@@ -138,14 +140,16 @@ class KiCADTests(unittest.TestCase):
                 self.assertEqual(test_sa.x, good_sa.x)
                 self.assertEqual(test_sa.y, good_sa.y)
                 self.assertEqual(test_sa.rotation, good_sa.rotation)
-                self.assertEqual(len(test_sa.annotations),
-                                 len(good_sa.annotations))
-                for test_ann, good_ann in zip(test_sa.annotations,
-                                              good_sa.annotations):
-                    self.assertEqual(test_ann.value, good_ann.value)
-                    self.assertEqual(test_ann.x, good_ann.x)
-                    self.assertEqual(test_ann.y, good_ann.y)
-                    self.assertEqual(test_ann.rotation, good_ann.rotation)
-                    self.assertEqual(test_ann.visible, good_ann.visible)
+                self.assert_annotations_equal(test_sa.annotations,
+                                              good_sa.annotations)
 
         self.assertEqual(test_insts, [])
+
+    def assert_annotations_equal(self, test_anns, good_anns):
+        self.assertEqual(len(test_anns), len(good_anns))
+        for test_ann, good_ann in zip(test_anns, good_anns):
+            self.assertEqual(test_ann.value, good_ann.value)
+            self.assertEqual(test_ann.x, good_ann.x)
+            self.assertEqual(test_ann.y, good_ann.y)
+            self.assertEqual(test_ann.rotation, good_ann.rotation)
+            self.assertEqual(test_ann.visible, good_ann.visible)

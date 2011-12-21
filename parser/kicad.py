@@ -58,6 +58,9 @@ class KiCAD(object):
                 self.parse_wire(f, segments)
             elif prefix == "Connection": # Store these to apply later
                 self.parse_connection(line, junctions)
+            elif prefix == "Text":
+                circuit.design_attributes.add_annotation(
+                    self.parse_text(f, line))
             elif prefix == "$Comp": # Component Instance
                 circuit.add_component_instance(
                     self.parse_component_instance(f, circuit.components))
@@ -86,6 +89,14 @@ class KiCAD(object):
         x, y = [int(i) for i in line.split()[2:4]]
         junctions.add((x, -y))
 
+
+    def parse_text(self, f, line):
+        """ Parse a Text line """
+        parts = line.split()
+        x, y, rotation = int(parts[2]), int(parts[3]), int(parts[4])
+        rotation = rotation / 1800.0
+        value = f.readline().strip()
+        return Annotation(value, x, -y, rotation, 'true')
 
     def parse_component_instance(self, f, components):
         """ Parse a component instance from a $Comp block """

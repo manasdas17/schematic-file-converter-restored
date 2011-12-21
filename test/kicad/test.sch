@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mon 12 Dec 2011 05:12:14 PM PST
+EESchema Schematic File Version 2  date Tue 20 Dec 2011 07:56:11 PM PST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "13 dec 2011"
+Date "21 dec 2011"
 Rev ""
 Comp ""
 Comment1 ""
@@ -44,6 +44,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text Label 3350 2300 0    60   ~ 0
+I'm a net label
 $Comp
 L LAA110 U3
 U 1 1 4EE59331
