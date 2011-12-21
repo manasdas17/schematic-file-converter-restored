@@ -65,6 +65,11 @@ class GEDA:
             'project': None,
         }
 
+    def set_offset(self, point):
+        ## create an offset of 5 grid squares from origin (0,0)
+        self.offset.x = point.x - 500
+        self.offset.y = point.y - 500
+
     def write(self, design, filename):
         """ Write the design to the gEDA format """
         ##TODO(elbaschid): get offset from design bounds
@@ -105,8 +110,66 @@ class GEDA:
     def write_component_to_file(self, component):
         raise NotImplementedError()
 
-    def create_nets(self, nets):
+    def _parse_annotation(self, annotation):
         raise NotImplementedError()
+
+    def write_nets(self, nets):
+
+        commands = []
+        
+        for net in nets:
+
+            #TODO(elbaschid): extract net name
+            if net.attributes.has_key('_name') and net.attributes['_name']:
+                net.attributes['netname'] = net.attributes['_name']
+
+            elif len(net.annotations) > 0:
+                ## assume that the first annotation is net name
+                annotation = net.annotations[0]
+                net.attributes['netname'] = annotation.value
+                net.annotations.remove(annotation)
+
+            ## at this point '_name' is no longer required
+            if net.attributes.has_key('_name'):
+                del net.attributes['_name']
+
+            ## parse annotations into text commands
+            for annotation in net.annotations:
+                commands += self._create_text(
+                    annotation.value,
+                    annotation.x,
+                    annotation.y,
+                    rotation=annotation.rotation
+                )
+            
+            ## generate list of segments from net points
+            ## prevent segments from being added twice (reverse)
+            segments = set()
+            for start_id, start_pt in net.points.items():
+                for end_id in start_pt.connected_points:
+                    if (end_id, start_id) not in segments:
+                        segments.add((start_id, end_id)) 
+
+            attributes = dict(net.attributes)
+            for segment in segments:
+                start_id, end_id = segment
+
+                ## prevent zero-length segements from being written
+                if net.points[start_id].x == net.points[end_id].x \
+                    and net.points[start_id].y == net.points[end_id].y:
+                    ## the same point is defined twice
+                    continue
+
+                commands += self._create_segment(
+                    net.points[start_id],
+                    net.points[end_id],
+                    attributes=attributes
+                )
+
+                if attributes is not None:
+                    attributes = None
+
+        return commands
 
     def write_schematic_file(self, design):
         output = []
@@ -145,9 +208,9 @@ class GEDA:
         return title_data
 
     def _create_component(self, x, y, basename, selectable=0, angle=0, mirror=0):
+        x, y = self.conv_coords(x, y)
         return 'C %d %d %d %d %d %s' % (
-            self.to_mils(x),
-            self.to_mils(y),
+            x, y,
             selectable,
             angle,
             mirror,
@@ -175,8 +238,8 @@ class GEDA:
         assert(isinstance(text, types.ListType))
 
         text_line =  'T %d %d %d %d %d %d %d %d %d' % (
-            self.to_mils(x) + self.offset.x,
-            self.to_mils(y) + self.offset.y,
+            self.x_to_mils(x),
+            self.y_to_mils(y),
             kwargs.get('color', GEDAColor.TEXT_COLOR),
             kwargs.get('size', 10),
             kwargs.get('visibility', 1),
@@ -193,10 +256,10 @@ class GEDA:
         connected_x, connected_y = pin.p2.x, pin.p2.y
         
         command = ['P %d %d %d %d %d %d %d' % (
-            self.to_mils(connected_x),
-            self.to_mils(connected_y),
-            self.to_mils(pin.p1.x),
-            self.to_mils(pin.p1.y),
+            self.x_to_mils(connected_x),
+            self.y_to_mils(connected_y),
+            self.x_to_mils(pin.p1.x),
+            self.y_to_mils(pin.p1.y),
             GEDAColor.PIN_COLOR,
             0, #pin type is always 0
             0, #first point is active/connected pin
@@ -294,10 +357,7 @@ class GEDA:
             )
         ]
 
-    def _create_segment(self, np1, np2=None, attributes=None):
-        if np2 is None:
-            np1, np2 = np1
-        
+    def _create_segment(self, np1, np2, attributes=None):
         np1_x, np1_y = self.conv_coords(np1.x, np1.y)
         np2_x, np2_y = self.conv_coords(np2.x, np2.y)
         command = [
@@ -443,8 +503,16 @@ class GEDA:
 
         return True 
 
-    def to_mils(self, px):
-        return self.offset.x + (px * self.SCALE_FACTOR)
+    def to_mils(self, value):
+        return value * self.SCALE_FACTOR
+
+    def y_to_mils(self, py):
+        value = (py - self.offset.y) * self.SCALE_FACTOR 
+        return value
+
+    def x_to_mils(self, px):
+        value = (px - self.offset.x) * self.SCALE_FACTOR 
+        return value
 
     def conv_angle(self, angle, steps=1):
         converted_angle = int(angle * 180)
@@ -452,6 +520,6 @@ class GEDA:
 
     def conv_coords(self, x, y):
         return (
-            (self.offset.x + x) * self.SCALE_FACTOR,
-            (self.offset.y + y) * self.SCALE_FACTOR,
+            self.x_to_mils(x),
+            self.y_to_mils(y)
         )

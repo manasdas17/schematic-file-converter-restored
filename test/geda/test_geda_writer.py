@@ -2,16 +2,19 @@
 import os
 import unittest
 import tempfile
+import StringIO
 
 from core import net 
 from core import shape
 from core import components 
 from writer.geda import GEDA, GEDAWriterError
+from parser.openjson import JSON
 
 class TestGEDA(unittest.TestCase):
 
     def setUp(self):
         self.geda_writer = GEDA()
+        self.oj_parser = JSON()
 
     def test_create_project_files(self):
         geda_filename = '/tmp/test_geda.sch'
@@ -32,6 +35,38 @@ class TestGEDA(unittest.TestCase):
         data = ''.join(fh.readlines())
         fh.close()
         self.assertEquals(data, '(component-library "./symbols")') 
+
+    def test_write_nets(self):
+        design = self.oj_parser.parse('test/geda/nets_exported.upv')
+
+        self.geda_writer.set_offset(design.bounds()[0])
+
+        commands = self.geda_writer.write_nets(design.nets)
+        self.assertTrue(len(commands) > 0)
+
+        segment_count = 0
+        for command in commands:
+            if command.startswith('N '):
+                segment_count += 1
+
+        self.assertEquals(segment_count, 21) 
+
+        env_count = 0
+        for command in commands:
+            if command.startswith('{'):
+                env_count += 1
+        self.assertEquals(env_count, 4) 
+
+        commands += [
+            'v 20110115 2\n',
+        ]
+        import parser.geda
+        parser = parser.geda.GEDA()
+        new_design = parser.parse_schematic(
+            StringIO.StringIO('\n'.join(commands))
+        )
+        self.assertEquals(len(design.nets), len(new_design.nets))
+
 
     def test_create_component(self):
         component = self.geda_writer._create_component(0, 0, 'test-1.sym')

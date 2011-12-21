@@ -648,6 +648,8 @@ class GEDA:
             for point_id in net_obj.points:
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
+                    net_obj.attributes['_name'] = self.net_names[point_id]
+                    ##TODO(elbaschid): add annotation to {{_name}}
 
         return nets
 
