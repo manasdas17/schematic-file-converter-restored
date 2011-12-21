@@ -128,8 +128,8 @@ class JSON:
         pin_number = pin.get('pin_number')
         p1 = self.parse_point(pin.get('p1'))
         p2 = self.parse_point(pin.get('p2'))
-        if None != pin.get('pin_label'):
-            pin_label = self.parse_label(pin.get('pin_label'))
+        if pin.get('label') is not None:
+            pin_label = self.parse_label(pin.get('label'))
             return Pin(pin_number, p1, p2, pin_label)
         return Pin(pin_number, p1, p2)
 
