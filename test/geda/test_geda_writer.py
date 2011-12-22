@@ -10,7 +10,7 @@ from core import components
 
 import parser.geda 
 
-from writer.geda import GEDA, GEDAWriterError
+from writer.geda import GEDA, GEDAError
 from parser.openjson import JSON
 
 class TestGEDA(unittest.TestCase):
@@ -236,7 +236,7 @@ class TestGEDA(unittest.TestCase):
                 (library_id, 0): 'opamp.sym', 
             } 
         )
-        library_id = 'EMBEDDEDcapacitor-1'
+        library_id = 'capacitor-1'
         component = converted_design.components.components[library_id]
         commands = self.geda_writer.write_component_to_file(library_id, component)
 
