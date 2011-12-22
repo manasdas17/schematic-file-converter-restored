@@ -378,22 +378,39 @@ class ComponentParser(object):
 
     def parse_x_line(self, parts):
         """ Parse an X (Pin) line """
-        num, direction = parts[2], parts[6]
+        name, num, direction = parts[1], parts[2], parts[6]
         p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
 
         if direction == 'U': # up
             p1x = p2x
             p1y = p2y + pinlen
+            label_x = p2x - 20
+            label_y = p2y + pinlen / 2
+            label_rotation = 1.5
         elif direction == 'D': # down
             p1x = p2x
             p1y = p2y - pinlen
+            label_x = p2x - 20
+            label_y = p2y - pinlen / 2
+            label_rotation = 1.5
         elif direction == 'L': # left
             p1x = p2x - pinlen
             p1y = p2y
+            label_x = p2x - pinlen / 2
+            label_y = p2y + 20
+            label_rotation = 0
         elif direction == 'R': # right
             p1x = p2x + pinlen
             p1y = p2y
+            label_x = p2x + pinlen / 2
+            label_y = p2y + 20
+            label_rotation = 0
         else:
             raise ValueError('unexpected pin direction', direction)
 
-        return Pin(num, (p1x, p1y), (p2x, p2y)) # TODO: label
+        if name == '~':
+            label = None
+        else:
+            label = Label(label_x, label_y, name, 'center', label_rotation)
+
+        return Pin(num, (p1x, p1y), (p2x, p2y), label)
