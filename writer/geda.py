@@ -3,7 +3,7 @@
 # Basic Strategy
 # 0) converted file will be store in subdirectory [TODO]
 # 1) create subdirectory, symbol and project file [TODO]
-# 2) Write each component into a .sym file [TODO]
+# 2) Write each component into a .sym file (even EMBEDDED components) [TODO]
 # 3) Write component instances to .sch file [TODO]
 # 4) Store net segments at the end of .sch file
 
@@ -13,6 +13,9 @@ import types
 from core import shape
 from core import components
 from core.shape import Point
+from core.annotation import Annotation
+
+import parser.geda
 
 class GEDAColor:
     BACKGROUND_COLOR = 0
@@ -50,10 +53,33 @@ class GEDA:
         'right': 4,
     }
 
-    def __init__(self):
+    def __init__(self, symbol_dirs=None, auto_include=False):
+        ## add flag to allow for auto inclusion
+        if symbol_dirs is None:
+            symbol_dirs = []
+
+            if auto_include is True:
+                symbol_dirs += [
+                    '/usr/share/gEDA/sym',
+                    '/usr/local/share/gEDA/sym',
+                ]
+
+        self.known_symbols = parser.geda.find_symbols(symbol_dirs)
+
         ## offset used as bottom left origin as default
         ## in gEDA when starting new file
         self.offset = Point(0, 0)
+        self.component_library = None
+
+        ##NOTE: special attributes that are processed
+        ## separately and will not be used as regular attributes
+        self.ignored_attributes = [
+            '_prefix',
+            '_suffix',
+            '_refdes',
+            '_name',
+            '_geda-imported',
+        ]
 
         self.project_dirs = {
             'symbol': None,
@@ -67,18 +93,22 @@ class GEDA:
 
     def write(self, design, filename):
         """ Write the design to the gEDA format """
-        ##TODO(elbaschid): setup project environment
+        self.component_library = dict()
+
+        ## setup project environment
         self.create_project_files(filename)
 
-        ##TODO(elbaschid): create symbol files for components
-        self.create_symbols(design.components)
+        ## create symbol files for components writing all symbols
+        ## to local 'symbols' directory. Symbols that are available
+        ## in provided directories are ignored and referenced.
+        self._create_symbols(design.components)
 
         ## generate commands for schematic file from design
         ## output is a list of lines 
-        output = self.create_schematic_file(design)
+        output = self.write_schematic_file(design)
 
         f = open(filename, "w")
-        f.write('\n'.join(output))
+        f.write(self.commands_to_string(output))
         f.close()
         return
 
@@ -90,10 +120,14 @@ class GEDA:
             os.mkdir(symbol_dir)
 
         ## create project file to allow gEDA find symbol files
-        project_file = 'gafrc'
-        fh = open(os.path.join(project_dir, 'gafrc'), 'w')
-        fh.write('(component-library "./symbols")')
-        fh.close()
+        project_file = os.path.join(project_dir, 'gafrc')
+        if not os.path.exists(project_file):
+            fh = open(os.path.join(project_dir, 'gafrc'), 'w')
+            fh.write('(component-library "./symbols")')
+            fh.close()
+        else:
+            print "gafrc file exists. Please make sure it contains following line:"
+            print "(component-library './symbols')"
 
         self.project_dirs['symbol'] = symbol_dir
         self.project_dirs['project'] = project_dir 
@@ -102,54 +136,111 @@ class GEDA:
         output = []
 
         ## create page frame & write name and owner 
-        output.extend(
-            self._create_schematic_title(design.design_attributes)
-        )
+        output += self._create_schematic_title(design.design_attributes)
 
-        ##TODO(elbaschid): create component instances
+        ## create component instances
+        output += self.generate_instances(design.component_instances)
 
         ## create gEDA commands for all nets
         output += self.generate_net_commands(design.nets)
 
         return output
 
-    def create_symbols(self, components):
-        raise NotImplementedError()
+    def generate_instances(self, component_instances):
+        commands = []
 
-    def write_component_to_file(self, component):
+        for instance in component_instances:
+            ## retrieve symbol for instance
+            component_symbol = self.component_library[(
+                instance.library_id, 
+                instance.symbol_index
+            )]
 
-        geda_imported = False
+            component_annotations = []
+
+            ## create component instance for every symbolattribute
+            for symbol_attribute in instance.symbol_attributes:
+                commands += self._create_component(
+                    symbol_attribute.x,
+                    symbol_attribute.y,
+                    angle=symbol_attribute.rotation,
+                    basename=component_symbol,
+                )
+
+                component_annotations += symbol_attribute.annotations
+
+            for annotation in component_annotations:
+                commands += self._convert_annotation(annotation)
+        
+            commands.append('{')
+            commands += self._create_attribute(
+                'refdes', 
+                instance.instance_id,
+                symbol_attribute.x,
+                symbol_attribute.y,
+                visibility=0,
+            )
+            attr_x, attr_y = symbol_attribute.x, symbol_attribute.y
+            for key, value in instance.attributes.items():
+                attr_x, attr_y = attr_x+10, attr_y+10
+                commands += self._create_attribute(key, value, attr_x, attr_y)
+            commands.append('}')
+
+        return commands
+
+    def write_component_to_file(self, library_id, component):
         ##NOTE: extract and remove gEDA internal attribute
-        if '_geda-imported' in component.attributes: 
-            geda_imported = component.attributes['_geda-imported'] == "true"
-            del component.attributes['_geda-imported']
+        geda_imported = component.attributes.get('_geda_imported', 'false')
+        geda_imported = (geda_imported == "true")
 
+        _prefix = component.attributes.get('_prefix', '')
+        _suffix = component.attributes.get('_suffix', '')
+
+        component.attributes['_refdes'] = '%s?%s' % (_prefix, _suffix)
+
+        symbol_filename = None
         if geda_imported:
-            ##TODO: check if component is known sym file in OS dirs
-            raise NotImplementedError()
-        else:
-            ## write symbol file for each symbol in component
-            for sym_idx, symbol in enumerate(component.symbols):
+            ##check if component is known sym file in OS dirs
+            symbol_name = component.name.replace('EMBEDDED', '') 
+            symbol_filename = "%s.sym" %  symbol_name
+            self.component_library[(library_id, 0)] = symbol_filename
 
-                symbol_attr = "_symbol_%d_0" % sym_idx
-                if symbol_attr in component.attributes:
-                    prefix = component.attributes[symbol_attr]
-                    del component.attributes[symbol_attr]
-                else:
-                    prefix = component.name
+            if symbol_name in self.known_symbols:
+                return 
 
+        ## write symbol file for each symbol in component
+        for sym_idx, symbol in enumerate(component.symbols):
+
+            symbol_attr = "_symbol_%d_0" % sym_idx
+            if symbol_attr in component.attributes:
+                prefix = component.attributes[symbol_attr]
+                del component.attributes[symbol_attr]
+            else:
+                prefix = component.name
+
+            if not geda_imported:
                 prefix = prefix.replace(' ', '_')
-                symbol_name = "%s-%d.sym" % (prefix, sym_idx)
-                print symbol_name
+                symbol_filename = "%s-%d.sym" % (prefix, sym_idx)
+            
+            commands = []
+            for body in symbol.bodies:
+                commands += self.generate_body_commands(body)
 
-                
-                commands = []
-                for body in symbol.bodies:
-                    commands += self.generate_body_commands(body)
+            ## write commands to file
+            path = os.path.join(
+                self.project_dirs['symbol'],
+                symbol_filename
+            )
+            fout = open(path, 'w')
+            fout.write(self.commands_to_string(commands))
+            fout.close()
 
-                
-        ##TODO: special attributes: _prefix && _suffix -> refdes
-        return []
+            ## required for instantiating components later
+            self.component_library[(library_id, sym_idx)] = symbol_filename
+
+    def commands_to_string(self, commands):
+        commands = ['v 20110115 2'] + commands
+        return '\n'.join(commands)
 
     def generate_body_commands(self, body):
         commands = []
@@ -166,7 +257,7 @@ class GEDA:
                         "invalid shape '%s' in component" % shape.type
                     )
 
-        ##TODO: process body pin
+        ## create commands for pins
         for pin_seq, pin in enumerate(body.pins):
             commands += self._create_pin(pin_seq, pin)
 
@@ -186,10 +277,6 @@ class GEDA:
                 annotation = net.annotations[0]
                 net.attributes['netname'] = annotation.value
                 net.annotations.remove(annotation)
-
-            ## at this point '_name' is no longer required
-            if net.attributes.has_key('_name'):
-                del net.attributes['_name']
 
             ## parse annotations into text commands
             for annotation in net.annotations:
@@ -231,37 +318,70 @@ class GEDA:
         return commands
 
     def _create_schematic_title(self, design_attributes):
-        title_data = ['v 20110115 2',]
+        commands = []
 
-        title_data.append(
-            self.create_component(self.offset.x, self.offset.y, 'title-B.sym')
+        commands += self._create_component(
+            self.offset.x, 
+            self.offset.y, 
+            'title-B.sym'
         )
-        title_data.append(
-            self.create_text(1390, 10, design_attributes.owner, size=10)
-        )
-        title_data.append(
-            self.create_text(1010, 8, design_attributes.name, size=20)
-        )
+
+        if design_attributes.metadata.owner:
+            commands += self._create_text(
+                design_attributes.metadata.owner, 
+                self.offset.x+1390, 
+                self.offset.y+10, 
+                size=10
+            )
+
+        if design_attributes.metadata.name:
+            commands += self._create_text(
+                design_attributes.metadata.name, 
+                self.offset.x+1010, 
+                self.offset.y+80, 
+                size=20
+            )
+
+        if design_attributes.metadata.license:
+            commands += self._create_attribute(
+                '_use_license',
+                design_attributes.metadata.license, 
+                self.offset.x, 
+                self.offset.y, 
+            )
+         
 
         ## set coordinates at offset for design attributes
-        for key, value in design_attributes.attributes:
-            attribute = self._create_attribute(key, value, x, y)
+        attr_x, attr_y = self.offset.x, self.offset.y
+        for key, value in design_attributes.attributes.items():
+            commands += self._create_attribute(
+                key, value, 
+                attr_x, 
+                attr_y,
+            )
+            attr_x, attr_y = attr_x+10, attr_y+10
 
-            title_data.append(attribute)
+        return commands
 
-        return title_data
+    def _create_symbols(self, components):
+        for library_id, component in components.components.items():
+            self.write_component_to_file(library_id, component)
 
     def _create_component(self, x, y, basename, selectable=0, angle=0, mirror=0):
         x, y = self.conv_coords(x, y)
-        return 'C %d %d %d %d %d %s' % (
-            x, y,
-            selectable,
-            angle,
-            mirror,
-            basename
-        )
+        return [
+            'C %d %d %d %d %d %s' % (
+                x, y,
+                selectable,
+                self.conv_angle(angle),
+                mirror,
+                basename
+            )
+        ]
 
     def _create_attribute(self, key, value, x, y, **kwargs):
+        if key in self.ignored_attributes:
+            return []
 
         ## make private attribute invisible in gEDA
         if key.startswith('_'): 
@@ -288,7 +408,7 @@ class GEDA:
             kwargs.get('color', GEDAColor.TEXT_COLOR),
             kwargs.get('size', 10),
             kwargs.get('visibility', 1),
-            0, #show_name_value is always '0'
+            1, #show_name_value is always '0'
             self.conv_angle(kwargs.get('angle', 0)),
             alignment,
             len(text),
@@ -341,6 +461,20 @@ class GEDA:
         command.append('}')
         return command
 
+    def _convert_annotation(self, annotation):
+        assert(issubclass(annotation.__class__, Annotation))
+    
+        if annotation.value.startswith('{{'):
+            return []
+
+        return self._create_text(
+            annotation.value,
+            annotation.x,
+            annotation.y,
+            angle=annotation.rotation,
+            visibility=annotation.visible,
+        )
+
     def _convert_arc(self, arc):
         assert(issubclass(arc.__class__, shape.Arc))
 
@@ -352,13 +486,12 @@ class GEDA:
             sweep_angle = 360 + sweep_angle
 
         return [
-            'A %d %d %d %d %d %d %d %d %d %d %d' % (
+            'A %d %d %d %d %d %d 10 0 0 -1 -1' % (
                 x, y,
                 self.to_mils(arc.radius),
                 start_angle, 
                 sweep_angle,
                 GEDAColor.GRAPHIC_COLOR,
-                0, 0, 0, -1, -1 ## default style values
             )
         ]
 
@@ -367,7 +500,7 @@ class GEDA:
 
         center_x, center_y = self.conv_coords(circle.x, circle.y)
         return [
-            'V %d %d %d 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
+            'V %d %d %d 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
                 center_x,
                 center_y,
                 self.to_mils(circle.radius)
@@ -383,7 +516,7 @@ class GEDA:
         width, height = self.to_mils(rect.width), self.to_mils(rect.height)
         ## gEDA uses bottom-left corner as rectangle origin
         return [
-            'B %d %d %d %d 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
+            'B %d %d %d %d 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
                 (top_x - height),
                 top_y,
                 width,
@@ -397,7 +530,7 @@ class GEDA:
         start_x, start_y = self.conv_coords(line.p1.x, line.p1.y)
         end_x, end_y = self.conv_coords(line.p2.x, line.p2.y)
         return [
-            'L %d %d %d %d 3 0 0 0 -1 -1' % (
+            'L %d %d %d %d 3 10 0 0 -1 -1' % (
                 start_x, 
                 start_y,
                 end_x, 
@@ -441,7 +574,7 @@ class GEDA:
 
     def _convert_polygon(self, polygon):
         num_lines = len(polygon.points)+1 ##add closing command to polygon
-        commands = ['H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines]
+        commands = ['H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 %d' % num_lines]
 
         start_x, start_y = polygon.points[0].x, polygon.points[0].y
         commands.append('M %d,%d' % self.conv_coords(start_x, start_y))
@@ -515,7 +648,7 @@ class GEDA:
 
             num_lines += 1
 
-        path_command = 'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 %d' % num_lines
+        path_command = 'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 %d' % num_lines
         return [path_command] + command + close_command
 
     def _convert_bezier(self, curve):
@@ -526,7 +659,7 @@ class GEDA:
         p2_x, p2_y = self.conv_coords(curve.p2.x, curve.p2.y)
         c2_x, c2_y = self.conv_coords(curve.control2.x, curve.control2.y)
         command= [
-            'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2',
+            'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 2',
             'M %d,%d' % (p1_x, p1_y),
             'C %d,%d %d,%d %d,%d' % (c1_x, c1_y, c2_x, c2_y, p2_x, p2_y)
         ]

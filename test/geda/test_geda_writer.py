@@ -7,6 +7,9 @@ import StringIO
 from core import net 
 from core import shape
 from core import components 
+
+import parser.geda 
+
 from writer.geda import GEDA, GEDAWriterError
 from parser.openjson import JSON
 
@@ -50,25 +53,208 @@ class TestGEDA(unittest.TestCase):
         fh.close()
         self.assertEquals(data, '(component-library "./symbols")') 
 
-    #def test_write_schematic_file(self):
-    #    raise NotImplementedError()
+    def test_write_schematic_file(self):
+        sym_dir = '/tmp/sym'
+        if os.path.exists('/tmp/converted.sch'):
+            os.remove('/tmp/converted.sch')
+        if os.path.exists(sym_dir):
+            import shutil
+            shutil.rmtree(sym_dir)
 
-    #def test_create_symbols(self):
-    #    raise NotImplementedError()
+        geda_parser = parser.geda.GEDA(
+            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+        )
+        simple_design = geda_parser.parse(
+            'test/geda/simple_example/simple_example.sch'
+        )
+
+        geda_writer = GEDA(auto_include=True)
+        geda_writer.write(simple_design, '/tmp/converted.sch')
+
+        converted_design = geda_parser.parse(
+            '/tmp/converted.sch'
+        )
+
+        ## parse design again to make sure it is a clean slate
+        geda_parser = parser.geda.GEDA(
+            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+        )
+        simple_design = geda_parser.parse(
+            'test/geda/simple_example/simple_example.sch'
+        )
+
+        ##compare nets
+        self.assertItemsEqual(
+            [(net.net_id, len(net.points)) for net in simple_design.nets], 
+            [(net.net_id, len(net.points)) for net in converted_design.nets]
+        )
+
+        snets = dict([(net.net_id, net) for net in simple_design.nets]) 
+        cnets = dict([(net.net_id, net) for net in converted_design.nets]) 
+
+        for snet_id, snet in snets.items():
+            cnet = cnets[snet_id]
+
+            spoints = dict([(pt.point_id, pt) for pt in snet.points.values()]) 
+            cpoints = dict([(pt.point_id, pt) for pt in cnet.points.values()]) 
+            self.assertItemsEqual(spoints.keys(), cpoints.keys())
+
+            for spoint_id, spoint in spoints.items():
+                cpoint = cpoints[spoint_id]
+
+                self.assertEquals(spoint.x, cpoint.x)
+                self.assertEquals(spoint.y, cpoint.y)
+
+        ## compare component library
+        self.assertItemsEqual(
+            simple_design.components.components.keys(),
+            converted_design.components.components.keys()
+        )
+
+        for lib_id in simple_design.components.components:
+            scomponent = simple_design.components.components[lib_id]
+            ccomponent = converted_design.components.components[lib_id]
+
+            self.assertEquals(scomponent.name, ccomponent.name)
+            self.assertEquals(scomponent.attributes, ccomponent.attributes)
+
+            self.assertEquals(len(scomponent.symbols), 1)
+            self.assertEquals(
+                len(scomponent.symbols), 
+                len(ccomponent.symbols)
+            )
+
+            self.assertEquals(len(scomponent.symbols[0].bodies), 1)
+            self.assertEquals(
+                len(scomponent.symbols[0].bodies), 
+                len(ccomponent.symbols[0].bodies)
+            )
+            sbody = scomponent.symbols[0].bodies[0]
+            cbody = ccomponent.symbols[0].bodies[0]
+
+            self.assertEquals(len(sbody.shapes), len(cbody.shapes))
+            self.assertEquals(len(sbody.pins), len(cbody.pins))
+
+            for spin, cpin in zip(sbody.pins, cbody.pins):
+                self.assertEquals(spin.p1.x, cpin.p1.x)
+                self.assertEquals(spin.p1.x, cpin.p1.x)
+                self.assertEquals(spin.p2.y, cpin.p2.y)
+                self.assertEquals(spin.p2.y, cpin.p2.y)
+                self.assertEquals(spin.label.text, cpin.label.text)
+
+            for sshape, cshape in zip(sbody.shapes, cbody.shapes):
+                self.assertEquals(sshape.type, cshape.type)
+
+        ## compare component instances
+        scomp_instances = dict([(comp.instance_id, comp) for comp in simple_design.component_instances])
+        ccomp_instances = dict([(comp.instance_id, comp) for comp in converted_design.component_instances])
+
+        for instance_id in scomp_instances:
+            sinst = scomp_instances[instance_id]
+            cinst = ccomp_instances[instance_id]
+            
+            self.assertEquals(sinst.instance_id, cinst.instance_id)
+            self.assertEquals(sinst.library_id, cinst.library_id)
+            self.assertEquals(sinst.symbol_index, cinst.symbol_index)
+
+            self.assertEquals(
+                sinst.symbol_attributes[0].x, 
+                cinst.symbol_attributes[0].x
+            )
+            self.assertEquals(
+                sinst.symbol_attributes[0].y, 
+                cinst.symbol_attributes[0].y
+            )
+            self.assertEquals(
+                sinst.symbol_attributes[0].rotation, 
+                cinst.symbol_attributes[0].rotation
+            )
 
     def test_write_component_to_file(self):
         sym_dir = '/tmp/sym'
-        if not os.path.exists(sym_dir):
-            os.mkdir(sym_dir)
+        if os.path.exists(sym_dir):
+            import shutil
+            shutil.rmtree(sym_dir)
 
+        os.mkdir(sym_dir)
+
+        self.geda_writer.set_offset(shape.Point(-500, -500))
+
+        self.geda_writer.component_library = dict()
         self.geda_writer.project_dirs['symbol'] = sym_dir 
 
         simple_design = self.oj_parser.parse('test/openjson/simple.upv')
 
-        component = simple_design.components.components['0000000000000001']
-        commands = self.geda_writer.write_component_to_file(component)
+        library_id = '0000000000000001'
+        component = simple_design.components.components[library_id]
+        commands = self.geda_writer.write_component_to_file(library_id, component)
 
-        print '\n'.join(commands)
+        component_library = self.geda_writer.component_library
+        self.assertEquals(len(component_library), 4)
+
+        self.assertEquals(
+            component_library,
+            {
+                (library_id, 0): 'Flag_1-0.sym', 
+                (library_id, 1): 'Flag_2-1.sym', 
+                (library_id, 2): 'GND-2.sym', 
+                (library_id, 3): 'VCC-3.sym'
+            } 
+        )
+        self.assertEquals(
+            sorted(os.listdir(sym_dir)),
+            ['Flag_1-0.sym', 'Flag_2-1.sym', 'GND-2.sym', 'VCC-3.sym']
+        )
+
+        if os.path.exists(sym_dir):
+            import shutil
+            shutil.rmtree(sym_dir)
+
+        os.mkdir(sym_dir)
+
+        self.geda_writer = GEDA(auto_include=True)
+        self.geda_writer.component_library = dict()
+        self.geda_writer.project_dirs['symbol'] = sym_dir 
+
+        geda_parser = parser.geda.GEDA(
+            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+        )
+        converted_design = geda_parser.parse(
+            'test/geda/simple_example/simple_example.sch'
+        )
+
+        library_id = 'opamp'
+        component = converted_design.components.components[library_id]
+        commands = self.geda_writer.write_component_to_file(library_id, component)
+
+        component_library = self.geda_writer.component_library
+        self.assertEquals(len(component_library), 1)
+
+        self.assertEquals(
+            component_library,
+            {
+                (library_id, 0): 'opamp.sym', 
+            } 
+        )
+        library_id = 'EMBEDDEDcapacitor-1'
+        component = converted_design.components.components[library_id]
+        commands = self.geda_writer.write_component_to_file(library_id, component)
+
+        component_library = self.geda_writer.component_library
+        self.assertEquals(len(component_library), 2)
+
+        self.assertEquals(
+            component_library,
+            {
+                ('opamp', 0): 'opamp.sym', 
+                (library_id, 0): 'capacitor-1.sym', 
+            } 
+        )
+        self.assertEquals(
+            sorted(os.listdir(sym_dir)),
+            ['opamp.sym']
+        )
+
 
     def test_write_nets(self):
         design = self.oj_parser.parse('test/geda/nets_exported.upv')
@@ -106,19 +292,19 @@ class TestGEDA(unittest.TestCase):
         component = self.geda_writer._create_component(0, 0, 'test-1.sym')
         self.assertEquals(
             component,
-            'C 0 0 0 0 0 test-1.sym'
+            ['C 0 0 0 0 0 test-1.sym']
         )
 
     def test_create_attribute(self):
         attribute = self.geda_writer._create_attribute('_refdes', 'U1', 0, 0) 
         self.assertEquals(
             attribute,
-            ['T 0 0 5 10 0 0 0 0 1', 'refdes=U1']
+            ['T 0 0 5 10 0 1 0 0 1', 'refdes=U1']
         )
         attribute = self.geda_writer._create_attribute('refdes', 'U1', 0, 0, size=25) 
         self.assertEquals(
             attribute,
-            ['T 0 0 5 25 1 0 0 0 1', 'refdes=U1']
+            ['T 0 0 5 25 1 1 0 0 1', 'refdes=U1']
         )
 
     def test_create_text(self):
@@ -126,7 +312,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(len(text), 2)
         self.assertEquals(
             text,
-            ['T 0 0 9 10 1 0 0 0 1', 'some text']
+            ['T 0 0 9 10 1 1 0 0 1', 'some text']
         )
 
         text = self.geda_writer._create_text(
@@ -137,7 +323,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(len(text), 4)
         self.assertEquals(
             text,
-            ['T 0 0 9 25 0 0 0 4 3', "some text", "multi line", "text"]
+            ['T 0 0 9 25 0 1 0 4 3', "some text", "multi line", "text"]
         )
 
     def test_create_pin(self):
@@ -149,9 +335,9 @@ class TestGEDA(unittest.TestCase):
             [
                 'P 0 300 0 0 1 0 0', 
                 '{',
-                'T 100 400 5 10 0 0 0 0 1',
+                'T 100 400 5 10 0 1 0 0 1',
                 'pinseq=1',
-                'T 100 500 5 10 0 0 0 0 1',
+                'T 100 500 5 10 0 1 0 0 1',
                 'pinnumber=E',
                 '}'
             ]
@@ -167,11 +353,11 @@ class TestGEDA(unittest.TestCase):
             [
                 'P 0 300 0 0 1 0 0', 
                 '{',
-                'T 100 0 5 10 1 0 90 0 1',
+                'T 100 0 5 10 1 1 90 0 1',
                 'pinlabel=p1',
-                'T 100 400 5 10 0 0 0 0 1',
+                'T 100 400 5 10 0 1 0 0 1',
                 'pinseq=1',
-                'T 100 500 5 10 0 0 0 0 1',
+                'T 100 500 5 10 0 1 0 0 1',
                 'pinnumber=E',
                 '}'
             ]
@@ -184,7 +370,7 @@ class TestGEDA(unittest.TestCase):
         
         self.assertEquals(
             command,
-            ['A 0 0 300 0 125 3 0 0 0 -1 -1'] 
+            ['A 0 0 300 0 125 3 10 0 0 -1 -1'] 
         )
 
         arc = shape.Arc(200, 400, 1.0, 0.5, 10)
@@ -192,7 +378,7 @@ class TestGEDA(unittest.TestCase):
         
         self.assertEquals(
             command,
-            ['A 2000 4000 100 180 270 3 0 0 0 -1 -1'] 
+            ['A 2000 4000 100 180 270 3 10 0 0 -1 -1'] 
         )
 
         arc = shape.Arc(200, 400, 0.2, 0.1, 10)
@@ -200,7 +386,7 @@ class TestGEDA(unittest.TestCase):
         
         self.assertEquals(
             command,
-            ['A 2000 4000 100 36 342 3 0 0 0 -1 -1'] 
+            ['A 2000 4000 100 36 342 3 10 0 0 -1 -1'] 
         )
 
     def test_convert_circle(self):
@@ -209,7 +395,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['V 0 0 3000 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['V 0 0 3000 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         circle = shape.Circle(10, 30, 10)
@@ -217,7 +403,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['V 100 300 100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['V 100 300 100 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
     def test_convert_rectangle(self):
@@ -226,7 +412,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B -500 0 400 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B -500 0 400 500 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         rect = shape.Rectangle(100, 50, 150, 30)
@@ -234,7 +420,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B 700 500 1500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B 700 500 1500 300 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         rect = shape.RoundedRectangle(0, 0, 40, 50, 0.5)
@@ -242,7 +428,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B -500 0 400 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B -500 0 400 500 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         rect = shape.RoundedRectangle(100, 50, 150, 30, 0.1)
@@ -250,7 +436,7 @@ class TestGEDA(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B 700 500 1500 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B 700 500 1500 300 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
     def test_convert_line(self):
@@ -258,21 +444,21 @@ class TestGEDA(unittest.TestCase):
         command = self.geda_writer._convert_line(line)
         self.assertEquals(
             command,
-            ['L 0 0 0 500 3 0 0 0 -1 -1']
+            ['L 0 0 0 500 3 10 0 0 -1 -1']
         )
 
         line = shape.Line((20, 40), (-20, 40))
         command = self.geda_writer._convert_line(line)
         self.assertEquals(
             command,
-            ['L 200 400 -200 400 3 0 0 0 -1 -1']
+            ['L 200 400 -200 400 3 10 0 0 -1 -1']
         )
 
         line = shape.Line((20, 40), (-30, 50))
         command = self.geda_writer._convert_line(line)
         self.assertEquals(
             command,
-            ['L 200 400 -300 500 3 0 0 0 -1 -1']
+            ['L 200 400 -300 500 3 10 0 0 -1 -1']
         )
 
     def test_convert_label(self):
@@ -281,7 +467,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(
             command,
             [
-                'T 0 0 9 10 1 0 0 3 1',
+                'T 0 0 9 10 1 1 0 3 1',
                 'test label'
             ]
         )
@@ -291,7 +477,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(
             command,
             [
-                'T 0 0 9 10 1 0 90 0 1',
+                'T 0 0 9 10 1 1 90 0 1',
                 'test label'
             ]
         )
@@ -311,7 +497,7 @@ class TestGEDA(unittest.TestCase):
             [
                 'N 1000 400 500 400 4',
                 '{',
-                'T 1100 500 5 10 1 0 0 0 1',
+                'T 1100 500 5 10 1 1 0 0 1',
                 'netname=test_net',
                 '}',
             ]
@@ -327,7 +513,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(
             self.geda_writer._convert_polygon(polygon),
             [
-                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5',
+                'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 5',
                 'M 0,0',
                 'L 1000,2000',
                 'L 1500,2000',
@@ -342,7 +528,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(
             self.geda_writer._convert_bezier(curve),
             [
-                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2',
+                'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 2',
                 'M 30,-120',
                 'C 90,-100 110,-100 170,-120',
             ]
@@ -362,7 +548,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(
             self.geda_writer._create_path(body),
             [
-                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5',
+                'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 5',
                 'M 100,100',
                 'L 500,100',
                 'C 700,100 800,300 800,400',
@@ -376,7 +562,7 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(
             self.geda_writer._create_path(body),
             [
-                'H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 6',
+                'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 6',
                 'M 100,100',
                 'L 500,100',
                 'C 700,100 800,300 800,400',
