@@ -16,6 +16,7 @@ from core.component_instance import ComponentInstance
 from core.component_instance import SymbolAttribute
 
 
+
 class GEDAParserError(Exception):
     """ Exception class for gEDA parser errors """
     pass
@@ -151,15 +152,7 @@ class GEDA:
         self.net_points = None
         self.net_names = None
 
-        for symbol_dir in symbol_dirs:
-            if os.path.exists(symbol_dir):
-                for dirpath, dummy, filenames in os.walk(symbol_dir):
-                    for filename in filenames:
-                        if filename.endswith('.sym'):
-                            filepath = os.path.join(dirpath, filename)
-
-                            filename, dummy = os.path.splitext(filename)
-                            self.known_symbols[filename] = filepath
+        self.known_symbols = find_symbols(symbol_dirs)
 
         warnings.warn(
             "converter will ignore style and color data in gEDA format!"
@@ -208,7 +201,10 @@ class GEDA:
                     self.design.design_attributes.add_annotation(value)
 
                 else: ## text is attribute
-                    self.design.design_attributes.add_attribute(key, value)
+                    if key == 'use_license':
+                        self.design.design_attributes.metadata.license = value
+                    else:
+                        self.design.design_attributes.add_attribute(key, value)
 
             elif obj_type == 'G' : ## picture type is not supported
                 warnings.warn(
@@ -364,8 +360,6 @@ class GEDA:
         if attributes is not None:
             instance_id = attributes.get('_refdes', component.name)
 
-        instance_id = instance_id + str(self.instance_counter.next())
-
         ## generate a component instance using attributes
         instance = ComponentInstance(instance_id, component.name, 0)
         self.design.add_component_instance(instance)
@@ -408,7 +402,7 @@ class GEDA:
         if basename.startswith('EMBEDDED'):
             move_to = (params['x'], params['y'])
 
-        ## grab next line (should be '[' or 
+        ## grab next line (should be '['
         typ, params = self._parse_command(stream, move_to)
 
         if typ == '[':
@@ -419,6 +413,10 @@ class GEDA:
         component.add_symbol(symbol)
         body = components.Body()
         symbol.add_body(body)
+
+        ##NOTE: adding this attribute to make parsing UPV data easier 
+        ## when using re-exported UPV.
+        component.add_attribute('_geda_imported', 'true')
 
         while typ is not None:
 
@@ -432,6 +430,7 @@ class GEDA:
                     component.add_attribute('_prefix', prefix)
                     component.add_attribute('_suffix', suffix)
                 else:
+                    assert(key not in ['_refdes', 'refdes'])
                     component.add_attribute(key, value)
             elif typ == 'L':
                 line = self._parse_line(params)
@@ -959,3 +958,21 @@ class GEDA:
         """ Converts *angle* (in degrees) to pi radians."""
         angle = angle % 360.0
         return round(angle/180.0, 1)
+
+
+def find_symbols(symbol_dirs):
+    known_symbols = {}
+
+    for symbol_dir in symbol_dirs:
+        if os.path.exists(symbol_dir):
+            for dirpath, dummy, filenames in os.walk(symbol_dir):
+                for filename in filenames:
+                    if filename.endswith('.sym'):
+                        filepath = os.path.join(dirpath, filename)
+
+                        filename, dummy = os.path.splitext(filename)
+                        known_symbols[filename] = filepath
+
+    return known_symbols
+
+
