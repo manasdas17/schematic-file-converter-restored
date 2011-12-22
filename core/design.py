@@ -25,6 +25,8 @@ class Design:
         bounds = [net.bounds() for net in self.nets]
         offset_bounds = lambda (x1, y1, x2, y2), (xo, yo): (x1+xo, y1+yo,
                                                             x2+xo, y2+yo)
+        x_values = []
+        y_values = []
         for comp in self.component_instances:
             offsets = [(att.x, att.y) for att in comp.symbol_attributes]
             lib_comp = self.components.components[comp.library_id]
@@ -34,6 +36,11 @@ class Design:
                        offsets)])
             x_values = sum([list(b[0::2]) for b in bounds], [])
             y_values = sum([list(b[1::2]) for b in bounds], [])
+
+        for net in self.nets:
+            x_values += [point.x for point in net.points.values()]
+            y_values += [point.y for point in net.points.values()]
+
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 

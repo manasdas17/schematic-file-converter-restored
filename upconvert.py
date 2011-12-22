@@ -15,27 +15,30 @@ Upverter's Open JSON Interchange Format """
 
 
 import os, re, copy, json
-import parser.openjson, parser.kicad, parser.eaglexml
-import writer.openjson, writer.kicad
+import parser.openjson, parser.kicad, parser.eaglexml, parser.geda
+import writer.openjson, writer.kicad, writer.geda
+
 from argparse import ArgumentParser
 
 PARSERS = {
     'openjson': parser.openjson.JSON,
     'kicad': parser.kicad.KiCAD,
+    'geda': parser.geda.GEDA,
     'eaglexml': parser.eaglexml.EagleXML,
 }
 
 WRITERS = {
     'openjson': writer.openjson.JSON,
-    'kicad': writer.kicad.KiCAD
+    'kicad': writer.kicad.KiCAD,
+    'geda': writer.geda.GEDA,
 }
 
 
-def parse(in_file, in_format='openjson'):
+def parse(in_file, in_format='openjson', **parser_kwargs):
     """ Parse the given input file using the in_format """
 
     try:
-        p = PARSERS[in_format]()
+        p = PARSERS[in_format](**parser_kwargs)
     except KeyError:
         print "ERROR: Unsupported input type:", in_format
         exit(1)
@@ -67,6 +70,9 @@ if __name__ == "__main__":
             default="openjson")
     parser.add_argument("-o", "--output", dest="outputfile",
             help="write OUTPUT file out", metavar="OUTPUT")
+    parser.add_argument("-s", "--sym-dirs", dest="sym_dirs",
+            help="specify SYMDIRS to search for .sym files (for gEDA only)", 
+            metavar="SYMDIRS", nargs="+")
     parser.add_argument("-t", "--to", dest="outputtype",
             help="write output file as TYPE", metavar="TYPE",
             default="openjson")
@@ -76,12 +82,17 @@ if __name__ == "__main__":
     outputtype = args.outputtype
     inputfile = args.inputfile
     outputfile = args.outputfile
+
+    parser_kwargs = {}
+    if args.sym_dirs:
+        parser_kwargs['symbol_dirs'] = args.sym_dirs
+
     if None == inputfile:
         print_help()
         exit(1)
 
     # parse and export the data
-    design = parse(inputfile, inputtype)
+    design = parse(inputfile, inputtype, **parser_kwargs)
     if design is not None: # we got a good result
         write(design, outputfile, outputtype)
     else: # parse returned None -> something went wrong
