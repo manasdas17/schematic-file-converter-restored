@@ -41,6 +41,7 @@
 
 import os
 import types
+import codecs
 
 from core import shape
 from core import components
@@ -112,8 +113,9 @@ class GEDA:
         self.ignored_attributes = [
             '_prefix',
             '_suffix',
+            '_refdes',
             '_name',
-            '_geda-imported',
+            '_geda_imported',
         ]
 
         self.project_dirs = {
@@ -150,7 +152,7 @@ class GEDA:
         ## output is a list of lines 
         output = self.write_schematic_file(design)
 
-        f_out = open(filename, "w")
+        f_out = codecs.open(filename, encoding='utf-8', mode='w')
         f_out.write(self.commands_to_string(output))
         f_out.close()
         return
@@ -174,7 +176,11 @@ class GEDA:
         ## create project file to allow gEDA find symbol files
         project_file = os.path.join(project_dir, 'gafrc')
         if not os.path.exists(project_file):
-            f_out = open(os.path.join(project_dir, 'gafrc'), 'w')
+            f_out = codecs.open(
+                os.path.join(project_dir, 'gafrc'), 
+                encoding='utf-8',
+                mode='w'
+            )
             f_out.write('(component-library "./symbols")')
             f_out.close()
         else:
@@ -239,18 +245,26 @@ class GEDA:
             ## start an attribute environment
             commands.append('{')
 
+            refdes = instance.instance_id
+            refdes = instance.attributes.get('_name', refdes)
+            refdes = instance.attributes.get('refdes', refdes)
+
             commands += self._create_attribute(
                 'refdes', 
-                instance.instance_id,
+                refdes, 
                 symbol_attribute.x,
                 symbol_attribute.y,
-                visibility=0,
+                visibility=1,
             )
             attr_x, attr_y = symbol_attribute.x, symbol_attribute.y
             for key, value in instance.attributes.items():
-                ## no position details available, stack attributes
-                attr_x, attr_y = attr_x+10, attr_y+10
-                commands += self._create_attribute(key, value, attr_x, attr_y)
+                if key != 'refdes':
+                    ## no position details available, stack attributes
+                    attr_x, attr_y = attr_x+10, attr_y+10
+                    commands += self._create_attribute(
+                            key, value, 
+                            attr_x, attr_y
+                    )
 
             ## close the attribute environment
             commands.append('}')
@@ -288,6 +302,10 @@ class GEDA:
             if symbol_name in self.known_symbols:
                 return 
 
+        ## symbol files should not use offset
+        saved_offset = self.offset
+        self.offset = shape.Point(0, 0)
+
         ## write symbol file for each symbol in component
         for sym_idx, symbol in enumerate(component.symbols):
 
@@ -306,17 +324,30 @@ class GEDA:
             for body in symbol.bodies:
                 commands += self.generate_body_commands(body)
 
+            attr_x, attr_y = 0, 0
+            for key, value in component.attributes.items():
+                if not key.startswith('_symbol') \
+                   and key not in self.ignored_attributes:
+                    commands += self._create_attribute(
+                        key, value,
+                        attr_x, attr_y,
+                    )
+                    attr_y = attr_y+10
+
             ## write commands to file
             path = os.path.join(
                 self.project_dirs['symbol'],
                 symbol_filename
             )
-            fout = open(path, 'w')
+            fout = codecs.open(path, encoding='utf-8', mode='w')
             fout.write(self.commands_to_string(commands))
             fout.close()
 
             ## required for instantiating components later
             self.component_library[(library_id, sym_idx)] = symbol_filename
+
+        ## restore offset
+        self.offset = saved_offset
 
     @staticmethod
     def commands_to_string(commands):
@@ -505,7 +536,7 @@ class GEDA:
             key = key[1:]
             kwargs['visibility'] = 0
 
-        text = "%s=%s" % (str(key), str(value))
+        text = "%s=%s" % (unicode(key), unicode(value))
 
         kwargs['color'] = GEDAColor.ATTRIBUTE_COLOR
 
