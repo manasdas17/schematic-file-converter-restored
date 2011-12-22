@@ -167,6 +167,7 @@ class GEDA:
                 symbol_dirs (list): List of directories containing .sym 
                     files
         """
+        self.offset = shape.Point(40000, 40000)
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
@@ -315,7 +316,7 @@ class GEDA:
         x, y = self.conv_coords(x, y)
         pt_a = self.get_netpoint(x, y)
 
-        ripper_size = self.conv_mils(200)
+        ripper_size = self.to_px(200)
 
         ## create second point for busripper segment on bus 
         if angle == 0:
@@ -431,6 +432,9 @@ class GEDA:
         """
         basename, dummy = os.path.splitext(params['basename'])
 
+        saved_offset = self.offset
+        self.offset = shape.Point(0, 0)
+
         move_to = None
         if basename.startswith('EMBEDDED'):
             move_to = (params['x'], params['y'])
@@ -501,6 +505,8 @@ class GEDA:
 
             typ, params = self._parse_command(stream, move_to)
 
+        self.offset = saved_offset
+
         return component
 
     def divide_segments(self):
@@ -543,8 +549,8 @@ class GEDA:
 
         return None, Annotation(
             text_str,
-            self.conv_mils(params['x']),
-            self.conv_mils(params['y']),
+            self.x_to_px(params['x']),
+            self.y_to_px(params['y']),
             self.conv_angle(params['angle']),
             self.conv_bool(params['visibility']),
         )
@@ -692,8 +698,8 @@ class GEDA:
             if '_name' in net_obj.attributes:
                 annotation = Annotation(
                     "{{_name}}", ## annotation referencing attribute '_name' 
-                    self.conv_mils(annotation_x),
-                    self.conv_mils(annotation_y),
+                    self.x_to_px(annotation_x),
+                    self.y_to_px(annotation_y),
                     self.conv_angle(0.0),
                     self.conv_bool(1),
                 )
@@ -768,7 +774,7 @@ class GEDA:
 
         def get_coords(string):
             x, y = string.strip().split(',')
-            return (self.conv_mils(int(x)), self.conv_mils(int(y)))
+            return (self.x_to_px(int(x)), self.y_to_px(int(y)))
 
         shapes = []
         current_pos = initial_pos = (get_coords(command[1]))
@@ -823,11 +829,11 @@ class GEDA:
             Returns Arc object.
         """
         return shape.Arc(
-            self.conv_mils(params['x']),
-            self.conv_mils(params['y']),
+            self.x_to_px(params['x']),
+            self.y_to_px(params['y']),
             self.conv_angle(params['startangle']),
             self.conv_angle(params['startangle'] + params['sweepangle']),
-            self.conv_mils(params['radius']),
+            self.to_px(params['radius']),
         )
 
     def _parse_line(self, params):
@@ -846,10 +852,10 @@ class GEDA:
             Returns a Rectangle object.
         """
         return shape.Rectangle(
-            self.conv_mils(params['x']+params['height']),
-            self.conv_mils(params['y']),
-            self.conv_mils(params['width']),
-            self.conv_mils(params['height'])
+            self.x_to_px(params['x']+params['height']),
+            self.y_to_px(params['y']),
+            self.to_px(params['width']),
+            self.to_px(params['height'])
         )
 
     def _parse_circle(self, params):
@@ -858,9 +864,9 @@ class GEDA:
             Returns a Circle object.
         """
         return shape.Circle(
-            self.conv_mils(params['x']),
-            self.conv_mils(params['y']),
-            self.conv_mils(params['radius']),
+            self.x_to_px(params['x']),
+            self.y_to_px(params['y']),
+            self.to_px(params['radius']),
         )
 
     def _parse_pin(self, stream, params):
@@ -967,15 +973,40 @@ class GEDA:
         return int(scaled)
 
     @classmethod
-    def conv_coords(cls, orig_x, orig_y):
+    def to_px(cls, value):
+        """ Converts value in MILS to pixels using the parsers
+            scale factor. 
+            Returns an integer value converted to pixels.
+        """
+        return int(value / float(cls.SCALE_FACTOR))
+
+    def x_to_px(self, px):
+        """ Convert *px* from MILS to pixels using the scale
+            factor and translating it allong the X-axis in 
+            offset. 
+
+            Returns translated and converted X coordinate.
+        """
+        return int((px - self.offset.x) / self.SCALE_FACTOR)
+
+    def y_to_px(self, py):
+        """ Convert *py* from MILS to pixels using the scale
+            factor and translating it allong the Y-axis in 
+            offset. 
+
+            Returns translated and converted Y coordinate.
+        """
+        return int((py - self.offset.y) / self.SCALE_FACTOR)
+
+    def conv_coords(self, orig_x, orig_y):
         """ Converts coordinats *orig_x* and *orig_y* from MILS
             to pixel units based on scale factor. The converted
             coordinates are in multiples of 10px.
         """
         orig_x, orig_y = int(orig_x), int(orig_y)
         return (
-            cls.conv_mils(orig_x),
-            cls.conv_mils(orig_y)
+            self.x_to_px(orig_x),
+            self.y_to_px(orig_y)
         )
 
     @staticmethod
