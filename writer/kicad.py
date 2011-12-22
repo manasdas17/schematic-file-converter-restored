@@ -241,8 +241,13 @@ $EndDescr
             else:
                 direction = 'R' # right
 
-        return ('X ~ %s %d %d %d %s 60 60 %%(unit)d %%(convert)d B\n' %
-                (pin.pin_number, x, y, abs(length), direction))
+        if pin.label is None:
+            name = '~'
+        else:
+            name = pin.label.text
+
+        return ('X %s %s %d %d %d %s 60 60 %%(unit)d %%(convert)d B\n' %
+                (name, pin.pin_number, x, y, abs(length), direction))
 
 
     def write_library_footer(self, f):

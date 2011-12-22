@@ -4,6 +4,7 @@ from core.design import Design
 from core.components import Pin
 from core.net import Net, NetPoint
 from core.component_instance import ComponentInstance, SymbolAttribute
+from core.shape import Label
 from core.annotation import Annotation
 from parser.openjson import JSON
 
@@ -120,6 +121,12 @@ $EndComp
         line = writer.get_pin_line(pin)
         self.assertEqual(
             line, 'X ~ 2 0 1500 200 D 60 60 %(unit)d %(convert)d B\n')
+
+        pin = Pin('2', (0, 1300), (0, 1500),
+                  Label(0, 0, 'name', 'center', 0))
+        line = writer.get_pin_line(pin)
+        self.assertEqual(
+            line, 'X name 2 0 1500 200 D 60 60 %(unit)d %(convert)d B\n')
 
     def test_write_library_footer(self):
         writer = KiCAD()
