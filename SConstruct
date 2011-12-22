@@ -27,6 +27,12 @@ def build_check(target, source, env):
     return subprocess.call(args)
 bld_check = Builder(action=build_check)
 
+def build_pyflakes(target, source, env):
+    args = ['pyflakes']
+    args.extend([str(py) for py in source])
+    return subprocess.call(args)
+bld_pyflakes = Builder(action=build_pyflakes)
+
 def build_test(target, source, env):
     args = ['nosetests', '--all-modules', 'core', 'parser', 'writer']
     args.extend([str(py) for py in source])
@@ -98,6 +104,7 @@ all_tests.extend([str(py) for py in writer_tests])
 env = Environment(BUILDERS = {'test': bld_test,
                               'lint': bld_lint,
                               'check': bld_check,
+                              'pyflakes': bld_pyflakes,
                               'coverage': bld_coverage,
                              },
                   ENV = {'PATH' : os.environ['PATH']},
@@ -105,11 +112,13 @@ env = Environment(BUILDERS = {'test': bld_test,
 
 lint = env.lint(['fake_target_to_force_lint'], all_source)
 check = env.check(['fake_target_to_force_check'], all_source)
+pyflakes = env.pyflakes(['fake_target_to_force_pyflakes'], all_source)
 test = env.test(['fake_target_to_force_test'], all_tests)
 coverage = env.coverage(['fake_target_to_force_coverage'], all_tests)
 
 env.Alias('lint', lint)
 env.Alias('check', check)
+env.Alias('pyflakes', pyflakes)
 env.Alias('test', test)
 env.Alias('coverage', coverage)
 env.Alias('all', '.')
