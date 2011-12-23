@@ -1,5 +1,39 @@
-#!/usr/bin/env python
-""" The gEDA schematics are based on a grid in MILS (1/1000 of an inch).
+#! /usr/bin/env python
+# 
+# Basic Strategy
+# 0) Extracting ONLY relevant data from gEDA format. ALL 
+#   color/style data is ignored 
+# 1) Parsing the schematic file to extract components & instances
+# 2) Create components and instances as they occur in the file
+# 2.1) Parse referenced symbol files (components) into components
+# 2.2) Parse EMBEDDED symbols into components
+# 3) Store net segments for later processing
+# 4) Calculate nets from segments 
+#
+# NOTE: The gEDA format is based on a 100x100 MILS grid where
+# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
+# a blueprint-style frame is present with origin at 
+# (40'000, 40'000). 
+""" This module provides a parser for the gEDA format into a 
+    OpenJSON design. The OpenJSON format does not provide 
+    color/style settings, hence, color/style data from the
+    gEDA format is ignored. 
+    The module provides a parser class :py:class:GEDA that 
+    implements all parsing functionality. To parse a gEDA 
+    schematic file into a design do the following:
+    
+    >>> parser = GEDA(auto_include=True)
+    >>> design = parser.parse('example_geda_file.sch')
+
+    The gEDA format relies highly on referencing symbol files
+    that are mostly provided in an installation directory of
+    the gEDA tool chain. To parse these symbol files it is
+    required to provide the symbol directories. Specify symbol
+    directories as follows:
+
+    >>> symbol_directories = ['/usr/share/gEDA/sym', './sym']
+    >>> parser = GEDA(symbol_dirs=symbol_directories)
+    >>> design = parser.parse('example_geda_file.sch')
 """
 
 import os
@@ -16,7 +50,7 @@ from core.component_instance import ComponentInstance
 from core.component_instance import SymbolAttribute
 
 
-class GEDAParserError(Exception):
+class GEDAError(Exception):
     """ Exception class for gEDA parser errors """
     pass
 
@@ -133,6 +167,7 @@ class GEDA:
                 symbol_dirs (list): List of directories containing .sym 
                     files
         """
+        self.offset = shape.Point(40000, 40000)
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
@@ -151,15 +186,7 @@ class GEDA:
         self.net_points = None
         self.net_names = None
 
-        for symbol_dir in symbol_dirs:
-            if os.path.exists(symbol_dir):
-                for dirpath, dummy, filenames in os.walk(symbol_dir):
-                    for filename in filenames:
-                        if filename.endswith('.sym'):
-                            filepath = os.path.join(dirpath, filename)
-
-                            filename, dummy = os.path.splitext(filename)
-                            self.known_symbols[filename] = filepath
+        self.known_symbols = find_symbols(symbol_dirs)
 
         warnings.warn(
             "converter will ignore style and color data in gEDA format!"
@@ -171,18 +198,18 @@ class GEDA:
             Returns the design corresponding to the gEDA file.
         """
 
-        fh = open(filename, "r")
+        f_in = open(filename, "r")
 
-        typ, params = self._parse_command(fh)
+        typ, dummy = self._parse_command(f_in)
         if typ != 'v':
-            raise GEDAParserError("cannot convert file, not in gEDA format")
+            raise GEDAError("cannot convert file, not in gEDA format")
 
-        design = self.parse_schematic(fh)
+        design = self.parse_schematic(f_in)
 
-        basename, extension = os.path.splitext(os.path.basename(filename))
+        basename, dummy = os.path.splitext(os.path.basename(filename))
         design.design_attributes.metadata.set_name(basename)
 
-        fh.close()
+        f_in.close()
 
         return design
 
@@ -208,7 +235,10 @@ class GEDA:
                     self.design.design_attributes.add_annotation(value)
 
                 else: ## text is attribute
-                    self.design.design_attributes.add_attribute(key, value)
+                    if key == 'use_license':
+                        self.design.design_attributes.metadata.license = value
+                    else:
+                        self.design.design_attributes.add_attribute(key, value)
 
             elif obj_type == 'G' : ## picture type is not supported
                 warnings.warn(
@@ -239,7 +269,7 @@ class GEDA:
                     self._parse_environment(stream)
 
                 else:
-                    component, instance = self.parse_component(stream, params)
+                    self.parse_component(stream, params)
 
             elif obj_type == 'N': ## net segement (in schematic ONLY)
                 self._parse_segment(stream, params)
@@ -261,10 +291,10 @@ class GEDA:
 
         ## process net segments into nets & net points and add to design
         self.divide_segments()
-        nets = self.calculate_nets()
+        calculated_nets = self.calculate_nets()
 
-        for net in nets:
-            self.design.add_net(net)
+        for cnet in calculated_nets:
+            self.design.add_net(cnet)
 
         return self.design
 
@@ -286,7 +316,7 @@ class GEDA:
         x, y = self.conv_coords(x, y)
         pt_a = self.get_netpoint(x, y)
 
-        ripper_size = self.conv_mils(200)
+        ripper_size = self.to_px(200)
 
         ## create second point for busripper segment on bus 
         if angle == 0:
@@ -298,7 +328,7 @@ class GEDA:
         elif angle == 270:
             pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y-ripper_size)
         else:
-            raise GEDAParserError(
+            raise GEDAError(
                 "invalid angle in component '%s'" % params['basename']
             )
 
@@ -312,13 +342,13 @@ class GEDA:
             to the library automatically if necessary. 
             An instance of this component will be created and added to 
             the design. 
-            A GEDAParserError is raised when either the component file
+            A GEDAError is raised when either the component file
             is invalid or the referenced symbol file cannot be found 
             in the known directories.
 
             Returns a tuple of Component and ComponentInstance objects.
         """
-        basename, extension = os.path.splitext(params['basename'])
+        basename, dummy = os.path.splitext(params['basename'])
         ## component has not been parsed yet
         if basename in self.design.components.components:
             component = self.design.components.components[basename]
@@ -335,22 +365,22 @@ class GEDA:
                     component = self.parse_component_data(stream, params)
             else:
                 if basename not in self.known_symbols:
-                    raise GEDAParserError(
+                    raise GEDAError(
                         "referenced symbol file '%s' unkown" % basename
                     )
 
                 ## requires parsing of referenced symbol file
-                fh = open(self.known_symbols[basename], "r")
+                f_in = open(self.known_symbols[basename], "r")
 
-                typ, dummy = self._parse_command(fh)
+                typ, dummy = self._parse_command(f_in)
                 if typ != 'v':
-                    raise GEDAParserError(
+                    raise GEDAError(
                         "cannot convert file, not in gEDA format"
                     )
 
-                component = self.parse_component_data(fh, params) 
+                component = self.parse_component_data(f_in, params) 
 
-                fh.close()
+                f_in.close()
                         
             self.design.add_component(basename, component)
 
@@ -363,8 +393,6 @@ class GEDA:
         instance_id = component.name
         if attributes is not None:
             instance_id = attributes.get('_refdes', component.name)
-
-        instance_id = instance_id + str(self.instance_counter.next())
 
         ## generate a component instance using attributes
         instance = ComponentInstance(instance_id, component.name, 0)
@@ -384,7 +412,7 @@ class GEDA:
 
         ## add annotation for refdes
         symbol.add_annotation(
-            Annotation('{{_refdes}}', comp_x, comp_y, 0.0, 'true')
+            Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
         )
         symbol.add_annotation(
             Annotation('{{device}}', comp_x, comp_y+10, 0.0, 'true')
@@ -402,13 +430,16 @@ class GEDA:
             
             Returns the newly created Component object.
         """
-        basename, ext = os.path.splitext(params['basename'])
+        basename, dummy = os.path.splitext(params['basename'])
+
+        saved_offset = self.offset
+        self.offset = shape.Point(0, 0)
 
         move_to = None
         if basename.startswith('EMBEDDED'):
             move_to = (params['x'], params['y'])
 
-        ## grab next line (should be '[' or 
+        ## grab next line (should be '['
         typ, params = self._parse_command(stream, move_to)
 
         if typ == '[':
@@ -419,6 +450,10 @@ class GEDA:
         component.add_symbol(symbol)
         body = components.Body()
         symbol.add_body(body)
+
+        ##NOTE: adding this attribute to make parsing UPV data easier 
+        ## when using re-exported UPV.
+        component.add_attribute('_geda_imported', 'true')
 
         while typ is not None:
 
@@ -432,6 +467,7 @@ class GEDA:
                     component.add_attribute('_prefix', prefix)
                     component.add_attribute('_suffix', suffix)
                 else:
+                    assert(key not in ['_refdes', 'refdes'])
                     component.add_attribute(key, value)
             elif typ == 'L':
                 line = self._parse_line(params)
@@ -456,8 +492,8 @@ class GEDA:
             elif typ == 'H':
                 shapes = self._parse_path(stream, params)
 
-                for shape in shapes:
-                    body.add_shape(shape)
+                for new_shape in shapes:
+                    body.add_shape(new_shape)
 
             elif typ == 'G':
                 warnings.warn(
@@ -468,6 +504,8 @@ class GEDA:
                 pass
 
             typ, params = self._parse_command(stream, move_to)
+
+        self.offset = saved_offset
 
         return component
 
@@ -511,13 +549,14 @@ class GEDA:
 
         return None, Annotation(
             text_str,
-            self.conv_mils(params['x']),
-            self.conv_mils(params['y']),
+            self.x_to_px(params['x']),
+            self.y_to_px(params['y']),
             self.conv_angle(params['angle']),
             self.conv_bool(params['visibility']),
         )
 
-    def _parse_attribute(self, text, visibility):
+    @staticmethod
+    def _parse_attribute(text, visibility):
         """ Creates a tuple of (key, value) from the attribute text.
             If visibility is '0' the attribute key is prefixed with '_'
             to make it a hidden attribute.
@@ -554,7 +593,8 @@ class GEDA:
             self.net_points[(x, y)] = net.NetPoint('%da%d' % (x, y), x, y)
         return self.net_points[(x, y)]
 
-    def intersects_segment(self, segment, pt_c):
+    @staticmethod
+    def intersects_segment(segment, pt_c):
         """ Checks if point *pt_c* lays on the *segment*. This code is 
             adapted from the kiCAD parser.
             Returns True if *pt_c* is on *segment*, False otherwise.
@@ -657,9 +697,9 @@ class GEDA:
 
             if '_name' in net_obj.attributes:
                 annotation = Annotation(
-                    "{{_name}}", ## annotation referencing the attribute '_name' 
-                    self.conv_mils(annotation_x),
-                    self.conv_mils(annotation_y),
+                    "{{_name}}", ## annotation referencing attribute '_name' 
+                    self.x_to_px(annotation_x),
+                    self.y_to_px(annotation_y),
                     self.conv_angle(0.0),
                     self.conv_bool(1),
                 )
@@ -730,11 +770,11 @@ class GEDA:
         command = stream.readline().strip().split(self.DELIMITER)
 
         if command[0] != 'M':
-            raise GEDAParserError('found invalid path in gEDA file')
+            raise GEDAError('found invalid path in gEDA file')
 
         def get_coords(string):
             x, y = string.strip().split(',')
-            return (self.conv_mils(int(x)), self.conv_mils(int(y)))
+            return (self.x_to_px(int(x)), self.y_to_px(int(y)))
 
         shapes = []
         current_pos = initial_pos = (get_coords(command[1]))
@@ -777,7 +817,7 @@ class GEDA:
                 )
 
             else:
-                raise GEDAParserError(
+                raise GEDAError(
                     "invalid command type in path '%s'" % command[0]
                 )
 
@@ -789,11 +829,11 @@ class GEDA:
             Returns Arc object.
         """
         return shape.Arc(
-            self.conv_mils(params['x']),
-            self.conv_mils(params['y']),
+            self.x_to_px(params['x']),
+            self.y_to_px(params['y']),
             self.conv_angle(params['startangle']),
             self.conv_angle(params['startangle'] + params['sweepangle']),
-            self.conv_mils(params['radius']),
+            self.to_px(params['radius']),
         )
 
     def _parse_line(self, params):
@@ -812,10 +852,10 @@ class GEDA:
             Returns a Rectangle object.
         """
         return shape.Rectangle(
-            self.conv_mils(params['x']+params['height']),
-            self.conv_mils(params['y']),
-            self.conv_mils(params['width']),
-            self.conv_mils(params['height'])
+            self.x_to_px(params['x']+params['height']),
+            self.y_to_px(params['y']),
+            self.to_px(params['width']),
+            self.to_px(params['height'])
         )
 
     def _parse_circle(self, params):
@@ -824,16 +864,16 @@ class GEDA:
             Returns a Circle object.
         """
         return shape.Circle(
-            self.conv_mils(params['x']),
-            self.conv_mils(params['y']),
-            self.conv_mils(params['radius']),
+            self.x_to_px(params['x']),
+            self.y_to_px(params['y']),
+            self.to_px(params['radius']),
         )
 
     def _parse_pin(self, stream, params):
         """ Creates a Pin object from the parameters in *param* and
             text attributes provided in the following environment. The
             environment is enclosed in ``{}`` and is required. If no
-            attributes can be extracted form *stream* an GEDAParserError
+            attributes can be extracted form *stream* an GEDAError
             is raised. 
             The *pin_id* is retrieved from the 'pinnumber' attribute and
             all other attributes are ignored. The conneted end of the 
@@ -846,10 +886,10 @@ class GEDA:
         attributes = self._parse_environment(stream)
         
         if attributes is None:
-            raise GEDAParserError('mandatory pin attributes missing')
+            raise GEDAError('mandatory pin attributes missing')
 
         if '_pinnumber' not in attributes:
-            raise GEDAParserError(
+            raise GEDAError(
                 "mandatory attribute '_pinnumber' not assigned to pin"
             )
 
@@ -874,7 +914,7 @@ class GEDA:
                 'left',
                 0.0
             )
-        ##TODO(elbaschid): should all pin attributes be ignored?
+
         return components.Pin(
             attributes['_pinnumber'], #pin number
             null_end,
@@ -891,7 +931,7 @@ class GEDA:
             Returns a tuple (*object type*, *parameters*) where *parameters*
                 is a dictionary of paramter name and value.
 
-            Raises GEDAParserError when object type is not known.
+            Raises GEDAError when object type is not known.
         """
         command_data = stream.readline().strip().split(self.DELIMITER)
 
@@ -919,7 +959,7 @@ class GEDA:
                 params['y2'] = params['y2'] - move_to[1]
 
         if object_type not in self.OBJECT_TYPES:
-            raise GEDAParserError("unknown type '%s' in file" % object_type)
+            raise GEDAError("unknown type '%s' in file" % object_type)
         
         return object_type, params 
 
@@ -933,15 +973,40 @@ class GEDA:
         return int(scaled)
 
     @classmethod
-    def conv_coords(cls, orig_x, orig_y):
+    def to_px(cls, value):
+        """ Converts value in MILS to pixels using the parsers
+            scale factor. 
+            Returns an integer value converted to pixels.
+        """
+        return int(value / float(cls.SCALE_FACTOR))
+
+    def x_to_px(self, px):
+        """ Convert *px* from MILS to pixels using the scale
+            factor and translating it allong the X-axis in 
+            offset. 
+
+            Returns translated and converted X coordinate.
+        """
+        return int((px - self.offset.x) / self.SCALE_FACTOR)
+
+    def y_to_px(self, py):
+        """ Convert *py* from MILS to pixels using the scale
+            factor and translating it allong the Y-axis in 
+            offset. 
+
+            Returns translated and converted Y coordinate.
+        """
+        return int((py - self.offset.y) / self.SCALE_FACTOR)
+
+    def conv_coords(self, orig_x, orig_y):
         """ Converts coordinats *orig_x* and *orig_y* from MILS
             to pixel units based on scale factor. The converted
             coordinates are in multiples of 10px.
         """
         orig_x, orig_y = int(orig_x), int(orig_y)
         return (
-            cls.conv_mils(orig_x),
-            cls.conv_mils(orig_y)
+            self.x_to_px(orig_x),
+            self.y_to_px(orig_y)
         )
 
     @staticmethod
@@ -959,3 +1024,26 @@ class GEDA:
         """ Converts *angle* (in degrees) to pi radians."""
         angle = angle % 360.0
         return round(angle/180.0, 1)
+
+
+def find_symbols(symbol_dirs):
+    """ Parses each directory in *symbol_dirs* searching for
+        gEDA symbol files based on its extension (extension: .sym).
+        It creates a symbol file lookup of basename (without 
+        extension) and absolute path to the symbol file. 
+
+        Returns a dictionary of file basename and absolute path.
+    """
+    known_symbols = {}
+
+    for symbol_dir in symbol_dirs:
+        if os.path.exists(symbol_dir):
+            for dirpath, dummy, filenames in os.walk(symbol_dir):
+                for filename in filenames:
+                    if filename.endswith('.sym'):
+                        filepath = os.path.join(dirpath, filename)
+
+                        filename, dummy = os.path.splitext(filename)
+                        known_symbols[filename] = filepath
+
+    return known_symbols

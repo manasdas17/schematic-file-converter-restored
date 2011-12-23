@@ -38,18 +38,24 @@ def parse(in_file, in_format='openjson', **parser_kwargs):
     """ Parse the given input file using the in_format """
 
     try:
-        p = PARSERS[in_format](**parser_kwargs)
+        if in_format == 'geda':
+            p = PARSERS[in_format](**parser_kwargs)
+        else:
+            p = PARSERS[in_format]()
     except KeyError:
         print "ERROR: Unsupported input type:", in_format
         exit(1)
     return p.parse(in_file)
 
 
-def write(dsgn, out_file, out_format='openjson'):
+def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
     """ Write the converted input file to the out_format """
 
     try:
-        w = WRITERS[out_format]()
+        if out_format == 'geda':
+            w = WRITERS[out_format](**parser_kwargs)
+        else:
+            w = WRITERS[out_format]()
     except KeyError:
         print "ERROR: Unsupported output type:", out_format
         exit(1)
@@ -94,7 +100,7 @@ if __name__ == "__main__":
     # parse and export the data
     design = parse(inputfile, inputtype, **parser_kwargs)
     if design is not None: # we got a good result
-        write(design, outputfile, outputtype)
+        write(design, outputfile, outputtype, **parser_kwargs)
     else: # parse returned None -> something went wrong
         print "Output cancelled due to previous errors."
         exit(1)

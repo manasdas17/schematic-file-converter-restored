@@ -2,7 +2,7 @@ import os
 import unittest
 import StringIO
 
-from parser.geda import GEDA, GEDAParserError
+from parser.geda import GEDA, GEDAError
 from parser.openjson import JSON
 
 
@@ -528,7 +528,7 @@ z"""
             stream = StringIO.StringIO('P 100 600 200 600 1 0 0\n')
             typ, params =  self.geda_parser._parse_command(stream)
             self.assertRaises(
-                GEDAParserError,
+                GEDAError,
                 self.geda_parser._parse_pin,
                 stream, 
                 params

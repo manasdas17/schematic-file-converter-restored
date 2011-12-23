@@ -6,6 +6,9 @@ December 31st, 2003
 
 slight changes for readability by tpltnt, November 2011
 
+Updated with some details that came up during implementation of the upconverter
+parser for gEDA by elbaschid, December 2011
+
 ## Overview ##
 
 This file is the official documentation for the file formats in gEDA/gaf
@@ -22,11 +25,15 @@ Ales Hvezda.
 
 ## Coordinate Space ##
 
-All coordinates are in mils (1/1000 of an inch). This is an arbitrary decision. Remember in there is no concept of physical lengths/dimensions in schematics and symbols (for schematic capture only).
+All coordinates are in mils (1/1000 of an inch). This is an arbitrary decision. 
+Remember in there is no concept of physical lengths/dimensions in schematics and 
+symbols (for schematic capture only).
 
- * Origin is in lower left hand corner.
+ * Origin is in lower left hand corner. 
  * The size of the coordinate space is unlimited, but it is recommended that all objects stay within (120.0, 90.0) (x, y inches).
  * It is generally advisable to have positive x and y coordinates, however, negative coordinates work too, but not recommended.
+ * A grid segment is of 100 x 100 mils size.
+ * The blueprint frame of a schematic is usually not in the origin but translated to (40000, 4000) in mils.
 
 The following figure shows how the coordinate space is setup: 
 TODO: insert image
