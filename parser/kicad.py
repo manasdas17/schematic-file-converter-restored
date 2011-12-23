@@ -62,8 +62,7 @@ class KiCAD(object):
                 circuit.design_attributes.add_annotation(
                     self.parse_text(f, line))
             elif prefix == "$Comp": # Component Instance
-                circuit.add_component_instance(
-                    self.parse_component_instance(f, circuit.components))
+                circuit.add_component_instance(self.parse_component_instance(f))
 
             line = f.readline()
 
@@ -98,7 +97,7 @@ class KiCAD(object):
         value = f.readline().strip()
         return Annotation(value, x, -y, rotation, 'true')
 
-    def parse_component_instance(self, f, components):
+    def parse_component_instance(self, f):
         """ Parse a component instance from a $Comp block """
         # name & reference
         prefix, name, reference = f.readline().split()
@@ -378,22 +377,39 @@ class ComponentParser(object):
 
     def parse_x_line(self, parts):
         """ Parse an X (Pin) line """
-        num, direction = parts[2], parts[6]
+        name, num, direction = parts[1], parts[2], parts[6]
         p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
 
         if direction == 'U': # up
             p1x = p2x
             p1y = p2y + pinlen
+            label_x = p2x - 20
+            label_y = p2y + int(pinlen / 2)
+            label_rotation = 1.5
         elif direction == 'D': # down
             p1x = p2x
             p1y = p2y - pinlen
+            label_x = p2x - 20
+            label_y = p2y - int(pinlen / 2)
+            label_rotation = 1.5
         elif direction == 'L': # left
             p1x = p2x - pinlen
             p1y = p2y
+            label_x = p2x - int(pinlen / 2)
+            label_y = p2y + 20
+            label_rotation = 0
         elif direction == 'R': # right
             p1x = p2x + pinlen
             p1y = p2y
+            label_x = p2x + int(pinlen / 2)
+            label_y = p2y + 20
+            label_rotation = 0
         else:
             raise ValueError('unexpected pin direction', direction)
 
-        return Pin(num, (p1x, p1y), (p2x, p2y)) # TODO: label
+        if name == '~':
+            label = None
+        else:
+            label = Label(label_x, label_y, name, 'center', label_rotation)
+
+        return Pin(num, (p1x, p1y), (p2x, p2y), label)
