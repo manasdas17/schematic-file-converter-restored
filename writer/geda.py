@@ -534,7 +534,7 @@ class GEDA:
 
             Returns a list of gEDA commands without linebreaks.
         """
-        if key in self.ignored_attributes:
+        if key in self.ignored_attributes or not value:
             return []
 
         ## make private attribute invisible in gEDA

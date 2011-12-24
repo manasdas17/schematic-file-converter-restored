@@ -319,6 +319,12 @@ class TestGEDA(unittest.TestCase):
             attribute,
             []
         )
+        attribute = self.geda_writer._create_attribute('_refdes', '', 0, 0) 
+        self.assertEquals(
+            attribute,
+            []
+        )
+
         attribute = self.geda_writer._create_attribute('_private_attr', 'U1', 0, 0) 
         self.assertEquals(
             attribute,
