@@ -1,19 +1,4 @@
 #! /usr/bin/env python
-# 
-# Basic Strategy
-# 0) Extracting ONLY relevant data from gEDA format. ALL 
-#   color/style data is ignored 
-# 1) Parsing the schematic file to extract components & instances
-# 2) Create components and instances as they occur in the file
-# 2.1) Parse referenced symbol files (components) into components
-# 2.2) Parse EMBEDDED symbols into components
-# 3) Store net segments for later processing
-# 4) Calculate nets from segments 
-#
-# NOTE: The gEDA format is based on a 100x100 MILS grid where
-# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
-# a blueprint-style frame is present with origin at 
-# (40'000, 40'000). 
 """ This module provides a parser for the gEDA format into a 
     OpenJSON design. The OpenJSON format does not provide 
     color/style settings, hence, color/style data from the
@@ -35,6 +20,21 @@
     >>> parser = GEDA(symbol_dirs=symbol_directories)
     >>> design = parser.parse('example_geda_file.sch')
 """
+
+# Basic Strategy
+# 0) Extracting ONLY relevant data from gEDA format. ALL 
+#   color/style data is ignored 
+# 1) Parsing the schematic file to extract components & instances
+# 2) Create components and instances as they occur in the file
+# 2.1) Parse referenced symbol files (components) into components
+# 2.2) Parse EMBEDDED symbols into components
+# 3) Store net segments for later processing
+# 4) Calculate nets from segments 
+#
+# NOTE: The gEDA format is based on a 100x100 MILS grid where
+# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
+# a blueprint-style frame is present with origin at 
+# (40'000, 40'000). 
 
 import os
 import warnings
@@ -188,9 +188,7 @@ class GEDA:
 
         self.known_symbols = find_symbols(symbol_dirs)
 
-        warnings.warn(
-            "converter will ignore style and color data in gEDA format!"
-        )
+        # FIXME: Converter currently will ignore style and color data in gEDA format!
     
     def parse(self, filename):
         """ Parse a gEDA file into a design.

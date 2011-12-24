@@ -24,4 +24,4 @@ class AnnotationTests(unittest.TestCase):
         assert anno.x == 0
         assert anno.y == 1
         assert anno.rotation == 2
-        assert anno.visible == False
+        assert anno.visible != True
