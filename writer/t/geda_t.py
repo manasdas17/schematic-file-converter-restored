@@ -654,4 +654,3 @@ class TestGEDA(unittest.TestCase):
                 self.geda_writer.conv_angle(angle, steps), 
                 expected
             )
-

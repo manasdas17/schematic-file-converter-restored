@@ -763,6 +763,3 @@ pintype=in
             sorted(net_names),
             sorted(['+_1', '-_In+']),
         )
-
-if __name__ == '__main__':
-    unittest.main()
