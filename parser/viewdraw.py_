@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+""" The Eagle XML Format Parser """
+
 from core.net import Net, NetPoint, ConnectedComponent
 from core.annotation import Annotation
 from core.design import Design
@@ -8,16 +11,20 @@ from os import listdir
 from math import pi, sqrt, atan
 from collections import defaultdict
 
+# Notes:
 # ViewDraw files are line-based, where the first character of a line is a
 # command, and the rest of the line is arguments for that command. '|' was
 # originally a comment, but seems to have ben co-opted to get even more commands
 # out of the format, such that |R, |Q, |FNTSTL, and others are now also used.
 
-class vdparser:
-    '''base class for the parsers. Includes parsing code for commands that are
+
+class ViewDrawBase:
+    '''The base class for the parsers. Includes parsing code for commands that are
     shared between the different files'''
+
     sheetsizes = ('ASIZE', 'BSIZE', 'CSIZE', 'DSIZE', 'ESIZE', 'A4', 'A3',
                   'A2', 'A1', 'A0', 'CUSTOM')
+
     def __init__(self, filename):
         self.filename = filename
         self.stream = None
@@ -59,6 +66,7 @@ class vdparser:
         return (None, [])
 
     def parse_annot(self, args):
+        """ Returns a parsed annotation. """
         x, y, font_size, rot, anchor, viz, val = args.split(' ', 6)
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
@@ -85,6 +93,7 @@ class vdparser:
         return ('annot', Annotation(value, int(x), int(y), 0, display))
 
     def parse_label(self, args):
+        """ Returns a parsed label. """
         x, y, font_size, rot, c, d, e, f, text = args.split(' ', 8)
         # treat them as annotations for now, I guess.
         # suspect that c, e are anchor and vis, as in parse_annot
@@ -94,32 +103,39 @@ class vdparser:
         return ('annot', Annotation(text, int(x), int(y), 0, True))
 
     def parse_rev(self, args):
+        """ Returns a parsed revision. """
         # File revision date. Gahh, ugly.
         return ('annot', Annotation('rev=' + args, 0, 0, 0, False))
 
     def parse_size(self, args):
+        """ Returns a parsed size. """
         size = int(args.split()[0])
         return ('sheetsize', (size < len(self.sheetsizes) and
                               self.sheetsizes[size] or 'unknown'))
 
     def parse_circle(self, args):
+        """ Returns a parsed circle. """
         x, y, r = [int(a) for a in args.split()]
         return ('shape', Circle(x, y, r))
 
     def parse_box(self, args):
+        """ Returns a parsed box. """
         x1, y1, x2, y2 = [int(a) for a in args.split()]
         return ('shape', Rectangle.from_corners(x1, y1, x2, y2))
 
     def parse_text(self, args):
+        """ Returns a parsed text. """
         x, y, size, rot, anchor, text = args.split(' ', 5)
         # TODO sort out rotation, alignment
         return ('shape', Label(int(x), int(y), text, 'left', 0))
 
     def parse_ver(self, args):
+        """ Returns a parsed version. """
         # Viewdraw file version. So far have only dealt with 50, 51.
         return ('fileversion', args)
 
     def parse_line(self, args):
+        """ Returns a parsed line. """
         numpts, sep, pts = args.partition(' ')
         pts = [int(p) for p in pts.split()]
         numpts = int(numpts)
@@ -130,6 +146,7 @@ class vdparser:
                           for i in range(0, (numpts - 1) * 2, 2)])
 
     def parse_arc(self, args):
+        """ Returns a parsed arc. """
         # ViewDraw saves arcs as three points along a circle. Start, mid, end
         # [not entirely sure that mid is a midpoint, but irrelevant here]. We
         # need to find the centre of that circle, and the angles of the start
@@ -155,6 +172,7 @@ class vdparser:
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
 
         def angle(x, y):
+            """ Returns a corrected angle. """
             # correcting for the y-origin will flip the angle through the y=x
             # line, so theta=0 is high noon, angle increases CW now, after
             # correct_y theta=0 is 3 o'clock and angle increases CCW.
@@ -178,9 +196,12 @@ class vdparser:
                              angle(x0,y0), angle(x2,y2),
                              int(round(r))))
 
-class ViewDrawSch(vdparser):
+
+class ViewDrawSch(ViewDrawBase):
+    """ The schematic parser. """
+    
     def __init__(self, lib, filename):
-        vdparser.__init__(self, filename)
+        ViewDrawBase.__init__(self, filename)
         self.parsers.update({'N': 'parse_net',
                              'J': 'parse_junc',
                              'S': 'parse_seg',
@@ -195,7 +216,7 @@ class ViewDrawSch(vdparser):
     def parse(self):
         '''Returns a Design built up from a schematic file that represents one
         sheet of the original schematic'''
-        tree = vdparser.parse(self)
+        tree = ViewDrawBase.parse(self)
         # tree['lines'] is a [list of [list of lines]]
         tree['shape'].extend(sum(tree['lines'], []))
         ckt = Design()
@@ -229,6 +250,7 @@ class ViewDrawSch(vdparser):
         return ckt
 
     def parse_net(self, args):
+        """ Returns a parsed net. """
         thisnet = Net(args)
         subdata = defaultdict(list)
         for phrase in self.stream:
@@ -268,6 +290,7 @@ class ViewDrawSch(vdparser):
         return ('net', thisnet)
 
     def parse_junc(self, args):
+        """ Returns a parsed junc. """
         x, y, unknown = args.split()
         # unknown is suspected to be drawing style for the net at this
         # point (right-angle corner? T-section? Solder dot?) ATM not very
@@ -275,10 +298,12 @@ class ViewDrawSch(vdparser):
         return ('netpoint', NetPoint(x + 'x' + y, int(x), int(y)))
 
     def parse_seg(self, args):
+        """ Returns a parsed seg. """
         a, b = [int(n) for n in args.split()]
         return ('segment', (a, b))
 
     def parse_inst(self, args):
+        """ Returns a parsed instance. """
         inst, libname, libnum, x, y, rot, scale, b = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
@@ -309,6 +334,7 @@ class ViewDrawSch(vdparser):
         return ('inst', thisinst)
 
     def parse_conn(self, args):
+        """ Returns a parsed connection. """
         netid, segpin, pin, a = args.split()
         # as far as has been observed, a is always 0
         # segpin is the netpoint on the net
@@ -316,10 +342,12 @@ class ViewDrawSch(vdparser):
         return ('conn', (netid, int(segpin), pin))
     
     def parse_bounds(self, args):
+        """ Returns a parsed bounds. """
         # Not sure if this is quite valid.
         return ('Dbounds', [int(a) for a in args.split()])
 
     def parse_attr(self, args):
+        """ Returns a parsed attribute. """
         x, y, font_size, rot, anchor, viz, kv = args.split(' ', 6)
         k, sep, v = kv.partition('=')
         # TODO want to do anything with the rest of the info?
@@ -327,9 +355,11 @@ class ViewDrawSch(vdparser):
         return ('attr', (k, v))
 
     def lookup(self, libname, num):
+        """ Convert a name + number pair. """
         return libname.lower() + '.' + num
 
     def correct_y(self, des, (xmin, ymin, xmax, ymax)):
+        """ Correct a y value. """
         for ann in des.design_attributes.annotations:
             ann.y = ymax - ann.y
         # someday, this will happen
@@ -355,12 +385,13 @@ class ViewDrawSch(vdparser):
             for ann in net.annotations:
                 ann.y = ymax - ann.y
 
-class ViewDrawSym(vdparser):
+
+class ViewDrawSym(ViewDrawBase):
     symtypes = ('composite', 'module', 'annotate', 'pin', 'power')
     # TODO A command
 
     def __init__(self, libdir, filename):
-        vdparser.__init__(self, libdir + filename)
+        ViewDrawBase.__init__(self, libdir + filename)
         self.parsers.update({'Y': 'parse_type',
                              'U': 'parse_attr',
                              'P': 'parse_pin',
@@ -369,11 +400,12 @@ class ViewDrawSym(vdparser):
         self.libdir = libdir
 
     def parse(self):
+        """ Returns a parsed symbol. """
         part = Component(self.filename)
         part.add_symbol(Symbol())
         part.symbols[0].add_body(Body())
         
-        tree = vdparser.parse(self)
+        tree = ViewDrawBase.parse(self)
         for attr in tree['attr']:
             part.add_attribute(*attr)
         for shape in tree['shape'] + sum(tree['lines'], []):
@@ -385,10 +417,12 @@ class ViewDrawSym(vdparser):
         return part
 
     def parse_type(self, args):
+        """ Returns a parsed symbol type. """
         return ('attr', ('symtype', (int(args) < len(self.symtypes) and
                                      self.symtypes[int(args)] or 'unknown')))
 
     def parse_attr(self, args):
+        """ Returns a parsed attribute. """
         # part properties, some of which look in need of further
         # processing to properly extract the part
         key, sep, val = args.split(' ', 6)[-1].partition('=')
@@ -400,6 +434,7 @@ class ViewDrawSym(vdparser):
         return ('attr', (key, val))
 
     def parse_pin(self, args):
+        """ Returns a parsed pin. """
         # Pin declaration, seems to only be done once per pin
         pid, xe, ye, xb, yb, rot, side, inv = [int(a) for a in args.split()]
         thispin = Pin(pid, (xb, yb), (xe, ye))
@@ -417,6 +452,7 @@ class ViewDrawSym(vdparser):
         return ('pin', thispin)
 
     def parse_label(self, args):
+        """ Returns a parsed label. """
         # So far, only seen it for labelling pins, in the symmbol files
         # at least.
         x, y, pts, rot, anchor, scope, vis, inv, text = args.split()
@@ -428,6 +464,7 @@ class ViewDrawSym(vdparser):
         # vertical alignment thing
 
     def correct_y(self, comp):
+        """ corrects a y value. """
         for sym in comp.symbols:
             for bod in sym.bodies:
                 for pin in bod.pins:
@@ -442,13 +479,17 @@ class ViewDrawSym(vdparser):
                         shape.p1.y = -shape.p1.y
                         shape.p2.y = -shape.p2.y
 
+
 class ViewDraw:
+    """ The viewdraw parser. """
+
     def __init__(self, schdir, symdirs):
         # symdirs is a dict; k,v = libname,directory
         # ^-that could be parsed out of a viewdraw.ini some day
         self.schdir, self.symdirs = schdir, symdirs
 
     def parse(self):
+        """ Returns a parsed viewdraw file. """
         lib = Components()
         # All the symbol files I have seen have a filename like partname.n
         # where n is a number, for multi-versioned parts I'm guessing
@@ -470,7 +511,10 @@ class ViewDraw:
         # sheet in the viewdraw schematic.
         return sheets
 
+
 class FileStack:
+    """ Used to step through a file stack. """
+
     def __init__(self, filename):
         self.f = open(filename)
         self.fstack = []
@@ -480,6 +524,7 @@ class FileStack:
         return self
 
     def next(self):
+        """ Returns the next file. """
         tok = self.subpop()
         nexttok = self.subpop()
         while nexttok.startswith(' ') or nexttok.startswith('+'):
@@ -489,16 +534,19 @@ class FileStack:
         return tok.strip('\r\n')
 
     def subpop(self):
+        """ Pops. """
         self.line += 1
         if len(self.fstack) > 0:
             return self.fstack.pop()
         return self.f.next()
 
     def continuation(self, tok, cont):
+        """ Continues. """
         if cont.startswith('+'):
             cont = cont[2:]
         return tok.strip('\r\n') + cont
 
     def push(self, tok):
+        """ Pushes. """
         self.line -= 1
         self.fstack.append(tok)

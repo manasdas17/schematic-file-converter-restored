@@ -10,13 +10,14 @@ class Board:
 
 
     def generate_netlist(self):
+        """ Generate a netlist (connected regions) from the layout. """
         pass
 
 
 class Layer:
     """ A layer in the physical board. In the final image
     posivite/filled/additive = copper.
-    negative/void/subtractive = no-copper."""
+    negative/void/subtractive = no-copper. """
 
     def __init__(self):
         self.type = 'copper' # Copper, mask, silk, or drill

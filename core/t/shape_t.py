@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # encoding: utf-8
+""" The shape test class """
+
 from core.shape import Shape
 from core.shape import Rectangle
 from core.shape import RoundedRectangle
@@ -14,27 +16,35 @@ import unittest
 
 
 class ShapeTests(unittest.TestCase):
+    """ The tests of the core module shape feature """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_shape(self):
+        """ Test the creation of a new empty shape. """
         shp = Shape()
         assert shp.type == None
 
 
 class RectangleTests(unittest.TestCase):
+    """ The tests of the core module rectangle shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_rectangle(self):
+        """ Test the creation of a new empty rectangle. """
         rect = Rectangle(0, 1, 2, 3)
         assert rect.x == 0
         assert rect.y == 1
@@ -43,14 +53,18 @@ class RectangleTests(unittest.TestCase):
 
 
 class RoundedRectangleTests(unittest.TestCase):
+    """ The tests of the core module rounded rectangle shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
-    def test_create_new_rounded_rectangle(self):
+    def test_create_new_rounded(self):
+        """ Test the creation of a new empty rounded rectangle. """
         rrect = RoundedRectangle(0, 1, 2, 3, 4)
         assert rrect.x == 0
         assert rrect.y == 1
@@ -60,14 +74,18 @@ class RoundedRectangleTests(unittest.TestCase):
 
 
 class ArcTests(unittest.TestCase):
+    """ The tests of the core module arc shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_arc(self):
+        """ Test the creation of a new empty arc. """
         arc = Arc(0, 1, 2, 3, 4)
         assert arc.x == 0
         assert arc.y == 1
@@ -77,14 +95,18 @@ class ArcTests(unittest.TestCase):
 
 
 class CircleTests(unittest.TestCase):
+    """ The tests of the core module circle shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_circle(self):
+        """ Test the creation of a new empty circle. """
         cir = Circle(0, 1, 2)
         assert cir.x == 0
         assert cir.y == 1
@@ -92,14 +114,18 @@ class CircleTests(unittest.TestCase):
 
 
 class LabelTests(unittest.TestCase):
+    """ The tests of the core module label shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_label(self):
+        """ Test the creation of a new empty label. """
         lbl = Label(0, 1, 'abc', 'left', 2)
         assert lbl.x == 0
         assert lbl.y == 1
@@ -109,14 +135,18 @@ class LabelTests(unittest.TestCase):
 
 
 class LineTests(unittest.TestCase):
+    """ The tests of the core module line shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_line(self):
+        """ Test the creation of a new empty line. """
         p1 = Point(0, 1)
         p2 = Point(2, 3)
         line = Line(p1, p2)
@@ -127,27 +157,35 @@ class LineTests(unittest.TestCase):
 
 
 class PolygonTests(unittest.TestCase):
+    """ The tests of the core module polygon shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_polygon(self):
+        """ Test the creation of a new empty polygon. """
         poly = Polygon()
         assert len(poly.points) == 0
 
 
 class BezierCurveTests(unittest.TestCase):
+    """ The tests of the core module bezier shape """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_bezier_curve(self):
+        """ Test the creation of a new empty bezier. """
         control1 = Point(0, 1)
         control2 = Point(2, 3)
         p1 = Point(4, 5)
@@ -164,14 +202,18 @@ class BezierCurveTests(unittest.TestCase):
 
 
 class PointTests(unittest.TestCase):
+    """ The tests of the core module point feature. """
 
     def setUp(self):
+        """ Setup the test case. """
         pass
 
     def tearDown(self):
+        """ Teardown the test case. """
         pass
 
     def test_create_new_point(self):
+        """ Test the creation of a new empty point. """
         pnt = Point(0, 1)
         assert pnt.x == 0
         assert pnt.y == 1

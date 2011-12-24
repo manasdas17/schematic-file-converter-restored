@@ -51,6 +51,7 @@ Supported Formats
 * Fritzing  (in development)
 * Altium    (in development)
 * Gerber    (in development)
+* ViewDraw  (in development)
 
 
 Format Wish List

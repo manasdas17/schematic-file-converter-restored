@@ -257,7 +257,7 @@ class ComponentParser(object):
 
     # the column positions of the unit and convert fields
     unit_cols = dict(A=6, C=4, P=2, S=5, T=6, X=9)
-    convert_cols = dict((k,v+1) for k,v in unit_cols.items())
+    convert_cols = dict((k, v+1) for k, v in unit_cols.items())
 
     def __init__(self, line):
         parts = line.split()
