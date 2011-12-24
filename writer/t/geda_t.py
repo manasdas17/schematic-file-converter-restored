@@ -202,7 +202,7 @@ class TestGEDA(unittest.TestCase):
 
         library_id = '0000000000000001'
         component = simple_design.components.components[library_id]
-        commands = self.geda_writer.write_component_to_file(library_id, component)
+        self.geda_writer.write_component_to_file(library_id, component)
 
         component_library = self.geda_writer.component_library
         self.assertEquals(len(component_library), 4)
@@ -239,7 +239,7 @@ class TestGEDA(unittest.TestCase):
 
         library_id = 'opamp'
         component = converted_design.components.components[library_id]
-        commands = self.geda_writer.write_component_to_file(library_id, component)
+        self.geda_writer.write_component_to_file(library_id, component)
 
         component_library = self.geda_writer.component_library
         self.assertEquals(len(component_library), 1)
@@ -252,7 +252,7 @@ class TestGEDA(unittest.TestCase):
         )
         library_id = 'capacitor-1'
         component = converted_design.components.components[library_id]
-        commands = self.geda_writer.write_component_to_file(library_id, component)
+        self.geda_writer.write_component_to_file(library_id, component)
 
         component_library = self.geda_writer.component_library
         self.assertEquals(len(component_library), 2)
