@@ -1,16 +1,16 @@
 ﻿
 import os
 import unittest
-import tempfile
 import StringIO
+import shutil
 
-from core import net 
+from core.net import NetPoint
 from core import shape
 from core import components 
 
 import parser.geda 
 
-from writer.geda import GEDA, GEDAError
+from writer.geda import GEDA
 from parser.openjson import JSON
 
 class TestGEDA(unittest.TestCase):
@@ -20,6 +20,9 @@ class TestGEDA(unittest.TestCase):
         self.oj_parser = JSON()
 
     def test_converter_methods(self):
+        """ Test if converter methods are available for all known
+            shapes in the core. 
+        """
         shape_types = [
             'line', 
             'bezier',
@@ -34,6 +37,10 @@ class TestGEDA(unittest.TestCase):
             self.assertTrue(hasattr(self.geda_writer, "_convert_"+typ))
 
     def test_create_project_files(self):
+        """ Test creating project files in the directory derived from the
+            output filename. Should try to create *gafrc* file and *symbol*
+            directory.
+        """
         geda_filename = '/tmp/test_geda.sch'
 
         self.geda_writer.create_project_files(geda_filename)
@@ -54,16 +61,23 @@ class TestGEDA(unittest.TestCase):
         self.assertEquals(data, '(component-library "./symbols")') 
 
     def test_write_schematic_file(self):
+        """ Reads the gEDA *simple_example* file into a design using the
+            gEDA parser, writes the result to a gEDA file and reads it into
+            a new design. Both designs are then compared regarding their 
+            respective components, instances and nets.
+        """
         sym_dir = '/tmp/sym'
+
         if os.path.exists('/tmp/converted.sch'):
             os.remove('/tmp/converted.sch')
+
         if os.path.exists(sym_dir):
-            import shutil
             shutil.rmtree(sym_dir)
 
         geda_parser = parser.geda.GEDA(
             symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
         )
+        geda_parser.set_offset(shape.Point(0, 0))
         simple_design = geda_parser.parse(
             'test/geda/simple_example/simple_example.sch'
         )
@@ -79,6 +93,7 @@ class TestGEDA(unittest.TestCase):
         geda_parser = parser.geda.GEDA(
             symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
         )
+        geda_parser.set_offset(shape.Point(0, 0))
         simple_design = geda_parser.parse(
             'test/geda/simple_example/simple_example.sch'
         )
@@ -171,9 +186,9 @@ class TestGEDA(unittest.TestCase):
             )
 
     def test_write_component_to_file(self):
+        """ Tests writing a component to a symbol file. """
         sym_dir = '/tmp/sym'
         if os.path.exists(sym_dir):
-            import shutil
             shutil.rmtree(sym_dir)
 
         os.mkdir(sym_dir)
@@ -207,7 +222,6 @@ class TestGEDA(unittest.TestCase):
         )
 
         if os.path.exists(sym_dir):
-            import shutil
             shutil.rmtree(sym_dir)
 
         os.mkdir(sym_dir)
@@ -256,7 +270,10 @@ class TestGEDA(unittest.TestCase):
         )
 
 
-    def test_write_nets(self):
+    def test_generate_net_commands(self):
+        """ Tests creating commands for nets that can then be 
+            written to the schematic file. 
+        """
         design = self.oj_parser.parse('test/geda/nets_exported.upv')
 
         self.geda_writer.set_offset(design.bounds()[0])
@@ -280,15 +297,15 @@ class TestGEDA(unittest.TestCase):
         commands += [
             'v 20110115 2\n',
         ]
-        import parser.geda
-        parser = parser.geda.GEDA()
-        new_design = parser.parse_schematic(
+        geda_parser = parser.geda.GEDA()
+        new_design = geda_parser.parse_schematic(
             StringIO.StringIO('\n'.join(commands))
         )
         self.assertEquals(len(design.nets), len(new_design.nets))
 
 
     def test_create_component(self):
+        """ Tests creating components from various gEDA commands. """
         component = self.geda_writer._create_component(0, 0, 'test-1.sym')
         self.assertEquals(
             component,
@@ -296,18 +313,25 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_create_attribute(self):
+        """ Tests creating attribute commands. """
         attribute = self.geda_writer._create_attribute('_refdes', 'U1', 0, 0) 
         self.assertEquals(
             attribute,
-            ['T 0 0 5 10 0 1 0 0 1', 'refdes=U1']
+            []
         )
-        attribute = self.geda_writer._create_attribute('refdes', 'U1', 0, 0, size=25) 
+        attribute = self.geda_writer._create_attribute('_private_attr', 'U1', 0, 0) 
         self.assertEquals(
             attribute,
-            ['T 0 0 5 25 1 1 0 0 1', 'refdes=U1']
+            ['T 0 0 5 10 0 1 0 0 1', 'private_attr=U1']
+        )
+        attribute = self.geda_writer._create_attribute('attr', 'U1', 0, 0, size=25) 
+        self.assertEquals(
+            attribute,
+            ['T 0 0 5 25 1 1 0 0 1', 'attr=U1']
         )
 
     def test_create_text(self):
+        """ Tests creating text commands. """
         text = self.geda_writer._create_text('some text', 0, 0)
         self.assertEquals(len(text), 2)
         self.assertEquals(
@@ -327,6 +351,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_create_pin(self):
+        """ Tests creating pin commands. """
         pin = components.Pin('E', (0, 0), (0, 30))
         command = self.geda_writer._create_pin(1, pin) 
 
@@ -365,6 +390,7 @@ class TestGEDA(unittest.TestCase):
 
 
     def test_convert_arc(self):
+        """ Tests converting Arc objects to arc commands."""
         arc = shape.Arc(0, 0, 0.0, 0.7, 30)
         command = self.geda_writer._convert_arc(arc)
         
@@ -390,6 +416,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_convert_circle(self):
+        """ Tests converting Circle objects to circle commands."""
         circle = shape.Circle(0, 0, 300)
         command = self.geda_writer._convert_circle(circle)
 
@@ -407,6 +434,9 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_convert_rectangle(self):
+        """ Tests converting Rectancle and RoundedRectangle
+            objects to box commands.
+        """
         rect = shape.Rectangle(0, 0, 40, 50)
         command = self.geda_writer._convert_rectangle(rect)
 
@@ -424,7 +454,7 @@ class TestGEDA(unittest.TestCase):
         )
 
         rect = shape.RoundedRectangle(0, 0, 40, 50, 0.5)
-        command = self.geda_writer._convert_rectangle(rect)
+        command = self.geda_writer._convert_rounded_rectangle(rect)
 
         self.assertEquals(
             command,
@@ -432,7 +462,7 @@ class TestGEDA(unittest.TestCase):
         )
 
         rect = shape.RoundedRectangle(100, 50, 150, 30, 0.1)
-        command = self.geda_writer._convert_rectangle(rect)
+        command = self.geda_writer._convert_rounded_rectangle(rect)
 
         self.assertEquals(
             command,
@@ -440,6 +470,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_convert_line(self):
+        """ Tests converting Line objects to line commands. """
         line = shape.Line((0, 0), (0, 50))
         command = self.geda_writer._convert_line(line)
         self.assertEquals(
@@ -462,6 +493,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_convert_label(self):
+        """ Tests converting Lable objects to label commands. """
         label = shape.Label(0, 0, 'test label', 'center', 0.0)
         command = self.geda_writer._convert_label(label)
         self.assertEquals(
@@ -483,14 +515,15 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_create_segment(self):
-        np1 = net.NetPoint('0a0', 0, 0)
-        np2 = net.NetPoint('0a10', 0, 10)
+        """ Tests creating segment commands from NetPoint objects. """
+        np1 = NetPoint('0a0', 0, 0)
+        np2 = NetPoint('0a10', 0, 10)
         self.assertEquals(
             self.geda_writer._create_segment(np1, np2),
             ['N 0 0 0 100 4']
         )
-        np1 = net.NetPoint('100a40', 100, 40)
-        np2 = net.NetPoint('50a40', 50, 40)
+        np1 = NetPoint('100a40', 100, 40)
+        np2 = NetPoint('50a40', 50, 40)
         attrs = {'netname': 'test_net'}
         self.assertEquals(
             self.geda_writer._create_segment(np1, np2, attributes=attrs),
@@ -504,6 +537,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_convert_polygon(self):
+        """ Tests converting Polygon objects to path commands."""
         polygon = shape.Polygon()
         polygon.add_point((0, 0))
         polygon.add_point((100, 200))
@@ -523,6 +557,7 @@ class TestGEDA(unittest.TestCase):
         )
     
     def test_convert_bezier(self):
+        """ Tests converting BezierCurve objects to path commands. """
         curve = shape.BezierCurve((9, -10), (11, -10), (3, -12), (17, -12))
 
         self.assertEquals(
@@ -535,6 +570,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_create_path(self):
+        """ Test creating path commands from Body objects. """
         shapes = [
             shape.Line((10, 10), (50, 10)),
             shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)),
@@ -573,6 +609,7 @@ class TestGEDA(unittest.TestCase):
         )
 
     def test_is_valid_path(self):
+        """ Tests if Body objects contain valid paths."""
         shapes = [
             shape.Line((10, 10), (50, 10)), #L 500,100
             shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)), #C 700,100 800,300 800,400
@@ -599,6 +636,7 @@ class TestGEDA(unittest.TestCase):
         self.assertFalse(self.geda_writer.is_valid_path(body))
 
     def test_conv_angle(self):
+        """ Test conversion of angles from pi radians to degrees. """
         angle_samples = [
             # angle, steps, expected result
             (0.0, 1, 0),

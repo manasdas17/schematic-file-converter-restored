@@ -191,6 +191,18 @@ class GEDA:
         warnings.warn(
             "converter will ignore style and color data in gEDA format!"
         )
+
+    def set_offset(self, point):
+        """ Set the offset point for the gEDA output. As OpenJSON
+            positions the origin in the center of the viewport and
+            gEDA usually uses (40'000, 40'000) as page origin, this
+            allows for translating from one coordinate system to 
+            another. It expects a *point* object providing a *x* and
+            *y* attribute.
+        """
+        ## create an offset of 5 grid squares from origin (0,0)
+        self.offset.x = point.x
+        self.offset.y = point.y
     
     def parse(self, filename):
         """ Parse a gEDA file into a design.
@@ -232,13 +244,14 @@ class GEDA:
                 key, value = self._parse_text(stream, params)
                 
                 if key is None: ## text is annotation
-                    self.design.design_attributes.add_annotation(value)
+                    self.design.design_attributes.add_annotation(
+                        self._create_annotation(value, params)
+                    )
 
-                else: ## text is attribute
-                    if key == 'use_license':
-                        self.design.design_attributes.metadata.license = value
-                    else:
-                        self.design.design_attributes.add_attribute(key, value)
+                elif key == 'use_license':
+                    self.design.design_attributes.metadata.license = value
+                else:
+                    self.design.design_attributes.add_attribute(key, value)
 
             elif obj_type == 'G' : ## picture type is not supported
                 warnings.warn(
@@ -253,16 +266,10 @@ class GEDA:
 
                 ## busripper are virtual components that need separate 
                 ## processing 
-                elif basename.startswith('busripper'):
-                    segment = self._create_ripper_segment(params)
-                    self.segments.add(segment)
-
-                    ## make sure following environment is ignored
-                    self._parse_environment(stream)
-
-                elif basename.startswith('EMBEDDEDbusripper'):
-                    segment = self._create_ripper_segment(params)
-                    self.segments.add(segment)
+                elif 'busripper' in basename:
+                    self.segments.add(
+                        self._create_ripper_segment(params)
+                    )
 
                     ## make sure following environments are ignored
                     self.skip_embedded_section(stream)
@@ -390,12 +397,20 @@ class GEDA:
         ## refdes attribute is name of component (mandatory as of gEDA doc)
         ## examples if gaf repo have components without refdes, use part of
         ## basename
-        instance_id = component.name
         if attributes is not None:
-            instance_id = attributes.get('_refdes', component.name)
+            instance = ComponentInstance(
+                attributes.get('_refdes', component.name),
+                component.name, 
+                0
+            )
+        else:
+            instance = ComponentInstance(
+                component.name, 
+                component.name, 
+                0
+            )
 
         ## generate a component instance using attributes
-        instance = ComponentInstance(instance_id, component.name, 0)
         self.design.add_component_instance(instance)
 
         if attributes is not None:
@@ -470,29 +485,31 @@ class GEDA:
                     assert(key not in ['_refdes', 'refdes'])
                     component.add_attribute(key, value)
             elif typ == 'L':
-                line = self._parse_line(params)
-                body.add_shape(line)
+                body.add_shape(
+                    self._parse_line(params)
+                )
 
             elif typ == 'B':
-                rect = self._parse_box(params)
-                body.add_shape(rect)
+                body.add_shape(
+                    self._parse_box(params)
+                )
 
             elif typ == 'C':
-                circle = self._parse_circle(params)
-                body.add_shape(circle)
+                body.add_shape(
+                    self._parse_circle(params)
+                )
 
             elif typ == 'A':
-                arc = self._parse_arc(params)
-                body.add_shape(arc)
+                body.add_shape(
+                    self._parse_arc(params)
+                )
 
             elif typ == 'P':
-                pin = self._parse_pin(stream, params)
-                body.add_pin(pin)
-
+                body.add_pin(
+                    self._parse_pin(stream, params)
+                )
             elif typ == 'H':
-                shapes = self._parse_path(stream, params)
-
-                for new_shape in shapes:
+                for new_shape in self._parse_path(stream, params):
                     body.add_shape(new_shape)
 
             elif typ == 'G':
@@ -533,8 +550,7 @@ class GEDA:
     def _parse_text(self, stream, params):
         """ Parses text element and determins if text is a text object
             or an attribute. 
-            Returns a tuple (key, value) for attribute and (None, Annotation())
-                otherwise.
+            Returns a tuple (key, value). If text is an annotation key is None. 
         """
         num_lines = params['num_lines']
 
@@ -547,8 +563,15 @@ class GEDA:
         if num_lines == 1 and '=' in text_str:
             return self._parse_attribute(text_str, params['visibility'])
 
-        return None, Annotation(
-            text_str,
+        return None, text_str
+    
+    def _create_annotation(self, text, params):
+        """ Creates an Annotation object from *text* using position,
+            rotation and visibility from *params*.
+            Returns an Annotation object.
+        """
+        return Annotation(
+            text,
             self.x_to_px(params['x']),
             self.y_to_px(params['y']),
             self.conv_angle(params['angle']),
@@ -578,7 +601,14 @@ class GEDA:
             to skip over embedded sections of already known 
             components.
         """
+        pos = stream.tell()
         typ = stream.readline().split(self.DELIMITER, 1)[0].strip()
+
+        ## return with stream reset to previous position if not 
+        ## an embedded section
+        if typ != '[':
+            stream.seek(pos)
+            return
 
         while typ != ']':
             typ = stream.readline().split(self.DELIMITER, 1)[0].strip()
@@ -773,6 +803,7 @@ class GEDA:
             raise GEDAError('found invalid path in gEDA file')
 
         def get_coords(string):
+            """ Get coordinates from string with comma-sparated notation."""
             x, y = string.strip().split(',')
             return (self.x_to_px(int(x)), self.y_to_px(int(y)))
 
@@ -964,15 +995,6 @@ class GEDA:
         return object_type, params 
 
     @classmethod
-    def conv_mils(cls, mils):
-        """ Converts *mils* from MILS (1/1000 of an inch) to 
-            pixel units based on a scale factor. The converted 
-            value is a multiple of 10px.
-        """
-        scaled = int(mils) / float(cls.SCALE_FACTOR)
-        return int(scaled)
-
-    @classmethod
     def to_px(cls, value):
         """ Converts value in MILS to pixels using the parsers
             scale factor. 
@@ -980,23 +1002,23 @@ class GEDA:
         """
         return int(value / float(cls.SCALE_FACTOR))
 
-    def x_to_px(self, px):
+    def x_to_px(self, x_mils):
         """ Convert *px* from MILS to pixels using the scale
             factor and translating it allong the X-axis in 
             offset. 
 
             Returns translated and converted X coordinate.
         """
-        return int((px - self.offset.x) / self.SCALE_FACTOR)
+        return int((x_mils - self.offset.x) / self.SCALE_FACTOR)
 
-    def y_to_px(self, py):
+    def y_to_px(self, y_mils):
         """ Convert *py* from MILS to pixels using the scale
             factor and translating it allong the Y-axis in 
             offset. 
 
             Returns translated and converted Y coordinate.
         """
-        return int((py - self.offset.y) / self.SCALE_FACTOR)
+        return int((y_mils - self.offset.y) / self.SCALE_FACTOR)
 
     def conv_coords(self, orig_x, orig_y):
         """ Converts coordinats *orig_x* and *orig_y* from MILS
