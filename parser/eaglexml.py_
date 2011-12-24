@@ -50,10 +50,9 @@ SCALE = 10./2.54   # TODO: figure out a way to infer this
 
 
 class EagleXML:
-    """ 
-    The Eagle XML Format Parser 
-    Built referencing the eagle.dtd that comes with Eagle 6 Beta
-    """
+    """ The Eagle XML Format Parser. Built referencing the eagle.dtd
+    that comes with Eagle 6 Beta. """
+
     def __init__(self):
         self.design = Design()
         # In the order they are parsed:

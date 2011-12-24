@@ -1,4 +1,6 @@
 # encoding: utf-8
+""" The kicad parser test class """
+
 from parser.kicad import KiCAD
 from parser.openjson import JSON
 import unittest
@@ -12,6 +14,7 @@ GOOD_OUTPUT_FILE = join(TEST_DIR, 'test.upv')
 
 
 class KiCADTests(unittest.TestCase):
+    """ The tests of the kicad parser """
 
     def setUp(self):
         """ Set load the test files """

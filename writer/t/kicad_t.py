@@ -1,4 +1,6 @@
 # encoding: utf-8
+""" The kicad writer test class """
+
 from writer.kicad import KiCAD
 from core.design import Design
 from core.components import Pin
@@ -19,6 +21,7 @@ from parser.t.kicad_t import GOOD_OUTPUT_FILE as TEST_UPV_FILE
 
 
 class KiCADTests(unittest.TestCase):
+    """ The tests of the kicad writer """
 
     def test_write(self):
         design = JSON().parse(TEST_UPV_FILE)
