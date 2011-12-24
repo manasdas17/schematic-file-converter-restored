@@ -445,7 +445,7 @@ class GEDA:
             
             Returns the newly created Component object.
         """
-        basename, dummy = os.path.splitext(params['basename'])
+        basename = os.path.splitext(params['basename'])[0]
 
         saved_offset = self.offset
         self.offset = shape.Point(0, 0)
