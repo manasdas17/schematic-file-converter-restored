@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # encoding: utf-8
-""" The eaglexml parser test class """
+""" The gerber parser test class """
 
-from parser.eaglexml import EagleXML
+from parser.gerber import Gerber
 import unittest
 
 
-class EagleXMLTests(unittest.TestCase):
-    """ The tests of the eagle-xml parser """
+class GerberTests(unittest.TestCase):
+    """ The tests of the gerber parser """
 
     def setUp(self):
         """ Setup the test case. """
@@ -17,7 +17,7 @@ class EagleXMLTests(unittest.TestCase):
         """ Teardown the test case. """
         pass
 
-    def test_create_new_eaglexml_parser(self):
+    def test_create_new_gerber_parser(self):
         """ Test creating an empty parser. """
-        parser = EagleXML()
+        parser = Gerber()
         assert parser != None

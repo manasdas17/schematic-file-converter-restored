@@ -5,13 +5,13 @@
 # 0) 1:1 Input of the data model
 
 import json
-from core.annotation import *
-from core.component_instance import *
-from core.components import *
-from core.design import *
-from core.design_attributes import *
-from core.shape import *
-from core.net import *
+from core.annotation import Annotation
+from core.component_instance import ComponentInstance, SymbolAttribute
+from core.components import Component, Symbol, Body, Pin
+from core.design import Design
+from core.design_attributes import DesignAttributes, Metadata
+from core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, Point
+from core.net import Net, NetPoint, ConnectedComponent
 
 
 class JSON:
@@ -24,6 +24,7 @@ class JSON:
 
 
     def parse(self, filename):
+        """ Parse the openjson file into the core. """
         f = open(filename)
         read = json.loads(f.read())
         f.close()
@@ -38,12 +39,14 @@ class JSON:
 
 
     def parse_version(self, version):
+        """ Extract the file version. """
         file_version = version.get('file_version')
         exporter = version.get('exporter')
         self.design.set_version(file_version, exporter)
 
 
     def parse_component_instances(self, component_instances):
+        """ Extract the component instances. """
         for instance in component_instances:
             # Get instance_id, library_id and symbol_index
             instance_id = instance.get('instance_id')
@@ -54,8 +57,8 @@ class JSON:
 
             # Get the SymbolAttributes
             for symbol_attribute in instance.get('symbol_attributes'):
-                sa = self.parse_symbol_attribute(symbol_attribute)
-                inst.add_symbol_attribute(sa)
+                attr = self.parse_symbol_attribute(symbol_attribute)
+                inst.add_symbol_attribute(attr)
 
             # Get the Attributes
             for key, value in instance.get('attributes').items():
@@ -66,20 +69,25 @@ class JSON:
 
 
     def parse_symbol_attribute(self, symbol_attribute):
+        """ Extract attributes from a symbol. """
         x = int(symbol_attribute.get('x'))
         y = int(symbol_attribute.get('y'))
         rotation = float(symbol_attribute.get('rotation'))
+
         # Make SymbolAttribute
-        sa = SymbolAttribute(x, y, rotation)
+        symbol_attr = SymbolAttribute(x, y, rotation)
+
         # Add Annotations
         for annotation in symbol_attribute.get('annotations'):
-            a = self.parse_annotation(annotation)
-            sa.add_annotation(a)
+            anno = self.parse_annotation(annotation)
+            symbol_attr.add_annotation(anno)
+
         # Return SymbolAttribute to be added to it's ComponentInstance
-        return sa
+        return symbol_attr
 
 
     def parse_annotation(self, annotation):
+        """ Extract an annotation. """
         value = annotation.get('value')
         x = int(annotation.get('x'))
         y = int(annotation.get('y'))
@@ -93,53 +101,59 @@ class JSON:
 
 
     def parse_components(self, components):
+        """ Extract a component library. """
         for library_id, component in components.items():
             name = component.get('name')
-            c = Component(name)
+            comp = Component(name)
             # Get attributes
             for key, value in component.get('attributes').items():
-                c.add_attribute(key, value)
+                comp.add_attribute(key, value)
             for symbol in component.get('symbols'):
-                s = self.parse_symbol(symbol)
-                c.add_symbol(s)
-            self.design.add_component(library_id, c)
+                symb = self.parse_symbol(symbol)
+                comp.add_symbol(symb)
+            self.design.add_component(library_id, comp)
 
 
     def parse_symbol(self, symbol):
-        s = Symbol()
+        """ Extract a symbol. """
+        symb = Symbol()
         for body in symbol.get('bodies'):
-            b = self.parse_body(body)
-            s.add_body(b)
-        return s
+            bdy = self.parse_body(body)
+            symb.add_body(bdy)
+        return symb
 
 
     def parse_body(self, body):
-        b = Body()
+        """ Extract a body of a symbol. """
+        bdy = Body()
         for pin in body.get('pins'):
-            p = self.parse_pin(pin)
-            b.add_pin(p)
+            parsed_pin = self.parse_pin(pin)
+            bdy.add_pin(parsed_pin)
         for shape in body.get('shapes'):
-            s = self.parse_shape(shape)
-            b.add_shape(s)
-        return b
+            parsed_shape = self.parse_shape(shape)
+            bdy.add_shape(parsed_shape)
+        return bdy
 
 
     def parse_pin(self, pin):
+        """ Extract a pin of a body. """
         pin_number = pin.get('pin_number')
         p1 = self.parse_point(pin.get('p1'))
         p2 = self.parse_point(pin.get('p2'))
-        if None != pin.get('pin_label'):
-            pin_label = self.parse_label(pin.get('pin_label'))
+        if pin.get('label') is not None:
+            pin_label = self.parse_label(pin.get('label'))
             return Pin(pin_number, p1, p2, pin_label)
         return Pin(pin_number, p1, p2)
 
 
     def parse_point(self, point):
+        """ Extract a point. """
         x = int(point.get('x'))
         y = int(point.get('y'))
         return Point(x, y)
 
     def parse_label(self, label):
+        """ Extract a label. """
         x = int(label.get('x'))
         y = int(label.get('y'))
         text = label.get('text')
@@ -148,6 +162,7 @@ class JSON:
         return Label(x, y, text, align, rotation)
 
     def parse_shape(self, shape):
+        """ Extract a shape. """
         typ = shape.get('type')
         if 'rectangle' == typ:
             x = int(shape.get('x'))
@@ -186,10 +201,10 @@ class JSON:
             p2 = self.parse_point(shape.get('p2'))
             return Line(p1, p2)
         elif 'polygon' == typ:
-            p = Polygon()
+            poly = Polygon()
             for point in shape.get('points'):
-                p.add_point(self.parse_point(point))
-            return p
+                poly.add_point(self.parse_point(point))
+            return poly
         elif 'bezier' == typ:
             control1 = self.parse_point(shape.get('control1'))
             control2 = self.parse_point(shape.get('control2'))
@@ -199,76 +214,75 @@ class JSON:
 
 
     def parse_design_attributes(self, design_attributes):
-        da = DesignAttributes()
+        """ Extract design attributes. """
+        attrs = DesignAttributes()
         # Get the Annotations
         for annotation in design_attributes.get('annotations'):
-            a = self.parse_annotation(annotation)
-            da.add_annotation(a)
+            anno = self.parse_annotation(annotation)
+            attrs.add_annotation(anno)
 
         # Get the Attributes
         for key, value in design_attributes.get('attributes').items():
-            da.add_attribute(key, value)
+            attrs.add_attribute(key, value)
 
         # Get the Metadata
-        m = self.parse_metadata(design_attributes.get('metadata'))
-        da.set_metadata(m)
-        self.design.set_design_attributes(da)
+        meta = self.parse_metadata(design_attributes.get('metadata'))
+        attrs.set_metadata(meta)
+        self.design.set_design_attributes(attrs)
 
 
     def parse_metadata(self, metadata):
-        m = Metadata()
-        m.set_name(metadata.get('name'))
-        m.set_license(metadata.get('license'))
-        m.set_owner(metadata.get('owner'))
-        m.set_updated_timestamp(metadata.get('updated_timestamp'))
-        m.set_design_id(metadata.get('design_id'))
-        m.set_description(metadata.get('description'))
-        m.set_slug(metadata.get('slug'))
+        """ Extract design meta-data. """
+        meta = Metadata()
+        meta.set_name(metadata.get('name'))
+        meta.set_license(metadata.get('license'))
+        meta.set_owner(metadata.get('owner'))
+        meta.set_updated_timestamp(metadata.get('updated_timestamp'))
+        meta.set_design_id(metadata.get('design_id'))
+        meta.set_description(metadata.get('description'))
+        meta.set_slug(metadata.get('slug'))
         for attached_url in metadata.get('attached_urls'):
-            m.add_attached_url(attached_url)
-        return m
+            meta.add_attached_url(attached_url)
+        return meta
 
 
     def parse_nets(self, nets):
+        """ Extract nets. """
         for net in nets:
             net_id = net.get('net_id')
-            n = Net(net_id)
+            ret_net = Net(net_id)
             # Add Annotations
             for annotation in net.get('annotations'):
-                a = self.parse_annotation(annotation)
-                n.add_annotation(a)
+                anno = self.parse_annotation(annotation)
+                ret_net.add_annotation(anno)
             # Get the Attributes
             for key, value in net.get('attributes').items():
-                n.add_attribute(key, value)
+                ret_net.add_attribute(key, value)
             # Get the Points
             for net_point in net.get('points'):
-                np = self.parse_net_point(net_point)
-                n.add_point(np)
-            self.design.add_net(n)
+                npnt = self.parse_net_point(net_point)
+                ret_net.add_point(npnt)
+            self.design.add_net(ret_net)
 
 
     def parse_net_point(self, net_point):
+        """ Extract a net point. """
         point_id = net_point.get('point_id')
         x = int(net_point.get('x'))
         y = int(net_point.get('y'))
-        np = NetPoint(point_id, x, y)
+        npnt = NetPoint(point_id, x, y)
         # Get the connected points
         for point in net_point.get('connected_points'):
-            np.add_connected_point(point)
+            npnt.add_connected_point(point)
         # Get the ConnectedComponents
         for connectedcomponent in net_point.get('connected_components'):
-            cc = self.parse_connected_component(connectedcomponent)
-            np.add_connected_component(cc)
-        return np
+            conn_comp = self.parse_connected_component(connectedcomponent)
+            npnt.add_connected_component(conn_comp)
+        return npnt
 
 
     def parse_connected_component(self, connectedcomponent):
+        """ Extract a connected component. """
         instance_id = connectedcomponent.get('instance_id')
         pin_number = connectedcomponent.get('pin_number')
         return ConnectedComponent(instance_id, pin_number)
-
-if __name__ == '__main__':
-    #Test case
-    test = JSON()
-    test.parse('/home/m/Downloads/High-Voltage-Converter-90V-From-15V.upv')
-    open('./trololoTest.json', 'w').write(test.design.json())

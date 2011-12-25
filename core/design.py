@@ -68,6 +68,16 @@ class Design:
         self.design_attributes = design_attributes
 
 
+    def generate_netlist(self):
+        """ The netlist as generated from the schematic. """
+        pass
+
+
+    def generate_bom(self):
+        """ The bill of materials as generated from the schematic. """
+        pass
+
+
     def json(self):
         """ Return a design as JSON """
         return {

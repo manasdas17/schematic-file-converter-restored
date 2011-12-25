@@ -6,10 +6,25 @@
             "library_id": "LAA110", 
             "symbol_attributes": [
                 {
-                    "annotations": [], 
+                    "annotations": [
+                        {
+                            "rotation": 1, 
+                            "value": "U3", 
+                            "visible": "true", 
+                            "x": 1650, 
+                            "y": -3600
+                        }, 
+                        {
+                            "rotation": 1, 
+                            "value": "LAA110", 
+                            "visible": "true", 
+                            "x": 1650, 
+                            "y": -3200
+                        }
+                    ], 
                     "rotation": 1.5, 
                     "x": 1650, 
-                    "y": 3400
+                    "y": -3400
                 }
             ], 
             "symbol_index": 0
@@ -20,10 +35,25 @@
             "library_id": "NSL-32", 
             "symbol_attributes": [
                 {
-                    "annotations": [], 
+                    "annotations": [
+                        {
+                            "rotation": 1, 
+                            "value": "U2", 
+                            "visible": "true", 
+                            "x": 1830, 
+                            "y": -2580
+                        }, 
+                        {
+                            "rotation": 1, 
+                            "value": "NSL-32", 
+                            "visible": "true", 
+                            "x": 1750, 
+                            "y": -2227
+                        }
+                    ], 
                     "rotation": 1, 
                     "x": 1750, 
-                    "y": 2400
+                    "y": -2400
                 }
             ], 
             "symbol_index": 0
@@ -34,10 +64,25 @@
             "library_id": "74LS00", 
             "symbol_attributes": [
                 {
-                    "annotations": [], 
+                    "annotations": [
+                        {
+                            "rotation": 1, 
+                            "value": "U1", 
+                            "visible": "true", 
+                            "x": 1700, 
+                            "y": -1300
+                        }, 
+                        {
+                            "rotation": 1, 
+                            "value": "74LS00", 
+                            "visible": "true", 
+                            "x": 1700, 
+                            "y": -1150
+                        }
+                    ], 
                     "rotation": 0.5, 
                     "x": 1700, 
-                    "y": 1250
+                    "y": -1250
                 }
             ], 
             "symbol_index": 0
@@ -48,10 +93,25 @@
             "library_id": "LP3966", 
             "symbol_attributes": [
                 {
-                    "annotations": [], 
+                    "annotations": [
+                        {
+                            "rotation": 1, 
+                            "value": "U4", 
+                            "visible": "true", 
+                            "x": 2000, 
+                            "y": -7200
+                        }, 
+                        {
+                            "rotation": 1, 
+                            "value": "LP3966", 
+                            "visible": "true", 
+                            "x": 2000, 
+                            "y": -6250
+                        }
+                    ], 
                     "rotation": 0, 
                     "x": 1900, 
-                    "y": 6750
+                    "y": -6750
                 }
             ], 
             "symbol_index": 0
@@ -62,10 +122,32 @@
             "library_id": "ATMEGA8-P", 
             "symbol_attributes": [
                 {
-                    "annotations": [], 
+                    "annotations": [
+                        {
+                            "rotation": 1, 
+                            "value": "IC1", 
+                            "visible": "true", 
+                            "x": 3450, 
+                            "y": -6100
+                        }, 
+                        {
+                            "rotation": 1, 
+                            "value": "ATMEGA8-P", 
+                            "visible": "true", 
+                            "x": 4400, 
+                            "y": -3450
+                        }, 
+                        {
+                            "rotation": 1, 
+                            "value": "DIL28", 
+                            "visible": "true", 
+                            "x": 4650, 
+                            "y": -3375
+                        }
+                    ], 
                     "rotation": 0, 
                     "x": 4150, 
-                    "y": 4850
+                    "y": -4850
                 }
             ], 
             "symbol_index": 0
@@ -83,6 +165,14 @@
                         {
                             "pins": [
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
                                     "p1": {
                                         "x": -200, 
                                         "y": -200
@@ -94,6 +184,14 @@
                                     "pin_number": "7"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
                                     "p1": {
                                         "x": -200, 
                                         "y": 200
@@ -136,6 +234,79 @@
                                         "y": 0
                                     }, 
                                     "pin_number": "3"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": 0.49944444444444447, 
+                                    "radius": 200, 
+                                    "start_angle": -0.49944444444444447, 
+                                    "type": "arc", 
+                                    "x": 100, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -169,6 +340,79 @@
                                         "y": 0
                                     }, 
                                     "pin_number": "6"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": 0.49944444444444447, 
+                                    "radius": 200, 
+                                    "start_angle": -0.49944444444444447, 
+                                    "type": "arc", 
+                                    "x": 100, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -202,6 +446,79 @@
                                         "y": -100
                                     }, 
                                     "pin_number": "10"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": 0.49944444444444447, 
+                                    "radius": 200, 
+                                    "start_angle": -0.49944444444444447, 
+                                    "type": "arc", 
+                                    "x": 100, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -235,6 +552,83 @@
                                         "y": -100
                                     }, 
                                     "pin_number": "13"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": 0.49944444444444447, 
+                                    "radius": 200, 
+                                    "start_angle": -0.49944444444444447, 
+                                    "type": "arc", 
+                                    "x": 100, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "bodies": [
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -268,6 +662,100 @@
                                         "y": 0
                                     }, 
                                     "pin_number": "3"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": -0.28, 
+                                    "radius": 259, 
+                                    "start_angle": 0.28, 
+                                    "type": "arc", 
+                                    "x": -465, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "end_angle": -0.13666666666666666, 
+                                    "radius": 343, 
+                                    "start_angle": -0.48944444444444446, 
+                                    "type": "arc", 
+                                    "x": -11, 
+                                    "y": 143
+                                }, 
+                                {
+                                    "end_angle": 0.4905555555555556, 
+                                    "radius": 340, 
+                                    "start_angle": 0.13555555555555557, 
+                                    "type": "arc", 
+                                    "x": -10, 
+                                    "y": -141
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": 200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -301,6 +789,100 @@
                                         "y": 0
                                     }, 
                                     "pin_number": "6"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": -0.28, 
+                                    "radius": 259, 
+                                    "start_angle": 0.28, 
+                                    "type": "arc", 
+                                    "x": -465, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "end_angle": -0.13666666666666666, 
+                                    "radius": 343, 
+                                    "start_angle": -0.48944444444444446, 
+                                    "type": "arc", 
+                                    "x": -11, 
+                                    "y": 143
+                                }, 
+                                {
+                                    "end_angle": 0.4905555555555556, 
+                                    "radius": 340, 
+                                    "start_angle": 0.13555555555555557, 
+                                    "type": "arc", 
+                                    "x": -10, 
+                                    "y": -141
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": 200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -334,6 +916,100 @@
                                         "y": -100
                                     }, 
                                     "pin_number": "10"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "end_angle": -0.28, 
+                                    "radius": 259, 
+                                    "start_angle": 0.28, 
+                                    "type": "arc", 
+                                    "x": -465, 
+                                    "y": 0
+                                }, 
+                                {
+                                    "end_angle": -0.13666666666666666, 
+                                    "radius": 343, 
+                                    "start_angle": -0.48944444444444446, 
+                                    "type": "arc", 
+                                    "x": -11, 
+                                    "y": 143
+                                }, 
+                                {
+                                    "end_angle": 0.4905555555555556, 
+                                    "radius": 340, 
+                                    "start_angle": 0.13555555555555557, 
+                                    "type": "arc", 
+                                    "x": -10, 
+                                    "y": -141
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -300, 
+                                            "y": -200
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": -200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -300, 
+                                            "y": 200
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": 200
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": -200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": -200
+                                    }, 
+                                    "pin_number": "7"
+                                }, 
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -220, 
+                                        "y": 200
+                                    }, 
+                                    "p1": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "p2": {
+                                        "x": -200, 
+                                        "y": 200
+                                    }, 
+                                    "pin_number": "14"
                                 }, 
                                 {
                                     "p1": {
@@ -371,54 +1047,25 @@
                             ], 
                             "shapes": [
                                 {
-                                    "end_angle": 0.5, 
-                                    "radius": 200, 
-                                    "start_angle": -0.5, 
-                                    "type": "arc", 
-                                    "x": 100, 
-                                    "y": 0
-                                }, 
-                                {
-                                    "points": [
-                                        {
-                                            "x": 100, 
-                                            "y": 200
-                                        }, 
-                                        {
-                                            "x": -300, 
-                                            "y": 200
-                                        }, 
-                                        {
-                                            "x": -300, 
-                                            "y": -200
-                                        }, 
-                                        {
-                                            "x": 100, 
-                                            "y": -200
-                                        }
-                                    ], 
-                                    "type": "polygon"
-                                }, 
-                                {
-                                    "end_angle": -0.3, 
+                                    "end_angle": -0.28, 
                                     "radius": 259, 
-                                    "start_angle": 0.3, 
+                                    "start_angle": 0.28, 
                                     "type": "arc", 
                                     "x": -465, 
                                     "y": 0
                                 }, 
                                 {
-                                    "end_angle": -0.1, 
+                                    "end_angle": -0.13666666666666666, 
                                     "radius": 343, 
-                                    "start_angle": -0.5, 
+                                    "start_angle": -0.48944444444444446, 
                                     "type": "arc", 
                                     "x": -11, 
                                     "y": 143
                                 }, 
                                 {
-                                    "end_angle": 0.5, 
+                                    "end_angle": 0.4905555555555556, 
                                     "radius": 340, 
-                                    "start_angle": 0.1, 
+                                    "start_angle": 0.13555555555555557, 
                                     "type": "arc", 
                                     "x": -10, 
                                     "y": -141
@@ -466,6 +1113,14 @@
                         {
                             "pins": [
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC6(/RESET)", 
+                                        "type": "label", 
+                                        "x": -800, 
+                                        "y": 1120
+                                    }, 
                                     "p1": {
                                         "x": -700, 
                                         "y": 1100
@@ -477,6 +1132,14 @@
                                     "pin_number": "1"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD0(RXD)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 220
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 200
@@ -488,6 +1151,14 @@
                                     "pin_number": "2"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD1(TXD)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 100
@@ -499,6 +1170,14 @@
                                     "pin_number": "3"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD2(INT0)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 20
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 0
@@ -510,6 +1189,14 @@
                                     "pin_number": "4"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD3(INT1)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -100
@@ -521,6 +1208,14 @@
                                     "pin_number": "5"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD4(XCK/T0)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -180
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -200
@@ -532,9 +1227,17 @@
                                     "pin_number": "6"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "VCC", 
+                                        "type": "label", 
+                                        "x": -20, 
+                                        "y": 1300
+                                    }, 
                                     "p1": {
                                         "x": 0, 
-                                        "y": 1600
+                                        "y": 1200
                                     }, 
                                     "p2": {
                                         "x": 0, 
@@ -543,9 +1246,17 @@
                                     "pin_number": "7"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -20, 
+                                        "y": -1400
+                                    }, 
                                     "p1": {
                                         "x": 0, 
-                                        "y": -1700
+                                        "y": -1300
                                     }, 
                                     "p2": {
                                         "x": 0, 
@@ -554,6 +1265,14 @@
                                     "pin_number": "8"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB6(XTAL1/TOSC1)", 
+                                        "type": "label", 
+                                        "x": -800, 
+                                        "y": 420
+                                    }, 
                                     "p1": {
                                         "x": -700, 
                                         "y": 400
@@ -565,6 +1284,14 @@
                                     "pin_number": "9"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB7(XTAL2/TOSC2)", 
+                                        "type": "label", 
+                                        "x": -800, 
+                                        "y": 220
+                                    }, 
                                     "p1": {
                                         "x": -700, 
                                         "y": 200
@@ -576,6 +1303,14 @@
                                     "pin_number": "10"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "AVCC", 
+                                        "type": "label", 
+                                        "x": -800, 
+                                        "y": 720
+                                    }, 
                                     "p1": {
                                         "x": -700, 
                                         "y": 700
@@ -587,6 +1322,14 @@
                                     "pin_number": "20"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD5(T1)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -280
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -300
@@ -598,6 +1341,14 @@
                                     "pin_number": "11"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "AREF", 
+                                        "type": "label", 
+                                        "x": -800, 
+                                        "y": 820
+                                    }, 
                                     "p1": {
                                         "x": -700, 
                                         "y": 800
@@ -609,6 +1360,14 @@
                                     "pin_number": "21"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD6(AIN0)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -380
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -400
@@ -620,6 +1379,14 @@
                                     "pin_number": "12"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "AGND", 
+                                        "type": "label", 
+                                        "x": -800, 
+                                        "y": 920
+                                    }, 
                                     "p1": {
                                         "x": -700, 
                                         "y": 900
@@ -631,6 +1398,14 @@
                                     "pin_number": "22"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PD7(AIN1)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -480
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -500
@@ -642,6 +1417,14 @@
                                     "pin_number": "13"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC0(ADC0)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 1120
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 1100
@@ -653,6 +1436,14 @@
                                     "pin_number": "23"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB0(ICP)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -680
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -700
@@ -664,6 +1455,14 @@
                                     "pin_number": "14"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC1(ADC1)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 1020
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 1000
@@ -675,6 +1474,14 @@
                                     "pin_number": "24"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB1(OC1A)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -780
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -800
@@ -686,6 +1493,14 @@
                                     "pin_number": "15"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC2(ADC2)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 920
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 900
@@ -697,6 +1512,14 @@
                                     "pin_number": "25"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB2(SS/OC1B)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -880
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -900
@@ -708,6 +1531,14 @@
                                     "pin_number": "16"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC3(ADC3)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 820
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 800
@@ -719,6 +1550,14 @@
                                     "pin_number": "26"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB3(MOSI/OC2)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -980
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -1000
@@ -730,6 +1569,14 @@
                                     "pin_number": "17"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC4(ADC4/SDA)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 720
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 700
@@ -741,6 +1588,14 @@
                                     "pin_number": "27"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB4(MISO)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -1080
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -1100
@@ -752,6 +1607,14 @@
                                     "pin_number": "18"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PC5(ADC5/SCL)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": 620
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": 600
@@ -763,6 +1626,14 @@
                                     "pin_number": "28"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "PB5(SCK)", 
+                                        "type": "label", 
+                                        "x": 900, 
+                                        "y": -1180
+                                    }, 
                                     "p1": {
                                         "x": 800, 
                                         "y": -1200
@@ -844,6 +1715,14 @@
                         {
                             "pins": [
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "ANOD", 
+                                        "type": "label", 
+                                        "x": -300, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": -200, 
                                         "y": 100
@@ -855,6 +1734,14 @@
                                     "pin_number": "1"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "CATH", 
+                                        "type": "label", 
+                                        "x": -300, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": -200, 
                                         "y": -100
@@ -866,6 +1753,14 @@
                                     "pin_number": "2"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "INOUTB1", 
+                                        "type": "label", 
+                                        "x": 300, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": 200, 
                                         "y": -100
@@ -877,6 +1772,14 @@
                                     "pin_number": "7"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "INOUTA1", 
+                                        "type": "label", 
+                                        "x": 300, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": 200, 
                                         "y": 100
@@ -886,8 +1789,453 @@
                                         "y": 100
                                     }, 
                                     "pin_number": "8"
+                                }
+                            ], 
+                            "shapes": [
+                                {
+                                    "align": "center", 
+                                    "rotation": 0.0, 
+                                    "text": "Norm OFF", 
+                                    "type": "label", 
+                                    "x": 70, 
+                                    "y": 130
                                 }, 
                                 {
+                                    "points": [
+                                        {
+                                            "x": 130, 
+                                            "y": -70
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": -30
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -50
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": -70
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": -70
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "height": -300, 
+                                    "type": "rectangle", 
+                                    "width": 400, 
+                                    "x": -200, 
+                                    "y": 150
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -40, 
+                                            "y": -40
+                                        }, 
+                                        {
+                                            "x": -120, 
+                                            "y": -40
+                                        }, 
+                                        {
+                                            "x": -120, 
+                                            "y": -40
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 50, 
+                                            "y": 100
+                                        }, 
+                                        {
+                                            "x": 50, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": 50, 
+                                            "y": -100
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": 200, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": 200, 
+                                            "y": -100
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": -80
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -100
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": -50
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -70
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -70
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": -20
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -40
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": -40
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": -20
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": -20
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": -20
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 40
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 40
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 50
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 70
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 70
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 100
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 80
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 80
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 100
+                                        }, 
+                                        {
+                                            "x": 200, 
+                                            "y": 100
+                                        }, 
+                                        {
+                                            "x": 200, 
+                                            "y": 100
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -200, 
+                                            "y": 100
+                                        }, 
+                                        {
+                                            "x": -80, 
+                                            "y": 100
+                                        }, 
+                                        {
+                                            "x": -80, 
+                                            "y": 80
+                                        }, 
+                                        {
+                                            "x": -80, 
+                                            "y": 80
+                                        }, 
+                                        {
+                                            "x": -80, 
+                                            "y": 80
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -130, 
+                                            "y": 80
+                                        }, 
+                                        {
+                                            "x": -30, 
+                                            "y": 80
+                                        }, 
+                                        {
+                                            "x": -80, 
+                                            "y": -40
+                                        }, 
+                                        {
+                                            "x": -130, 
+                                            "y": 80
+                                        }, 
+                                        {
+                                            "x": -130, 
+                                            "y": 80
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -80, 
+                                            "y": -40
+                                        }, 
+                                        {
+                                            "x": -80, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": -200, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": -200, 
+                                            "y": -100
+                                        }, 
+                                        {
+                                            "x": -200, 
+                                            "y": -100
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": -30, 
+                                            "y": -40
+                                        }, 
+                                        {
+                                            "x": -10, 
+                                            "y": -10
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": -20
+                                        }, 
+                                        {
+                                            "x": 20, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 20, 
+                                            "y": 20
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 0, 
+                                            "y": 10
+                                        }, 
+                                        {
+                                            "x": 20, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 20, 
+                                            "y": 0
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": 10
+                                        }, 
+                                        {
+                                            "x": 0, 
+                                            "y": 10
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 100, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": 20
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": 20
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 130, 
+                                            "y": 70
+                                        }, 
+                                        {
+                                            "x": 100, 
+                                            "y": 50
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": 30
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": 70
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": 70
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }, 
+                                {
+                                    "points": [
+                                        {
+                                            "x": 130, 
+                                            "y": 50
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": 50
+                                        }, 
+                                        {
+                                            "x": 160, 
+                                            "y": -50
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": -50
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": -50
+                                        }, 
+                                        {
+                                            "x": 130, 
+                                            "y": -50
+                                        }
+                                    ], 
+                                    "type": "polygon"
+                                }
+                            ]
+                        }, 
+                        {
+                            "pins": [
+                                {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "ANOD", 
+                                        "type": "label", 
+                                        "x": -300, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": -200, 
                                         "y": 100
@@ -899,6 +2247,14 @@
                                     "pin_number": "3"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "CATH", 
+                                        "type": "label", 
+                                        "x": -300, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": -200, 
                                         "y": -100
@@ -910,6 +2266,14 @@
                                     "pin_number": "4"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "INOUTB1", 
+                                        "type": "label", 
+                                        "x": 300, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": 200, 
                                         "y": -100
@@ -921,6 +2285,14 @@
                                     "pin_number": "5"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "INOUTA1", 
+                                        "type": "label", 
+                                        "x": 300, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": 200, 
                                         "y": 100
@@ -1381,6 +2753,14 @@
                         {
                             "pins": [
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "SHDN", 
+                                        "type": "label", 
+                                        "x": -650, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": -500, 
                                         "y": 100
@@ -1392,6 +2772,14 @@
                                     "pin_number": "1"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "IN", 
+                                        "type": "label", 
+                                        "x": -650, 
+                                        "y": 320
+                                    }, 
                                     "p1": {
                                         "x": -500, 
                                         "y": 300
@@ -1403,9 +2791,17 @@
                                     "pin_number": "2"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 1.5, 
+                                        "text": "GND", 
+                                        "type": "label", 
+                                        "x": -20, 
+                                        "y": -550
+                                    }, 
                                     "p1": {
                                         "x": 0, 
-                                        "y": -1000
+                                        "y": -400
                                     }, 
                                     "p2": {
                                         "x": 0, 
@@ -1414,6 +2810,14 @@
                                     "pin_number": "3"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "OUT", 
+                                        "type": "label", 
+                                        "x": 650, 
+                                        "y": 320
+                                    }, 
                                     "p1": {
                                         "x": 500, 
                                         "y": 300
@@ -1425,6 +2829,14 @@
                                     "pin_number": "4"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "SENSE/ADJ", 
+                                        "type": "label", 
+                                        "x": 650, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": 500, 
                                         "y": 100
@@ -1461,6 +2873,14 @@
                         {
                             "pins": [
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "A", 
+                                        "type": "label", 
+                                        "x": -250, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": -150, 
                                         "y": 100
@@ -1472,6 +2892,14 @@
                                     "pin_number": "1"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "K", 
+                                        "type": "label", 
+                                        "x": -250, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": -150, 
                                         "y": -100
@@ -1483,6 +2911,14 @@
                                     "pin_number": "2"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "R", 
+                                        "type": "label", 
+                                        "x": 300, 
+                                        "y": -80
+                                    }, 
                                     "p1": {
                                         "x": 200, 
                                         "y": -100
@@ -1494,6 +2930,14 @@
                                     "pin_number": "3"
                                 }, 
                                 {
+                                    "label": {
+                                        "align": "center", 
+                                        "rotation": 0, 
+                                        "text": "R", 
+                                        "type": "label", 
+                                        "x": 300, 
+                                        "y": 120
+                                    }, 
                                     "p1": {
                                         "x": 200, 
                                         "y": 100
@@ -1774,7 +3218,22 @@
         }
     }, 
     "design_attributes": {
-        "annotations": [], 
+        "annotations": [
+            {
+                "rotation": 0.0, 
+                "value": "I'm a net label", 
+                "visible": "true", 
+                "x": 3350, 
+                "y": -2300
+            }, 
+            {
+                "rotation": 0.0, 
+                "value": "PWR", 
+                "visible": "true", 
+                "x": 6350, 
+                "y": -4050
+            }
+        ], 
         "attributes": {}, 
         "metadata": {
             "attached_urls": [], 
@@ -1784,9 +3243,9 @@
             "name": "", 
             "owner": "", 
             "slug": "", 
-            "updated_timestamp": 1323544478
+            "updated_timestamp": 1324482613
         }
-    },
+    }, 
     "nets": [
         {
             "annotations": [], 
@@ -1796,125 +3255,30 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6100a4650", 
-                        "6900a4950", 
-                        "6100a5350"
+                        "2700a-3950"
                     ], 
-                    "point_id": "6100a4950", 
-                    "x": 6100, 
-                    "y": 4950
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6100a5350"
-                    ], 
-                    "point_id": "5150a5350", 
-                    "x": 5150, 
-                    "y": 5350
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "5150a4650", 
-                        "6100a4950"
-                    ], 
-                    "point_id": "6100a4650", 
-                    "x": 6100, 
-                    "y": 4650
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6100a4650"
-                    ], 
-                    "point_id": "5150a4650", 
-                    "x": 5150, 
-                    "y": 4650
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6100a4950", 
-                        "5150a5350"
-                    ], 
-                    "point_id": "6100a5350", 
-                    "x": 6100, 
-                    "y": 5350
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "5150a4050", 
-                        "6900a4950"
-                    ], 
-                    "point_id": "6900a4050", 
-                    "x": 6900, 
-                    "y": 4050
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6900a4050"
-                    ], 
-                    "point_id": "5150a4050", 
-                    "x": 5150, 
-                    "y": 4050
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "6900a4050", 
-                        "6100a4950"
-                    ], 
-                    "point_id": "6900a4950", 
-                    "x": 6900, 
-                    "y": 4950
-                }
-            ]
-        }, 
-        {
-            "annotations": [], 
-            "attributes": {}, 
-            "net_id": "", 
-            "points": [
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "2950a6650"
-                    ], 
-                    "point_id": "2700a6650", 
+                    "point_id": "2700a-6450", 
                     "x": 2700, 
-                    "y": 6650
+                    "y": -6450
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2700a6650", 
-                        "2950a4450"
+                        "3250a-3950", 
+                        "2700a-6450"
                     ], 
-                    "point_id": "2950a6650", 
-                    "x": 2950, 
-                    "y": 6650
+                    "point_id": "2700a-3950", 
+                    "x": 2700, 
+                    "y": -3950
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2950a6650", 
-                        "3250a4450"
+                        "2700a-3950"
                     ], 
-                    "point_id": "2950a4450", 
-                    "x": 2950, 
-                    "y": 4450
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "2950a4450"
-                    ], 
-                    "point_id": "3250a4450", 
+                    "point_id": "3250a-3950", 
                     "x": 3250, 
-                    "y": 4450
+                    "y": -3950
                 }
             ]
         }, 
@@ -1926,75 +3290,90 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2700a3950"
+                        "6100a-5350", 
+                        "6100a-4650", 
+                        "6900a-4950"
                     ], 
-                    "point_id": "2700a6450", 
-                    "x": 2700, 
-                    "y": 6450
+                    "point_id": "6100a-4950", 
+                    "x": 6100, 
+                    "y": -4950
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2700a3950"
+                        "6100a-5350"
                     ], 
-                    "point_id": "3250a3950", 
-                    "x": 3250, 
-                    "y": 3950
+                    "point_id": "5150a-5350", 
+                    "x": 5150, 
+                    "y": -5350
+                }, 
+                {
+                    "connected_components": [
+                        {
+                            "instance_id": "IC1", 
+                            "pin_number": "6"
+                        }
+                    ], 
+                    "connected_points": [
+                        "6100a-4650"
+                    ], 
+                    "point_id": "5150a-4650", 
+                    "x": 5150, 
+                    "y": -4650
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2700a6450", 
-                        "3250a3950"
+                        "6100a-4950", 
+                        "5150a-4650"
                     ], 
-                    "point_id": "2700a3950", 
-                    "x": 2700, 
-                    "y": 3950
-                }
-            ]
-        }, 
-        {
-            "annotations": [], 
-            "attributes": {}, 
-            "net_id": "", 
-            "points": [
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "7550a3500", 
-                        "6900a3100"
-                    ], 
-                    "point_id": "7550a3100", 
-                    "x": 7550, 
-                    "y": 3100
+                    "point_id": "6100a-4650", 
+                    "x": 6100, 
+                    "y": -4650
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "7550a3500"
+                        "5150a-5350", 
+                        "6100a-4950"
                     ], 
-                    "point_id": "6900a3500", 
+                    "point_id": "6100a-5350", 
+                    "x": 6100, 
+                    "y": -5350
+                }, 
+                {
+                    "connected_components": [
+                        {
+                            "instance_id": "IC1", 
+                            "pin_number": "15"
+                        }
+                    ], 
+                    "connected_points": [
+                        "6900a-4050"
+                    ], 
+                    "point_id": "5150a-4050", 
+                    "x": 5150, 
+                    "y": -4050
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "6900a-4950", 
+                        "5150a-4050"
+                    ], 
+                    "point_id": "6900a-4050", 
                     "x": 6900, 
-                    "y": 3500
+                    "y": -4050
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "7550a3100"
+                        "6100a-4950", 
+                        "6900a-4050"
                     ], 
-                    "point_id": "6900a3100", 
+                    "point_id": "6900a-4950", 
                     "x": 6900, 
-                    "y": 3100
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "7550a3100", 
-                        "6900a3500"
-                    ], 
-                    "point_id": "7550a3500", 
-                    "x": 7550, 
-                    "y": 3500
+                    "y": -4950
                 }
             ]
         }, 
@@ -2006,56 +3385,146 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "5000a2000", 
-                        "6450a2700"
+                        "7550a-3500"
                     ], 
-                    "point_id": "6450a2000", 
+                    "point_id": "6900a-3500", 
+                    "x": 6900, 
+                    "y": -3500
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "7550a-3500", 
+                        "6900a-3100"
+                    ], 
+                    "point_id": "7550a-3100", 
+                    "x": 7550, 
+                    "y": -3100
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "7550a-3100"
+                    ], 
+                    "point_id": "6900a-3100", 
+                    "x": 6900, 
+                    "y": -3100
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "7550a-3100", 
+                        "6900a-3500"
+                    ], 
+                    "point_id": "7550a-3500", 
+                    "x": 7550, 
+                    "y": -3500
+                }
+            ]
+        }, 
+        {
+            "annotations": [], 
+            "attributes": {}, 
+            "net_id": "", 
+            "points": [
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "5900a-2700", 
+                        "6450a-2000"
+                    ], 
+                    "point_id": "6450a-2700", 
                     "x": 6450, 
-                    "y": 2000
+                    "y": -2700
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a2000", 
-                        "5000a3000"
+                        "6450a-2000", 
+                        "5000a-3000"
                     ], 
-                    "point_id": "5000a2000", 
+                    "point_id": "5000a-2000", 
                     "x": 5000, 
-                    "y": 2000
+                    "y": -2000
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a2700"
+                        "5000a-2000"
                     ], 
-                    "point_id": "5900a2700", 
+                    "point_id": "5000a-3000", 
+                    "x": 5000, 
+                    "y": -3000
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "6450a-2700", 
+                        "5000a-2000"
+                    ], 
+                    "point_id": "6450a-2000", 
+                    "x": 6450, 
+                    "y": -2000
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "6450a-2700"
+                    ], 
+                    "point_id": "5900a-2700", 
                     "x": 5900, 
-                    "y": 2700
+                    "y": -2700
+                }
+            ]
+        }, 
+        {
+            "annotations": [], 
+            "attributes": {}, 
+            "net_id": "", 
+            "points": [
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2950a-4450"
+                    ], 
+                    "point_id": "3250a-4450", 
+                    "x": 3250, 
+                    "y": -4450
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "6450a2000", 
-                        "5900a2700"
+                        "2700a-6650", 
+                        "2950a-4450"
                     ], 
-                    "point_id": "6450a2700", 
-                    "x": 6450, 
-                    "y": 2700
+                    "point_id": "2950a-6650", 
+                    "x": 2950, 
+                    "y": -6650
                 }, 
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "5000a2000"
+                        "2950a-6650"
                     ], 
-                    "point_id": "5000a3000", 
-                    "x": 5000, 
-                    "y": 3000
+                    "point_id": "2700a-6650", 
+                    "x": 2700, 
+                    "y": -6650
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2950a-6650", 
+                        "3250a-4450"
+                    ], 
+                    "point_id": "2950a-4450", 
+                    "x": 2950, 
+                    "y": -4450
                 }
             ]
         }
     ], 
     "version": {
-        "file_version": "0.0.1", 
-        "tool_name": "Upverter converter"
+        "exporter": "Upverter converter", 
+        "file_version": "0.1.0"
     }
 }

@@ -43,22 +43,39 @@ Supported Formats
 ---------------
 
   The converter started with support for KiCad. We have since been expanding it to support many of the popular open and closed source formats, as follows.
-* KiCad
-* Eagle (in development)
-* gEDA (in development)
-* Fritzing (in development)
-* Altium (in development)
+
+* KiCad     (in beta testing)
+* gEDA      (in beta testing)
+* Eagle     (in alpha testing)
+* Eagle XML (in alpha testing)
+* Fritzing  (in development)
+* Altium    (in development)
+* Gerber    (in development)
+* ViewDraw  (in development)
 
 
 Format Wish List
 ---------------
 
   This is the list of formats we wish we supported, and will work on someday (hopefully soon!). We are looking for developers to help us so please ping us if you're interested!
-* DXDesigner & PADs
+
+* DXDesigner
+* PADs
 * Alegro
 * OrCad
+* DSN
 
-More in the todo list [TODO.md](https://github.com/upverter/schematic-file-converter/blob/master/TODO.md).
+
+Exports
+---------------
+
+  This is the list of formats we can export too, given an import with the required info in it. These are currently all in development.
+
+* BOM (Bill of Materials) in CSV format
+* Netlist in CSV format
+* Netlist in Telesis format
+* Layout Data in RS274-X (Gerber) format
+* Drill Data in Excellon format
 
 
 The Concept
