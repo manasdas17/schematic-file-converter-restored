@@ -25,3 +25,14 @@ class AnnotationTests(unittest.TestCase):
         assert anno.y == 1
         assert anno.rotation == 2
         assert anno.visible != True
+
+    def test_annotation_bounds(self):
+        '''Test .bounds()'''
+        annot = Annotation('foo', 3, 6, 0, True)
+        tl, br = annot.bounds()
+        # bounds() will give a square with sides 20 units long, centered on the
+        # annotation
+        self.assertEqual(tl.x, 3 - 10)
+        self.assertEqual(tl.y, 6 - 10)
+        self.assertEqual(br.x, 3 + 10)
+        self.assertEqual(br.y, 6 + 10)
