@@ -92,6 +92,10 @@ class Body:
         points = sum([s.bounds() for s in self.shapes + self.pins], [])
         x_values = [pt.x for pt in points]
         y_values = [pt.y for pt in points]
+        if len(x_values) == 0:
+            # Empty body includes just the origin
+            x_values = [0]
+            y_values = [0]
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 
@@ -129,7 +133,7 @@ class Pin:
     def bounds(self):
         """ Return the min and max points of a pin """
         x_values = [self.p1.x, self.p2.x]
-        y_values = [self.p2.y, self.p2.y]
+        y_values = [self.p1.y, self.p2.y]
         if self.label is not None:
             x_values.extend([pt.x for pt in self.label.bounds()])
             y_values.extend([pt.y for pt in self.label.bounds()])

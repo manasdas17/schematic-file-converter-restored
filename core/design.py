@@ -23,6 +23,8 @@ class Design:
     def bounds(self):
         """ Return the min and max point of a design """
         bounds = [net.bounds() for net in self.nets]
+        bounds.extend([anno.bounds() for anno in
+                       self.design_attributes.annotations])
         offset_bounds = lambda (p1, p2), (xo, yo): [Point(p1.x + xo, p1.y + yo),
                                                     Point(p2.x + xo, p2.y + yo)]
         for comp in self.component_instances:
@@ -34,10 +36,14 @@ class Design:
             # library components bodies
             bounds.extend([offset_bounds(b, o) for b, o in zip(bodybounds,
                                                                offsets)])
-            # flatten out bounds to just a list of Points
+        # flatten out bounds to just a list of Points
         bounds = sum(bounds, [])
         x_values = [pt.x for pt in bounds]
         y_values = [pt.y for pt in bounds]
+        # by convention, an empty design will bound just the origin
+        if len(x_values) == 0:
+            x_values = [0]
+            y_values = [0]
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 

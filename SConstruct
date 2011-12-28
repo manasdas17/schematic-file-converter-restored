@@ -34,14 +34,13 @@ def build_pyflakes(target, source, env):
 bld_pyflakes = Builder(action=build_pyflakes)
 
 def build_test(target, source, env):
-    args = ['nosetests', '--all-modules', 'core', 'parser', 'writer']
+    args = ['nosetests2', '--all-modules']
     args.extend([str(py) for py in source])
     return subprocess.call(args)
 bld_test = Builder(action=build_test)
 
 def build_coverage(target, source, env):
-    args = ['nosetests', '--with-coverage', '--all-modules',
-            'core', 'parser', 'writer']
+    args = ['nosetests2', '--with-coverage', '--all-modules']
     args.extend([str(py) for py in source])
     return subprocess.call(args)
 bld_coverage = Builder(action=build_coverage)
