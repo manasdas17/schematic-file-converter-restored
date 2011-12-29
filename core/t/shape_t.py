@@ -70,6 +70,27 @@ class RectangleTests(unittest.TestCase):
         assert rect.width == 2
         assert rect.height == 3
 
+    def test_create_rectangle_from_corners(self):
+        '''Test for Rectangle.from_corners()'''
+        rect = Rectangle.from_corners(0, 1, 2, 4)
+        self.assertEqual(rect.x, 0)
+        self.assertEqual(rect.y, 1)
+        self.assertEqual(rect.width, 2)
+        self.assertEqual(rect.height, 3)
+
+    def test_rectangle_min_point(self):
+        '''Test Rectangle.min_point()'''
+        rect = Rectangle(-2, -3, 8, 5)
+        tl = rect.min_point()
+        self.assertEqual(tl.x, -2)
+        self.assertEqual(tl.y, -3)
+
+    def test_rectangle_max_point(self):
+        '''Test Rectangle.max_point()'''
+        rect = Rectangle(-2, -3, 8, 5)
+        br = rect.max_point()
+        self.assertEqual(br.x, 6)
+        self.assertEqual(br.y, 2)
 
 class RoundedRectangleTests(unittest.TestCase):
     """ The tests of the core module rounded rectangle shape """
@@ -91,6 +112,28 @@ class RoundedRectangleTests(unittest.TestCase):
         assert rrect.height == 3
         assert rrect.radius == 4
 
+    def test_create_rounded_from_corners(self):
+        '''Test for RoundedRectangle.from_corners()'''
+        rrect = RoundedRectangle.from_corners(0, 1, 2, 4, 5)
+        self.assertEqual(rrect.x, 0)
+        self.assertEqual(rrect.y, 1)
+        self.assertEqual(rrect.width, 2)
+        self.assertEqual(rrect.height, 3)
+        self.assertEqual(rrect.radius, 5)
+
+    def test_rrectangle_min_point(self):
+        '''Test RoundedRectangle.min_point()'''
+        rrect = RoundedRectangle(-2, -3, 8, 5, 6)
+        tl = rrect.min_point()
+        self.assertEqual(tl.x, -2)
+        self.assertEqual(tl.y, -3)
+
+    def test_rrectangle_max_point(self):
+        '''Test RoundedRectangle.max_point()'''
+        rrect = RoundedRectangle(-2, -3, 8, 5, 6)
+        br = rrect.max_point()
+        self.assertEqual(br.x, 6)
+        self.assertEqual(br.y, 2)
 
 class ArcTests(unittest.TestCase):
     """ The tests of the core module arc shape """
@@ -112,6 +155,32 @@ class ArcTests(unittest.TestCase):
         assert arc.end_angle == 3
         assert arc.radius == 4
 
+    def test_min_point_arc_is_really_a_circle(self):
+        '''min_point() when an arc actually traces out a full circle'''
+        arc = Arc(2, 3, 0, 2, 5)
+        self.assertEqual(arc.min_point().x, -3)
+        self.assertEqual(arc.min_point().y, -2)
+
+    def test_max_point_arc_is_really_a_circle(self):
+        '''max_point() when an arc actually traces out a full circle'''
+        arc = Arc(2, 3, 0, 2, 5)
+        self.assertEqual(arc.max_point().x, 7)
+        self.assertEqual(arc.max_point().y, 8)
+
+    def test_min_point_arc(self):
+        arc = Arc(2, 3, 0, 1.5, 5)
+        self.assertEqual(arc.min_point().x, -3)
+        self.assertEqual(arc.min_point().y, -2)
+
+    def test_max_point_arc(self):
+        arc = Arc(2, 3, 0, 1.5, 5)
+        self.assertEqual(arc.max_point().x, 7)
+        self.assertEqual(arc.max_point().y, 8)
+        
+    def test_min_point_arc_wraparound(self):
+        arc = Arc(2, 3, 1.75, 0.25, 5)
+        self.assertEqual(arc.min_point().x, 6)
+        self.assertEqual(arc.min_point().y, 5)
 
 class CircleTests(unittest.TestCase):
     """ The tests of the core module circle shape """
@@ -130,6 +199,20 @@ class CircleTests(unittest.TestCase):
         assert cir.x == 0
         assert cir.y == 1
         assert cir.radius == 2
+
+    def test_circle_min_point(self):
+        '''Test Circle.min_point()'''
+        cir = Circle(2, 3, 4)
+        tl = cir.min_point()
+        self.assertEqual(tl.x, -2)
+        self.assertEqual(tl.y, -1)
+
+    def test_circle_max_point(self):
+        '''Test Circle.max_point()'''
+        cir = Circle(2, 3, 4)
+        br = cir.max_point()
+        self.assertEqual(br.x, 6)
+        self.assertEqual(br.y, 7)
 
 
 class LabelTests(unittest.TestCase):
@@ -152,6 +235,21 @@ class LabelTests(unittest.TestCase):
         assert lbl.align == 'left'
         assert lbl.rotation == 2
 
+    def test_label_min_point(self):
+        '''Test Label.min_point()'''
+        lbl = Label(2, 1, 'foo', 'left', 0)
+        # this will fail, until Labels get min/max_point() methods
+        tl = lbl.min_point()
+        # TODO change this to work with however Label.min_point() does
+        self.assertTrue(False)
+
+    def test_label_max_point(self):
+        '''Test Label.max_point()'''
+        lbl = Label(2, 1, 'foo', 'left', 0)
+        # this will fail, until Labels get min/max_point() methods
+        tl = lbl.max_point()
+        # TODO change this to work with however Label.max_point() does
+        self.assertTrue(False)
 
 class LineTests(unittest.TestCase):
     """ The tests of the core module line shape """
@@ -174,22 +272,68 @@ class LineTests(unittest.TestCase):
         assert line.p2.x == p2.x
         assert line.p2.y == p2.y
 
+    def test_line_min_point(self):
+        '''Test Line.min_point() in different situations'''
+        line = Line(Point(2,3), Point(4,5))
+        tl = line.min_point()
+        self.assertEqual(tl.x, 2)
+        self.assertEqual(tl.y, 3)
+
+        line = Line(Point(2,3), Point(-1,4))
+        tl = line.min_point()
+        self.assertEqual(tl.x, -1)
+        self.assertEqual(tl.y, 3)
+
+    def test_line_max_point(self):
+        '''Test Line.max_point() in different situations'''
+        line = Line(Point(2,3), Point(4,5))
+        br = line.max_point()
+        self.assertEqual(br.x, 4)
+        self.assertEqual(br.y, 5)
+
+        line = Line(Point(2, 3), Point(-1,4))
+        br = line.max_point()
+        self.assertEqual(br.x, 2)
+        self.assertEqual(br.y, 4)
 
 class PolygonTests(unittest.TestCase):
     """ The tests of the core module polygon shape """
 
     def setUp(self):
         """ Setup the test case. """
-        pass
+        self.poly = Polygon()
 
     def tearDown(self):
         """ Teardown the test case. """
-        pass
+        del self.poly
 
     def test_create_new_polygon(self):
         """ Test the creation of a new empty polygon. """
-        poly = Polygon()
-        assert len(poly.points) == 0
+        assert len(self.poly.points) == 0
+
+    def test_empty_min_point(self):
+        '''Test Polygon.min_point() for a Polygon with no points at all'''
+        self.assertEqual(self.poly.min_point().x, 0)
+        self.assertEqual(self.poly.min_point().y, 0)
+
+    def test_empty_max_point(self):
+        '''Test Polygon.max_point() for a Polygon with no points at all'''
+        self.assertEqual(self.poly.max_point().x, 0)
+        self.assertEqual(self.poly.max_point().y, 0)
+
+    def test_min_point(self):
+        '''Test Polygon.min_point() for complex case'''
+        for xy in [(1,3), (3,7), (4,3), (3,-2)]:
+            self.poly.add_point(xy)
+        self.assertEqual(self.poly.min_point().x, 1)
+        self.assertEqual(self.poly.min_point().y, -2)
+
+    def test_max_point(self):
+        '''Test Polygon.max_point() for complex case'''
+        for xy in [(1,3), (3,7), (4,3), (3,-2)]:
+            self.poly.add_point(xy)
+        self.assertEqual(self.poly.max_point().x, 4)
+        self.assertEqual(self.poly.max_point().y, 7)
 
 
 class BezierCurveTests(unittest.TestCase):

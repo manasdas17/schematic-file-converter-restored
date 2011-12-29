@@ -65,24 +65,14 @@ class Rectangle(Shape):
 
     def min_point(self):
         """ Return the min point of the shape """
-        x = self.x
-        if self.width < 0:
-            x += self.width
-        y = self.y - self.height
-        if self.height < 0:
-            y += self.height
-        return Point(x, y)
+        return Point(min(self.x, self.x + self.width),
+                     min(self.y, self.y + self.height))
     
     
     def max_point(self):
         """ Return the max point of the shape """
-        x = self.x + self.width
-        if self.width < 0:
-            x -= self.width
-        y = self.y
-        if self.height < 0:
-            y -= self.height
-        return Point(x, y)
+        return Point(max(self.x, self.x + self.width),
+                     max(self.y, self.y + self.height))
 
 
     @classmethod
@@ -125,24 +115,14 @@ class RoundedRectangle(Shape):
 
     def min_point(self):
         """ Return the min point of the shape """
-        x = self.x
-        if self.width < 0:
-            x += self.width
-        y = self.y - self.height
-        if self.height < 0:
-            y += self.height
-        return Point(x, y)
+        return Point(min(self.x, self.x + self.width),
+                     min(self.y, self.y + self.height))
     
     
     def max_point(self):
         """ Return the max point of the shape """
-        x = self.x + self.width
-        if self.width < 0:
-            x -= self.width
-        y = self.y
-        if self.height < 0:
-            y -= self.height
-        return Point(x, y)
+        return Point(max(self.x, self.x + self.width),
+                     max(self.y, self.y + self.height))
 
 
     @classmethod
@@ -391,28 +371,22 @@ class Polygon(Shape):
     def min_point(self):
         """ Return the min point of the shape """
         if len(self.points) < 1:
-            return None
-        x = self.points[0].x
-        y = self.points[0].y
-        for point in self.points:
-            if point.x < x:
-                x = point.x
-            if point.y < y:
-                y = point.y
+            # by convention
+            x, y = 0, 0
+        else:
+            x = min([pt.x for pt in self.points])
+            y = min([pt.y for pt in self.points])
         return Point(x, y)
     
     
     def max_point(self):
         """ Return the max point of the shape """
         if len(self.points) < 1:
-            return None
-        x = self.points[0].x
-        y = self.points[0].y
-        for point in self.points:
-            if point.x > x:
-                x = point.x
-            if point.y > y:
-                y = point.y
+            # by convention
+            x, y = 0, 0
+        else:
+            x = max([pt.x for pt in self.points])
+            y = max([pt.y for pt in self.points])
         return Point(x, y)
 
 
