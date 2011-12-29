@@ -535,6 +535,15 @@ class Point:
             self.x, self.y = x
 
 
+    def __repr__(self):
+        return 'Point(%d, %d)' % (self.x, self.y)
+
+
+    def __eq__(self, other):
+        return (isinstance(other, Point) and self.x == other.x
+                                         and self.y == other.y)
+
+
     def json(self):
         """ Return the point as JSON """
         return {
