@@ -48,8 +48,8 @@ from core import components
 from core.shape import Point
 from core.annotation import Annotation
 
-import parser.geda
 from parser.geda import GEDAError
+from parser.geda import find_symbols 
 
 class GEDAColor:
     """ Enumeration of gEDA colors """
@@ -69,6 +69,9 @@ class GEDAColor:
     ZOOM_BOX_COLOR = 13
     STROKE_COLOR = 14
     LOCK_COLOR = 15
+
+    def __init__(self):
+        pass
 
 
 class GEDA:
@@ -101,7 +104,7 @@ class GEDA:
                     '/usr/local/share/gEDA/sym',
                 ]
 
-        self.known_symbols = parser.geda.find_symbols(symbol_dirs)
+        self.known_symbols = find_symbols(symbol_dirs)
 
         ## offset used as bottom left origin as default
         ## in gEDA when starting new file
@@ -229,6 +232,7 @@ class GEDA:
             component_annotations = []
 
             ## create component instance for every symbolattribute
+            attr_x, attr_y = 0, 0 
             for symbol_attribute in instance.symbol_attributes:
                 commands += self._create_component(
                     symbol_attribute.x,
@@ -238,6 +242,9 @@ class GEDA:
                 )
 
                 component_annotations += symbol_attribute.annotations
+
+                attr_x = symbol_attribute.x
+                attr_y = symbol_attribute.y 
 
             for annotation in component_annotations:
                 commands += self._convert_annotation(annotation)
@@ -252,11 +259,11 @@ class GEDA:
             commands += self._create_attribute(
                 'refdes', 
                 refdes, 
-                symbol_attribute.x,
-                symbol_attribute.y,
+                attr_x,
+                attr_y,
                 visibility=1,
             )
-            attr_x, attr_y = symbol_attribute.x, symbol_attribute.y
+
             for key, value in instance.attributes.items():
                 if key != 'refdes':
                     ## no position details available, stack attributes
@@ -284,10 +291,10 @@ class GEDA:
         geda_imported = component.attributes.get('_geda_imported', 'false')
         geda_imported = (geda_imported == "true")
 
-        _prefix = component.attributes.get('_prefix', '')
-        _suffix = component.attributes.get('_suffix', '')
-
-        component.attributes['_refdes'] = '%s?%s' % (_prefix, _suffix)
+        component.attributes['_refdes'] = '%s?%s' % (
+            component.attributes.get('_prefix', ''),
+            component.attributes.get('_suffix', '')
+        ) 
 
         symbol_filename = None
         ##NOTE: this attributed is used in the parser to mark at component
@@ -295,11 +302,10 @@ class GEDA:
         ## local .sym files will be referenced if available.
         if geda_imported:
             ##check if component is known sym file in OS dirs
-            symbol_name = component.name.replace('EMBEDDED', '') 
-            symbol_filename = "%s.sym" %  symbol_name
+            symbol_filename = "%s.sym" %  component.name.replace('EMBEDDED', '')
             self.component_library[(library_id, 0)] = symbol_filename
 
-            if symbol_name in self.known_symbols:
+            if component.name.replace('EMBEDDED', '') in self.known_symbols:
                 return 
 
         ## symbol files should not use offset
@@ -324,13 +330,13 @@ class GEDA:
             for body in symbol.bodies:
                 commands += self.generate_body_commands(body)
 
-            attr_x, attr_y = 0, 0
+            attr_y = 0
             for key, value in component.attributes.items():
                 if not key.startswith('_symbol') \
                    and key not in self.ignored_attributes:
                     commands += self._create_attribute(
                         key, value,
-                        attr_x, attr_y,
+                        0, attr_y,
                     )
                     attr_y = attr_y+10
 
@@ -498,7 +504,7 @@ class GEDA:
                 attr_x, 
                 attr_y,
             )
-            attr_x, attr_y = attr_x+10, attr_y+10
+            attr_y = attr_y+10
 
         return commands
 
@@ -528,7 +534,7 @@ class GEDA:
 
             Returns a list of gEDA commands without linebreaks.
         """
-        if key in self.ignored_attributes:
+        if key in self.ignored_attributes or not value:
             return []
 
         ## make private attribute invisible in gEDA
@@ -802,24 +808,21 @@ class GEDA:
 
         shapes = list(path.shapes) #create new list to be able to modify
 
-        start_shape = shapes[0]
         current_x, current_y = self.conv_coords(
-            start_shape.p1.x, 
-            start_shape.p1.y
+            shapes[0].p1.x, 
+            shapes[0].p1.y
         )
         start_x, start_y = current_x, current_y
         command = ['M %d,%d' % (start_x, start_y)]
 
         close_command = []
-
         ## check if last element is line back to starting point
-        end_shape = shapes[-1]
-        if end_shape.type == 'line':
-            if end_shape.p2.x == start_shape.p1.x \
-                and end_shape.p2.y == start_shape.p1.y:
+        if shapes[-1].type == 'line':
+            if shapes[-1].p2.x == shapes[0].p1.x \
+                and shapes[-1].p2.y == shapes[0].p1.y:
                 ## discard line and close path instead
                 close_command = ['z']
-                shapes.remove(end_shape)
+                shapes.remove(shapes[-1])
                 num_lines += 1
                 
         for shape_obj in shapes:
@@ -859,8 +862,9 @@ class GEDA:
 
             num_lines += 1
 
-        path_command = 'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 %d' % num_lines
-        return [path_command] + command + close_command
+        return [
+            'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 %d' % num_lines,
+        ] + command + close_command
 
     def _convert_bezier(self, curve):
         """ Converts BezierCurve object in *curve* to gEDA curve command.
@@ -914,22 +918,22 @@ class GEDA:
         """
         return value * self.SCALE_FACTOR
 
-    def y_to_mils(self, py):
-        """ Converts *py* from pixel to mils and translating
+    def y_to_mils(self, y_px):
+        """ Converts *y_px* from pixel to mils and translating
             it along the Y axis according to the offset value.
 
             Returns a scaled and translated Y coordinate in MILS.
         """
-        value = (py - self.offset.y) * self.SCALE_FACTOR 
+        value = (y_px - self.offset.y) * self.SCALE_FACTOR 
         return value
 
-    def x_to_mils(self, px):
-        """ Converts *px* from pixel to mils and translating
+    def x_to_mils(self, x_px):
+        """ Converts *x_px* from pixel to mils and translating
             it along the X axis according to the offset value.
 
             Returns a scaled and translated X coordinate in MILS.
         """
-        value = (px - self.offset.x) * self.SCALE_FACTOR 
+        value = (x_px - self.offset.x) * self.SCALE_FACTOR 
         return value
 
     @staticmethod
@@ -943,14 +947,14 @@ class GEDA:
         converted_angle = int(angle * 180)
         return (converted_angle // int(steps)) * steps
 
-    def conv_coords(self, x, y):
-        """ Converts *x*, *y* from pixel to mils and translating
+    def conv_coords(self, x_px, y_px):
+        """ Converts *x_px*, *y_px* from pixel to mils and translating
             it along the X- and Y-axes, respectively, according to 
             the offset value.
 
             Returns a scaled and translated coordinates in MILS.
         """
         return (
-            self.x_to_mils(x),
-            self.y_to_mils(y)
+            self.x_to_mils(x_px),
+            self.y_to_mils(y_px)
         )
