@@ -126,11 +126,11 @@ class KiCAD(object):
             elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
-                    key = tuple(int(i) for i in parts)
-                    rotation = MATRIX2ROTATION.get(key, 0)
+                    rotation = MATRIX2ROTATION.get(
+                        tuple(int(i) for i in parts), 0)
             line = f.readline()
 
-        inst = ComponentInstance(reference, name, 0)
+        inst = ComponentInstance(reference, name, convert - 1)
         symbattr = SymbolAttribute(compx, -compy, rotation)
         for ann in annotations:
             symbattr.add_annotation(ann)

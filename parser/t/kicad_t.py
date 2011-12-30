@@ -39,22 +39,22 @@ class KiCADTests(unittest.TestCase):
         good_points = {}
 
         for net in self.good.nets:
-            for pid, p in net.points.items():
-                good_points[pid] = p
+            for pid, point in net.points.items():
+                good_points[pid] = point
 
         self.assertEqual(len(good_points), 24)
 
         for net in self.actual.nets:
-            for pid, p in net.points.items():
+            for pid, point in net.points.items():
                 goodp = good_points.pop(pid)
-                self.assertEqual(p.point_id, goodp.point_id)
-                self.assertEqual(p.x, goodp.x)
-                self.assertEqual(p.y, goodp.y)
-                self.assertEqual(set(p.connected_points),
+                self.assertEqual(point.point_id, goodp.point_id)
+                self.assertEqual(point.x, goodp.x)
+                self.assertEqual(point.y, goodp.y)
+                self.assertEqual(set(point.connected_points),
                                  set(goodp.connected_points))
                 self.assertEqual(
                     set((cc.instance_id, cc.pin_number)
-                        for cc in p.connected_components),
+                        for cc in point.connected_components),
                     set((cc.instance_id, cc.pin_number)
                         for cc in goodp.connected_components))
 
@@ -124,11 +124,13 @@ class KiCADTests(unittest.TestCase):
 
         while good_insts:
             good_inst = good_insts.pop(0)
+            test_inst = None
             for test_inst in test_insts:
                 if good_inst.instance_id == test_inst.instance_id:
                     test_insts.remove(test_inst)
                     break
-            else:
+
+            if test_inst is None:
                 raise Exception('missing instance', good_inst.instance_id)
 
             self.assertEqual(test_inst.library_id, good_inst.library_id)
@@ -149,6 +151,10 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(test_insts, [])
 
     def assert_annotations_equal(self, test_anns, good_anns):
+        """
+        Assert that two sets of annotations are equal.
+        """
+
         self.assertEqual(len(test_anns), len(good_anns))
         for test_ann, good_ann in zip(test_anns, good_anns):
             self.assertEqual(test_ann.value, good_ann.value)

@@ -164,28 +164,29 @@ $EndDescr
 
 
     def write_symbols(self, f, symbols):
-        """ Write the DRAW portion (shapes and pins) of a kiCAD component symbol """
+        """ Write the DRAW portion (shapes and pins) of a kiCAD
+        component symbol """
         f.write('DRAW\n')
 
-        lines = {} # line template -> (set([units]), set([converts]))
+        lines = {} # line template -> (symbol, set([units]), set([converts]))
 
-        def add_line(line, unit, convert):
-            """ Add a line with a given unit and convert """
+        def add_line(line, symbol, unit, convert):
+            """ Add a line with a given symbol, unit and convert """
             if line not in lines:
-                lines[line] = (set(), set())
-            lines[line][0].add(unit)
-            lines[line][1].add(convert)
+                lines[line] = (symbol, set(), set())
+            lines[line][1].add(unit)
+            lines[line][2].add(convert)
 
         for convert, symbol in enumerate(symbols[:2], 1):
             for unit, body in enumerate(symbol.bodies, 1):
                 for shape in body.shapes:
                     add_line(self.get_shape_line(shape),
-                             unit, convert)
+                             symbol, unit, convert)
 
                 for pin in body.pins:
-                    add_line(self.get_pin_line(pin), unit, convert)
+                    add_line(self.get_pin_line(pin), symbol, unit, convert)
 
-        for line, (units, converts) in lines.items():
+        for line, (symbol, units, converts) in lines.items():
             if len(units) == len(symbol.bodies):
                 units = (0,)
             if len(converts) == 2:
