@@ -16,6 +16,7 @@ def mkbounds(obj, left, top, right, bot):
         return [Point(left, top), Point(right, bot)]
     obj.bounds = newbounds
 
+
 class ComponentsTests(unittest.TestCase):
     """ The tests of the core module library feature """
 
@@ -93,7 +94,7 @@ class BodyTests(unittest.TestCase):
 
     def test_bounds_pins(self):
         '''Test bounds() with just pins included'''
-        pins = [Pin(str(i), Point(0,0), Point(0,0)) for i in range(4)]
+        pins = [Pin(str(i), Point(0, 0), Point(0, 0)) for i in range(4)]
         # checking body.bounds(), not the pins, so override their bounds()
         # methods
         for i, pin in enumerate(pins):
@@ -125,7 +126,7 @@ class BodyTests(unittest.TestCase):
 
     def test_bounds_pins_shapes(self):
         '''Test Body.bounds() when some extremes are from pins, others shapes'''
-        pt = Point(0,0)
+        pt = Point(0, 0)
         pin1 = Pin('foo', pt, pt)
         pin2 = Pin('bar', pt, pt)
         sh1 = Shape()
@@ -144,6 +145,7 @@ class BodyTests(unittest.TestCase):
         self.assertEqual(tl.y, 2)
         self.assertEqual(br.x, 5)
         self.assertEqual(br.y, 4)
+
 
 class PinTests(unittest.TestCase):
     """ The tests of the core module pin feature """
