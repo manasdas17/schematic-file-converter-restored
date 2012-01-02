@@ -23,24 +23,27 @@ class Design:
     def bounds(self):
         """ Return the min and max point of a design """
         bounds = [net.bounds() for net in self.nets]
-        offset_bounds = lambda (x1, y1, x2, y2), (xo, yo): (x1+xo, y1+yo,
-                                                            x2+xo, y2+yo)
-        x_values = []
-        y_values = []
+        bounds.extend([anno.bounds() for anno in
+                       self.design_attributes.annotations])
+        offset_bounds = lambda (p1, p2), (xo, yo): [Point(p1.x + xo, p1.y + yo),
+                                                    Point(p2.x + xo, p2.y + yo)]
         for comp in self.component_instances:
             offsets = [(att.x, att.y) for att in comp.symbol_attributes]
             lib_comp = self.components.components[comp.library_id]
-            bbounds = [b.bounds() for b in
-                       lib_comp.symbols[comp.symbol_index].bodies]
-            bounds.extend([offset_bounds(b, o) for b, o in zip(bbounds,
-                       offsets)])
-            x_values = sum([list(b[0::2]) for b in bounds], [])
-            y_values = sum([list(b[1::2]) for b in bounds], [])
-
-        for net in self.nets:
-            x_values += [point.x for point in net.points.values()]
-            y_values += [point.y for point in net.points.values()]
-
+            bodybounds = [b.bounds() for b in
+                          lib_comp.symbols[comp.symbol_index].bodies]
+            # the offsets in symbol_attributes will align and apply to the
+            # library components bodies
+            bounds.extend([offset_bounds(b, o) for b, o in zip(bodybounds,
+                                                               offsets)])
+        # flatten out bounds to just a list of Points
+        bounds = sum(bounds, [])
+        x_values = [pt.x for pt in bounds]
+        y_values = [pt.y for pt in bounds]
+        # by convention, an empty design will bound just the origin
+        if len(x_values) == 0:
+            x_values = [0]
+            y_values = [0]
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
 
