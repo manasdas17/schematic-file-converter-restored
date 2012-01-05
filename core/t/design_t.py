@@ -3,7 +3,7 @@
 """ The design test class """
 
 from core.design import Design
-from core.net import Net, NetPoint
+from core.net import Net
 from core.shape import Point
 from core.annotation import Annotation
 from core.components import Component, Symbol, Body
@@ -12,7 +12,9 @@ import unittest
 
 
 def mkbounds(obj, left, top, right, bot):
+    """ Helper function for testing bounds. """
     def newbounds():
+        """ Function that gets returned"""
         return [Point(left, top), Point(right, bot)]
     obj.bounds = newbounds
 
@@ -34,13 +36,16 @@ class DesignTests(unittest.TestCase):
 
     def test_empty_bounds(self):
         '''bounds() on an empty design is to include just the origin'''
-        for pt in self.des.bounds():
-            self.assertEqual(pt.x, 0)
-            self.assertEqual(pt.y, 0)
+        for point in self.des.bounds():
+            self.assertEqual(point.x, 0)
+            self.assertEqual(point.y, 0)
 
     def test_bounds_nets(self):
         '''Test bounds() with just the design's nets'''
-        leftnet, topnet, rightnet, botnet = [Net('foo') for i in range(4)]
+        leftnet = Net('foo1')
+        topnet = Net('foo2')
+        rightnet = Net('foo3')
+        botnet = Net('foo4')
         # limits minx=2, miny=1, maxx=7, maxy=9
         mkbounds(leftnet, 2, 3, 3, 3)
         mkbounds(topnet, 3, 1, 3, 3)
@@ -59,14 +64,16 @@ class DesignTests(unittest.TestCase):
 
     def test_bounds_annots(self):
         '''Test bounds() with just Annotations added as design attributes'''
-        left, top, right, bot = [Annotation('foo', 3, 3, 0, True) for i in
-                                 range(4)]
+        left = Annotation('foo1', 3, 3, 0, True)
+        top = Annotation('foo2', 3, 3, 0, True)
+        right = Annotation('foo3', 3, 3, 0, True)
+        bot = Annotation('foo4', 3, 3, 0, True)
         mkbounds(left, 2, 3, 3, 3)
         mkbounds(top, 3, 2, 3, 3)
         mkbounds(right, 3, 3, 5, 3)
         mkbounds(bot, 3, 3, 3, 6)
-        for a in (left, right, bot, top):
-            self.des.design_attributes.add_annotation(a)
+        for anno in (left, right, bot, top):
+            self.des.design_attributes.add_annotation(anno)
 
         top_left, btm_right = self.des.bounds()
         self.assertEqual(top_left.x, 2)

@@ -7,7 +7,7 @@ from core.shape import Point
 class Annotation:
     """ The Annotation class represents all cases of annotations """
 
-    def __init__(self, value, x, y, rotation, visible):
+    def __init__(self, value, x, y, rotation, visible): # pylint: disable=R0913
         self.value = value
         self.x = x
         self.y = y

@@ -287,6 +287,8 @@ class GEDA:
             not present, a new symbol file will be generated in the project
             directory's symbols directory.
         """
+        # pylint: disable=R0914
+
         ##NOTE: extract and remove gEDA internal attribute
         geda_imported = component.attributes.get('_geda_imported', 'false')
         geda_imported = (geda_imported == "true")

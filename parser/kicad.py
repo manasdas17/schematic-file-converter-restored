@@ -99,6 +99,8 @@ class KiCAD(object):
 
     def parse_component_instance(self, f):
         """ Parse a component instance from a $Comp block """
+        # pylint: disable=R0914
+
         # name & reference
         prefix, name, reference = f.readline().split()
         assert prefix == 'L'

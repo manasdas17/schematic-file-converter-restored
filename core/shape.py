@@ -87,7 +87,7 @@ class RoundedRectangle(Shape):
     """ A rectangle with rounded corners, defined by x, y of top left corner
     and width, height and corner radius"""
 
-    def __init__(self, x, y, width, height, radius):
+    def __init__(self, x, y, width, height, radius): # pylint: disable=R0913
         super(RoundedRectangle, self).__init__()
         self.type = "rounded_rectangle"
         self.x = x
@@ -125,7 +125,7 @@ class RoundedRectangle(Shape):
 
 
     @classmethod
-    def from_corners(cls, x, y, x2, y2, radius):
+    def from_corners(cls, x, y, x2, y2, radius): # pylint: disable=R0913
         """ x and y are the top left corner of the rectangle, x2 and y2 are the
         bottom right corner of the rectangle """
         width = x2-x
@@ -148,8 +148,9 @@ class RoundedRectangle(Shape):
 class Arc(Shape):
     """ arc defined by center point x, y and two angles between which an
     arc is drawn """
+    # pylint: disable=W0223
 
-    def __init__(self, x, y, start_angle, end_angle, radius):
+    def __init__(self, x, y, start_angle, end_angle, radius): # pylint: disable=R0913
         super(Arc, self).__init__()
         self.type = "arc"
         self.x = x
@@ -218,10 +219,10 @@ class Circle(Shape):
 
 class Label(Shape):
     """ Text label with x, y location, alignment, rotation and text.
-    Alignment can be 'left','right', or 'center'.
-    """
+    Alignment can be 'left','right', or 'center'. """
+    # pylint: disable=W0223
 
-    def __init__(self, x, y, text, align, rotation):
+    def __init__(self, x, y, text, align, rotation): # pylint: disable=R0913
         super(Label, self).__init__()
         self.type = "label"
         self.x = x
@@ -361,6 +362,7 @@ class Polygon(Shape):
 
 class BezierCurve(Shape):
     """ A parametric curved line """
+    # pylint: disable=W0223
 
     def __init__(self, control1, control2, p1, p2):
         super(BezierCurve, self).__init__()
@@ -376,7 +378,7 @@ class BezierCurve(Shape):
         return [self.min_point(), self.max_point()]
 
 
-    def build(self, control1x, control1y, control2x, control2y, p1x,
+    def build(self, control1x, control1y, control2x, control2y, p1x, # pylint: disable=R0913
             p1y, p2x, p2y):
         """ Build the bezier curve """
         self.type = "bezier"

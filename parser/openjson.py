@@ -163,6 +163,9 @@ class JSON:
 
     def parse_shape(self, shape):
         """ Extract a shape. """
+        # pylint: disable=R0914
+        # pylint: disable=R0911
+
         typ = shape.get('type')
         if 'rectangle' == typ:
             x = int(shape.get('x'))

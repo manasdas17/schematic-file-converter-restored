@@ -229,6 +229,8 @@ class GEDA:
             
             Returns the design corresponding to the schematic.
         """
+        # pylint: disable=R0912
+
         self.design = Design()
         self.segments = set()
         self.net_points = dict() 
@@ -443,6 +445,8 @@ class GEDA:
             
             Returns the newly created Component object.
         """
+        # pylint: disable=R0912
+
         basename = os.path.splitext(params['basename'])[0]
 
         saved_offset = self.offset

@@ -5,7 +5,6 @@
 from core.net import Net
 from core.net import NetPoint
 from core.net import ConnectedComponent
-from core.shape import Point
 import unittest
 
 

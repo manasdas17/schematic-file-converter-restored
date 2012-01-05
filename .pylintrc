@@ -33,11 +33,12 @@ load-plugins=
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=W0511,R0903,R0201,R0801
+disable=W0511,R0903,R0201,R0801,I0011
 #W0511: Used when a warning note as FIXME or XXX is detected
 #R0903: Too few public methods (%s/%s) Used when class has too few public methods, so be sure it's really worth it.
 #R0201: Method could be a function
 #R0801:	Similar lines in %s files Indicates that a set of similar lines has been detected among multiple file. This usually means that the code should be refactored to avoid this duplication.
+#I0011: Locally disabling %s
 
 
 [REPORTS]
@@ -122,7 +123,7 @@ no-docstring-rgx=__.*__
 max-line-length=120
 
 # Maximum number of lines in a module
-max-module-lines=1000
+max-module-lines=1500
 
 # String used as indentation unit. This is usually " " (4 spaces) or "\t" (1
 # tab).
@@ -221,7 +222,7 @@ max-attributes=12
 min-public-methods=2
 
 # Maximum number of public methods for a class (see R0904).
-max-public-methods=20
+max-public-methods=40
 
 
 [IMPORTS]

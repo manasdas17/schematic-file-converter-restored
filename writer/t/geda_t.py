@@ -1,19 +1,22 @@
-﻿
+﻿#!/usr/bin/python
+# encoding: utf-8
+""" The geda parser test class """
+
 import os
 import unittest
 import StringIO
 import shutil
-
 from core.net import NetPoint
 from core import shape
 from core import components 
-
 import parser.geda 
-
 from writer.geda import GEDA
 from parser.openjson import JSON
 
-class TestGEDA(unittest.TestCase):
+
+class GEDATests(unittest.TestCase):
+    """ The tests of the geda writer """
+    # pylint: disable=W0212
 
     def setUp(self):
         self.geda_writer = GEDA()
@@ -55,17 +58,19 @@ class TestGEDA(unittest.TestCase):
         )
         self.assertTrue(os.path.exists('/tmp/gafrc'))
         
-        fh = open('/tmp/gafrc', 'r')
-        data = ''.join(fh.readlines())
-        fh.close()
+        filh = open('/tmp/gafrc', 'r')
+        data = ''.join(filh.readlines())
+        filh.close()
         self.assertEquals(data, '(component-library "./symbols")') 
 
     def test_write_schematic_file(self):
         """ Reads the gEDA *simple_example* file into a design using the
             gEDA parser, writes the result to a gEDA file and reads it into
             a new design. Both designs are then compared regarding their 
-            respective components, instances and nets.
-        """
+            respective components, instances and nets. """
+        # pylint: disable=R0914
+        # pylint: disable=R0915
+
         sym_dir = '/tmp/sym'
 
         if os.path.exists('/tmp/converted.sch'):
@@ -99,9 +104,9 @@ class TestGEDA(unittest.TestCase):
         )
 
         ##compare nets
-        self.assertItemsEqual(
-            [(net.net_id, len(net.points)) for net in simple_design.nets], 
-            [(net.net_id, len(net.points)) for net in converted_design.nets]
+        self.assertEqual(
+            sorted([(net.net_id, len(net.points)) for net in simple_design.nets]),
+            sorted([(net.net_id, len(net.points)) for net in converted_design.nets])
         )
 
         snets = dict([(net.net_id, net) for net in simple_design.nets]) 
@@ -112,7 +117,7 @@ class TestGEDA(unittest.TestCase):
 
             spoints = dict([(pt.point_id, pt) for pt in snet.points.values()]) 
             cpoints = dict([(pt.point_id, pt) for pt in cnet.points.values()]) 
-            self.assertItemsEqual(spoints.keys(), cpoints.keys())
+            self.assertEqual(sorted(spoints.keys()), sorted(cpoints.keys()))
 
             for spoint_id, spoint in spoints.items():
                 cpoint = cpoints[spoint_id]
@@ -121,9 +126,9 @@ class TestGEDA(unittest.TestCase):
                 self.assertEquals(spoint.y, cpoint.y)
 
         ## compare component library
-        self.assertItemsEqual(
-            simple_design.components.components.keys(),
-            converted_design.components.components.keys()
+        self.assertEqual(
+            sorted(simple_design.components.components.keys()),
+            sorted(converted_design.components.components.keys())
         )
 
         for lib_id in simple_design.components.components:
