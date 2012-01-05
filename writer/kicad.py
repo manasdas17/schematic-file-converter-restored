@@ -209,6 +209,9 @@ $EndDescr
         elif shape.type == 'circle':
             return ('C %d %d %d %%(unit)d %%(convert)d 0 N\n' %
                     (shape.x, shape.y, shape.radius))
+        elif shape.type == 'line':
+            return ('P 2 %%(unit)d %%(convert)d 0 %d %d %d %d N\n' %
+                    (shape.p1.x, shape.p1.y, shape.p2.x, shape.p2.y))
         elif shape.type == 'polygon':
             return ('P %d %%(unit)d %%(convert)d 0 %s N\n' %
                     (len(shape.points),

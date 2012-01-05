@@ -14,8 +14,8 @@ Upverter's Open JSON Interchange Format """
 #   ./upconvert.py -i test.upv -o test.json 
 
 
-import os, re, copy, json
 import parser.openjson, parser.kicad, parser.eaglexml, parser.geda
+import parser.fritzing
 import writer.openjson, writer.kicad, writer.geda
 
 from argparse import ArgumentParser
@@ -25,6 +25,7 @@ PARSERS = {
     'kicad': parser.kicad.KiCAD,
     'geda': parser.geda.GEDA,
     'eaglexml': parser.eaglexml.EagleXML,
+    'fritzing': parser.fritzing.Fritzing,
 }
 
 WRITERS = {
