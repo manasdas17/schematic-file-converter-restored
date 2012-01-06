@@ -157,7 +157,7 @@ class GEDA:
         'G': [], #picture
     }
 
-    def __init__(self, symbol_dirs=None, auto_include=False):
+    def __init__(self, symbol_dirs=None):
         """ Constuct a gEDA parser object. Specifying a list of symbol 
             directories in *symbol_dir* will provide a symbol file 
             lookup in the specified directories. The lookup will be 
@@ -172,11 +172,9 @@ class GEDA:
         if symbol_dirs is None:
             symbol_dirs = []
 
-            if auto_include is True:
-                symbol_dirs += [
-                    '/usr/share/gEDA/sym',
-                    '/usr/local/share/gEDA/sym',
-                ]
+        symbol_dirs += [
+            'symbols/geda',
+        ]
 
         self.instance_counter = itertools.count()
         self.known_symbols = {}

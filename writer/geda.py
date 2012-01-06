@@ -87,22 +87,18 @@ class GEDA:
         'right': 4,
     }
 
-    def __init__(self, symbol_dirs=None, auto_include=False):
+    def __init__(self, symbol_dirs=None):
         """ Constructs a new GEDA object and initialises it. *symbol_dirs*
             expects a list of directories. It will search for .sym files
-            in all the specified directories. To use the most likely gEDA
-            symbol directories set *auto_include* to True. It will try 
-            */usr/share/gEDA/sym* and */usr/local/share/gEDA/sym*.
+            in all the specified directories.
         """
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
 
-            if auto_include is True:
-                symbol_dirs += [
-                    '/usr/share/gEDA/sym',
-                    '/usr/local/share/gEDA/sym',
-                ]
+        symbol_dirs += [
+            'symbols/geda',
+        ]
 
         self.known_symbols = find_symbols(symbol_dirs)
 
