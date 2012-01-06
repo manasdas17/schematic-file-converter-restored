@@ -10,8 +10,6 @@ from xml.etree.ElementTree import ElementTree
 
 from os.path import basename, dirname, exists, join
 
-MULT = 10
-
 
 class Fritzing(object):
     """ The Fritzing Format Parser """
@@ -46,7 +44,6 @@ class Fritzing(object):
         if instance.get('moduleIdRef') == 'WireModuleID':
             self.parse_wire(instance)
         else:
-            self.ensure_component(instance)
             self.parse_component_instance(instance)
 
 
@@ -63,14 +60,10 @@ class Fritzing(object):
         connectors = view.findall('connectors/connector')
 
         pid1 = index + '.' + connectors[0].get('connectorId')
-        self.points[pid1] = NetPoint(pid1,
-                                     float(geom.get('x')) * MULT,
-                                     -float(geom.get('y')) * MULT)
+        self.points[pid1] = NetPoint(pid1, get_x(geom), get_y(geom))
 
         pid2 = index + '.' + connectors[1].get('connectorId')
-        self.points[pid2] = NetPoint(pid2,
-                                     float(geom.get('x2')) * MULT,
-                                     -float(geom.get('y2')) * MULT)
+        self.points[pid2] = NetPoint(pid2, get_x(geom, 'x2'), get_y(geom, 'y2'))
 
 
     def ensure_component(self, inst):
@@ -98,6 +91,11 @@ class Fritzing(object):
         if view is None:
             return
 
+        if view.get('layer') == 'breadboardbreadboard':
+            return
+
+        self.ensure_component(inst)
+
         index = inst.get('modelIndex')
         idref = inst.get('moduleIdRef')
         title = inst.find('title').text
@@ -114,9 +112,7 @@ class Fritzing(object):
         compinst = ComponentInstance(title, idref, 0)
 
         compinst.add_symbol_attribute(
-            SymbolAttribute(float(geom.get('x')),
-                            -float(geom.get('y')),
-                            rotation))
+            SymbolAttribute(get_x(geom), get_y(geom), rotation))
 
         self.component_instances[index] = compinst
 
@@ -214,20 +210,16 @@ class ComponentParser(object):
     def parse_rect(self, rect):
         """ Parse a rect element """
 
-        x, y = float(rect.get('x', 0)), float(rect.get('y', 0))
-        width, height = float(rect.get('width')), float(rect.get('height'))
-
-        return Rectangle(x * MULT, -(y + height) * MULT,
-                         width * MULT, height * MULT)
+        x, y = get_x(rect), get_y(rect)
+        width, height = get_length(rect, 'width'), get_length(rect, 'height')
+        return Rectangle(x, y - height, width, height)
 
 
     def parse_line(self, rect):
         """ Parse a line element """
 
-        return Line((float(rect.get('x1')) * MULT,
-                     -float(rect.get('y1')) * MULT),
-                    (float(rect.get('x2')) * MULT,
-                     -float(rect.get('y2')) * MULT))
+        return Line((get_x(rect, 'x1'), get_y(rect, 'y1')),
+                    (get_x(rect, 'x2'), get_y(rect, 'y2')))
 
 
     def parse_polygon(self, poly):
@@ -238,7 +230,7 @@ class ComponentParser(object):
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                shape.add_point(float(x) * MULT, -float(y) * MULT)
+                shape.add_point(make_x(x), make_y(y))
 
         if shape.points:
             shape.add_point(shape.points[0].x, shape.points[0].y)
@@ -254,7 +246,7 @@ class ComponentParser(object):
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                shape.add_point(float(x) * MULT, -float(y) * MULT)
+                shape.add_point(make_x(x), make_y(y))
 
         return shape
 
@@ -262,9 +254,9 @@ class ComponentParser(object):
     def parse_circle(self, circle):
         """ Parse a circle element """
 
-        return Circle(float(circle.get('cx')) * MULT,
-                      -float(circle.get('cy')) * MULT,
-                      float(circle.get('r')) * MULT)
+        return Circle(get_x(circle, 'cx'),
+                      get_y(circle, 'cy'),
+                      get_length(circle, 'r'))
 
     def get_pin(self, shape, element):
         """ Return a Pin for the given shape and element, or None """
@@ -281,3 +273,26 @@ class ComponentParser(object):
             return None
 
         return Pin(element.get('id'), (x, y), (x, y))
+
+
+MULT = 10
+
+def make_x(x):
+    """ Make an openjson x coordinate from a fritzing x coordinate """
+    return int(float(x) * MULT)
+
+def make_y(y):
+    """ Make an openjson y coordinate from a fritzing y coordinate """
+    return -int(float(y) * MULT)
+
+def get_length(element, name, default=0):
+    """ Get an openjson length from a fritzing element """
+    return make_x(element.get(name, default))
+
+def get_x(element, name='x', default=0):
+    """ Get an openjson x coordinate from a fritzing element """
+    return make_x(element.get(name, default))
+
+def get_y(element, name='y', default=0):
+    """ Get an openjson y coordinate from a fritzing element """
+    return make_y(element.get(name, default))
