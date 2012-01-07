@@ -2,6 +2,7 @@
 # encoding: utf-8
 """ The geda parser test class """
 
+import os
 import unittest
 import StringIO
 from parser.geda import GEDA, GEDAError

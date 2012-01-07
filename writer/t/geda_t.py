@@ -104,7 +104,7 @@ class GEDATests(unittest.TestCase):
         )
 
         ##compare nets
-        self.assertEqual(
+        self.assertEquals(
             sorted([(net.net_id, len(net.points)) for net in simple_design.nets]),
             sorted([(net.net_id, len(net.points)) for net in converted_design.nets])
         )
