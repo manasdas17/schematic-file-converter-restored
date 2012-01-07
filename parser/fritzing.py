@@ -6,6 +6,8 @@ from core.component_instance import ComponentInstance, SymbolAttribute
 from core.shape import Circle, Line, Polygon, Rectangle
 from core.net import NetPoint
 
+from partlib.fritzing import lookup_part
+
 from xml.etree.ElementTree import ElementTree
 
 from os.path import basename, dirname, exists, join
@@ -25,6 +27,8 @@ class Fritzing(object):
         """ Parse a Fritzing file into a design """
 
         tree = ElementTree(file=filename)
+
+        self.fritzing_version = tree.getroot().get('fritzingVersion', '0')
 
         for element in tree.findall('instances/instance'):
             self.parse_instance(element)
@@ -77,6 +81,11 @@ class Fritzing(object):
             return self.components[idref]
 
         path = inst.get('path')
+        if not path:
+            return None
+
+        if not exists(path):
+            path = lookup_part(path, self.fritzing_version)
 
         if not path or not exists(path):
             return None
