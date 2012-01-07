@@ -42,15 +42,22 @@ class GEDATests(unittest.TestCase):
         """ Test constructor with different parameters to ensure
             that symbols and symbol directories are handled correctly.
         """
+        ## get number of symbols in symbols directory
+        symbols = set() 
+        for dummy, dummy, filenames in os.walk('symbols/geda'):
+            for filename in filenames:
+                if filename.endswith('.sym'):
+                    symbols.add(filename)
+
         geda_parser = GEDA()
-        self.assertEquals(len(geda_parser.known_symbols), 0)
+        self.assertEquals(len(geda_parser.known_symbols), len(symbols))
 
         geda_parser = GEDA([
             './test/geda/simple_example/symbols',
             '/invalid/dir/gEDA',
         ])
 
-        self.assertEquals(len(geda_parser.known_symbols), 1)
+        self.assertEquals(len(geda_parser.known_symbols), len(symbols)+1)
         self.assertEquals(
             geda_parser.known_symbols['opamp'],
             './test/geda/simple_example/symbols/opamp.sym'
@@ -58,14 +65,13 @@ class GEDATests(unittest.TestCase):
 
         geda_parser = GEDA([
             './test/geda/simple_example/symbols',
-            '/usr/share/gEDA/sym',
             '/invalid/dir/gEDA',
         ])
 
-        self.assertTrue(len(geda_parser.known_symbols) > 0)
+        self.assertGreater(len(geda_parser.known_symbols), len(symbols))
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
-        geda_parser = GEDA(auto_include=True)
+        geda_parser = GEDA()
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
     def test__parse_text(self):
@@ -699,7 +705,6 @@ pintype=in
     def test_parse(self):
         """ Tests parsing valid and invalid schematic files. """
         self.geda_parser = GEDA([
-            '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
 
@@ -765,7 +770,6 @@ pintype=in
             sections.
         """ 
         self.geda_parser = GEDA([
-            '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
         
@@ -783,7 +787,6 @@ pintype=in
     def test_parse_full(self):
         """ Test parsing a complete schematic file generating OpenJSON. """
         self.geda_parser = GEDA([
-            '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
 
