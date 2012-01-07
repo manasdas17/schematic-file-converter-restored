@@ -68,19 +68,22 @@ class Fritzing(object):
 
     def ensure_component(self, inst):
         """ If we have not already done so, create the Component the
-        given Fritzing instance is an instance of """
+        given Fritzing instance is an instance of. Return the Component,
+        or None if we cannot load it """
 
         idref = inst.get('moduleIdRef')
 
         if idref in self.components:
-            return
+            return self.components[idref]
 
         path = inst.get('path')
 
         if not path or not exists(path):
-            return
+            return None
 
         self.components[idref] = ComponentParser(idref, path).component
+
+        return self.components[idref]
 
 
     def parse_component_instance(self, inst):
@@ -94,7 +97,10 @@ class Fritzing(object):
         if view.get('layer') == 'breadboardbreadboard':
             return
 
-        self.ensure_component(inst)
+        cpt = self.ensure_component(inst)
+
+        if cpt is None:
+            return
 
         index = inst.get('modelIndex')
         idref = inst.get('moduleIdRef')
@@ -128,6 +134,8 @@ class ComponentParser(object):
     """I parse components from Fritzing libraries."""
 
     def __init__(self, idref, path):
+        self.next_pin_number = 0
+
         tree = ElementTree(file=path)
 
         self.component = Component(idref)
@@ -141,6 +149,15 @@ class ComponentParser(object):
 
         self.terminals = self.parse_terminals(tree)
         self.parse_svg(tree, path)
+
+
+    def get_next_pin_number(self):
+        """ Return the next pin number """
+
+        nextpn = self.next_pin_number
+        self.next_pin_number += 1
+        return str(nextpn)
+
 
     def parse_terminals(self, tree):
         """ Return a dictionary mapping svg id's to connector ids """
@@ -161,6 +178,7 @@ class ComponentParser(object):
 
         return terminals
 
+
     def parse_svg(self, tree, fzp_path):
         """ Parse the shapes and pins from an svg file """
 
@@ -174,15 +192,14 @@ class ComponentParser(object):
 
         fzp_dir = dirname(fzp_path)
         parts_dir = dirname(fzp_dir)
-        svg = join(parts_dir, 'svg', basename(fzp_dir), image)
+        svg_path = join(parts_dir, 'svg', basename(fzp_dir), image)
 
-        if not exists(svg):
+        if not exists(svg_path):
             return
 
-        tree = ElementTree(file=svg)
-        namespaces = {'svg': 'http://www.w3.org/2000/svg'}
+        tree = ElementTree(file=svg_path)
 
-        for element in tree.find('svg:g', namespaces=namespaces).iter():
+        for element in tree.getroot().iter():
             tag = element.tag.rsplit('}', -1)[-1]
 
             if tag == 'circle':
@@ -258,6 +275,7 @@ class ComponentParser(object):
                       get_y(circle, 'cy'),
                       get_length(circle, 'r'))
 
+
     def get_pin(self, shape, element):
         """ Return a Pin for the given shape and element, or None """
 
@@ -272,7 +290,7 @@ class ComponentParser(object):
         else:
             return None
 
-        return Pin(element.get('id'), (x, y), (x, y))
+        return Pin(self.get_next_pin_number(), (x, y), (x, y))
 
 
 MULT = 10
@@ -285,9 +303,7 @@ def make_y(y):
     """ Make an openjson y coordinate from a fritzing y coordinate """
     return -int(float(y) * MULT)
 
-def get_length(element, name, default=0):
-    """ Get an openjson length from a fritzing element """
-    return make_x(element.get(name, default))
+make_length = make_x
 
 def get_x(element, name='x', default=0):
     """ Get an openjson x coordinate from a fritzing element """
@@ -296,3 +312,7 @@ def get_x(element, name='x', default=0):
 def get_y(element, name='y', default=0):
     """ Get an openjson y coordinate from a fritzing element """
     return make_y(element.get(name, default))
+
+def get_length(element, name, default=0):
+    """ Get an openjson length from a fritzing element """
+    return make_length(element.get(name, default))
