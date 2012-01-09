@@ -173,7 +173,7 @@ class GEDA:
             symbol_dirs = []
 
         symbol_dirs += [
-            'symbols/geda',
+            'library/geda',
         ]
 
         self.instance_counter = itertools.count()

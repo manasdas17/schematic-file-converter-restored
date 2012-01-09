@@ -45,7 +45,7 @@ class GEDATests(unittest.TestCase):
         """
         ## get number of symbols in symbols directory
         symbols = set() 
-        for dummy, dummy, filenames in os.walk('symbols/geda'):
+        for dummy, dummy, filenames in os.walk('library/geda'):
             for filename in filenames:
                 if filename.endswith('.sym'):
                     symbols.add(filename)
@@ -69,7 +69,7 @@ class GEDATests(unittest.TestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertGreater(len(geda_parser.known_symbols), len(symbols))
+        self.assertTrue(len(geda_parser.known_symbols) > len(symbols))
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
         geda_parser = GEDA()

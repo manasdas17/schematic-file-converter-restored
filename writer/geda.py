@@ -97,7 +97,7 @@ class GEDA:
             symbol_dirs = []
 
         symbol_dirs += [
-            'symbols/geda',
+            'library/geda',
         ]
 
         self.known_symbols = find_symbols(symbol_dirs)

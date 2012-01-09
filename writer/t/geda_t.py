@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/python
 # encoding: utf-8
-""" The geda parser test class """
+""" The geda writer test class """
 
 import os
 import unittest
