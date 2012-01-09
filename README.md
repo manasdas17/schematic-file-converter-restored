@@ -18,7 +18,7 @@ Usage
 ---------------
 
 ```bash
-usage: upconvert.py [-h] [-i INPUT] [-f TYPE] [-o OUTPUT] [-t TYPE]
+usage: upconvert.py [-h] [-i INPUT] [-f TYPE] [-o OUTPUT] [-s SYMDIRS [SYMDIRS ...]] [-t TYPE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -27,6 +27,9 @@ optional arguments:
   -f TYPE, --from TYPE  read input file as TYPE
   -o OUTPUT, --output OUTPUT
                         write OUTPUT file out
+  -s SYMDIRS [SYMDIRS ...], --sym-dirs SYMDIRS [SYMDIRS ...]
+                        specify SYMDIRS to search for .sym files (for gEDA
+                        only)
   -t TYPE, --to TYPE    write output file as TYPE
 ```
 
@@ -37,6 +40,9 @@ Where to Get Help
 ```bash
 ./upconvert.py -h
 ```
+
+  Github: Submit an issue, or pull request.
+  Email: support@upverter.com
 
 
 Supported Formats
@@ -88,3 +94,9 @@ Interchange Format Documentation
 ---------------
 
   The converter is based on the Upverter Open JSON Format fully documented at http://upverter.com/resources/open-json-format/. We hope that someday all of the major providers of schematic capture software will support interoperability with open formats like this one.
+
+
+Licence
+---------------
+
+  http://www.apache.org/licenses/LICENSE-2.0.html

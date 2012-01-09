@@ -1,4 +1,37 @@
+#!/usr/bin/env python
 """ The KiCAD Format Writer """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# Basic Strategy
+# 0) converted file will be store in subdirectory
+# 1) create subdirectory, symbol and project file
+# 2) Write each component into a .sym file (even EMBEDDED components)
+# 3) Write component instances to .sch file
+# 4) Store net segments at the end of .sch file
+#
+# NOTE: The gEDA format is based on a 100x100 MILS grid where
+# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
+# a blueprint-style frame is present with origin at 
+# (40'000, 40'000). 
+
 
 # Note: in a KiCAD schematic, the y coordinates increase downwards. In
 # OpenJSON, y coordinates increase upwards, so we negate them. In the

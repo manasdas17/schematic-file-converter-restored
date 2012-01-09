@@ -3,15 +3,45 @@
 Upverter's Open JSON Interchange Format """
 
 # upconvert.py - A universal hardware design file format converter using
-# Upverter's Open JSON Interchange Format
-# (http://upverter.com/resources/open-json-format/)
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+# Development:
+#   Active: As of Jan, 2012
+#   See: github.com/upverter/schematic-file-converter
 #
 # Authors:
 #   Alex Ray ajray@ncsu.edu
 #   Upverter support@upverter.com
 #
+# Contact:
+#   Zak Homuth @ Upverter
+#   zak@upverter.com
+#   415-766-2333
+#   24 Phoebe Street, Toronto, On
+#
+# Format & Documentation:
+#   Based on Upverter's Open JSON Interchange Format
+#   upverter.com/resources/open-json-format/
+#
+#
 # Usage example:
-#   ./upconvert.py -i test.upv -o test.json 
+#   ./upconvert.py -i test/openjson/simple.upv -o example.upv 
 
 
 import parser.openjson, parser.kicad, parser.eaglexml, parser.geda
@@ -61,11 +91,6 @@ def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
         print "ERROR: Unsupported output type:", out_format
         exit(1)
     return w.write(dsgn, out_file)
-
-
-def print_help():
-    """ Display program and parameter help """
-    print "TODO: write help"
 
 
 if __name__ == "__main__":
