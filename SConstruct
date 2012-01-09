@@ -84,8 +84,8 @@ os.path.walk('./core', filter_source, core_source)
 parser_source = []
 os.path.walk('./parser', filter_source, parser_source)
 
-partlib_source = []
-os.path.walk('./partlib', filter_source, partlib_source)
+library_source = []
+os.path.walk('./library', filter_source, library_source)
 
 writer_source = []
 os.path.walk('./writer', filter_source, writer_source)
@@ -93,7 +93,7 @@ os.path.walk('./writer', filter_source, writer_source)
 all_source = []
 all_source.extend([str(py) for py in core_source])
 all_source.extend([str(py) for py in parser_source])
-all_source.extend([str(py) for py in partlib_source])
+all_source.extend([str(py) for py in library_source])
 all_source.extend([str(py) for py in writer_source])
 
 core_tests = []
@@ -102,8 +102,8 @@ os.path.walk('./core', filter_test, core_tests)
 parser_tests = []
 os.path.walk('./parser', filter_test, parser_tests)
 
-partlib_tests = []
-os.path.walk('./partlib', filter_test, partlib_tests)
+library_tests = []
+os.path.walk('./library', filter_test, library_tests)
 
 writer_tests = []
 os.path.walk('./writer', filter_test, writer_tests)
@@ -111,7 +111,7 @@ os.path.walk('./writer', filter_test, writer_tests)
 all_tests = []
 all_tests.extend([str(py) for py in core_tests])
 all_tests.extend([str(py) for py in parser_tests])
-all_tests.extend([str(py) for py in partlib_tests])
+all_tests.extend([str(py) for py in library_tests])
 all_tests.extend([str(py) for py in writer_tests])
 
 

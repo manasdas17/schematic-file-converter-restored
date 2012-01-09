@@ -1,13 +1,13 @@
-""" The fritzing partlib test class """
+""" The fritzing library test class """
 
-from partlib.fritzing import lookup_part
+from library.fritzing import lookup_part
 
 from unittest import TestCase
 from os.path import basename, exists
 
 
 class FritzingTests(TestCase):
-    """ The tests of the fritzing partlib """
+    """ The tests of the fritzing library """
 
     def test_lookup_present(self):
         """ Test looking up a part that is present """

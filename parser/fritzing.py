@@ -6,7 +6,7 @@ from core.component_instance import ComponentInstance, SymbolAttribute
 from core.shape import Circle, Line, Polygon, Rectangle
 from core.net import NetPoint
 
-from partlib.fritzing import lookup_part
+from library.fritzing import lookup_part
 
 from xml.etree.ElementTree import ElementTree
 
