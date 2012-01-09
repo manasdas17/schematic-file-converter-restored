@@ -51,17 +51,27 @@ bld_coverage = Builder(action=build_coverage)
 # Filters
 ###################
 
+def filter_non_python(top, names):
+    for name in names[:]:
+        path = os.path.join(top, name)
+        if os.path.isdir(path):
+            initpath = os.path.join(path, '__init__.py')
+            if not os.path.exists(initpath):
+                names.remove(name)
+
 source_re = re.compile(r'.*\.py$')
 def filter_source(arg, top, names):
     for name in names:
         if source_re.match(os.path.join(top, name)):
             arg.append(File(os.path.join(top, name)))
+    filter_non_python(top, names)
 
 test_re = re.compile(r'.*/(t|test)/.*_t\.py$')
 def filter_test(arg, top, names):
     for name in names:
         if test_re.match(os.path.join(top, name)):
             arg.append(File(os.path.join(top, name)))
+    filter_non_python(top, names)
 
 
 ###################
@@ -74,12 +84,16 @@ os.path.walk('./core', filter_source, core_source)
 parser_source = []
 os.path.walk('./parser', filter_source, parser_source)
 
+partlib_source = []
+os.path.walk('./partlib', filter_source, partlib_source)
+
 writer_source = []
 os.path.walk('./writer', filter_source, writer_source)
 
 all_source = []
 all_source.extend([str(py) for py in core_source])
 all_source.extend([str(py) for py in parser_source])
+all_source.extend([str(py) for py in partlib_source])
 all_source.extend([str(py) for py in writer_source])
 
 core_tests = []
@@ -88,12 +102,16 @@ os.path.walk('./core', filter_test, core_tests)
 parser_tests = []
 os.path.walk('./parser', filter_test, parser_tests)
 
+partlib_tests = []
+os.path.walk('./partlib', filter_test, partlib_tests)
+
 writer_tests = []
 os.path.walk('./writer', filter_test, writer_tests)
 
 all_tests = []
 all_tests.extend([str(py) for py in core_tests])
 all_tests.extend([str(py) for py in parser_tests])
+all_tests.extend([str(py) for py in partlib_tests])
 all_tests.extend([str(py) for py in writer_tests])
 
 
