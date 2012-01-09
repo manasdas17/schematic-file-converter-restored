@@ -8,7 +8,7 @@ Folder Contents
 
 * `core/` - All of the converter code
 * `doc/` - Everything related to documentation
-* `example/` - Examples of input and output files
+* `library/` - Library files for the software packages that dont export complete files
 * `parser/` - All of the in code
 * `test/` - A set of test files for each format
 * `writer/` - All of the out code
@@ -42,23 +42,23 @@ Where to Get Help
 Supported Formats
 ---------------
 
-  The converter started with support for KiCad. We have since been expanding it to support many of the popular open and closed source formats, as follows.
+  The converter can import and export in the following popular open and closed source formats.
 
-* KiCad     (in beta testing)
-* gEDA      (in beta testing)
-* Eagle     (in alpha testing)
-* Eagle XML (in alpha testing)
-* Fritzing  (in development)
-* Altium    (in development)
-* Gerber    (in development)
-* ViewDraw  (in development)
+* KiCad
+* gEDA
+* Eagle     (in testing)
+* Eagle XML (in testing)
+* Fritzing  (in testing)
 
 
 Format Wish List
 ---------------
 
-  This is the list of formats we wish we supported, and will work on someday (hopefully soon!). We are looking for developers to help us so please ping us if you're interested!
+  This is the list of formats we wish we supported, and will work on or finish someday soon. We are looking for developers to help us so please ping us if you're interested!
 
+* Altium     (in development)
+* Gerber     (in development)
+* ViewDraw   (in development)
 * DXDesigner
 * PADs
 * Alegro
