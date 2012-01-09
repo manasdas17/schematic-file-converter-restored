@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 """ The KiCAD Format Parser """
 
 # upconvert.py - A universal hardware design file format converter using

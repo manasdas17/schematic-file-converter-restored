@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """ The instance class """
 
 # upconvert.py - A universal hardware design file format converter using

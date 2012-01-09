@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """ The KiCAD Format Writer """
 
 # upconvert.py - A universal hardware design file format converter using

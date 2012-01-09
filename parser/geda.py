@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python2
 """ This module provides a parser for the gEDA format into a 
     OpenJSON design. The OpenJSON format does not provide 
     color/style settings, hence, color/style data from the

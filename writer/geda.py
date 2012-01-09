@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """ This module provides a writer class to generate valid gEDA
     file format data from a OpenJSON design. The module does
     not generate embedded symbols but writes each symbol to 

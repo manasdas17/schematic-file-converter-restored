@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """ A universal hardware design file format converter using 
 Upverter's Open JSON Interchange Format """
 
@@ -39,6 +39,10 @@ Upverter's Open JSON Interchange Format """
 #   Based on Upverter's Open JSON Interchange Format
 #   upverter.com/resources/open-json-format/
 #
+# Dependencies:
+#   Python: 2.6+ (excluding 3.0+)
+#   ArgumentParser
+# 
 #
 # Usage example:
 #   ./upconvert.py -i test/openjson/simple.upv -o example.upv 
