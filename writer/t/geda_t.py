@@ -80,14 +80,14 @@ class GEDATests(unittest.TestCase):
             shutil.rmtree(sym_dir)
 
         geda_parser = parser.geda.GEDA(
-            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+            symbol_dirs=['test/geda/simple_example/symbols']
         )
         geda_parser.set_offset(shape.Point(0, 0))
         simple_design = geda_parser.parse(
             'test/geda/simple_example/simple_example.sch'
         )
 
-        geda_writer = GEDA(auto_include=True)
+        geda_writer = GEDA()
         geda_writer.write(simple_design, '/tmp/converted.sch')
 
         converted_design = geda_parser.parse(
@@ -96,7 +96,7 @@ class GEDATests(unittest.TestCase):
 
         ## parse design again to make sure it is a clean slate
         geda_parser = parser.geda.GEDA(
-            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+            symbol_dirs=['test/geda/simple_example/symbols']
         )
         geda_parser.set_offset(shape.Point(0, 0))
         simple_design = geda_parser.parse(
@@ -104,7 +104,7 @@ class GEDATests(unittest.TestCase):
         )
 
         ##compare nets
-        self.assertEqual(
+        self.assertEquals(
             sorted([(net.net_id, len(net.points)) for net in simple_design.nets]),
             sorted([(net.net_id, len(net.points)) for net in converted_design.nets])
         )
@@ -231,12 +231,12 @@ class GEDATests(unittest.TestCase):
 
         os.mkdir(sym_dir)
 
-        self.geda_writer = GEDA(auto_include=True)
+        self.geda_writer = GEDA()
         self.geda_writer.component_library = dict()
         self.geda_writer.project_dirs['symbol'] = sym_dir 
 
         geda_parser = parser.geda.GEDA(
-            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+            symbol_dirs=['test/geda/simple_example/symbols']
         )
         converted_design = geda_parser.parse(
             'test/geda/simple_example/simple_example.sch'
