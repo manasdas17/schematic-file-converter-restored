@@ -29,6 +29,8 @@
 # Note: This writer saves file as a 5.11 version one.
 #
 
+import struct
+
 from parser.eagle import EagleBinConsts
 
 class Eagle:
@@ -75,10 +77,10 @@ class Eagle:
             """ Just a constructor
             """
             if None == seqno:
-                seqno = EagleBin.Settings.counter
-                EagleBin.Settings.counter += 1
+                seqno = Eagle.Settings.counter
+                Eagle.Settings.counter += 1
             else:
-                EagleBin.Settings.counter = 1 + seqno
+                Eagle.Settings.counter = 1 + seqno
             self.seqno = seqno # looks like first and second blocks
                                #  starts with the same byte set
                                #  but then the second set starts to evolve
@@ -308,10 +310,10 @@ class Eagle:
             """
             _ret_val = 0
             if 1 == algo:
-                _ret_val = (int(real * EagleBin.Shape.scale1a) >> 
-                                                EagleBin.Shape.scale1b)
+                _ret_val = (int(real * Eagle.Shape.scale1a) >> 
+                                                Eagle.Shape.scale1b)
             else:
-                _ret_val = real * EagleBin.Shape.scale2
+                _ret_val = real * Eagle.Shape.scale2
             return int(_ret_val)
 
     class Circle(Shape):
@@ -323,7 +325,7 @@ class Eagle:
         def __init__(self, x, y, radius, width, layer):
             """ Just a constructor
             """
-            super(EagleBin.Circle, self).__init__(layer)
+            super(Eagle.Circle, self).__init__(layer)
             self.x = x
             self.y = y
             self.radius = radius
@@ -338,12 +340,12 @@ class Eagle:
             _ret_val = struct.pack(self.template,
                                    self.constant, 
                                    0, 0, self.layer,
-                                   EagleBin.Shape.encode_real(self.x),
-                                   EagleBin.Shape.encode_real(self.y),
-                                   EagleBin.Shape.encode_real(self.radius),
-                                   EagleBin.Shape.encode_real(self.radius),
+                                   Eagle.Shape.encode_real(self.x),
+                                   Eagle.Shape.encode_real(self.y),
+                                   Eagle.Shape.encode_real(self.radius),
+                                   Eagle.Shape.encode_real(self.radius),
                                    self.width_xscale *
-                                    EagleBin.Shape.encode_real(self.width),
+                                    Eagle.Shape.encode_real(self.width),
                                    0, 0
                                   )
             return _ret_val
@@ -357,7 +359,7 @@ class Eagle:
         def __init__(self, x1, y1, x2, y2, layer, rotate):
             """ Just a constructor
             """
-            super(EagleBin.Rectangle, self).__init__(layer)
+            super(Eagle.Rectangle, self).__init__(layer)
             self.x1 = x1
             self.y1 = y1
             self.x2 = x2
@@ -371,18 +373,18 @@ class Eagle:
             _ret_val = None
 
             _rotate = 0
-            for _rr in EagleBin.Rectangle.rotates:
-                if EagleBin.Rectangle.rotates[_rr] == self.rotate:
+            for _rr in Eagle.Rectangle.rotates:
+                if Eagle.Rectangle.rotates[_rr] == self.rotate:
                     _rotate = _rr
                     break
 
-            _ret_val = struct.pack(EagleBin.Rectangle.template,
-                                   EagleBin.Rectangle.constant, 
+            _ret_val = struct.pack(Eagle.Rectangle.template,
+                                   Eagle.Rectangle.constant, 
                                    0, 0, self.layer,
-                                   EagleBin.Shape.encode_real(self.x1),
-                                   EagleBin.Shape.encode_real(self.y1),
-                                   EagleBin.Shape.encode_real(self.x2),
-                                   EagleBin.Shape.encode_real(self.y2),
+                                   Eagle.Shape.encode_real(self.x1),
+                                   Eagle.Shape.encode_real(self.y1),
+                                   Eagle.Shape.encode_real(self.x2),
+                                   Eagle.Shape.encode_real(self.y2),
                                    0, _rotate, 0, 0
                                   )
             return _ret_val
@@ -414,7 +416,7 @@ class Eagle:
         def __init__(self, name, nclass, numofblocks=0, segments=None):
             """ Just a constructor
             """
-            super(EagleBin.Net, self).__init__(name, numofblocks, segments)
+            super(Eagle.Net, self).__init__(name, numofblocks, segments)
             self.nclass = nclass
             return
 
@@ -481,7 +483,7 @@ class Eagle:
         def __init__(self, x1, y1, x2, y2, layer, width):
             """ Just a constructor
             """
-            super(EagleBin.Wire, self).__init__(layer)
+            super(Eagle.Wire, self).__init__(layer)
             self.x1 = x1
             self.y1 = y1
             self.x2 = x2
@@ -497,12 +499,12 @@ class Eagle:
             _ret_val = struct.pack(self.template,
                                    self.constant, 
                                    0, 0, self.layer,
-                                   EagleBin.Shape.encode_real(self.x1),
-                                   EagleBin.Shape.encode_real(self.y1),
-                                   EagleBin.Shape.encode_real(self.x2),
-                                   EagleBin.Shape.encode_real(self.y2),
+                                   Eagle.Shape.encode_real(self.x1),
+                                   Eagle.Shape.encode_real(self.y1),
+                                   Eagle.Shape.encode_real(self.x2),
+                                   Eagle.Shape.encode_real(self.y2),
                                    self.width_xscale *
-                                    EagleBin.Shape.encode_real(self.width),
+                                    Eagle.Shape.encode_real(self.width),
                                    0, 0
                                   )
             return _ret_val
@@ -518,7 +520,7 @@ class Eagle:
         def __init__(self, x, y, layer):
             """ Just a constructor
             """
-            super(EagleBin.Junction, self).__init__(layer)
+            super(Eagle.Junction, self).__init__(layer)
             self.x = x
             self.y = y
             return
@@ -531,8 +533,8 @@ class Eagle:
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, self.layer,
                                    self.constantmid,
-                                   EagleBin.Shape.encode_real(self.x),
-                                   EagleBin.Shape.encode_real(self.y),
+                                   Eagle.Shape.encode_real(self.x),
+                                   Eagle.Shape.encode_real(self.y),
                                    0, 0
                                   )
             return _ret_val
@@ -554,7 +556,7 @@ class Eagle:
         def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction):
             """ Just a constructor
             """
-            super(EagleBin.Arc, self).__init__(x1, y1, x2, y2, layer, width)
+            super(Eagle.Arc, self).__init__(x1, y1, x2, y2, layer, width)
             self.curve = curve
             self.cap = cap
             self.direction = direction
@@ -579,12 +581,12 @@ class Eagle:
                                    self.constant, 
                                    0, 0, self.layer,
 # TODO add curve...
-                                   EagleBin.Shape.encode_real(self.x1),
-                                   EagleBin.Shape.encode_real(self.y1),
-                                   EagleBin.Shape.encode_real(self.x2),
-                                   EagleBin.Shape.encode_real(self.y2),
+                                   Eagle.Shape.encode_real(self.x1),
+                                   Eagle.Shape.encode_real(self.y1),
+                                   Eagle.Shape.encode_real(self.x2),
+                                   Eagle.Shape.encode_real(self.y2),
                                    self.width_xscale *
-                                    EagleBin.Shape.encode_real(self.width),
+                                    Eagle.Shape.encode_real(self.width),
                                    _signs, 
                                    self.arc_sign
                                   )
@@ -603,7 +605,7 @@ class Eagle:
         def __init__(self, value, x, y, size, layer, rotate, font, ratio):
             """ Just a constructor
             """
-            super(EagleBin.Text, self).__init__(layer)
+            super(Eagle.Text, self).__init__(layer)
             self.value = value
             self.x = x
             self.y = y
@@ -619,13 +621,13 @@ class Eagle:
             _ret_val = None
 
             _font = 0
-            for _ff in EagleBin.Text.fonts:
-                if EagleBin.Text.fonts[_ff] == self.font:
+            for _ff in Eagle.Text.fonts:
+                if Eagle.Text.fonts[_ff] == self.font:
                     _font = _ff
                     break
             _rotate = 0
-            for _rr in EagleBin.Text.rotates:
-                if EagleBin.Text.rotates[_rr] == self.rotate:
+            for _rr in Eagle.Text.rotates:
+                if Eagle.Text.rotates[_rr] == self.rotate:
                     _rotate = _rr
                     break
             if self.max_embed_len > len(self.value):
@@ -672,7 +674,7 @@ class Eagle:
                      onoff, mirrored, xref=None):
             """ Just a constructor
             """
-            super(EagleBin.Label, self).__init__(layer)
+            super(Eagle.Label, self).__init__(layer)
             self.x = x
             self.y = y
             self.size = size
@@ -690,16 +692,16 @@ class Eagle:
             _ret_val = None
 
             _font = 0
-            for _ff in EagleBin.Text.fonts:
-                if EagleBin.Text.fonts[_ff] == self.font:
+            for _ff in Eagle.Text.fonts:
+                if Eagle.Text.fonts[_ff] == self.font:
                     _font = _ff
                     break
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, self.layer,
                                    self.constantmid,
-                                   EagleBin.Shape.encode_real(self.x),
-                                   EagleBin.Shape.encode_real(self.y),
+                                   Eagle.Shape.encode_real(self.x),
+                                   Eagle.Shape.encode_real(self.y),
                                    0, 0
                                   )
             return _ret_val
@@ -713,7 +715,7 @@ class Eagle:
         def __init__(self, name, numofblocks=0, segments=None):
             """ Just a constructor
             """
-            super(EagleBin.Bus, self).__init__(name, numofblocks, segments)
+            super(Eagle.Bus, self).__init__(name, numofblocks, segments)
             return
 
         def construct(self):
@@ -765,7 +767,7 @@ class Eagle:
                 _str2 = self.no_embed_str + b'\0\0\0\x09'
 
             _ret_val = struct.pack(self.template,
-                                   EagleBin.Attribute.constant, 
+                                   Eagle.Attribute.constant, 
                                    0, 0x2a, # <--- a kind of a marker?
                                    0,
                                    _str2
@@ -798,9 +800,9 @@ class Eagle:
             """ Just a constructor
             """
             if None == xreflabel:
-                xreflabel = EagleBin.Schematic.defxreflabel
+                xreflabel = Eagle.Schematic.defxreflabel
             if None == xrefpart:
-                xrefpart = EagleBin.Schematic.defxrefpart
+                xrefpart = Eagle.Schematic.defxrefpart
 
             self.xreflabel = xreflabel
             self.xrefpart = xrefpart
@@ -848,7 +850,7 @@ class Eagle:
             """ Transforms given value to a binary representation
             """
             _ret_val = 0
-            _ret_val = int(real * EagleBin.NetClass.scale1)
+            _ret_val = int(real * Eagle.NetClass.scale1)
             return _ret_val
 
         def construct(self):
@@ -862,7 +864,7 @@ class Eagle:
                 _val = 0
                 if (len(self.clearances) > _ndx and 
                             _nn == sorted(self.clearances)[_ndx]):
-                    _val = EagleBin.NetClass.encode_real(
+                    _val = Eagle.NetClass.encode_real(
                             sorted(self.clearances)[_ndx])
                     _ndx += 1
                 _cls.append(_val)
@@ -883,6 +885,10 @@ class Eagle:
                                    self.constantend
                                   )
             return _ret_val
+
+    blocksize = 24
+    noregblockconst = b'\x13\x12\x99\x19'
+    noregdelimeter = b'\0'
 
     def __init__(self):
         """ Construct a writer object and initialize it.
@@ -930,31 +936,31 @@ class Eagle:
         """
 
         if None == self.header:
-            self.header = EagleBin.Header()
+            self.header = Eagle.Header()
 
         if None == self.settings:
             self.settings = []
         while 2 > len(self.settings):
-            self.settings.append(EagleBin.Settings())
+            self.settings.append(Eagle.Settings())
 
         if None == self.grid:
-            self.grid = EagleBin.Grid()
+            self.grid = Eagle.Grid()
 
         if None == self.attributeheader:
-            self.attributeheader = EagleBin.AttributeHeader()
+            self.attributeheader = Eagle.AttributeHeader()
 
         if None == self.shapeheader:
-            self.shapeheader = EagleBin.ShapeHeader()
+            self.shapeheader = Eagle.ShapeHeader()
 
         if None == self.schematic:
-            self.schematic = EagleBin.Schematic()
+            self.schematic = Eagle.Schematic()
 
         if None == self.netclasses:
             self.netclasses = []
         if 0 == len(self.netclasses):
-            self.netclasses.append(EagleBin.NetClass(0, 'default'))
+            self.netclasses.append(Eagle.NetClass(0, 'default'))
         while 8 > len(self.netclasses):
-            self.netclasses.append(EagleBin.NetClass(len(self.netclasses)))
+            self.netclasses.append(Eagle.NetClass(len(self.netclasses)))
 
 # calculate num of blocks
         self._calculateweb(self.nets)
@@ -1006,7 +1012,7 @@ class Eagle:
             for _nn in self.nets:
                 _of.write(_nn.construct())
 
-            _of.write(EagleBin.noregblockconst)
+            _of.write(Eagle.noregblockconst)
 
             _xattr = []
             _xattr.append(self.schematic.construct())
@@ -1025,11 +1031,9 @@ class Eagle:
             for _cc in self.netclasses:
                 _of.write(_cc.construct())
 
-            _of.write(struct.pack(EagleBin.NetClass.template0,
-                                  0, EagleBin.NetClass.constantend, 0
+            _of.write(struct.pack(Eagle.NetClass.template0,
+                                  0, Eagle.NetClass.constantend, 0
                                  ))
             return
-
-
 
 
