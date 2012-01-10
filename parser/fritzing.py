@@ -110,7 +110,7 @@ class Fritzing(object):
         if not path or not exists(path):
             return None
 
-        self.components[idref] = ComponentParser(idref, path).component
+        self.components[idref] = ComponentParser(idref, path).parse()
 
         return self.components[idref]
 
@@ -164,10 +164,13 @@ class ComponentParser(object):
 
     def __init__(self, idref, path):
         self.next_pin_number = 0
+        self.idref = idref
+        self.path = path
 
-        tree = ElementTree(file=path)
+    def parse(self):
+        tree = ElementTree(file=self.path)
 
-        self.component = Component(idref)
+        self.component = Component(self.idref)
         self.component.add_attribute('_prefix', tree.find('label').text)
 
         symbol = Symbol()
@@ -177,8 +180,9 @@ class ComponentParser(object):
         symbol.add_body(self.body)
 
         self.terminals = self.parse_terminals(tree)
-        self.parse_svg(tree, path)
+        self.parse_svg(tree, self.path)
 
+        return self.component
 
     def get_next_pin_number(self):
         """ Return the next pin number """
@@ -249,8 +253,6 @@ class ComponentParser(object):
                 pin = self.get_pin(shape, element)
                 if pin is not None:
                     self.body.add_pin(pin)
-
-        return self.body
 
 
     def parse_rect(self, rect):

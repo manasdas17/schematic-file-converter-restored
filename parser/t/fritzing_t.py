@@ -20,7 +20,8 @@
 # limitations under the License.
 
 
-from parser.fritzing import Fritzing
+from core.shape import Circle, Rectangle
+from parser.fritzing import Fritzing, ComponentParser
 from parser.fritzing import make_x, make_y, make_length
 from parser.fritzing import get_x, get_y, get_length
 from unittest import TestCase
@@ -38,22 +39,27 @@ class FritzingTests(TestCase):
         parser = Fritzing()
         return parser.parse(join(TEST_DIR, basename))
 
+
     def test_create_new_fritzing_parser(self):
         """ Test creating an empty parser. """
         parser = Fritzing()
         assert parser != None
 
+
     def test_make_x(self):
         """ make_x converts x values correctly """
         self.assertEqual(make_x('17.23'), 172)
+
 
     def test_make_y(self):
         """ make_y converts y values correctly """
         self.assertEqual(make_y('17.23'), -172)
 
+
     def test_make_length(self):
         """ make_length converts other numeric values correctly """
         self.assertEqual(make_length('17.23'), 172)
+
 
     def test_get_x(self):
         """ get_x retrieves x values correctly """
@@ -62,12 +68,14 @@ class FritzingTests(TestCase):
         self.assertEqual(get_x(elem, 'x1'), 102)
         self.assertEqual(get_x(elem, 'x2'), 0)
 
+
     def test_get_y(self):
         """ get_y retrieves y values correctly """
         elem = {'y': '4.42', 'y1': '10.2'}
         self.assertEqual(get_y(elem), -44)
         self.assertEqual(get_y(elem, 'y1'), -102)
         self.assertEqual(get_y(elem, 'y2'), 0)
+
 
     def test_get_length(self):
         """ get_length retrieves other numeric values correctly """
@@ -76,16 +84,130 @@ class FritzingTests(TestCase):
         self.assertEqual(get_length(elem, 'r1'), 102)
         self.assertEqual(get_length(elem, 'r2'), 0)
 
+
     def test_components(self):
         """ The parser loads Components correctly """
         design = self.load_file('components.fz')
         self.assertEqual(len(design.components.components), 2)
+
         cpts = design.components.components
         self.assertEqual(set(cpts),
                          set(['ResistorModuleID',
                               '4a300fed-afa9-4e78-a643-ec209be7e3b8']))
+
         diode = cpts['4a300fed-afa9-4e78-a643-ec209be7e3b8']
         self.assertEqual(diode.name, '4a300fed-afa9-4e78-a643-ec209be7e3b8')
         self.assertEqual(diode.attributes, {'_prefix': 'D'})
         self.assertEqual(len(diode.symbols), 1)
 
+        symb = diode.symbols[0]
+        self.assertEqual(len(symb.bodies), 1)
+
+        body = symb.bodies[0]
+        self.assertEqual(len(body.shapes), 8)
+        self.assertEqual(len(body.pins), 2)
+
+        shape = body.shapes[0]
+        self.assertEqual(shape.type, 'rectangle')
+        self.assertEqual(shape.x, 116)
+        self.assertEqual(shape.y, -10)
+        self.assertEqual(shape.width, 2)
+        self.assertEqual(shape.height, 2)
+
+        pin = body.pins[0]
+        self.assertEqual(pin.pin_number, '0')
+        self.assertEqual(pin.p1.x, 117)
+        self.assertEqual(pin.p1.y, -9)
+        self.assertEqual(pin.p2.x, pin.p1.x)
+        self.assertEqual(pin.p2.y, pin.p1.y)
+
+
+    def test_component_instances(self):
+        """ The parser loads ComponentInstances correctly """
+        design = self.load_file('components.fz')
+        self.assertEqual(len(design.component_instances), 2)
+        self.assertEqual(
+            set([i.instance_id for i in design.component_instances]),
+            set(['D1', 'R1']))
+
+        inst = [i for i in design.component_instances
+                if i.instance_id == 'D1'][0]
+        self.assertEqual(inst.library_id, "4a300fed-afa9-4e78-a643-ec209be7e3b8")
+        self.assertEqual(inst.symbol_index, 0)
+        self.assertEqual(len(inst.symbol_attributes), 1)
+
+        symbattr = inst.symbol_attributes[0]
+        self.assertEqual(symbattr.x, 3140)
+        self.assertEqual(symbattr.y, -1030)
+        self.assertEqual(symbattr.rotation, 1.5)
+
+
+    def test_get_pin(self):
+        """ The ComponentParser.get_pin method returns the correct Pins """
+
+        parser = ComponentParser(None, None)
+        parser.terminals = {'1': '1'}
+        elem = {'id': '1'}
+
+        shape = Rectangle(0, 0, 4, 8)
+        pin = parser.get_pin(shape, elem)
+        self.assertEqual(pin.p1.x, 2)
+        self.assertEqual(pin.p1.y, 4)
+        self.assertEqual(pin.p2.x, pin.p1.x)
+        self.assertEqual(pin.p2.y, pin.p1.y)
+
+        shape = Circle(0, 0, 4)
+        pin = parser.get_pin(shape, elem)
+        self.assertEqual(pin.p1.x, 0)
+        self.assertEqual(pin.p1.y, 0)
+        self.assertEqual(pin.p2.x, pin.p1.x)
+        self.assertEqual(pin.p2.y, pin.p1.y)
+
+
+    def test_missing_layers(self):
+        """The component parser handles a missing schematic layer """
+
+        parser = ComponentParser(None, None)
+
+        class FakeTree(object):
+            """A fake tree """
+
+            def find(self, path):
+                assert path == 'views/schematicView/layers'
+                return None
+
+        parser.parse_svg(FakeTree(), None)
+
+
+    def test_missing_p(self):
+        """The component parser handles a connector missing a p element """
+
+        parser = ComponentParser(None, None)
+
+        class FakeConn(object):
+            """A fake connector"""
+
+            def __init__(self, missing):
+                self.missing = missing
+
+            def find(self, path):
+                assert path == 'views/schematicView/p'
+                if self.missing:
+                    return None
+                else:
+                    return {'terminalId': 'tid'}
+
+            def get(self, key):
+                assert key == 'id'
+                return 'id'
+
+        class FakeTree(object):
+            """A fake tree """
+
+            def findall(self, path):
+                assert path == 'connectors/connector'
+                return [FakeConn(missing=True), FakeConn(missing=False)]
+
+        terminals = parser.parse_terminals(FakeTree())
+
+        self.assertEqual(terminals, {'tid':'id'})
