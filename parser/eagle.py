@@ -227,7 +227,7 @@ class Eagle:
                 pass # unknown layer visibility sign
 
             _ret_val = Eagle.Layer(number=_dta[3], # or [4], they're the same
-                                      name=_dta[9],
+                                      name=_dta[9].rstrip('\x00'),
                                       color=_dta[6],
                                       fill=_dta[5], 
                                       visible=_visible,

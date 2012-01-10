@@ -914,7 +914,7 @@ class Eagle:
         """
         _cumuno = 0
         for _nn in web:
-            _cumuno +=1
+            _cumuno += 1
             for _ss in _nn.segments:
                 _ss.numofshapes = (len(_ss.wires) + 
                                    len(_ss.junctions) +
