@@ -38,8 +38,18 @@ class Fritzing(object):
 
     def __init__(self):
         self.design = Design()
-        self.points = {} # index.connectorid -> NetPoint
+
+        # This maps fritzing wire indices to connector ids to NetPoints
+        self.points = {} # index -> connectorid -> NetPoint
+
+        # This maps fritzing component indices to ComponentInstances
         self.component_instances = {} # index -> ComponentInstance
+
+        # This is a list of lists. Each list contains tuples of
+        # (module index, connector id). All connectors in a single
+        # list are connected together.
+        self.connects = [] # [[(index, connectorid)]]
+
         self.components = {} # idref -> Component
 
 
@@ -58,6 +68,9 @@ class Fritzing(object):
 
         for cptinst in self.component_instances.itervalues():
             self.design.add_component_instance(cptinst)
+
+        for net in self.build_nets():
+            self.design.add_net(net)
 
         return self.design
 
@@ -81,13 +94,36 @@ class Fritzing(object):
 
         index = inst.get('modelIndex')
         geom = view.find('geometry')
-        connectors = view.findall('connectors/connector')
 
-        pid1 = index + '.' + connectors[0].get('connectorId')
-        self.points[pid1] = NetPoint(pid1, get_x(geom), get_y(geom))
+        self.points[index] = {}
 
-        pid2 = index + '.' + connectors[1].get('connectorId')
-        self.points[pid2] = NetPoint(pid2, get_x(geom, 'x2'), get_y(geom, 'y2'))
+        for i, connector in enumerate(view.findall('connectors/connector')):
+            cid = connector.get('connectorId')
+            pid = index + '.' + cid
+
+            if i == 0:
+                coord_names = 'x', 'y'
+            else:
+                coord_names = 'x2', 'y2'
+
+            self.points[index][cid] = NetPoint(pid,
+                                               get_x(geom, coord_names[0]),
+                                               get_y(geom, coord_names[1]))
+
+        self.add_connects(index, view)
+
+
+    def add_connects(self, index, view):
+        """ Add the connects from a view """
+
+        for connector in view.findall('connectors/connector'):
+            connects = [(c.get('modelIndex'), c.get('connectorId'))
+                        for c in connector.findall('connects/connect')
+                        if c.get('layer') != 'breadboardbreadboard']
+
+            if connects:
+                connects.insert(0, (index, connector.get('connectorId')))
+                self.connects.append(connects)
 
 
     def ensure_component(self, inst):
@@ -150,6 +186,14 @@ class Fritzing(object):
             SymbolAttribute(get_x(geom), get_y(geom), rotation))
 
         self.component_instances[index] = compinst
+
+        self.add_connects(index, view)
+
+
+    def build_nets(self):
+        """ Build the nets from the connects, points, and instances """
+
+        return []
 
 
 # map fritzing rotation matrices to pi radians
