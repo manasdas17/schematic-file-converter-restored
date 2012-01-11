@@ -40,7 +40,7 @@ class EagleTests(unittest.TestCase):
         parser = Eagle()
         assert parser != None
 
-    def test_Header_parse(self):
+    def test_header_parse(self):
         """ Test Header block parsing """
         
         _valid_chunk = b''.join((b"\x10\x00\x0c\x00\x10\x00\x00\x00", 
@@ -54,7 +54,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_header.numofblocks, 16)
         return
 
-    def test_Settings_parse(self):
+    def test_settings_parse(self):
         """ Test Settings block parsing """
 
         _valid_chunk = b''.join((b"\x11\x00\x78\x20\x99\xa0\x1a\x47",
@@ -67,7 +67,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_settings.copyno, 2)
         return
 
-    def test_Grid_parse(self):
+    def test_grid_parse(self):
         """ Test Grid block parsing """
 
         _valid_chunk = b''.join((b"\x12\x00\x02\xaa\x0f\x00\x00\x00",
@@ -86,7 +86,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_grid.altunit, "mil")
         return
 
-    def test_Layer_parse(self):
+    def test_layer_parse(self):
         """ Test Layer block parsing """
 
         _valid_chunk = b''.join((b"\x13\x00\x0f\x5b\x5b\x01\x02\x00",
@@ -102,7 +102,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_layer.active, True)
         return
 
-    def test_AttributeHeader_parse(self):
+    def test_attributeheader_parse(self):
         """ Test AttributeHeader block parsing """
 
         _valid_chunk = b''.join((b"\x14\x80\x01\x00\x00\x00\x00\x00",
@@ -114,7 +114,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_attrheader.numofattributes, 0) 
         return
 
-    def test_ShapeHeader_parse(self):
+    def test_shapeheader_parse(self):
         """ Test ShapeHeader block parsing """
 
         _valid_chunk = b''.join((b"\x1a\x00\x01\x00\x53\x02\x76\x0a",
@@ -125,7 +125,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_shapeheader.numofshapes, 1)
         return
 
-    def test_Net_parse(self):
+    def test_net_parse(self):
         """ Test Net block parsing """
 
         _valid_chunk = b''.join((b"\x1f\x80\x05\x00\xff\x7f\xff\x7f",
@@ -138,7 +138,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_net.numofblocks, 5)
         return
 
-    def test_Segment_parse(self):
+    def test_segment_parse(self):
         """ Test Segment block parsing """
 
         _valid_chunk = b''.join((b"\x20\x00\x04\x00\xcd\x05\x9b\x01",
@@ -150,7 +150,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_segment.cumulativenumofshapes, 19)
         return
 
-    def test_Wire_parse(self):
+    def test_wire_parse(self):
         """ Test Wire block parsing """
 
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xd8\x09\x05\x00",
@@ -166,7 +166,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_wire.layer, 91)
         return
 
-    def test_Arc_parse(self):
+    def test_arc_parse(self):
         """ Test Arc block parsing """
 
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xc0\x80\x0f\xd8",
@@ -185,7 +185,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_arc.layer, 91)
         return
 
-    def test_Circle_parse(self):
+    def test_circle_parse(self):
         """ Test Circle block parsing """
 
         _valid_chunk = b''.join((b"\x25\x00\x00\x5b\x48\x37\x12\x00",
@@ -200,7 +200,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_circle.layer, 91)
         return
 
-    def test_Rectangle_parse(self):
+    def test_rectangle_parse(self):
         """ Test Rectangle block parsing """
 
         _valid_chunk = b''.join((b"\x26\x80\x00\x5c\x50\x53\x02\x00",
@@ -216,7 +216,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_rectangle.layer, 92)
         return
 
-    def test_Text_parse_embedded(self):
+    def test_text_parse_embedded(self):
         """ Test Text block parsing """
 
         _valid_chunk = b''.join((b"\x31\x80\x02\x5b\x80\x9a\x12\x00",
@@ -234,7 +234,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_text.layer, 91)
         return
  
-    def test_Text_parse_external(self):
+    def test_text_parse_external(self):
         """ Test Text block parsing (value is not in block) """
 
         _valid_chunk = b''.join((b"\x31\x80\x02\x5b\x18\xf0\x01\x00",
@@ -252,7 +252,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_text.layer, 91)
         return
  
-    def test_Label_parse(self):
+    def test_label_parse(self):
         """ Test Label block parsing """
 
         _valid_chunk = b''.join((b"\x33\x00\x02\x5f\xe0\xf3\x0d\x00",
@@ -271,7 +271,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_label.layer, 95)
         return
  
-    def test_Bus_parse(self):
+    def test_bus_parse(self):
         """ Test Bus block parsing """
 
         _valid_chunk = b''.join((b"\x3a\x80\x04\x00\x42\x24\x33\x00",
@@ -283,7 +283,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_bus.numofblocks, 4)
         return
 
-    def test_Attribute_parse_embedded(self):
+    def test_attribute_parse_embedded(self):
         """ Test Attribute block parsing """
 
         _valid_chunk = b''.join((b"\x42\x80\x2a\x00\x00\x00\x00\x31",
@@ -295,7 +295,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_attr.value, "qw!rt")
         return
 
-    def test_Attribute_parse_external(self):
+    def test_attribute_parse_external(self):
         """ Test Attribute block parsing (value is not in block) """
 
         _valid_chunk = b''.join((b"\x42\x80\x2a\x00\x00\x00\x00\x7f",

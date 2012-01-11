@@ -27,10 +27,10 @@ import struct
 
 from core.design import Design
 
-class EagleBinConsts:
-    """ Just a set of constants to be used by both parser and writer
-    """
-    pass
+#class EagleBinConsts:
+#    """ Just a set of constants to be used by both parser and writer
+#    """
+#    pass
 
 class Eagle:
     """ The Eagle Format Parser """
@@ -447,7 +447,7 @@ class Eagle:
 
             if (Eagle.Net.constantmid1 != _dta[3] or 
                     Eagle.Net.constantmid2 != _dta[4]):
-                logging.error("strange mid-constants in net " + _dta[6])
+                pass # strange mid-constants in net
 
             _ret_val = Eagle.Net(name=_dta[6].rstrip('\x00'),
                                     nclass=_dta[5],
@@ -669,7 +669,7 @@ class Eagle:
 
             _parts = chunk.split(Eagle.Text.delimeter)
             if 1 < len(_parts):
-                logging.error("too many extra values for Text: " + chunk)
+                pass # too many extra values for Text
 
             _ret_val = _parts[0]
 
@@ -685,8 +685,9 @@ class Eagle:
         onoffmask = 0x01
 
         def __init__(self, x, y, size, layer, rotate, ratio, font, 
-                     onoff, mirrored, xref=None):
+                     onoff, mirrored):
             """ Just a constructor
+                Note: 6.0.0's xref is an other name for onoff
             """
             super(Eagle.Label, self).__init__(layer)
             self.x = x
@@ -850,7 +851,7 @@ class Eagle:
             _xreflabel = _parts[0]
 
             if 2 != len(_parts):
-                logging.error("strange schematic string: " + chunk)
+                pass # strange schematic string
             else:
                 _xrefpart = _parts[1]
 
@@ -874,7 +875,7 @@ class Eagle:
         
         endmarker = 0x99999999
 
-        def __init__(self, num, name='', width=0, drill=0, clearances=[], 
+        def __init__(self, num, name='', width=0, drill=0, clearances=None,
                      leadint=0):
             """ Just a constructor
             """ 
@@ -882,6 +883,8 @@ class Eagle:
             self.name = name
             self.width = width
             self.drill = drill
+            if None == clearances:
+                clearances = []
             self.clearances = clearances
             
             self.leadint = leadint # TODO decypher it..
@@ -929,11 +932,11 @@ class Eagle:
                         _ret_val = Eagle.NetClass(num=_dta[0], 
                                                      leadint=leadint)
                 else:
-                    logging.error("bad constants or/and data in netclasses")
-            elif Eagle.NetClass.ncendmarker == ncconst and None == chunk:
+                    pass # bad constants or/and data in netclasses
+            elif Eagle.NetClass.constantend == ncconst and None == chunk:
                 pass # nothing to do: final entry ; never hit though
             else:
-                logging.error("bad constants or/and data in netclasses")
+                pass # bad constants or/and data in netclasses
             return _ret_val
 
     blocksize = 24
