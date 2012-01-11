@@ -449,7 +449,7 @@ class Eagle:
                     Eagle.Net.constantmid2 != _dta[4]):
                 logging.error("strange mid-constants in net " + _dta[6])
 
-            _ret_val = Eagle.Net(name=_dta[6],
+            _ret_val = Eagle.Net(name=_dta[6].rstrip('\x00'),
                                     nclass=_dta[5],
                                     numofblocks=_dta[2],
                                    )
@@ -648,7 +648,7 @@ class Eagle:
 
             _value = None
             if Eagle.Text.no_embed_str != _dta[11][0]:
-                _value = _dta[11]
+                _value = _dta[11].rstrip('\x00')
             _ret_val = Eagle.Text(value=_value,
                                      x=Eagle.Shape.decode_real(_dta[4]),
                                      y=Eagle.Shape.decode_real(_dta[5]),
@@ -748,7 +748,7 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.Bus.template, chunk)
 
-            _ret_val = Eagle.Bus(name=_dta[3],
+            _ret_val = Eagle.Bus(name=_dta[3].rstrip('\x00'),
                                     numofblocks=_dta[2],
                                    )
             return _ret_val
@@ -796,7 +796,7 @@ class Eagle:
             _dta = struct.unpack(Eagle.Attribute.template, chunk)
 
             if Eagle.Attribute.no_embed_str != _dta[4][0]: # embedded attr
-                (_name, _value) = Eagle.Attribute._parse(_dta[4])
+                (_name, _value) = Eagle.Attribute._parse(_dta[4].rstrip('\x00'))
             else:
 # TODO decode [8] [9] [10]
 # [11] -- a kind of a marker, 0x09; 4 bytes long int, changed on each save as, even with no changes
