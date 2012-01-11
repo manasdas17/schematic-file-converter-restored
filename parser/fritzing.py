@@ -236,19 +236,19 @@ class ComponentParser(object):
             tag = element.tag.rsplit('}', -1)[-1]
 
             if tag == 'circle':
-                shape = self.parse_circle(element)
+                shapes = self.parse_circle(element)
             elif tag == 'rect':
-                shape = self.parse_rect(element)
+                shapes = self.parse_rect(element)
             elif tag == 'line':
-                shape = self.parse_line(element)
+                shapes = self.parse_line(element)
             elif tag == 'polygon':
-                shape = self.parse_polygon(element)
+                shapes = self.parse_polygon(element)
             elif tag == 'polyline':
-                shape = self.parse_polyline(element)
+                shapes = self.parse_polyline(element)
             else:
-                shape = None
+                shapes = []
 
-            if shape is not None:
+            for shape in shapes:
                 self.body.add_shape(shape)
                 pin = self.get_pin(shape, element)
                 if pin is not None:
@@ -260,14 +260,14 @@ class ComponentParser(object):
 
         x, y = get_x(rect), get_y(rect)
         width, height = get_length(rect, 'width'), get_length(rect, 'height')
-        return Rectangle(x, y - height, width, height)
+        return [Rectangle(x, y - height, width, height)]
 
 
     def parse_line(self, rect):
         """ Parse a line element """
 
-        return Line((get_x(rect, 'x1'), get_y(rect, 'y1')),
-                    (get_x(rect, 'x2'), get_y(rect, 'y2')))
+        return [Line((get_x(rect, 'x1'), get_y(rect, 'y1')),
+                     (get_x(rect, 'x2'), get_y(rect, 'y2')))]
 
 
     def parse_polygon(self, poly):
@@ -283,28 +283,32 @@ class ComponentParser(object):
         if shape.points:
             shape.add_point(shape.points[0].x, shape.points[0].y)
 
-        return shape
+        return [shape]
 
 
     def parse_polyline(self, poly):
         """ Parse a polyline element """
 
-        shape = Polygon()
+        shapes = []
+        last_point = None
 
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                shape.add_point(make_x(x), make_y(y))
+                point = (make_x(x), make_y(y))
+                if last_point is not None:
+                    shapes.append(Line(last_point, point))
+                last_point = point
 
-        return shape
+        return shapes
 
 
     def parse_circle(self, circle):
         """ Parse a circle element """
 
-        return Circle(get_x(circle, 'cx'),
-                      get_y(circle, 'cy'),
-                      get_length(circle, 'r'))
+        return [Circle(get_x(circle, 'cx'),
+                       get_y(circle, 'cy'),
+                       get_length(circle, 'r'))]
 
 
     def get_pin(self, shape, element):
@@ -324,17 +328,17 @@ class ComponentParser(object):
         return Pin(self.get_next_pin_number(), (x, y), (x, y))
 
 
-MULT = 10
-
 def make_x(x):
     """ Make an openjson x coordinate from a fritzing x coordinate """
-    return int(float(x) * MULT)
+    return int(round(float(x)))
 
 def make_y(y):
     """ Make an openjson y coordinate from a fritzing y coordinate """
-    return -int(float(y) * MULT)
+    return -int(round(float(y)))
 
-make_length = make_x
+def make_length(v):
+    """ Make a length measurement from a fritzing measurement """
+    return int(round(float(v)))
 
 def get_x(element, name='x', default=0):
     """ Get an openjson x coordinate from a fritzing element """

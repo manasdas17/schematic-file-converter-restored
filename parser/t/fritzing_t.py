@@ -48,40 +48,40 @@ class FritzingTests(TestCase):
 
     def test_make_x(self):
         """ make_x converts x values correctly """
-        self.assertEqual(make_x('17.23'), 172)
+        self.assertEqual(make_x('17.23'), 17)
 
 
     def test_make_y(self):
         """ make_y converts y values correctly """
-        self.assertEqual(make_y('17.23'), -172)
+        self.assertEqual(make_y('17.23'), -17)
 
 
     def test_make_length(self):
         """ make_length converts other numeric values correctly """
-        self.assertEqual(make_length('17.23'), 172)
+        self.assertEqual(make_length('17.23'), 17)
 
 
     def test_get_x(self):
         """ get_x retrieves x values correctly """
-        elem = {'x': '4.42', 'x1': '10.2'}
-        self.assertEqual(get_x(elem), 44)
-        self.assertEqual(get_x(elem, 'x1'), 102)
+        elem = {'x': '4.62', 'x1': '10.2'}
+        self.assertEqual(get_x(elem), 5)
+        self.assertEqual(get_x(elem, 'x1'), 10)
         self.assertEqual(get_x(elem, 'x2'), 0)
 
 
     def test_get_y(self):
         """ get_y retrieves y values correctly """
-        elem = {'y': '4.42', 'y1': '10.2'}
-        self.assertEqual(get_y(elem), -44)
-        self.assertEqual(get_y(elem, 'y1'), -102)
+        elem = {'y': '4.62', 'y1': '10.2'}
+        self.assertEqual(get_y(elem), -5)
+        self.assertEqual(get_y(elem, 'y1'), -10)
         self.assertEqual(get_y(elem, 'y2'), 0)
 
 
     def test_get_length(self):
         """ get_length retrieves other numeric values correctly """
-        elem = {'r': '4.42', 'r1': '10.2'}
-        self.assertEqual(get_length(elem, 'r'), 44)
-        self.assertEqual(get_length(elem, 'r1'), 102)
+        elem = {'r': '4.62', 'r1': '10.2'}
+        self.assertEqual(get_length(elem, 'r'), 5)
+        self.assertEqual(get_length(elem, 'r1'), 10)
         self.assertEqual(get_length(elem, 'r2'), 0)
 
 
@@ -109,15 +109,15 @@ class FritzingTests(TestCase):
 
         shape = body.shapes[0]
         self.assertEqual(shape.type, 'rectangle')
-        self.assertEqual(shape.x, 116)
-        self.assertEqual(shape.y, -10)
-        self.assertEqual(shape.width, 2)
-        self.assertEqual(shape.height, 2)
+        self.assertEqual(shape.x, 12)
+        self.assertEqual(shape.y, -1)
+        self.assertEqual(shape.width, 0)
+        self.assertEqual(shape.height, 0)
 
         pin = body.pins[0]
         self.assertEqual(pin.pin_number, '0')
-        self.assertEqual(pin.p1.x, 117)
-        self.assertEqual(pin.p1.y, -9)
+        self.assertEqual(pin.p1.x, 12)
+        self.assertEqual(pin.p1.y, -1)
         self.assertEqual(pin.p2.x, pin.p1.x)
         self.assertEqual(pin.p2.y, pin.p1.y)
 
@@ -137,8 +137,8 @@ class FritzingTests(TestCase):
         self.assertEqual(len(inst.symbol_attributes), 1)
 
         symbattr = inst.symbol_attributes[0]
-        self.assertEqual(symbattr.x, 3140)
-        self.assertEqual(symbattr.y, -1030)
+        self.assertEqual(symbattr.x, 314)
+        self.assertEqual(symbattr.y, -103)
         self.assertEqual(symbattr.rotation, 1.5)
 
 
