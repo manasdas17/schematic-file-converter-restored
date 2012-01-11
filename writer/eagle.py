@@ -31,7 +31,7 @@
 
 import struct
 
-from parser.eagle import EagleBinConsts
+#from parser.eagle import EagleBinConsts
 
 class Eagle:
     """ The Eagle format writer """
@@ -671,8 +671,9 @@ class Eagle:
         onoffmask = 0x01
 
         def __init__(self, x, y, size, layer, rotate, ratio, font, 
-                     onoff, mirrored, xref=None):
+                     onoff, mirrored):
             """ Just a constructor
+                Note: 6.0.0's xref is the same as onoff
             """
             super(Eagle.Label, self).__init__(layer)
             self.x = x
@@ -697,11 +698,24 @@ class Eagle:
                     _font = _ff
                     break
 
+            _ss = 0
+            for _rr in Eagle.Label.rotates:
+                if Eagle.Label.rotates[_rr] == self.rotate:
+                    _ss += _rr
+                    break
+            if self.mirrored:
+                _ss += self.mirroredmask
+
             _ret_val = struct.pack(self.template,
-                                   self.constant, 0, 0, self.layer,
-                                   self.constantmid,
-                                   Eagle.Shape.encode_real(self.x),
-                                   Eagle.Shape.encode_real(self.y),
+                                   self.constant, 0, _font, self.layer,
+                                   self.encode_real(self.x),
+                                   self.encode_real(self.y),
+                                   self.encode_real(self.size /
+                                       self.size_xscale),
+                                   self.ratio << Eagle.Text.ratio_sscale,
+                                   0,
+                                   _ss,
+                                   self.onoffmask if self.onoff else 0,
                                    0, 0
                                   )
             return _ret_val
@@ -832,7 +846,7 @@ class Eagle:
         
         endmarker = 0x99999999
 
-        def __init__(self, num, name='', width=0, drill=0, clearances=[], 
+        def __init__(self, num, name='', width=0, drill=0, clearances=None,
                      leadint=0):
             """ Just a constructor
             """ 
@@ -840,6 +854,8 @@ class Eagle:
             self.name = name
             self.width = width
             self.drill = drill
+            if None == clearances:
+                clearances = []
             self.clearances = clearances
             
             self.leadint = leadint # TODO decypher it..
@@ -906,7 +922,7 @@ class Eagle:
         self.texts = []
         self.schematic = None
         self.netclasses = []
-        pass
+        return
 
     @staticmethod
     def _calculateweb(web):
@@ -925,7 +941,7 @@ class Eagle:
                         sum([_ss.numofshapes for _ss in _nn.segments]))
         return
 
-    def _convert(self):
+    def _convert(self, design):
         """ Converts design into a set of Eagle objects
         """
         pass
@@ -984,7 +1000,7 @@ class Eagle:
         """ Save given design as an Eagle format file with a given name
         """
 
-        self._convert()
+        self._convert(design)
         self._validate()
 
         with open(filename, 'wb') as _of:
