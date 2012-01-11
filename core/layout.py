@@ -15,9 +15,12 @@ class Layer:
 
     def __init__(self):
         self.id = ''
-        self.type = '' #Copper or Mask/Silk
-        self.traces = []
+        self.type = '' # Copper or Mask/Silk
+        self.traces = [] # Lines, Circle parts, etc... connection tracks
         self.vias = []
-        self.fills = []
-        self.voids = []
-        self.components = []
+        self.fills = [] # probably includes pads -- may have to extend
+        self.voids = [] # possibly places that must be kept clear -- irrelevant for gerber
+        self.components = [] # if used, possibly could include pads
+        # self.holes = [] -- should not be relevant - vias probably cover it
+
+# for silk layers, how are symbols defined - eg, 'UART' or '1.' ? Looks like they are traces... Ugh!!

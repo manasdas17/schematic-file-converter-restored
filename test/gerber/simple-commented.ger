@@ -1,0 +1,19 @@
+G04 EXAMPLE 1: 2 BOXES*
+%FSLAX23Y23*%   Format statement - leading zeroes omitted, absolute coordinates, X2.3,  Y2.3. 
+%MOIN*%         Set units to inches. 
+%OFA0B0*%       No offset 
+%SFA1.0B1.0*%   Scale factor is A1, B1 
+%ADD10C,0.010*% Define aperture with D-code 10 as a 10 mil circle 
+%LNBOXES*%      Name layer “BOXES”. 
+G54D10*  
+X0Y0D02*        Start from 0,0 
+X5000Y0D01*     Line to 5,0 
+Y5000*          Line to 5,5 
+X0*             Line to 0,5 
+Y0*             Line to 0,0 
+X6000D02*       Start from 6,0 
+X11000D01*      Line to 11,0 
+Y5000*          Line to 11,5 
+X6000*          Line to 6,5 
+Y0*             Line to 6,0 
+M02*            End of program 
