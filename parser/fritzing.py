@@ -19,12 +19,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from core.design import Design
 from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
 from core.shape import Circle, Line, Polygon, Rectangle
-from core.net import NetPoint
+from core.net import Net, NetPoint, ConnectedComponent
 
 from library.fritzing import lookup_part
 
@@ -34,23 +33,30 @@ from os.path import basename, dirname, exists, join
 
 
 class Fritzing(object):
-    """ The Fritzing Format Parser """
+    """ The Fritzing Format Parser
+
+    Connection points in a fritzing file are identified by a 'module
+    index' which references a component instance or a wire, and a
+    'connector id' which references a specific pin. Together the
+    (index, connid) tuple uniquely identifies a connection point.
+    """
 
     def __init__(self):
         self.design = Design()
 
-        # This maps fritzing wire indices to connector ids to NetPoints
-        self.points = {} # index -> connectorid -> NetPoint
+        # This maps fritzing connector keys to (x, y) coordinates
+        self.points = {} # (index, connid) -> (x, y)
 
         # This maps fritzing component indices to ComponentInstances
         self.component_instances = {} # index -> ComponentInstance
 
-        # This is a list of lists. Each list contains tuples of
-        # (module index, connector id). All connectors in a single
-        # list are connected together.
-        self.connects = [] # [[(index, connectorid)]]
+        # Map connector keys to the list of connector keys they
+        # are connected to.
+        self.connects = {} # (index, connid) -> [(index, connid)]
 
-        self.components = {} # idref -> Component
+        self.components = {} # idref -> ComponentParser
+
+        self.fritzing_version = None
 
 
     def parse(self, filename):
@@ -63,8 +69,8 @@ class Fritzing(object):
         for element in tree.findall('instances/instance'):
             self.parse_instance(element)
 
-        for idref, cpt in self.components.iteritems():
-            self.design.add_component(idref, cpt)
+        for idref, cpt_parser in self.components.iteritems():
+            self.design.add_component(idref, cpt_parser.component)
 
         for cptinst in self.component_instances.itervalues():
             self.design.add_component_instance(cptinst)
@@ -85,7 +91,7 @@ class Fritzing(object):
 
 
     def parse_wire(self, inst):
-        """ Parse a Fritzing wire instance into two NetPoints """
+        """ Parse a Fritzing wire instance """
 
         view = inst.find('views/schematicView')
 
@@ -95,41 +101,31 @@ class Fritzing(object):
         index = inst.get('modelIndex')
         geom = view.find('geometry')
 
-        self.points[index] = {}
+        origin_x, origin_y = get_x(geom), get_y(geom)
 
-        for i, connector in enumerate(view.findall('connectors/connector')):
+        conn_keys = []
+
+        for i, connector in enumerate(view.findall('connectors/connector'), 1):
             cid = connector.get('connectorId')
-            pid = index + '.' + cid
+            self.points[index, cid] = (origin_x + get_x(geom, 'x%d' % i),
+                                       origin_y + get_y(geom, 'y%d' % i))
 
-            if i == 0:
-                coord_names = 'x', 'y'
-            else:
-                coord_names = 'x2', 'y2'
+            conn_keys.append((index, cid))
 
-            self.points[index][cid] = NetPoint(pid,
-                                               get_x(geom, coord_names[0]),
-                                               get_y(geom, coord_names[1]))
+            self.connects[index, cid] = \
+                [(c.get('modelIndex'), c.get('connectorId'))
+                 for c in connector.findall('connects/connect')
+                 if c.get('layer') != 'breadboardbreadboard']
 
-        self.add_connects(index, view)
-
-
-    def add_connects(self, index, view):
-        """ Add the connects from a view """
-
-        for connector in view.findall('connectors/connector'):
-            connects = [(c.get('modelIndex'), c.get('connectorId'))
-                        for c in connector.findall('connects/connect')
-                        if c.get('layer') != 'breadboardbreadboard']
-
-            if connects:
-                connects.insert(0, (index, connector.get('connectorId')))
-                self.connects.append(connects)
+        # connect wire ends to each other
+        self.connects[conn_keys[0]].append(conn_keys[1])
+        self.connects[conn_keys[1]].append(conn_keys[0])
 
 
     def ensure_component(self, inst):
         """ If we have not already done so, create the Component the
-        given Fritzing instance is an instance of. Return the Component,
-        or None if we cannot load it """
+        given Fritzing instance is an instance of. Return the
+        Component, or None if we cannot load it"""
 
         idref = inst.get('moduleIdRef')
 
@@ -146,9 +142,10 @@ class Fritzing(object):
         if not path or not exists(path):
             return None
 
-        self.components[idref] = ComponentParser(idref, path).parse()
-
-        return self.components[idref]
+        parser = ComponentParser(idref, path)
+        self.components[idref] = parser
+        parser.parse()
+        return parser
 
 
     def parse_component_instance(self, inst):
@@ -187,13 +184,67 @@ class Fritzing(object):
 
         self.component_instances[index] = compinst
 
-        self.add_connects(index, view)
-
 
     def build_nets(self):
         """ Build the nets from the connects, points, and instances """
 
-        return []
+        todo = set(self.connects) # set([(index, cid)])
+        points = {} # (x, y) -> NetPoint
+        nets = []
+
+        def get_point(point):
+            """ Return a new or existing NetPoint for an (x,y) point """
+            if point not in points:
+                points[point] = NetPoint('%da%d' % point, point[0], point[1])
+            return points[point]
+
+        def update_net(net, main_key):
+            """ Update a net with a new set of connects """
+
+            todo.discard(main_key)
+
+            main_point = get_point(self.points[main_key])
+            net.add_point(main_point)
+
+            remaining = []
+
+            for conn_key in self.connects[main_key]:
+                if conn_key in todo:
+                    remaining.append(conn_key)
+
+                if conn_key in self.points:
+                    connect(net, main_point, get_point(self.points[conn_key]))
+                elif conn_key[0] in self.component_instances:
+                    inst = self.component_instances[conn_key[0]]
+                    cpt_parser = self.components[inst.library_id]
+                    cpt_parser.connect_point(conn_key[1], inst, main_point)
+
+            return remaining
+
+        while todo:
+            net = Net(str(len(nets)))
+            nets.append(net)
+            remaining = [todo.pop()]
+
+            while remaining:
+                remaining.extend(update_net(net, remaining.pop(0)))
+
+        return nets
+
+
+def connect(net, p1, p2):
+    """ Connect two points in a net """
+
+    if p1 is p2:
+        return
+
+    net.add_point(p1)
+    net.add_point(p2)
+
+    if p2.point_id not in p1.connected_points:
+        p1.connected_points.append(p2.point_id)
+    if p1.point_id not in p2.connected_points:
+        p2.connected_points.append(p1.point_id)
 
 
 # map fritzing rotation matrices to pi radians
@@ -207,26 +258,45 @@ class ComponentParser(object):
     """I parse components from Fritzing libraries."""
 
     def __init__(self, idref, path):
+        self.component = Component(idref)
         self.next_pin_number = 0
-        self.idref = idref
+        self.cid2termid = {} # connid -> termid
+        self.termid2pin = {} # termid -> Pin
+        self.terminals = set()
         self.path = path
 
     def parse(self):
+        """ Parse the Fritzing component """
+
         tree = ElementTree(file=self.path)
 
-        self.component = Component(self.idref)
         self.component.add_attribute('_prefix', tree.find('label').text)
 
         symbol = Symbol()
         self.component.add_symbol(symbol)
 
-        self.body = Body()
-        symbol.add_body(self.body)
+        body = Body()
+        symbol.add_body(body)
 
-        self.terminals = self.parse_terminals(tree)
-        self.parse_svg(tree, self.path)
+        self.cid2termid.update(self.parse_terminals(tree))
+        self.terminals.update(self.cid2termid.values())
+
+        self.parse_svg(body, tree, self.path)
 
         return self.component
+
+
+    def connect_point(self, cid, inst, point):
+        """ Given a connector id, instance id, and a NetPoint,
+        add the appropriate ConnectedComponent to the point """
+
+        termid = self.cid2termid.get(cid)
+        pin = self.termid2pin.get(termid)
+
+        if pin is not None:
+            ccpt = ConnectedComponent(inst.instance_id, pin.pin_number)
+            point.add_connected_component(ccpt)
+
 
     def get_next_pin_number(self):
         """ Return the next pin number """
@@ -237,26 +307,26 @@ class ComponentParser(object):
 
 
     def parse_terminals(self, tree):
-        """ Return a dictionary mapping svg id's to connector ids """
+        """ Return a dictionary mapping connector id's to terminal id's """
 
-        terminals = {}
+        cid2termid = {}
 
         for conn in tree.findall('connectors/connector'):
             plug = conn.find('views/schematicView/p')
             if plug is None:
                 continue
 
-            cid = plug.get('terminalId')
-            if cid is None:
-                cid = plug.get('svgId')
+            termid = plug.get('terminalId')
+            if termid is None:
+                termid = plug.get('svgId')
 
-            if cid is not None:
-                terminals[cid] = conn.get('id')
+            if termid is not None:
+                cid2termid[conn.get('id')] = termid
 
-        return terminals
+        return cid2termid
 
 
-    def parse_svg(self, tree, fzp_path):
+    def parse_svg(self, body, tree, fzp_path):
         """ Parse the shapes and pins from an svg file """
 
         layers = tree.find('views/schematicView/layers')
@@ -293,10 +363,13 @@ class ComponentParser(object):
                 shapes = []
 
             for shape in shapes:
-                self.body.add_shape(shape)
-                pin = self.get_pin(shape, element)
-                if pin is not None:
-                    self.body.add_pin(pin)
+                body.add_shape(shape)
+                if element.get('id') in self.terminals:
+                    pin = get_pin(shape)
+                    if pin is not None:
+                        pin.pin_number = self.get_next_pin_number()
+                        self.termid2pin[element.get('id')] = pin
+                        body.add_pin(pin)
 
 
     def parse_rect(self, rect):
@@ -355,21 +428,18 @@ class ComponentParser(object):
                        get_length(circle, 'r'))]
 
 
-    def get_pin(self, shape, element):
-        """ Return a Pin for the given shape and element, or None """
+def get_pin(shape):
+    """ Return a Pin for the given shape, or None """
 
-        if element.get('id') not in self.terminals:
-            return None
+    if shape.type == 'rectangle':
+        x = shape.x + shape.width / 2
+        y = shape.y + shape.height / 2
+    elif shape.type == 'circle':
+        x, y = shape.x, shape.y
+    else:
+        return None
 
-        if shape.type == 'rectangle':
-            x = shape.x + shape.width / 2
-            y = shape.y + shape.height / 2
-        elif shape.type == 'circle':
-            x, y = shape.x, shape.y
-        else:
-            return None
-
-        return Pin(self.get_next_pin_number(), (x, y), (x, y))
+    return Pin('', (x, y), (x, y))
 
 
 def make_x(x):
@@ -380,9 +450,9 @@ def make_y(y):
     """ Make an openjson y coordinate from a fritzing y coordinate """
     return -int(round(float(y)))
 
-def make_length(v):
+def make_length(value):
     """ Make a length measurement from a fritzing measurement """
-    return int(round(float(v)))
+    return int(round(float(value)))
 
 def get_x(element, name='x', default=0):
     """ Get an openjson x coordinate from a fritzing element """

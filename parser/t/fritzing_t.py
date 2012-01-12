@@ -20,9 +20,9 @@
 # limitations under the License.
 
 
-from core.shape import Circle, Rectangle
+from core.shape import Circle, Rectangle, Shape
 from parser.fritzing import Fritzing, ComponentParser
-from parser.fritzing import make_x, make_y, make_length
+from parser.fritzing import make_x, make_y, make_length, get_pin
 from parser.fritzing import get_x, get_y, get_length
 from unittest import TestCase
 
@@ -87,6 +87,7 @@ class FritzingTests(TestCase):
 
     def test_components(self):
         """ The parser loads Components correctly """
+
         design = self.load_file('components.fz')
         self.assertEqual(len(design.components.components), 2)
 
@@ -124,6 +125,7 @@ class FritzingTests(TestCase):
 
     def test_component_instances(self):
         """ The parser loads ComponentInstances correctly """
+
         design = self.load_file('components.fz')
         self.assertEqual(len(design.component_instances), 2)
         self.assertEqual(
@@ -143,25 +145,23 @@ class FritzingTests(TestCase):
 
 
     def test_get_pin(self):
-        """ The ComponentParser.get_pin method returns the correct Pins """
-
-        parser = ComponentParser(None, None)
-        parser.terminals = {'1': '1'}
-        elem = {'id': '1'}
+        """ The get_pin function returns the correct Pins """
 
         shape = Rectangle(0, 0, 4, 8)
-        pin = parser.get_pin(shape, elem)
+        pin = get_pin(shape)
         self.assertEqual(pin.p1.x, 2)
         self.assertEqual(pin.p1.y, 4)
         self.assertEqual(pin.p2.x, pin.p1.x)
         self.assertEqual(pin.p2.y, pin.p1.y)
 
         shape = Circle(0, 0, 4)
-        pin = parser.get_pin(shape, elem)
+        pin = get_pin(shape)
         self.assertEqual(pin.p1.x, 0)
         self.assertEqual(pin.p1.y, 0)
         self.assertEqual(pin.p2.x, pin.p1.x)
         self.assertEqual(pin.p2.y, pin.p1.y)
+
+        self.assertEqual(get_pin(Shape()), None)
 
 
     def test_missing_layers(self):
@@ -176,7 +176,7 @@ class FritzingTests(TestCase):
                 assert path == 'views/schematicView/layers'
                 return None
 
-        parser.parse_svg(FakeTree(), None)
+        parser.parse_svg(None, FakeTree(), None)
 
 
     def test_missing_p(self):
@@ -210,4 +210,21 @@ class FritzingTests(TestCase):
 
         terminals = parser.parse_terminals(FakeTree())
 
-        self.assertEqual(terminals, {'tid':'id'})
+        self.assertEqual(terminals, {'id':'tid'})
+
+
+    def test_nets(self):
+        """ The parser loads Nets correctly """
+
+        design = self.load_file('nets.fz')
+        self.assertEqual(len(design.nets), 2)
+        self.assertEqual(set(len(net.points) for net in design.nets),
+                         set([8, 5]))
+
+        net = [n for n in design.nets if len(n.points) == 5][0]
+
+        p1 = net.points['143a33']
+        self.assertEqual(p1.connected_points, ['143a44'])
+        self.assertEqual(len(p1.connected_components), 1)
+        self.assertEqual(p1.connected_components[0].instance_id, 'L1')
+        self.assertEqual(p1.connected_components[0].pin_number, '1')
