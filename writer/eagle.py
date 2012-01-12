@@ -546,8 +546,6 @@ class Eagle:
     class Arc(Wire):
         """ A struct that represents an arc
         """
-        template = "=4B4IH2B" # unsigned int
-
         capmask = 0x10
         caps = {
                 0x00: None,
@@ -589,8 +587,8 @@ class Eagle:
                                    self.constant, 
                                    0, 0, self.layer,
 # TODO add curve...
-                                   self.encode_real(self.x1) | (_curve & 0xff) << 24,
-                                   self.encode_real(self.y1) ,
+                                   self.encode_real(self.x1),
+                                   self.encode_real(self.y1),
                                    self.encode_real(self.x2),
                                    self.encode_real(self.y2),
                                    self.encode_real(
