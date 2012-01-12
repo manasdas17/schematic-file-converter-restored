@@ -27,7 +27,7 @@ class GerberTests(unittest.TestCase):
     # decorator for tests that use input files
 
     def use_file(filename):
-        """ Generate parser from file. """
+        """ Parse a gerber file. """
         def wrap_wrap_tm(test_method):
             def wrap_tm(self):
                 parser = Gerber(path.join(dir, filename))
@@ -50,13 +50,13 @@ class GerberTests(unittest.TestCase):
     # tests that pass if no errors are raised
 
     def test_create_new_gerber_parser(self):
-        """ Test creating an empty parser. """
+        """ Create an empty gerber parser. """
         parser = Gerber()
         assert parser != None
 
     @use_file('simple.ger')
     def test_simple(self):
-        """ Test parsing a simple, correctly formatted file. """
+        """ Parse a simple, correct gerber file. """
         assert self.design.layouts != None
 
 

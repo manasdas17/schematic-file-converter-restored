@@ -2,6 +2,7 @@
 """ The Gerber RS274-X Format Parser """
 
 import re
+from string import digits
 from collections import namedtuple
 
 from core.design import Design
@@ -20,9 +21,14 @@ class DataAfterEOF(Unparsable): pass
 
 # token classes
 
-Funct = namedtuple('Funct', 'type_ code')
 Param = namedtuple('Param', 'id_ val')
+Aperture = namedtuple('Aperture', 'code type_ modifiers')
+Funct = namedtuple('Funct', 'type_ code')
 Coord = namedtuple('Coord', 'x y i j')
+CoordFmt = namedtuple('CoordFmt', 'int dec')
+FormatSpec = namedtuple('FormatSpec', ['zero_omission', 'incremental_coords',
+                                       'n_max', 'g_max', 'x', 'y',
+                                       'd_max', 'm_max'])
 
 # parser
 
@@ -31,24 +37,26 @@ class Gerber:
 
     def __init__(self, filename=None):
         self.filename = filename
-        self.dir_params = {'AS':{'A':'X',     # axis select
-                                 'B':'Y'},
-                           'FS':{},           # format spec
-                           'MI':{'A':0,       # mirror image
-                                 'B':0},
-                           'MO':'IN',         # mode
-                           'OF':{'A':0,       # offset
-                                 'B':0},
-                           'SF':{'A':1,       # scale factor
-                                 'B':1}}
-        self.img_params = {'IN':'',           # image name
-                           'IJ':{'A':('L', 0),# justify
-                                 'B':('L', 0)},
-                           'IO':{'A':0,       # offset
-                                 'B':0},
-                           'IP':True,         # polarity
-                           'IR':0,            # rotation
-                           'PF':''}           # plot film
+
+        # establish gerber defaults
+        self.params = {'AS':{'A':'X',     # axis select
+                             'B':'Y'},
+                       'FS':None,         # format spec
+                       'MI':{'A':0,       # mirror image
+                             'B':0},
+                       'MO':'IN',         # mode
+                       'OF':{'A':0,       # offset
+                             'B':0},
+                       'SF':{'A':1,       # scale factor
+                             'B':1},
+                       'IN':'',           # image name
+                       'IJ':{'A':('L', 0),# justify
+                             'B':('L', 0)},
+                       'IO':{'A':0,       # offset
+                             'B':0},
+                       'IP':True,         # polarity
+                       'IR':0,            # rotation
+                       'PF':''}           # plot film
 
     def parse(self):
         """ Parse a Gerber file into a design """
@@ -57,8 +65,7 @@ class Gerber:
         print 'data...'
         for data_block in data:
             print data_block
-        print 'dir_params: %s' % self.dir_params
-        print 'img_params: %s' % self.img_params
+        print 'params: %s' % self.params
         return design
 
     def _tokenize(self):
@@ -92,6 +99,8 @@ class Gerber:
         ]
         reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
         tok_re = re.compile(reg_ex, re.MULTILINE)
+        image_params = ('IJ', 'IN', 'IO', 'IP', 'IR', 'PF')
+        directives = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF')
         pos = matched = 0
         param_block = data_began = eof = False
 
@@ -106,16 +115,26 @@ class Gerber:
                 pos += 1
             else:
                 typ = mo.lastgroup
-                tok = mo.group(typ)[:-1] # strips *
+                tok = mo.group(typ)[:-1]
                 try:
                     if typ == 'PARAM_DELIM':
                         param_block = not param_block
-                    elif len(typ) == 2: # ALL PARAMS
+                    elif len(typ) == 2: # PARAMS
                         self._check_pb(param_block)
-                        if typ in ('IJ', 'IN', 'IO', 'IP', 'IR', 'PF'):
-                            self.img_params[tok[:2]] = tok[2:]
-                        elif typ in ('AS', 'FS', 'MI', 'MO', 'OF', 'SF') and not data_began:
-                            self._set_dir_param(tok)
+                        if typ in image_params:
+                            self.params[tok[:2]] = tok[2:]
+                        elif typ in directives:
+                            directive = self._parse_dir_param(tok)
+                            if data_began:
+                                yield directive
+                            else:
+                                self.params[typ] = directive
+                        elif typ == 'AD':
+                            aperture = self._parse_ap_def(tok)
+                            if self.params.has_key(aperture.code):
+                                yield aperture
+                            else:
+                                self.params[aperture.code] = aperture
                         else:
                             yield Param(tok[:2], tok[2:])
                     elif typ not in ('SKIP', 'UNKNOWN', 'COMMENT', 'DEPRECATED'):
@@ -138,25 +157,30 @@ class Gerber:
                     raise
                 pos = matched = mo.end()
             mo = tok_re.match(s, pos)
+        # self._check_eof(eof)
 
-    def _set_dir_param(self, tok):
-        name = tok[:2]
-        tok = tok[2:]
+    def _parse_dir_param(self, tok):
+        name, tok = (tok[:2], tok[2:])
         if name == 'FS':
-            fs = {}
-            tok, fs['M_max_digits'] = self._pop_val('M', tok)
-            tok, fs['D_max_digits'] = self._pop_val('D', tok)
+            tok, m_max = self._pop_val('M', tok)
+            tok, d_max = self._pop_val('D', tok)
             tok, y = self._pop_val('Y', tok, coerce_int=False)
-            fs['Y'] = {'int':int(y[:1]), 'dec':int(y[1:])}
+            y = CoordFmt(int(y[0]), int(y[1]))
             tok, x = self._pop_val('X', tok, coerce_int=False)
-            fs['X'] = {'int':int(x[:1]), 'dec':int(x[1:])}
-            tok, fs['G_max_digits'] = self._pop_val('G', tok)
-            tok, fs['N_max_digits'] = self._pop_val('N', tok)
-            fs['incremental'] = (tok[1] == 'I')
-            fs['zero_omission'] = tok[0]
-            self.dir_params[name] = fs
-        else:
-            self.dir_params[name] = tok
+            x = CoordFmt(int(x[0]), int(x[1]))
+            tok, g_max = self._pop_val('G', tok)
+            tok, n_max = self._pop_val('N', tok)
+            inc_coords = (tok[1] == 'I')
+            z_omit = tok[0]
+            tok = FormatSpec(z_omit, inc_coords, n_max, g_max,
+                             x, y, d_max, m_max)
+        return tok
+
+    def _parse_ap_def(self, tok):
+        code_end = tok[5] in digits and 6 or 5
+        code = tok[3:code_end]
+        type_, mods = tok[code_end:].split(',')
+        return Aperture(code, type_, tuple(mods.split('X')))
 
     def _parse_coord(self, tok):
         self._check_fs()
@@ -176,23 +200,23 @@ class Gerber:
             if num_str:
                 if format:
                     if coord in ('X', 'I'):
-                        val = self._format_dec(num_str, 'X')
+                        val = self._format_dec(num_str, 4)
                     else:
-                        val = self._format_dec(num_str, 'Y')
+                        val = self._format_dec(num_str, 5)
                 else:
                     val = coerce_int and int(num_str) or num_str
         return (tok, val)
 
     def _format_dec(self, num_str, xy):
-        fs = self.dir_params['FS']
+        fs = self.params['FS']
         sign_wid = num_str[0] in ('-', '+') and 1 or 0
-        int_wid = sign_wid + fs[xy]['int']
-        wid = int_wid + fs[xy]['dec']
+        int_wid = sign_wid + fs[xy].int
+        wid = int_wid + fs[xy].dec
 
         # pad to specified width
-        if fs['zero_omission'] == 'L':
+        if fs.zero_omission == 'L':
             num_str = num_str.zfill(wid)
-        elif fs['zero_omission'] == 'T':
+        elif fs.zero_omission == 'T':
             num_str = num_str.rjust(wid, '0')
         if len(num_str) != wid:
             raise Malformed('num_str: %s wid: %s' % (num_str, wid))
@@ -209,7 +233,7 @@ class Gerber:
             raise ContainsBadData
 
     def _check_fs(self):
-        if not self.dir_params['FS']:
+        if not self.params['FS']:
             raise PrecedesFormatSpec
 
     def _check_eof(self, trailing_fragment):
