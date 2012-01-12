@@ -133,7 +133,7 @@ class EagleTests(unittest.TestCase):
                                  b"\x4e\x24\x31\x00\x00\x00\x00\x00"))
         _net = Eagle.Net.parse(_valid_chunk)
 
-        self.assertEqual(_net.name,"N$1")
+        self.assertEqual(_net.name, "N$1")
         self.assertEqual(_net.nclass, 1)
         self.assertEqual(_net.numofblocks, 5)
         return

@@ -242,7 +242,7 @@ class Eagle:
                                    0, 
                                    1 + self.numofshapes, # TODO recheck +1
                                    self.numofattributes,
-                                   0x7f, 0, 0, 0,
+                                   0, 0, 0, 0x7f,
                                    0
                                   )
             return _ret_val
@@ -314,6 +314,10 @@ class Eagle:
                                                 Eagle.Shape.scale1b)
             else:
                 _ret_val = real * Eagle.Shape.scale2
+                if 0 < _ret_val:
+                    _ret_val += 0.01
+                else:
+                    _ret_val -= 0.01
             return int(_ret_val)
 
     class Circle(Shape):
@@ -344,8 +348,8 @@ class Eagle:
                                    Eagle.Shape.encode_real(self.y),
                                    Eagle.Shape.encode_real(self.radius),
                                    Eagle.Shape.encode_real(self.radius),
-                                   self.width_xscale *
-                                    Eagle.Shape.encode_real(self.width),
+                                   Eagle.Shape.encode_real(
+                                       self.width / self.width_xscale),
                                    0, 0
                                   )
             return _ret_val
@@ -503,8 +507,8 @@ class Eagle:
                                    Eagle.Shape.encode_real(self.y1),
                                    Eagle.Shape.encode_real(self.x2),
                                    Eagle.Shape.encode_real(self.y2),
-                                   self.width_xscale *
-                                    Eagle.Shape.encode_real(self.width),
+                                   Eagle.Shape.encode_real(
+                                       self.width / self.width_xscale),
                                    0, 0
                                   )
             return _ret_val
@@ -542,6 +546,8 @@ class Eagle:
     class Arc(Wire):
         """ A struct that represents an arc
         """
+        template = "=4B4IH2B" # unsigned int
+
         capmask = 0x10
         caps = {
                 0x00: None,
@@ -577,16 +583,18 @@ class Eagle:
                     _signs += _cc
                     break
 
+            _curve = self.encode_real(self.curve)
+
             _ret_val = struct.pack(self.template,
                                    self.constant, 
                                    0, 0, self.layer,
 # TODO add curve...
-                                   Eagle.Shape.encode_real(self.x1),
-                                   Eagle.Shape.encode_real(self.y1),
-                                   Eagle.Shape.encode_real(self.x2),
-                                   Eagle.Shape.encode_real(self.y2),
-                                   self.width_xscale *
-                                    Eagle.Shape.encode_real(self.width),
+                                   self.encode_real(self.x1) | (_curve & 0xff) << 24,
+                                   self.encode_real(self.y1) ,
+                                   self.encode_real(self.x2),
+                                   self.encode_real(self.y2),
+                                   self.encode_real(
+                                       self.width / self.width_xscale),
                                    _signs, 
                                    self.arc_sign
                                   )
@@ -630,7 +638,7 @@ class Eagle:
                 if Eagle.Text.rotates[_rr] == self.rotate:
                     _rotate = _rr
                     break
-            if self.max_embed_len > len(self.value):
+            if self.max_embed_len >= len(self.value):
                 _value = self.value
             else:
                 _value = self.no_embed_str + b'\0\0\0\x09'

@@ -567,6 +567,8 @@ class Eagle:
     class Arc(Wire):
         """ A struct that represents an arc
         """
+        template = "=4B4IH2B" # unsigned int
+
         capmask = 0x10
         caps = {
                 0x00: None,
