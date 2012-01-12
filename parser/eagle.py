@@ -32,7 +32,7 @@ from core.design import Design
 #    """
 #    pass
 
-class Eagle:
+class Eagle: # pylint: disable=R0902
     """ The Eagle Format Parser """
 
     
@@ -127,7 +127,7 @@ class Eagle:
                 1: True,
                }
 
-        def __init__(self, distance=0.1, unitdist="inch", unit="inch", 
+        def __init__(self, distance=0.1, unitdist="inch", unit="inch",  # pylint: disable=R0913
                 style="lines", multiple=1, display=False, altdistance=0.01, 
                 altunitdist="inch", altunit="inch"):
             """ Just a constructor
@@ -194,7 +194,7 @@ class Eagle:
 ## total 16; different line and dot patterns
 #               ]
 
-        def __init__(self, number, name, color, fill, visible, active):
+        def __init__(self, number, name, color, fill, visible, active): # pylint: disable=R0913
             """ Just a constructor
             """
             self.number = number
@@ -342,7 +342,7 @@ class Eagle:
         constant = 0x25
         template = "=4B4IH2B"
 
-        def __init__(self, x, y, radius, width, layer):
+        def __init__(self, x, y, radius, width, layer): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Circle, self).__init__(layer)
@@ -377,7 +377,7 @@ class Eagle:
         constant = 0x26
         template = "=4B4I4B"
 
-        def __init__(self, x1, y1, x2, y2, layer, rotate):
+        def __init__(self, x1, y1, x2, y2, layer, rotate): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Rectangle, self).__init__(layer)
@@ -461,7 +461,7 @@ class Eagle:
         constant = 0x20
         template = "=2BHI4B3I"
 
-        def __init__(self, numofshapes=0, wires=None, junctions=None,
+        def __init__(self, numofshapes=0, wires=None, junctions=None, # pylint: disable=R0913
                      labels=None, cumulativenumofshapes=0):
             """ Just a constructor
             """
@@ -499,7 +499,7 @@ class Eagle:
 
         arc_sign = 0x81
 
-        def __init__(self, x1, y1, x2, y2, layer, width):
+        def __init__(self, x1, y1, x2, y2, layer, width): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Wire, self).__init__(layer)
@@ -580,7 +580,7 @@ class Eagle:
                       0x20: "counterclockwise",
                      }
 
-        def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction):
+        def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Arc, self).__init__(x1, y1, x2, y2, layer, width)
@@ -627,7 +627,7 @@ class Eagle:
         delimeter = b'!'
         no_embed_str = b'\x7f'
 
-        def __init__(self, value, x, y, size, layer, rotate, font, ratio):
+        def __init__(self, value, x, y, size, layer, rotate, font, ratio): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Text, self).__init__(layer)
@@ -686,7 +686,7 @@ class Eagle:
         mirroredmask = 0x10
         onoffmask = 0x01
 
-        def __init__(self, x, y, size, layer, rotate, ratio, font, 
+        def __init__(self, x, y, size, layer, rotate, ratio, font,  # pylint: disable=R0913
                      onoff, mirrored):
             """ Just a constructor
                 Note: 6.0.0's xref is an other name for onoff
@@ -877,7 +877,7 @@ class Eagle:
         
         endmarker = 0x99999999
 
-        def __init__(self, num, name='', width=0, drill=0, clearances=None,
+        def __init__(self, num, name='', width=0, drill=0, clearances=None, # pylint: disable=R0913
                      leadint=0):
             """ Just a constructor
             """ 
@@ -963,16 +963,15 @@ class Eagle:
         self.netclasses = []
         return
 
-    def _parse(self, filehandle):
-        """ Parse an Eagle file into a set of Eagle objects
+    def _parse_blocks(self, filehandle, numofblocks): # pylint: disable=R0912
+        """ Parse fixed length block part of a file
         """
-# headers (constant block size driven)
-        self.header = self.Header.parse(filehandle.read(self.blocksize))
 # to keep parsing position
         _cur_web = None # consists of one or more segments
         _cur_segment = None # consists of one or more "wires"
 
-        for _nn in range(-1 + self.header.numofblocks):
+# loop through 24 byte long blocks
+        for _nn in range(numofblocks):
             _dta = filehandle.read(self.blocksize)
 
             _type = struct.unpack("24B", _dta)[0]
@@ -1012,12 +1011,37 @@ class Eagle:
             else:
 # TODO remove
                 print("unknown block tag %s" % hex(_type))
+        return
+
+    def _parse_netclasses(self, filehandle):
+        """ Parse netclasses part (fixed part + length + data part)
+        """
+
+        while True: # netclasses ## 0..7
+            (_some_int, _ncconst, _nclen) = struct.unpack(
+                    self.NetClass.template0, 
+                    filehandle.read(struct.calcsize(self.NetClass.template0)))
+            _ncdta = None
+            if 0 < _nclen:
+                _ncdta = filehandle.read(_nclen)
+            else:
+                break # should leadnum of a final 3I block be saved?..
+            self.netclasses.append(self.NetClass.parse(_some_int, 
+                                                       _ncconst, _ncdta))
+        return
+ 
+    def _parse(self, filehandle):
+        """ Parse an Eagle file into a set of Eagle objects
+        """
+# headers (constant block size driven)
+        self.header = self.Header.parse(filehandle.read(self.blocksize))
+        self._parse_blocks(filehandle, -1 + self.header.numofblocks)
 
 # desc (length driven)
         _noregblockheader = filehandle.read(4)
-        if Eagle.noregblockconst != _noregblockheader:
-# TODO remove
-            print("bad constant follows headers!")
+## TODO remove
+#        if Eagle.noregblockconst != _noregblockheader:
+#            print("bad constant follows headers!")
 
         # read len in bytes, then read corrsponding number of bytes
         _unreg_dta = filehandle.read(struct.unpack("I", 
@@ -1053,18 +1077,9 @@ class Eagle:
 
 # just to note: the list above ends with two zero bytes
 
-        while True: # netclasses ## 0..7
-            (_some_int, _ncconst, _nclen) = struct.unpack(
-                    self.NetClass.template0, 
-                    filehandle.read(struct.calcsize(self.NetClass.template0)))
-            _ncdta = None
-            if 0 < _nclen:
-                _ncdta = filehandle.read(_nclen)
-            else:
-                break # should leadnum of a final 3I block be saved?..
-            self.netclasses.append(self.NetClass.parse(_some_int, 
-                                                       _ncconst, _ncdta))
- 
+        self._parse_netclasses(filehandle)
+        return
+
     def _convert(self):
         """ Converts a set of Eagle objects into Design
         """

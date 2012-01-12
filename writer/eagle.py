@@ -33,7 +33,7 @@ import struct
 
 #from parser.eagle import EagleBinConsts
 
-class Eagle:
+class Eagle: # pylint: disable=R0902
     """ The Eagle format writer """
 
     class Header:
@@ -126,7 +126,7 @@ class Eagle:
                 1: True,
                }
 
-        def __init__(self, distance=0.1, unitdist="inch", unit="inch", 
+        def __init__(self, distance=0.1, unitdist="inch", unit="inch", # pylint: disable=R0913
                 style="lines", multiple=1, display=False, altdistance=0.01, 
                 altunitdist="inch", altunit="inch"):
             """ Just a constructor
@@ -188,7 +188,7 @@ class Eagle:
 ## total 16; different line and dot patterns
 #               ]
 
-        def __init__(self, number, name, color, fill, visible, active):
+        def __init__(self, number, name, color, fill, visible, active): # pylint: disable=R0913
             """ Just a constructor
             """
             self.number = number
@@ -326,7 +326,7 @@ class Eagle:
         constant = 0x25
         template = "=4B4IH2B"
 
-        def __init__(self, x, y, radius, width, layer):
+        def __init__(self, x, y, radius, width, layer): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Circle, self).__init__(layer)
@@ -360,7 +360,7 @@ class Eagle:
         constant = 0x26
         template = "=4B4I4B"
 
-        def __init__(self, x1, y1, x2, y2, layer, rotate):
+        def __init__(self, x1, y1, x2, y2, layer, rotate): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Rectangle, self).__init__(layer)
@@ -445,7 +445,7 @@ class Eagle:
         constant = 0x20
         template = "=2BHI4B3I"
 
-        def __init__(self, numofshapes=0, wires=None, junctions=None,
+        def __init__(self, numofshapes=0, wires=None, junctions=None, # pylint: disable=R0913
                      labels=None, cumulativenumofshapes=0):
             """ Just a constructor
             """
@@ -484,7 +484,7 @@ class Eagle:
 
         arc_sign = 0x81
 
-        def __init__(self, x1, y1, x2, y2, layer, width):
+        def __init__(self, x1, y1, x2, y2, layer, width): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Wire, self).__init__(layer)
@@ -557,7 +557,7 @@ class Eagle:
                       0x20: "counterclockwise",
                      }
 
-        def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction):
+        def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Arc, self).__init__(x1, y1, x2, y2, layer, width)
@@ -608,7 +608,7 @@ class Eagle:
         delimeter = b'!'
         no_embed_str = b'\x7f'
 
-        def __init__(self, value, x, y, size, layer, rotate, font, ratio):
+        def __init__(self, value, x, y, size, layer, rotate, font, ratio): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Text, self).__init__(layer)
@@ -676,7 +676,7 @@ class Eagle:
         mirroredmask = 0x10
         onoffmask = 0x01
 
-        def __init__(self, x, y, size, layer, rotate, ratio, font, 
+        def __init__(self, x, y, size, layer, rotate, ratio, font,  # pylint: disable=R0913
                      onoff, mirrored):
             """ Just a constructor
                 Note: 6.0.0's xref is the same as onoff
@@ -852,7 +852,7 @@ class Eagle:
         
         endmarker = 0x99999999
 
-        def __init__(self, num, name='', width=0, drill=0, clearances=None,
+        def __init__(self, num, name='', width=0, drill=0, clearances=None, # pylint: disable=R0913
                      leadint=0):
             """ Just a constructor
             """ 
