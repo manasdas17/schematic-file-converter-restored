@@ -21,11 +21,12 @@ class DataAfterEOF(Unparsable): pass
 
 # token classes
 
-Param = namedtuple('Param', 'id_ val')
 Aperture = namedtuple('Aperture', 'code type_ modifiers')
-Funct = namedtuple('Funct', 'type_ code')
 Coord = namedtuple('Coord', 'x y i j')
 CoordFmt = namedtuple('CoordFmt', 'int dec')
+AxisDef = namedtuple('AxisDef', 'a b')
+Funct = namedtuple('Funct', 'type_ code')
+Param = namedtuple('Param', 'id_ val')
 FormatSpec = namedtuple('FormatSpec', ['zero_omission', 'incremental_coords',
                                        'n_max', 'g_max', 'x', 'y',
                                        'd_max', 'm_max'])
@@ -39,68 +40,65 @@ class Gerber:
         self.filename = filename
 
         # establish gerber defaults
-        self.params = {'AS':{'A':'X',     # axis select
-                             'B':'Y'},
-                       'FS':None,         # format spec
-                       'MI':{'A':0,       # mirror image
-                             'B':0},
-                       'MO':'IN',         # mode
-                       'OF':{'A':0,       # offset
-                             'B':0},
-                       'SF':{'A':1,       # scale factor
-                             'B':1},
-                       'IN':'',           # image name
-                       'IJ':{'A':('L', 0),# justify
-                             'B':('L', 0)},
-                       'IO':{'A':0,       # offset
-                             'B':0},
-                       'IP':True,         # polarity
-                       'IR':0,            # rotation
-                       'PF':''}           # plot film
+        self.params = {'AS':AxisDef('x', 'y'),# axis select
+                       'FS':None,             # format spec
+                       'MI':AxisDef(0, 0),    # mirror image
+                       'MO':'IN',             # mode: inches/mm
+                       'OF':AxisDef(0, 0),    # offset
+                       'SF':AxisDef(1, 1),    # scale factor
+                       'IN':'',               # image name
+                       'IJ':AxisDef(('L', 0), # image justify
+                                    ('L', 0)),
+                       'IO':AxisDef(0, 0),    # image offset
+                       'IP':True,             # image polarity
+                       'IR':0,                # image rotation
+                       'PF':''}               # plot film
 
     def parse(self):
         """ Parse a Gerber file into a design """
         design = Design()
         data = self._tokenize()
-        print 'data...'
         for data_block in data:
             print data_block
         print 'params: %s' % self.params
         return design
 
     def _tokenize(self):
-        tok_spec = [
-            ('PARAM_DELIM', r'%'),      # parameter delimiter
-            ('AS', r'AS[^\*]*\*'),      # axis select
-            ('FS', r'FS[^\*]*\*'),      # format specification
-            ('MI', r'MI[^\*]*\*'),      # mirror image (axis)
-            ('MO', r'MO[^\*]*\*'),      # mode (inches/mm)
-            ('OF', r'OF[^\*]*\*'),      # offset
-            ('SF', r'SF[^\*]*\*'),      # scale factor
-            ('IJ', r'IJ[^\*]*\*'),      # image justification
-            ('IN', r'IN[^\*]*\*'),      # image name
-            ('IO', r'IO[^\*]*\*'),      # image offset
-            ('IP', r'IP[^\*]*\*'),      # image polarity
-            ('IR', r'IR[^\*]*\*'),      # image rotation
-            ('PF', r'PF[^\*]*\*'),      # plot film
-            ('KO', r'KO[^\*]*\*'),      # layer - knock out
-            ('LN', r'LN[^\*]*\*'),      # layer - name
-            ('LP', r'LP[^\*]*\*'),      # layer - polarity
-            ('SR', r'SR[^\*]*\*'),      # layer - step and repeat
-            ('AD', r'AD[^\*]*\*'),      # aperture definition
-            ('COMMENT', r'G04[^\*]*\*'),# comment
-            ('DEPRECATED', r'G54\*?'),  # historic crud
-            ('FUNCT', r'[GD][^\*]*\*'), # function code
-            ('COORD', r'[XY][^\*]*\*'), # coordinates
-            ('EOF', r'M02\*'),          # end of file
-            ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # more historic crud, whitespace
-            ('UNKNOWN', r'[^\*]*\*'),   # unintelligble data blocks
-                                        # -- currently traps aperture defs and thermal descriptions
-        ]
+        tok_spec = (('PARAM_DELIM', r'%'),      # parameter delimiter
+                    ('AS', r'AS[^\*]*\*'),
+                    ('FS', r'FS[^\*]*\*'),
+                    ('MI', r'MI[^\*]*\*'),
+                    ('MO', r'MO[^\*]*\*'),
+                    ('OF', r'OF[^\*]*\*'),
+                    ('SF', r'SF[^\*]*\*'),
+                    ('IJ', r'IJ[^\*]*\*'),
+                    ('IN', r'IN[^\*]*\*'),
+                    ('IO', r'IO[^\*]*\*'),
+                    ('IP', r'IP[^\*]*\*'),
+                    ('IR', r'IR[^\*]*\*'),
+                    ('PF', r'PF[^\*]*\*'),
+                    ('KO', r'KO[^\*]*\*'),      # layer - knock out
+                    ('LN', r'LN[^\*]*\*'),      # layer - name
+                    ('LP', r'LP[^\*]*\*'),      # layer - polarity
+                    ('SR', r'SR[^\*]*\*'),      # layer - step and repeat
+                    ('AD', r'AD[^\*]*\*'),      # aperture definition
+                    ('COMMENT', r'G04[^\*]*\*'),# comment
+                    ('DEPRECATED', r'G54\*?'),  # historic crud
+                    ('FUNCT', r'[GD][^\*]*\*'), # function code
+                    ('COORD', r'[XY][^\*]*\*'), # coordinates
+                    ('EOF', r'M02\*'),          # end of file
+                    ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # more historic crud, whitespace
+                    ('UNKNOWN', r'[^\*]*\*'))   # unintelligble data block
+                                                # -- currently traps thermal descriptions
+
+        # define constants and counters
         reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
         tok_re = re.compile(reg_ex, re.MULTILINE)
-        image_params = ('IJ', 'IN', 'IO', 'IP', 'IR', 'PF')
+        axis_params = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
         directives = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF')
+        image_params = ('IJ', 'IN', 'IO', 'IP', 'IR', 'PF')
+        stored_params =  directives + image_params + ('AD',)
+        ignore = ('SKIP', 'COMMENT', 'DEPRECATED')
         pos = matched = 0
         param_block = data_began = eof = False
 
@@ -119,54 +117,51 @@ class Gerber:
                 try:
                     if typ == 'PARAM_DELIM':
                         param_block = not param_block
-                    elif len(typ) == 2: # PARAMS
+
+                    # handle params
+                    elif len(typ) == 2:
                         self._check_pb(param_block)
-                        if typ in image_params:
-                            self.params[tok[:2]] = tok[2:]
-                        elif typ in directives:
-                            directive = self._parse_dir_param(tok)
-                            if data_began:
-                                yield directive
-                            else:
-                                self.params[typ] = directive
-                        elif typ == 'AD':
-                            aperture = self._parse_ap_def(tok)
-                            if self.params.has_key(aperture.code):
-                                yield aperture
-                            else:
-                                self.params[aperture.code] = aperture
+                        param = self._parse_param(tok, axis_params)
+                        do_yield = (typ in directives and
+                                    data_began) or (typ == 'AD' and
+                                    self.params.has_key(param.code)) or (
+                                    typ not in stored_params)
+                        if do_yield:
+                            yield param
                         else:
-                            yield Param(tok[:2], tok[2:])
-                    elif typ not in ('SKIP', 'UNKNOWN', 'COMMENT', 'DEPRECATED'):
+                            self.params[typ] = param
+
+                    # handle data
+                    elif typ not in ignore:
                         self._check_pb(param_block, False)
                         if typ in ('FUNCT', 'COORD'):
-                            if 'G' in tok:
-                                g_code = tok[1:3] # assumes leading 0 is supplied... maybe flawed
-                                tok = tok[3:]
-                                yield Funct('G', g_code)
-                            if 'D' in tok:
-                                tok, d_code = tok.split('D')
-                                yield Funct('D', d_code)
-                            if tok:
-                                data_began = True
-                                yield self._parse_coord(tok)
+                            data_began = True # TODO: allow FS following funct but preceding coord
+
+                            # explode self-referential data blocks
+                            blocks = self._parse_data_block(tok)
+                            for block in blocks:
+                                yield block
+
+                        # handle EOF
                         elif typ == 'EOF':
                             self._check_eof(s[mo.end():])
                             eof = True
+
+                # tidy up
                 except Unparsable:
                     raise
                 pos = matched = mo.end()
             mo = tok_re.match(s, pos)
         # self._check_eof(eof)
 
-    def _parse_dir_param(self, tok):
+    def _parse_param(self, tok, axis_params):
         name, tok = (tok[:2], tok[2:])
         if name == 'FS':
             tok, m_max = self._pop_val('M', tok)
             tok, d_max = self._pop_val('D', tok)
-            tok, y = self._pop_val('Y', tok, coerce_int=False)
+            tok, y = self._pop_val('Y', tok, coerce=False)
             y = CoordFmt(int(y[0]), int(y[1]))
-            tok, x = self._pop_val('X', tok, coerce_int=False)
+            tok, x = self._pop_val('X', tok, coerce=False)
             x = CoordFmt(int(x[0]), int(x[1]))
             tok, g_max = self._pop_val('G', tok)
             tok, n_max = self._pop_val('N', tok)
@@ -174,13 +169,31 @@ class Gerber:
             z_omit = tok[0]
             tok = FormatSpec(z_omit, inc_coords, n_max, g_max,
                              x, y, d_max, m_max)
-        return tok
+        elif name == 'AD':
+            code_end = tok[3] in digits and 4 or 3
+            code = tok[1:code_end]
+            type_, mods = tok[code_end:].split(',')
+            tok = Aperture(code, type_, tuple(mods.split('X')))
+        elif name == 'LN':
+            tok = Param(name, tok)
+        elif name in axis_params:
+            coerce = name in axis_params[:2] and 'int' or 'float'
+            tok, b = self._pop_val('B', tok, coerce=coerce)
+            tok, a = self._pop_val('A', tok, coerce=coerce)
+            tok = AxisDef(a, b) # TODO: spec for IJ references off-spec examples with , or . delimiters
+        # TODO: handle  IP, IR, layer params KO, LP, SR
+        return tok # TODO: MO, IN, PF... naked strings - use a more sensible var
 
-    def _parse_ap_def(self, tok):
-        code_end = tok[5] in digits and 6 or 5
-        code = tok[3:code_end]
-        type_, mods = tok[code_end:].split(',')
-        return Aperture(code, type_, tuple(mods.split('X')))
+    def _parse_data_block(self, tok):
+        if 'G' in tok:
+            g_code = tok[1:3] # TODO: remove assumption that leading 0 is supplied -- not required by spec
+            tok = tok[3:]
+            yield Funct('G', g_code)
+        tok, d_code = self._pop_val('D', tok, coerce=False)
+        if d_code:
+            yield Funct('D', d_code)
+        if tok:
+            yield self._parse_coord(tok)
 
     def _parse_coord(self, tok):
         self._check_fs()
@@ -193,18 +206,20 @@ class Gerber:
             raise Malformed('%s remainder=%s' % (result, tok))
         return result
 
-    def _pop_val(self, coord, tok, format=False, coerce_int=True):
+    def _pop_val(self, key, tok, format=False, coerce='int'):
         val = None
-        if coord in tok:
-            tok, num_str = tok.split(coord)
+        if key in tok:
+            tok, num_str = tok.split(key)
             if num_str:
                 if format:
-                    if coord in ('X', 'I'):
+                    if key in ('X', 'I'):
                         val = self._format_dec(num_str, 4)
                     else:
                         val = self._format_dec(num_str, 5)
                 else:
-                    val = coerce_int and int(num_str) or num_str
+                    val = coerce and (coerce == 'float' and
+                                      float(num_str) or
+                                      int(num_str)) or num_str
         return (tok, val)
 
     def _format_dec(self, num_str, xy):
@@ -213,7 +228,7 @@ class Gerber:
         int_wid = sign_wid + fs[xy].int
         wid = int_wid + fs[xy].dec
 
-        # pad to specified width
+        # pad coordinate data to specified width
         if fs.zero_omission == 'L':
             num_str = num_str.zfill(wid)
         elif fs.zero_omission == 'T':
