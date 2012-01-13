@@ -15,8 +15,8 @@ class Layer:
 
     def __init__(self):
         self.id = ''
-        self.type = '' # Copper or Mask/Silk
-        self.traces = [] # Lines, Circle parts, etc... connection tracks
+        self.type = ''  # Copper or Mask/Silk
+        self.traces = []# Lines, Circle parts, etc... connection tracks
         self.vias = []
         self.fills = [] # probably includes pads -- may have to extend
         self.voids = [] # possibly places that must be kept clear -- irrelevant for gerber

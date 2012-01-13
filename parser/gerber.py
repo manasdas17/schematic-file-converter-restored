@@ -14,10 +14,12 @@ class Unparsable(ValueError): pass
 class ParamError(Unparsable): pass
 class CoordError(Unparsable): pass
 class DelimiterMissing(ParamError): pass
-class ContainsBadData(ParamError): pass
-class PrecedesFormatSpec(CoordError): pass
-class Malformed(CoordError): pass
+class ParamContainsBadData(ParamError): pass
+class CoordPrecedesFormatSpec(CoordError): pass
+class CoordMalformed(CoordError): pass
+class FileNotTerminated(Unparsable): pass
 class DataAfterEOF(Unparsable): pass
+class UnintelligibleDataBlock(Unparsable): pass
 
 # token classes
 
@@ -27,9 +29,9 @@ CoordFmt = namedtuple('CoordFmt', 'int dec')
 AxisDef = namedtuple('AxisDef', 'a b')
 Funct = namedtuple('Funct', 'type_ code')
 Param = namedtuple('Param', 'id_ val')
-FormatSpec = namedtuple('FormatSpec', ['zero_omission', 'incremental_coords',
-                                       'n_max', 'g_max', 'x', 'y',
-                                       'd_max', 'm_max'])
+FormatSpec = namedtuple('FormatSpec', ['zero_omission',
+                        'incremental_coords', 'n_max', 'g_max',
+                        'x', 'y', 'd_max', 'm_max'])
 
 # parser
 
@@ -46,13 +48,11 @@ class Gerber:
                        'MO':'IN',             # mode: inches/mm
                        'OF':AxisDef(0, 0),    # offset
                        'SF':AxisDef(1, 1),    # scale factor
-                       'IN':'',               # image name
                        'IJ':AxisDef(('L', 0), # image justify
                                     ('L', 0)),
                        'IO':AxisDef(0, 0),    # image offset
                        'IP':True,             # image polarity
-                       'IR':0,                # image rotation
-                       'PF':''}               # plot film
+                       'IR':0}                # image rotation
 
     def parse(self):
         """ Parse a Gerber file into a design """
@@ -64,40 +64,29 @@ class Gerber:
         return design
 
     def _tokenize(self):
-        tok_spec = (('PARAM_DELIM', r'%'),      # parameter delimiter
-                    ('AS', r'AS[^\*]*\*'),
-                    ('FS', r'FS[^\*]*\*'),
-                    ('MI', r'MI[^\*]*\*'),
-                    ('MO', r'MO[^\*]*\*'),
-                    ('OF', r'OF[^\*]*\*'),
-                    ('SF', r'SF[^\*]*\*'),
-                    ('IJ', r'IJ[^\*]*\*'),
-                    ('IN', r'IN[^\*]*\*'),
-                    ('IO', r'IO[^\*]*\*'),
-                    ('IP', r'IP[^\*]*\*'),
-                    ('IR', r'IR[^\*]*\*'),
-                    ('PF', r'PF[^\*]*\*'),
-                    ('KO', r'KO[^\*]*\*'),      # layer - knock out
-                    ('LN', r'LN[^\*]*\*'),      # layer - name
-                    ('LP', r'LP[^\*]*\*'),      # layer - polarity
-                    ('SR', r'SR[^\*]*\*'),      # layer - step and repeat
-                    ('AD', r'AD[^\*]*\*'),      # aperture definition
-                    ('COMMENT', r'G04[^\*]*\*'),# comment
-                    ('DEPRECATED', r'G54\*?'),  # historic crud
-                    ('FUNCT', r'[GD][^\*]*\*'), # function code
-                    ('COORD', r'[XY][^\*]*\*'), # coordinates
-                    ('EOF', r'M02\*'),          # end of file
-                    ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # more historic crud, whitespace
-                    ('UNKNOWN', r'[^\*]*\*'))   # unintelligble data block
-                                                # -- currently traps thermal descriptions
+        all_params = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
+                      'IJ', 'IN', 'IO', 'IP', 'IR', 'PF', 'AD',
+                      'KO', 'LN', 'LP', 'SR')
+        param_spec = tuple([(p, r'%s[^\*]*\*' % p)
+                            for p in all_params])
+        tok_spec = (('PARAM_DELIM', r'%'),) + param_spec + (
+                    ('COMMENT', r'G04[^\*]*\*'),
+                    ('DEPRECATED', r'G54\*?'), # historic crud
+                    ('FUNCT', r'[GD][^\*]*\*'),# function codes
+                    ('COORD', r'[XY][^\*]*\*'),# coordinates
+                    ('EOF', r'M02\*'),         # end of file
+                    ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
+                    ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
+                                               # -- currently traps aperture macros
 
         # define constants and counters
         reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
         tok_re = re.compile(reg_ex, re.MULTILINE)
+        directives = all_params[:6]
+        img_params = all_params[6:12]
+        stored_params = all_params[:13]
+        layer_params = all_params[13:]
         axis_params = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
-        directives = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF')
-        image_params = ('IJ', 'IN', 'IO', 'IP', 'IR', 'PF')
-        stored_params =  directives + image_params + ('AD',)
         ignore = ('SKIP', 'COMMENT', 'DEPRECATED')
         pos = matched = 0
         param_block = data_began = eof = False
@@ -134,7 +123,11 @@ class Gerber:
                     # handle data
                     elif typ not in ignore:
                         self._check_pb(param_block, False)
-                        if typ in ('FUNCT', 'COORD'):
+                        if typ == 'EOF':
+                            self._check_eof(s[mo.end():])
+                            eof = True
+                        else:
+                            self._check_typ(typ, tok)
                             data_began = True # TODO: allow FS following funct but preceding coord
 
                             # explode self-referential data blocks
@@ -142,17 +135,12 @@ class Gerber:
                             for block in blocks:
                                 yield block
 
-                        # handle EOF
-                        elif typ == 'EOF':
-                            self._check_eof(s[mo.end():])
-                            eof = True
-
                 # tidy up
                 except Unparsable:
                     raise
                 pos = matched = mo.end()
             mo = tok_re.match(s, pos)
-        # self._check_eof(eof)
+        self._check_eof(eof=eof)
 
     def _parse_param(self, tok, axis_params):
         name, tok = (tok[:2], tok[2:])
@@ -203,7 +191,7 @@ class Gerber:
         tok, x = self._pop_val('X', tok, format=True)
         result = Coord(x, y, i, j)
         if tok:
-            raise Malformed('%s remainder=%s' % (result, tok))
+            raise CoordMalformed('%s remainder=%s' % (result, tok))
         return result
 
     def _pop_val(self, key, tok, format=False, coerce='int'):
@@ -234,7 +222,7 @@ class Gerber:
         elif fs.zero_omission == 'T':
             num_str = num_str.rjust(wid, '0')
         if len(num_str) != wid:
-            raise Malformed('num_str: %s wid: %s' % (num_str, wid))
+            raise CoordMalformed('num_str: %s wid: %s' % (num_str, wid))
 
         # insert decimal point
         num_str = '%s.%s' % (num_str[:int_wid], num_str[int_wid:])
@@ -245,12 +233,18 @@ class Gerber:
         if should_be and not param_block:
             raise DelimiterMissing
         if param_block and not should_be:
-            raise ContainsBadData
+            raise ParamContainsBadData
 
     def _check_fs(self):
         if not self.params['FS']:
-            raise PrecedesFormatSpec
+            raise CoordPrecedesFormatSpec
 
-    def _check_eof(self, trailing_fragment):
-        if trailing_fragment.strip():
+    def _check_eof(self, trailing_fragment=None, eof=False):
+        if not (trailing_fragment or eof):
+            raise FileNotTerminated
+        elif (not eof) and trailing_fragment.strip():
             raise DataAfterEOF(trailing_fragment)
+
+    def _check_typ(self, typ, tok):
+        if typ == 'UNKNOWN':
+            raise UnintelligibleDataBlock(tok)
