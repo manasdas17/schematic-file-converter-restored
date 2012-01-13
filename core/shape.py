@@ -1,5 +1,26 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """ The shape class """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+from math import sqrt, pi, sin, cos
 
 
 class Shape(object):
@@ -87,7 +108,7 @@ class RoundedRectangle(Shape):
     """ A rectangle with rounded corners, defined by x, y of top left corner
     and width, height and corner radius"""
 
-    def __init__(self, x, y, width, height, radius):
+    def __init__(self, x, y, width, height, radius): # pylint: disable=R0913
         super(RoundedRectangle, self).__init__()
         self.type = "rounded_rectangle"
         self.x = x
@@ -125,7 +146,7 @@ class RoundedRectangle(Shape):
 
 
     @classmethod
-    def from_corners(cls, x, y, x2, y2, radius):
+    def from_corners(cls, x, y, x2, y2, radius): # pylint: disable=R0913
         """ x and y are the top left corner of the rectangle, x2 and y2 are the
         bottom right corner of the rectangle """
         width = x2-x
@@ -149,7 +170,7 @@ class Arc(Shape):
     """ arc defined by center point x, y and two angles between which an
     arc is drawn """
 
-    def __init__(self, x, y, start_angle, end_angle, radius):
+    def __init__(self, x, y, start_angle, end_angle, radius): # pylint: disable=R0913
         super(Arc, self).__init__()
         self.type = "arc"
         self.x = x
@@ -162,6 +183,55 @@ class Arc(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
+
+
+    def _contains_angle(self, theta):
+        """ normalize angles to the interval [0, 2) """
+        start = self.start_angle % 2.0
+        end = self.end_angle % 2.0
+        theta = theta % 2.0
+
+        if start == end:
+            # arc is really a dot, I suppose?
+            return theta == start
+        elif start < end:
+            return start <= theta and theta <= end
+        else:
+            # arc spans [start, 2.0), wraps around, and also spans [0, end]
+            return start <= theta or theta <= end
+
+
+    def min_point(self):
+        """ Return the min point of the shape """
+        start, end = (self.start_angle % 2.0) * pi, (self.end_angle % 2.0) * pi
+        if self._contains_angle(1.5):
+            # the top of the circle is included
+            y = self.y - self.radius
+        else:
+            y = self.y + min([sin(start), sin(end)]) * self.radius
+        if self._contains_angle(1):
+            x = self.x - self.radius
+        else:
+            x = self.x + min([cos(start), cos(end)]) * self.radius
+        return Point(int(round(x)), int(round(y)))
+
+
+    def max_point(self):
+        """ Return the max point of the shape """
+        # assuming angle is in radians/pi, such that an angle of 1.0 is 180
+        # degrees, assuming 0 is 3 o'clock, and angles increase clockwise.
+        # normalize angles to the interval [0, 2)
+        start, end = (self.start_angle % 2.0) * pi, (self.end_angle % 2.0) * pi
+        if self._contains_angle(0.5):
+            # the bottom of the circle is included
+            y = self.y + self.radius
+        else:
+            y = self.y + max([sin(start), sin(end)]) * self.radius
+        if self._contains_angle(0):
+            x = self.x + self.radius
+        else:
+            x = self.x + max([cos(start), cos(end)]) * self.radius
+        return Point(int(round(x)), int(round(y)))
 
 
     def json(self):
@@ -218,10 +288,10 @@ class Circle(Shape):
 
 class Label(Shape):
     """ Text label with x, y location, alignment, rotation and text.
-    Alignment can be 'left','right', or 'center'.
-    """
+    Alignment can be 'left','right', or 'center'. """
+    # pylint: disable=W0223
 
-    def __init__(self, x, y, text, align, rotation):
+    def __init__(self, x, y, text, align, rotation): # pylint: disable=R0913
         super(Label, self).__init__()
         self.type = "label"
         self.x = x
@@ -369,14 +439,66 @@ class BezierCurve(Shape):
         self.control2 = Point(control2)
         self.p1 = Point(p1)
         self.p2 = Point(p2)
+        self._memo_cache = {'min_point': {}, 'max_point': {}}
     
+
+    def _line(self):
+        """ Convert the curve into a set of points. """
+        segments = [(self.p1, self.control1),
+                    (self.control1, self.control2),
+                    (self.control2, self.p1)]
+        # calculate maximum path length as straight lines between each point,
+        # (think the curve itself can be no longer than that) then double it so
+        # as not to skip points, and use that to decide t step size. Quite
+        # possible too many points will result.
+        maxpath = sum([sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) for
+                       p1, p2 in segments]) * 2
+        # textbook Bezier interpolation
+        bzx = lambda t: int(round((1-t) * (1-t) * (1-t) * self.p1.x +
+                                 3 * (1-t) * (1-t) * t * self.control1.x +
+                                 3 * (1-t) * t * t * self.control2.x +
+                                 t * t * t * self.p2.x))
+        bzy = lambda t: int(round((1-t) * (1-t) * (1-t) * self.p1.y +
+                                 3 * (1-t) * (1-t) * t * self.control1.y +
+                                 3 * (1-t) * t * t * self.control2.y +
+                                 t * t * t * self.p2.y))
+        points = [Point(bzx(t), bzy(t)) for t in [float(s)/maxpath for s in
+                                                range(int(maxpath) + 1)]]
+        return points
+
     
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
 
 
-    def build(self, control1x, control1y, control2x, control2y, p1x,
+    def min_point(self):
+        """ Return the min point of the shape """
+        # key the memoization cache on the actual (x,y) co-ords of our points
+        cache_key = tuple([(p.x, p.y) for p in [self.p1, self.control1,
+                                                self.control2, self.p2]])
+        if cache_key not in self._memo_cache['min_point']:
+            pts = self._line()
+            x_pts = [pt.x for pt in pts]
+            y_pts = [pt.y for pt in pts]
+            self._memo_cache['min_point'][cache_key] = (min(x_pts), min(y_pts))
+        # create a new Point each time, in case the caller modifies them
+        return Point(self._memo_cache['min_point'][cache_key])
+
+
+    def max_point(self):
+        """ Return the max point of the shape """
+        cache_key = tuple([(p.x, p.y) for p in [self.p1, self.control1,
+                                                self.control2, self.p2]])
+        if cache_key not in self._memo_cache['max_point']:
+            pts = self._line()
+            x_pts = [pt.x for pt in pts]
+            y_pts = [pt.y for pt in pts]
+            self._memo_cache['max_point'][cache_key] = (max(x_pts), max(y_pts))
+        return Point(self._memo_cache['max_point'][cache_key])
+
+
+    def build(self, control1x, control1y, control2x, control2y, p1x, # pylint: disable=R0913
             p1y, p2x, p2y):
         """ Build the bezier curve """
         self.type = "bezier"

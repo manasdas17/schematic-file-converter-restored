@@ -1,16 +1,4 @@
-#!/usr/bin/env python
-#
-# Basic Strategy
-# 0) converted file will be store in subdirectory
-# 1) create subdirectory, symbol and project file
-# 2) Write each component into a .sym file (even EMBEDDED components)
-# 3) Write component instances to .sch file
-# 4) Store net segments at the end of .sch file
-#
-# NOTE: The gEDA format is based on a 100x100 MILS grid where
-# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
-# a blueprint-style frame is present with origin at 
-# (40'000, 40'000). 
+#!/usr/bin/env python2
 """ This module provides a writer class to generate valid gEDA
     file format data from a OpenJSON design. The module does
     not generate embedded symbols but writes each symbol to 
@@ -38,6 +26,38 @@
     ])
     >>> writer.geda.write(design, 'geda_test_design.sch')
 """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# Basic Strategy
+# 0) converted file will be store in subdirectory
+# 1) create subdirectory, symbol and project file
+# 2) Write each component into a .sym file (even EMBEDDED components)
+# 3) Write component instances to .sch file
+# 4) Store net segments at the end of .sch file
+#
+# NOTE: The gEDA format is based on a 100x100 MILS grid where
+# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
+# a blueprint-style frame is present with origin at 
+# (40'000, 40'000). 
+
 
 import os
 import types
@@ -87,22 +107,18 @@ class GEDA:
         'right': 4,
     }
 
-    def __init__(self, symbol_dirs=None, auto_include=False):
+    def __init__(self, symbol_dirs=None):
         """ Constructs a new GEDA object and initialises it. *symbol_dirs*
             expects a list of directories. It will search for .sym files
-            in all the specified directories. To use the most likely gEDA
-            symbol directories set *auto_include* to True. It will try 
-            */usr/share/gEDA/sym* and */usr/local/share/gEDA/sym*.
+            in all the specified directories.
         """
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
 
-            if auto_include is True:
-                symbol_dirs += [
-                    '/usr/share/gEDA/sym',
-                    '/usr/local/share/gEDA/sym',
-                ]
+        symbol_dirs += [
+            'library/geda',
+        ]
 
         self.known_symbols = find_symbols(symbol_dirs)
 
@@ -287,6 +303,8 @@ class GEDA:
             not present, a new symbol file will be generated in the project
             directory's symbols directory.
         """
+        # pylint: disable=R0914
+
         ##NOTE: extract and remove gEDA internal attribute
         geda_imported = component.attributes.get('_geda_imported', 'false')
         geda_imported = (geda_imported == "true")

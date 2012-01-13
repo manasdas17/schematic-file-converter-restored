@@ -2,16 +2,34 @@
 # encoding: utf-8
 """ The geda parser test class """
 
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 import os
 import unittest
 import StringIO
 from parser.geda import GEDA, GEDAError
-from parser.openjson import JSON
 import core.shape
 
 
-class GEDATests(unittest.TestCase):
-    """ The tests of the geda parser """
+class GEDAEmpty(unittest.TestCase):
+    """ The tests of a blank geda parser """
 
     def setUp(self):
         """ Setup the test case. """
@@ -27,7 +45,9 @@ class GEDATests(unittest.TestCase):
         assert parser != None
 
 
-class TestGEDA(unittest.TestCase):
+class GEDATests(unittest.TestCase):
+    """ The tests of the geda parser """
+    # pylint: disable=W0212
 
     def setUp(self):
         """ setup gEDA parser instance with offset (0,0) for easier 
@@ -42,15 +62,22 @@ class TestGEDA(unittest.TestCase):
         """ Test constructor with different parameters to ensure
             that symbols and symbol directories are handled correctly.
         """
+        ## get number of symbols in symbols directory
+        symbols = set() 
+        for dummy, dummy, filenames in os.walk('library/geda'):
+            for filename in filenames:
+                if filename.endswith('.sym'):
+                    symbols.add(filename)
+
         geda_parser = GEDA()
-        self.assertEquals(len(geda_parser.known_symbols), 0)
+        self.assertEquals(len(geda_parser.known_symbols), len(symbols))
 
         geda_parser = GEDA([
             './test/geda/simple_example/symbols',
             '/invalid/dir/gEDA',
         ])
 
-        self.assertEquals(len(geda_parser.known_symbols), 1)
+        self.assertEquals(len(geda_parser.known_symbols), len(symbols)+1)
         self.assertEquals(
             geda_parser.known_symbols['opamp'],
             './test/geda/simple_example/symbols/opamp.sym'
@@ -58,23 +85,24 @@ class TestGEDA(unittest.TestCase):
 
         geda_parser = GEDA([
             './test/geda/simple_example/symbols',
-            '/usr/share/gEDA/sym',
             '/invalid/dir/gEDA',
         ])
 
-        self.assertGreater(len(geda_parser.known_symbols), 0)
+        self.assertTrue(len(geda_parser.known_symbols) > len(symbols))
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
-        geda_parser = GEDA(auto_include=True)
+        geda_parser = GEDA()
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
     def test__parse_text(self):
         """ Test extracting text commands from input stream. """
+
         valid_text = """T 16900 35800 3 10 1 0 0 0 1
 Text string!"""
 
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser._parse_command(text_stream)
+        self.assertEquals(typ, 'T')
         key, value = self.geda_parser._parse_text(text_stream, params)
 
         self.assertEquals(key, None)
@@ -95,6 +123,7 @@ and more ...
 text!"""
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser._parse_command(text_stream)
+        self.assertEquals(typ, 'T')
         key, value = self.geda_parser._parse_text(text_stream, params)
 
         text = """Text string!
@@ -376,6 +405,7 @@ device=none
 
         stream = StringIO.StringIO(simple_segment)
         typ, params = self.geda_parser._parse_command(stream)
+        self.assertEquals(typ, 'N')
         self.geda_parser._parse_segment(stream, params)
 
         np_a, np_b = self.geda_parser.segments.pop()
@@ -406,6 +436,7 @@ netname=+_1
 
         stream = StringIO.StringIO(complex_segment)
         typ, params = self.geda_parser._parse_command(stream)
+        self.assertEquals(typ, 'N')
         self.geda_parser._parse_segment(stream, params)
 
         expected_points = [(4730, 4850), (4350, 4850)]
@@ -420,6 +451,7 @@ netname=+_1
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 41100 48500 1900 0 90 3 0 0 0 -1 -1")
         )
+        self.assertEquals(typ, 'A')
         arc_obj = self.geda_parser._parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 4110)
@@ -431,6 +463,7 @@ netname=+_1
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 44300 49800 500 30 200 3 0 0 0 -1 -1")
         )
+        self.assertEquals(typ, 'A')
         arc_obj = self.geda_parser._parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 4430)
@@ -443,6 +476,7 @@ netname=+_1
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 45100 48400 700 123 291 3 0 0 0 -1 -1")
         )
+        self.assertEquals(typ, 'A')
         arc_obj = self.geda_parser._parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 4510)
@@ -463,6 +497,7 @@ netname=+_1
             typ, params =  self.geda_parser._parse_command(
                 StringIO.StringIO(line_string)
             )
+            self.assertEquals(typ, 'L')
             line_obj = self.geda_parser._parse_line(params)
             self.assertEquals(line_obj.type, 'line')
             self.assertEquals(
@@ -493,6 +528,7 @@ netname=+_1
             typ, params =  self.geda_parser._parse_command(
                 StringIO.StringIO(rect_string)
             )
+            self.assertEquals(typ, 'B')
             rect_obj = self.geda_parser._parse_box(params)
             self.assertEquals(rect_obj.type, 'rectangle')
             self.assertEquals(
@@ -576,6 +612,7 @@ z"""
             typ, params =  self.geda_parser._parse_command(
                 StringIO.StringIO(circle_string)
             )
+            self.assertEquals(typ, 'V')
             circle_obj = self.geda_parser._parse_circle(params)
             self.assertEquals(circle_obj.type, 'circle')
             self.assertEquals(
@@ -595,6 +632,7 @@ z"""
         """ Tests parsing pin commands into Pin objects. """
         stream = StringIO.StringIO('P 100 600 200 600 1 0 0\n')
         typ, params =  self.geda_parser._parse_command(stream)
+        self.assertEquals(typ, 'P')
         self.assertRaises(
             GEDAError,
             self.geda_parser._parse_pin,
@@ -615,6 +653,7 @@ pintype=in
 }"""
         stream = StringIO.StringIO(pin_sample)
         typ, params =  self.geda_parser._parse_command(stream)
+        self.assertEquals(typ, 'P')
         pin = self.geda_parser._parse_pin(stream, params)
 
         self.assertEquals(pin.pin_number, '3')
@@ -637,6 +676,7 @@ pintype=in
 }"""
         stream = StringIO.StringIO(reversed_pin_sample)
         typ, params =  self.geda_parser._parse_command(stream)
+        self.assertEquals(typ, 'P')
         pin = self.geda_parser._parse_pin(stream, params)
 
         self.assertEquals(pin.pin_number, 'E')
@@ -685,7 +725,6 @@ pintype=in
     def test_parse(self):
         """ Tests parsing valid and invalid schematic files. """
         self.geda_parser = GEDA([
-            '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
 
@@ -751,7 +790,6 @@ pintype=in
             sections.
         """ 
         self.geda_parser = GEDA([
-            '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
         
@@ -769,7 +807,6 @@ pintype=in
     def test_parse_full(self):
         """ Test parsing a complete schematic file generating OpenJSON. """
         self.geda_parser = GEDA([
-            '/usr/share/gEDA/sym',
             './test/geda/simple_example/symbols',
         ])
 

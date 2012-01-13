@@ -1,19 +1,41 @@
-﻿
+﻿#!/usr/bin/python
+# encoding: utf-8
+""" The geda writer test class """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 import os
 import unittest
 import StringIO
 import shutil
-
 from core.net import NetPoint
 from core import shape
 from core import components 
-
 import parser.geda 
-
 from writer.geda import GEDA
 from parser.openjson import JSON
 
-class TestGEDA(unittest.TestCase):
+
+class GEDATests(unittest.TestCase):
+    """ The tests of the geda writer """
+    # pylint: disable=W0212
 
     def setUp(self):
         self.geda_writer = GEDA()
@@ -55,17 +77,19 @@ class TestGEDA(unittest.TestCase):
         )
         self.assertTrue(os.path.exists('/tmp/gafrc'))
         
-        fh = open('/tmp/gafrc', 'r')
-        data = ''.join(fh.readlines())
-        fh.close()
+        filh = open('/tmp/gafrc', 'r')
+        data = ''.join(filh.readlines())
+        filh.close()
         self.assertEquals(data, '(component-library "./symbols")') 
 
     def test_write_schematic_file(self):
         """ Reads the gEDA *simple_example* file into a design using the
             gEDA parser, writes the result to a gEDA file and reads it into
             a new design. Both designs are then compared regarding their 
-            respective components, instances and nets.
-        """
+            respective components, instances and nets. """
+        # pylint: disable=R0914
+        # pylint: disable=R0915
+
         sym_dir = '/tmp/sym'
 
         if os.path.exists('/tmp/converted.sch'):
@@ -75,14 +99,14 @@ class TestGEDA(unittest.TestCase):
             shutil.rmtree(sym_dir)
 
         geda_parser = parser.geda.GEDA(
-            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+            symbol_dirs=['test/geda/simple_example/symbols']
         )
         geda_parser.set_offset(shape.Point(0, 0))
         simple_design = geda_parser.parse(
             'test/geda/simple_example/simple_example.sch'
         )
 
-        geda_writer = GEDA(auto_include=True)
+        geda_writer = GEDA()
         geda_writer.write(simple_design, '/tmp/converted.sch')
 
         converted_design = geda_parser.parse(
@@ -91,7 +115,7 @@ class TestGEDA(unittest.TestCase):
 
         ## parse design again to make sure it is a clean slate
         geda_parser = parser.geda.GEDA(
-            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+            symbol_dirs=['test/geda/simple_example/symbols']
         )
         geda_parser.set_offset(shape.Point(0, 0))
         simple_design = geda_parser.parse(
@@ -99,9 +123,9 @@ class TestGEDA(unittest.TestCase):
         )
 
         ##compare nets
-        self.assertItemsEqual(
-            [(net.net_id, len(net.points)) for net in simple_design.nets], 
-            [(net.net_id, len(net.points)) for net in converted_design.nets]
+        self.assertEquals(
+            sorted([(net.net_id, len(net.points)) for net in simple_design.nets]),
+            sorted([(net.net_id, len(net.points)) for net in converted_design.nets])
         )
 
         snets = dict([(net.net_id, net) for net in simple_design.nets]) 
@@ -112,7 +136,7 @@ class TestGEDA(unittest.TestCase):
 
             spoints = dict([(pt.point_id, pt) for pt in snet.points.values()]) 
             cpoints = dict([(pt.point_id, pt) for pt in cnet.points.values()]) 
-            self.assertItemsEqual(spoints.keys(), cpoints.keys())
+            self.assertEqual(sorted(spoints.keys()), sorted(cpoints.keys()))
 
             for spoint_id, spoint in spoints.items():
                 cpoint = cpoints[spoint_id]
@@ -121,9 +145,9 @@ class TestGEDA(unittest.TestCase):
                 self.assertEquals(spoint.y, cpoint.y)
 
         ## compare component library
-        self.assertItemsEqual(
-            simple_design.components.components.keys(),
-            converted_design.components.components.keys()
+        self.assertEqual(
+            sorted(simple_design.components.components.keys()),
+            sorted(converted_design.components.components.keys())
         )
 
         for lib_id in simple_design.components.components:
@@ -226,12 +250,12 @@ class TestGEDA(unittest.TestCase):
 
         os.mkdir(sym_dir)
 
-        self.geda_writer = GEDA(auto_include=True)
+        self.geda_writer = GEDA()
         self.geda_writer.component_library = dict()
         self.geda_writer.project_dirs['symbol'] = sym_dir 
 
         geda_parser = parser.geda.GEDA(
-            symbol_dirs=['test/geda/simple_example/symbols', '/usr/share/gEDA/sym'],
+            symbol_dirs=['test/geda/simple_example/symbols']
         )
         converted_design = geda_parser.parse(
             'test/geda/simple_example/simple_example.sch'

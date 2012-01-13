@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python2
 """ This module provides a parser for the gEDA format into a 
     OpenJSON design. The OpenJSON format does not provide 
     color/style settings, hence, color/style data from the
@@ -20,6 +20,25 @@
     >>> parser = GEDA(symbol_dirs=symbol_directories)
     >>> design = parser.parse('example_geda_file.sch')
 """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 
 # Basic Strategy
 # 0) Extracting ONLY relevant data from gEDA format. ALL 
@@ -157,7 +176,7 @@ class GEDA:
         'G': [], #picture
     }
 
-    def __init__(self, symbol_dirs=None, auto_include=False):
+    def __init__(self, symbol_dirs=None):
         """ Constuct a gEDA parser object. Specifying a list of symbol 
             directories in *symbol_dir* will provide a symbol file 
             lookup in the specified directories. The lookup will be 
@@ -172,11 +191,9 @@ class GEDA:
         if symbol_dirs is None:
             symbol_dirs = []
 
-            if auto_include is True:
-                symbol_dirs += [
-                    '/usr/share/gEDA/sym',
-                    '/usr/local/share/gEDA/sym',
-                ]
+        symbol_dirs += [
+            'library/geda',
+        ]
 
         self.instance_counter = itertools.count()
         self.known_symbols = {}
@@ -229,6 +246,8 @@ class GEDA:
             
             Returns the design corresponding to the schematic.
         """
+        # pylint: disable=R0912
+
         self.design = Design()
         self.segments = set()
         self.net_points = dict() 
@@ -443,6 +462,8 @@ class GEDA:
             
             Returns the newly created Component object.
         """
+        # pylint: disable=R0912
+
         basename = os.path.splitext(params['basename'])[0]
 
         saved_offset = self.offset
