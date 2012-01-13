@@ -32,6 +32,7 @@ from core.shape import Polygon
 from core.shape import BezierCurve
 from core.shape import Point
 import unittest
+from math import sin, cos, pi
 
 
 class ShapeTests(unittest.TestCase):
@@ -168,19 +169,28 @@ class ArcTests(unittest.TestCase):
         self.assertEqual(arc.max_point().y, 8)
 
     def test_min_point_arc(self):
-        arc = Arc(2, 3, 0, 1.5, 5)
+        """min_point() of an arc tracing top-left quarter"""
+        arc = Arc(2, 3, 1, 1.5, 5)
         self.assertEqual(arc.min_point().x, -3)
         self.assertEqual(arc.min_point().y, -2)
 
     def test_max_point_arc(self):
-        arc = Arc(2, 3, 0, 1.5, 5)
+        """max_point() of an arc tracing bottom-right quarter"""
+        arc = Arc(2, 3, 0, 0.5, 5)
         self.assertEqual(arc.max_point().x, 7)
         self.assertEqual(arc.max_point().y, 8)
         
     def test_min_point_arc_wraparound(self):
+        """min_point() of an arc that traces through 0 degrees"""
         arc = Arc(2, 3, 1.75, 0.25, 5)
-        self.assertEqual(arc.min_point().x, 6)
-        self.assertEqual(arc.min_point().y, 5)
+        self.assertEqual(arc.min_point().x, int(round(cos(1.75 * pi) * 5 + 2)))
+        self.assertEqual(arc.min_point().y, int(round(sin(1.75 * pi) * 5 + 3)))
+
+    def test_max_point_arc_wraparound(self):
+        """max_point() of an arc that traces through 0 degrees"""
+        arc = Arc(2, 3, 1.75, 0.25, 5)
+        self.assertEqual(arc.max_point().x, 5 + 2)
+        self.assertEqual(arc.max_point().y, int(round(sin(0.25 * pi) * 5 + 3)))
 
 class CircleTests(unittest.TestCase):
     """ The tests of the core module circle shape """
