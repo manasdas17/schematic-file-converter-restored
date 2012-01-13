@@ -59,12 +59,7 @@ class GerberTests(unittest.TestCase):
     @use_file('simple.ger')
     def test_simple(self):
         """ Parse a simple, correct gerber file. """
-        assert self.design.layouts != None
-
-    @use_file('complex.ger')
-    def test_complex(self):
-        """ Parse a complex, correct gerber file. """
-        assert self.design.layouts != None
+        assert len(self.design.layouts[0].layers[0].traces) == 8
 
 
     # tests that pass if they raise expected errors

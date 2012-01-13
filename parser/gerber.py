@@ -6,7 +6,7 @@ from string import digits
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout
+from core.layout import Layout, Layer, FatLine
 
 # exceptions
 
@@ -23,13 +23,12 @@ class UnintelligibleDataBlock(Unparsable): pass
 
 # token classes
 
-Aperture = namedtuple('Aperture', 'id_ code type_ modifiers')
+Aperture = namedtuple('Aperture', 'code type_ modifiers')
 Coord = namedtuple('Coord', 'x y i j')
 CoordFmt = namedtuple('CoordFmt', 'int dec')
-AxisDef = namedtuple('AxisDef', 'id_ a b')
+AxisDef = namedtuple('AxisDef', 'a b')
 Funct = namedtuple('Funct', 'type_ code')
-Param = namedtuple('Param', 'id_ val')
-FormatSpec = namedtuple('FormatSpec', ['id_', 'zero_omission',
+FormatSpec = namedtuple('FormatSpec', ['zero_omission',
                         'incremental_coords', 'n_max', 'g_max',
                         'x', 'y', 'd_max', 'm_max'])
 
@@ -44,6 +43,7 @@ class Gerber:
 
     def __init__(self, filename=None):
         self.filename = filename
+        self.layer = Layer()
 
         # establish gerber defaults
         self.params = {'AS':AxisDef('x', 'y'),# axis select
@@ -60,19 +60,62 @@ class Gerber:
 
     def parse(self):
         """ Parse tokens from gerber file into a design. """
-        layout = Layout()
-        data = self._tokenize()
-        status = Status(0.0, 0.0, False, None)
-        for block in data:
+        status = Status(0.0, 0.0, None, None)
+        for block in self._tokenize():
             if isinstance(block, Funct):
                 status = self._do_funct(block, status)
             elif isinstance(block, Coord):
-                self._go(block, layout, status)
+                status = self._move(block, status)
             else:
                 self.params[block.id_] = block
         design = Design()
+        layout = Layout()
+        layout.layers.append(self.layer)
         design.layouts.append(layout)
         return design
+
+    def _do_funct(self, block, status):
+        # TODO: write docstrings for private methods
+        # TODO: handle G codes
+        if block.type_ == 'D':
+            if int(block.code) < 10:
+                status = status._replace(draw=block.code)
+            else:
+                status = status._replace(aperture=block.code)
+        return status
+
+    def _move(self, block, status):
+        x, y = self._target_pos(block, status)
+        if status.draw == '01':
+            # TODO: handle 'D03'
+            # TODO: don't assume circular aperture
+            trace_wid = self.params[status.aperture].modifiers[0]
+            trace = FatLine(status[:2], (x, y), trace_wid)
+            self.layer.traces.append(trace)
+        return status._replace(x=x, y=y)
+
+    def _target_pos(self, block, status):
+        block = self._replace_nulls(block, status)
+        if self.params['FS'].incremental_coords:
+            x = status.x + block.x
+            y = status.y + block.y
+        else:
+            x, y = block[:2]
+        return (x, y)
+
+    def _replace_nulls(self, block, status):
+        x, y = block[:2]
+        if self.params['FS'].incremental_coords:
+            if block.x is None:
+                x = 0
+            if block.y is None:
+                y = 0
+        else:
+            if block.x is None:
+                x = status.x
+            if block.y is None:
+                y = status.y
+        return block._replace(x=x, y=y)
 
     def _tokenize(self):
         """ Split gerber file into pythonic tokens. """
@@ -89,24 +132,20 @@ class Gerber:
                     ('EOF', r'M02\*'),         # end of file
                     ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
                     ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
-                                               # -- currently traps aperture macros
+                                               # TODO: handle aperture macros
 
-        # define constants and counters
+        # define constants, counters
         reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
         tok_re = re.compile(reg_ex, re.MULTILINE)
-        directives = all_params[:6]
-        img_params = all_params[6:12]
-        stored_params = all_params[:13]
-        layer_params = all_params[13:]
         ignore = ('SKIP', 'COMMENT', 'DEPRECATED')
         pos = matched = 0
         param_block = data_began = eof = False
 
-        # read the file
+        # read file
         with open(self.filename, 'r') as ger:
             s = ger.read()
 
-        # step through file content, extracting tokens
+        # step through content, extract tokens
         mo = tok_re.match(s)
         while pos < len(s):
             if mo is None:
@@ -114,35 +153,16 @@ class Gerber:
             else:
                 typ = mo.lastgroup
                 tok = mo.group(typ)[:-1]
-
-                # store tokens as useful pythonic structures
                 try:
                     if typ == 'PARAM_DELIM':
                         param_block = not param_block
 
-                    # handle params
+                    # params
                     elif len(typ) == 2:
                         self._check_pb(param_block, tok)
-                        param = self._parse_param(tok)
-                        do_yield = (typ in directives and
-                                    data_began) or (typ == 'AD' and
-                                    self.params.has_key(param.code)) or (
-                                    typ not in stored_params)
+                        self.params.update((self._parse_param(tok),))
 
-                        # Though params can change mid-stream,
-                        # they are often condensed in a single
-                        # block at the top of the file and
-                        # thence remain static throughout...
-                        # Most of them are going to be cached
-                        # in the params dict. We only yield
-                        # them into the data generator if their
-                        # position in the file is relevant.
-                        if do_yield:
-                            yield param
-                        else:
-                            self.params[typ] = param
-
-                    # handle data
+                    # data blocks
                     elif typ not in ignore:
                         self._check_pb(param_block, tok, False)
                         if typ == 'EOF':
@@ -150,7 +170,6 @@ class Gerber:
                             eof = True
                         else:
                             self._check_typ(typ, tok)
-                            data_began = True # TODO: allow FS following funct but preceding coord
 
                             # explode self-referential data blocks
                             blocks = self._parse_data_block(tok)
@@ -178,15 +197,13 @@ class Gerber:
             tok, n_max = self._pop_val('N', tok)
             inc_coords = (tok[1] == 'I')
             z_omit = tok[0]
-            tok = FormatSpec('FS', z_omit, inc_coords, n_max, g_max,
+            tok = FormatSpec(z_omit, inc_coords, n_max, g_max,
                              x, y, d_max, m_max)
         elif name == 'AD':
             code_end = tok[3] in digits and 4 or 3
-            code = tok[1:code_end]
+            name = tok[1:code_end]
             type_, mods = tok[code_end:].split(',')
-            tok = Aperture('AD', code, type_, tuple(mods.split('X')))
-        elif name == 'LN':
-            tok = Param(name, tok)
+            tok = Aperture(name, type_, tuple(mods.split('X')))
         elif name in axis_params:
             if name in ('AS', 'IJ'):
                 coerce = False
@@ -195,11 +212,12 @@ class Gerber:
             tok, b = self._pop_val('B', tok, coerce=coerce)
             tok, a = self._pop_val('A', tok, coerce=coerce)
             if name == 'IJ':
-                tok = AxisDef(name, self._parse_justify(a), self._parse_justify(b))
+                tok = AxisDef(self._parse_justify(a), self._parse_justify(b))
             else:
-                tok = AxisDef(name, a, b)
-        # TODO: handle  IP, IR, layer params KO, LP, SR
-        return tok # TODO: MO, IN, PF are naked strings -- maybe not good -- & use a more sensible var
+                tok = AxisDef(a, b)
+        # TODO: handle  IP, IR, layer params KO, LN, LP, SR (if they matter)
+        # TODO: check file for duplicate image_params -- should use last occurrence for entire file
+        return (name, tok)
 
     def _parse_data_block(self, tok):
         if 'G' in tok:
