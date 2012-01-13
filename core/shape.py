@@ -166,7 +166,11 @@ class Arc(Shape):
 
 
     def _contains_angle(self, theta):
-        """ normalize angles to the interval [0, 2) """
+        """Return True iff tracing the arc passes through theta"""
+        if abs(self.start_angle - self.end_angle) >= 2:
+            # ha ha I'm actually a circle!
+            return True
+        # normalize angles to the interval [0, 2)
         start = self.start_angle % 2.0
         end = self.end_angle % 2.0
         theta = theta % 2.0
