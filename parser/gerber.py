@@ -86,7 +86,6 @@ class Gerber:
         img_params = all_params[6:12]
         stored_params = all_params[:13]
         layer_params = all_params[13:]
-        axis_params = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
         ignore = ('SKIP', 'COMMENT', 'DEPRECATED')
         pos = matched = 0
         param_block = data_began = eof = False
@@ -109,8 +108,8 @@ class Gerber:
 
                     # handle params
                     elif len(typ) == 2:
-                        self._check_pb(param_block)
-                        param = self._parse_param(tok, axis_params)
+                        self._check_pb(param_block, tok)
+                        param = self._parse_param(tok)
                         do_yield = (typ in directives and
                                     data_began) or (typ == 'AD' and
                                     self.params.has_key(param.code)) or (
@@ -122,7 +121,7 @@ class Gerber:
 
                     # handle data
                     elif typ not in ignore:
-                        self._check_pb(param_block, False)
+                        self._check_pb(param_block, tok, False)
                         if typ == 'EOF':
                             self._check_eof(s[mo.end():])
                             eof = True
@@ -142,8 +141,9 @@ class Gerber:
             mo = tok_re.match(s, pos)
         self._check_eof(eof=eof)
 
-    def _parse_param(self, tok, axis_params):
+    def _parse_param(self, tok):
         name, tok = (tok[:2], tok[2:])
+        axis_params = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
         if name == 'FS':
             tok, m_max = self._pop_val('M', tok)
             tok, d_max = self._pop_val('D', tok)
@@ -165,10 +165,16 @@ class Gerber:
         elif name == 'LN':
             tok = Param(name, tok)
         elif name in axis_params:
-            coerce = name in axis_params[:2] and 'int' or 'float'
+            if name in ('AS', 'IJ'):
+                coerce = False
+            else:
+                coerce = name == 'MI' and 'int' or 'float'
             tok, b = self._pop_val('B', tok, coerce=coerce)
             tok, a = self._pop_val('A', tok, coerce=coerce)
-            tok = AxisDef(a, b) # TODO: spec for IJ references off-spec examples with , or . delimiters
+            if name == 'IJ':
+                tok = AxisDef(self._parse_justify(a), self._parse_justify(b))
+            else:
+                tok = AxisDef(a, b)
         # TODO: handle  IP, IR, layer params KO, LP, SR
         return tok # TODO: MO, IN, PF... naked strings - use a more sensible var
 
@@ -229,11 +235,19 @@ class Gerber:
 
         return float(num_str)
 
-    def _check_pb(self, param_block, should_be=True):
+    def _parse_justify(self, tok):
+        if len(tok) > 1 or tok not in 'LC':
+            result = ('L', float(tok.split('L')[-1]))
+        else:
+            result = (tok, None)
+        # TODO: spec for IJ references off-spec examples with , or . delimiters
+        return result
+
+    def _check_pb(self, param_block, tok, should_be=True):
         if should_be and not param_block:
             raise DelimiterMissing
         if param_block and not should_be:
-            raise ParamContainsBadData
+            raise ParamContainsBadData(tok)
 
     def _check_fs(self):
         if not self.params['FS']:
