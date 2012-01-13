@@ -351,27 +351,71 @@ class BezierCurveTests(unittest.TestCase):
 
     def setUp(self):
         """ Setup the test case. """
-        pass
+        self.curve = BezierCurve((2, 9), (9, 8), (1, 1), (7, 2))
 
     def tearDown(self):
         """ Teardown the test case. """
-        pass
+        del self.curve
 
     def test_create_new_bezier_curve(self):
         """ Test the creation of a new empty bezier. """
-        control1 = Point(0, 1)
-        control2 = Point(2, 3)
-        p1 = Point(4, 5)
-        p2 = Point(6, 7)
-        curve = BezierCurve(control1, control2, p1, p2)
-        assert curve.control1.x == control1.x
-        assert curve.control1.y == control1.y
-        assert curve.control2.x == control2.x
-        assert curve.control2.y == control2.y
-        assert curve.p1.x == p1.x
-        assert curve.p1.y == p1.y
-        assert curve.p2.x == p2.x
-        assert curve.p2.y == p2.y
+        control1 = Point(2, 9)
+        control2 = Point(9, 8)
+        p1 = Point(1, 1)
+        p2 = Point(7, 2)
+        assert self.curve.control1.x == control1.x
+        assert self.curve.control1.y == control1.y
+        assert self.curve.control2.x == control2.x
+        assert self.curve.control2.y == control2.y
+        assert self.curve.p1.x == p1.x
+        assert self.curve.p1.y == p1.y
+        assert self.curve.p2.x == p2.x
+        assert self.curve.p2.y == p2.y
+
+
+    def interp_bezier(self, points, t):
+        return tuple([int(round(((1 - t) ** 3) * pts[0]
+                                + 3 * ((1 - t) ** 2) * t * pts[1]
+                                + 3 * (1 - t) * (t ** 2) * pts[2]
+                                + (t ** 3) * pts[3]))
+                      for pts in ([pt.x for pt in points],
+                                  [pt.y for pt in points])])
+    
+
+    def bez_recurse(self, pts, lo, hi):
+        """Helper method to draw a bezier curve"""
+        # kind of important that we don't just copy how it's done in the method
+        # to be tested, so do it by recusively bisecting the curve until we hit
+        # the necessary resolution
+        [plo, phi] = [self.interp_bezier(pts, t) for t in (lo, hi)]
+        if abs(plo[0] - phi[0]) <= 1 and abs(plo[1] - phi[1]) <= 1:
+            return [plo, phi]
+        mid = (lo + hi) / 2.
+        bot_half = self.bez_recurse(pts, lo, mid)
+        top_half = self.bez_recurse(pts, mid, hi)
+        if bot_half[-1] == top_half[0]:
+            bot_half = bot_half[:-1]
+        return bot_half + top_half
+
+
+    def test_bezier_min_point(self):
+        points = self.bez_recurse([self.curve.p1, self.curve.control1,
+                                   self.curve.control2, self.curve.p2], 0., 1.)
+        x = min([pt[0] for pt in points])
+        y = min([pt[1] for pt in points])
+        min_pt = self.curve.min_point()
+        self.assertEqual(min_pt.x, x)
+        self.assertEqual(min_pt.y, y)
+
+
+    def test_bezier_max_point(self):
+        points = self.bez_recurse([self.curve.p1, self.curve.control1,
+                                   self.curve.control2, self.curve.p2], 0., 1.)
+        x = max([pt[0] for pt in points])
+        y = max([pt[1] for pt in points])
+        max_pt = self.curve.max_point()
+        self.assertEqual(max_pt.x, x)
+        self.assertEqual(max_pt.y, y)
 
 
 class PointTests(unittest.TestCase):
