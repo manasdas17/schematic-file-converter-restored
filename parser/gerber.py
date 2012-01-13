@@ -23,15 +23,19 @@ class UnintelligibleDataBlock(Unparsable): pass
 
 # token classes
 
-Aperture = namedtuple('Aperture', 'code type_ modifiers')
+Aperture = namedtuple('Aperture', 'id_ code type_ modifiers')
 Coord = namedtuple('Coord', 'x y i j')
 CoordFmt = namedtuple('CoordFmt', 'int dec')
-AxisDef = namedtuple('AxisDef', 'a b')
+AxisDef = namedtuple('AxisDef', 'id_ a b')
 Funct = namedtuple('Funct', 'type_ code')
 Param = namedtuple('Param', 'id_ val')
-FormatSpec = namedtuple('FormatSpec', ['zero_omission',
+FormatSpec = namedtuple('FormatSpec', ['id_', 'zero_omission',
                         'incremental_coords', 'n_max', 'g_max',
                         'x', 'y', 'd_max', 'm_max'])
+
+# parser status
+
+Status = namedtuple('Status', 'x y draw aperture')
 
 # parser
 
@@ -55,15 +59,23 @@ class Gerber:
                        'IR':0}                # image rotation
 
     def parse(self):
-        """ Parse a Gerber file into a design """
-        design = Design()
+        """ Parse tokens from gerber file into a design. """
+        layout = Layout()
         data = self._tokenize()
-        for data_block in data:
-            print data_block
-        print 'params: %s' % self.params
+        status = Status(0.0, 0.0, False, None)
+        for block in data:
+            if isinstance(block, Funct):
+                status = self._do_funct(block, status)
+            elif isinstance(block, Coord):
+                self._go(block, layout, status)
+            else:
+                self.params[block.id_] = block
+        design = Design()
+        design.layouts.append(layout)
         return design
 
     def _tokenize(self):
+        """ Split gerber file into pythonic tokens. """
         all_params = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
                       'IJ', 'IN', 'IO', 'IP', 'IR', 'PF', 'AD',
                       'KO', 'LN', 'LP', 'SR')
@@ -94,7 +106,7 @@ class Gerber:
         with open(self.filename, 'r') as ger:
             s = ger.read()
 
-        # step through file data and extract tokens
+        # step through file content, extracting tokens
         mo = tok_re.match(s)
         while pos < len(s):
             if mo is None:
@@ -102,6 +114,8 @@ class Gerber:
             else:
                 typ = mo.lastgroup
                 tok = mo.group(typ)[:-1]
+
+                # store tokens as useful pythonic structures
                 try:
                     if typ == 'PARAM_DELIM':
                         param_block = not param_block
@@ -114,6 +128,15 @@ class Gerber:
                                     data_began) or (typ == 'AD' and
                                     self.params.has_key(param.code)) or (
                                     typ not in stored_params)
+
+                        # Though params can change mid-stream,
+                        # they are often condensed in a single
+                        # block at the top of the file and
+                        # thence remain static throughout...
+                        # Most of them are going to be cached
+                        # in the params dict. We only yield
+                        # them into the data generator if their
+                        # position in the file is relevant.
                         if do_yield:
                             yield param
                         else:
@@ -155,13 +178,13 @@ class Gerber:
             tok, n_max = self._pop_val('N', tok)
             inc_coords = (tok[1] == 'I')
             z_omit = tok[0]
-            tok = FormatSpec(z_omit, inc_coords, n_max, g_max,
+            tok = FormatSpec('FS', z_omit, inc_coords, n_max, g_max,
                              x, y, d_max, m_max)
         elif name == 'AD':
             code_end = tok[3] in digits and 4 or 3
             code = tok[1:code_end]
             type_, mods = tok[code_end:].split(',')
-            tok = Aperture(code, type_, tuple(mods.split('X')))
+            tok = Aperture('AD', code, type_, tuple(mods.split('X')))
         elif name == 'LN':
             tok = Param(name, tok)
         elif name in axis_params:
@@ -172,11 +195,11 @@ class Gerber:
             tok, b = self._pop_val('B', tok, coerce=coerce)
             tok, a = self._pop_val('A', tok, coerce=coerce)
             if name == 'IJ':
-                tok = AxisDef(self._parse_justify(a), self._parse_justify(b))
+                tok = AxisDef(name, self._parse_justify(a), self._parse_justify(b))
             else:
-                tok = AxisDef(a, b)
+                tok = AxisDef(name, a, b)
         # TODO: handle  IP, IR, layer params KO, LP, SR
-        return tok # TODO: MO, IN, PF... naked strings - use a more sensible var
+        return tok # TODO: MO, IN, PF are naked strings -- maybe not good -- & use a more sensible var
 
     def _parse_data_block(self, tok):
         if 'G' in tok:
