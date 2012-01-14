@@ -532,7 +532,13 @@ class ViewDraw:
 
 
 class FileStack:
-    """ Used to step through a file stack. """
+    """ Handles a file as a stack of lines, to be able to push back lines"""
+    # Two reasons for this:
+    # 1) Line continuations are signaled at the beginning of the continuing
+    #   line. This means you can't know if line n is the entirety of a statement
+    #   until you've checked line n+1
+    # 2) Some commands are affected by proceeding commands, so need to check if
+    #   the next command is of concern. If not, need to be able to send it back.
 
     def __init__(self, filename):
         self.f = open(filename)
@@ -543,7 +549,7 @@ class FileStack:
         return self
 
     def next(self):
-        """ Returns the next file. """
+        """ Returns the next command. Continuations handled transparently. """
         tok = self.subpop()
         nexttok = self.subpop()
         while nexttok.startswith(' ') or nexttok.startswith('+'):
@@ -553,19 +559,19 @@ class FileStack:
         return tok.strip('\r\n')
 
     def subpop(self):
-        """ Pops. """
+        """ Next line, from the pushed-back stack if applicable. """
         self.line += 1
         if len(self.fstack) > 0:
             return self.fstack.pop()
         return self.f.next()
 
     def continuation(self, tok, cont):
-        """ Continues. """
+        """ Tie together multi-line commands. """
         if cont.startswith('+'):
             cont = cont[2:]
         return tok.strip('\r\n') + cont
 
     def push(self, tok):
-        """ Pushes. """
+        """ Push line back on the stack (before what would be the next line) """
         self.line -= 1
         self.fstack.append(tok)
