@@ -551,19 +551,26 @@ class FileStack:
     def next(self):
         """ Returns the next command. Continuations handled transparently. """
         tok = self.subpop()
-        nexttok = self.subpop()
-        while nexttok.startswith(' ') or nexttok.startswith('+'):
-            tok = self.continuation(tok, nexttok)
+        try:
             nexttok = self.subpop()
-        self.push(nexttok)
+            while nexttok.startswith(' ') or nexttok.startswith('+'):
+                tok = self.continuation(tok, nexttok)
+                nexttok = self.subpop()
+            self.push(nexttok)
+        except(StopIteration):
+            # don't want to pass that up the chain if tok is valid
+            pass
         return tok.strip('\r\n')
 
     def subpop(self):
         """ Next line, from the pushed-back stack if applicable. """
-        self.line += 1
         if len(self.fstack) > 0:
-            return self.fstack.pop()
-        return self.f.next()
+            retval = self.fstack.pop()
+        else:
+            retval = self.f.next()
+        # need to increment after iterators have had a chance to StopIteration
+        self.line += 1
+        return retval
 
     def continuation(self, tok, cont):
         """ Tie together multi-line commands. """
