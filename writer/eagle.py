@@ -445,6 +445,35 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Symbol(NamedShapeSet):
+        """ A struct that represents a symbol
+        """
+        constant = 0x1d
+        template = "=2BH3I8s"
+
+        def __init__(self, name, numofshapes=0, shapes=None):
+            """ Just a constructor; shown for a sake of clarity
+            """
+            super(EagleBin.Symbol, self).__init__(name, numofshapes, shapes)
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 
+                                   self.numofshapes,
+                                   0, 0, 0,
+                                   _name,
+                                  )
+            return _ret_val
+
 # ------------------------------
 
     class ShapeHeader:

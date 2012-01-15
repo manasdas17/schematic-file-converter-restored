@@ -463,9 +463,39 @@ class Eagle: # pylint: disable=R0902
                 _name = _dta[7].rstrip('\0')
 
             _ret_val = Eagle.PackageHeader(name=_name,
-                                          numofblocks=_dta[3],
-                                          numofshapesets=_dta[4],
-                                         )
+                                           numofblocks=_dta[3],
+                                           numofshapesets=_dta[4],
+                                          )
+            return _ret_val
+
+    class Symbol(NamedShapeSet):
+        """ A struct that represents a symbol
+        """
+        constant = 0x1d
+        template = "=2BH3I8s"
+
+        def __init__(self, name, numofshapes=0, shapes=None):
+            """ Just a constructor; shown for a sake of clarity
+            """
+            super(EagleBin.Symbol, self).__init__(name, numofshapes, shapes)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses symbol block
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(EagleBin.Symbol.template, chunk)
+
+            _name = None
+            if Eagle.Symbol.no_embed_str != _dta[6][0]:
+                _name = _dta[6].rstrip('\0')
+
+# number of shapes, excluding this line
+            _ret_val = EagleBin.Symbol(name=_name,
+                                       numofshapes=_dta[2],
+                                      )
             return _ret_val
 
 # ------------------------------
