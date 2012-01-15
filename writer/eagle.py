@@ -683,8 +683,6 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
-# ------------------------------
-
     class Shape(object):
         """ A base struct for shapes, provides common codecs
              Although it provides two scaling methods, #2 has 
@@ -927,6 +925,86 @@ class Eagle: # pylint: disable=R0902
                                        self.width / self.width_xscale),
                                    _signs, 
                                    self.arc_sign
+                                  )
+            return _ret_val
+
+    class Pad(Shape):
+        """ A struct that represents a pad
+            (no layer is available for pad ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x2a
+        template = "=4B3I3B5s"
+
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y, drill):
+            """ Just a constructor
+            """
+            super(Eagle.Pad, self).__init__(layer=-1)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.drill = drill
+# TODO shape (3:1==normal,3==long)
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   self.encode_real(self.x),
+                                   self.encode_real(self.y),
+                                   self.encode_real(self.drill),
+                                   0, 0, 0,
+                                   _name,
+                                  )
+            return _ret_val
+
+    class Pin(Shape):
+        """ A struct that represents a pin
+            (no layer is available for pin ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x2c
+        template = "=4B2I2B10s"
+
+        max_embed_len = 10
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y):
+            """ Just a constructor
+            """
+            super(Eagle.Pin, self).__init__(layer=-1)
+            self.name = name
+            self.x = x
+            self.y = y
+# TODO visible len direction rotate(12:0xe0)
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   self.encode_real(self.x),
+                                   self.encode_real(self.y),
+                                   0, 0, 
+                                   _name,
                                   )
             return _ret_val
 

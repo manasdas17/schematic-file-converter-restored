@@ -955,6 +955,86 @@ class Eagle: # pylint: disable=R0902
                                      )
             return _ret_val
 
+    class Pad(Shape):
+        """ A struct that represents a pad
+            (no layer is available for pad ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x2a
+        template = "=4B3I3B5s"
+
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y, drill):
+            """ Just a constructor
+            """
+            super(Eagle.Pad, self).__init__(layer=-1)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.drill = drill
+# TODO shape (3:1==normal,3==long)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses pad
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Pad.template, chunk)
+
+            _name = None
+            if Eagle.Pad.no_embed_str != _dta[10][0]:
+                _name = _dta[10].rstrip('\0')
+
+            _ret_val = Eagle.Pad(name=_name,
+                                 x=Eagle.Shape.decode_real(_dta[4]),
+                                 y=Eagle.Shape.decode_real(_dta[5]),
+                                 drill=Eagle.Shape.decode_real(_dta[6]),
+                                )
+            return _ret_val
+
+    class Pin(Shape):
+        """ A struct that represents a pin
+            (no layer is available for pin ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x2c
+        template = "=4B2I2B10s"
+
+        max_embed_len = 10
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y):
+            """ Just a constructor
+            """
+            super(Eagle.Pin, self).__init__(layer=-1)
+            self.name = name
+            self.x = x
+            self.y = y
+# TODO visible len direction rotate(12:0xe0)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses pin
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Pin.template, chunk)
+
+            _name = None
+            if Eagle.Pin.no_embed_str != _dta[8][0]:
+                _name = _dta[8].rstrip('\0')
+
+            _ret_val = Eagle.Pin(name=_name,
+                                 x=Eagle.Shape.decode_real(_dta[4]),
+                                 y=Eagle.Shape.decode_real(_dta[5]),
+                                )
+            return _ret_val
+
     class Text(Shape):
         """ A struct that represents a text
         """
@@ -988,7 +1068,8 @@ class Eagle: # pylint: disable=R0902
 
             _value = None
             if Eagle.Text.no_embed_str != _dta[11][0]:
-                _value = _dta[11].rstrip('\x00')
+                _value = _dta[11].rstrip('\0')
+
             _ret_val = Eagle.Text(value=_value,
                                      x=Eagle.Shape.decode_real(_dta[4]),
                                      y=Eagle.Shape.decode_real(_dta[5]),
