@@ -192,6 +192,9 @@ class Eagle: # pylint: disable=R0902
         visact = 0x0e
         nvisact = 0x02
 
+        max_embed_len = 9
+        no_embed_str = b'\x7f'
+
 #        colors = ['unknown','darkblue','darkgreen','darkcyan',
 #                'darkred','unknown','khaki','grey',
 ## light variants x8
@@ -242,15 +245,19 @@ class Eagle: # pylint: disable=R0902
                     Eagle.Layer.linkedsignmask & _dta[2]):
                 _linked = True
 
+            _name = None
+            if Eagle.Layer.no_embed_str != _dta[9][0]:
+                _name = _dta[9].rstrip('\0')
+
             _ret_val = Eagle.Layer(number=_dta[3],
-                                      name=_dta[9].rstrip('\x00'),
-                                      color=_dta[6],
-                                      fill=_dta[5], 
-                                      visible=_visible,
-                                      active=_active,
-                                      linkednumber=_dta[2],
-                                      linkedsign=_linked
-                                     )
+                                   name=_name,
+                                   color=_dta[6],
+                                   fill=_dta[5], 
+                                   visible=_visible,
+                                   active=_active,
+                                   linkednumber=_dta[4],
+                                   linkedsign=_linked
+                                  )
             return _ret_val
 
     class ShapeSet(object):
@@ -283,15 +290,15 @@ class Eagle: # pylint: disable=R0902
         """
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             self.name = name
             self.numofblocks = numofblocks
             self.numofshapesets = numofshapesets
-            if None == shipsets:
-                shipsets = []
-            self.shipsets = shipsets
+            if None == shapesets:
+                shapesets = []
+            self.shapesets = shapesets
             return
 
     class AttributeHeader:
@@ -341,10 +348,27 @@ class Eagle: # pylint: disable=R0902
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, ):
+        def __init__(self, name, numofdevsetblocks=0, devsets=None,
+                     numofsymbolblocks=0, symbols=None,
+                     numofpackageblocks=0, packages=None,):
             """ Just a constructor
             """
             self.name = name
+
+            self.numofdevsetblocks = numofdevsetblocks
+            if None == devsets:
+                devsets = []
+            self.devsets = devsets
+
+            self.numofsymbolblocks = numofsymbolblocks
+            if None == symbols:
+                symbols = []
+            self.symbols = symbols
+
+            self.numofpackageblocks = numofpackageblocks
+            if None == packages:
+                packages = []
+            self.packages = packages
             return
 
         @staticmethod
@@ -360,6 +384,9 @@ class Eagle: # pylint: disable=R0902
                 _name = _dta[7].rstrip('\0')
 # three ints are counters, have to recheck
             _ret_val = Eagle.Library(name=_name,
+                                     numofdevsetblocks=_dta[4],
+                                     numofsymbolblocks=_dta[5],
+                                     numofpackageblocks=_dta[6],
                                     )
             return _ret_val
 
@@ -373,11 +400,11 @@ class Eagle: # pylint: disable=R0902
         no_embed_str = b'\x7f'
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             super(Eagle.DeviceSet, self).__init__(name, numofblocks, 
-                        numofshapesets, shipsets)
+                        numofshapesets, shapesets)
             return
 
         @staticmethod
@@ -393,8 +420,8 @@ class Eagle: # pylint: disable=R0902
                 _name = _dta[7].rstrip('\0')
 
             _ret_val = Eagle.DeviceSet(name=_name,
-                                       numofblocks=_dta[3],
-                                       numofshapesets=_dta[4],
+                                       numofblocks=_dta[4],
+                                       numofshapesets=_dta[5],
                                       )
             return _ret_val
 
@@ -408,11 +435,11 @@ class Eagle: # pylint: disable=R0902
         no_embed_str = b'\x7f'
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             super(Eagle.SymbolHeader, self).__init__(name, numofblocks, 
-                        numofshapesets, shipsets)
+                        numofshapesets, shapesets)
             return
 
         @staticmethod
@@ -428,8 +455,8 @@ class Eagle: # pylint: disable=R0902
                 _name = _dta[7].rstrip('\0')
 
             _ret_val = Eagle.SymbolHeader(name=_name,
-                                          numofblocks=_dta[3],
-                                          numofshapesets=_dta[4],
+                                          numofblocks=_dta[4],
+                                          numofshapesets=_dta[5],
                                          )
             return _ret_val
 
@@ -443,11 +470,11 @@ class Eagle: # pylint: disable=R0902
         no_embed_str = b'\x7f'
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             super(Eagle.PackageHeader, self).__init__(name, numofblocks, 
-                        numofshapesets, shipsets)
+                        numofshapesets, shapesets)
             return
 
         @staticmethod
@@ -463,8 +490,8 @@ class Eagle: # pylint: disable=R0902
                 _name = _dta[7].rstrip('\0')
 
             _ret_val = Eagle.PackageHeader(name=_name,
-                                           numofblocks=_dta[3],
-                                           numofshapesets=_dta[4],
+                                           numofblocks=_dta[4],
+                                           numofshapesets=_dta[5],
                                           )
             return _ret_val
 
@@ -480,7 +507,7 @@ class Eagle: # pylint: disable=R0902
         def __init__(self, name, numofshapes=0, shapes=None):
             """ Just a constructor; shown for a sake of clarity
             """
-            super(EagleBin.Symbol, self).__init__(name, numofshapes, shapes)
+            super(Eagle.Symbol, self).__init__(name, numofshapes, shapes)
             return
 
         @staticmethod
@@ -489,16 +516,16 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _dta = struct.unpack(EagleBin.Symbol.template, chunk)
+            _dta = struct.unpack(Eagle.Symbol.template, chunk)
 
             _name = None
             if Eagle.Symbol.no_embed_str != _dta[6][0]:
                 _name = _dta[6].rstrip('\0')
 
 # number of shapes, excluding this line
-            _ret_val = EagleBin.Symbol(name=_name,
-                                       numofshapes=_dta[2],
-                                      )
+            _ret_val = Eagle.Symbol(name=_name,
+                                    numofshapes=_dta[2],
+                                   )
             return _ret_val
 
     class Package(NamedShapeSet):
@@ -514,7 +541,7 @@ class Eagle: # pylint: disable=R0902
         def __init__(self, name, desc, numofshapes=0, shapes=None):
             """ Just a constructor
             """
-            super(EagleBin.Package, self).__init__(name, numofshapes, shapes)
+            super(Eagle.Package, self).__init__(name, numofshapes, shapes)
             self.desc = desc
             return
 
@@ -524,7 +551,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _dta = struct.unpack(EagleBin.Package.template, chunk)
+            _dta = struct.unpack(Eagle.Package.template, chunk)
 
             _name = None
             if Eagle.Package.no_embed_str != _dta[6][0]:
@@ -534,10 +561,10 @@ class Eagle: # pylint: disable=R0902
                 _desc = _dta[7].rstrip('\0')
 
 # number of shapes, excluding this line
-            _ret_val = EagleBin.Symbol(name=_name,
-                                       desc=_desc,
-                                       numofshapes=_dta[2],
-                                      )
+            _ret_val = Eagle.Package(name=_name,
+                                     desc=_desc,
+                                     numofshapes=_dta[2],
+                                    )
             return _ret_val
 
     class Net(NamedShapeSet):

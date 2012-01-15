@@ -186,6 +186,9 @@ class Eagle: # pylint: disable=R0902
         visact = 0x0e
         nvisact = 0x02
 
+        max_embed_len = 9
+        no_embed_str = b'\x7f'
+
 #        colors = ['unknown','darkblue','darkgreen','darkcyan',
 #                'darkred','unknown','khaki','grey',
 ## light variants x8
@@ -223,12 +226,16 @@ class Eagle: # pylint: disable=R0902
             if self.linkedsign:
                 _vis_act_link += self.linkedsignmask
 
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, _vis_act_link, 
                                    self.number, self.linkednumber,
                                    self.fill, self.color,
                                    0, 0,
-                                   self.name
+                                   _name,
                                   )
             return _ret_val
 
@@ -262,15 +269,15 @@ class Eagle: # pylint: disable=R0902
         """
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             self.name = name
             self.numofblocks = numofblocks
             self.numofshapesets = numofshapesets
-            if None == shipsets:
-                shipsets = []
-            self.shipsets = shipsets
+            if None == shapesets:
+                shapesets = []
+            self.shapesets = shapesets
             return
 
     class AttributeHeader:
@@ -318,10 +325,27 @@ class Eagle: # pylint: disable=R0902
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, ):
+        def __init__(self, name, numofdevsetblocks=0, devsets=None,
+                     numofsymbolblocks=0, symbols=None,
+                     numofpackageblocks=0, packages=None,):
             """ Just a constructor
             """
             self.name = name
+
+            self.numofdevsetblocks = numofdevsetblocks
+            if None == devsets:
+                devsets = []
+            self.devsets = devsets
+
+            self.numofsymbolblocks = numofsymbolblocks
+            if None == symbols:
+                symbols = []
+            self.symbols = symbols
+
+            self.numofpackageblocks = numofpackageblocks
+            if None == packages:
+                packages = []
+            self.packages = packages
             return
 
         def construct(self):
@@ -335,7 +359,9 @@ class Eagle: # pylint: disable=R0902
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
-                                   0, 0, 0, # TODO recheck
+                                   self.numofdevsetblocks,
+                                   self.numofsymbolblocks,
+                                   self.numofpackageblocks,
                                    _name,
                                   )
             return _ret_val
@@ -350,11 +376,11 @@ class Eagle: # pylint: disable=R0902
         no_embed_str = b'\x7f'
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             super(Eagle.DeviceSet, self).__init__(name, numofblocks, 
-                        numofshapesets, shipsets)
+                        numofshapesets, shapesets)
             return
 
         def construct(self):
@@ -375,7 +401,7 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
-    class SymbolHeader:
+    class SymbolHeader(Web):
         """ A struct that represents a header of symbols
         """
         constant = 0x18
@@ -385,11 +411,11 @@ class Eagle: # pylint: disable=R0902
         no_embed_str = b'\x7f'
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             super(Eagle.SymbolHeader, self).__init__(name, numofblocks, 
-                        numofshapesets, shipsets)
+                        numofshapesets, shapesets)
             return
 
         def construct(self):
@@ -410,7 +436,7 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
-    class PackageHeader:
+    class PackageHeader(Web):
         """ A struct that represents a header of packages
         """
         constant = 0x19
@@ -420,11 +446,11 @@ class Eagle: # pylint: disable=R0902
         no_embed_str = b'\x7f'
 
         def __init__(self, name, numofblocks=0, numofshapesets=0, 
-                     shipsets=None):
+                     shapesets=None):
             """ Just a constructor
             """
             super(Eagle.PackageHeader, self).__init__(name, numofblocks, 
-                        numofshapesets, shipsets)
+                        numofshapesets, shapesets)
             return
 
         def construct(self):
@@ -457,7 +483,7 @@ class Eagle: # pylint: disable=R0902
         def __init__(self, name, numofshapes=0, shapes=None):
             """ Just a constructor; shown for a sake of clarity
             """
-            super(EagleBin.Symbol, self).__init__(name, numofshapes, shapes)
+            super(Eagle.Symbol, self).__init__(name, numofshapes, shapes)
             return
 
         def construct(self):
@@ -490,7 +516,7 @@ class Eagle: # pylint: disable=R0902
         def __init__(self, name, desc, numofshapes=0, shapes=None):
             """ Just a constructor
             """
-            super(EagleBin.Package, self).__init__(name, numofshapes, shapes)
+            super(Eagle.Package, self).__init__(name, numofshapes, shapes)
             self.desc = desc
             return
 
@@ -579,7 +605,7 @@ class Eagle: # pylint: disable=R0902
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
-                                   self.numofblocks,
+                                   self.numofshapes,
                                    _name,
                                   )
             return _ret_val
