@@ -581,18 +581,34 @@ class Eagle: # pylint: disable=R0902
                                 )
             return _ret_val
 
-# ------------------------------
-
-    class ShapeHeader:
+    class ShapeHeader(ShapeSet):
         """ A struct that represents a header of shapes
         """
         constant = 0x1a
         template = "=2BH5I"
 
-        def __init__(self, numofshapes=0):
+        def __init__(self, numofshapes=0, shapes=None, 
+                     numofpartblocks=0, parts=None,
+                     numofbusblocks=0, buses=None,
+                     numofnetblocks=0, nets=None,):
             """ Just a constructor
             """
-            self.numofshapes = numofshapes # to be validated!
+            super(Eagle.ShapeHeader, self).__init__(numofshapes, shapes)
+
+            self.numofpartblocks = numofpartblocks
+            if None == parts:
+                parts = []
+            self.parts = parts
+
+            self.numofbusblocks = numofbusblocks
+            if None == buses:
+                buses = []
+            self.buses = buses
+
+            self.numofnetblocks = numofnetblocks
+            if None == nets:
+                nets = []
+            self.nets = nets
             return
 
         @staticmethod
@@ -605,8 +621,13 @@ class Eagle: # pylint: disable=R0902
 
 # number of shapes, excluding this header block
             _ret_val = Eagle.ShapeHeader(numofshapes=_dta[2],
-                                           )
+                                         numofpartblocks=_dta[5],
+                                         numofbusblocks=_dta[6],
+                                         numofnetblocks=_dta[7],
+                                        )
             return _ret_val
+
+# ------------------------------
 
     class Shape(object):
         """ A base struct for shapes, provides common codecs
