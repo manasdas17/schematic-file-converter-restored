@@ -363,6 +363,41 @@ class Eagle: # pylint: disable=R0902
                                     )
             return _ret_val
 
+    class DeviceSet(Web):
+        """ Not a real "Web" but with a like structure
+        """
+        constant = 0x17
+        template = "=4B3I8s"
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+                     shipsets=None):
+            """ Just a constructor
+            """
+            super(Eagle.DeviceSet, self).__init__(name, numofblocks, 
+                        numofshapesets, shipsets)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses deviceset block
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.DeviceSet.template, chunk)
+
+            _name = None
+            if Eagle.DeviceSet.no_embed_str != _dta[7][0]:
+                _name = _dta[7].rstrip('\0')
+
+            _ret_val = Eagle.Library(name=_name,
+                                     numofblocks=_dta[3],
+                                     numofshapesets=_dta[4],
+                                    )
+            return _ret_val
+
 # ------------------------------
 
     class ShapeHeader:

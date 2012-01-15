@@ -340,6 +340,41 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class DeviceSet(Web):
+        """ Not a real "Web" but with a like structure
+        """
+        constant = 0x17
+        template = "=4B3I8s"
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+                     shipsets=None):
+            """ Just a constructor
+            """
+            super(Eagle.DeviceSet, self).__init__(name, numofblocks, 
+                        numofshapesets, shipsets)
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   self.numofblocks,
+                                   self.numofshapesets,
+                                   0,
+                                   _name,
+                                  )
+            return _ret_val
+
 # ------------------------------
 
     class ShapeHeader:
