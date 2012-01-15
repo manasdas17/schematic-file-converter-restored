@@ -186,6 +186,12 @@ class Eagle: # pylint: disable=R0902
         constant = 0x13
         template = "=7B2I9s"
 
+        linkedsignmask = 0x10
+
+        visactmask = 0x0f
+        visact = 0x0f
+        nvisact = 0x03
+
 #        colors = ['unknown','darkblue','darkgreen','darkcyan',
 #                'darkred','unknown','khaki','grey',
 ## light variants x8
@@ -194,7 +200,8 @@ class Eagle: # pylint: disable=R0902
 ## total 16; different line and dot patterns
 #               ]
 
-        def __init__(self, number, name, color, fill, visible, active): # pylint: disable=R0913
+        def __init__(self, number, name, color, fill, visible, active, # pylint: disable=R0913
+                     linkednumber=None, linkedsign=0):
             """ Just a constructor
             """
             self.number = number
@@ -203,6 +210,10 @@ class Eagle: # pylint: disable=R0902
             self.fill = fill
             self.visible = visible
             self.active = active
+            self.linkedsign = linkedsign
+            if None==linkednumber:
+                linkednumber = number
+            self.linkednumber = linkednumber
             return
 
         @staticmethod
@@ -213,27 +224,77 @@ class Eagle: # pylint: disable=R0902
 
             _dta = struct.unpack(Eagle.Layer.template, chunk)
 
+            _linked = False # a kind of a "twin" layer
 # these visible / active signs looks like legacy ones
 #  and older format files have other values for this octet
             _visible = False
             _active = False
-            if 0x03 == _dta[2]:
+            if Eagle.Layer.nvisact == Eagle.Layer.visactmask & _dta[2]:
                 _visible = False
                 _active = True
-            elif 0x0f == _dta[2]:
+            elif Eagle.Layer.visact == Eagle.Layer.visactmask & _dta[2]:
                 _visible = True
                 _active = True
             else:
                 pass # unknown layer visibility sign
 
-            _ret_val = Eagle.Layer(number=_dta[3], # or [4], they're the same
+            if (Eagle.Layer.linkedsignmask == 
+                    Eagle.Layer.linkedsignmask & _dta[2]):
+                _linked = True
+
+            _ret_val = Eagle.Layer(number=_dta[3],
                                       name=_dta[9].rstrip('\x00'),
                                       color=_dta[6],
                                       fill=_dta[5], 
                                       visible=_visible,
-                                      active=_active
+                                      active=_active,
+                                      linkednumber=_dta[2],
+                                      linkedsign=_linked
                                      )
             return _ret_val
+
+    class ShapeSet(object):
+        """ A struct that represents a bunch of shapes
+        """
+
+        def __init__(self, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            self.numofshapes = numofshapes
+            if None == shapes:
+                shapes = []
+            self.shapes = shapes
+            return
+
+    class NamedShapeSet(ShapeSet):
+        """ A struct that represents a *named* bunch of shapes
+        """
+
+        def __init__(self, name, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.NamedShapeSet, self).__init__(numofshapes, shapes)
+            self.name = name
+            return
+
+    class Web(object):
+        """ A base struct for a bunch of shapesets
+            It's needed to uniform parsing and counting of members
+        """
+
+        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+                     shipsets=None):
+            """ Just a constructor
+            """
+            self.name = name
+            self.numofblocks = numofblocks
+            self.numofshapesets = numofshapesets
+            if None == shipsets:
+                shipsets = []
+            self.shipsets = shipsets
+            return
+
+# ------------------------------
 
     class AttributeHeader:
         """ A struct that represents a header of attributes
@@ -261,9 +322,34 @@ class Eagle: # pylint: disable=R0902
 # [19] -- a kind of a marker, 0x7f
 # TODO decode [20:24], looks like int changed on each 'save as', even with no changes
             _ret_val = Eagle.AttributeHeader(numofshapes=(-1 + _dta[5]),
-                                                numofattributes=_dta[6]
-                                               )
+                                             numofattributes=_dta[6]
+                                            )
             return _ret_val
+
+    class Library:
+        """ A struct that represents a library
+        """
+        constant = 0x15
+        template = "=2B"
+
+        def __init__(self):
+            pass
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses library block
+            """
+
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Library.template, chunk)
+
+            _ret_val = Eagle.Library(
+                                    )
+            return _ret_val
+
+
+
 
     class ShapeHeader:
         """ A struct that represents a header of shapes
@@ -405,21 +491,6 @@ class Eagle: # pylint: disable=R0902
                                       rotate=Eagle.Rectangle.rotates[_dta[9]]
                                          )
             return _ret_val
-
-    class Web(object):
-        """ A base struct for a bunch of segments
-            It's needed to uniform parsing and counting of members
-        """
-
-        def __init__(self, name, numofblocks=0, segments=None):
-            """ Just a constructor
-            """
-            self.name = name
-            if None == segments:
-                segments = []
-            self.segments = segments
-            self.numofblocks = numofblocks
-            return
 
     class Net(Web):
         """ A struct that represents a net
@@ -954,6 +1025,7 @@ class Eagle: # pylint: disable=R0902
         self.grid = None
         self.attributeheader = None
         self.attributes = []
+        self.libraries = []
         self.shapeheader = None
         self.shapes = []
         self.nets = []
@@ -985,6 +1057,8 @@ class Eagle: # pylint: disable=R0902
                 self.attributeheader = self.AttributeHeader.parse(_dta)
             elif Eagle.ShapeHeader.constant == _type:
                 self.shapeheader = self.ShapeHeader.parse(_dta)
+            elif Eagle.Library.constant == _type:
+                self.libraries.append(self.Library.parse(_dta))
             elif Eagle.Circle.constant == _type:
                 self.shapes.append(self.Circle.parse(_dta))
             elif Eagle.Rectangle.constant == _type:

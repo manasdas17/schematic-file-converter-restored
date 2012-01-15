@@ -180,6 +180,12 @@ class Eagle: # pylint: disable=R0902
         constant = 0x13
         template = "=7B2I9s"
 
+        linkedsignmask = 0x10
+
+        visactmask = 0x0f
+        visact = 0x0f
+        nvisact = 0x03
+
 #        colors = ['unknown','darkblue','darkgreen','darkcyan',
 #                'darkred','unknown','khaki','grey',
 ## light variants x8
@@ -188,7 +194,8 @@ class Eagle: # pylint: disable=R0902
 ## total 16; different line and dot patterns
 #               ]
 
-        def __init__(self, number, name, color, fill, visible, active): # pylint: disable=R0913
+        def __init__(self, number, name, color, fill, visible, active, # pylint: disable=R0913
+                     linkednumber=None, linkedsign=0):
             """ Just a constructor
             """
             self.number = number
@@ -197,6 +204,10 @@ class Eagle: # pylint: disable=R0902
             self.fill = fill
             self.visible = visible
             self.active = active
+            self.linkedsign = linkedsign
+            if None==linkednumber:
+                linkednumber = number
+            self.linkednumber = linkednumber
             return
 
         def construct(self):
@@ -204,20 +215,65 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _vis_act = 0x00
+            _vis_act_link = 0x00
             if self.visible and self.active:
-                _vis_act = 0x0f
+                _vis_act_link += self.visact
             elif not self.visible and self.active:
-                _vis_act = 0x03
+                _vis_act_link += self.nvisact
+            if self.linkedsign:
+                _vis_act_link += self.linkedsignmask
 
             _ret_val = struct.pack(self.template,
-                                   self.constant, 0, _vis_act, 
-                                   self.number, self.number,
+                                   self.constant, 0, _vis_act_link, 
+                                   self.number, self.linkednumber,
                                    self.fill, self.color,
                                    0, 0,
                                    self.name
                                   )
             return _ret_val
+
+    class ShapeSet(object):
+        """ A struct that represents a bunch of shapes
+        """
+
+        def __init__(self, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            self.numofshapes = numofshapes
+            if None == shapes:
+                shapes = []
+            self.shapes = shapes
+            return
+
+    class NamedShapeSet(ShapeSet):
+        """ A struct that represents a *named* bunch of shapes
+        """
+
+        def __init__(self, name, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.NamedShapeSet, self).__init__(numofshapes, shapes)
+            self.name = name
+            return
+
+    class Web(object):
+        """ A base struct for a bunch of shapesets
+            It's needed to uniform parsing and counting of members
+        """
+
+        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+                     shipsets=None):
+            """ Just a constructor
+            """
+            self.name = name
+            self.numofblocks = numofblocks
+            self.numofshapesets = numofshapesets
+            if None == shipsets:
+                shipsets = []
+            self.shipsets = shipsets
+            return
+
+# ------------------------------
 
     class AttributeHeader:
         """ A struct that represents a header of attributes
@@ -921,6 +977,7 @@ class Eagle: # pylint: disable=R0902
         self.grid = None
         self.attributeheader = None
         self.attributes = []
+        self.libraries = []
         self.shapeheader = None
         self.shapes = []
         self.nets = []
