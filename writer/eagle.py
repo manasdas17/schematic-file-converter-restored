@@ -309,6 +309,37 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Library:
+        """ A struct that represents a library
+        """
+        constant = 0x15
+        template = "=4B3I8s"
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, ):
+            """ Just a constructor
+            """
+            self.name = name
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   0, 0, 0, # TODO recheck
+                                   _name,
+                                  )
+            return _ret_val
+
 # ------------------------------
 
     class ShapeHeader:

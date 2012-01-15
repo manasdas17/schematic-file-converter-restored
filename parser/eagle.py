@@ -332,32 +332,38 @@ class Eagle: # pylint: disable=R0902
                                             )
             return _ret_val
 
-# ------------------------------
-
     class Library:
         """ A struct that represents a library
         """
         constant = 0x15
-        template = "=2B"
+        template = "=4B3I8s"
 
-        def __init__(self):
-            pass
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, ):
+            """ Just a constructor
+            """
+            self.name = name
+            return
 
         @staticmethod
         def parse(chunk):
             """ Parses library block
             """
-
             _ret_val = None
 
             _dta = struct.unpack(Eagle.Library.template, chunk)
 
-            _ret_val = Eagle.Library(
+            _name = None
+            if Eagle.Library.no_embed_str != _dta[7][0]:
+                _name = _dta[7].rstrip('\0')
+# three ints are counters, have to recheck
+            _ret_val = Eagle.Library(name=_name,
                                     )
             return _ret_val
 
-
-
+# ------------------------------
 
     class ShapeHeader:
         """ A struct that represents a header of shapes
