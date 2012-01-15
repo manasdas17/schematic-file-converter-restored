@@ -515,6 +515,44 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Net(NamedShapeSet):
+        """ A struct that represents a net
+        """
+        constant = 0x1f
+        template = "=2BH3I8s"
+
+        constantmid1 = 0x7fff7fff
+        constantmid2 = 0x80008000
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, nclass, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Net, self).__init__(name, numofshapes, shapes)
+            self.nclass = nclass
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0,
+                                   self.numofshapes,
+                                   self.constantmid1,
+                                   self.constantmid2,
+                                   self.nclass,
+                                   _name,
+                                  )
+            return _ret_val
+
 # ------------------------------
 
     class ShapeHeader:
@@ -677,37 +715,6 @@ class Eagle: # pylint: disable=R0902
             self.segments = segments
             self.numofblocks = numofblocks
             return
-
-    class Net(Web):
-        """ A struct that represents a net
-        """
-        constant = 0x1f
-        template = "=2BH3I8s"
-
-        constantmid1 = 0x7fff7fff
-        constantmid2 = 0x80008000
-
-        def __init__(self, name, nclass, numofblocks=0, segments=None):
-            """ Just a constructor
-            """
-            super(Eagle.Net, self).__init__(name, numofblocks, segments)
-            self.nclass = nclass
-            return
-
-        def construct(self):
-            """ Prepares a binary block
-            """
-            _ret_val = None
-
-            _ret_val = struct.pack(self.template,
-                                   self.constant, 0,
-                                   self.numofblocks,
-                                   self.constantmid1,
-                                   self.constantmid2,
-                                   self.nclass,
-                                   self.name
-                                  )
-            return _ret_val
 
     class Segment:
         """ A struct that represents a segment

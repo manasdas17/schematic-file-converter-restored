@@ -520,7 +520,7 @@ class Eagle: # pylint: disable=R0902
 
         @staticmethod
         def parse(chunk):
-            """ Parses symbol block
+            """ Parses package block
             """
             _ret_val = None
 
@@ -538,6 +538,47 @@ class Eagle: # pylint: disable=R0902
                                        desc=_desc,
                                        numofshapes=_dta[2],
                                       )
+            return _ret_val
+
+    class Net(NamedShapeSet):
+        """ A struct that represents a net
+        """
+        constant = 0x1f
+        template = "=2BH3I8s"
+
+        constantmid1 = 0x7fff7fff
+        constantmid2 = 0x80008000
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, nclass, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Net, self).__init__(name, numofshapes, shapes)
+            self.nclass = nclass
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses net
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Net.template, chunk)
+
+            if (Eagle.Net.constantmid1 != _dta[3] or 
+                    Eagle.Net.constantmid2 != _dta[4]):
+                pass # strange mid-constants in net
+
+            _name = None
+            if Eagle.Package.no_embed_str != _dta[6][0]:
+                _name = _dta[6].rstrip('\0')
+
+            _ret_val = Eagle.Net(name=_name,
+                                 nclass=_dta[5],
+                                 numofshapes=_dta[2],
+                                )
             return _ret_val
 
 # ------------------------------
@@ -681,40 +722,6 @@ class Eagle: # pylint: disable=R0902
                                       layer=_dta[3],
                                       rotate=Eagle.Rectangle.rotates[_dta[9]]
                                          )
-            return _ret_val
-
-    class Net(Web):
-        """ A struct that represents a net
-        """
-        constant = 0x1f
-        template = "=2BH3I8s"
-
-        constantmid1 = 0x7fff7fff
-        constantmid2 = 0x80008000
-
-        def __init__(self, name, nclass, numofblocks=0, segments=None):
-            """ Just a constructor
-            """
-            super(Eagle.Net, self).__init__(name, numofblocks, segments)
-            self.nclass = nclass
-            return
-
-        @staticmethod
-        def parse(chunk):
-            """ Parses net
-            """
-            _ret_val = None
-
-            _dta = struct.unpack(Eagle.Net.template, chunk)
-
-            if (Eagle.Net.constantmid1 != _dta[3] or 
-                    Eagle.Net.constantmid2 != _dta[4]):
-                pass # strange mid-constants in net
-
-            _ret_val = Eagle.Net(name=_dta[6].rstrip('\x00'),
-                                    nclass=_dta[5],
-                                    numofblocks=_dta[2],
-                                   )
             return _ret_val
 
     class Segment:
