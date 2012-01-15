@@ -451,6 +451,9 @@ class Eagle: # pylint: disable=R0902
         constant = 0x1d
         template = "=2BH3I8s"
 
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
         def __init__(self, name, numofshapes=0, shapes=None):
             """ Just a constructor; shown for a sake of clarity
             """
@@ -471,6 +474,44 @@ class Eagle: # pylint: disable=R0902
                                    self.numofshapes,
                                    0, 0, 0,
                                    _name,
+                                  )
+            return _ret_val
+
+    class Package(NamedShapeSet):
+        """ A struct that represents a package
+        """
+        constant = 0x1e
+        template = "=2BH2IB5s6s"
+
+        max_embed_nlen = 5
+        max_embed_dlen = 6
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, desc, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(EagleBin.Package, self).__init__(name, numofshapes, shapes)
+            self.desc = desc
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_nlen > len(self.name):
+                _name = self.name
+            _desc = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_dlen > len(self.desc):
+                _desc = self.desc
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 
+                                   self.numofshapes,
+                                   0, 0, 0,
+                                   _name,
+                                   _desc
                                   )
             return _ret_val
 

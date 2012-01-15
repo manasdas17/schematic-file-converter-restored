@@ -474,6 +474,9 @@ class Eagle: # pylint: disable=R0902
         constant = 0x1d
         template = "=2BH3I8s"
 
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
         def __init__(self, name, numofshapes=0, shapes=None):
             """ Just a constructor; shown for a sake of clarity
             """
@@ -494,6 +497,45 @@ class Eagle: # pylint: disable=R0902
 
 # number of shapes, excluding this line
             _ret_val = EagleBin.Symbol(name=_name,
+                                       numofshapes=_dta[2],
+                                      )
+            return _ret_val
+
+    class Package(NamedShapeSet):
+        """ A struct that represents a package
+        """
+        constant = 0x1e
+        template = "=2BH2IB5s6s"
+
+        max_embed_nlen = 5
+        max_embed_dlen = 6
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, desc, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(EagleBin.Package, self).__init__(name, numofshapes, shapes)
+            self.desc = desc
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses symbol block
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(EagleBin.Package.template, chunk)
+
+            _name = None
+            if Eagle.Package.no_embed_str != _dta[6][0]:
+                _name = _dta[6].rstrip('\0')
+            _desc = None
+            if Eagle.Package.no_embed_str != _dta[7][0]:
+                _desc = _dta[7].rstrip('\0')
+
+# number of shapes, excluding this line
+            _ret_val = EagleBin.Symbol(name=_name,
+                                       desc=_desc,
                                        numofshapes=_dta[2],
                                       )
             return _ret_val
