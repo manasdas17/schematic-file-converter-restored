@@ -188,9 +188,9 @@ class Eagle: # pylint: disable=R0902
 
         linkedsignmask = 0x10
 
-        visactmask = 0x0f
-        visact = 0x0f
-        nvisact = 0x03
+        visactmask = 0x0e
+        visact = 0x0e
+        nvisact = 0x02
 
 #        colors = ['unknown','darkblue','darkgreen','darkcyan',
 #                'darkred','unknown','khaki','grey',
@@ -294,17 +294,19 @@ class Eagle: # pylint: disable=R0902
             self.shipsets = shipsets
             return
 
-# ------------------------------
-
     class AttributeHeader:
         """ A struct that represents a header of attributes
         """
         constant = 0x14
-        template = "=4BIII4BI"
+        template = "=4B3I3B5s"
 
-        def __init__(self, numofshapes=0, numofattributes=0):
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, schematic, numofshapes=0, numofattributes=0):
             """ Just a constructor
             """
+            self.schematic = schematic
             self.numofshapes = numofshapes # to be validated!
             self.numofattributes = numofattributes # to be validated!
             return
@@ -317,14 +319,20 @@ class Eagle: # pylint: disable=R0902
 
             _dta = struct.unpack(Eagle.AttributeHeader.template, chunk)
 
+            _schematic = None
+            if Eagle.AttributeHeader.no_embed_str != _dta[10][0]:
+                _schematic = _dta[10].rstrip('\0')
 # number of shapes + header of shapes
 # number of attributes, excluding this line
-# [19] -- a kind of a marker, 0x7f
-# TODO decode [20:24], looks like int changed on each 'save as', even with no changes
-            _ret_val = Eagle.AttributeHeader(numofshapes=(-1 + _dta[5]),
+# name can be of length 0 for versions prior to 5.x
+#  name==None means a long name stored separately
+            _ret_val = Eagle.AttributeHeader(schematic=_schematic,
+                                             numofshapes=(-1 + _dta[5]),
                                              numofattributes=_dta[6]
                                             )
             return _ret_val
+
+# ------------------------------
 
     class Library:
         """ A struct that represents a library

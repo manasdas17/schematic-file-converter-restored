@@ -182,9 +182,9 @@ class Eagle: # pylint: disable=R0902
 
         linkedsignmask = 0x10
 
-        visactmask = 0x0f
-        visact = 0x0f
-        nvisact = 0x03
+        visactmask = 0x0e
+        visact = 0x0e
+        nvisact = 0x02
 
 #        colors = ['unknown','darkblue','darkgreen','darkcyan',
 #                'darkred','unknown','khaki','grey',
@@ -273,17 +273,19 @@ class Eagle: # pylint: disable=R0902
             self.shipsets = shipsets
             return
 
-# ------------------------------
-
     class AttributeHeader:
         """ A struct that represents a header of attributes
         """
         constant = 0x14
-        template = "=4BIII4BI"
+        template = "=4B3I3B5s"
 
-        def __init__(self, numofshapes=0, numofattributes=0):
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, schematic, numofshapes=0, numofattributes=0):
             """ Just a constructor
             """
+            self.schematic = schematic
             self.numofshapes = numofshapes # to be validated!
             self.numofattributes = numofattributes # to be validated!
             return
@@ -293,15 +295,21 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
+            _schematic = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.schematic):
+                _schematic = self.schematic
+
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
                                    0, 
                                    1 + self.numofshapes, # TODO recheck +1
                                    self.numofattributes,
-                                   0, 0, 0, 0x7f,
-                                   0
+                                   0, 0, 0,
+                                   _schematic,
                                   )
             return _ret_val
+
+# ------------------------------
 
     class ShapeHeader:
         """ A struct that represents a header of shapes
