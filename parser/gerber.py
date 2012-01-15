@@ -113,27 +113,16 @@ class Gerber:
         return status._replace(x=x, y=y)
 
     def _target_pos(self, block, status):
-        block = self._replace_nulls(block, status)
-        if self.params['FS'].incremental_coords:
-            x = status.x + block.x
-            y = status.y + block.y
-        else:
-            x, y = block[:2]
-        return (x, y)
-
-    def _replace_nulls(self, block, status):
-        x, y = block[:2]
-        if self.params['FS'].incremental_coords:
-            if block.x is None:
-                x = 0
-            if block.y is None:
-                y = 0
-        else:
-            if block.x is None:
-                x = status.x
-            if block.y is None:
-                y = status.y
-        return block._replace(x=x, y=y)
+        coord = {'x':block.x, 'y':block.y}
+        for k in coord:
+            if self.params['FS'].incremental_coords:
+                if coord[k] is None:
+                    coord[k] = 0
+                coord[k] = getattr(status, k) + getattr(block, k)
+            else:
+                if coord[k] is None:
+                    coord[k] = getattr(status, k)
+        return (coord['x'], coord['y'])
 
     def _tokenize(self):
         """ Split gerber file into pythonic tokens. """
