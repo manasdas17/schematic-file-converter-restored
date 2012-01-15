@@ -19,7 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from shape import Line
+from shape import Point
 
 class Layout:
     """ The layout class holds the PCB Layout portion of the design to
@@ -34,12 +34,23 @@ class Layer:
 
     def __init__(self):
         self.id = ''
-        self.type = ''  # Copper or Mask/Silk
-        self.traces = []# Trace = connected FatLines, FatArcs, etc
+        self.type = ''   # Copper or Mask/Silk
+        self.traces = [] # Trace = connected shapes that are of a width
         self.vias = []
-        self.fills = [] # probably includes pads -- may have to extend
-        self.voids = [] # possibly places that must be kept clear -- irrelevant for gerber
+        self.fills = []  # probably includes pads -- may have to extend
+        self.voids = []
         self.components = [] # if used, possibly could include pads
+
+    def get_connected_trace(self, w, coord):
+        """ Is coord connected to any of the layer's traces? """
+        #TODO: interpolate and take widths into account
+        point = Point(coord)
+        for tr_index in range(len(self.traces)):
+            trace = self.traces[tr_index]
+            for segment in trace.segments:
+                if point in (segment.p1, segment.p2) and trace.width == w:
+                    return tr_index
+        return None
 
     def json(self):
         """ Return the layer as JSON """
@@ -52,19 +63,20 @@ class Layer:
             }
 
 
-class FatLine(Line):
-    """ finite width line segment from point1 to point2 """
+class Trace:
+    """ A collection of connected segments such as lines and arcs. """
 
-    def __init__(self, p1, p2, wid):
-        super(FatLine, self).__init__(p1, p2)
-        self.type = "fatline"
-        self.wid = wid
+    def __init__(self, width=0.01, segments=[], tool_shape='circle'):
+        self.type = 'trace'
+        self.width = width
+        self.tool_shape = tool_shape
+        self.segments = segments
 
     def json(self):
-        """ Return the fatline as JSON """
+        """ Return the trace as JSON """
         return {
             "type": self.type,
-            "p1": self.p1.json(),
-            "p2": self.p2.json(),
-            "wid": self.wid
+            "width": self.width,
+            "tool_shape": self.tool_shape,
+            "segments": [s.json() for s in self.segments]
             }

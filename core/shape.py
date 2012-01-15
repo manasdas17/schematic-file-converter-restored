@@ -535,6 +535,11 @@ class Point:
             self.x, self.y = x
 
 
+    def __eq__(self, other):
+        """ Facilitate p1 == p2 comparisons. """
+        return self.__dict__ == other.__dict__
+
+
     def json(self):
         """ Return the point as JSON """
         return {

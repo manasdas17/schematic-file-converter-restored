@@ -24,7 +24,8 @@ from string import digits
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout, Layer, FatLine
+from core.layout import Layout, Layer, Trace
+from core.shape import Line
 
 # exceptions
 
@@ -86,9 +87,10 @@ class Gerber:
                 status = self._move(block, status)
             else:
                 self.params[block.id_] = block
-        design = Design()
         layout = Layout()
         layout.layers.append(self.layer)
+        print self.layer.json()
+        design = Design()
         design.layouts.append(layout)
         return design
 
@@ -107,9 +109,14 @@ class Gerber:
         if status.draw == '01':
             # TODO: handle 'D03'
             # TODO: don't assume circular aperture
-            trace_wid = self.params[status.aperture].modifiers[0]
-            trace = FatLine(status[:2], (x, y), trace_wid)
-            self.layer.traces.append(trace)
+            segment = Line(status[:2], (x, y))
+            w = self.params[status.aperture].modifiers[0]
+            tr_index = self.layer.get_connected_trace(w, status[:2])
+            if tr_index is None:
+                trace = Trace(w, [segment])
+                self.layer.traces.append(trace)
+            else:
+                self.layer.traces[tr_index].segments.append(segment)
         return status._replace(x=x, y=y)
 
     def _target_pos(self, block, status):
