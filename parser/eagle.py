@@ -392,11 +392,54 @@ class Eagle: # pylint: disable=R0902
             if Eagle.DeviceSet.no_embed_str != _dta[7][0]:
                 _name = _dta[7].rstrip('\0')
 
-            _ret_val = Eagle.Library(name=_name,
-                                     numofblocks=_dta[3],
-                                     numofshapesets=_dta[4],
-                                    )
+            _ret_val = Eagle.DeviceSet(name=_name,
+                                       numofblocks=_dta[3],
+                                       numofshapesets=_dta[4],
+                                      )
             return _ret_val
+
+    class SymbolHeader(Web):
+        """ A struct that represents a header of symbols
+        """
+        constant = 0x18
+        template = "=4B3I8s"
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+                     shipsets=None):
+            """ Just a constructor
+            """
+            super(Eagle.SymbolHeader, self).__init__(name, numofblocks, 
+                        numofshapesets, shipsets)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses symbolheader block
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.SymbolHeader.template, chunk)
+
+            _name = None
+            if Eagle.SymbolHeader.no_embed_str != _dta[7][0]:
+                _name = _dta[7].rstrip('\0')
+
+            _ret_val = Eagle.SymbolHeader(name=_name,
+                                          numofblocks=_dta[3],
+                                          numofshapesets=_dta[4],
+                                         )
+            return _ret_val
+
+
+
+
+
+
+
+
 
 # ------------------------------
 
