@@ -100,6 +100,8 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_layer.fill, 1)
         self.assertEqual(_layer.visible, True)
         self.assertEqual(_layer.active, True)
+        self.assertEqual(_layer.linkedsign, False)
+        self.assertEqual(_layer.linkednumber, 91)
         return
 
     def test_attributeheader_parse(self):
@@ -110,24 +112,116 @@ class EagleTests(unittest.TestCase):
                                  b"\x00\x00\x00\x7f\x10\xfa\x0d\x09"))
         _attrheader = Eagle.AttributeHeader.parse(_valid_chunk)
 
+        self.assertEqual(_attrheader.schematic, None)
         self.assertEqual(_attrheader.numofshapes, 1)
         self.assertEqual(_attrheader.numofattributes, 0) 
+# probably no embedded "schematic" is possible
         return
 
-    def test_shapeheader_parse(self):
-        """ Test ShapeHeader block parsing """
+    def test_library_parse(self):
+        """ Test Library block parsing """
 
-        _valid_chunk = b''.join((b"\x1a\x00\x01\x00\x53\x02\x76\x0a",
-                                 b"\xeb\x08\x0e\x11\x00\x00\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
-        _shapeheader = Eagle.ShapeHeader.parse(_valid_chunk)
+# embedded name
+        _valid_chunk = b''.join((b"\x15\x80\x00\x00\x09\x00\x00\x00",
+                                 b"\x16\x00\x00\x00\x24\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+        _library = Eagle.Library.parse(_valid_chunk)
 
-        self.assertEqual(_shapeheader.numofshapes, 1)
+        self.assertEqual(_library.name, "diode")
+        self.assertEqual(_library.numofdevsetblocks, 9)
+        self.assertEqual(_library.numofsymbolblocks, 22)
+        self.assertEqual(_library.numofpackageblocks, 36)
+
+# TODO external name
+        return
+
+    def test_deviceset_parse(self):
+        """ Test DeviceSet block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x17\x80\x00\x00\x08\x00\x00\x00",
+                                 b"\x02\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+        _deviceset = Eagle.DeviceSet.parse(_valid_chunk)
+
+        self.assertEqual(_deviceset.name, "diode")
+        self.assertEqual(_deviceset.numofblocks, 8)
+        self.assertEqual(_deviceset.numofshapesets, 2)
+
+# TODO external name
+
+        return
+
+    def test_symbolheader_parse(self):
+        """ Test SymbolHeader block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x18\x80\x00\x00\x15\x00\x00\x00",
+                                 b"\x02\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+        _symbolheader = Eagle.SymbolHeader.parse(_valid_chunk)
+
+        self.assertEqual(_symbolheader.name, "diode")
+        self.assertEqual(_symbolheader.numofblocks, 21)
+        self.assertEqual(_symbolheader.numofshapesets, 2)
+
+# TODO external name
+
+        return
+
+    def test_packageheader_parse(self):
+        """ Test PackageHeader block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x19\x80\x00\x00\x23\x00\x00\x00",
+                                 b"\x02\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+        _packageheader = Eagle.PackageHeader.parse(_valid_chunk)
+
+        self.assertEqual(_packageheader.name, "diode")
+        self.assertEqual(_packageheader.numofblocks, 35)
+        self.assertEqual(_packageheader.numofshapesets, 2)
+
+# TODO external name
+
+        return
+
+    def test_symbol_parse(self):
+        """ Test Symbol block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x1d\x00\x0a\x00\xf4\xfe\x62\xff",
+                                 b"\x2e\x01\xa8\x00\x00\x00\x00\x00",
+                                 b"\x5a\x44\x00\x00\x00\x00\x00\x00"))
+        _symbol = Eagle.Symbol.parse(_valid_chunk)
+
+        self.assertEqual(_symbol.name, "ZD")
+        self.assertEqual(_symbol.numofshapes, 10)
+
+# TODO external name
+        return
+
+    def test_package_parse(self):
+        """ Test Package block parsing """
+
+# TODO embedded name
+
+# external name
+        _valid_chunk = b''.join((b"\x1e\x00\x0d\x00\x7c\xfe\xb5\xff",
+                                 b"\x84\x01\x97\x00\x00\x7f\x34\xe3",
+                                 b"\x2a\x09\x7f\x2b\xe3\x2a\x09\x00"))
+        _package = Eagle.Package.parse(_valid_chunk)
+
+        self.assertEqual(_package.name, None)
+        self.assertEqual(_package.desc, None)
+        self.assertEqual(_package.numofshapes, 13)
+
         return
 
     def test_net_parse(self):
         """ Test Net block parsing """
 
+# embedded name
         _valid_chunk = b''.join((b"\x1f\x80\x05\x00\xff\x7f\xff\x7f",
                                  b"\x00\x80\x00\x80\x01\x00\x00\x00",
                                  b"\x4e\x24\x31\x00\x00\x00\x00\x00"))
@@ -135,7 +229,38 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_net.name, "N$1")
         self.assertEqual(_net.nclass, 1)
-        self.assertEqual(_net.numofblocks, 5)
+        self.assertEqual(_net.numofshapes, 5)
+
+# TODO external name
+        return
+
+    def test_bus_parse(self):
+        """ Test Bus block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x3a\x80\x04\x00\x42\x24\x33\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+        _bus = Eagle.Bus.parse(_valid_chunk)
+
+        self.assertEqual(_bus.name, "B$3")
+        self.assertEqual(_bus.numofshapes, 4)
+
+# TODO external name
+        return
+
+    def test_shapeheader_parse(self):
+        """ Test ShapeHeader block parsing """
+
+        _valid_chunk = b''.join((b"\x1a\x00\x03\x00\x33\x01\x05\x0d",
+                                 b"\x64\x07\x4b\x10\x04\x00\x00\x00",
+                                 b"\x05\x00\x00\x00\x0e\x00\x00\x00"))
+        _shapeheader = Eagle.ShapeHeader.parse(_valid_chunk)
+
+        self.assertEqual(_shapeheader.numofshapes, 3)
+        self.assertEqual(_shapeheader.numofpartblocks, 4)
+        self.assertEqual(_shapeheader.numofbusblocks, 5)
+        self.assertEqual(_shapeheader.numofnetblocks, 14)
         return
 
     def test_segment_parse(self):
@@ -216,9 +341,43 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_rectangle.layer, 92)
         return
 
-    def test_text_parse_embedded(self):
+    def test_pad_parse(self):
+        """ Test Pad block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x2a\x80\x01\x00\x70\xc6\x00\x00",
+                                 b"\x00\x00\x00\x00\xd4\x15\x00\x00",
+                                 b"\x00\x00\x00\x41\x00\x00\x00\x00"))
+        _pad = Eagle.Pad.parse(_valid_chunk)
+
+        self.assertEqual(_pad.name, "A")
+        self.assertEqual(_pad.x, 5.08)
+        self.assertEqual(_pad.y, 0.)
+        self.assertEqual(_pad.drill, 0.5588)
+
+# TODO external name
+        return
+
+    def test_pin_parse(self):
+        """ Test Pin block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x2c\x80\x00\x00\x38\x63\x00\x00",
+                                 b"\x00\x00\x00\x00\x96\x00\x43\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+        _pin = Eagle.Pin.parse(_valid_chunk)
+
+        self.assertEqual(_pin.name, "C")
+        self.assertEqual(_pin.x, 2.54)
+        self.assertEqual(_pin.y, 0.)
+
+# TODO external name
+        return
+
+    def test_text_parse(self):
         """ Test Text block parsing """
 
+# embedded text
         _valid_chunk = b''.join((b"\x31\x80\x02\x5b\x80\x9a\x12\x00",
                                  b"\xc0\x19\x03\x00\x02\x7e\x4c\x00",
                                  b"\x00\x08\x74\x65\x78\x74\x21\x00"))
@@ -232,11 +391,8 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_text.font, "fixed")
         self.assertEqual(_text.ratio, 19)
         self.assertEqual(_text.layer, 91)
-        return
- 
-    def test_text_parse_external(self):
-        """ Test Text block parsing (value is not in block) """
 
+# extarnal text
         _valid_chunk = b''.join((b"\x31\x80\x02\x5b\x18\xf0\x01\x00",
                                  b"\x18\x57\x0e\x00\x02\x7e\x4c\x00",
                                  b"\x00\x00\x7f\xf8\xcd\x35\x09\x00"))
@@ -271,21 +427,10 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_label.layer, 95)
         return
  
-    def test_bus_parse(self):
-        """ Test Bus block parsing """
-
-        _valid_chunk = b''.join((b"\x3a\x80\x04\x00\x42\x24\x33\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
-        _bus = Eagle.Bus.parse(_valid_chunk)
-
-        self.assertEqual(_bus.name, "B$3")
-        self.assertEqual(_bus.numofblocks, 4)
-        return
-
-    def test_attribute_parse_embedded(self):
+    def test_attribute_parse(self):
         """ Test Attribute block parsing """
 
+# embedded text
         _valid_chunk = b''.join((b"\x42\x80\x2a\x00\x00\x00\x00\x31",
                                  b"\x32\x33\x34\x35\x36\x37\x38\x39",
                                  b"\x30\x21\x71\x77\x21\x72\x74\x00"))
@@ -293,11 +438,8 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_attr.name, "1234567890")
         self.assertEqual(_attr.value, "qw!rt")
-        return
 
-    def test_attribute_parse_external(self):
-        """ Test Attribute block parsing (value is not in block) """
-
+# external text
         _valid_chunk = b''.join((b"\x42\x80\x2a\x00\x00\x00\x00\x7f",
                                  b"\x88\x2b\x18\x09\x00\x00\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))

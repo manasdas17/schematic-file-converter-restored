@@ -208,7 +208,7 @@ class Eagle: # pylint: disable=R0902
             self.visible = visible
             self.active = active
             self.linkedsign = linkedsign
-            if None==linkednumber:
+            if None == linkednumber:
                 linkednumber = number
             self.linkednumber = linkednumber
             return
@@ -325,7 +325,7 @@ class Eagle: # pylint: disable=R0902
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofdevsetblocks=0, devsets=None,
+        def __init__(self, name, numofdevsetblocks=0, devsets=None, # pylint: disable=R0913
                      numofsymbolblocks=0, symbols=None,
                      numofpackageblocks=0, packages=None,):
             """ Just a constructor
@@ -616,7 +616,7 @@ class Eagle: # pylint: disable=R0902
         constant = 0x1a
         template = "=2BH5I"
 
-        def __init__(self, numofshapes=0, shapes=None, 
+        def __init__(self, numofshapes=0, shapes=None, # pylint: disable=R0913
                      numofpartblocks=0, parts=None,
                      numofbusblocks=0, buses=None,
                      numofnetblocks=0, nets=None,):

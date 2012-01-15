@@ -30,9 +30,9 @@ from core.design import Design
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
 #    """
-#    pass
+#    pass# pylint: disable=R0902
 
-class Eagle: # pylint: disable=R0902
+class Eagle: 
     """ The Eagle Format Parser """
 
     
@@ -214,7 +214,7 @@ class Eagle: # pylint: disable=R0902
             self.visible = visible
             self.active = active
             self.linkedsign = linkedsign
-            if None==linkednumber:
+            if None == linkednumber:
                 linkednumber = number
             self.linkednumber = linkednumber
             return
@@ -348,7 +348,7 @@ class Eagle: # pylint: disable=R0902
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofdevsetblocks=0, devsets=None,
+        def __init__(self, name, numofdevsetblocks=0, devsets=None, # pylint: disable=R0913
                      numofsymbolblocks=0, symbols=None,
                      numofpackageblocks=0, packages=None,):
             """ Just a constructor
@@ -646,7 +646,7 @@ class Eagle: # pylint: disable=R0902
         constant = 0x1a
         template = "=2BH5I"
 
-        def __init__(self, numofshapes=0, shapes=None, 
+        def __init__(self, numofshapes=0, shapes=None, # pylint: disable=R0913
                      numofpartblocks=0, parts=None,
                      numofbusblocks=0, buses=None,
                      numofnetblocks=0, nets=None,):
@@ -1350,9 +1350,9 @@ class Eagle: # pylint: disable=R0902
         self.attributes = []
         self.libraries = []
         self.shapeheader = None
-        self.shapes = []
-        self.nets = []
-        self.buses = []
+#        self.shapes = []
+#        self.nets = []
+#        self.buses = []
         self.texts = []
         self.schematic = None
         self.netclasses = []
@@ -1362,8 +1362,9 @@ class Eagle: # pylint: disable=R0902
         """ Parse fixed length block part of a file
         """
 # to keep parsing position
-        _cur_web = None # consists of one or more segments
-        _cur_segment = None # consists of one or more "wires"
+        _cur_lib = None
+        _cur_web = None # consists of one or more shapesets/segments
+        _cur_segment = None # consists of one or more shapes
 
 # loop through 24 byte long blocks
         for _nn in range(numofblocks):
@@ -1378,31 +1379,51 @@ class Eagle: # pylint: disable=R0902
                 self.layers.append(self.Layer.parse(_dta))
             elif Eagle.AttributeHeader.constant == _type:
                 self.attributeheader = self.AttributeHeader.parse(_dta)
+            elif Eagle.Library.constant == _type:
+                _cur_lib = self.Library.parse(_dta)
+                self.libraries.append(_cur_lib)
+            elif Eagle.DeviceSet.constant == _type:
+                _cur_web = self.DeviceSet.parse(_dta)
+                _cur_lib.devicesets.append(_cur_web)
+            elif Eagle.SymbolHeader.constant == _type:
+                _cur_web = self.SymbolHeader.parse(_dta)
+                _cur_lib.symbols.append(_cur_web)
+            elif Eagle.PackageHeader.constant == _type:
+                _cur_web = self.PackageHeader.parse(_dta)
+                _cur_lib.packages.append(_cur_web)
+            elif Eagle.Symbol.constant == _type:
+                _cur_segment = self.Symbol.parse(_dta)
+                _cur_web.symbols.append(_cur_segment)
+            elif Eagle.Package.constant == _type:
+                _cur_segment = self.Package.parse(_dta)
+                _cur_web.packages.append(_cur_segment)
             elif Eagle.ShapeHeader.constant == _type:
                 self.shapeheader = self.ShapeHeader.parse(_dta)
-            elif Eagle.Library.constant == _type:
-                self.libraries.append(self.Library.parse(_dta))
-            elif Eagle.Circle.constant == _type:
-                self.shapes.append(self.Circle.parse(_dta))
-            elif Eagle.Rectangle.constant == _type:
-                self.shapes.append(self.Rectangle.parse(_dta))
+            elif Eagle.Bus.constant == _type:
+                _cur_web = self.Bus.parse(_dta)
+                self.shapeheader.buses.append(_cur_web)
             elif Eagle.Net.constant == _type:
                 _cur_web = self.Net.parse(_dta)
-                self.nets.append(_cur_web)
+                self.shapeheader.nets.append(_cur_web)
             elif Eagle.Segment.constant == _type:
                 _cur_segment = self.Segment.parse(_dta)
                 _cur_web.segments.append(_cur_segment)
+            elif Eagle.Circle.constant == _type:
+                _cur_segment.shapes.append(self.Circle.parse(_dta))
+            elif Eagle.Rectangle.constant == _type:
+                _cur_segment.shapes.append(self.Rectangle.parse(_dta))
             elif Eagle.Wire.constant == _type:
-                _cur_segment.wires.append(self.Wire.parse(_dta))
+                _cur_segment.shapes.wires.append(self.Wire.parse(_dta))
             elif Eagle.Junction.constant == _type:
-                _cur_segment.junctions.append(self.Junction.parse(_dta))
+                _cur_segment.shapes.append(self.Junction.parse(_dta))
+            elif Eagle.Pad.constant == _type:
+                _cur_segment.shapes.append(self.Pad.parse(_dta))
+            elif Eagle.Pin.constant == _type:
+                _cur_segment.shapes.append(self.Pin.parse(_dta))
             elif Eagle.Label.constant == _type:
-                _cur_segment.labels.append(self.Label.parse(_dta))
-            elif Eagle.Bus.constant == _type:
-                _cur_web = self.Bus.parse(_dta)
-                self.buses.append(_cur_web)
+                _cur_segment.shapes.append(self.Label.parse(_dta))
             elif Eagle.Text.constant == _type:
-                self.texts.append(self.Text.parse(_dta))
+                _cur_segment.shapes.append(self.Text.parse(_dta))
             elif Eagle.Attribute.constant == _type:
                 self.attributes.append(self.Attribute.parse(_dta))
             else:

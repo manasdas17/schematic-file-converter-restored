@@ -95,11 +95,13 @@ class EagleTests(unittest.TestCase):
                              fill=1,
                              visible=True,
                              active=True,
+                             linkedsign=False,
+                             linkednumber=91,
                             )
 
         _chunk = _layer.construct()
 
-        _valid_chunk = b''.join((b"\x13\x00\x0f\x5b\x5b\x01\x02\x00",
+        _valid_chunk = b''.join((b"\x13\x00\x0e\x5b\x5b\x01\x02\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x4e",
                                  b"\x65\x74\x73\x00\x00\x00\x00\x00"))
 
@@ -110,7 +112,11 @@ class EagleTests(unittest.TestCase):
     def test_attributeheader_construct(self):
         """ Test AttributeHeader block creation """
 
-        _attrheader = Eagle.AttributeHeader(numofshapes=3,
+# probably no embedded schematic is possible;
+        _attrheader = Eagle.AttributeHeader(schematic=''.join((
+                                                ":%F%N/%S.%C%R", 
+                                                '\t', "/%S.%C%R")),
+                                            numofshapes=3,
                                             numofattributes=2, 
                                            )
 
@@ -118,7 +124,169 @@ class EagleTests(unittest.TestCase):
 
         _valid_chunk = b''.join((b"\x14\x00\x00\x00\x00\x00\x00\x00",
                                  b"\x04\x00\x00\x00\x02\x00\x00\x00",
-                                 b"\x00\x00\x00\x7f\x00\x00\x00\x00"))
+                                 b"\x00\x00\x00\x7f\x00\x00\x00\x09"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_library_construct(self):
+        """ Test Library block creation """
+
+# embedded text
+        _library = Eagle.Library(name="diode",
+                                 numofdevsetblocks=9,
+                                 numofsymbolblocks=22,
+                                 numofpackageblocks=36,
+                                )
+
+        _chunk = _library.construct()
+
+        _valid_chunk = b''.join((b"\x15\x00\x00\x00\x09\x00\x00\x00",
+                                 b"\x16\x00\x00\x00\x24\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+# TODO external text
+        return
+
+    def test_deviceset_construct(self):
+        """ Test DeviceSet block creation """
+
+# embedded text
+        _deviceset = Eagle.DeviceSet(name="diode",
+                                     numofblocks=8,
+                                     numofshapesets=2,
+                                    )
+
+        _chunk = _deviceset.construct()
+
+        _valid_chunk = b''.join((b"\x17\x00\x00\x00\x08\x00\x00\x00",
+                                 b"\x02\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+# TODO external text
+        return
+
+    def test_symbolheader_construct(self):
+        """ Test SymbolHeader block creation """
+
+# embedded text
+        _symbolheader = Eagle.SymbolHeader(name="diode",
+                                           numofblocks=21,
+                                           numofshapesets=2,
+                                          )
+
+        _chunk = _symbolheader.construct()
+
+        _valid_chunk = b''.join((b"\x18\x00\x00\x00\x15\x00\x00\x00",
+                                 b"\x02\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+# TODO external text
+        return
+
+    def test_packageheader_construct(self):
+        """ Test PackageHeader block creation """
+
+# embedded text
+        _packageheader = Eagle.PackageHeader(name="diode",
+                                             numofblocks=35,
+                                             numofshapesets=2,
+                                            )
+
+        _chunk = _packageheader.construct()
+
+        _valid_chunk = b''.join((b"\x19\x00\x00\x00\x23\x00\x00\x00",
+                                 b"\x02\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+# TODO external text
+        return
+
+    def test_symbol_construct(self):
+        """ Test Symbol block creation """
+
+# embedded text
+        _symbol = Eagle.Symbol(name="ZD", 
+                               numofshapes=10,
+                              )
+
+        _chunk = _symbol.construct()
+
+        _valid_chunk = b''.join((b"\x1d\x00\x0a\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x5a\x44\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+# TODO external text
+        return
+
+    def test_package_construct(self):
+        """ Test Package block creation """
+
+# TODO embedded text
+
+# external text
+        _package = Eagle.Package(name="LongName", 
+                                 desc="LongDescription",
+                                 numofshapes=13,
+                                )
+
+        _chunk = _package.construct()
+
+        _valid_chunk = b''.join((b"\x1e\x00\x0d\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x7f\x00\x00",
+                                 b"\x00\x09\x7f\x00\x00\x00\x09\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+        return
+
+    def test_net_construct(self):
+        """ Test Net block creation """
+
+        _net = Eagle.Net(name="N$1",
+                         nclass=1,
+                         numofshapes=5,
+                        )
+
+        _chunk = _net.construct()
+
+        _valid_chunk = b''.join((b"\x1f\x00\x05\x00\xff\x7f\xff\x7f",
+                                 b"\x00\x80\x00\x80\x01\x00\x00\x00",
+                                 b"\x4e\x24\x31\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_bus_construct(self):
+        """ Test Bus block creation """
+
+        _bus = Eagle.Bus(name="B$3",
+                         numofshapes=4,
+                        )
+
+        _chunk = _bus.construct()
+
+        _valid_chunk = b''.join((b"\x3a\x00\x04\x00\x42\x24\x33\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
@@ -127,32 +295,17 @@ class EagleTests(unittest.TestCase):
     def test_shapeheader_construct(self):
         """ Test ShapeHeader block creation """
 
-        _shapeheader = Eagle.ShapeHeader(numofshapes=1,
+        _shapeheader = Eagle.ShapeHeader(numofshapes=3,
+                                         numofpartblocks=4,
+                                         numofbusblocks=5,
+                                         numofnetblocks=14,
                                         )
 
         _chunk = _shapeheader.construct()
 
-        _valid_chunk = b''.join((b"\x1a\x00\x01\x00\x00\x00\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
-
-        self.assertNotEqual(_chunk, None)
-        self.assertEqual(_chunk, _valid_chunk)
-        return
-
-    def test_net_construct(self):
-        """ Test Net block creation """
-
-        _net = Eagle.Net(name="N$1",
-                         nclass=1,
-                         numofblocks=5,
-                        )
-
-        _chunk = _net.construct()
-
-        _valid_chunk = b''.join((b"\x1f\x00\x05\x00\xff\x7f\xff\x7f",
-                                 b"\x00\x80\x00\x80\x01\x00\x00\x00",
-                                 b"\x4e\x24\x31\x00\x00\x00\x00\x00"))
+        _valid_chunk = b''.join((b"\x1a\x00\x03\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x04\x00\x00\x00",
+                                 b"\x05\x00\x00\x00\x0e\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
@@ -261,6 +414,43 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
 
+    def test_pad_construct(self):
+        """ Test Pad block creation """
+
+        _pad = Eagle.Pad(name="A",
+                         x=5.08,
+                         y=0.,
+                         drill=0.5588,
+                        )
+
+        _chunk = _pad.construct()
+
+        _valid_chunk = b''.join((b"\x2a\x00\x00\x00\x70\xc6\x00\x00",
+                                 b"\x00\x00\x00\x00\xd4\x15\x00\x00",
+                                 b"\x00\x00\x00\x41\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_pin_construct(self):
+        """ Test Pin block creation """
+
+        _pin = Eagle.Pin(name="C",
+                         x=2.54,
+                         y=0.,
+                        )
+
+        _chunk = _pin.construct()
+
+        _valid_chunk = b''.join((b"\x2c\x00\x00\x00\x38\x63\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x43\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
     def test_text_construct(self):
         """ Test Text block creation """
 
@@ -329,23 +519,6 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
  
-    def test_bus_construct(self):
-        """ Test Bus block creation """
-
-        _bus = Eagle.Bus(name="B$3",
-                         numofblocks=4,
-                        )
-
-        _chunk = _bus.construct()
-
-        _valid_chunk = b''.join((b"\x3a\x00\x04\x00\x42\x24\x33\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
-
-        self.assertNotEqual(_chunk, None)
-        self.assertEqual(_chunk, _valid_chunk)
-        return
-
     def test_attribute_construct(self):
         """ Test Attribute block creation """
 
