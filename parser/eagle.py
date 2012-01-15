@@ -627,6 +627,33 @@ class Eagle: # pylint: disable=R0902
                                         )
             return _ret_val
 
+    class Segment(ShapeSet):
+        """ A struct that represents a segment
+        """
+        constant = 0x20
+        template = "=2BHI4B3I"
+
+        def __init__(self, numofshapes=0, shapes=None,
+                     cumulativenumofshapes=0):
+            """ Just a constructor
+            """
+            super(Eagle.Segment, self).__init__(numofshapes, shapes)
+            self.cumulativenumofshapes = cumulativenumofshapes
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses segment
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Segment.template, chunk)
+
+            _ret_val = Eagle.Segment(numofshapes=_dta[2],
+                                     cumulativenumofshapes=_dta[5], # TODO recheck
+                                    )
+            return _ret_val
+
 # ------------------------------
 
     class Shape(object):
@@ -743,42 +770,6 @@ class Eagle: # pylint: disable=R0902
                                       layer=_dta[3],
                                       rotate=Eagle.Rectangle.rotates[_dta[9]]
                                          )
-            return _ret_val
-
-    class Segment:
-        """ A struct that represents a segment
-        """
-        constant = 0x20
-        template = "=2BHI4B3I"
-
-        def __init__(self, numofshapes=0, wires=None, junctions=None, # pylint: disable=R0913
-                     labels=None, cumulativenumofshapes=0):
-            """ Just a constructor
-            """
-            self.cumulativenumofshapes = cumulativenumofshapes
-            self.numofshapes = numofshapes
-            if None == wires:
-                wires = []
-            self.wires = wires
-            if None == junctions:
-                junctions = []
-            self.junctions = junctions
-            if None == labels:
-                labels = []
-            self.labels = labels
-            return
-
-        @staticmethod
-        def parse(chunk):
-            """ Parses segment
-            """
-            _ret_val = None
-
-            _dta = struct.unpack(Eagle.Segment.template, chunk)
-
-            _ret_val = Eagle.Segment(numofshapes=_dta[2],
-                                        cumulativenumofshapes=_dta[5],
-                                       )
             return _ret_val
 
     class Wire(Shape):

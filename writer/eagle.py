@@ -598,6 +598,34 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Segment(ShapeSet):
+        """ A struct that represents a segment
+        """
+        constant = 0x20
+        template = "=2BHI4B3I"
+
+        def __init__(self, numofshapes=0, shapes=None,
+                     cumulativenumofshapes=0):
+            """ Just a constructor
+            """
+            super(Eagle.Segment, self).__init__(numofshapes, shapes)
+            self.cumulativenumofshapes = cumulativenumofshapes
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 
+                                   self.numofshapes,
+                                   0,
+                                   0, self.cumulativenumofshapes, 0, 0, # TODO recheck
+                                   0, 0, 0
+                                  )
+            return _ret_val
+
 # ------------------------------
 
     class Shape(object):
@@ -720,58 +748,6 @@ class Eagle: # pylint: disable=R0902
                                    Eagle.Shape.encode_real(self.x2),
                                    Eagle.Shape.encode_real(self.y2),
                                    0, _rotate, 0, 0
-                                  )
-            return _ret_val
-
-    class Web(object):
-        """ A base struct for a bunch of segments
-            It's needed to uniform parsing and counting of members
-        """
-
-        def __init__(self, name, numofblocks=0, segments=None):
-            """ Just a constructor
-            """
-            self.name = name
-            if None == segments:
-                segments = []
-            self.segments = segments
-            self.numofblocks = numofblocks
-            return
-
-    class Segment:
-        """ A struct that represents a segment
-        """
-        constant = 0x20
-        template = "=2BHI4B3I"
-
-        def __init__(self, numofshapes=0, wires=None, junctions=None, # pylint: disable=R0913
-                     labels=None, cumulativenumofshapes=0):
-            """ Just a constructor
-            """
-            self.cumulativenumofshapes = cumulativenumofshapes
-            self.numofshapes = numofshapes
-            if None == wires:
-                wires = []
-            self.wires = wires
-            if None == junctions:
-                junctions = []
-            self.junctions = junctions
-            if None == labels:
-                labels = []
-            self.labels = labels
-            return
-
-        def construct(self):
-            """ Prepares a binary block
-            """
-            _ret_val = None
-
-            _ret_val = struct.pack(self.template,
-                                   self.constant, 0, 
-                                   self.numofshapes,
-                                   0,
-                                   0, self.cumulativenumofshapes, 0, 0,
-                                   0, 0, 0
                                   )
             return _ret_val
 
