@@ -581,6 +581,38 @@ class Eagle: # pylint: disable=R0902
                                 )
             return _ret_val
 
+    class Bus(NamedShapeSet):
+        """ A struct that represents a bus
+        """
+        constant = 0x3a
+        template = "=2BH20s" 
+
+        max_embed_len = 20
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, numofshapes=0, shapes=None):
+            """ Just a constructor; shown for a sake of clarity
+            """
+            super(Eagle.Bus, self).__init__(name, numofshapes, shapes)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses bus
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Bus.template, chunk)
+
+            _name = None
+            if Eagle.Package.no_embed_str != _dta[3][0]:
+                _name = _dta[3].rstrip('\0')
+
+            _ret_val = Eagle.Bus(name=_name,
+                                 numofshapes=_dta[2],
+                                )
+            return _ret_val
+
     class ShapeHeader(ShapeSet):
         """ A struct that represents a header of shapes
         """
@@ -653,8 +685,6 @@ class Eagle: # pylint: disable=R0902
                                      cumulativenumofshapes=_dta[5], # TODO recheck
                                     )
             return _ret_val
-
-# ------------------------------
 
     class Shape(object):
         """ A base struct for shapes, provides common codecs
@@ -1010,31 +1040,6 @@ class Eagle: # pylint: disable=R0902
                                                 _dta[9] & Eagle.Label.mirroredmask
                                                 else False),
                                      )
-            return _ret_val
-
-    class Bus(Web):
-        """ A struct that represents a web
-        """
-        constant = 0x3a
-        template = "=2BH8s3I"
-
-        def __init__(self, name, numofblocks=0, segments=None):
-            """ Just a constructor
-            """
-            super(Eagle.Bus, self).__init__(name, numofblocks, segments)
-            return
-
-        @staticmethod
-        def parse(chunk):
-            """ Parses bus
-            """
-            _ret_val = None
-
-            _dta = struct.unpack(Eagle.Bus.template, chunk)
-
-            _ret_val = Eagle.Bus(name=_dta[3].rstrip('\x00'),
-                                    numofblocks=_dta[2],
-                                   )
             return _ret_val
 
     class Attribute:

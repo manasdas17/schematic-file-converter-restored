@@ -553,6 +553,37 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Bus(NamedShapeSet):
+        """ A struct that represents a bus
+        """
+        constant = 0x3a
+        template = "=2BH20s" 
+
+        max_embed_len = 20
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, numofshapes=0, shapes=None):
+            """ Just a constructor; shown for a sake of clarity
+            """
+            super(Eagle.Bus, self).__init__(name, numofshapes, shapes)
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len > len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0,
+                                   self.numofblocks,
+                                   _name,
+                                  )
+            return _ret_val
+
     class ShapeHeader(ShapeSet):
         """ A struct that represents a header of shapes
         """
@@ -998,31 +1029,6 @@ class Eagle: # pylint: disable=R0902
                                    _ss,
                                    self.onoffmask if self.onoff else 0,
                                    0, 0
-                                  )
-            return _ret_val
-
-    class Bus(Web):
-        """ A struct that represents a web
-        """
-        constant = 0x3a
-        template = "=2BH8s3I"
-
-        def __init__(self, name, numofblocks=0, segments=None):
-            """ Just a constructor
-            """
-            super(Eagle.Bus, self).__init__(name, numofblocks, segments)
-            return
-
-        def construct(self):
-            """ Prepares a binary block
-            """
-            _ret_val = None
-
-            _ret_val = struct.pack(self.template,
-                                   self.constant, 0,
-                                   self.numofblocks,
-                                   self.name,
-                                   0, 0, 0
                                   )
             return _ret_val
 
