@@ -139,8 +139,8 @@ class FritzingTests(TestCase):
         self.assertEqual(len(inst.symbol_attributes), 1)
 
         symbattr = inst.symbol_attributes[0]
-        self.assertEqual(symbattr.x, 314)
-        self.assertEqual(symbattr.y, -103)
+        self.assertEqual(symbattr.x, 293)
+        self.assertEqual(symbattr.y, -147)
         self.assertEqual(symbattr.rotation, 1.5)
 
 

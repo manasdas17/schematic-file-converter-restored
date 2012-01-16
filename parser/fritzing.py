@@ -170,17 +170,20 @@ class Fritzing(object):
         geom = view.find('geometry')
         xform = geom.find('transform')
 
+        x, y = float(geom.get('x', 0)), float(geom.get('y', 0))
+
         if xform is None:
             rotation = 0.0
         else:
-            rotation = MATRIX2ROTATION.get(
-                tuple(int(xform.get(key, 0))
-                      for key in ('m11', 'm12', 'm21', 'm22')), 0.0)
+            matrix = tuple(int(xform.get(key, 0))
+                           for key in ('m11', 'm12', 'm21', 'm22'))
+            x, y = rotate_component(cpt, matrix, x, y)
+            rotation = MATRIX2ROTATION.get(matrix, 0.0)
 
         compinst = ComponentInstance(title, idref, 0)
 
         compinst.add_symbol_attribute(
-            SymbolAttribute(get_x(geom), get_y(geom), rotation))
+            SymbolAttribute(make_x(x), make_y(y), rotation))
 
         self.component_instances[index] = compinst
 
@@ -264,6 +267,8 @@ class ComponentParser(object):
         self.termid2pin = {} # termid -> Pin
         self.terminals = set()
         self.path = path
+        self.width = 0.0
+        self.height = 0.0
 
     def parse(self):
         """ Parse the Fritzing component """
@@ -346,23 +351,11 @@ class ComponentParser(object):
 
         tree = ElementTree(file=svg_path)
 
+        viewbox = tree.getroot().get('viewBox')
+        self.width, self.height = [float(v) for v in viewbox.split()[-2:]]
+
         for element in tree.getroot().iter():
-            tag = element.tag.rsplit('}', -1)[-1]
-
-            if tag == 'circle':
-                shapes = self.parse_circle(element)
-            elif tag == 'rect':
-                shapes = self.parse_rect(element)
-            elif tag == 'line':
-                shapes = self.parse_line(element)
-            elif tag == 'polygon':
-                shapes = self.parse_polygon(element)
-            elif tag == 'polyline':
-                shapes = self.parse_polyline(element)
-            else:
-                shapes = []
-
-            for shape in shapes:
+            for shape in self.parse_shapes(element):
                 body.add_shape(shape)
                 if element.get('id') in self.terminals:
                     pin = get_pin(shape)
@@ -371,6 +364,24 @@ class ComponentParser(object):
                         self.termid2pin[element.get('id')] = pin
                         body.add_pin(pin)
 
+
+    def parse_shapes(self, element):
+        """ Parse a list of shapes from an svg element """
+
+        tag = element.tag.rsplit('}', -1)[-1]
+
+        if tag == 'circle':
+            return self.parse_circle(element)
+        elif tag == 'rect':
+            return self.parse_rect(element)
+        elif tag == 'line':
+            return self.parse_line(element)
+        elif tag == 'polygon':
+            return self.parse_polygon(element)
+        elif tag == 'polyline':
+            return self.parse_polyline(element)
+        else:
+            return []
 
     def parse_rect(self, rect):
         """ Parse a rect element """
@@ -440,6 +451,24 @@ def get_pin(shape):
         return None
 
     return Pin('', (x, y), (x, y))
+
+
+def rotate_component(cpt, matrix, x, y):
+    """ Given a ComponentParser, a rotation matrix, and x/y points
+    referencing the upper left edge of the Fritzing component (in
+    Fritzing space), return a new pair of x/y points referencing the
+    component after it is rotated about its center. Fritzing rotations
+    are applied to the center of the component bounding boxes."""
+
+    # upper left corner when origin is at center
+    x1, y1 = -cpt.width / 2, -cpt.height / 2
+
+    # rotate upper left corner
+    x2, y2 = (matrix[0] * x1 + matrix[2] * y1,
+              matrix[1] * x1 + matrix[3] * y1)
+
+    # translate original coordinate
+    return (x + (x2 - x1), y + (y2 - y1))
 
 
 def make_x(x):
