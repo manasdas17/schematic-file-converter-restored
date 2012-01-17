@@ -174,6 +174,7 @@ class FritzingTests(TestCase):
             """A fake tree """
 
             def find(self, path):
+                """ Return None for the layers """
                 assert path == 'views/schematicView/layers'
                 return None
 
@@ -192,6 +193,7 @@ class FritzingTests(TestCase):
                 self.missing = missing
 
             def find(self, path):
+                """ Return None or a fixed element for the p element """
                 assert path == 'views/schematicView/p'
                 if self.missing:
                     return None
@@ -199,6 +201,7 @@ class FritzingTests(TestCase):
                     return {'terminalId': 'tid'}
 
             def get(self, key):
+                """ Return 'id' for the 'id' attribute """
                 assert key == 'id'
                 return 'id'
 
@@ -206,6 +209,8 @@ class FritzingTests(TestCase):
             """A fake tree """
 
             def findall(self, path):
+                """ Return two fake connectors, one missing
+                a p element and one not """
                 assert path == 'connectors/connector'
                 return [FakeConn(missing=True), FakeConn(missing=False)]
 
