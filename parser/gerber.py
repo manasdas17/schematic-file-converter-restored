@@ -21,11 +21,12 @@
 
 import re
 from string import digits
+from math import sqrt, asin, pi
 from collections import namedtuple
 
 from core.design import Design
 from core.layout import Layout, Layer, Trace
-from core.shape import Line
+from core.shape import Line, Arc, Point
 
 # exceptions
 
@@ -58,8 +59,9 @@ Status = namedtuple('Status', ['x', 'y', 'draw', 'interpolation',
                                'units', 'incremental_coords'])
 
 # constants
-
-g_map = {36:True, 37:False,
+d_map = {1:'ON', 2:'OFF', 3:'FLASH'}
+g_map = {1:'LINEAR', 2:'CLOCKWISE_CIRCULAR', 3:'ANTICLOCKWISE_CIRCULAR',
+         36:True, 37:False,
          70:'IN', 71:'MM',
          74:True, 75:False,
          90:True, 91:False}
@@ -88,14 +90,15 @@ class Gerber:
 
     def parse(self):
         """ Parse tokens from gerber file into a design. """
-        status = Status(0.0, 0.0, '02', '01', None, False, False, None, None)
+        status = Status(x=0, y=0, draw='OFF', interpolation='LINEAR',
+                        aperture=None, outline_fill=False, multi_quadrant=False,
+                        units=None, incremental_coords=None)
         for block in self._tokenize():
             if isinstance(block, Funct):
                 status = self._do_funct(block, status)
-            elif isinstance(block, Coord):
-                status = self._move(block, status)
             else:
-                self.params[block.id_] = block
+                status = self._move(block, status)
+        print self.layer.json()
         layout = Layout()
         layout.layers.append(self.layer)
         design = Design()
@@ -107,12 +110,12 @@ class Gerber:
         code = int(block.code)
         if block.type_ == 'D':
             if code < 10:
-                status = status._replace(draw=block.code)
+                status = status._replace(draw=d_map[code])
             else:
                 status = status._replace(aperture=block.code)
         else:
             if code in range(1, 4):
-                status = status._replace(interpolation=block.code)
+                status = status._replace(interpolation=g_map[code])
             elif code in range(36, 38):
                 status = status._replace(outline_fill=g_map[code])
             elif code in range(70, 72):
@@ -122,14 +125,20 @@ class Gerber:
         return status
 
     def _move(self, block, status):
-        """ Draw part of a shape or trace. """
+        """ Draw a segment of a shape or trace. """
         x, y = self._target_pos(block, status)
-        if status.draw == '01':
-            # TODO: handle 'D03'
-            # TODO: don't assume circular aperture
-            segment = Line(status[:2], (x, y))
+        if status.draw == 'ON':
+            #TODO: handle non-circular apertures
+            if status.interpolation == 'LINEAR':
+                segment = Line(status[:2], (x, y))
+            else:
+                clockwise = 'CLOCKWISE' in status.interpolation
+                segment = self._draw_arc(start_pt=Point(status[:2]),
+                                         end_pt=Point(x, y),
+                                         center_offset=block[2:],
+                                         clockwise=clockwise)
             w = self.params[status.aperture].modifiers[0]
-            tr_index = self.layer.get_connected_trace(w, status[:2])
+            tr_index = self.layer.get_connected_trace(w, status[:2], (x,y))
             if tr_index is None:
 
                 # begin a new trace
@@ -137,8 +146,11 @@ class Gerber:
                 self.layer.traces.append(trace)
             else:
 
-                # add segment to the trace it's connected to
+                # add segment to existing trace
                 self.layer.traces[tr_index].segments.append(segment)
+
+        elif status.draw == 'FLASH':
+            pass #TODO: add some kind of shape to the layer
 
         return status._replace(x=x, y=y)
 
@@ -155,6 +167,61 @@ class Gerber:
                     coord[k] = getattr(status, k)
         return (coord['x'], coord['y'])
 
+    def _draw_arc(self, start_pt, end_pt, center_offset, clockwise):
+        """ Convert arc path into shape. """
+        if clockwise:
+            start, end = (start_pt, end_pt)
+        else:
+            start, end = (end_pt, start_pt)
+        offset = {'i':center_offset[0], 'j':center_offset[1]}
+        for k in offset:
+            if offset[k] is None:
+                offset[k] = 0
+        center, radius = self._get_center_and_radius(start, end, offset)
+        start_angle = self._get_angle(center, start)
+        end_angle = self._get_angle(center, end)
+        return Arc(center.x, center.y, start_angle, end_angle, radius)
+
+    def _get_center_and_radius(self, start_pt, end_pt, offset):
+        """ Apply gerber circular interpolation logic. """
+        radius = sqrt(offset['i']**2 + offset['j']**2)
+        center = Point(x=start_pt.x + offset['i'],
+                       y=start_pt.y + offset['j'])
+
+        # In single-quadrant mode, gerber requires implicit
+        # determination of offset direction, so we find the
+        # center through trial and error.
+        if not self._almost_equals(center.dist(end_pt), radius):
+            center = Point(x=start_pt.x - offset['i'],
+                           y=start_pt.y - offset['j'])
+            if not self._almost_equals(center.dist(end_pt), radius):
+                center = Point(x=start_pt.x + offset['i'],
+                               y=start_pt.y - offset['j'])
+                if not self._almost_equals(center.dist(end_pt), radius):
+                    center = Point(x=start_pt.x - offset['i'],
+                                   y=start_pt.y + offset['j'])
+                    if not self._almost_equals(center.dist(end_pt), radius):
+                        raise ImpossibleGeometry
+        return (center, radius)
+
+    def _get_angle(self, arc_center, point):
+        """
+        Convert 2 points to an angle in radians/pi.
+
+        Quadrants are counter-cartesian, in accordance with
+        the way arc angles are defined in shape.py
+
+        """
+        opp = arc_center.y - point.y
+        adj = arc_center.x - point.x
+        hyp = arc_center.dist(point)
+        angle = asin(opp/hyp)/pi
+        if adj > 0: # Q2 and Q3
+            angle = 1 - angle
+        elif opp < 0 and adj < 0: # Q4
+            angle += 2
+        return angle
+
     def _tokenize(self):
         """ Split gerber file into pythonic tokens. """
         all_params = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
@@ -170,7 +237,7 @@ class Gerber:
                     ('EOF', r'M02\*'),         # end of file
                     ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
                     ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
-                                               # TODO: handle aperture macros
+                                               #TODO: handle aperture macros
 
         # define constants, counters
         reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
@@ -254,14 +321,14 @@ class Gerber:
                 tok = AxisDef(self._parse_justify(a), self._parse_justify(b))
             else:
                 tok = AxisDef(a, b)
-        # TODO: handle  IP, IR, layer params KO, LN, LP, SR (if they matter)
-        # TODO: check file for duplicate image_params -- should use last occurrence for entire file
+        #TODO: handle  IP, IR, layer params KO, LN, LP, SR (if they matter)
+        #TODO: check file for duplicate image_params -- should use last occurrence for entire file
         return (name, tok)
 
     def _parse_data_block(self, tok):
         """ Convert a non-param into pythonic data. """
         if 'G' in tok:
-            g_code = tok[1:3] # TODO: remove assumption that leading 0 is supplied -- not required by spec
+            g_code = tok[1:3] #TODO: remove assumption that leading 0 is supplied -- not required by spec
             tok = tok[3:]
             yield Funct('G', g_code)
         tok, d_code = self._pop_val('D', tok, coerce=False)
@@ -325,8 +392,14 @@ class Gerber:
             result = ('L', float(tok.split('L')[-1]))
         else:
             result = (tok, None)
-        # TODO: spec for IJ references off-spec examples with , or . delimiters
+        #TODO: spec for IJ references off-spec examples with , or . delimiters
         return result
+
+    def _almost_equals(self, f1, f2):
+        """ Check floats for equality (with 0.1% margin). """
+        margin = abs(0.001 * f2)
+        print margin, f1, f2
+        return (f2 - margin) <= f1 <= (f2 + margin)
 
     def _check_pb(self, param_block, tok, should_be=True):
         """ Ensure we are parsing an appropriate block. """

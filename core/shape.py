@@ -535,10 +535,21 @@ class Point:
             self.x, self.y = x
 
 
-    def __eq__(self, other):
-        """ Facilitate p1 == p2 comparisons. """
-        return self.__dict__ == other.__dict__
+    def __eq__(self, other, snap=True, dp=6):
+        """ Compare with another point. """
+        if snap:
+            eq = round(self.x, dp) == round(other.x, dp) and \
+                    round(self.y, dp) == round(other.y, dp)
+        else:
+            eq = self.__dict__ == other.__dict__
+        return eq
 
+
+    def dist(self, other):
+        """ Calculate the distance to another point. """
+        delta_x = self.x - other.x
+        delta_y = self.y - other.y
+        return sqrt(delta_x**2 + delta_y**2)
 
     def json(self):
         """ Return the point as JSON """

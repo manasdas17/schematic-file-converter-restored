@@ -19,7 +19,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from shape import Point
+from shape import Point, Arc
+from math import sin, cos, pi
 
 class Layout:
     """ The layout class holds the PCB Layout portion of the design to
@@ -41,16 +42,35 @@ class Layer:
         self.voids = []
         self.components = [] # if used, possibly could include pads
 
-    def get_connected_trace(self, w, coord):
+
+    def get_connected_trace(self, w, start, end):
         """ Is coord connected to any of the layer's traces? """
         #TODO: interpolate and take widths into account
-        point = Point(coord)
+        start, end = (Point(start), Point(end))
         for tr_index in range(len(self.traces)):
             trace = self.traces[tr_index]
             for segment in trace.segments:
-                if point in (segment.p1, segment.p2) and trace.width == w:
-                    return tr_index
+                if trace.width == w:
+                    if isinstance(segment, Arc):
+                        p1, p2 = self._arc_endpoints(segment)
+                    else:
+                        p1, p2 = (segment.p1, segment.p2)
+                    if start in (p1, p2) or end in (p1, p2):
+                        return tr_index
         return None
+
+
+    def _arc_endpoints(self, segment):
+        """ Calc arc ends based on center, radius, angles. """
+        points = {}
+        for ord_ in ('start', 'end'):
+            opp = sin(getattr(segment, ord_ + '_angle') * pi) * segment.radius
+            adj = cos(getattr(segment, ord_ + '_angle') * pi) * segment.radius
+            x = segment.x + adj
+            y = -1 * (segment.y + opp)
+            points[ord_] = Point(x, y)
+        return (points['start'], points['end'])
+
 
     def json(self):
         """ Return the layer as JSON """
@@ -71,6 +91,7 @@ class Trace:
         self.width = width
         self.tool_shape = tool_shape
         self.segments = segments
+
 
     def json(self):
         """ Return the trace as JSON """
