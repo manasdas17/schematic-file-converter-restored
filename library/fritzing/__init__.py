@@ -5,7 +5,7 @@ from os.path import basename, dirname, exists, join
 
 VERSIONS_DIR = join(dirname(__file__), 'versions')
 
-all_versions = []
+ALL_VERSIONS = []
 
 
 def lookup_part(path, fritzing_version):
@@ -13,16 +13,16 @@ def lookup_part(path, fritzing_version):
     version, attempt to locate a part in the library which
     matches the path. """
 
-    if not all_versions:
-        all_versions.extend((chunk_version(v), v) for v in listdir(VERSIONS_DIR))
-        all_versions.sort()
+    if not ALL_VERSIONS:
+        ALL_VERSIONS.extend((chunk_version(v), v) for v in listdir(VERSIONS_DIR))
+        ALL_VERSIONS.sort()
 
     cur_version = chunk_version(fritzing_version)
 
-    candidates = [name for (v, name) in all_versions if v >= cur_version]
+    candidates = [name for (v, name) in ALL_VERSIONS if v >= cur_version]
 
     if not candidates:
-        candidates = all_versions[-1][1]
+        candidates = ALL_VERSIONS[-1][1]
 
     rel_path = part_relpath(path)
 
