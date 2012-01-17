@@ -21,7 +21,7 @@
 
 import re
 from string import digits
-from math import sqrt, asin, pi
+from math import sqrt, acos, pi
 from collections import namedtuple
 
 from core.design import Design
@@ -59,6 +59,7 @@ Status = namedtuple('Status', ['x', 'y', 'draw', 'interpolation',
                                'units', 'incremental_coords'])
 
 # constants
+
 d_map = {1:'ON', 2:'OFF', 3:'FLASH'}
 g_map = {1:'LINEAR', 2:'CLOCKWISE_CIRCULAR', 3:'ANTICLOCKWISE_CIRCULAR',
          36:True, 37:False,
@@ -98,7 +99,6 @@ class Gerber:
                 status = self._do_funct(block, status)
             else:
                 status = self._move(block, status)
-        print self.layer.json()
         layout = Layout()
         layout.layers.append(self.layer)
         design = Design()
@@ -132,7 +132,7 @@ class Gerber:
             if status.interpolation == 'LINEAR':
                 segment = Line(status[:2], (x, y))
             else:
-                clockwise = 'CLOCKWISE' in status.interpolation
+                clockwise = 'ANTI' not in status.interpolation
                 segment = self._draw_arc(start_pt=Point(status[:2]),
                                          end_pt=Point(x, y),
                                          center_offset=block[2:],
@@ -208,18 +208,16 @@ class Gerber:
         """
         Convert 2 points to an angle in radians/pi.
 
-        Quadrants are counter-cartesian, in accordance with
+        0 radians = 3 o'clock, in accordance with
         the way arc angles are defined in shape.py
 
         """
-        opp = arc_center.y - point.y
-        adj = arc_center.x - point.x
+        adj = point.x - arc_center.x
+        opp = point.y - arc_center.y
         hyp = arc_center.dist(point)
-        angle = asin(opp/hyp)/pi
-        if adj > 0: # Q2 and Q3
-            angle = 1 - angle
-        elif opp < 0 and adj < 0: # Q4
-            angle += 2
+        angle = acos(adj/hyp)/pi
+        if opp > 0:
+            angle = 2 - angle
         return angle
 
     def _tokenize(self):
@@ -396,10 +394,8 @@ class Gerber:
         return result
 
     def _almost_equals(self, f1, f2):
-        """ Check floats for equality (with 0.1% margin). """
-        margin = abs(0.001 * f2)
-        print margin, f1, f2
-        return (f2 - margin) <= f1 <= (f2 + margin)
+        """ Compare floats at max gerber precision (6dp). """
+        return round(f1, 6) == round(f2, 6)
 
     def _check_pb(self, param_block, tok, should_be=True):
         """ Ensure we are parsing an appropriate block. """

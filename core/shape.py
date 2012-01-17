@@ -536,7 +536,18 @@ class Point:
 
 
     def __eq__(self, other, snap=True, dp=6):
-        """ Compare with another point. """
+        """
+        Compare with another point. eg: p1 == p2
+
+        Default behaviour is to consider points equal if they
+        are equal when rounded to maximum gerber precision (ie,
+        6 decimal places). To override default behaviour, call
+        the method explicitly, eg:
+
+        p1.__eq__(p2, snap=False), or
+        p1.__eq__(p2, dp=3)
+
+        """
         if snap:
             eq = round(self.x, dp) == round(other.x, dp) and \
                     round(self.y, dp) == round(other.y, dp)

@@ -82,7 +82,7 @@ class GerberTests(unittest.TestCase):
     @use_file('arc_segments.ger')
     def test_simple(self):
         """ Parse some connected arcs and lines - gerber. """
-        assert len(self.design.layouts[0].layers[0].traces) == 1
+        assert len(self.design.layouts[0].layers[0].traces) == 2
 
 
     # tests that pass if they raise expected errors

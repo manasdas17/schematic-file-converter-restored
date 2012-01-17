@@ -67,7 +67,7 @@ class Layer:
             opp = sin(getattr(segment, ord_ + '_angle') * pi) * segment.radius
             adj = cos(getattr(segment, ord_ + '_angle') * pi) * segment.radius
             x = segment.x + adj
-            y = -1 * (segment.y + opp)
+            y = segment.y - opp
             points[ord_] = Point(x, y)
         return (points['start'], points['end'])
 
