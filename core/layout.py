@@ -19,7 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from shape import Point, Arc
+from core.shape import Point, Arc
 from math import sin, cos, pi
 
 class Layout:
@@ -43,14 +43,14 @@ class Layer:
         self.components = [] # if used, possibly could include pads
 
 
-    def get_connected_trace(self, w, start, end):
+    def get_connected_trace(self, width, start, end):
         """ Is coord connected to any of the layer's traces? """
         #TODO: interpolate and take widths into account
         start, end = (Point(start), Point(end))
         for tr_index in range(len(self.traces)):
             trace = self.traces[tr_index]
             for segment in trace.segments:
-                if trace.width == w:
+                if trace.width == width:
                     if isinstance(segment, Arc):
                         p1, p2 = self._arc_endpoints(segment)
                     else:
@@ -86,11 +86,11 @@ class Layer:
 class Trace:
     """ A collection of connected segments such as lines and arcs. """
 
-    def __init__(self, width=0.01, segments=[], tool_shape='circle'):
+    def __init__(self, width=0.01, segments=None, tool_shape='circle'):
         self.type = 'trace'
         self.width = width
         self.tool_shape = tool_shape
-        self.segments = segments
+        self.segments = segments or []
 
 
     def json(self):

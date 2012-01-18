@@ -535,25 +535,23 @@ class Point:
             self.x, self.y = x
 
 
-    def __eq__(self, other, snap=True, dp=6):
+    def __eq__(self, other):
         """
         Compare with another point. eg: p1 == p2
 
-        Default behaviour is to consider points equal if they
-        are equal when rounded to maximum gerber precision (ie,
-        6 decimal places). To override default behaviour, call
-        the method explicitly, eg:
-
-        p1.__eq__(p2, snap=False), or
-        p1.__eq__(p2, dp=3)
+        Points are considered equal if they are equal when
+        rounded to maximum gerber precision (ie, 6 decimal
+        places).
 
         """
+        snap = True
+        precision = 6
         if snap:
-            eq = round(self.x, dp) == round(other.x, dp) and \
-                    round(self.y, dp) == round(other.y, dp)
+            equal = round(self.x, precision) == round(other.x, precision) and \
+                        round(self.y, precision) == round(other.y, precision)
         else:
-            eq = self.__dict__ == other.__dict__
-        return eq
+            equal = self.__dict__ == other.__dict__
+        return equal
 
 
     def dist(self, other):

@@ -20,7 +20,6 @@
 # limitations under the License.
 
 import re
-from string import digits
 from math import sqrt, acos, pi
 from collections import namedtuple
 
@@ -30,42 +29,76 @@ from core.shape import Line, Arc, Point
 
 # exceptions
 
-class Unparsable(ValueError): pass
-class ParamError(Unparsable): pass
-class CoordError(Unparsable): pass
-class DelimiterMissing(ParamError): pass
-class ParamContainsBadData(ParamError): pass
-class CoordPrecedesFormatSpec(CoordError): pass
-class CoordMalformed(CoordError): pass
-class FileNotTerminated(Unparsable): pass
-class DataAfterEOF(Unparsable): pass
-class UnintelligibleDataBlock(Unparsable): pass
+class Unparsable(ValueError):
+    """ Superclass for all parser errors. """
+    pass
+
+class ParamError(Unparsable):
+    """ Superclass for parameter errors. """
+    pass
+
+class CoordError(Unparsable):
+    """ Superclass for coordinate errors. """
+    pass
+
+class DelimiterMissing(ParamError):
+    """ Missing paramater block delimiter (%). """
+    pass
+
+class ParamContainsBadData(ParamError):
+    """ Non-paramater found within param block. """
+    pass
+
+class CoordPrecedesFormatSpec(CoordError):
+    """ Coordinate data prior to format specification. """
+    pass
+
+class CoordMalformed(CoordError):
+    """ Coordinate block doesn't conform to spec. """
+    pass
+
+class FileNotTerminated(Unparsable):
+    """ M02* was not encountered. """
+    pass
+
+class DataAfterEOF(Unparsable):
+    """ M02* was not the last thing in the file. """
+    pass
+
+class UnintelligibleDataBlock(Unparsable):
+    """ Data block did not conform to any known pattern. """
+    pass
+
+class ImpossibleGeometry(Unparsable):
+    """ Arc radius, center and endpoints don't gel. """
+    pass
 
 # token classes
 
-Aperture = namedtuple('Aperture', 'code type_ modifiers')
-Coord = namedtuple('Coord', 'x y i j')
-CoordFmt = namedtuple('CoordFmt', 'int dec')
-AxisDef = namedtuple('AxisDef', 'a b')
-Funct = namedtuple('Funct', 'type_ code')
-FormatSpec = namedtuple('FormatSpec', ['zero_omission',
+Aperture = namedtuple('Aperture', 'code type_ modifiers')           # pylint: disable=C0103
+Coord = namedtuple('Coord', 'x y i j')                              # pylint: disable=C0103
+CoordFmt = namedtuple('CoordFmt', 'int dec')                        # pylint: disable=C0103
+AxisDef = namedtuple('AxisDef', 'a b')                              # pylint: disable=C0103
+Funct = namedtuple('Funct', 'type_ code')                           # pylint: disable=C0103
+FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: disable=C0103
                         'incremental_coords', 'n_max', 'g_max',
                         'x', 'y', 'd_max', 'm_max'])
 
 # parser status
 
-Status = namedtuple('Status', ['x', 'y', 'draw', 'interpolation',
+Status = namedtuple('Status', ['x', 'y', 'draw', 'interpolation',   # pylint: disable=C0103
                                'aperture', 'outline_fill', 'multi_quadrant',
                                'units', 'incremental_coords'])
 
 # constants
 
-d_map = {1:'ON', 2:'OFF', 3:'FLASH'}
-g_map = {1:'LINEAR', 2:'CLOCKWISE_CIRCULAR', 3:'ANTICLOCKWISE_CIRCULAR',
+D_MAP = {1:'ON', 2:'OFF', 3:'FLASH'}
+G_MAP = {1:'LINEAR', 2:'CLOCKWISE_CIRCULAR', 3:'ANTICLOCKWISE_CIRCULAR',
          36:True, 37:False,
          70:'IN', 71:'MM',
          74:True, 75:False,
          90:True, 91:False}
+DIGITS = '0123456789'
 
 # parser
 
@@ -110,18 +143,18 @@ class Gerber:
         code = int(block.code)
         if block.type_ == 'D':
             if code < 10:
-                status = status._replace(draw=d_map[code])
+                status = status._replace(draw=D_MAP[code])          # pylint: disable=W0212
             else:
-                status = status._replace(aperture=block.code)
+                status = status._replace(aperture=block.code)       # pylint: disable=W0212
         else:
             if code in range(1, 4):
-                status = status._replace(interpolation=g_map[code])
+                status = status._replace(interpolation=G_MAP[code]) # pylint: disable=W0212
             elif code in range(36, 38):
-                status = status._replace(outline_fill=g_map[code])
+                status = status._replace(outline_fill=G_MAP[code])  # pylint: disable=W0212
             elif code in range(70, 72):
-                status = status._replace(units=g_map[code])
+                status = status._replace(units=G_MAP[code])         # pylint: disable=W0212
             elif code in range(90, 92):
-                status = status._replace(incremental=g_map[code])
+                status = status._replace(incremental=G_MAP[code])   # pylint: disable=W0212
         return status
 
     def _move(self, block, status):
@@ -137,12 +170,12 @@ class Gerber:
                                          end_pt=Point(x, y),
                                          center_offset=block[2:],
                                          clockwise=clockwise)
-            w = self.params[status.aperture].modifiers[0]
-            tr_index = self.layer.get_connected_trace(w, status[:2], (x,y))
+            wid = self.params[status.aperture].modifiers[0]
+            tr_index = self.layer.get_connected_trace(wid, status[:2], (x, y))
             if tr_index is None:
 
                 # begin a new trace
-                trace = Trace(w, [segment])
+                trace = Trace(wid, [segment])
                 self.layer.traces.append(trace)
             else:
 
@@ -152,7 +185,7 @@ class Gerber:
         elif status.draw == 'FLASH':
             pass #TODO: add some kind of shape to the layer
 
-        return status._replace(x=x, y=y)
+        return status._replace(x=x, y=y)                            # pylint: disable=W0212
 
     def _target_pos(self, block, status):
         """ Interpret coordinates in a data block. """
@@ -241,21 +274,21 @@ class Gerber:
         reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
         tok_re = re.compile(reg_ex, re.MULTILINE)
         ignore = ('SKIP', 'COMMENT', 'DEPRECATED')
-        pos = matched = 0
-        param_block = data_began = eof = False
+        param_block = eof = False
+        pos = 0
 
         # read file
         with open(self.filename, 'r') as ger:
-            s = ger.read()
+            content = ger.read()
 
         # step through content, extract tokens
-        mo = tok_re.match(s)
-        while pos < len(s):
-            if mo is None:
+        match = tok_re.match(content)
+        while pos < len(content):
+            if match is None:
                 pos += 1
             else:
-                typ = mo.lastgroup
-                tok = mo.group(typ)[:-1]
+                typ = match.lastgroup
+                tok = match.group(typ)[:-1]
                 try:
                     if typ == 'PARAM_DELIM':
                         param_block = not param_block
@@ -269,7 +302,7 @@ class Gerber:
                     elif typ not in ignore:
                         self._check_pb(param_block, tok, False)
                         if typ == 'EOF':
-                            self._check_eof(s[mo.end():])
+                            self._check_eof(content[match.end():])
                             eof = True
                         else:
                             self._check_typ(typ, tok)
@@ -282,8 +315,8 @@ class Gerber:
                 # tidy up
                 except Unparsable:
                     raise
-                pos = matched = mo.end()
-            mo = tok_re.match(s, pos)
+                pos = match.end()
+            match = tok_re.match(content, pos)
         self._check_eof(eof=eof)
 
     def _parse_param(self, tok):
@@ -293,9 +326,9 @@ class Gerber:
         if name == 'FS':
             tok, m_max = self._pop_val('M', tok)
             tok, d_max = self._pop_val('D', tok)
-            tok, y = self._pop_val('Y', tok, coerce=False)
+            tok, y = self._pop_val('Y', tok, coerce_=False)
             y = CoordFmt(int(y[0]), int(y[1]))
-            tok, x = self._pop_val('X', tok, coerce=False)
+            tok, x = self._pop_val('X', tok, coerce_=False)
             x = CoordFmt(int(x[0]), int(x[1]))
             tok, g_max = self._pop_val('G', tok)
             tok, n_max = self._pop_val('N', tok)
@@ -304,21 +337,22 @@ class Gerber:
             tok = FormatSpec(z_omit, inc_coords, n_max, g_max,
                              x, y, d_max, m_max)
         elif name == 'AD':
-            code_end = tok[3] in digits and 4 or 3
+            code_end = tok[3] in DIGITS and 4 or 3
             name = tok[1:code_end]
             type_, mods = tok[code_end:].split(',')
             tok = Aperture(name, type_, tuple(mods.split('X')))
         elif name in axis_params:
             if name in ('AS', 'IJ'):
-                coerce = False
+                coerce_ = False
             else:
-                coerce = name == 'MI' and 'int' or 'float'
-            tok, b = self._pop_val('B', tok, coerce=coerce)
-            tok, a = self._pop_val('A', tok, coerce=coerce)
+                coerce_ = name == 'MI' and 'int' or 'float'
+            tok, b_val = self._pop_val('B', tok, coerce_=coerce_)
+            tok, a_val = self._pop_val('A', tok, coerce_=coerce_)
             if name == 'IJ':
-                tok = AxisDef(self._parse_justify(a), self._parse_justify(b))
+                tok = AxisDef(self._parse_justify(a_val),
+                              self._parse_justify(b_val))
             else:
-                tok = AxisDef(a, b)
+                tok = AxisDef(a_val, b_val)
         #TODO: handle  IP, IR, layer params KO, LN, LP, SR (if they matter)
         #TODO: check file for duplicate image_params -- should use last occurrence for entire file
         return (name, tok)
@@ -329,7 +363,7 @@ class Gerber:
             g_code = tok[1:3] #TODO: remove assumption that leading 0 is supplied -- not required by spec
             tok = tok[3:]
             yield Funct('G', g_code)
-        tok, d_code = self._pop_val('D', tok, coerce=False)
+        tok, d_code = self._pop_val('D', tok, coerce_=False)
         if d_code:
             yield Funct('D', d_code)
         if tok:
@@ -338,43 +372,52 @@ class Gerber:
     def _parse_coord(self, tok):
         """ Convert a coordinate set into pythonic data. """
         self._check_fs()
-        tok, j = self._pop_val('J', tok, format=True)
-        tok, i = self._pop_val('I', tok, format=True)
-        tok, y = self._pop_val('Y', tok, format=True)
-        tok, x = self._pop_val('X', tok, format=True)
+        tok, j = self._pop_val('J', tok, format_=True)
+        tok, i = self._pop_val('I', tok, format_=True)
+        tok, y = self._pop_val('Y', tok, format_=True)
+        tok, x = self._pop_val('X', tok, format_=True)
         result = Coord(x, y, i, j)
         if tok:
             raise CoordMalformed('%s remainder=%s' % (result, tok))
         return result
 
-    def _pop_val(self, key, tok, format=False, coerce='int'):
+    def _pop_val(self, key, tok, format_=False, coerce_='int'):
         """ Pop a labelled value from the end of a token. """
         val = None
         if key in tok:
             tok, num_str = tok.split(key)
             if num_str:
-                if format:
+                if format_:
                     if key in ('X', 'I'):
                         val = self._format_dec(num_str, 4)
                     else:
                         val = self._format_dec(num_str, 5)
                 else:
-                    val = coerce and (coerce == 'float' and
+                    val = coerce_ and (coerce_ == 'float' and
                                       float(num_str) or
                                       int(num_str)) or num_str
         return (tok, val)
 
-    def _format_dec(self, num_str, xy):
-        """ Interpret a coordinate value using format spec. """
-        fs = self.params['FS']
+    def _format_dec(self, num_str, axis):
+        """
+        Interpret a coordinate value using format spec.
+
+        Params: num_str (the string representation of a number
+                         portended by format spec)
+                axis (X or Y - not to be confused with A/B)
+
+        Returns: float
+
+        """
+        f_spec = self.params['FS']
         sign_wid = num_str[0] in ('-', '+') and 1 or 0
-        int_wid = sign_wid + fs[xy].int
-        wid = int_wid + fs[xy].dec
+        int_wid = sign_wid + f_spec[axis].int
+        wid = int_wid + f_spec[axis].dec
 
         # pad coordinate to specified width
-        if fs.zero_omission == 'L':
+        if f_spec.zero_omission == 'L':
             num_str = num_str.zfill(wid)
-        elif fs.zero_omission == 'T':
+        elif f_spec.zero_omission == 'T':
             num_str = num_str.rjust(wid, '0')
         if len(num_str) != wid:
             raise CoordMalformed('num_str: %s wid: %s' % (num_str, wid))
@@ -393,9 +436,9 @@ class Gerber:
         #TODO: spec for IJ references off-spec examples with , or . delimiters
         return result
 
-    def _almost_equals(self, f1, f2):
+    def _almost_equals(self, float_1, float_2):
         """ Compare floats at max gerber precision (6dp). """
-        return round(f1, 6) == round(f2, 6)
+        return round(float_1, 6) == round(float_2, 6)
 
     def _check_pb(self, param_block, tok, should_be=True):
         """ Ensure we are parsing an appropriate block. """

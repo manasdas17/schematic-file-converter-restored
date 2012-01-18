@@ -25,12 +25,15 @@ import unittest
 
 from nose.tools import raises
 
-from parser.gerber import *
+from parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
+                            CoordPrecedesFormatSpec, CoordMalformed, \
+                            FileNotTerminated, DataAfterEOF, \
+                            UnintelligibleDataBlock
 
-strip_dirs = path.join('parser', 't')
-base_dir = path.dirname(__file__).split(strip_dirs)[0]
-test_files = path.join('test', 'gerber')
-dir = path.join(base_dir, test_files)
+STRIP_DIRS = path.join('parser', 't')
+BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
+TEST_FILES = path.join('test', 'gerber')
+DIR = path.join(BASE_DIR, TEST_FILES)
 
 class GerberTests(unittest.TestCase):
     """ The tests of the gerber parser """
@@ -46,11 +49,13 @@ class GerberTests(unittest.TestCase):
 
     # decorator for tests that use input files
 
-    def use_file(filename):
+    def use_file(filename):                             # pylint: disable=E0213
         """ Parse a gerber file. """
         def wrap_wrap_tm(test_method):
+            """ Add params to decorator function. """
             def wrap_tm(self):
-                parser = Gerber(path.join(dir, filename))
+                """ Perform meta operations, then method. """
+                parser = Gerber(path.join(DIR, filename))
                 self.design = parser.parse()
                 test_method(self)
 
@@ -80,7 +85,7 @@ class GerberTests(unittest.TestCase):
         assert len(self.design.layouts[0].layers[0].traces) == 2
 
     @use_file('arc_segments.ger')
-    def test_simple(self):
+    def test_arcs(self):
         """ Parse some connected arcs and lines - gerber. """
         assert len(self.design.layouts[0].layers[0].traces) == 2
 
