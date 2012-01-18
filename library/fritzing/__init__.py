@@ -58,4 +58,4 @@ def part_relpath(path):
 
         path = new_path
 
-    return join(*path_parts)
+    return join(*path_parts) #pylint: disable=W0142
