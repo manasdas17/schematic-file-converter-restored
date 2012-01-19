@@ -28,7 +28,7 @@ from nose.tools import raises
 from parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
                             CoordPrecedesFormatSpec, CoordMalformed, \
                             FileNotTerminated, DataAfterEOF, \
-                            UnintelligibleDataBlock
+                            UnintelligibleDataBlock, QuadrantViolation
 
 STRIP_DIRS = path.join('parser', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
@@ -132,4 +132,10 @@ class GerberTests(unittest.TestCase):
     @use_file('alien.ger')
     def test_alien_data(self):
         """ Trap off-spec data in gerber file. """
+        pass
+
+    @raises(QuadrantViolation)
+    @use_file('sq-violation.ger')
+    def test_single_quadrant(self):
+        """ Trap long arc in single quadrant mode. """
         pass

@@ -27,6 +27,7 @@ from core.design import Design
 from core.layout import Layout, Layer, Trace
 from core.shape import Line, Arc, Point
 
+
 # exceptions
 
 class Unparsable(ValueError):
@@ -57,6 +58,10 @@ class CoordMalformed(CoordError):
     """ Coordinate block doesn't conform to spec. """
     pass
 
+class QuadrantViolation(CoordError):
+    """ Single quadrant arc longer than 0.5 radians/pi. """
+    pass
+
 class FileNotTerminated(Unparsable):
     """ M02* was not encountered. """
     pass
@@ -72,6 +77,7 @@ class UnintelligibleDataBlock(Unparsable):
 class ImpossibleGeometry(Unparsable):
     """ Arc radius, center and endpoints don't gel. """
     pass
+
 
 # token classes
 
@@ -195,11 +201,10 @@ class Gerber:
             if status.interpolation == 'LINEAR':
                 segment = Line(status[:2], (x, y))
             else:
-                clockwise = 'ANTI' not in status.interpolation
                 segment = self._draw_arc(start_pt=Point(status[:2]),
                                          end_pt=Point(x, y),
                                          center_offset=block[2:],
-                                         clockwise=clockwise)
+                                         status=status)
             wid = self.params[status.aperture].modifiers[0]
             tr_index = self.layer.get_connected_trace(wid, status[:2], (x, y))
             if tr_index is None:
@@ -236,22 +241,25 @@ class Gerber:
 
     # circular paths
 
-    def _draw_arc(self, start_pt, end_pt, center_offset, clockwise):
+    def _draw_arc(self, start_pt, end_pt, center_offset, status):
         """ Convert arc path into shape. """
         offset = {'i':center_offset[0], 'j':center_offset[1]}
         for k in offset:
             if offset[k] is None:
                 offset[k] = 0
-        center, radius = self._get_center_and_radius(start_pt, end_pt, offset)
+        center, radius = self._get_ctr_and_radius(start_pt, end_pt, offset,
+                                                  status.multi_quadrant)
         start_angle = self._get_angle(center, start_pt)
         end_angle = self._get_angle(center, end_pt)
+        self._check_mq(start_angle, end_angle, status.multi_quadrant)
+        clockwise = 'ANTI' not in status.interpolation
         return Arc(center.x, center.y,
                    clockwise and start_angle or end_angle,
                    clockwise and end_angle or start_angle,
                    radius)
 
 
-    def _get_center_and_radius(self, start_pt, end_pt, offset):
+    def _get_ctr_and_radius(self, start_pt, end_pt, offset, multi_quadrant):
         """ Apply gerber circular interpolation logic. """
         radius = sqrt(offset['i']**2 + offset['j']**2)
         center = Point(x=start_pt.x + offset['i'],
@@ -260,17 +268,18 @@ class Gerber:
         # In single-quadrant mode, gerber requires implicit
         # determination of offset direction, so we find the
         # center through trial and error.
-        if not snap(center.dist(end_pt), radius):
-            center = Point(x=start_pt.x - offset['i'],
-                           y=start_pt.y - offset['j'])
+        if not multi_quadrant:
             if not snap(center.dist(end_pt), radius):
-                center = Point(x=start_pt.x + offset['i'],
+                center = Point(x=start_pt.x - offset['i'],
                                y=start_pt.y - offset['j'])
                 if not snap(center.dist(end_pt), radius):
-                    center = Point(x=start_pt.x - offset['i'],
-                                   y=start_pt.y + offset['j'])
+                    center = Point(x=start_pt.x + offset['i'],
+                                   y=start_pt.y - offset['j'])
                     if not snap(center.dist(end_pt), radius):
-                        raise ImpossibleGeometry
+                        center = Point(x=start_pt.x - offset['i'],
+                                       y=start_pt.y + offset['j'])
+                        if not snap(center.dist(end_pt), radius):
+                            raise ImpossibleGeometry
         return (center, radius)
 
 
@@ -486,6 +495,12 @@ class Gerber:
                                       int(num_str)) or num_str
         return (tok, val)
 
+
+    def _check_mq(self, start_angle, end_angle, multi_quadrant):
+        if not multi_quadrant:
+            if abs(end_angle - start_angle) > 0.5:
+                raise QuadrantViolation('Arc(%s to %s) > 0.5 rad/pi'
+                                        % (start_angle, end_angle))
 
     def _check_pb(self, param_block, tok, should_be=True):
         """ Ensure we are parsing an appropriate block. """
