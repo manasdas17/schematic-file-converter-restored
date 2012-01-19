@@ -92,18 +92,38 @@ Status = namedtuple('Status', ['x', 'y', 'draw', 'interpolation',   # pylint: di
 
 # constants
 
+DIGITS = '0123456789'
 D_MAP = {1:'ON', 2:'OFF', 3:'FLASH'}
 G_MAP = {1:'LINEAR', 2:'CLOCKWISE_CIRCULAR', 3:'ANTICLOCKWISE_CIRCULAR',
          36:True, 37:False,
          70:'IN', 71:'MM',
          74:True, 75:False,
          90:True, 91:False}
+AXIS_PARAMS = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
 ALL_PARAMS = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
               'IJ', 'IN', 'IO', 'IP', 'IR', 'PF', 'AD',
               'KO', 'LN', 'LP', 'SR')
-AXIS_PARAMS = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
+TOK_SPEC = (('PARAM_DELIM', r'%'),
+           ) + tuple([(p, r'%s[^\*]*\*' % p) for p in ALL_PARAMS]) + (
+            ('COMMENT', r'G04[^\*]*\*'),
+            ('DEPRECATED', r'G54\*?'), # historic crud
+            ('FUNCT', r'[GD][^\*]*\*'),# function codes
+            ('COORD', r'[XY][^\*]*\*'),# coordinates
+            ('EOF', r'M02\*'),         # end of file
+            ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
+            ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
+                                       #TODO: handle aperture macros
 IGNORE = ('SKIP', 'COMMENT', 'DEPRECATED')
-DIGITS = '0123456789'
+REG_EX = '|'.join('(?P<%s>%s)' % pair for pair in TOK_SPEC)
+TOK_RE = re.compile(REG_EX, re.MULTILINE)
+
+
+# module global funct
+
+def snap(float_1, float_2):
+    """ Compare floats at max gerber precision (6dp). """
+    return round(float_1, 6) == round(float_2, 6)
+
 
 # parser
 
@@ -241,16 +261,16 @@ class Gerber:
         # In single-quadrant mode, gerber requires implicit
         # determination of offset direction, so we find the
         # center through trial and error.
-        if not self._almost_equals(center.dist(end_pt), radius):
+        if not snap(center.dist(end_pt), radius):
             center = Point(x=start_pt.x - offset['i'],
                            y=start_pt.y - offset['j'])
-            if not self._almost_equals(center.dist(end_pt), radius):
+            if not snap(center.dist(end_pt), radius):
                 center = Point(x=start_pt.x + offset['i'],
                                y=start_pt.y - offset['j'])
-                if not self._almost_equals(center.dist(end_pt), radius):
+                if not snap(center.dist(end_pt), radius):
                     center = Point(x=start_pt.x - offset['i'],
                                    y=start_pt.y + offset['j'])
-                    if not self._almost_equals(center.dist(end_pt), radius):
+                    if not snap(center.dist(end_pt), radius):
                         raise ImpossibleGeometry
         return (center, radius)
 
@@ -276,29 +296,11 @@ class Gerber:
 
     def _tokenize(self):
         """ Split gerber file into pythonic tokens. """
-        tok_spec = (('PARAM_DELIM', r'%'),
-                   ) + tuple([(p, r'%s[^\*]*\*' % p) for p in ALL_PARAMS]) + (
-                    ('COMMENT', r'G04[^\*]*\*'),
-                    ('DEPRECATED', r'G54\*?'), # historic crud
-                    ('FUNCT', r'[GD][^\*]*\*'),# function codes
-                    ('COORD', r'[XY][^\*]*\*'),# coordinates
-                    ('EOF', r'M02\*'),         # end of file
-                    ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
-                    ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
-                                               #TODO: handle aperture macros
-
-        # define constants, counters
-        reg_ex = '|'.join('(?P<%s>%s)' % pair for pair in tok_spec)
-        tok_re = re.compile(reg_ex, re.MULTILINE)
         param_block = eof = False
         pos = 0
-
-        # read file
         with open(self.filename, 'r') as ger:
             content = ger.read()
-
-        # step through content, extract tokens
-        match = tok_re.match(content)
+        match = TOK_RE.match(content)
         while pos < len(content):
             if match is None:
                 pos += 1
@@ -328,15 +330,14 @@ class Gerber:
                             for block in blocks:
                                 yield block
 
-                # tidy up
                 except Unparsable:
                     raise
                 pos = match.end()
-            match = tok_re.match(content, pos)
+            match = TOK_RE.match(content, pos)
         self._check_eof(eof=eof)
 
 
-    # tokemizer support methods - parameters
+    # tokenizer support methods - parameters
 
     def _parse_param(self, tok):
         """ Convert a param specifier into pythonic data. """
@@ -485,11 +486,6 @@ class Gerber:
                                       float(num_str) or
                                       int(num_str)) or num_str
         return (tok, val)
-
-
-    def _almost_equals(self, float_1, float_2):
-        """ Compare floats at max gerber precision (6dp). """
-        return round(float_1, 6) == round(float_2, 6)
 
 
     def _check_pb(self, param_block, tok, should_be=True):
