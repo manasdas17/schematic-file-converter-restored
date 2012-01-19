@@ -238,18 +238,17 @@ class Gerber:
 
     def _draw_arc(self, start_pt, end_pt, center_offset, clockwise):
         """ Convert arc path into shape. """
-        if clockwise:
-            start, end = (start_pt, end_pt)
-        else:
-            start, end = (end_pt, start_pt)
         offset = {'i':center_offset[0], 'j':center_offset[1]}
         for k in offset:
             if offset[k] is None:
                 offset[k] = 0
-        center, radius = self._get_center_and_radius(start, end, offset)
-        start_angle = self._get_angle(center, start)
-        end_angle = self._get_angle(center, end)
-        return Arc(center.x, center.y, start_angle, end_angle, radius)
+        center, radius = self._get_center_and_radius(start_pt, end_pt, offset)
+        start_angle = self._get_angle(center, start_pt)
+        end_angle = self._get_angle(center, end_pt)
+        return Arc(center.x, center.y,
+                   clockwise and start_angle or end_angle,
+                   clockwise and end_angle or start_angle,
+                   radius)
 
 
     def _get_center_and_radius(self, start_pt, end_pt, offset):
