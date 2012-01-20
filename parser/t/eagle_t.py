@@ -234,6 +234,23 @@ class EagleTests(unittest.TestCase):
 # TODO external name
         return
 
+    def test_part_parse(self):
+        """ Test Part block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x38\x00\x02\x00\x01\x00\x02\x00",
+                                 b"\x01\x01\x01\x49\x43\x39\x00\x00",
+                                 b"\x44\x53\x33\x36\x36\x38\x00\x00"))
+        _part = Eagle.Part.parse(_valid_chunk)
+
+        self.assertEqual(_part.name, "IC9")
+        self.assertEqual(_part.libid, 1)
+        self.assertEqual(_part.value, "DS3668")
+        self.assertEqual(_part.numofshapes, 2)
+
+# TODO external name
+        return
+
     def test_bus_parse(self):
         """ Test Bus block parsing """
 
@@ -273,6 +290,21 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_segment.numofshapes, 4)
         self.assertEqual(_segment.cumulativenumofshapes, 19)
+        return
+
+    def test_instance_parse(self):
+        """ Test Instance block parsing """
+
+        _valid_chunk = b''.join((b"\x30\x00\x02\x00\xd0\x54\x21\x00",
+                                 b"\x40\x4d\x09\x00\xff\xff\x01\x00",
+                                 b"\x00\x04\x01\x00\x00\x00\x00\x00"))
+        _instance = Eagle.Instance.parse(_valid_chunk)
+
+        self.assertEqual(_instance.numofshapes, 2)
+        self.assertEqual(_instance.x, 218.44)
+        self.assertEqual(_instance.y, 60.96)
+        self.assertEqual(_instance.smashed, True)
+        self.assertEqual(_instance.rotate, "R90")
         return
 
     def test_wire_parse(self):
@@ -427,6 +459,34 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_label.layer, 95)
         return
  
+    def test_attributenam_parse(self):
+        """ Test AttributeNam block parsing """
+
+        _valid_chunk = b''.join((b"\x34\x00\x01\x5f\xd6\xd0\x21\x00",
+                                 b"\x14\xe2\x09\x00\xc4\x1d\x20\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+        _attrnam = Eagle.AttributeNam.parse(_valid_chunk)
+
+        self.assertEqual(_attrnam.x, 221.615)
+        self.assertEqual(_attrnam.y, 64.77)
+        self.assertEqual(_attrnam.size, 1.524)
+        self.assertEqual(_attrnam.layer, 95)
+        return
+ 
+    def test_attributeval_parse(self):
+        """ Test AttributeVal block parsing """
+
+        _valid_chunk = b''.join((b"\x35\x00\x01\x60\x3a\x9f\x21\x00",
+                                 b"\xbe\x8d\x09\x00\xc4\x1d\x20\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+        _attrval = Eagle.AttributeVal.parse(_valid_chunk)
+
+        self.assertEqual(_attrval.x, 220.345)
+        self.assertEqual(_attrval.y, 62.611)
+        self.assertEqual(_attrval.size, 1.524)
+        self.assertEqual(_attrval.layer, 96)
+        return
+
     def test_attribute_parse(self):
         """ Test Attribute block parsing """
 

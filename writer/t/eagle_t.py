@@ -275,6 +275,25 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
 
+    def test_part_construct(self):
+        """ Test Part block creation """
+
+        _part = Eagle.Part(name="IC9",
+                           libid=1,
+                           value="DS3668",
+                           numofshapes=2,
+                          )
+
+        _chunk = _part.construct()
+
+        _valid_chunk = b''.join((b"\x38\x00\x02\x00\x01\x00\x00\x00",
+                                 b"\x00\x00\x01\x49\x43\x39\x00\x00",
+                                 b"\x44\x53\x33\x36\x36\x38\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
     def test_bus_construct(self):
         """ Test Bus block creation """
 
@@ -323,6 +342,26 @@ class EagleTests(unittest.TestCase):
         _valid_chunk = b''.join((b"\x20\x00\x04\x00\x00\x00\x00\x00",
                                  b"\x00\x13\x00\x00\x00\x00\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_instance_construct(self):
+        """ Test Instance block creation """
+
+        _instance = Eagle.Instance(numofshapes=2,
+                                   x=218.44,
+                                   y=60.96,
+                                   smashed=True,
+                                   rotate="R90",
+                                  )
+
+        _chunk = _instance.construct()
+
+        _valid_chunk = b''.join((b"\x30\x00\x02\x00\xd0\x54\x21\x00",
+                                 b"\x40\x4d\x09\x00\xff\xff\x00\x00",
+                                 b"\x00\x04\x01\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
@@ -519,6 +558,44 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
  
+    def test_attributenam_construct(self):
+        """ Test AttributeNam block creation """
+
+        _attrnam = Eagle.AttributeNam(x=221.615,
+                                      y=64.77,
+                                      size=1.524,
+                                      layer=95,
+                                     )
+
+        _chunk = _attrnam.construct()
+
+        _valid_chunk = b''.join((b"\x34\x00\x00\x5f\xd6\xd0\x21\x00",
+                                 b"\x14\xe2\x09\x00\xc4\x1d\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+ 
+    def test_attributeval_construct(self):
+        """ Test AttributeVal block creation """
+
+        _attrval = Eagle.AttributeVal(x=220.345,
+                                      y=62.611,
+                                      size=1.524,
+                                      layer=96,
+                                     )
+
+        _chunk = _attrval.construct()
+
+        _valid_chunk = b''.join((b"\x35\x00\x00\x60\x3a\x9f\x21\x00",
+                                 b"\xbe\x8d\x09\x00\xc4\x1d\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
     def test_attribute_construct(self):
         """ Test Attribute block creation """
 

@@ -579,6 +579,53 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Part(NamedShapeSet):
+        """ A struct that represents a part
+        """
+        constant = 0x38
+        template = "=2B3H3B5s8s" 
+
+        max_embed_len1 = 5
+        max_embed_len2 = 8
+        no_embed_str = b'\x7f'
+
+        val_sign_mask = 0x01
+
+        def __init__(self, name, libid, value='', # pylint: disable=R0913
+                     numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Part, self).__init__(name, numofshapes, shapes)
+            self.value = value
+            self.libid = libid
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len1 > len(self.name):
+                _name = self.name
+
+            _value = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len2 > len(self.value):
+                _value = self.value
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0,
+                                   self.numofshapes,
+                                   self.libid, 0,
+                                   0, 0,
+                                   self.val_sign_mask 
+                                        if 'None' != self.value and
+                                            0 != len(self.value) else 0,
+                                   _name,
+                                   _value,
+                                  )
+            return _ret_val
+
     class Bus(NamedShapeSet):
         """ A struct that represents a bus
         """
@@ -732,6 +779,53 @@ class Eagle: # pylint: disable=R0902
                 else:
                     _ret_val -= 0.01
             return int(_ret_val)
+
+    class Instance(ShapeSet, Shape):
+        """ A struct that represents an instance
+        """
+        constant = 0x30
+        template = "=2BH2IH6BI"
+
+        smashed_mask = 0x01
+
+        constantmid = 0xffff
+
+        def __init__(self, x, y, smashed, rotate, numofshapes=0, # pylint: disable=R0913
+                     shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Instance, self).__init__(numofshapes, shapes)
+#            super(Eagle.Shape, self).__init__(-1)
+            self.x = x
+            self.y = y
+            self.smashed = smashed
+            self.rotate = rotate
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _rotate = 0
+            for _rr in self.rotates:
+                if self.rotates[_rr] == self.rotate:
+                    _rotate = _rr
+                    break
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0,
+                                   self.numofshapes,
+                                   self.encode_real(self.x),
+                                   self.encode_real(self.y),
+                                   self.constantmid,
+                                   0, 0, 0,
+                                   _rotate,
+                                   self.smashed_mask if self.smashed
+                                        else 0,
+                                   0, 0
+                                  )
+            return _ret_val
 
     class Circle(Shape):
         """ A struct that represents a circle
@@ -1135,6 +1229,48 @@ class Eagle: # pylint: disable=R0902
                                    0, 0
                                   )
             return _ret_val
+
+    class AttributeNam(Shape):
+        """ A struct that represents a part's NAME attribute
+        """
+        constant = 0x34
+        template = "=4B2I2H8s"
+
+        def __init__(self, x, y, size, layer, name="NAME"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributeNam, self).__init__(layer)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.size = size
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, self.layer,
+                                   self.encode_real(self.x),
+                                   self.encode_real(self.y),
+                                   self.encode_real(self.size /
+                                       self.size_xscale),
+                                   0, ''
+                                  )
+            return _ret_val
+
+    class AttributeVal(AttributeNam):
+        """ A struct that represents a part's VALUE attribute
+        """
+        constant = 0x35
+
+        def __init__(self, x, y, size, layer, name="VALUE"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributeVal, self).__init__(x, y, size, layer, name)
+            return
 
     class Attribute:
         """ A struct that represents an attribute

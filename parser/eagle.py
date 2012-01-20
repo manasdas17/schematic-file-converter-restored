@@ -599,11 +599,58 @@ class Eagle:
                 pass # strange mid-constants in net
 
             _name = None
-            if Eagle.Package.no_embed_str != _dta[6][0]:
+            if Eagle.Net.no_embed_str != _dta[6][0]:
                 _name = _dta[6].rstrip('\0')
 
             _ret_val = Eagle.Net(name=_name,
                                  nclass=_dta[5],
+                                 numofshapes=_dta[2],
+                                )
+            return _ret_val
+
+    class Part(NamedShapeSet):
+        """ A struct that represents a part
+        """
+        constant = 0x38
+        template = "=2B3H3B5s8s" 
+
+        max_embed_len1 = 5
+        max_embed_len2 = 8
+        no_embed_str = b'\x7f'
+
+        val_sign_mask = 0x01
+
+        def __init__(self, name, libid, value='', # pylint: disable=R0913
+                     numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Part, self).__init__(name, numofshapes, shapes)
+            self.value = value
+            self.libid = libid
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses part
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Part.template, chunk)
+
+            _name = None
+            if Eagle.Part.no_embed_str != _dta[8][0]:
+                _name = _dta[8].rstrip('\0')
+
+            _value = None
+            if Eagle.Part.no_embed_str != _dta[9][0]:
+                _value = _dta[9].rstrip('\0')
+
+            _ret_val = Eagle.Part(name=_name,
+                                 libid=_dta[3],
+#                                 valpresence = 
+#                                    True if _dta[7] & Eagle.Part.val_sign_mask 
+#                                            else False,
+                                 value=_value,
                                  numofshapes=_dta[2],
                                 )
             return _ret_val
@@ -757,6 +804,48 @@ class Eagle:
                                                 Eagle.Shape.scale1a)
             elif 2 == algo:
                 _ret_val = number / Eagle.Shape.scale2
+            return _ret_val
+
+    class Instance(ShapeSet, Shape):
+        """ A struct that represents an instance
+        """
+        constant = 0x30
+        template = "=2BH2IH6BI"
+
+        smashed_mask = 0x01
+
+        constantmid = 0xffff
+
+        def __init__(self, x, y, smashed, rotate, numofshapes=0, # pylint: disable=R0913
+                     shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Instance, self).__init__(numofshapes, shapes)
+#            super(Eagle.Shape, self).__init__(-1)
+            self.x = x
+            self.y = y
+            self.smashed = smashed
+            self.rotate = rotate
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses instance
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Instance.template, chunk)
+
+            _ret_val = Eagle.Instance(numofshapes=_dta[2],
+                                     x=Eagle.Instance.decode_real(_dta[3]),
+                                     y=Eagle.Instance.decode_real(_dta[4]),
+                                     smashed=True 
+                                        if Eagle.Instance.smashed_mask ==
+                                            (Eagle.Instance.smashed_mask & 
+                                                _dta[10]) else False,
+                                     rotate=Eagle.Instance.rotates[
+                                         Eagle.Instance.rotatemask & _dta[9]],
+                                    )
             return _ret_val
 
     class Circle(Shape):
@@ -1150,6 +1239,66 @@ class Eagle:
                                      )
             return _ret_val
 
+    class AttributeNam(Shape):
+        """ A struct that represents a part's NAME attribute
+        """
+        constant = 0x34
+        template = "=4B2I2H8s"
+
+        def __init__(self, x, y, size, layer, name="NAME"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributeNam, self).__init__(layer)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.size = size
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses attribute-name
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.AttributeNam.template, chunk)
+
+# [2] can be font
+            _ret_val = Eagle.AttributeNam(x=Eagle.Shape.decode_real(_dta[4]),
+                                          y=Eagle.Shape.decode_real(_dta[5]),
+                                          size=Eagle.Shape.size_xscale *
+                                               Eagle.Shape.decode_real(_dta[6]),
+                                          layer=_dta[3],
+                                         )
+            return _ret_val
+
+    class AttributeVal(AttributeNam):
+        """ A struct that represents a part's VALUE attribute
+        """
+        constant = 0x35
+
+        def __init__(self, x, y, size, layer, name="VALUE"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributeVal, self).__init__(x, y, size, layer, name)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses attribute-name
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.AttributeVal.template, chunk)
+
+            _ret_val = Eagle.AttributeVal(x=Eagle.Shape.decode_real(_dta[4]),
+                                          y=Eagle.Shape.decode_real(_dta[5]),
+                                          size=Eagle.Shape.size_xscale *
+                                               Eagle.Shape.decode_real(_dta[6]),
+                                          layer=_dta[3],
+                                         )
+            return _ret_val
+
     class Attribute:
         """ A struct that represents an attribute
         """
@@ -1353,6 +1502,7 @@ class Eagle:
 #        self.shapes = []
 #        self.nets = []
 #        self.buses = []
+        self.parts = []
         self.texts = []
         self.schematic = None
         self.netclasses = []
@@ -1408,6 +1558,12 @@ class Eagle:
             elif Eagle.Segment.constant == _type:
                 _cur_segment = self.Segment.parse(_dta)
                 _cur_web.segments.append(_cur_segment)
+            elif Eagle.Part.constant == _type:
+                _cur_web = self.Part.parse(_dta)
+                self.parts.append(_cur_web)
+            elif Eagle.Instance.constant == _type:
+                _cur_segment = self.Instance.parse(_dta)
+                _cur_web.shapes.append(_cur_web)
             elif Eagle.Circle.constant == _type:
                 _cur_segment.shapes.append(self.Circle.parse(_dta))
             elif Eagle.Rectangle.constant == _type:
@@ -1422,6 +1578,10 @@ class Eagle:
                 _cur_segment.shapes.append(self.Pin.parse(_dta))
             elif Eagle.Label.constant == _type:
                 _cur_segment.shapes.append(self.Label.parse(_dta))
+            elif Eagle.AttributeNam.constant == _type:
+                _cur_segment.shapes.append(self.AttributeNam.parse(_dta))
+            elif Eagle.AttributeVal.constant == _type:
+                _cur_segment.shapes.append(self.AttributeVal.parse(_dta))
             elif Eagle.Text.constant == _type:
                 _cur_segment.shapes.append(self.Text.parse(_dta))
             elif Eagle.Attribute.constant == _type:
