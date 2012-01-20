@@ -234,6 +234,16 @@ class Arc(Shape):
         return Point(int(round(x)), int(round(y)))
 
 
+    def ends(self):
+        """ Calculate arc endpoints. """
+        points = {}
+        for ord_ in ('start', 'end'):
+            opp = sin(getattr(self, ord_ + '_angle') * pi) * self.radius
+            adj = cos(getattr(self, ord_ + '_angle') * pi) * self.radius
+            points[ord_] = Point(self.x + adj, self.y - opp)
+        return (points['start'], points['end'])
+
+
     def json(self):
         """ Return the arc as JSON """
         return {

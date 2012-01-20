@@ -28,7 +28,8 @@ from nose.tools import raises
 from parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
                             CoordPrecedesFormatSpec, CoordMalformed, \
                             FileNotTerminated, DataAfterEOF, \
-                            UnintelligibleDataBlock, QuadrantViolation
+                            UnintelligibleDataBlock, QuadrantViolation, \
+                            OpenFillBoundary
 
 STRIP_DIRS = path.join('parser', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
@@ -89,6 +90,11 @@ class GerberTests(unittest.TestCase):
         """ Parse some connected arcs and lines - gerber. """
         assert len(self.design.layouts[0].layers[0].traces) == 2
 
+    @use_file('fills.ger')
+    def test_outline_fills(self):
+        """ Parse outline fills - gerber. """
+        assert len(self.design.layouts[0].layers[0].fills) == 2
+
 
     # tests that pass if they raise expected errors
 
@@ -138,4 +144,10 @@ class GerberTests(unittest.TestCase):
     @use_file('sq-violation.ger')
     def test_single_quadrant(self):
         """ Trap long arc in single quadrant mode. """
+        pass
+
+    @raises(OpenFillBoundary)
+    @use_file('open-fill.ger')
+    def test_open_fill(self):
+        """ Trap unsuccessful outline fill closure. """
         pass

@@ -62,6 +62,10 @@ class QuadrantViolation(CoordError):
     """ Single quadrant arc longer than 0.5 radians/pi. """
     pass
 
+class OpenFillBoundary(CoordError):
+    """ Fill boundary ends do not equate. """
+    pass
+
 class FileNotTerminated(Unparsable):
     """ M02* was not encountered. """
     pass
@@ -90,21 +94,22 @@ FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: di
                         'incremental_coords', 'n_max', 'g_max',
                         'x', 'y', 'd_max', 'm_max'])
 
-# parser status
-
-Status = namedtuple('Status', ['x', 'y', 'draw', 'interpolation',   # pylint: disable=C0103
-                               'aperture', 'outline_fill', 'multi_quadrant',
-                               'units', 'incremental_coords'])
 
 # constants
 
 DIGITS = '0123456789'
 D_MAP = {1:'ON', 2:'OFF', 3:'FLASH'}
-G_MAP = {1:'LINEAR', 2:'CLOCKWISE_CIRCULAR', 3:'ANTICLOCKWISE_CIRCULAR',
-         36:True, 37:False,
-         70:'IN', 71:'MM',
-         74:True, 75:False,
-         90:True, 91:False}
+G_MAP = {1:{'interpolation':'LINEAR'},
+         2:{'interpolation':'CLOCKWISE_CIRCULAR'},
+         3:{'interpolation':'ANTICLOCKWISE_CIRCULAR'},
+         36:{'outline_fill':True},
+         37:{'outline_fill':False},
+         70:{'units':'IN'},
+         71:{'units':'MM'},
+         74:{'multi_quadrant':False},
+         75:{'multi_quadrant':True},
+         90:{'incremental':True},
+         91:{'incremental':False}}
 AXIS_PARAMS = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
 ALL_PARAMS = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
               'IJ', 'IN', 'IO', 'IP', 'IR', 'PF', 'AD',
@@ -152,18 +157,25 @@ class Gerber:
                        'IO':AxisDef(0, 0),    # image offset
                        'IP':True,             # image polarity
                        'IR':0}                # image rotation
+        self.status = {'x':0,
+                       'y':0,
+                       'draw':'OFF',
+                       'interpolation':'LINEAR',
+                       'aperture':None,
+                       'outline_fill':False,
+                       'multi_quadrant':False,
+                       'units':None,
+                       'incremental_coords':None}
 
 
     def parse(self):
         """ Parse tokens from gerber file into a design. """
-        status = Status(x=0, y=0, draw='OFF', interpolation='LINEAR',
-                        aperture=None, outline_fill=False, multi_quadrant=False,
-                        units=None, incremental_coords=None)
         for block in self._tokenize():
             if isinstance(block, Funct):
-                status = self._do_funct(block, status)
+                effect = self._do_funct(block)
             else:
-                status = self._move(block, status)
+                effect = self._move(block)
+            self.status.update(effect)
         layout = Layout()
         layout.layers.append(self.layer)
         design = Design()
@@ -173,93 +185,119 @@ class Gerber:
 
     # primary parser support methods
 
-    def _do_funct(self, block, status):
+    def _do_funct(self, block):
         """ Set drawing modes. """
         code = int(block.code)
         if block.type_ == 'D':
             if code < 10:
-                status = status._replace(draw=D_MAP[code])          # pylint: disable=W0212
+                effect = {'draw':D_MAP[code]}
+
+                # terminate, instantiate fills mid mode
+                if (self.status['outline_fill'] and
+                    code == 2 and
+                    self.layer.fills[-1]):
+                    self._check_fill(self.layer.fills[-1])
+                    self.layer.fills.append([])
+
             else:
-                status = status._replace(aperture=block.code)       # pylint: disable=W0212
+                effect = {'aperture':block.code}
         else:
-            if code in range(1, 4):
-                status = status._replace(interpolation=G_MAP[code]) # pylint: disable=W0212
-            elif code in range(36, 38):
-                status = status._replace(outline_fill=G_MAP[code])  # pylint: disable=W0212
-            elif code in range(70, 72):
-                status = status._replace(units=G_MAP[code])         # pylint: disable=W0212
-            elif code in range(90, 92):
-                status = status._replace(incremental=G_MAP[code])   # pylint: disable=W0212
-        return status
+            effect = G_MAP[code]
+
+            # start a new fill
+            if code == 36:
+                self.layer.fills.append([])
+
+            elif code == 37:
+
+                # terminate fill if D02 was not specified
+                if self.layer.fills[-1]:
+                    self._check_fill(self.layer.fills[-1])
+
+                # tidy up empty trailing fill
+                else:
+                    self.layer.fills.pop()
+
+        return effect
 
 
-    def _move(self, block, status):
+    def _move(self, block):
         """ Draw a segment of a shape or trace. """
-        x, y = self._target_pos(block, status)
-        if status.draw == 'ON':
+        start = tuple([self.status[k] for k in ('x', 'y')])
+        end = self._target_pos(block)
+        start_pt, end_pt = (Point(start), Point(end))
+        if self.status['draw'] == 'ON':
+
+            # generate segment
             #TODO: handle non-circular apertures
-            if status.interpolation == 'LINEAR':
-                segment = Line(status[:2], (x, y))
+            #      (historic use only)
+            if self.status['interpolation'] == 'LINEAR':
+                seg = Line(start, end)
             else:
-                segment = self._draw_arc(start_pt=Point(status[:2]),
-                                         end_pt=Point(x, y),
-                                         center_offset=block[2:],
-                                         status=status)
-            wid = self.params[status.aperture].modifiers[0]
-            tr_index = self.layer.get_connected_trace(wid, status[:2], (x, y))
-            if tr_index is None:
+                ctr_offset = block[2:]
+                seg = self._draw_arc(start_pt, end_pt, ctr_offset)
 
-                # begin a new trace
-                trace = Trace(wid, [segment])
-                self.layer.traces.append(trace)
+            # append segment to fill
+            if self.status['outline_fill']:
+                self.layer.fills[-1].append(seg)
+
+            # append segment to trace
             else:
+                aperture = self.params[self.status['aperture']]
+                wid = aperture.modifiers[0]
+                tr_ind = self.layer.get_trace(wid, start_pt, end_pt)
+                if tr_ind is None:
 
-                # add segment to existing trace
-                self.layer.traces[tr_index].segments.append(segment)
+                    # start a new trace
+                    trace = Trace(wid, [seg])
+                    self.layer.traces.append(trace)
+                else:
 
-        elif status.draw == 'FLASH':
+                    # add to existing trace
+                    self.layer.traces[tr_ind].segments.append(seg)
+
+        elif self.status['draw'] == 'FLASH':
             pass #TODO: add some kind of shape to the layer
 
-        return status._replace(x=x, y=y)                            # pylint: disable=W0212
+        return {'x':end[0], 'y':end[1]}
 
 
     # coordinate interpretation
 
-    def _target_pos(self, block, status):
+    def _target_pos(self, block):
         """ Interpret coordinates in a data block. """
         coord = {'x':block.x, 'y':block.y}
         for k in coord:
             if self.params['FS'].incremental_coords:
                 if coord[k] is None:
                     coord[k] = 0
-                coord[k] = getattr(status, k) + getattr(block, k)
+                coord[k] = self.status[k] + getattr(block, k)
             else:
                 if coord[k] is None:
-                    coord[k] = getattr(status, k)
+                    coord[k] = self.status[k]
         return (coord['x'], coord['y'])
 
 
     # circular paths
 
-    def _draw_arc(self, start_pt, end_pt, center_offset, status):
+    def _draw_arc(self, start_pt, end_pt, center_offset):
         """ Convert arc path into shape. """
         offset = {'i':center_offset[0], 'j':center_offset[1]}
         for k in offset:
             if offset[k] is None:
                 offset[k] = 0
-        center, radius = self._get_ctr_and_radius(start_pt, end_pt, offset,
-                                                  status.multi_quadrant)
+        center, radius = self._get_ctr_and_radius(start_pt, end_pt, offset)
         start_angle = self._get_angle(center, start_pt)
         end_angle = self._get_angle(center, end_pt)
-        self._check_mq(start_angle, end_angle, status.multi_quadrant)
-        clockwise = 'ANTI' not in status.interpolation
+        self._check_mq(start_angle, end_angle)
+        clockwise = 'ANTI' not in self.status['interpolation']
         return Arc(center.x, center.y,
                    clockwise and start_angle or end_angle,
                    clockwise and end_angle or start_angle,
                    radius)
 
 
-    def _get_ctr_and_radius(self, start_pt, end_pt, offset, multi_quadrant):
+    def _get_ctr_and_radius(self, start_pt, end_pt, offset):
         """ Apply gerber circular interpolation logic. """
         radius = sqrt(offset['i']**2 + offset['j']**2)
         center = Point(x=start_pt.x + offset['i'],
@@ -268,7 +306,7 @@ class Gerber:
         # In single-quadrant mode, gerber requires implicit
         # determination of offset direction, so we find the
         # center through trial and error.
-        if not multi_quadrant:
+        if not self.status['multi_quadrant']:
             if not snap(center.dist(end_pt), radius):
                 center = Point(x=start_pt.x - offset['i'],
                                y=start_pt.y - offset['j'])
@@ -496,8 +534,38 @@ class Gerber:
         return (tok, val)
 
 
-    def _check_mq(self, start_angle, end_angle, multi_quadrant):
-        if not multi_quadrant:
+    def _check_fill(self, fill):
+        """ Check that a fill is closed. """
+        if len(fill) >= 2:
+            segs = (fill[0], fill[1], fill[-2], fill[-1])
+            ends = [isinstance(s, Arc) and list(s.ends()) or [s.p1, s.p2]
+                    for s in segs]
+            if len(fill) > 2:
+
+                # If first or last seg is an arc that was defined
+                # in anticlockwise mode, we need to reverse it.
+                if ends[0][0] in ends[1]:
+                    ends[0].reverse()
+                if ends[-1][1] in ends[-2]:
+                    ends[-1].reverse()
+
+                if not ends[-1][1] == ends[0][0]:
+                    raise OpenFillBoundary('%s != %s' %
+                                           (ends[-1][1], ends[0][0]))
+            else:
+                for end in ends[-1]:
+                    if end not in end[0]:
+                        raise OpenFillBoundary('%s != %s' %
+                                               (ends[-1][1], ends[0][0]))
+        else:
+            start, end = fill[0].ends()
+            if not start == end:
+                raise OpenFillBoundary('%s != %s' % (start, end))
+
+
+    def _check_mq(self, start_angle, end_angle):
+        """ Enforce single quadrant arc length restriction. """
+        if not self.status['multi_quadrant']:
             if abs(end_angle - start_angle) > 0.5:
                 raise QuadrantViolation('Arc(%s to %s) > 0.5 rad/pi'
                                         % (start_angle, end_angle))

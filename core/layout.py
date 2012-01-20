@@ -19,8 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from core.shape import Point, Arc
-from math import sin, cos, pi
+from core.shape import Arc
 
 class Layout:
     """ The layout class holds the PCB Layout portion of the design to
@@ -43,33 +42,20 @@ class Layer:
         self.components = [] # if used, possibly could include pads
 
 
-    def get_connected_trace(self, width, start, end):
+    def get_trace(self, width, start_pt, end_pt):
         """ Is coord connected to any of the layer's traces? """
         #TODO: interpolate and take widths into account
-        start, end = (Point(start), Point(end))
         for tr_index in range(len(self.traces)):
             trace = self.traces[tr_index]
             for segment in trace.segments:
                 if trace.width == width:
                     if isinstance(segment, Arc):
-                        p1, p2 = self._arc_endpoints(segment)
+                        seg_ends = segment.ends()
                     else:
-                        p1, p2 = (segment.p1, segment.p2)
-                    if start in (p1, p2) or end in (p1, p2):
+                        seg_ends = (segment.p1, segment.p2)
+                    if start_pt in seg_ends or end_pt in seg_ends:
                         return tr_index
         return None
-
-
-    def _arc_endpoints(self, segment):
-        """ Calc arc ends based on center, radius, angles. """
-        points = {}
-        for ord_ in ('start', 'end'):
-            opp = sin(getattr(segment, ord_ + '_angle') * pi) * segment.radius
-            adj = cos(getattr(segment, ord_ + '_angle') * pi) * segment.radius
-            x = segment.x + adj
-            y = segment.y - opp
-            points[ord_] = Point(x, y)
-        return (points['start'], points['end'])
 
 
     def json(self):
