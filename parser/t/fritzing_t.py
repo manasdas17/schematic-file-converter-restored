@@ -32,6 +32,14 @@ from os.path import dirname, join
 TEST_DIR = join(dirname(__file__), '..', '..', 'test', 'fritzing')
 
 
+class FakeElem(dict):
+    """ A fake xml element. """
+
+    def __init__(self, tag, **kw):
+        self.tag = tag
+        super(FakeElem, self).__init__(**kw)
+
+
 class FritzingTests(TestCase):
     """ The tests of the fritzing parser """
 
@@ -234,3 +242,14 @@ class FritzingTests(TestCase):
         self.assertEqual(len(p1.connected_components), 1)
         self.assertEqual(p1.connected_components[0].instance_id, 'L1')
         self.assertEqual(p1.connected_components[0].pin_number, '1')
+
+
+    def test_parse_circle(self):
+        parser = ComponentParser(None, None)
+        elem = FakeElem('circle', cx='1.5', cy='10.4', r='15')
+        shapes = parser.parse_shapes(elem)
+        self.assertEqual(len(shapes), 1)
+        self.assertEqual(shapes[0].type, 'circle')
+        self.assertEqual(shapes[0].x, 2)
+        self.assertEqual(shapes[0].y, -10)
+        self.assertEqual(shapes[0].radius, 15)
