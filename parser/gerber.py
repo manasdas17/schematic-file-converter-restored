@@ -225,7 +225,7 @@ class Gerber:
         """ Draw a segment of a shape or trace. """
         start = tuple([self.status[k] for k in ('x', 'y')])
         end = self._target_pos(block)
-        start_pt, end_pt = (Point(start), Point(end))
+        ends = (Point(start), Point(end))
         if self.status['draw'] == 'ON':
 
             # generate segment
@@ -235,7 +235,7 @@ class Gerber:
                 seg = Line(start, end)
             else:
                 ctr_offset = block[2:]
-                seg = self._draw_arc(start_pt, end_pt, ctr_offset)
+                seg = self._draw_arc(ends, ctr_offset)
 
             # append segment to fill
             if self.status['outline_fill']:
@@ -245,7 +245,7 @@ class Gerber:
             else:
                 aperture = self.params[self.status['aperture']]
                 wid = aperture.modifiers[0]
-                tr_ind = self.layer.get_trace(wid, start_pt, end_pt)
+                tr_ind = self.layer.get_trace(wid, ends)
                 if tr_ind is None:
 
                     # start a new trace
@@ -280,15 +280,16 @@ class Gerber:
 
     # circular paths
 
-    def _draw_arc(self, start_pt, end_pt, center_offset):
+    def _draw_arc(self, end_pts, center_offset):
         """ Convert arc path into shape. """
+        start, end = end_pts
         offset = {'i':center_offset[0], 'j':center_offset[1]}
         for k in offset:
             if offset[k] is None:
                 offset[k] = 0
-        center, radius = self._get_ctr_and_radius(start_pt, end_pt, offset)
-        start_angle = self._get_angle(center, start_pt)
-        end_angle = self._get_angle(center, end_pt)
+        center, radius = self._get_ctr_and_radius(end_pts, offset)
+        start_angle = self._get_angle(center, start)
+        end_angle = self._get_angle(center, end)
         self._check_mq(start_angle, end_angle)
         clockwise = 'ANTI' not in self.status['interpolation']
         return Arc(center.x, center.y,
@@ -297,26 +298,27 @@ class Gerber:
                    radius)
 
 
-    def _get_ctr_and_radius(self, start_pt, end_pt, offset):
+    def _get_ctr_and_radius(self, end_pts, offset):
         """ Apply gerber circular interpolation logic. """
+        start, end = end_pts
         radius = sqrt(offset['i']**2 + offset['j']**2)
-        center = Point(x=start_pt.x + offset['i'],
-                       y=start_pt.y + offset['j'])
+        center = Point(x=start.x + offset['i'],
+                       y=start.y + offset['j'])
 
         # In single-quadrant mode, gerber requires implicit
         # determination of offset direction, so we find the
         # center through trial and error.
         if not self.status['multi_quadrant']:
-            if not snap(center.dist(end_pt), radius):
-                center = Point(x=start_pt.x - offset['i'],
-                               y=start_pt.y - offset['j'])
-                if not snap(center.dist(end_pt), radius):
-                    center = Point(x=start_pt.x + offset['i'],
-                                   y=start_pt.y - offset['j'])
-                    if not snap(center.dist(end_pt), radius):
-                        center = Point(x=start_pt.x - offset['i'],
-                                       y=start_pt.y + offset['j'])
-                        if not snap(center.dist(end_pt), radius):
+            if not snap(center.dist(end), radius):
+                center = Point(x=start.x - offset['i'],
+                               y=start.y - offset['j'])
+                if not snap(center.dist(end), radius):
+                    center = Point(x=start.x + offset['i'],
+                                   y=start.y - offset['j'])
+                    if not snap(center.dist(end), radius):
+                        center = Point(x=start.x - offset['i'],
+                                       y=start.y + offset['j'])
+                        if not snap(center.dist(end), radius):
                             raise ImpossibleGeometry
         return (center, radius)
 

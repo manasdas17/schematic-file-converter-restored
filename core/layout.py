@@ -35,25 +35,25 @@ class Layer:
     def __init__(self):
         self.id = ''
         self.type = ''   # Copper or Mask/Silk
-        self.traces = [] # Trace = connected shapes that are of a width
+        self.traces = []
         self.vias = []
-        self.fills = []  # probably includes pads -- may have to extend
+        self.fills = []
         self.voids = []
-        self.components = [] # if used, possibly could include pads
+        self.components = []
 
 
-    def get_trace(self, width, start_pt, end_pt):
-        """ Is coord connected to any of the layer's traces? """
-        #TODO: interpolate and take widths into account
+    def get_trace(self, width, end_pts):
+        """ Is segment connected to an existing trace? """
+        start, end = end_pts
         for tr_index in range(len(self.traces)):
             trace = self.traces[tr_index]
-            for segment in trace.segments:
+            for seg in trace.segments:
                 if trace.width == width:
-                    if isinstance(segment, Arc):
-                        seg_ends = segment.ends()
+                    if isinstance(seg, Arc):
+                        seg_ends = seg.ends()
                     else:
-                        seg_ends = (segment.p1, segment.p2)
-                    if start_pt in seg_ends or end_pt in seg_ends:
+                        seg_ends = (seg.p1, seg.p2)
+                    if start in seg_ends or end in seg_ends:
                         return tr_index
         return None
 
@@ -72,10 +72,9 @@ class Layer:
 class Trace:
     """ A collection of connected segments such as lines and arcs. """
 
-    def __init__(self, width=0.01, segments=None, tool_shape='circle'):
+    def __init__(self, width, segments=None):
         self.type = 'trace'
         self.width = width
-        self.tool_shape = tool_shape
         self.segments = segments or []
 
 
@@ -84,6 +83,5 @@ class Trace:
         return {
             "type": self.type,
             "width": self.width,
-            "tool_shape": self.tool_shape,
             "segments": [s.json() for s in self.segments]
             }
