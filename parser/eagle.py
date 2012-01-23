@@ -1534,7 +1534,7 @@ class Eagle:
                 self.libraries.append(_cur_lib)
             elif Eagle.DeviceSet.constant == _type:
                 _cur_web = self.DeviceSet.parse(_dta)
-                _cur_lib.devicesets.append(_cur_web)
+                _cur_lib.devsets.append(_cur_web)
             elif Eagle.SymbolHeader.constant == _type:
                 _cur_web = self.SymbolHeader.parse(_dta)
                 _cur_lib.symbols.append(_cur_web)
@@ -1543,10 +1543,10 @@ class Eagle:
                 _cur_lib.packages.append(_cur_web)
             elif Eagle.Symbol.constant == _type:
                 _cur_segment = self.Symbol.parse(_dta)
-                _cur_web.symbols.append(_cur_segment)
+                _cur_web.shapesets.append(_cur_segment)
             elif Eagle.Package.constant == _type:
                 _cur_segment = self.Package.parse(_dta)
-                _cur_web.packages.append(_cur_segment)
+                _cur_web.shapesets.append(_cur_segment)
             elif Eagle.ShapeHeader.constant == _type:
                 self.shapeheader = self.ShapeHeader.parse(_dta)
             elif Eagle.Bus.constant == _type:
@@ -1557,7 +1557,7 @@ class Eagle:
                 self.shapeheader.nets.append(_cur_web)
             elif Eagle.Segment.constant == _type:
                 _cur_segment = self.Segment.parse(_dta)
-                _cur_web.segments.append(_cur_segment)
+                _cur_web.shapes.append(_cur_segment)
             elif Eagle.Part.constant == _type:
                 _cur_web = self.Part.parse(_dta)
                 self.parts.append(_cur_web)
@@ -1569,7 +1569,7 @@ class Eagle:
             elif Eagle.Rectangle.constant == _type:
                 _cur_segment.shapes.append(self.Rectangle.parse(_dta))
             elif Eagle.Wire.constant == _type:
-                _cur_segment.shapes.wires.append(self.Wire.parse(_dta))
+                _cur_segment.shapes.append(self.Wire.parse(_dta))
             elif Eagle.Junction.constant == _type:
                 _cur_segment.shapes.append(self.Junction.parse(_dta))
             elif Eagle.Pad.constant == _type:
