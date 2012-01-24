@@ -83,17 +83,26 @@ class GerberTests(unittest.TestCase):
     @use_file('simple.ger')
     def test_simple(self):
         """ Parse a simple, correct gerber file. """
-        assert len(self.design.layouts[0].layers[0].traces) == 2
+        image = self.design.layouts[0].layers[0].images[0]
+        assert len(image.traces) == 2
 
     @use_file('arc_segments.ger')
     def test_arcs(self):
         """ Parse some connected arcs and lines - gerber. """
-        assert len(self.design.layouts[0].layers[0].traces) == 2
+        image = self.design.layouts[0].layers[0].images[0]
+        assert len(image.traces) == 2
 
     @use_file('fills.ger')
     def test_outline_fills(self):
         """ Parse outline fills - gerber. """
-        assert len(self.design.layouts[0].layers[0].fills) == 2
+        image = self.design.layouts[0].layers[0].images[0]
+        assert len(image.fills) == 2
+
+    @use_file('complex.ger')
+    def test_complex(self):
+        """ Parse aperture macros - gerber. """
+        images = self.design.layouts[0].layers[0].images
+        assert len(images[0].shape_instances) == 2
 
 
     # tests that pass if they raise expected errors

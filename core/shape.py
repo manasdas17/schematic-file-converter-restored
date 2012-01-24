@@ -529,6 +529,130 @@ class BezierCurve(Shape):
             }
 
 
+class Moire(Shape):
+    """ A target of concentric rings with crosshairs. """
+
+    def __init__(self, x, y, outer, ring_thickness, gap, max_rings,
+                 hair_thickness, hair_length, rotation):
+        self.x = x
+        self.y = y
+        self.outer_diameter = outer
+        self.ring_thickness = ring_thickness
+        self.gap_thickness = gap
+        self.max_rings = max_rings
+        self.hair_thickness = hair_thickness
+        self.hair_length = hair_length
+        self.rotation = rotation
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        raise NotImplementedError("Not implemented")
+    
+    
+    def min_point(self):
+        """ Return the min point of the shape """
+        raise NotImplementedError("Not implemented")
+    
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        raise NotImplementedError("Not implemented")
+
+
+    def json(self):
+        """ Return the moire as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "outer_diameter": self.outer_diameter,
+            "ring_thickness": self.ring_thickness,
+            "gap_thickness": self.gap_thickness,
+            "max_rings": self.max_rings,
+            "hair_thickness": self.hair_thickness,
+            "hair_length": self.hair_length,
+            "rotation": self.rotation
+            }
+        
+
+class Thermal(Shape):
+    """ A ring with 4 gaps, each separated by 90 deg. """
+
+    def __init__(self, x, y, outer, inner, gap, rotation):
+        self.x = x
+        self.y = y
+        self.outer_diameter = outer
+        self.inner_diameter = inner
+        self.gap_thickness = gap
+        self.rotation = rotation
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        raise NotImplementedError("Not implemented")
+    
+    
+    def min_point(self):
+        """ Return the min point of the shape """
+        raise NotImplementedError("Not implemented")
+    
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        raise NotImplementedError("Not implemented")
+
+
+    def json(self):
+        """ Return the thermal as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "outer_diameter": self.outer_diameter,
+            "inner_diameter": self.inner_diameter,
+            "gap_thickness": self.gap_thickness,
+            "rotation": self.rotation
+            }
+
+
+class RegularPolygon(Shape):
+    """
+    A polygon with sides of equal length.
+
+    The first vertex is positioned right of center.
+
+    """
+    def __init__(self, x, y, outer, vertices):
+        self.x = x
+        self.y = y
+        self.outer_diameter = outer
+        self.vertices = vertices
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        raise NotImplementedError("Not implemented")
+    
+    
+    def min_point(self):
+        """ Return the min point of the shape """
+        raise NotImplementedError("Not implemented")
+    
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        raise NotImplementedError("Not implemented")
+
+
+    def json(self):
+        """ Return the regular polygon as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "outer_diameter": self.outer_diameter,
+            "vertices": self.vertices,
+            }
+
+
 class Point:
     """ Simple x, y coordinate. Different from the 'Point' in Nets """
 

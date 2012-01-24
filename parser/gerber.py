@@ -24,7 +24,7 @@ from math import sqrt, acos, pi
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout, Layer, Trace
+from core.layout import Layout, Layer, Image, Macro, Trace
 from core.shape import Line, Arc, Point
 
 
@@ -85,6 +85,7 @@ class ImpossibleGeometry(Unparsable):
 
 # token classes
 
+MacroDef = namedtuple('MacroDef', 'name primitive_defs')            # pylint: disable=C0103
 Aperture = namedtuple('Aperture', 'code type_ modifiers')           # pylint: disable=C0103
 Coord = namedtuple('Coord', 'x y i j')                              # pylint: disable=C0103
 CoordFmt = namedtuple('CoordFmt', 'int dec')                        # pylint: disable=C0103
@@ -98,6 +99,15 @@ FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: di
 # constants
 
 DIGITS = '0123456789'
+PRIMITIVES = {1:'circle',
+              2:'vector',
+              20:'vector',
+              21:'line',
+              22:'rectangle',
+              4:'outline',
+              5:'polygon',
+              6:'moire',
+              7:'thermal'}
 D_MAP = {1:'ON', 2:'OFF', 3:'FLASH'}
 G_MAP = {1:{'interpolation':'LINEAR'},
          2:{'interpolation':'CLOCKWISE_CIRCULAR'},
@@ -114,7 +124,8 @@ AXIS_PARAMS = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
 ALL_PARAMS = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
               'IJ', 'IN', 'IO', 'IP', 'IR', 'PF', 'AD',
               'KO', 'LN', 'LP', 'SR')
-TOK_SPEC = (('PARAM_DELIM', r'%'),
+TOK_SPEC = (('MACRO', r'%AM[^%]*%'),
+            ('PARAM_DELIM', r'%'),
            ) + tuple([(p, r'%s[^\*]*\*' % p) for p in ALL_PARAMS]) + (
             ('COMMENT', r'G04[^\*]*\*'),
             ('DEPRECATED', r'G54\*?'), # historic crud
@@ -123,7 +134,6 @@ TOK_SPEC = (('PARAM_DELIM', r'%'),
             ('EOF', r'M02\*'),         # end of file
             ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
             ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
-                                       #TODO: handle aperture macros
 IGNORE = ('SKIP', 'COMMENT', 'DEPRECATED')
 REG_EX = '|'.join('(?P<%s>%s)' % pair for pair in TOK_SPEC)
 TOK_RE = re.compile(REG_EX, re.MULTILINE)
@@ -141,9 +151,13 @@ def snap(float_1, float_2):
 class Gerber:
     """ The Gerber Format Parser """
 
-    def __init__(self, filename=None):
+    def __init__(self, filename='.'):
+        name, ext = filename.rsplit('.', 1)
+        layer_name = ext.lower() == 'ger' and name or ext
         self.filename = filename
-        self.layer = Layer()
+        self.layer = Layer(layer_name)
+        self.img_buff = Image()
+        self.fill_buff = []
 
         # establish gerber defaults
         self.params = {'AS':AxisDef('x', 'y'),# axis select
@@ -171,7 +185,9 @@ class Gerber:
     def parse(self):
         """ Parse tokens from gerber file into a design. """
         for block in self._tokenize():
-            if isinstance(block, Funct):
+            if isinstance(block, MacroDef):
+                effect = self._build_macro(block)
+            elif isinstance(block, Funct):
                 effect = self._do_funct(block)
             else:
                 effect = self._move(block)
@@ -185,6 +201,88 @@ class Gerber:
 
     # primary parser support methods
 
+    def _build_macro(self, block):
+        """ Build a macro out of component shape defs. """
+        primitives = []
+        for p_def in block.primitive_defs:
+            type_, mods = (p_def[0], [float(i) for i in p_def[1:]])
+            is_additive = type_ in ('moire', 'thermal') or int(mods[0])
+            rotation = type_ in ('circle', 'moire',
+                                 'thermal') and None or float(mods[-1])/180
+            if type_ == 'circle':
+                params = {'x': mods[2],
+                          'y': mods[3],
+                          'radius': mods[1]/2}
+            elif type_ == 'vector':
+                type_ = 'rectangle'
+
+                # If vect is not horizontal, rotate about the
+                # origin until horizontal. Define it as a
+                # normal rectangle, then incorporate rotated
+                # angle into explicit rotation, so it is
+                # appropriately redeemed.
+                start, end = (mods[2:4], mods[4:6])
+                start_radius = sqrt(start[0]**2 + start[1]**2)
+                end_radius = sqrt(end[0]**2 + end[1]**2)
+                if start_radius > end_radius:
+                    end, start = (mods[2:4], mods[4:6])
+                    radius = end_radius
+                else:
+                    radius = start_radius
+                x, y = start
+                adj = end[0] - x
+                opp = end[1] - y
+                hyp = sqrt(adj**2 + opp**2)
+                vect_theta =  acos(adj/hyp)/pi
+                if opp > 0:
+                    vect_theta = 2 - vect_theta
+                d_theta = 2 - vect_theta
+                theta = acos(x/radius)/pi 
+                if y > 0:
+                    theta = 2 - theta
+                theta += d_theta
+                rotated_y = sin((2 - theta) * pi) * radius
+                rotated_x = cos((2 - theta) * pi) * radius
+                rotation = (rotation + theta) % 2
+
+                params = {'x': rotated_x,
+                          'y': rotated_y + (mods[1])/2,
+                          'width': hyp,
+                          'height': mods[1]}
+            elif type_ == 'line':
+                type_ = 'rectangle'
+                params = {'x': mods[3] - (mods[1]/2),
+                          'y': mods[4] + (mods[2]/2),
+                          'width': mods[1],
+                          'height': mods[2]}
+            elif type_ == 'rectangle':
+                params = {'x': mods[3],
+                          'y': mods[4] + mods[2],
+                          'width': mods[1],
+                          'height': mods[2]}
+            elif type_ == 'outline':
+                type_ = 'polygon'
+                params = zip(('x', 'y') * mods[1]/2, mods[2:-1])
+            elif type_ == 'polygon':
+                type_ = 'regular_polygon'
+                params = {'x': mods[2],
+                          'y': mods[3],
+                          'outer': mods[4],
+                          'vertices': mods[1]}
+            elif type_ == 'moire':
+                params = zip(('x', 'y', 'outer', 'ring_thickness',
+                              'gap', 'max_rings', 'hair_thickness',
+                              'hair_length', 'rotation'),
+                             mods[0:9])
+            elif type_ == 'thermal':
+                params = zip(('x', 'y', 'outer', 'inner', 'gap', 'rotation'),
+                             mods[0:6])
+            primitives.append((is_additive, rotation, type_, params))
+        macro = Macro(block.name, primitives)
+        self.layer.shapes.append(macro)
+        return {}
+
+
     def _do_funct(self, block):
         """ Set drawing modes. """
         code = int(block.code)
@@ -192,31 +290,20 @@ class Gerber:
             if code < 10:
                 effect = {'draw':D_MAP[code]}
 
-                # terminate, instantiate fills mid mode
+                # terminate fill mid mode
                 if (self.status['outline_fill'] and
-                    code == 2 and
-                    self.layer.fills[-1]):
-                    self._check_fill(self.layer.fills[-1])
-                    self.layer.fills.append([])
+                    code == 2 and self.fill_buff):
+                    self.img_buff.fills.append(self._check_fill())
 
             else:
                 effect = {'aperture':block.code}
         else:
             effect = G_MAP[code]
-
-            # start a new fill
-            if code == 36:
-                self.layer.fills.append([])
-
-            elif code == 37:
+            if code == 37:
 
                 # terminate fill if D02 was not specified
-                if self.layer.fills[-1]:
-                    self._check_fill(self.layer.fills[-1])
-
-                # tidy up empty trailing fill
-                else:
-                    self.layer.fills.pop()
+                if self.fill_buff:
+                    self.img_buff.fills.append(self._check_fill())
 
         return effect
 
@@ -239,22 +326,22 @@ class Gerber:
 
             # append segment to fill
             if self.status['outline_fill']:
-                self.layer.fills[-1].append(seg)
+                self.fill_buff.append(seg)
 
             # append segment to trace
             else:
                 aperture = self.params[self.status['aperture']]
                 wid = aperture.modifiers[0]
-                tr_ind = self.layer.get_trace(wid, ends)
+                tr_ind = self.img_buff.get_trace(wid, ends)
                 if tr_ind is None:
 
                     # start a new trace
                     trace = Trace(wid, [seg])
-                    self.layer.traces.append(trace)
+                    self.img_buff.traces.append(trace)
                 else:
 
                     # add to existing trace
-                    self.layer.traces[tr_ind].segments.append(seg)
+                    self.img_buff.traces[tr_ind].segments.append(seg)
 
         elif self.status['draw'] == 'FLASH':
             pass #TODO: add some kind of shape to the layer
@@ -356,7 +443,9 @@ class Gerber:
                 typ = match.lastgroup
                 tok = match.group(typ)[:-1]
                 try:
-                    if typ == 'PARAM_DELIM':
+                    if typ == 'MACRO':
+                        yield self._parse_macro(tok)
+                    elif typ == 'PARAM_DELIM':
                         param_block = not param_block
 
                     # params
@@ -383,6 +472,19 @@ class Gerber:
                 pos = match.end()
             match = TOK_RE.match(content, pos)
         self._check_eof(eof=eof)
+        self.layer.images.append(self.img_buff)
+
+
+    # tokenizer support methods - macros
+
+    def _parse_macro(self, tok):
+        """ Define a macro, with its component shapes. """
+        parts = tok.split('*')
+        name = parts[0][3:]
+        prims =  [p.strip().split(',') for p in parts[1:-1]] 
+        prim_defs = tuple([(PRIMITIVES[int(p[0])],) + tuple(p[1:])
+                           for p in prims])
+        return MacroDef(name, prim_defs)
 
 
     # tokenizer support methods - parameters
@@ -423,6 +525,7 @@ class Gerber:
 
     def _extract_ad(self, tok):
         """ Extract aperture definition into tuple. """
+        tok = ',' in tok and tok or tok + ','
         code_end = tok[3] in DIGITS and 4 or 3
         name = tok[1:code_end]
         type_, mods = tok[code_end:].split(',')
@@ -465,7 +568,8 @@ class Gerber:
             tok = tok[3:]
             #TODO: remove assumption that leading 0 is
             #      supplied -- not required by spec
-            yield Funct('G', g_code)
+            if int(g_code) in G_MAP:
+                yield Funct('G', g_code)
         tok, d_code = self._pop_val('D', tok, coerce_=False)
         if d_code:
             yield Funct('D', d_code)
@@ -536,8 +640,9 @@ class Gerber:
         return (tok, val)
 
 
-    def _check_fill(self, fill):
+    def _check_fill(self):
         """ Check that a fill is closed. """
+        fill = self.fill_buff
         if len(fill) >= 2:
             segs = (fill[0], fill[1], fill[-2], fill[-1])
             ends = [isinstance(s, Arc) and list(s.ends()) or [s.p1, s.p2]
@@ -563,6 +668,8 @@ class Gerber:
             start, end = fill[0].ends()
             if not start == end:
                 raise OpenFillBoundary('%s != %s' % (start, end))
+        self.fill_buff = []
+        return fill
 
 
     def _check_mq(self, start_angle, end_angle):

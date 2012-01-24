@@ -22,28 +22,83 @@
 from core.shape import Arc
 
 class Layout:
-    """ The layout class holds the PCB Layout portion of the design to
-    match with the schematics. """
+    """ Represents the design schematic as a PCB Layout. """
 
     def __init__(self):
         self.layers = []
 
 
-class Layer:
-    """ A layer in the layout. """
+    def generate_netlist(self):
+        """ Generate a netlist from the layout. """
+        pass
 
-    def __init__(self):
-        self.id = ''
-        self.type = ''   # Copper or Mask/Silk
-        self.traces = []
+
+class Layer:
+    """ A layer in the layout (ie, a PCB layer). """
+
+    def __init__(self, name=''):
+        self.name = name
+        self.type = '' # copper/mask/silk/drill
+        self.images = []
+        self.shapes = []
         self.vias = []
-        self.fills = []
-        self.voids = []
         self.components = []
 
 
+    def json(self):
+        """ Return the layer as JSON """
+        return {
+            "type": self.type,
+            "images": [i.json() for i in self.images],
+            "shapes": [s.json() for s in self.shapes],
+            "vias": [v.json() for v in self.vias],
+            "components": [c.json() for c in self.components]
+            }
+
+
+class Image:
+    """
+    An image layer (not a PCB layer).
+
+    Image layers can be additive or subtractive. Therefore they
+    must be applied successively to build up a final image
+    representing a single layer of the PCB (ie, a single gerber
+    file).
+
+    Image layers will be applied in the order they appear in the
+    layer[n].images list of the Layout. Subtractive image layers
+    only subtract from previous image layers - not subsequent
+    image layers.
+
+    Example
+    =======
+    For a ground plane that is partly negated to make room for
+    traces, define three image layers in the following order:
+
+        1. the ground plane
+        2. the area(s) to be negated (as a subtractive image)
+        3. the traces to be laid within the negated area(s)
+
+    """
+
+    def __init__(self, is_additive=True):
+        self.is_additive = is_additive
+        self.traces = []
+        self.fills = []
+        self.smears = []
+        self.shape_instances = []
+
+
     def get_trace(self, width, end_pts):
-        """ Is segment connected to an existing trace? """
+        """
+        Get the list index of a connected trace.
+
+        Params:
+            width   - float
+            end_pts - tuple of 2 Points (ie, the endpoints of
+                      the segment we wish to attach)
+
+        """
         start, end = end_pts
         for tr_index in range(len(self.traces)):
             trace = self.traces[tr_index]
@@ -59,21 +114,19 @@ class Layer:
 
 
     def json(self):
-        """ Return the layer as JSON """
+        """ Return the trace as JSON """
         return {
-            "type": self.type,
+            "is_additive": self.is_additive and 'true' or 'false',
             "traces": [t.json() for t in self.traces],
-            "vias": [v.json() for v in self.vias],
-            "fills": [f.json() for f in self.fills],
-            "voids": [v.json() for v in self.voids]
+            "fills": [[s.json() for s in f] for f in self.fills],
+            "shape_instances": [s.json() for s in self.shape_instances]
             }
 
 
 class Trace:
-    """ A collection of connected segments such as lines and arcs. """
+    """ A collection of connected segments (lines/arcs). """
 
     def __init__(self, width, segments=None):
-        self.type = 'trace'
         self.width = width
         self.segments = segments or []
 
@@ -81,7 +134,61 @@ class Trace:
     def json(self):
         """ Return the trace as JSON """
         return {
-            "type": self.type,
             "width": self.width,
             "segments": [s.json() for s in self.segments]
+            }
+
+class Smear:
+    """ Line drawn by any shape other than a tiny circle. """
+
+    def __init__(self, line, shape):
+        self.line = line
+        self.shape = shape
+
+
+    def json(self):
+        """ Return the smear as JSON """
+        return {
+            "line": self.line.json(),
+            "shape": self.shape.json()
+            }
+
+
+class Macro:
+    """
+    Complex shape built from multiple primitives.
+
+    Primitive shapes are added together in the order they
+    appear in the list. Subtractive shapes subtract only
+    from prior shapes, not subsequent shapes.
+
+    """
+    def __init__(self, name, defs):
+        self.name = name
+        self.primitives = [Primitive(*d) for d in defs]
+
+
+    def json(self):
+        return {
+            "name": self.name,
+            "primitives": [p.json() for p in self.primitives]
+            }
+
+
+class Primitive:
+    """ Store shape defs, rotation and exposure modifiers. """
+
+    def __init__(self, is_additive, rotation, shape, params):
+        self.is_additive = is_additive
+        self.rotation = rotation
+        self.shape = shape
+        self.params = params
+
+
+    def json(self):
+        return {
+            "is_additive": self.is_additive and 'true' or 'false',
+            "rotation": self.rotation,
+            "shape": self.shape,
+            "params": list(self.params)
             }
