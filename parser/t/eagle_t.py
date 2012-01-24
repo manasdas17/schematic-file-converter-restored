@@ -135,18 +135,18 @@ class EagleTests(unittest.TestCase):
 # TODO external name
         return
 
-    def test_deviceset_parse(self):
-        """ Test DeviceSet block parsing """
+    def test_devicesetheader_parse(self):
+        """ Test DeviceSetHeader block parsing """
 
 # embedded name
         _valid_chunk = b''.join((b"\x17\x80\x00\x00\x08\x00\x00\x00",
                                  b"\x02\x00\x00\x00\x00\x00\x00\x00",
                                  b"\x64\x69\x6f\x64\x65\x00\x00\x00"))
-        _deviceset = Eagle.DeviceSet.parse(_valid_chunk)
+        _devicesetheader = Eagle.DeviceSetHeader.parse(_valid_chunk)
 
-        self.assertEqual(_deviceset.name, "diode")
-        self.assertEqual(_deviceset.numofblocks, 8)
-        self.assertEqual(_deviceset.numofshapesets, 2)
+        self.assertEqual(_devicesetheader.name, "diode")
+        self.assertEqual(_devicesetheader.numofblocks, 8)
+        self.assertEqual(_devicesetheader.numofshapesets, 2)
 
 # TODO external name
 
@@ -251,6 +251,37 @@ class EagleTests(unittest.TestCase):
 # TODO external name
         return
 
+    def test_deviceset_parse(self):
+        """ Test DeviceSet block parsing """
+
+# embedded names (2 of 3)
+        _valid_chunk = b''.join((b"\x37\x80\x01\x00\x02\x00\x00\x84",
+                                 b"\x44\x00\x00\x00\x00\x7f\xdd\x95",
+                                 b"\x3c\x09\x31\x4e\x35\x33\x33\x33"))
+        _devset = Eagle.DeviceSet.parse(_valid_chunk)
+
+        self.assertEqual(_devset.name, "1N5333")
+        self.assertEqual(_devset.prefix, "D")
+        self.assertEqual(_devset.description, None)
+        self.assertEqual(_devset.uservalue, False)
+        self.assertEqual(_devset.numofshapes, 1)
+        self.assertEqual(_devset.numofconnblocks, 2)
+
+# embedded names (2 of 3)
+        _valid_chunk = b''.join((b"\x37\x00\x01\x00\x02\x00\x01\x85",
+                                 b"\x4A\x50\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x7f\xc1\xd3\xcf\x08\x00"))
+        _devset = Eagle.DeviceSet.parse(_valid_chunk)
+
+        self.assertEqual(_devset.name, None)
+        self.assertEqual(_devset.prefix, "JP")
+        self.assertEqual(_devset.description, "")
+        self.assertEqual(_devset.uservalue, True)
+        self.assertEqual(_devset.numofshapes, 1)
+        self.assertEqual(_devset.numofconnblocks, 2)
+
+        return
+
     def test_bus_parse(self):
         """ Test Bus block parsing """
 
@@ -292,6 +323,30 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_segment.cumulativenumofshapes, 19)
         return
 
+    def test_connectionheader_parse(self):
+        """ Test ConnectionHeader block parsing """
+
+        _valid_chunk = b''.join((b"\x36\x00\x01\x00\x04\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x27\x27\x00\x00\x00"))
+        _connheader = Eagle.ConnectionHeader.parse(_valid_chunk)
+
+        self.assertEqual(_connheader.numofshapes, 1)
+        self.assertEqual(_connheader.sindex, 4)
+        return
+
+    def test_connections_parse(self):
+        """ Test Connections block parsing """
+
+        _valid_chunk = b''.join((b"\x3c\x00\x21\x22\x23\x24\x25\x26",
+                                 b"\x27\x28\x29\x2a\x2b\x2c\x2d\x2e",
+                                 b"\x2f\x30\x00\x00\x00\x00\x00\x00"))
+        _connections = Eagle.Connections.parse(_valid_chunk)
+
+        self.assertEqual(_connections.connections, [33, 34, 35, 36, 37, 38, 
+                            39, 40, 41, 42, 43, 44, 45, 46, 47, 48])
+        return
+
     def test_instance_parse(self):
         """ Test Instance block parsing """
 
@@ -321,6 +376,19 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_wire.y2, 50.8)
         self.assertEqual(_wire.width, 0.1524)
         self.assertEqual(_wire.layer, 91)
+        return
+
+    def test_hole_parse(self):
+        """ Test Hole block parsing """
+
+        _valid_chunk = b''.join((b"\x28\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x90\xb4\x01\x00\x7e\x40\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+        _hole = Eagle.Hole.parse(_valid_chunk)
+
+        self.assertEqual(_hole.x, 0.)
+        self.assertEqual(_hole.y, 11.176)
+        self.assertEqual(_hole.drill, 3.302)
         return
 
     def test_arc_parse(self):
@@ -406,6 +474,24 @@ class EagleTests(unittest.TestCase):
 # TODO external name
         return
 
+    def test_gate_parse(self):
+        """ Test Gate block parsing """
+
+# embedded name
+        _valid_chunk = b''.join((b"\x2d\x00\x00\x00\xd0\x1f\xfc\xff",
+                                 b"\x38\x63\x00\x00\x03\x00\x02\x00",
+                                 b"\x50\x00\x00\x00\x00\x00\x00\x00"))
+        _gate = Eagle.Gate.parse(_valid_chunk)
+
+        self.assertEqual(_gate.name, "P")
+        self.assertEqual(_gate.x, -25.4)
+        self.assertEqual(_gate.y, 2.54)
+        self.assertEqual(_gate.sindex, 2)
+        self.assertEqual(_gate.addlevel, "request")
+
+# TODO external name
+        return
+
     def test_text_parse(self):
         """ Test Text block parsing """
 
@@ -486,6 +572,19 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_attrval.size, 1.524)
         self.assertEqual(_attrval.layer, 96)
         return
+    
+    def test_pinref_parse(self):
+        """ Test PinRef block parsing """
+
+        _valid_chunk = b''.join((b"\x3d\x00\x00\x00\x06\x00\x01\x00",
+                                 b"\x07\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+        _pinref = Eagle.PinRef.parse(_valid_chunk)
+
+        self.assertEqual(_pinref.partno, 6)
+        self.assertEqual(_pinref.gateno, 1)
+        self.assertEqual(_pinref.pinno, 7)
+        return
 
     def test_attribute_parse(self):
         """ Test Attribute block parsing """
@@ -507,6 +606,4 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_attr.name, None)
         self.assertEqual(_attr.value, None)
         return
-
-
 

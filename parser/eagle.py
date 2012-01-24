@@ -390,7 +390,7 @@ class Eagle:
                                     )
             return _ret_val
 
-    class DeviceSet(Web):
+    class DeviceSetHeader(Web):
         """ Not a real "Web" but with a like structure
         """
         constant = 0x17
@@ -403,7 +403,7 @@ class Eagle:
                      shapesets=None):
             """ Just a constructor
             """
-            super(Eagle.DeviceSet, self).__init__(name, numofblocks, 
+            super(Eagle.DeviceSetHeader, self).__init__(name, numofblocks, 
                         numofshapesets, shapesets)
             return
 
@@ -413,13 +413,13 @@ class Eagle:
             """
             _ret_val = None
 
-            _dta = struct.unpack(Eagle.DeviceSet.template, chunk)
+            _dta = struct.unpack(Eagle.DeviceSetHeader.template, chunk)
 
             _name = None
-            if Eagle.DeviceSet.no_embed_str != _dta[7][0]:
+            if Eagle.DeviceSetHeader.no_embed_str != _dta[7][0]:
                 _name = _dta[7].rstrip('\0')
 
-            _ret_val = Eagle.DeviceSet(name=_name,
+            _ret_val = Eagle.DeviceSetHeader(name=_name,
                                        numofblocks=_dta[4],
                                        numofshapesets=_dta[5],
                                       )
@@ -655,6 +655,73 @@ class Eagle:
                                 )
             return _ret_val
 
+    class DeviceSet(NamedShapeSet):
+        """ A struct that represents a deviceset
+        """
+        constant = 0x37
+        template = "=2B2H2B5s5s6s" 
+
+        max_embed_len1 = 5
+        max_embed_len2 = 5
+        max_embed_len3 = 6
+        no_embed_str = b'\x7f'
+
+        nopref_sign_mask = 0x02
+        uservalue_sign_mask = 0x01
+
+        def __init__(self, name, prefix, description, uservalue, # pylint: disable=R0913
+                     numofshapes=0, shapes=None,
+                     numofconnblocks=0, connblocks=None):
+            """ Just a constructor
+            """
+            super(Eagle.DeviceSet, self).__init__(name, numofshapes, shapes)
+            self.prefix = prefix
+            self.description = description
+            self.uservalue = uservalue
+
+            self.numofconnblocks = numofconnblocks
+            if None == connblocks:
+                connblocks = []
+            self.connblocks = connblocks
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses deviceset
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.DeviceSet.template, chunk)
+
+            _prefix = None
+            if Eagle.DeviceSet.no_embed_str != _dta[6][0]:
+                _prefix = _dta[6].rstrip('\0')
+
+            _desc = None
+            if Eagle.DeviceSet.no_embed_str != _dta[7][0]:
+                _desc = _dta[7].rstrip('\0')
+
+            _name = None
+            if Eagle.DeviceSet.no_embed_str != _dta[8][0]:
+                _name = _dta[8].rstrip('\0')
+
+# numofshapes excludes connections-related info
+# their num is numofconnblocks
+            _ret_val = Eagle.DeviceSet(name=_name,
+                                       prefix=_prefix,
+                                       description=_desc,
+#                                 prefpresence = 
+#                                    False if _dta[4] & Eagle.DeviceSet.nopref_sign_mask 
+#                                            else True,
+                                        uservalue = 
+                                           True if _dta[4] & 
+                                                    Eagle.DeviceSet.uservalue_sign_mask
+                                                else False,
+                                        numofshapes=_dta[2],
+                                        numofconnblocks=_dta[3],
+                                       )
+            return _ret_val
+
     class Bus(NamedShapeSet):
         """ A struct that represents a bus
         """
@@ -758,6 +825,63 @@ class Eagle:
             _ret_val = Eagle.Segment(numofshapes=_dta[2],
                                      cumulativenumofshapes=_dta[5], # TODO recheck
                                     )
+            return _ret_val
+
+    class ConnectionHeader(ShapeSet):
+        """ A struct that represents a header for 'connections' blocks
+        """
+        constant = 0x36
+        template = "=2BHI11s5s"
+
+        constantmid = "''"
+
+        def __init__(self, sindex, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.ConnectionHeader, self).__init__(numofshapes, shapes)
+            self.sindex = sindex
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses header for 'connections' blocks
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.ConnectionHeader.template, chunk)
+
+            _ret_val = Eagle.ConnectionHeader(numofshapes=_dta[2],
+                                              sindex=_dta[3],
+                                             )
+            return _ret_val
+
+    class Connections:
+        """ A struct that represents a set of connection indexes
+        """
+        constant = 0x3c
+        template = "=2B22B"
+
+        connset_len = 22
+
+        def __init__(self, connections=None):
+            """ Just a constructor
+            """
+            if None == connections:
+                connections = []
+            self.connections = connections
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses connection indexes set
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Connections.template, chunk)
+
+            _ret_val = Eagle.Connections(connections=[x for x in _dta[2:] 
+                                                                if 0 != x],
+                                        )
             return _ret_val
 
     class Shape(object):
@@ -991,6 +1115,38 @@ class Eagle:
                                         )
             return _ret_val
 
+    class Hole(Shape):
+        """ A struct that represents a hole
+            (no layer is available for hole ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x28
+        template = "=4B5I"
+
+        def __init__(self, x, y, drill):
+            """ Just a constructor
+            """
+            super(Eagle.Hole, self).__init__(-1)
+            self.x = x
+            self.y = y
+            self.drill = drill
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses junction
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Hole.template, chunk)
+
+            _ret_val = Eagle.Hole(x=Eagle.Shape.decode_real(_dta[4]),
+                                  y=Eagle.Shape.decode_real(_dta[5]),
+                                  drill=(Eagle.Hole.width_xscale *
+                                      Eagle.Shape.decode_real(_dta[6])),
+                                 )
+            return _ret_val
+
     class Arc(Wire):
         """ A struct that represents an arc
         """
@@ -1122,6 +1278,54 @@ class Eagle:
                                  x=Eagle.Shape.decode_real(_dta[4]),
                                  y=Eagle.Shape.decode_real(_dta[5]),
                                 )
+            return _ret_val
+
+    class Gate(Shape):
+        """ A struct that represents a gate
+            (no layer is available for gate ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x2d
+        template = "=4B2i2BH8s"
+
+        addlevels = {
+                     0x00: "must",
+                     0x02: None,
+                     0x03: "request",
+                    }
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, x, y, name, sindex, addlevel): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.Gate, self).__init__(-1)
+            self.x = x
+            self.y = y
+            self.name = name
+            self.sindex = sindex
+            self.addlevel = addlevel
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses junction
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Gate.template, chunk)
+
+            _name = None
+            if Eagle.Gate.no_embed_str != _dta[9][0]:
+                _name = _dta[9].rstrip('\0')
+
+            _ret_val = Eagle.Gate(x=Eagle.Shape.decode_real(_dta[4]),
+                                  y=Eagle.Shape.decode_real(_dta[5]),
+                                  name=_name,
+                                  sindex=_dta[8],
+                                  addlevel=Eagle.Gate.addlevels[_dta[6]],
+                                 )
             return _ret_val
 
     class Text(Shape):
@@ -1297,6 +1501,37 @@ class Eagle:
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
                                          )
+            return _ret_val
+
+    class PinRef(Shape):
+        """ A struct that represents a pinref
+            (no layer is available for pinref ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x3d
+        template = "=4B3H14s"
+
+        def __init__(self, partno, gateno, pinno):
+            """ Just a constructor
+            """
+            super(Eagle.PinRef, self).__init__(-1)
+            self.partno = partno
+            self.gateno = gateno
+            self.pinno = pinno
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses attribute-name
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.PinRef.template, chunk)
+
+            _ret_val = Eagle.PinRef(partno=_dta[4],
+                                    gateno=_dta[5],
+                                    pinno=_dta[6],
+                                   )
             return _ret_val
 
     class Attribute:
@@ -1515,6 +1750,7 @@ class Eagle:
         _cur_lib = None
         _cur_web = None # consists of one or more shapesets/segments
         _cur_segment = None # consists of one or more shapes
+        _cur_connset = None # consists of one or more shapes (deviceset shows two types)
 
 # loop through 24 byte long blocks
         for _nn in range(numofblocks):
@@ -1532,8 +1768,8 @@ class Eagle:
             elif Eagle.Library.constant == _type:
                 _cur_lib = self.Library.parse(_dta)
                 self.libraries.append(_cur_lib)
-            elif Eagle.DeviceSet.constant == _type:
-                _cur_web = self.DeviceSet.parse(_dta)
+            elif Eagle.DeviceSetHeader.constant == _type:
+                _cur_web = self.DeviceSetHeader.parse(_dta)
                 _cur_lib.devsets.append(_cur_web)
             elif Eagle.SymbolHeader.constant == _type:
                 _cur_web = self.SymbolHeader.parse(_dta)
@@ -1558,18 +1794,32 @@ class Eagle:
             elif Eagle.Segment.constant == _type:
                 _cur_segment = self.Segment.parse(_dta)
                 _cur_web.shapes.append(_cur_segment)
+            elif Eagle.DeviceSet.constant == _type:
+                _cur_segment = self.DeviceSet.parse(_dta)
+                _cur_web.shapesets.append(_cur_segment)
+            elif Eagle.ConnectionHeader.constant == _type:
+                _cur_connset = self.ConnectionHeader.parse(_dta)
+                _cur_segment.connblocks.append(_cur_connset)
             elif Eagle.Part.constant == _type:
                 _cur_web = self.Part.parse(_dta)
                 self.parts.append(_cur_web)
             elif Eagle.Instance.constant == _type:
                 _cur_segment = self.Instance.parse(_dta)
                 _cur_web.shapes.append(_cur_web)
+            elif Eagle.Connections.constant == _type:
+                _cur_connset.shapes.append(self.Connections.parse(_dta))
+            elif Eagle.Gate.constant == _type:
+                _cur_segment.shapes.append(self.Gate.parse(_dta))
             elif Eagle.Circle.constant == _type:
                 _cur_segment.shapes.append(self.Circle.parse(_dta))
             elif Eagle.Rectangle.constant == _type:
                 _cur_segment.shapes.append(self.Rectangle.parse(_dta))
             elif Eagle.Wire.constant == _type:
                 _cur_segment.shapes.append(self.Wire.parse(_dta))
+            elif Eagle.Hole.constant == _type:
+                _cur_segment.shapes.append(self.Hole.parse(_dta))
+            elif Eagle.PinRef.constant == _type:
+                _cur_segment.shapes.append(self.PinRef.parse(_dta))
             elif Eagle.Junction.constant == _type:
                 _cur_segment.shapes.append(self.Junction.parse(_dta))
             elif Eagle.Pad.constant == _type:

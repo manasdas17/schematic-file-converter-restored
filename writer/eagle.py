@@ -227,7 +227,7 @@ class Eagle: # pylint: disable=R0902
                 _vis_act_link += self.linkedsignmask
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -303,7 +303,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _schematic = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.schematic):
+            if self.max_embed_len >= len(self.schematic):
                 _schematic = self.schematic
 
             _ret_val = struct.pack(self.template,
@@ -354,7 +354,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -366,7 +366,7 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
-    class DeviceSet(Web):
+    class DeviceSetHeader(Web):
         """ Not a real "Web" but with a like structure
         """
         constant = 0x17
@@ -379,7 +379,7 @@ class Eagle: # pylint: disable=R0902
                      shapesets=None):
             """ Just a constructor
             """
-            super(Eagle.DeviceSet, self).__init__(name, numofblocks, 
+            super(Eagle.DeviceSetHeader, self).__init__(name, numofblocks, 
                         numofshapesets, shapesets)
             return
 
@@ -389,7 +389,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -424,7 +424,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -459,7 +459,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -492,7 +492,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -526,10 +526,10 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_nlen > len(self.name):
+            if self.max_embed_nlen >= len(self.name):
                 _name = self.name
             _desc = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_dlen > len(self.desc):
+            if self.max_embed_dlen >= len(self.desc):
                 _desc = self.desc
 
             _ret_val = struct.pack(self.template,
@@ -566,7 +566,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -606,11 +606,11 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len1 > len(self.name):
+            if self.max_embed_len1 >= len(self.name):
                 _name = self.name
 
             _value = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len2 > len(self.value):
+            if self.max_embed_len2 >= len(self.value):
                 _value = self.value
 
             _ret_val = struct.pack(self.template,
@@ -623,6 +623,70 @@ class Eagle: # pylint: disable=R0902
                                             0 != len(self.value) else 0,
                                    _name,
                                    _value,
+                                  )
+            return _ret_val
+
+    class DeviceSet(NamedShapeSet):
+        """ A struct that represents a deviceset
+        """
+        constant = 0x37
+        template = "=2B2H2B5s5s6s" 
+
+        max_embed_len1 = 5
+        max_embed_len2 = 5
+        max_embed_len3 = 6
+        no_embed_str = b'\x7f'
+
+        nopref_sign_mask = 0x02
+        uservalue_sign_mask = 0x01
+
+        def __init__(self, name, prefix, description, uservalue, # pylint: disable=R0913
+                     numofshapes=0, shapes=None,
+                     numofconnblocks=0, connblocks=None):
+            """ Just a constructor
+            """
+            super(Eagle.DeviceSet, self).__init__(name, numofshapes, shapes)
+            self.prefix = prefix
+            self.description = description
+            self.uservalue = uservalue
+
+            self.numofconnblocks = numofconnblocks
+            if None == connblocks:
+                connblocks = []
+            self.connblocks = connblocks
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _signs = 0
+            if '' == self.prefix:
+                _signs += self.nopref_sign_mask
+            if self.uservalue:
+                _signs += self.uservalue_sign_mask
+
+            _prefix = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len1 >= len(self.prefix):
+                _prefix = self.prefix
+
+            _desc = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len2 >= len(self.description):
+                _desc = self.description
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len3 >= len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0,
+                                   self.numofshapes,
+                                   self.numofconnblocks,
+                                   _signs, 0,
+                                   _prefix,
+                                   _desc,
+                                   _name,
                                   )
             return _ret_val
 
@@ -647,7 +711,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -727,6 +791,65 @@ class Eagle: # pylint: disable=R0902
                                    0,
                                    0, self.cumulativenumofshapes, 0, 0, # TODO recheck
                                    0, 0, 0
+                                  )
+            return _ret_val
+
+    class ConnectionHeader(ShapeSet):
+        """ A struct that represents a header for 'connections' blocks
+        """
+        constant = 0x36
+        template = "=2BHI11s5s"
+
+        constantmid = "''"
+
+        def __init__(self, sindex, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.ConnectionHeader, self).__init__(numofshapes, shapes)
+            self.sindex = sindex
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 
+                                   self.numofshapes,
+                                   self.sindex,
+                                   '',
+                                   self.constantmid,
+                                  )
+            return _ret_val
+
+    class Connections:
+        """ A struct that represents a set of connection indexes
+        """
+        constant = 0x3c
+        template = "=2B22B"
+
+        connset_len = 22
+
+        def __init__(self, connections=None):
+            """ Just a constructor
+            """
+            if None == connections:
+                connections = []
+            self.connections = connections
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _indexes = self.connections + [0,] * (self.connset_len - 
+                                            len(self.connections))
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 
+                                   *_indexes
                                   )
             return _ret_val
 
@@ -967,6 +1090,38 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class Hole(Shape):
+        """ A struct that represents a hole
+            (no layer is available for hole ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x28
+        template = "=4B5I"
+
+        def __init__(self, x, y, drill):
+            """ Just a constructor
+            """
+            super(Eagle.Hole, self).__init__(-1)
+            self.x = x
+            self.y = y
+            self.drill = drill
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   Eagle.Shape.encode_real(self.x),
+                                   Eagle.Shape.encode_real(self.y),
+                                   Eagle.Shape.encode_real(
+                                       self.drill / self.width_xscale),
+                                   0, 0
+                                  )
+            return _ret_val
+
     class Arc(Wire):
         """ A struct that represents an arc
         """
@@ -1050,7 +1205,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -1090,7 +1245,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len > len(self.name):
+            if self.max_embed_len >= len(self.name):
                 _name = self.name
 
             _ret_val = struct.pack(self.template,
@@ -1098,6 +1253,59 @@ class Eagle: # pylint: disable=R0902
                                    self.encode_real(self.x),
                                    self.encode_real(self.y),
                                    0, 0, 
+                                   _name,
+                                  )
+            return _ret_val
+
+    class Gate(Shape):
+        """ A struct that represents a gate
+            (no layer is available for gate ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x2d
+        template = "=4B2i2BH8s"
+
+        addlevels = {
+                     0x00: "must",
+                     0x02: None,
+                     0x03: "request",
+                    }
+
+        max_embed_len = 8
+        no_embed_str = b'\x7f'
+
+        def __init__(self, x, y, name, sindex, addlevel): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.Gate, self).__init__(-1)
+            self.x = x
+            self.y = y
+            self.name = name
+            self.sindex = sindex
+            self.addlevel = addlevel
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _addlevel = 0
+            for _ll in self.addlevels:
+                if self.addlevels[_ll] == self.addlevel:
+                    _addlevel = _ll
+                    break
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len >= len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   self.encode_real(self.x),
+                                   self.encode_real(self.y),
+                                   _addlevel, 0, 
+                                   self.sindex,
                                    _name,
                                   )
             return _ret_val
@@ -1272,6 +1480,37 @@ class Eagle: # pylint: disable=R0902
             super(Eagle.AttributeVal, self).__init__(x, y, size, layer, name)
             return
 
+    class PinRef(Shape):
+        """ A struct that represents a pinref
+            (no layer is available for pinref ; base Shape class
+            is used both for uniformity and convertors)
+        """
+        constant = 0x3d
+        template = "=4B3H14s"
+
+        def __init__(self, partno, gateno, pinno):
+            """ Just a constructor
+            """
+            super(Eagle.PinRef, self).__init__(-1)
+            self.partno = partno
+            self.gateno = gateno
+            self.pinno = pinno
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, 0,
+                                   self.partno,
+                                   self.gateno,
+                                   self.pinno,
+                                   '',
+                                  )
+            return _ret_val
+
     class Attribute:
         """ A struct that represents an attribute
         """
@@ -1302,7 +1541,7 @@ class Eagle: # pylint: disable=R0902
 
             _str = self._construct()
 
-            if self.max_embed_len > len(_str):
+            if self.max_embed_len >= len(_str):
                 _str2 = _str
             else:
                 _str2 = self.no_embed_str + b'\0\0\0\x09'

@@ -152,14 +152,14 @@ class EagleTests(unittest.TestCase):
 # TODO external text
         return
 
-    def test_deviceset_construct(self):
-        """ Test DeviceSet block creation """
+    def test_devicesetheader_construct(self):
+        """ Test DeviceSetHeader block creation """
 
 # embedded text
-        _deviceset = Eagle.DeviceSet(name="diode",
-                                     numofblocks=8,
-                                     numofshapesets=2,
-                                    )
+        _deviceset = Eagle.DeviceSetHeader(name="diode",
+                                           numofblocks=8,
+                                           numofshapesets=2,
+                                          )
 
         _chunk = _deviceset.construct()
 
@@ -294,6 +294,46 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
 
+    def test_deviceset_construct(self):
+        """ Test DeviceSet block creation """
+
+# embedded names (2 of 3)
+        _devset = Eagle.DeviceSet(name="1N5333",
+                                  prefix="D",
+                                  description="some long long long description",
+                                  uservalue=False,
+                                  numofshapes=1,
+                                  numofconnblocks=2,
+                                 )
+
+        _chunk = _devset.construct()
+
+        _valid_chunk = b''.join((b"\x37\x00\x01\x00\x02\x00\x00\x00",
+                                 b"\x44\x00\x00\x00\x00\x7f\x00\x00",
+                                 b"\x00\x09\x31\x4e\x35\x33\x33\x33"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+# embedded names (2 of 3)
+        _devset = Eagle.DeviceSet(name="some long long long name",
+                                  prefix="JP",
+                                  description="",
+                                  uservalue=True,
+                                  numofshapes=1,
+                                  numofconnblocks=2,
+                                 )
+
+        _chunk = _devset.construct()
+
+        _valid_chunk = b''.join((b"\x37\x00\x01\x00\x02\x00\x01\x00",
+                                 b"\x4A\x50\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x7f\x00\x00\x00\x09\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+        return
+
     def test_bus_construct(self):
         """ Test Bus block creation """
 
@@ -347,6 +387,40 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
 
+    def test_connectionheader_construct(self):
+        """ Test ConnectionHeader block creation """
+
+        _connheader = Eagle.ConnectionHeader(numofshapes=1,
+                                             sindex=4,
+                                            )
+
+        _chunk = _connheader.construct()
+
+        _valid_chunk = b''.join((b"\x36\x00\x01\x00\x04\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x27\x27\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_connections_construct(self):
+        """ Test Connections block creation """
+
+        _connections = Eagle.Connections(connections = [33, 34, 35, 36, 37, 38, 
+                                        39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
+                                        )
+
+        _chunk = _connections.construct()
+
+        _valid_chunk = b''.join((b"\x3c\x00\x21\x22\x23\x24\x25\x26",
+                                 b"\x27\x28\x29\x2a\x2b\x2c\x2d\x2e",
+                                 b"\x2f\x30\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
     def test_instance_construct(self):
         """ Test Instance block creation """
 
@@ -383,6 +457,24 @@ class EagleTests(unittest.TestCase):
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xd8\x09\x05\x00",
                                  b"\x40\x4d\x09\x00\xd8\x09\x05\x00",
                                  b"\x60\xc0\x07\x00\xfa\x02\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_hole_construct(self):
+        """ Test Hole block creation """
+
+        _hole = Eagle.Hole(x=0.,
+                           y=11.176,
+                           drill=3.302,
+                          )
+
+        _chunk = _hole.construct()
+
+        _valid_chunk = b''.join((b"\x28\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x90\xb4\x01\x00\x7e\x40\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
@@ -490,6 +582,26 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
 
+    def test_gate_construct(self):
+        """ Test Gate block creation """
+
+        _gate = Eagle.Gate(name="P",
+                           x=-25.4,
+                           y=2.54,
+                           sindex=2,
+                           addlevel="request",
+                          )
+
+        _chunk = _gate.construct()
+
+        _valid_chunk = b''.join((b"\x2d\x00\x00\x00\xd0\x1f\xfc\xff",
+                                 b"\x38\x63\x00\x00\x03\x00\x02\x00",
+                                 b"\x50\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
     def test_text_construct(self):
         """ Test Text block creation """
 
@@ -590,6 +702,24 @@ class EagleTests(unittest.TestCase):
 
         _valid_chunk = b''.join((b"\x35\x00\x00\x60\x3a\x9f\x21\x00",
                                  b"\xbe\x8d\x09\x00\xc4\x1d\x00\x00",
+                                 b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_pinref_construct(self):
+        """ Test PinRef block creation """
+
+        _pinref = Eagle.PinRef(partno=6,
+                               gateno=1,
+                               pinno=7,
+                              )
+
+        _chunk = _pinref.construct()
+
+        _valid_chunk = b''.join((b"\x3d\x00\x00\x00\x06\x00\x01\x00",
+                                 b"\x07\x00\x00\x00\x00\x00\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
