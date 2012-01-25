@@ -1,8 +1,9 @@
 import unittest
 from inspect import getargspec
-from parser.viewdraw import FileStack, ViewDrawBase
+from parser.viewdraw import FileStack, ViewDrawBase, ViewDrawSym
 
 from core.annotation import Annotation
+from core.shape import Label
 from math import sin, cos, pi
 
 real_fs_init  = FileStack.__init__
@@ -225,6 +226,88 @@ class ViewDrawBaseTests(unittest.TestCase):
             self.assertLess(abs(reflang(v.start_angle) - (ang[0])), 0.01)
             self.assertLess(abs(reflang(v.end_angle) - (ang[2])), 0.01)
 
-#class ViewDrawSymTests(unittest.TestCase):
-#
-#    def setUp(self):
+class ViewDrawSymTests(unittest.TestCase):
+
+    def setUp(self):
+        stub_file_stack()
+        self.sym = ViewDrawSym('library/', 'file.1')
+        self.sym.stream = FileStack(self.sym.filename)
+
+    def tearDown(self):
+        unstub_file_stack()
+        del self.sym
+
+    def test_parser_dispatch(self):
+        valid_cmds = 'Y U P L'.split()
+        for cmd in valid_cmds:
+            parser  = self.sym.parsenode(cmd)
+            # make sure it only needs two argument (self, args)
+            self.assertEqual(len(getargspec(parser)[0]), 2)
+        # currently not testing invalid commands, their behaviour can be
+        # considered 'undefined'
+
+    def test_sym_type(self):
+        for i, txt in enumerate(['composite', 'module', 'annotate', 'pin',
+                               'power', 'unknown']):
+            k,v = self.sym.parse_type(str(i))
+            self.assertEqual(k, 'attr')
+            self.assertEqual(v, ('symtype', txt))
+
+    def test_attr_key_val(self):
+        k,v = self.sym.parse_attr('0 1 2 3 4 5 KEY=VAL')
+        self.assertEqual(k, 'attr')
+        self.assertEqual(v, ('KEY', 'VAL'))
+
+    def test_attr_just_key(self):
+        k,v = self.sym.parse_attr('0 1 2 3 4 5 KEY')
+        self.assertEqual(k, 'attr')
+        self.assertEqual(v, ('KEY', ''))
+
+    def subtest_pin(self):
+        k,v = self.sym.parse_pin('13 2 4 3 5 0 0 0')
+        self.assertEqual(k, 'pin')
+        self.assertEqual((v.p1.x, v.p1.y), (3, 5))
+        self.assertEqual((v.p2.x, v.p2.y), (2, 4))
+        self.assertEqual(v.pin_number, 13)
+        return(v)
+
+    def test_pin(self):
+        v = self.subtest_pin()
+        self.assertIsNone(v.label)
+
+    def test_pin_with_label(self):
+        self.sym.stream.f = iter(['L testlabel'])
+        # create a fake label parser
+        # NOTE not sure if this test is too coupled to internal
+        # state/architecture. Fix it if there's a better way
+        def fake_label(args):
+            return ('label', Label(1, 2, args, 'left', 0))
+
+        p = self.sym.parsenode
+        def parsenode_shim(cmd):
+            if cmd is 'L':
+                return fake_label
+            return p(cmd)
+        self.sym.parsenode = parsenode_shim
+
+        label = self.subtest_pin().label
+        self.assertEqual(label.type, 'label')
+        self.assertEqual((label.x, label.y), (1, 2))
+        self.assertEqual(label.text, 'testlabel')
+        self.assertEqual(label.align, 'left')
+        self.assertEqual(label.rotation, 0)
+
+    def test_label(self):
+        k,v = self.sym.parse_label('2 3 12 0 1 1 1 0 foobar')
+        # values of 1 aren't used by parser
+        self.assertEqual(k, 'label')
+        self.assertEqual(v.type, 'label')
+        self.assertEqual((v.x, v.y), (2, 3))
+        self.assertEqual(v.text, 'foobar')
+        self.assertEqual(v.align, 'left')
+        self.assertEqual(v.rotation, 0)
+
+    def test_label_inverted(self):
+        k,v = self.sym.parse_label('2 3 12 0 1 1 1 1 foobar')
+        # everything else already tested in test_label()
+        self.assertEqual(v.text, '/foobar')
