@@ -38,8 +38,8 @@ from collections import defaultdict
 
 
 class ViewDrawBase:
-    '''The base class for the parsers. Includes parsing code for commands that are
-    shared between the different files'''
+    '''The base class for the parsers. Includes parsing code for commands that
+    are shared between the different files'''
 
     sheetsizes = ('ASIZE', 'BSIZE', 'CSIZE', 'DSIZE', 'ESIZE', 'A4', 'A3',
                   'A2', 'A1', 'A0', 'CUSTOM')
@@ -192,9 +192,9 @@ class ViewDrawBase:
 
         def angle(x, y):
             """ Returns a corrected angle. """
-            # correcting for the y-origin will flip the angle through the y=x
-            # line, so theta=0 is high noon, angle increases CW now, after
-            # correct_y theta=0 is 3 o'clock and angle increases CCW.
+            # as parsed, the angle increases CCW. Here, we return an angle
+            # increasing CW, as correct_y will put us in a coordinate system
+            # with the origin at the top-left.
             opp = y - yc
             adj = x - xc
             if abs(adj) < 0.01:
@@ -212,7 +212,7 @@ class ViewDrawBase:
             return ang
 
         return ('shape', Arc(int(round(xc)), int(round(yc)),
-                             angle(x0,y0), angle(x2,y2),
+                             angle(x0,y0) / pi, angle(x2,y2) / pi,
                              int(round(r))))
 
 
