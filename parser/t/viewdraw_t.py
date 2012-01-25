@@ -5,28 +5,36 @@ from parser.viewdraw import FileStack, ViewDrawBase
 from core.annotation import Annotation
 from math import sin, cos, pi
 
+real_fs_init  = FileStack.__init__
+
+def stub_file_stack():
+    """ stub in a constructor that doesn't depend on the filesystem """
+    def fake_init(self, filename):
+        self.f = iter([])
+        self.fstack = []
+        self.line = 0
+    FileStack.__init__ = fake_init
+
+def unstub_file_stack():
+    """ return to the proper FileStack constructor. """
+    FileStack.__init__ = real_fs_init
+
+    
 class FileStackTests(unittest.TestCase):
 
     def setUp(self):
-        """stub in a constructor that doesn't depend on filesystem"""
-        def fake_init(self, filename):
-            self.f = iter([filename + '\n', 'foo\n', 'bar\n', 'baz\n'])
-            self.fstack = []
-            self.line = 0
-
-        self.real_init = FileStack.__init__
-        FileStack.__init__ = fake_init
+        stub_file_stack()
         self.fs = FileStack('test')
 
 
     def tearDown(self):
-        """undo the FileStack.__init__ hack"""
-        FileStack.__init__ = self.real_init
+        unstub_file_stack()
         del self.fs
 
 
     def test_subpop(self):
         """Ensure subpop() can iterate through the simplest case"""
+        self.fs.f = iter(['test\n', 'foo\n', 'bar\n', 'baz\n'])
         for i, line in enumerate(['test', 'foo', 'bar', 'baz']):
             self.assertEqual(self.fs.line, i)
             self.assertEqual(self.fs.subpop(), line + '\n')
@@ -62,18 +70,12 @@ class FileStackTests(unittest.TestCase):
 class ViewDrawBaseTests(unittest.TestCase):
     
     def setUp(self):
-        def fake_init(self, filename):
-            self.f = iter([])
-            self.fstack = []
-            self.line = 0
-
-        self.real_init = FileStack.__init__
-        FileStack.__init__ = fake_init
+        stub_file_stack()
         self.base = ViewDrawBase('foo')
         self.base.stream = FileStack('bar')
 
     def tearDown(self):
-        FileStack.__init__ = self.real_init
+        unstub_file_stack()
         del self.base
 
     def test_base_init(self):
@@ -222,3 +224,7 @@ class ViewDrawBaseTests(unittest.TestCase):
             self.assertLessEqual(abs(v.radius - radius), 1)
             self.assertLess(abs(reflang(v.start_angle) - (ang[0])), 0.01)
             self.assertLess(abs(reflang(v.end_angle) - (ang[2])), 0.01)
+
+#class ViewDrawSymTests(unittest.TestCase):
+#
+#    def setUp(self):
