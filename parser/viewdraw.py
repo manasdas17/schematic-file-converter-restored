@@ -122,12 +122,12 @@ class ViewDrawBase:
         return ('annot', Annotation(text, int(x), int(y), 0, True))
 
     def parse_rev(self, args):
-        """ Returns a parsed revision. """
+        """ Returns the file revision date, parsed into an annotation. """
         # File revision date. Gahh, ugly.
         return ('annot', Annotation('rev=' + args, 0, 0, 0, False))
 
     def parse_size(self, args):
-        """ Returns a parsed size. """
+        """ Returns the sheet size. """
         size = int(args.split()[0])
         return ('sheetsize', (size < len(self.sheetsizes) and
                               self.sheetsizes[size] or 'unknown'))
@@ -143,13 +143,13 @@ class ViewDrawBase:
         return ('shape', Rectangle.from_corners(x1, y1, x2, y2))
 
     def parse_text(self, args):
-        """ Returns a parsed text. """
+        """ Parses a text label and returns as a Shape.Label. """
         x, y, size, rot, anchor, text = args.split(' ', 5)
         # TODO sort out rotation, alignment
         return ('shape', Label(int(x), int(y), text, 'left', 0))
 
     def parse_ver(self, args):
-        """ Returns a parsed version. """
+        """ Returns the ViewDraw output file format version. """
         # Viewdraw file version. So far have only dealt with 50, 51.
         return ('fileversion', args)
 
@@ -191,7 +191,7 @@ class ViewDrawBase:
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
 
         def angle(x, y):
-            """ Returns a corrected angle. """
+            """ Calculate the angle from the center of the arc to (x, y). """
             # as parsed, the angle increases CCW. Here, we return an angle
             # increasing CW, as correct_y will put us in a coordinate system
             # with the origin at the top-left.
