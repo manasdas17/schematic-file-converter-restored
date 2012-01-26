@@ -40,7 +40,8 @@ class Layer:
         self.name = name
         self.type = '' # copper/mask/silk/drill
         self.images = []
-        self.shapes = []
+        self.shapes = {}
+        self.macros = {}
         self.vias = []
         self.components = []
 
@@ -50,7 +51,8 @@ class Layer:
         return {
             "type": self.type,
             "images": [i.json() for i in self.images],
-            "shapes": [s.json() for s in self.shapes],
+            "shapes": [self.shapes[k].json() for k in self.shapes],
+            "macros": [self.macros[m].json() for m in self.macros],
             "vias": [v.json() for v in self.vias],
             "components": [c.json() for c in self.components]
             }
@@ -81,12 +83,23 @@ class Image:
 
     """
 
-    def __init__(self, is_additive=True):
+    def __init__(self, name='Untitled Image', is_additive=True):
+        self.name = name
         self.is_additive = is_additive
+        self.x_repeats = 1
+        self.x_step = None
+        self.y_repeats = 1
+        self.y_step = None
         self.traces = []
         self.fills = []
         self.smears = []
         self.shape_instances = []
+
+
+    def not_empty(self):
+        """ True if image contains only metadata. """
+        return (self.traces or self.fills or self.smears or
+                self.shape_instances) and True or False
 
 
     def get_trace(self, width, end_pts):
@@ -114,12 +127,17 @@ class Image:
 
 
     def json(self):
-        """ Return the trace as JSON """
+        """ Return the image as JSON """
         return {
+            "name": self.name,
             "is_additive": self.is_additive and 'true' or 'false',
+            "x_repeats": self.x_repeats,
+            "x_step": self.x_step,
+            "y_repeats": self.y_repeats,
+            "y_step": self.y_step,
             "traces": [t.json() for t in self.traces],
             "fills": [[s.json() for s in f] for f in self.fills],
-            "shape_instances": [s.json() for s in self.shape_instances]
+            "shape_instances": self.shape_instances
             }
 
 
@@ -163,32 +181,33 @@ class Macro:
     from prior shapes, not subsequent shapes.
 
     """
-    def __init__(self, name, defs):
+    def __init__(self, name, prim_defs):
         self.name = name
-        self.primitives = [Primitive(*d) for d in defs]
+        self.primitives = [Primitive(d[0], d[1], d[2])
+                           for d in prim_defs]
 
 
     def json(self):
+        """ Return the macro as JSON """
         return {
             "name": self.name,
-            "primitives": [p.json() for p in self.primitives]
+            "primitives": [prim.json() for prim in self.primitives]
             }
 
 
 class Primitive:
-    """ Store shape defs, rotation and exposure modifiers. """
+    """ A shape with rotation and exposure modifiers. """
 
-    def __init__(self, is_additive, rotation, shape, params):
+    def __init__(self, is_additive, rotation, shape):
         self.is_additive = is_additive
         self.rotation = rotation
         self.shape = shape
-        self.params = params
 
 
     def json(self):
+        """ Return the primitive as JSON """
         return {
             "is_additive": self.is_additive and 'true' or 'false',
             "rotation": self.rotation,
-            "shape": self.shape,
-            "params": list(self.params)
+            "shape": self.shape.json()
             }

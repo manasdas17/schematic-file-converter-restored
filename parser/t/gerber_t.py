@@ -101,8 +101,8 @@ class GerberTests(unittest.TestCase):
     @use_file('complex.ger')
     def test_complex(self):
         """ Parse aperture macros - gerber. """
-        images = self.design.layouts[0].layers[0].images
-        assert len(images[0].shape_instances) == 2
+        image = self.design.layouts[0].layers[0].images[2]
+        assert len(image.shape_instances) == 3
 
 
     # tests that pass if they raise expected errors

@@ -20,12 +20,13 @@
 # limitations under the License.
 
 import re
-from math import sqrt, acos, pi
+from math import sqrt, sin, cos, acos, pi
 from collections import namedtuple
 
 from core.design import Design
 from core.layout import Layout, Layer, Image, Macro, Trace
-from core.shape import Line, Arc, Point
+from core.shape import Line, Arc, Point, Circle, Rectangle, Obround, \
+                       Polygon, RegularPolygon, Moire, Thermal
 
 
 # exceptions
@@ -86,7 +87,6 @@ class ImpossibleGeometry(Unparsable):
 # token classes
 
 MacroDef = namedtuple('MacroDef', 'name primitive_defs')            # pylint: disable=C0103
-Aperture = namedtuple('Aperture', 'code type_ modifiers')           # pylint: disable=C0103
 Coord = namedtuple('Coord', 'x y i j')                              # pylint: disable=C0103
 CoordFmt = namedtuple('CoordFmt', 'int dec')                        # pylint: disable=C0103
 AxisDef = namedtuple('AxisDef', 'a b')                              # pylint: disable=C0103
@@ -120,10 +120,13 @@ G_MAP = {1:{'interpolation':'LINEAR'},
          75:{'multi_quadrant':True},
          90:{'incremental':True},
          91:{'incremental':False}}
+IMAGE_POLARITIES = {'C': False,
+                    'D': True}
 AXIS_PARAMS = ('AS', 'MI', 'OF', 'SF', 'IJ', 'IO')
 ALL_PARAMS = ('AS', 'FS', 'MI', 'MO', 'OF', 'SF',
               'IJ', 'IN', 'IO', 'IP', 'IR', 'PF', 'AD',
               'KO', 'LN', 'LP', 'SR')
+LAYER_PARAMS = ALL_PARAMS[-4:]
 TOK_SPEC = (('MACRO', r'%AM[^%]*%'),
             ('PARAM_DELIM', r'%'),
            ) + tuple([(p, r'%s[^\*]*\*' % p) for p in ALL_PARAMS]) + (
@@ -192,6 +195,8 @@ class Gerber:
             else:
                 effect = self._move(block)
             self.status.update(effect)
+        for image in self.layer.images:
+            print image.json()
         layout = Layout()
         layout.layers.append(self.layer)
         design = Design()
@@ -207,19 +212,19 @@ class Gerber:
         for p_def in block.primitive_defs:
             type_, mods = (p_def[0], [float(i) for i in p_def[1:]])
             is_additive = type_ in ('moire', 'thermal') or int(mods[0])
-            rotation = type_ in ('circle', 'moire',
-                                 'thermal') and None or float(mods[-1])/180
+            rotation = type_ not in ('circle', 'moire', 'thermal') and mods[-1]/180
+
+            # create a shape for this primitive
             if type_ == 'circle':
-                params = {'x': mods[2],
-                          'y': mods[3],
-                          'radius': mods[1]/2}
+                shape = Circle(x=mods[2],
+                               y=mods[3],
+                               radius=mods[1]/2)
             elif type_ == 'vector':
-                type_ = 'rectangle'
 
                 # If vect is not horizontal, rotate about the
                 # origin until horizontal. Define it as a
                 # normal rectangle, then incorporate rotated
-                # angle into explicit rotation, so it is
+                # angle into explicit rotation, so it can be
                 # appropriately redeemed.
                 start, end = (mods[2:4], mods[4:6])
                 start_radius = sqrt(start[0]**2 + start[1]**2)
@@ -245,46 +250,46 @@ class Gerber:
                 rotated_x = cos((2 - theta) * pi) * radius
                 rotation = (rotation + theta) % 2
 
-                params = {'x': rotated_x,
-                          'y': rotated_y + (mods[1])/2,
-                          'width': hyp,
-                          'height': mods[1]}
+                shape = Rectangle(x=rotated_x,
+                                  y=rotated_y + mods[1]/2,
+                                  width=hyp,
+                                  height=mods[1])
             elif type_ == 'line':
-                type_ = 'rectangle'
-                params = {'x': mods[3] - (mods[1]/2),
-                          'y': mods[4] + (mods[2]/2),
-                          'width': mods[1],
-                          'height': mods[2]}
+                shape = Rectangle(x=mods[3] - mods[1]/2,
+                                  y=mods[4] + mods[2]/2,
+                                  width=mods[1],
+                                  height=mods[2])
             elif type_ == 'rectangle':
-                params = {'x': mods[3],
-                          'y': mods[4] + mods[2],
-                          'width': mods[1],
-                          'height': mods[2]}
+                shape = Rectangle(x=mods[3],
+                                  y=mods[4] + mods[2],
+                                  width=mods[1],
+                                  height=mods[2])
             elif type_ == 'outline':
-                type_ = 'polygon'
-                params = zip(('x', 'y') * mods[1]/2, mods[2:-1])
+                points = [Point(mods[i], mods[i + 1])
+                          for i in range(2, len(mods[:-1]), 2)]
+                shape = Polygon(points)
             elif type_ == 'polygon':
-                type_ = 'regular_polygon'
-                params = {'x': mods[2],
-                          'y': mods[3],
-                          'outer': mods[4],
-                          'vertices': mods[1]}
+                shape = RegularPolygon(x=mods[2],
+                                       y=mods[3],
+                                       outer=mods[4],
+                                       vertices=mods[1])
             elif type_ == 'moire':
-                params = zip(('x', 'y', 'outer', 'ring_thickness',
-                              'gap', 'max_rings', 'hair_thickness',
-                              'hair_length', 'rotation'),
-                             mods[0:9])
+                mods[8] = 2 - mods[8]/180
+                shape = Moire(*mods[0:9])
             elif type_ == 'thermal':
-                params = zip(('x', 'y', 'outer', 'inner', 'gap', 'rotation'),
-                             mods[0:6])
-            primitives.append((is_additive, rotation, type_, params))
+                mods[5] = 2 - mods[5]/180
+                shape = Thermal(*mods[0:6])
+
+            primitives.append([is_additive, rotation, shape])
+
+        # generate and stow the macro
         macro = Macro(block.name, primitives)
-        self.layer.shapes.append(macro)
+        self.layer.macros[block.name] = macro
         return {}
 
 
     def _do_funct(self, block):
-        """ Set drawing modes. """
+        """ Set drawing modes, fill terminators. """
         code = int(block.code)
         if block.type_ == 'D':
             if code < 10:
@@ -309,15 +314,15 @@ class Gerber:
 
 
     def _move(self, block):
-        """ Draw a segment of a shape or trace. """
+        """ Draw a shape, or a segment of a trace. """
         start = tuple([self.status[k] for k in ('x', 'y')])
         end = self._target_pos(block)
         ends = (Point(start), Point(end))
+        shapes = self.layer.shapes
         if self.status['draw'] == 'ON':
 
             # generate segment
-            #TODO: handle non-circular apertures
-            #      (historic use only)
+            #TODO: handle rectangular apertures (smears)
             if self.status['interpolation'] == 'LINEAR':
                 seg = Line(start, end)
             else:
@@ -330,8 +335,8 @@ class Gerber:
 
             # append segment to trace
             else:
-                aperture = self.params[self.status['aperture']]
-                wid = aperture.modifiers[0]
+                aperture = shapes[self.status['aperture']]
+                wid = aperture[0].radius * 2
                 tr_ind = self.img_buff.get_trace(wid, ends)
                 if tr_ind is None:
 
@@ -344,7 +349,8 @@ class Gerber:
                     self.img_buff.traces[tr_ind].segments.append(seg)
 
         elif self.status['draw'] == 'FLASH':
-            pass #TODO: add some kind of shape to the layer
+            aperture = shapes[self.status['aperture']]
+            self.img_buff.shape_instances.append((ends[1], aperture))
 
         return {'x':end[0], 'y':end[1]}
 
@@ -418,7 +424,7 @@ class Gerber:
         the way arc angles are defined in shape.py
 
         """
-        adj = point.x - arc_center.x
+        adj = float(point.x - arc_center.x)
         opp = point.y - arc_center.y
         hyp = arc_center.dist(point)
         angle = acos(adj/hyp)/pi
@@ -451,7 +457,7 @@ class Gerber:
                     # params
                     elif len(typ) == 2:
                         self._check_pb(param_block, tok)
-                        self.params.update((self._parse_param(tok),))
+                        self.params.update(self._parse_param(tok))
 
                     # data blocks
                     elif typ not in IGNORE:
@@ -481,9 +487,9 @@ class Gerber:
         """ Define a macro, with its component shapes. """
         parts = tok.split('*')
         name = parts[0][3:]
-        prims =  [p.strip().split(',') for p in parts[1:-1]] 
-        prim_defs = tuple([(PRIMITIVES[int(p[0])],) + tuple(p[1:])
-                           for p in prims])
+        prims =  [part.strip().split(',') for part in parts[1:-1]] 
+        prim_defs = tuple([(PRIMITIVES[int(m[0])],) + tuple(m[1:])
+                           for m in prims])
         return MacroDef(name, prim_defs)
 
 
@@ -495,16 +501,17 @@ class Gerber:
         if name == 'FS':
             tup = self._extract_fs(tok)
         elif name == 'AD':
-            tup = self._extract_ad(tok)
-            name = tup.code
+            self._extract_ad(tok)
+            return {}
         elif name in AXIS_PARAMS:
             tup = self._extract_ap(name, tok)
+        elif name in LAYER_PARAMS:
+            self._extract_lp(name, tok)
+            return {}
         else:
-            #TODO: handle  IP, IR, layer params KO, LN, LP, SR
-            #TODO: check file for duplicate image_params
-            #      (should use last occurrence for entire file)
+            #TODO: handle layer params LN, LP, SR
             tup = tok
-        return (name, tup)
+        return {name:tup}
 
 
     def _extract_fs(self, tok):
@@ -524,12 +531,40 @@ class Gerber:
 
 
     def _extract_ad(self, tok):
-        """ Extract aperture definition into tuple. """
+        """ Extract aperture definition into shape def. """
         tok = ',' in tok and tok or tok + ','
         code_end = tok[3] in DIGITS and 4 or 3
-        name = tok[1:code_end]
+        code = tok[1:code_end]
         type_, mods = tok[code_end:].split(',')
-        return Aperture(name, type_, tuple(mods.split('X')))
+        if mods:
+            mods = [float(m) for m in mods.split('X')]
+
+        # An aperture can use any of the 4 standard types,
+        # (with or without a central hole), or a previously
+        # defined macro.
+        if type_ == 'C':
+            shape = Circle(0, 0, mods[0]/2)
+            hole_defs = len(mods) > 1 and mods[1:]
+        elif type_ == 'R':
+            shape = Rectangle(-mods[0]/2, mods[1]/2, *mods[:2])
+            hole_defs = len(mods) > 2 and mods[2:]
+        elif type_ == 'O':
+            shape = Obround(0, 0, *mods[:2])
+            hole_defs = len(mods) > 2 and mods[2:]
+        elif type_ == 'P':
+            args = len(mods) > 2 and mods[:3] or mods[:2]
+            shape = RegularPolygon(0, 0, *args)
+            hole_defs = len(mods) > 3 and mods[3:]
+        else:
+            shape = type_
+            hole_defs = None
+        hole = hole_defs and (len(hole_defs) > 1 and
+                              Rectangle(-hole_defs[0]/2,
+                                        hole_defs[1]/2,
+                                        *hole_defs[:2]) or
+                              Circle(0, 0, hole_defs[0]/2))
+
+        self.layer.shapes.update({code:(shape, hole)})
 
 
     def _extract_ap(self, name, tok):
@@ -548,14 +583,41 @@ class Gerber:
         return tup
 
 
+    def _extract_lp(self, name, tok):
+        """ Extract "layer param" and reset image layer. """
+        if self.img_buff.not_empty():
+            self.layer.images.append(self.img_buff)
+            self.img_buff = Image('', self.img_buff.is_additive)
+            self.status.update({'x':0,
+                                'y':0,
+                                'draw':'OFF',
+                                'interpolation':'LINEAR',
+                                'aperture':None,
+                                'outline_fill':False,
+                                'multi_quadrant':False,
+                                'units':None,
+                                'incremental_coords':None})
+        if name == 'LN':
+            self.img_buff.name = tok
+        elif name == 'LP':
+            self.img_buff.is_additive = IMAGE_POLARITIES[tok]
+        elif name == 'SR':
+            tok, j = self._pop_val('J', tok, coerce_='float')
+            tok, i = self._pop_val('I', tok, coerce_='float')
+            tok, y = self._pop_val('Y', tok)
+            tok, x = self._pop_val('X', tok)
+            self.img_buff.x_repeats = x
+            self.img_buff.x_step = i
+            self.img_buff.y_repeats = y
+            self.img_buff.y_step = j
+
+
     def _parse_justify(self, val):
         """ Make a tuple for each axis (special case). """
         if len(val) > 1 or val not in 'LC':
             ab_tup = ('L', float(val.split('L')[-1]))
         else:
             ab_tup = (val, None)
-        #TODO: spec for IJ references off-spec examples
-        #      with , or . delimiters
         return ab_tup
 
 
@@ -566,8 +628,6 @@ class Gerber:
         if 'G' in tok:
             g_code = tok[1:3]
             tok = tok[3:]
-            #TODO: remove assumption that leading 0 is
-            #      supplied -- not required by spec
             if int(g_code) in G_MAP:
                 yield Funct('G', g_code)
         tok, d_code = self._pop_val('D', tok, coerce_=False)
