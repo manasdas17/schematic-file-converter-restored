@@ -20,7 +20,7 @@
 # limitations under the License.
 
 
-from math import sqrt, pi, sin, cos
+from math import sqrt, pi, sin, cos, asin, acos
 
 
 class Shape(object):
@@ -234,6 +234,16 @@ class Arc(Shape):
         return Point(int(round(x)), int(round(y)))
 
 
+    def ends(self):
+        """ Calculate arc endpoints. """
+        points = {}
+        for ord_ in ('start', 'end'):
+            opp = sin(getattr(self, ord_ + '_angle') * pi) * self.radius
+            adj = cos(getattr(self, ord_ + '_angle') * pi) * self.radius
+            points[ord_] = Point(self.x + adj, self.y - opp)
+        return (points['start'], points['end'])
+
+
     def json(self):
         """ Return the arc as JSON """
         return {
@@ -377,10 +387,10 @@ class Line(Shape):
 class Polygon(Shape):
     """ A polygon is just a list of points, drawn as connected in order """
 
-    def __init__(self):
+    def __init__(self, points=None):
         super(Polygon, self).__init__()
         self.type = "polygon"
-        self.points = list()
+        self.points = points or list()
 
     
     def bounds(self):
@@ -519,6 +529,195 @@ class BezierCurve(Shape):
             }
 
 
+class Moire(Shape):
+    """
+    A target of concentric rings with crosshairs.
+
+    Without rotation, the crosshairs are aligned to
+    the axes. Rotation is in radians / pi, clockwise
+    positive.
+
+    """
+    def __init__(self, x, y, outer, ring_thickness, gap, max_rings, # pylint: disable=R0913
+                 hair_thickness, hair_length, rotation):
+        super(Moire, self).__init__()
+        self.x = x
+        self.y = y
+        self.outer_diameter = outer
+        self.ring_thickness = ring_thickness
+        self.gap_thickness = gap
+        self.max_rings = max_rings
+        self.hair_thickness = hair_thickness
+        self.hair_length = hair_length
+        self.rotation = rotation
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        return [self.min_point(), self.max_point()]
+    
+    
+    def min_point(self):
+        """ Return the min point of the shape """
+        x = self.x - self._half_box
+        y = self.y - self._half_box
+        return Point(x, y)
+    
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        x = self.x + self._half_box
+        y = self.y + self._half_box
+        return Point(x, y)
+
+
+    def _half_box(self):
+        """ Return half the width of the bounding square. """
+        rad = self.outer_diameter / 2.0
+        opp = abs(sin(self.rotation * pi) * rad)
+        adj = abs(cos(self.rotation * pi) * rad)
+        return max(opp, adj, rad)
+
+
+    def json(self):
+        """ Return the moire as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "outer_diameter": self.outer_diameter,
+            "ring_thickness": self.ring_thickness,
+            "gap_thickness": self.gap_thickness,
+            "max_rings": self.max_rings,
+            "hair_thickness": self.hair_thickness,
+            "hair_length": self.hair_length,
+            "rotation": self.rotation
+            }
+        
+
+class Thermal(Shape):
+    """
+    A ring with 4 gaps, each separated by 0.5 rad/pi.
+
+    Without rotation, the gaps are at the cardinal points.
+    Rotation is in rad/pi, clockwise positive.
+
+    """
+    def __init__(self, x, y, outer, inner, gap, rotation=0): # pylint: disable=R0913
+        super(Thermal, self).__init__()
+        self.x = x
+        self.y = y
+        self.outer_diameter = outer
+        self.inner_diameter = inner
+        self.gap_thickness = gap
+        self.rotation = rotation
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        return [self.min_point(), self.max_point()]
+    
+    
+    def min_point(self):
+        """ Return the min point of the shape """
+        x = self.x - self._half_box
+        y = self.y - self._half_box
+        return Point(x, y)
+    
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        x = self.x + self._half_box
+        y = self.y + self._half_box
+        return Point(x, y)
+
+
+    def _half_box(self):
+        """ Return half the width of the bounding box. """
+        hyp = self.outer_diameter / 2.0
+        opp = self.gap_thickness / 2.0
+        norm_theta = asin(opp / hyp) / pi
+        rot = self.rotation % 0.5
+        if rot < norm_theta:
+            hwid = cos((norm_theta - rot) * pi) * hyp
+        elif (0.5 - rot) < norm_theta:
+            hwid = cos((norm_theta - (0.5 - rot)) * pi) * hyp
+        else:
+            hwid = hyp
+        return hwid
+
+
+    def json(self):
+        """ Return the thermal as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "outer_diameter": self.outer_diameter,
+            "inner_diameter": self.inner_diameter,
+            "gap_thickness": self.gap_thickness,
+            "rotation": self.rotation
+            }
+
+
+class RegularPolygon(Shape):
+    """
+    A polygon with sides of equal length.
+
+    Without rotation, the first vertex is at 3 o'clock.
+    Rotation is in rad/pi, clockwise positive.
+
+    """
+    def __init__(self, x, y, outer, vertices, rotation=0): # pylint: disable=R0913
+        super(RegularPolygon, self).__init__()
+        self.x = x
+        self.y = y
+        self.outer_diameter = outer
+        self.vertices = vertices
+        self.rotation = rotation
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        return [self.min_point(), self.max_point()]
+    
+    
+    def min_point(self):
+        """ Return the min point of the shape """
+        x = self.x + self._max_dist(1)
+        y = self.y + self._max_dist(0.5)
+        return Point(x, y)
+
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        x = self.x + self._max_dist(0)
+        y = self.y + self._max_dist(1.5)
+        return Point(x, y)
+
+
+    def _max_dist(self, axis_rads):
+        """ Return max reach of the shape along an axis. """
+        v_rads = 2.0 / self.vertices
+        if self.vertices % 2 == 0:
+            hyp = self.outer_diameter / 2.0
+        else:
+            hyp = self.outer_diameter - acos(v_rads / 2.0)
+        start_angle = (axis_rads + self.rotation) % v_rads
+        this_v = abs(cos(start_angle * pi) * hyp)
+        next_v = abs(cos((start_angle - v_rads) * pi) * hyp)
+        return max(this_v, next_v)
+
+
+    def json(self):
+        """ Return the regular polygon as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "outer_diameter": self.outer_diameter,
+            "vertices": self.vertices,
+            "rotation": self.rotation
+            }
+
+
 class Point:
     """ Simple x, y coordinate. Different from the 'Point' in Nets """
 
@@ -540,8 +739,29 @@ class Point:
 
 
     def __eq__(self, other):
-        return (isinstance(other, Point) and self.x == other.x
-                                         and self.y == other.y)
+        """
+        Compare with another point. eg: p1 == p2
+
+        Points are considered equal if they are equal when
+        rounded to maximum gerber precision (ie, 6 decimal
+        places).
+
+        """
+        snap = True
+        precision = 6
+        if snap:
+            equal = round(self.x, precision) == round(other.x, precision) and \
+                        round(self.y, precision) == round(other.y, precision)
+        else:
+            equal = self.__dict__ == other.__dict__
+        return equal
+
+
+    def dist(self, other):
+        """ Calculate the distance to another point. """
+        delta_x = self.x - other.x
+        delta_y = self.y - other.y
+        return sqrt(delta_x**2 + delta_y**2)
 
 
     def json(self):
@@ -550,3 +770,46 @@ class Point:
             "x": self.x,
             "y": self.y
             }
+
+
+class Obround(Shape):
+    """ An oval, defined by x, y at center and width, height"""
+
+    def __init__(self, x, y, width, height):
+        super(Obround, self).__init__()
+        self.type = "obround"
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+    
+    
+    def bounds(self):
+        """ Return the min and max points of the bounding box """
+        return [self.min_point(), self.max_point()]
+
+
+    def min_point(self):
+        """ Return the min point of the shape """
+        x = self.x - self.width / 2.0
+        y = self.y - self.height / 2.0
+        return Point(x, y)
+    
+    
+    def max_point(self):
+        """ Return the max point of the shape """
+        x = self.x + self.width / 2.0
+        y = self.y + self.height / 2.0
+        return Point(x, y)
+
+
+    def json(self):
+        """ Return the rectangle as JSON """
+        return {
+            "height": self.height,
+            "type": self.type,
+            "width": self.width,
+            "x": self.x,
+            "y": self.y,
+            }
+

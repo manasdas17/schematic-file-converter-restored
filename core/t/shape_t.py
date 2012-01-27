@@ -30,6 +30,9 @@ from core.shape import Circle
 from core.shape import Label
 from core.shape import Line
 from core.shape import Polygon
+from core.shape import RegularPolygon
+from core.shape import Moire
+from core.shape import Thermal
 from core.shape import BezierCurve
 from core.shape import Point
 import unittest
@@ -191,6 +194,89 @@ class PolygonTests(unittest.TestCase):
         """ Test the creation of a new empty polygon. """
         poly = Polygon()
         assert len(poly.points) == 0
+
+
+class RegularPolygonTests(unittest.TestCase):
+    """ The tests of the core module regular polygon shape. """
+
+    def setUp(self):
+        """ Setup the test case. """
+        pass
+
+    def tearDown(self):
+        """ Teardown the test case. """
+        pass
+
+    def test_create_new_regular_polygon(self):
+        """ Test creating a new regular polygon. """
+        rpoly = RegularPolygon(x=0,
+                               y=0,
+                               outer=5,
+                               vertices=5)
+        assert rpoly.x == 0
+        assert rpoly.y == 0
+        assert rpoly.outer_diameter == 5
+        assert rpoly.vertices == 5
+        assert rpoly.rotation == 0
+
+
+class MoireTests(unittest.TestCase):
+    """ The tests of the core module moire shape. """
+
+    def setUp(self):
+        """ Setup the test case. """
+        pass
+
+    def tearDown(self):
+        """ Teardown the test case. """
+        pass
+
+    def test_create_new_moire(self):
+        """ Test the creation of a new Moire. """
+        moire = Moire(x=0,
+                      y=0,
+                      outer=6,
+                      ring_thickness=1.5,
+                      gap=1,
+                      max_rings=2,
+                      hair_thickness=0.2,
+                      hair_length=6,
+                      rotation=0)
+        assert moire.x == 0
+        assert moire.y == 0
+        assert moire.outer_diameter == 6
+        assert moire.ring_thickness == 1.5
+        assert moire.gap_thickness == 1
+        assert moire.max_rings == 2
+        assert moire.hair_thickness == 0.2
+        assert moire.hair_length == 6
+        assert moire.rotation == 0
+
+
+class ThermalTests(unittest.TestCase):
+    """ The tests of the core module thermal shape. """
+
+    def setUp(self):
+        """ Setup the test case. """
+        pass
+
+    def tearDown(self):
+        """ Teardown the test case. """
+        pass
+
+    def test_create_new_thermal(self):
+        """ Test the creation of a new thermal. """
+        thermal = Thermal(x=0,
+                          y=0,
+                          outer=5,
+                          inner=3,
+                          gap=2)
+        assert thermal.x == 0
+        assert thermal.y == 0
+        assert thermal.outer_diameter == 5
+        assert thermal.inner_diameter == 3
+        assert thermal.gap_thickness == 2
+        assert thermal.rotation == 0
 
 
 class BezierCurveTests(unittest.TestCase):

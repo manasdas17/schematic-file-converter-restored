@@ -1,0 +1,97 @@
+%ASAXBY*        Axis Select, A=X, B=Y
+FSLAX23Y23*     Format Statement, Leading zeros omitted, absolute data, 2 integer digits and 3 fractional digits
+MIA0B0*         Mirror about the specified axis; 0=no, 1=yes
+MOIN*           Mode inches
+OFA0B0*         Offset 0
+SFA1.0B1.0*%    Scale Factor
+%IJALBL*        Image Justify
+INXTEST*        Image Name
+IOA0B0*         Image Offset
+IPPOS*          Image Polarity
+IR0*%           Image Rotation
+G04 Define Apertures* Comment
+%AMTARGET125*   Aperture Macro
+6,0,0,0.125,.01,0.01,3,0.003,0.150,0*% Moire description
+%AMTHERMAL80*   Aperture Macro
+7,0,0,0.080,0.055,0.0125,45*% Thermal description
+%ADD10C,0.01*   Aperture description, D10 is a circular aperture with 0.01” diameter
+ADD11C,0.06*    Aperture Description, D11 is a circular aperture with 0.06” diameter
+ADD12R,0.06X0.06*   Aperture Description, D12 is a rectangular aperture, 0.06” X 0.06”
+ADD13R,0.04X0.100*  Aperture Description, D13 is a rectangular aperture, 0.04” X 0.100”
+ADD14R,0.100X0.04*  Aperture Description, D14 is a rectangular aperture, 0.100” X 0.04”
+ADD15O,0.04X0.100*  Aperture Description, D15 is a obround aperture, 0.04” X 0.100”
+ADD16P,0.100X3* Aperture Description, D16 is a 3 sided polygon 0.100” overall size
+ADD17P,0.100X3* Aperture Description, D17 is a 3 sided polygon 0.100” overall size
+ADD18TARGET125* Aperture Description, D18 is a special aperture called “TARGET125”
+ADD19THERMAL80*% Aperture Description, D19 is a special aperture called "THERMAL80”
+%LNXTEST1*      Layer Name XTEST1
+LPD*            Layer Polarity Dark
+SRX1Y1I0J0*%    Step and Repeat set to 1 X 1 (Not Required)
+G54D10*         Aperture select
+G01X0Y250D02*   Linear move with light off
+X0Y0D01*        Linear move with light on
+X250Y0D01*      Linear move with light on
+X1000Y1000D02*  Linear move with light off
+X1500D01*       Linear move with light on
+X2000Y1500*     Notice since D01 is modal it does not need to be repeated
+X2500D02*       Notice since the X & Y commands are modal, Y is not repeated
+Y1000D01*       X is not repeated and uses its previous value of 2.500”
+D02*            Light off no move
+G54D11*         New aperture selected
+G55X1000Y1000D03* G55 prepares for flash It is not necessary. D03 is the flash command.
+X2000D03*       Y value does not change
+X2500D03*       This method reduces the size of the file
+Y1500D03*       Here, X does not change from previous value
+X2000D03*       Flash
+G54D12*         New aperture select
+X1000Y1500D03*  Move to (1.0, 1.5) and flash
+G54D13*         New aperture select
+X3000Y1500D03*  Move and flash
+G54D14*         New aperture select
+Y1250D03*       Move and flash
+G54D15*         New aperture select
+Y1000D03*       Move and flash
+G54D10*         New aperture select
+G01X3750Y1000D02* Linear move, light off. Start point of the following arc command
+G75*            Sets multi quadrant mode
+G03X3750Y1000I250J0D01* Move from start point above to end point drawing a complete circle
+G54D16*         New aperture select
+G55X3400Y1000D03* Flash
+G54D17*         New aperture select
+G55X3500Y900D03* Flash
+G54D10*         New aperture select
+G36*            Start Outline fill
+G01X500Y2000D02*
+Y3750D01*
+X3750*
+Y2000*
+X500*
+X500Y2000D02*
+G37*            End Outline fill
+G54D18*         New aperture select
+G55X0Y3875D03*  Flash
+X3875Y3875D03*  Flash
+%LNXTEST2* LPC*% Layer Name
+G36*            Start Outline fill
+G01X1000Y2500D02*
+Y3000D01*
+G74*            Single Quadrant mode
+G02X1250Y3250I250J0D01* Clockwise arc move with radius .25”
+G01X3000*       Complete 90° arc
+G75*            Sets multi quadrant mode
+G02X3000Y2500I0J-375D01* Clockwise arc move with radius .375”
+G01X1000*       Linear move light on
+X1000Y2500D02*  Linear move light off
+G37*            End Outline fill
+%LNXTEST3*      Layer Name
+LPD*%           Layer Polarity Dark
+G54D10*         New aperture select
+X1500Y2875D02*
+X2000D01*
+D02*
+G54D11*
+X1500Y2875D03*
+X2000D03*
+G54D19*         New aperture select
+X2875Y2875D03*
+M02*            End of Program
