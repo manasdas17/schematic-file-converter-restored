@@ -237,3 +237,39 @@ class PointTests(unittest.TestCase):
         pnt = Point(0, 1)
         assert pnt.x == 0
         assert pnt.y == 1
+
+    def test_create_point_from_tuple(self):
+        '''Test Point constructor using a tuple as only argument'''
+        pnt = Point((2, 3))
+        self.assertEqual(pnt.x, 2)
+        self.assertEqual(pnt.y, 3)
+
+    def test_create_point_from_point(self):
+        '''Test Point constructor when cloning another point'''
+        oldpnt = Point(2, 3)
+        newpnt = Point(oldpnt)
+        self.assertIsNot(oldpnt, newpnt)
+        self.assertEqual(oldpnt.x, newpnt.x)
+        self.assertEqual(oldpnt.y, newpnt.y)
+        oldpnt.x = 4
+        oldpnt.y = 5
+        self.assertEqual(newpnt.x, 2)
+        self.assertEqual(newpnt.y, 3)
+
+    def test_point_equality(self):
+        '''pt1 == pt2 iff (pt1.x == pt2.x and pt1.y == pt2.y)'''
+        pta = Point(2, 3)
+        ptb = Point(2, 3)
+        ptc = Point(2, 4)
+        ptd = Point(4, 3)
+        pte = Point(4, 5)
+        self.assertEqual(pta, ptb)
+        for pt in (ptc, ptd, pte):
+            self.assertNotEqual(pta, pt)
+
+    def test_point_repr(self):
+        '''repr(Point) --> Point($x, $y)'''
+        pt = Point(8, 7)
+        self.assertEqual(repr(pt), 'Point(8, 7)')
+        pt = Point(-3, -4)
+        self.assertEqual(repr(pt), 'Point(-3, -4)')
