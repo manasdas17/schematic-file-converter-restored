@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # encoding: utf-8
+#pylint: disable=R0904
 """ The design attribute test class """
 
 # upconvert.py - A universal hardware design file format converter using
