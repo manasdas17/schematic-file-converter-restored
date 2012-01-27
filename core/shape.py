@@ -746,8 +746,9 @@ class Point:
         snap = True
         precision = 6
         if snap:
-            equal = round(self.x, precision) == round(other.x, precision) and \
-                        round(self.y, precision) == round(other.y, precision)
+            equal = (isinstance(other, Point) and
+                     round(self.x, precision) == round(other.x, precision) and
+                     round(self.y, precision) == round(other.y, precision))
         else:
             equal = self.__dict__ == other.__dict__
         return equal

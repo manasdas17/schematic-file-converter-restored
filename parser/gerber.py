@@ -24,7 +24,7 @@ from math import sqrt, sin, cos, acos, pi
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout, Layer, Image, Macro, Trace
+from core.layout import Layout, Layer, Image, Macro, Trace, ShapeInstance
 from core.shape import Line, Arc, Point, Circle, Rectangle, Obround, \
                        Polygon, RegularPolygon, Moire, Thermal
 
@@ -196,6 +196,7 @@ class Gerber:
                 effect = self._move(block)
             self.status.update(effect)
         for image in self.layer.images:
+            print '-- %s --' % image.name
             print image.json()
         layout = Layout()
         layout.layers.append(self.layer)
@@ -212,80 +213,93 @@ class Gerber:
         for p_def in block.primitive_defs:
             type_, mods = (p_def[0], [float(i) for i in p_def[1:]])
             is_additive = type_ in ('moire', 'thermal') or int(mods[0])
-            rotation = type_ not in ('circle', 'moire', 'thermal') and mods[-1]/180
-
-            # create a shape for this primitive
-            if type_ == 'circle':
-                shape = Circle(x=mods[2],
-                               y=mods[3],
-                               radius=mods[1]/2)
-            elif type_ == 'vector':
-
-                # If vect is not horizontal, rotate about the
-                # origin until horizontal. Define it as a
-                # normal rectangle, then incorporate rotated
-                # angle into explicit rotation, so it can be
-                # appropriately redeemed.
-                start, end = (mods[2:4], mods[4:6])
-                start_radius = sqrt(start[0]**2 + start[1]**2)
-                end_radius = sqrt(end[0]**2 + end[1]**2)
-                if start_radius > end_radius:
-                    end, start = (mods[2:4], mods[4:6])
-                    radius = end_radius
-                else:
-                    radius = start_radius
-                x, y = start
-                adj = end[0] - x
-                opp = end[1] - y
-                hyp = sqrt(adj**2 + opp**2)
-                vect_theta =  acos(adj/hyp)/pi
-                if opp > 0:
-                    vect_theta = 2 - vect_theta
-                d_theta = 2 - vect_theta
-                theta = acos(x/radius)/pi 
-                if y > 0:
-                    theta = 2 - theta
-                theta += d_theta
-                rotated_y = sin((2 - theta) * pi) * radius
-                rotated_x = cos((2 - theta) * pi) * radius
-                rotation = (rotation + theta) % 2
-
-                shape = Rectangle(x=rotated_x,
-                                  y=rotated_y + mods[1]/2,
-                                  width=hyp,
-                                  height=mods[1])
-            elif type_ == 'line':
-                shape = Rectangle(x=mods[3] - mods[1]/2,
-                                  y=mods[4] + mods[2]/2,
-                                  width=mods[1],
-                                  height=mods[2])
-            elif type_ == 'rectangle':
-                shape = Rectangle(x=mods[3],
-                                  y=mods[4] + mods[2],
-                                  width=mods[1],
-                                  height=mods[2])
-            elif type_ == 'outline':
-                points = [Point(mods[i], mods[i + 1])
-                          for i in range(2, len(mods[:-1]), 2)]
-                shape = Polygon(points)
-            elif type_ == 'polygon':
-                shape = RegularPolygon(x=mods[2],
-                                       y=mods[3],
-                                       outer=mods[4],
-                                       vertices=mods[1])
-            elif type_ == 'moire':
-                mods[8] = 2 - mods[8]/180
-                shape = Moire(*mods[0:9])
-            elif type_ == 'thermal':
-                mods[5] = 2 - mods[5]/180
-                shape = Thermal(*mods[0:6])
-
+            rotation = type_ not in ('circle', 'moire',
+                                     'thermal') and mods[-1]/180
+            shape, rotation = self._gen_shape(type_, mods, rotation)
             primitives.append([is_additive, rotation, shape])
 
         # generate and stow the macro
         macro = Macro(block.name, primitives)
         self.layer.macros[block.name] = macro
         return {}
+
+
+    def _gen_shape(self, type_, mods, rotation):
+        """ Create a primitive shape component for a macro. """
+        if type_ == 'circle':
+            shape = Circle(x=mods[2],
+                           y=mods[3],
+                           radius=mods[1]/2)
+        elif type_ == 'vector':
+            shape, rotation = self._vector_to_rect(mods,
+                                                   rotation)
+        elif type_ == 'line':
+            shape = Rectangle(x=mods[3] - mods[1]/2,
+                              y=mods[4] + mods[2]/2,
+                              width=mods[1],
+                              height=mods[2])
+        elif type_ == 'rectangle':
+            shape = Rectangle(x=mods[3],
+                              y=mods[4] + mods[2],
+                              width=mods[1],
+                              height=mods[2])
+        elif type_ == 'outline':
+            points = [Point(mods[i], mods[i + 1])
+                      for i in range(2, len(mods[:-1]), 2)]
+            shape = Polygon(points)
+        elif type_ == 'polygon':
+            shape = RegularPolygon(x=mods[2],
+                                   y=mods[3],
+                                   outer=mods[4],
+                                   vertices=mods[1])
+        elif type_ == 'moire':
+            mods[8] = 2 - mods[8]/180
+            shape = Moire(*mods[0:9])
+        elif type_ == 'thermal':
+            mods[5] = 2 - mods[5]/180
+            shape = Thermal(*mods[0:6])
+        return (shape, rotation)
+
+
+    def _vector_to_rect(self, mods, rotation):
+        """
+        Convert a vector into a Rectangle.
+
+        If vect is not horizontal, rotate about the
+        origin until horizontal. Define it as a
+        normal rectangle, then incorporate rotated
+        angle into explicit rotation, so it can be
+        appropriately redeemed.
+
+        """
+        start, end = (mods[2:4], mods[4:6])
+        start_radius = sqrt(start[0]**2 + start[1]**2)
+        end_radius = sqrt(end[0]**2 + end[1]**2)
+        if start_radius > end_radius:
+            end, start = (mods[2:4], mods[4:6])
+            radius = end_radius
+        else:
+            radius = start_radius
+        x, y = start
+        adj = end[0] - x
+        opp = end[1] - y
+        hyp = sqrt(adj**2 + opp**2)
+        theta = acos(adj/hyp)/pi
+        if opp > 0:
+            theta = 2 - theta
+        d_theta = 2 - theta
+        theta = acos(x/radius)/pi 
+        if y > 0:
+            theta = 2 - theta
+        theta += d_theta
+        y = sin((2 - theta) * pi) * radius
+        x = cos((2 - theta) * pi) * radius
+        rotation = (rotation + theta) % 2
+        return (Rectangle(x=x,
+                          y=y + mods[1]/2,
+                          width=hyp,
+                          height=mods[1]),
+                rotation)
 
 
     def _do_funct(self, block):
@@ -314,7 +328,7 @@ class Gerber:
 
 
     def _move(self, block):
-        """ Draw a shape, or a segment of a trace. """
+        """ Draw a shape, or a segment of a trace or fill. """
         start = tuple([self.status[k] for k in ('x', 'y')])
         end = self._target_pos(block)
         ends = (Point(start), Point(end))
@@ -341,16 +355,16 @@ class Gerber:
                 if tr_ind is None:
 
                     # start a new trace
-                    trace = Trace(wid, [seg])
-                    self.img_buff.traces.append(trace)
+                    self.img_buff.traces.append(Trace(wid, [seg]))
                 else:
 
                     # add to existing trace
                     self.img_buff.traces[tr_ind].segments.append(seg)
 
         elif self.status['draw'] == 'FLASH':
-            aperture = shapes[self.status['aperture']]
-            self.img_buff.shape_instances.append((ends[1], aperture))
+            shape, hole = shapes[self.status['aperture']]
+            shape_inst = ShapeInstance(ends[1], shape, hole)
+            self.img_buff.shape_instances.append(shape_inst)
 
         return {'x':end[0], 'y':end[1]}
 
@@ -531,7 +545,7 @@ class Gerber:
 
 
     def _extract_ad(self, tok):
-        """ Extract aperture definition into shape def. """
+        """ Extract aperture definition into shapes dict. """
         tok = ',' in tok and tok or tok + ','
         code_end = tok[3] in DIGITS and 4 or 3
         code = tok[1:code_end]
@@ -546,14 +560,16 @@ class Gerber:
             shape = Circle(0, 0, mods[0]/2)
             hole_defs = len(mods) > 1 and mods[1:]
         elif type_ == 'R':
-            shape = Rectangle(-mods[0]/2, mods[1]/2, *mods[:2])
+            shape = Rectangle(-mods[0]/2, mods[1]/2,
+                              mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
         elif type_ == 'O':
-            shape = Obround(0, 0, *mods[:2])
+            shape = Obround(0, 0, mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
         elif type_ == 'P':
-            args = len(mods) > 2 and mods[:3] or mods[:2]
-            shape = RegularPolygon(0, 0, *args)
+            if len(mods) < 3:
+                mods.append(0)
+            shape = RegularPolygon(0, 0, mods[0], mods[1], mods[2])
             hole_defs = len(mods) > 3 and mods[3:]
         else:
             shape = type_
@@ -561,7 +577,8 @@ class Gerber:
         hole = hole_defs and (len(hole_defs) > 1 and
                               Rectangle(-hole_defs[0]/2,
                                         hole_defs[1]/2,
-                                        *hole_defs[:2]) or
+                                        hole_defs[0],
+                                        hole_defs[1]) or
                               Circle(0, 0, hole_defs[0]/2))
 
         self.layer.shapes.update({code:(shape, hole)})

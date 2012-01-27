@@ -137,7 +137,7 @@ class Image:
             "y_step": self.y_step,
             "traces": [t.json() for t in self.traces],
             "fills": [[s.json() for s in f] for f in self.fills],
-            "shape_instances": self.shape_instances
+            "shape_instances": [i.json() for i in self.shape_instances]
             }
 
 
@@ -156,6 +156,7 @@ class Trace:
             "segments": [s.json() for s in self.segments]
             }
 
+
 class Smear:
     """ Line drawn by any shape other than a tiny circle. """
 
@@ -169,6 +170,41 @@ class Smear:
         return {
             "line": self.line.json(),
             "shape": self.shape.json()
+            }
+
+
+class ShapeInstance:
+    """
+    An instance of a shape or macro.
+
+    If the shape is not defined by a macro, its class
+    must be one of Circle, Rectangle, Obround or
+    RegularPolygon.
+
+    If the shape is not defined by a macro, it may have
+    a hole. The class of the hole must be either Circle
+    or Rectangle. The hole is always centered on the
+    center of the shape, and never rotates, even if the
+    shape itself is rotated.
+
+    x and y attributes can be thought of as an offset.
+
+    """
+    def __init__(self, point, shape, hole):
+        self.x = point.x
+        self.y = point.y
+        self.shape = shape
+        self.hole = hole
+
+
+    def json(self):
+        """ Return the shape instance as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "shape": (isinstance(self.shape, str) and
+                      self.shape or self.shape.json()),
+            "hole": self.hole and self.hole.json()
             }
 
 
