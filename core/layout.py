@@ -159,7 +159,7 @@ class Trace:
 
 
 class Smear:
-    """ Line drawn by any shape other than a tiny circle. """
+    """ A line drawn by a rectangular aperture. """
 
     def __init__(self, line, shape):
         self.line = line
