@@ -137,6 +137,7 @@ class Image:
             "y_step": self.y_step,
             "traces": [t.json() for t in self.traces],
             "fills": [[s.json() for s in f] for f in self.fills],
+            "smears": [m.json() for m in self.smears],
             "shape_instances": [i.json() for i in self.shape_instances]
             }
 

@@ -30,7 +30,7 @@ from parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
                             CoordPrecedesFormatSpec, CoordMalformed, \
                             FileNotTerminated, DataAfterEOF, \
                             UnintelligibleDataBlock, QuadrantViolation, \
-                            OpenFillBoundary
+                            OpenFillBoundary, IncompatibleAperture
 
 STRIP_DIRS = path.join('parser', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
@@ -99,6 +99,12 @@ class GerberTests(unittest.TestCase):
         image = self.design.layouts[0].layers[0].images[0]
         assert len(image.fills) == 2
 
+    @use_file('smear.ger')
+    def test_smear(self):
+        """ Parse a smear - gerber. """
+        image = self.design.layouts[0].layers[0].images[0]
+        assert len(image.smears) == 1
+
     @use_file('complex.ger')
     def test_complex(self):
         """ Parse aperture macros - gerber. """
@@ -160,4 +166,10 @@ class GerberTests(unittest.TestCase):
     @use_file('open-fill.ger')
     def test_open_fill(self):
         """ Trap unsuccessful outline fill closure. """
+        pass
+
+    @raises(IncompatibleAperture)
+    @use_file('disallowed-smear.ger')
+    def test_arc_smear(self):
+        """ Trap non-linear smear - gerber. """
         pass

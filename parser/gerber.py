@@ -25,7 +25,7 @@ from collections import namedtuple
 
 from core.design import Design
 from core.layout import Layout, Layer, Image, Macro, Primitive, \
-                        Trace, ShapeInstance
+                        Trace, Smear, ShapeInstance
 from core.shape import Line, Arc, Point, Circle, Rectangle, Obround, \
                        Polygon, RegularPolygon, Moire, Thermal
 
@@ -82,6 +82,10 @@ class UnintelligibleDataBlock(Unparsable):
 
 class ImpossibleGeometry(Unparsable):
     """ Arc radius, center and endpoints don't gel. """
+    pass
+
+class IncompatibleAperture(Unparsable):
+    """ Attempted to draw non-linear shape with rect. """
     pass
 
 
@@ -258,7 +262,6 @@ class Gerber:
         if self.status['draw'] == 'ON':
 
             # generate segment
-            #TODO: handle rectangular apertures (smears)
             if self.status['interpolation'] == 'LINEAR':
                 seg = Line(start, end)
             else:
@@ -269,19 +272,26 @@ class Gerber:
             if self.status['outline_fill']:
                 self.fill_buff.append(seg)
 
-            # append segment to trace
             else:
                 aperture = shapes[self.status['aperture']]
-                wid = aperture[0].radius * 2
-                tr_ind = self.img_buff.get_trace(wid, ends)
-                if tr_ind is None:
+                if isinstance(aperture[0], Rectangle):
 
-                    # start a new trace
-                    self.img_buff.traces.append(Trace(wid, [seg]))
+                    # construct a smear
+                    shape, hole = shapes[self.status['aperture']]
+                    self._check_smear(seg, shape)
+                    self.img_buff.smears.append(Smear(seg, shape))
+
                 else:
+                    wid = aperture[0].radius * 2
+                    tr_ind = self.img_buff.get_trace(wid, ends)
+                    if tr_ind is None:
 
-                    # add to existing trace
-                    self.img_buff.traces[tr_ind].segments.append(seg)
+                        # construct a trace
+                        self.img_buff.traces.append(Trace(wid, [seg]))
+                    else:
+
+                        # append segment to existing trace
+                        self.img_buff.traces[tr_ind].segments.append(seg)
 
         elif self.status['draw'] == 'FLASH':
             shape, hole = shapes[self.status['aperture']]
@@ -767,12 +777,20 @@ class Gerber:
         return fill
 
 
+    def _check_smear(self, seg, shape):
+        """ Enforce linear interpolation constraint. """
+        if not isinstance(seg, Line):
+            raise IncompatibleAperture('%s cannot draw arc %s'
+                                       % (shape, seg))
+
+
     def _check_mq(self, start_angle, end_angle):
         """ Enforce single quadrant arc length restriction. """
         if not self.status['multi_quadrant']:
             if abs(end_angle - start_angle) > 0.5:
                 raise QuadrantViolation('Arc(%s to %s) > 0.5 rad/pi'
                                         % (start_angle, end_angle))
+
 
     def _check_pb(self, param_block, tok, should_be=True):
         """ Ensure we are parsing an appropriate block. """
