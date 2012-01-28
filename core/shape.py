@@ -559,15 +559,15 @@ class Moire(Shape):
     
     def min_point(self):
         """ Return the min point of the shape """
-        x = self.x - self._half_box
-        y = self.y - self._half_box
+        x = self.x - self._half_box()
+        y = self.y - self._half_box()
         return Point(x, y)
     
     
     def max_point(self):
         """ Return the max point of the shape """
-        x = self.x + self._half_box
-        y = self.y + self._half_box
+        x = self.x + self._half_box()
+        y = self.y + self._half_box()
         return Point(x, y)
 
 
@@ -619,15 +619,15 @@ class Thermal(Shape):
     
     def min_point(self):
         """ Return the min point of the shape """
-        x = self.x - self._half_box
-        y = self.y - self._half_box
+        x = self.x - self._half_box()
+        y = self.y - self._half_box()
         return Point(x, y)
     
     
     def max_point(self):
         """ Return the max point of the shape """
-        x = self.x + self._half_box
-        y = self.y + self._half_box
+        x = self.x + self._half_box()
+        y = self.y + self._half_box()
         return Point(x, y)
 
 

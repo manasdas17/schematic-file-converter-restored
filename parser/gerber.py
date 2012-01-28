@@ -24,7 +24,8 @@ from math import sqrt, sin, cos, acos, pi
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout, Layer, Image, Macro, Trace, ShapeInstance
+from core.layout import Layout, Layer, Image, Macro, Primitive, \
+                        Trace, ShapeInstance
 from core.shape import Line, Arc, Point, Circle, Rectangle, Obround, \
                        Polygon, RegularPolygon, Moire, Thermal
 
@@ -216,90 +217,11 @@ class Gerber:
             rotation = type_ not in ('circle', 'moire',
                                      'thermal') and mods[-1]/180
             shape, rotation = self._gen_shape(type_, mods, rotation)
-            primitives.append([is_additive, rotation, shape])
+            primitives.append(Primitive(is_additive, rotation, shape))
 
         # generate and stow the macro
-        macro = Macro(block.name, primitives)
-        self.layer.macros[block.name] = macro
+        self.layer.macros[block.name] = Macro(block.name, primitives)
         return {}
-
-
-    def _gen_shape(self, type_, mods, rotation):
-        """ Create a primitive shape component for a macro. """
-        if type_ == 'circle':
-            shape = Circle(x=mods[2],
-                           y=mods[3],
-                           radius=mods[1]/2)
-        elif type_ == 'vector':
-            shape, rotation = self._vector_to_rect(mods,
-                                                   rotation)
-        elif type_ == 'line':
-            shape = Rectangle(x=mods[3] - mods[1]/2,
-                              y=mods[4] + mods[2]/2,
-                              width=mods[1],
-                              height=mods[2])
-        elif type_ == 'rectangle':
-            shape = Rectangle(x=mods[3],
-                              y=mods[4] + mods[2],
-                              width=mods[1],
-                              height=mods[2])
-        elif type_ == 'outline':
-            points = [Point(mods[i], mods[i + 1])
-                      for i in range(2, len(mods[:-1]), 2)]
-            shape = Polygon(points)
-        elif type_ == 'polygon':
-            shape = RegularPolygon(x=mods[2],
-                                   y=mods[3],
-                                   outer=mods[4],
-                                   vertices=mods[1])
-        elif type_ == 'moire':
-            mods[8] = 2 - mods[8]/180
-            shape = Moire(*mods[0:9])
-        elif type_ == 'thermal':
-            mods[5] = 2 - mods[5]/180
-            shape = Thermal(*mods[0:6])
-        return (shape, rotation)
-
-
-    def _vector_to_rect(self, mods, rotation):
-        """
-        Convert a vector into a Rectangle.
-
-        If vect is not horizontal, rotate about the
-        origin until horizontal. Define it as a
-        normal rectangle, then incorporate rotated
-        angle into explicit rotation, so it can be
-        appropriately redeemed.
-
-        """
-        start, end = (mods[2:4], mods[4:6])
-        start_radius = sqrt(start[0]**2 + start[1]**2)
-        end_radius = sqrt(end[0]**2 + end[1]**2)
-        if start_radius > end_radius:
-            end, start = (mods[2:4], mods[4:6])
-            radius = end_radius
-        else:
-            radius = start_radius
-        x, y = start
-        adj = end[0] - x
-        opp = end[1] - y
-        hyp = sqrt(adj**2 + opp**2)
-        theta = acos(adj/hyp)/pi
-        if opp > 0:
-            theta = 2 - theta
-        d_theta = 2 - theta
-        theta = acos(x/radius)/pi 
-        if y > 0:
-            theta = 2 - theta
-        theta += d_theta
-        y = sin((2 - theta) * pi) * radius
-        x = cos((2 - theta) * pi) * radius
-        rotation = (rotation + theta) % 2
-        return (Rectangle(x=x,
-                          y=y + mods[1]/2,
-                          width=hyp,
-                          height=mods[1]),
-                rotation)
 
 
     def _do_funct(self, block):
@@ -385,7 +307,104 @@ class Gerber:
         return (coord['x'], coord['y'])
 
 
-    # circular paths
+    # geometry
+
+    def _gen_shape(self, type_, mods, rotation):
+        """ Create a primitive shape component for a macro. """
+        if type_ == 'circle':
+            shape = Circle(x=mods[2],
+                           y=mods[3],
+                           radius=mods[1]/2)
+        elif type_ == 'vector':
+            shape, rotation = self._vector_to_rect(mods,
+                                                   rotation)
+        elif type_ == 'line':
+            shape = Rectangle(x=mods[3] - mods[1]/2,
+                              y=mods[4] + mods[2]/2,
+                              width=mods[1],
+                              height=mods[2])
+        elif type_ == 'rectangle':
+            shape = Rectangle(x=mods[3],
+                              y=mods[4] + mods[2],
+                              width=mods[1],
+                              height=mods[2])
+        elif type_ == 'outline':
+            points = [Point(mods[i], mods[i + 1])
+                      for i in range(2, len(mods[:-1]), 2)]
+            shape = Polygon(points)
+        elif type_ == 'polygon':
+            shape = RegularPolygon(x=mods[2],
+                                   y=mods[3],
+                                   outer=mods[4],
+                                   vertices=mods[1])
+        elif type_ == 'moire':
+            mods[8] = 2 - mods[8]/180
+            shape = Moire(*mods[0:9])
+        elif type_ == 'thermal':
+            mods[5] = 2 - mods[5]/180
+            shape = Thermal(*mods[0:6])
+        return (shape, rotation)
+
+
+    def _vector_to_rect(self, mods, rotation):
+        """
+        Convert a vector into a Rectangle.
+
+        Strategy
+        ========
+        If vect is not horizontal:
+            - rotate about the origin until horizontal
+            - define it as a normal rectangle
+            - incorporate rotated angle into explicit rotation
+
+        """
+        start, end = (mods[2:4], mods[4:6])
+        start_radius = sqrt(start[0]**2 + start[1]**2)
+        end_radius = sqrt(end[0]**2 + end[1]**2)
+
+        # Reverse the vector if its endpoint is closer
+        # to the origin than its start point (avoids
+        # mucking about with signage later).
+        if start_radius > end_radius:
+            end, start = (mods[2:4], mods[4:6])
+            radius = end_radius
+        else:
+            radius = start_radius
+
+        # Calc the angle of the vector with respect to
+        # the x axis.
+        x, y = start
+        adj = end[0] - x
+        opp = end[1] - y
+        hyp = sqrt(adj**2 + opp**2)
+        theta = acos(adj/hyp)/pi
+        if opp > 0:
+            theta = 2 - theta
+
+        # Represent vector angle as a delta.
+        d_theta = 2 - theta
+
+        # Calc the angle of the start point of the
+        # flattened vector.
+        theta = acos(x/radius)/pi 
+        if y > 0:
+            theta = 2 - theta
+        theta += d_theta
+
+        # Redefine x and y at center of the rect's left
+        # side.
+        y = sin((2 - theta) * pi) * radius
+        x = cos((2 - theta) * pi) * radius
+
+        # Calc the composite rotation angle.
+        rotation = (rotation + theta) % 2
+
+        return (Rectangle(x=x,
+                          y=y + mods[1]/2,
+                          width=hyp,
+                          height=mods[1]),
+                rotation)
+
 
     def _draw_arc(self, end_pts, center_offset):
         """ Convert arc path into shape. """
@@ -495,7 +514,7 @@ class Gerber:
         self.layer.images.append(self.img_buff)
 
 
-    # tokenizer support methods - macros
+    # tokenizer support - macros
 
     def _parse_macro(self, tok):
         """ Define a macro, with its component shapes. """
@@ -507,7 +526,7 @@ class Gerber:
         return MacroDef(name, prim_defs)
 
 
-    # tokenizer support methods - parameters
+    # tokenizer support - params
 
     def _parse_param(self, tok):
         """ Convert a param specifier into pythonic data. """
@@ -523,7 +542,6 @@ class Gerber:
             self._extract_lp(name, tok)
             return {}
         else:
-            #TODO: handle layer params LN, LP, SR
             tup = tok
         return {name:tup}
 
@@ -638,7 +656,7 @@ class Gerber:
         return ab_tup
 
 
-    # tokenizer support methods - functions and coordinates
+    # tokenizer support - funct/coord
 
     def _parse_data_block(self, tok):
         """ Convert a non-param into pythonic data. """

@@ -217,10 +217,9 @@ class Macro:
     from prior shapes, not subsequent shapes.
 
     """
-    def __init__(self, name, prim_defs):
+    def __init__(self, name, primitives):
         self.name = name
-        self.primitives = [Primitive(d[0], d[1], d[2])
-                           for d in prim_defs]
+        self.primitives = primitives
 
 
     def json(self):
