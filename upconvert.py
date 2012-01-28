@@ -48,9 +48,11 @@ Upverter's Open JSON Interchange Format """
 #   ./upconvert.py -i test/openjson/simple.upv -o example.upv 
 
 
-import parser.openjson, parser.kicad, parser.eaglexml, parser.geda
+import parser.openjson, parser.kicad, parser.geda
 import parser.fritzing
+import parser.eagle
 import writer.openjson, writer.kicad, writer.geda
+import writer.eagle
 
 from argparse import ArgumentParser
 
@@ -58,7 +60,7 @@ PARSERS = {
     'openjson': parser.openjson.JSON,
     'kicad': parser.kicad.KiCAD,
     'geda': parser.geda.GEDA,
-    'eaglexml': parser.eaglexml.EagleXML,
+    'eagle': parser.eagle.Eagle,
     'fritzing': parser.fritzing.Fritzing,
 }
 
@@ -66,6 +68,7 @@ WRITERS = {
     'openjson': writer.openjson.JSON,
     'kicad': writer.kicad.KiCAD,
     'geda': writer.geda.GEDA,
+    'eagle': writer.eagle.Eagle,
 }
 
 
