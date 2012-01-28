@@ -37,6 +37,32 @@ BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
 TEST_FILES = path.join('test', 'gerber')
 DIR = path.join(BASE_DIR, TEST_FILES)
 
+
+# decorator for tests that use input files
+
+def use_file(filename):
+    """ Parse a gerber file. """
+    def wrap_wrap_tm(test_method):
+        """ Add params to decorator function. """
+        def wrap_tm(self):
+            """ Perform meta operations, then method. """
+            parser = Gerber(path.join(DIR, filename))
+            self.design = parser.parse()
+            test_method(self)
+
+        # correctly identify the decorated method
+        # (otherwise nose will not run the test)
+        wrap_tm.__name__ = test_method.__name__
+        wrap_tm.__doc__ = test_method.__doc__
+        wrap_tm.__dict__.update(test_method.__dict__)
+        wrap_wrap_tm.__name__ = wrap_tm.__name__
+        wrap_wrap_tm.__doc__ = wrap_tm.__doc__
+        wrap_wrap_tm.__dict__.update(wrap_tm.__dict__)
+
+        return wrap_tm
+    return wrap_wrap_tm
+
+
 class GerberTests(unittest.TestCase):
     """ The tests of the gerber parser """
 
@@ -47,31 +73,6 @@ class GerberTests(unittest.TestCase):
     def tearDown(self):
         """ Teardown the test case. """
         pass
-
-
-    # decorator for tests that use input files
-
-    def use_file(filename):                             # pylint: disable=E0213
-        """ Parse a gerber file. """
-        def wrap_wrap_tm(test_method):
-            """ Add params to decorator function. """
-            def wrap_tm(self):
-                """ Perform meta operations, then method. """
-                parser = Gerber(path.join(DIR, filename))
-                self.design = parser.parse()
-                test_method(self)
-
-            # correctly identify the decorated method
-            # (otherwise nose will not run the test)
-            wrap_tm.__name__ = test_method.__name__
-            wrap_tm.__doc__ = test_method.__doc__
-            wrap_tm.__dict__.update(test_method.__dict__)
-            wrap_wrap_tm.__name__ = wrap_tm.__name__
-            wrap_wrap_tm.__doc__ = wrap_tm.__doc__
-            wrap_wrap_tm.__dict__.update(wrap_tm.__dict__)
-
-            return wrap_tm
-        return wrap_wrap_tm
 
 
     # tests that pass if no errors are raised

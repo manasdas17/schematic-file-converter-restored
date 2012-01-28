@@ -24,10 +24,10 @@ from math import sqrt, sin, cos, acos, pi
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout, Layer, Image, Macro, Primitive, \
-                        Trace, Smear, ShapeInstance
-from core.shape import Line, Arc, Point, Circle, Rectangle, Obround, \
-                       Polygon, RegularPolygon, Moire, Thermal
+from core.layout import Layout, Layer, Image, Macro, Primitive
+from core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
+from core.shape import Line, Arc, Point, Circle, Rectangle, Obround
+from core.shape import Polygon, RegularPolygon, Moire, Thermal
 
 
 # exceptions
@@ -103,6 +103,7 @@ FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: di
 
 # constants
 
+DEBUG = False
 DIGITS = '0123456789'
 PRIMITIVES = {1:'circle',
               2:'vector',
@@ -179,6 +180,8 @@ class Gerber:
                        'IO':AxisDef(0, 0),    # image offset
                        'IP':True,             # image polarity
                        'IR':0}                # image rotation
+
+        # simulate a photo plotter
         self.status = {'x':0,
                        'y':0,
                        'draw':'OFF',
@@ -200,9 +203,8 @@ class Gerber:
             else:
                 effect = self._move(block)
             self.status.update(effect)
-        for image in self.layer.images:
-            print '-- %s --' % image.name
-            print image.json()
+        if DEBUG:
+            self._debug_stdout()
         layout = Layout()
         layout.layers.append(self.layer)
         design = Design()
@@ -258,7 +260,7 @@ class Gerber:
         start = tuple([self.status[k] for k in ('x', 'y')])
         end = self._target_pos(block)
         ends = (Point(start), Point(end))
-        shapes = self.layer.shapes
+        apertures = self.layer.apertures
         if self.status['draw'] == 'ON':
 
             # generate segment
@@ -273,16 +275,15 @@ class Gerber:
                 self.fill_buff.append(seg)
 
             else:
-                aperture = shapes[self.status['aperture']]
-                if isinstance(aperture[0], Rectangle):
+                aperture = apertures[self.status['aperture']]
+                if isinstance(aperture.shape, Rectangle):
 
                     # construct a smear
-                    shape, hole = shapes[self.status['aperture']]
-                    self._check_smear(seg, shape)
-                    self.img_buff.smears.append(Smear(seg, shape))
+                    self._check_smear(seg, aperture.shape)
+                    self.img_buff.smears.append(Smear(seg, aperture.shape))
 
                 else:
-                    wid = aperture[0].radius * 2
+                    wid = aperture.shape.radius * 2
                     tr_ind = self.img_buff.get_trace(wid, ends)
                     if tr_ind is None:
 
@@ -294,8 +295,8 @@ class Gerber:
                         self.img_buff.traces[tr_ind].segments.append(seg)
 
         elif self.status['draw'] == 'FLASH':
-            shape, hole = shapes[self.status['aperture']]
-            shape_inst = ShapeInstance(ends[1], shape, hole)
+            aperture = apertures[self.status['aperture']]
+            shape_inst = ShapeInstance(ends[1], aperture)
             self.img_buff.shape_instances.append(shape_inst)
 
         return {'x':end[0], 'y':end[1]}
@@ -609,7 +610,7 @@ class Gerber:
                                         hole_defs[1]) or
                               Circle(0, 0, hole_defs[0]/2))
 
-        self.layer.shapes.update({code:(shape, hole)})
+        self.layer.apertures.update({code:Aperture(code, shape, hole)})
 
 
     def _extract_ap(self, name, tok):
@@ -774,7 +775,7 @@ class Gerber:
             if not start == end:
                 raise OpenFillBoundary('%s != %s' % (start, end))
         self.fill_buff = []
-        return fill
+        return Fill(fill)
 
 
     def _check_smear(self, seg, shape):
@@ -818,3 +819,17 @@ class Gerber:
         """ Ensure data block is understood by the parser. """
         if typ == 'UNKNOWN':
             raise UnintelligibleDataBlock(tok)
+
+
+    def _debug_stdout(self):
+        """ Dump what we know. """
+        for j in self.layer.apertures:
+            print '-- D%s --' % j
+            print self.layer.apertures[j].json()
+        for k in self.layer.macros:
+            print '-- %s --' % k
+            print self.layer.macros[k].json()
+        for image in self.layer.images:
+            print '-- %s --' % image.name
+            print image.json()
+        raise Unparsable('deliberate error')
