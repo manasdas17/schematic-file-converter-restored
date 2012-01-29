@@ -1,6 +1,6 @@
 import unittest
 from inspect import getargspec
-from parser.viewdraw import FileStack, ViewDrawBase, ViewDrawSym
+from parser.viewdraw import FileStack, ViewDrawBase, ViewDrawSym, ViewDrawSch
 
 from core.annotation import Annotation
 from core.shape import Label
@@ -311,3 +311,105 @@ class ViewDrawSymTests(unittest.TestCase):
         k,v = self.sym.parse_label('2 3 12 0 1 1 1 1 foobar')
         # everything else already tested in test_label()
         self.assertEqual(v.text, '/foobar')
+
+class ViewDrawSchTests(unittest.TestCase):
+    # TODO work out a sensible way to test connecting instances to nets.
+
+    def setUp(self):
+        stub_file_stack()
+        self.sch = ViewDrawSch(None, 'foobar')
+        self.sch.stream = FileStack('foo')
+
+    def tearDown(self):
+        unstub_file_stack()
+        del self.sch
+
+    def test_junc(self):
+        k,v = self.sch.parse_junc('2 3 4')
+        self.assertEqual(k, 'netpoint')
+        self.assertEqual((v.x, v.y), (2, 3))
+        self.assertEqual(len(v.connected_points), 0)
+        self.assertEqual(len(v.connected_components), 0)
+        # Not checking v.point_id, as it is only spec'd to be a unique string
+
+    def test_seg(self):
+        k,v = self.sch.parse_seg('6 5')
+        self.assertEqual(k, 'segment')
+        self.assertEqual(v, (6, 5))
+
+    def test_basic_net(self):
+        k,v = self.sch.parse_net('bar')
+        self.assertEqual(k, 'net')
+        self.assertEqual(v.net_id, 'bar')
+        # make sure nothing got put in there
+        self.assertEqual(len(v.points), 0)
+        self.assertEqual(len(v.attributes), 0)
+        self.assertEqual(len(v.annotations), 0)
+
+    def netpt_helper(self, pts_dict, net):
+        self.assertEqual(len(net.points), len(pts_dict))
+        for pt in net.points.values():
+            # make sure pt is one of the ones we created
+            self.assertIn((pt.x, pt.y), pts_dict)
+            # make sure it's connected to the other point
+            self.assertEqual(len(pt.connected_points),
+                             len(pts_dict[(pt.x, pt.y)]))
+            for ptid in pt.connected_points:
+                otherpt = net.points[ptid]
+                self.assertIn((otherpt.x, otherpt.y), pts_dict[(pt.x, pt.y)])
+                self.assertEqual(len(pt.connected_components), 0)
+
+    def test_net_two_points(self):
+        pts_dict = {(13, 15): [(17, 19)],
+                    (17, 19): [(13, 15)]}
+        self.sch.stream.f = iter(['J 13 15 2\n',
+                                  'J 17 19 2\n',
+                                  'S 1 2\n'])
+        k,v = self.sch.parse_net('bar')
+        self.assertEqual(k, 'net')
+        self.netpt_helper(pts_dict, v)
+        self.assertEqual(v.net_id, 'bar')
+        self.assertEqual(len(v.attributes), 0)
+        self.assertEqual(len(v.annotations), 0)
+
+    def test_net_three_points(self):
+        pts_dict = {(1, 2): [(3, 4)],
+                    (3, 4): [(1, 2), (5, 6)],
+                    (5, 6): [(3, 4)]}
+        segs = [('1 2', '2 1'), ('2 3', '3 2')]
+        for (p,q,r) in [(a,b,c) for a in (0,1) for b in (0,1) for c in (0,1)]:
+            self.sch.stream.f = iter(['J 1 2 2\n',
+                                      'J 3 4 2\n',
+                                      'J 5 6 2\n',
+                                      'S %s\n' % segs[r][p],
+                                      'S %s\n' % segs[1-r][q]])
+            # run the different permutations to make sure different ordering of
+            # connections doesn't matter
+            k,v = self.sch.parse_net('bar')
+            self.assertEqual(k, 'net')
+            self.netpt_helper(pts_dict, v)
+            self.assertEqual(v.net_id, 'bar')
+            self.assertEqual(len(v.attributes), 0)
+            self.assertEqual(len(v.annotations), 0)
+
+    def test_net_label(self):
+        self.sch.stream.f = iter(['L 2 3 4 0 5 6 7 8 foo label\n'])
+        k,v = self.sch.parse_net('bar')
+        self.assertEqual(len(v.annotations), 1)
+        annot = v.annotations[0]
+        self.assertEqual((annot.x, annot.y), (2, 3))
+        self.assertEqual(annot.value, 'foo label')
+        self.assertEqual(annot.visible, True)
+
+    def test_simple_inst(self):
+        k,v = self.sch.parse_inst("1500 lib:file 5 4 3 2 1 '")
+        self.assertEqual(k, 'inst')
+        self.assertEqual(v.instance_id, '1500')
+        self.assertEqual(v.library_id, 'lib:file.5')
+        self.assertEqual(v.symbol_index, 0)
+        self.assertEqual(len(v.symbol_attributes), 1)
+        attrs = v.symbol_attributes[0]
+        self.assertEqual((attrs.x, attrs.y), (4, 3))
+        self.assertEqual(attrs.rotation, 1)
+
+    
