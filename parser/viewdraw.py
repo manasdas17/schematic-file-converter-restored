@@ -64,7 +64,7 @@ class ViewDrawBase:
         self.stream = FileStack(self.filename)
         tree = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             k, v = self.parsenode(cmd)(args)
             tree[k].append(v)
         return tree
@@ -86,13 +86,13 @@ class ViewDrawBase:
 
     def parse_annot(self, args):
         """ Returns a parsed annotation. """
-        x, y, font_size, rot, anchor, viz, val = args.split(' ', 6)
+        x, y, _font_size, _rot, _anchor, viz, val = args.split(' ', 6)
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
         # FIXME use rotation
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('Q'):
                 self.stream.push(phrase)
                 break
@@ -113,7 +113,7 @@ class ViewDrawBase:
 
     def parse_label(self, args):
         """ Returns a parsed label. """
-        x, y, font_size, rot, c, d, e, f, text = args.split(' ', 8)
+        x, y, _font_size, _rot, _c, _d, _e, _f, text = args.split(' ', 8)
         # treat them as annotations for now, I guess.
         # suspect that c, e are anchor and vis, as in parse_annot
         # According to other research, d is scope (0=local, 1=global) and f
@@ -134,8 +134,8 @@ class ViewDrawBase:
 
     def parse_circle(self, args):
         """ Returns a parsed circle. """
-        x, y, r = [int(a) for a in args.split()]
-        return ('shape', Circle(x, y, r))
+        x, y, rad = [int(a) for a in args.split()]
+        return ('shape', Circle(x, y, rad))
 
     def parse_box(self, args):
         """ Returns a parsed box. """
@@ -144,7 +144,7 @@ class ViewDrawBase:
 
     def parse_text(self, args):
         """ Parses a text label and returns as a Shape.Label. """
-        x, y, size, rot, anchor, text = args.split(' ', 5)
+        x, y, _size, _rot, _anchor, text = args.split(' ', 5)
         # TODO sort out rotation, alignment
         return ('shape', Label(int(x), int(y), text, 'left', 0))
 
@@ -155,7 +155,7 @@ class ViewDrawBase:
 
     def parse_line(self, args):
         """ Returns a parsed line. """
-        numpts, sep, pts = args.partition(' ')
+        numpts, _sep, pts = args.partition(' ')
         pts = [int(p) for p in pts.split()]
         numpts = int(numpts)
         # this next bit would be much easier if open polygons were
@@ -180,12 +180,12 @@ class ViewDrawBase:
         while abs(x0 - x1) < 0.1 or abs(x1 - x2) < 0.1 or abs(y0 - y1) < 0.1:
             x0, y0, x1, y1, x2, y2 = x1, y1, x2, y2, x0, y0
         # slopes of the chords
-        ma, mb = (y1-y0)/(x1-x0), (y2-y1)/(x2-x1)
+        ma, mb = (y1-y0) / (x1-x0), (y2-y1) / (x2-x1)
         # find the centre
-        xc = (ma*mb*(y0-y2) + mb*(x0+x1) - ma*(x1+x2)) / (2*(mb-ma))
-        yc = (-1/ma) * (xc - (x0+x1)/2) + (y0+y1)/2
+        xc = (ma * mb * (y0-y2) + mb * (x0+x1) - ma * (x1+x2)) / (2 * (mb-ma))
+        yc = (-1/ma) * (xc - (x0+x1) / 2) + (y0+y1) / 2
         # radius is the distance from the centre to any of the three points
-        r = sqrt((xc-x0)**2 + (yc-y0)**2)
+        rad = sqrt((xc-x0)**2 + (yc-y0)**2)
 
         # re-init xs,ys so that start and end points don't get confused.
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
@@ -213,7 +213,7 @@ class ViewDrawBase:
 
         return ('shape', Arc(int(round(xc)), int(round(yc)),
                              angle(x0,y0) / pi, angle(x2,y2) / pi,
-                             int(round(r))))
+                             int(round(rad))))
 
 
 class ViewDrawSch(ViewDrawBase):
@@ -249,8 +249,8 @@ class ViewDrawSch(ViewDrawBase):
             # hold on tight, this is ugly
             for (netid, netpt, pinid) in inst.conns:
                 net = [n for n in ckt.nets if n.net_id == netid][0]
-                cc = ConnectedComponent(inst.instance_id, pinid)
-                net.ibpts[netpt - 1].add_connected_component(cc)
+                comp = ConnectedComponent(inst.instance_id, pinid)
+                net.ibpts[netpt - 1].add_connected_component(comp)
             del inst.conns
         for net in ckt.nets:
             del net.ibpts
@@ -274,7 +274,7 @@ class ViewDrawSch(ViewDrawBase):
         subdata = defaultdict(list)
         for phrase in self.stream:
             print phrase
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
                 self.stream.push(phrase)
                 break
@@ -289,8 +289,8 @@ class ViewDrawSch(ViewDrawBase):
             else:
                 # oh yeah, a net can have a point more than once, because that
                 # makes *great* sense.
-                for pt in netpt.connected_points:
-                    thisnet.points[netpt.point_id].add_connected_point(pt)
+                for point in netpt.connected_points:
+                    thisnet.points[netpt.point_id].add_connected_point(point)
                 for comp in netpt.connected_components:
                     thisnet.points[netpt.point_id].add_connected_component(comp)
                 # update subdata['netpoint'] so that ref to netpt points to the
@@ -301,9 +301,9 @@ class ViewDrawSch(ViewDrawBase):
         # yuck, passing in-band
         thisnet.ibpts = subdata['netpoint']
 
-        for a, b in subdata['segment']:
-            thisnet.connect((subdata['netpoint'][a - 1],
-                             subdata['netpoint'][b - 1]))
+        for pt_a, pt_b in subdata['segment']:
+            thisnet.connect((subdata['netpoint'][pt_a - 1],
+                             subdata['netpoint'][pt_b - 1]))
         for annot in subdata['annot']:
             thisnet.add_annotation(annot)
             if '=' in annot.value:
@@ -312,7 +312,7 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_junc(self, args):
         """ Parses a junction on the net as a NetPoint. """
-        x, y, unknown = args.split()
+        x, y, _unknown = args.split()
         # unknown is suspected to be drawing style for the net at this
         # point (right-angle corner? T-section? Solder dot?) ATM not very
         # useful, not really our responsibility.
@@ -320,12 +320,12 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_seg(self, args):
         """ Returns a parsed net segment """
-        a, b = [int(n) for n in args.split()]
-        return ('segment', (a, b))
+        pt_a, pt_b = [int(n) for n in args.split()]
+        return ('segment', (pt_a, pt_b))
 
     def parse_inst(self, args):
         """ Returns a parsed component instance. """
-        inst, libname, libnum, x, y, rot, scale, b = args.split()
+        inst, libname, libnum, x, y, rot, _scale, _b = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
         if int(rot) > 3:
@@ -338,7 +338,7 @@ class ViewDrawSch(ViewDrawBase):
                                                       float(rot) / 2))
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('|R', 'A', 'C'):
                 self.stream.push(phrase)
                 break
@@ -356,7 +356,7 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_conn(self, args):
         """ Returns a parsed connection between component and net. """
-        netid, segpin, pin, a = args.split()
+        netid, segpin, pin, _a = args.split()
         # as far as has been observed, a is always 0
         # segpin is the netpoint on the net
         # TODO I have no faith in pin variable here
@@ -369,8 +369,8 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
-        x, y, font_size, rot, anchor, viz, kv = args.split(' ', 6)
-        k, sep, v = kv.partition('=')
+        x, y, _font_size, _rot, _anchor, viz, kv = args.split(' ', 6)
+        k, _sep, v = kv.partition('=')
         # TODO want to do anything with the rest of the info?
         # TODO at least add in the label
         return ('attr', (k, v))
@@ -408,6 +408,7 @@ class ViewDrawSch(ViewDrawBase):
 
 
 class ViewDrawSym(ViewDrawBase):
+    """ Parser for a library symbol file. """
     symtypes = ('composite', 'module', 'annotate', 'pin', 'power')
     # TODO A command
 
@@ -446,7 +447,7 @@ class ViewDrawSym(ViewDrawBase):
         """ Returns a parsed attribute. """
         # part properties, some of which look in need of further
         # processing to properly extract the part
-        key, sep, val = args.split(' ', 6)[-1].partition('=')
+        key, _sep, val = args.split(' ', 6)[-1].partition('=')
         # I have seen some properties that have no value set, and don't
         # have '=' in the string. partition() will set val = ''
 
@@ -461,7 +462,7 @@ class ViewDrawSym(ViewDrawBase):
         thispin = Pin(pid, (xb, yb), (xe, ye))
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('L'):
                 self.stream.push(phrase)
                 break
@@ -476,7 +477,7 @@ class ViewDrawSym(ViewDrawBase):
         """ Returns a parsed label. """
         # So far, only seen it for labelling pins, in the symmbol files
         # at least.
-        x, y, pts, rot, anchor, scope, vis, inv, text = args.split()
+        x, y, _pts, rot, _anchor, _scope, _vis, inv, text = args.split()
         return ('label', Label(int(x), int(y),
                          # cheap-o overbar
                          (inv == '1' and '/' or '') + text,
