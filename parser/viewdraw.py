@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-""" The Eagle XML Format Parser """
+""" The ViewDraw [5.x] format parser """
 
 # upconvert.py - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
@@ -217,7 +217,7 @@ class ViewDrawBase:
 
 
 class ViewDrawSch(ViewDrawBase):
-    """ The schematic parser. """
+    """ Parser for a single schematic file. """
     
     def __init__(self, lib, filename):
         ViewDrawBase.__init__(self, filename)
@@ -269,14 +269,16 @@ class ViewDrawSch(ViewDrawBase):
         return ckt
 
     def parse_net(self, args):
-        """ Returns a parsed net. """
+        """ Assembles a net from a list of junctions, segments, and labels. """
         thisnet = Net(args)
         subdata = defaultdict(list)
         for phrase in self.stream:
+            print phrase
             cmd, sep, args = phrase.partition(' ')
             if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
                 self.stream.push(phrase)
                 break
+            print args
             k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         # finish building thisnet
@@ -309,7 +311,7 @@ class ViewDrawSch(ViewDrawBase):
         return ('net', thisnet)
 
     def parse_junc(self, args):
-        """ Returns a parsed junc. """
+        """ Parses a junction on the net as a NetPoint. """
         x, y, unknown = args.split()
         # unknown is suspected to be drawing style for the net at this
         # point (right-angle corner? T-section? Solder dot?) ATM not very
@@ -317,12 +319,12 @@ class ViewDrawSch(ViewDrawBase):
         return ('netpoint', NetPoint(x + 'x' + y, int(x), int(y)))
 
     def parse_seg(self, args):
-        """ Returns a parsed seg. """
+        """ Returns a parsed net segment """
         a, b = [int(n) for n in args.split()]
         return ('segment', (a, b))
 
     def parse_inst(self, args):
-        """ Returns a parsed instance. """
+        """ Returns a parsed component instance. """
         inst, libname, libnum, x, y, rot, scale, b = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
@@ -353,7 +355,7 @@ class ViewDrawSch(ViewDrawBase):
         return ('inst', thisinst)
 
     def parse_conn(self, args):
-        """ Returns a parsed connection. """
+        """ Returns a parsed connection between component and net. """
         netid, segpin, pin, a = args.split()
         # as far as has been observed, a is always 0
         # segpin is the netpoint on the net
@@ -361,7 +363,7 @@ class ViewDrawSch(ViewDrawBase):
         return ('conn', (netid, int(segpin), pin))
     
     def parse_bounds(self, args):
-        """ Returns a parsed bounds. """
+        """ Parses the bounds of this schematic sheet. """
         # Not sure if this is quite valid.
         return ('Dbounds', [int(a) for a in args.split()])
 
@@ -374,11 +376,11 @@ class ViewDrawSch(ViewDrawBase):
         return ('attr', (k, v))
 
     def lookup(self, libname, num):
-        """ Convert a name + number pair. """
+        """ Given a component name and version, returns the filename """
         return libname.lower() + '.' + num
 
     def correct_y(self, des, (xmin, ymin, xmax, ymax)):
-        """ Correct a y value. """
+        """ Flips all placed elements on this sheet about x-axis. """
         for ann in des.design_attributes.annotations:
             ann.y = ymax - ann.y
         # someday, this will happen
@@ -419,7 +421,7 @@ class ViewDrawSym(ViewDrawBase):
         self.libdir = libdir
 
     def parse(self):
-        """ Returns a parsed symbol. """
+        """ Parses a component from the library, returns a Compenent. """
         part = Component(self.filename)
         part.add_symbol(Symbol())
         part.symbols[0].add_body(Body())
@@ -483,7 +485,7 @@ class ViewDrawSym(ViewDrawBase):
         # vertical alignment thing
 
     def correct_y(self, comp):
-        """ corrects a y value. """
+        """ Flips all elements of the part about the x-axis. """
         for sym in comp.symbols:
             for bod in sym.bodies:
                 for pin in bod.pins:
@@ -508,7 +510,7 @@ class ViewDraw:
         self.schdir, self.symdirs = schdir, symdirs
 
     def parse(self):
-        """ Returns a parsed viewdraw file. """
+        """ Parses a viewdraw project and returns a list of sheets. """
         lib = Components()
         # All the symbol files I have seen have a filename like partname.n
         # where n is a number, for multi-versioned parts I'm guessing
