@@ -335,7 +335,7 @@ class GEDA:
         angle, mirror = params['angle'], params['mirror']
 
         if mirror == 1:
-            angle = abs(angle - 90)
+            angle = (angle + 90) % 360
 
         x, y = self.conv_coords(x, y)
         pt_a = self.get_netpoint(x, y)
@@ -797,8 +797,8 @@ class GEDA:
         y1, y2 = params['y1'], params['y2']
         ripperdir = params['ripperdir']
 
-        ## ignore bus when length or ripperdir is zero
-        if (x1 == x2 and y1 == y2) or ripperdir == 0:
+        ## ignore bus when length is zero
+        if x1 == x2 and y1 == y2:
             return 
 
         pta_x, pta_y = self.conv_coords(x1, y1)
