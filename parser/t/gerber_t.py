@@ -46,8 +46,8 @@ def use_file(filename):
         """ Add params to decorator function. """
         def wrap_tm(self):
             """ Perform meta operations, then method. """
-            parser = Gerber(path.join(DIR, filename))
-            self.design = parser.parse()
+            parser = Gerber()
+            self.design = parser.parse(path.join(DIR, filename))
             test_method(self)
 
         # correctly identify the decorated method
@@ -85,31 +85,31 @@ class GerberTests(unittest.TestCase):
     @use_file('simple.ger')
     def test_simple(self):
         """ Parse a simple, correct gerber file. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.traces) == 2
 
     @use_file('arc_segments.ger')
     def test_arcs(self):
         """ Parse some connected arcs and lines - gerber. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.traces) == 2
 
     @use_file('fills.ger')
     def test_outline_fills(self):
         """ Parse outline fills - gerber. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.fills) == 2
 
     @use_file('smear.ger')
     def test_smear(self):
         """ Parse a smear - gerber. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.smears) == 1
 
     @use_file('complex.ger')
     def test_complex(self):
         """ Parse aperture macros - gerber. """
-        image = self.design.layouts[0].layers[0].images[2]
+        image = self.design.layout.layers[0].images[2]
         assert len(image.shape_instances) == 3
 
 

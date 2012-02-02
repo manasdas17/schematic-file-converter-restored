@@ -160,11 +160,8 @@ def snap(float_1, float_2):
 class Gerber:
     """ The Gerber Format Parser """
 
-    def __init__(self, filename='.'):
-        name, ext = filename.rsplit('.', 1)
-        layer_name = ext.lower() == 'ger' and name or ext
-        self.filename = filename
-        self.layer = Layer(layer_name)
+    def __init__(self):
+        self.layer = Layer()
         self.img_buff = Image()
         self.fill_buff = []
 
@@ -193,9 +190,11 @@ class Gerber:
                        'incremental_coords':None}
 
 
-    def parse(self):
+    def parse(self, infile='.'):
         """ Parse tokens from gerber file into a design. """
-        for block in self._tokenize():
+        name, ext = infile.rsplit('.', 1)
+        self.layer.name = ext.lower() == 'ger' and name or ext
+        for block in self._tokenize(infile):
             if isinstance(block, MacroDef):
                 effect = self._build_macro(block)
             elif isinstance(block, Funct):
@@ -206,9 +205,11 @@ class Gerber:
         if DEBUG:
             self._debug_stdout()
         layout = Layout()
+        layout.units = (self.params['MO'] == 'IN'
+                        and 'inch' or 'mm')
         layout.layers.append(self.layer)
         design = Design()
-        design.layouts.append(layout)
+        design.layout = layout
         return design
 
 
@@ -479,11 +480,11 @@ class Gerber:
 
     # tokenizer
 
-    def _tokenize(self):
+    def _tokenize(self, infile):
         """ Split gerber file into pythonic tokens. """
         param_block = eof = False
         pos = 0
-        with open(self.filename, 'r') as ger:
+        with open(infile, 'r') as ger:
             content = ger.read()
         match = TOK_RE.match(content)
         while pos < len(content):

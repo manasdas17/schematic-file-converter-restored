@@ -35,7 +35,7 @@ class Design:
         self.components = Components()
         self.component_instances = list()
         self.design_attributes = DesignAttributes()
-        self.layouts = list()
+        self.layout = None
         self.version = dict()
         self.set_version("0.1.0","Upverter converter")
 

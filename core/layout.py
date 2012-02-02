@@ -251,6 +251,18 @@ class Aperture:
         self.hole = hole
 
 
+    def __eq__(self, other):
+        """ Compare 2 apertures. """
+        if (isinstance(self.shape, str) or
+            isinstance(other.shape, str)):
+            equal = self.shape == other.shape
+        else:
+            equal = (self.shape.__dict__ == other.shape.__dict__ and
+                     (self.hole == other.hole or
+                      self.hole.__dict__ == other.hole.__dict__))
+        return equal
+
+
     def json(self):
         """ Return the aperture as JSON """
         return {

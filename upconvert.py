@@ -49,10 +49,10 @@ Upverter's Open JSON Interchange Format """
 
 
 import parser.openjson, parser.kicad, parser.geda
-import parser.fritzing
+import parser.fritzing, parser.gerber
 import parser.eagle
 import writer.openjson, writer.kicad, writer.geda
-import writer.eagle
+import writer.eagle, writer.gerber
 
 from argparse import ArgumentParser
 
@@ -62,6 +62,7 @@ PARSERS = {
     'geda': parser.geda.GEDA,
     'eagle': parser.eagle.Eagle,
     'fritzing': parser.fritzing.Fritzing,
+    'gerber': parser.gerber.Gerber,
 }
 
 WRITERS = {
@@ -69,6 +70,7 @@ WRITERS = {
     'kicad': writer.kicad.KiCAD,
     'geda': writer.geda.GEDA,
     'eagle': writer.eagle.Eagle,
+    'gerber': writer.gerber.Gerber,
 }
 
 
