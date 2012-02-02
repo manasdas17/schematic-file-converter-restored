@@ -501,8 +501,22 @@ class GEDA:
                 if key is None:
                     ##TODO(elbaschid): annotation text in component. what to do?
                     ##TODO(elbaschid): make this into a label?
-                    ##TODO(elbaschid): add optional mirroring of 
-                    pass
+                    ##TODO(elbaschid): add optional mirroring 
+                    text_x = params['x']
+
+                    if mirrored:
+                        text_x = 0 - text_x
+
+                    label = shape.Label(
+                        self.x_to_px(text_x),
+                        self.y_to_px(params['y']),
+                        value,
+                        'left',
+                        self.conv_angle(params['angle']),
+                    )
+
+                    body.add_shape(label)
+
                 elif key == '_refdes' and '?' in value:
                     prefix, suffix = value.split('?') 
                     component.add_attribute('_prefix', prefix)
