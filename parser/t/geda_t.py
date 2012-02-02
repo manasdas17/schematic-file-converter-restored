@@ -150,6 +150,7 @@ text!"""
             (180, 1.0), 
             (220, 0.8), 
             (270, 0.5), 
+            (510, 1.2),
         ]
     
         for angle, expected in angles:
@@ -172,7 +173,7 @@ text!"""
             (3429, 342),
             (0, 0),
             (-50, -5),
-            (-1238, -124),
+            (-1238, -123),
         ]
 
         self.geda_parser.set_offset(core.shape.Point(0, 0))
@@ -460,6 +461,13 @@ netname=+_1
         self.assertEquals(arc_obj.radius, 190)
         self.assertEquals(arc_obj.start_angle, 0.0)
         self.assertEquals(arc_obj.end_angle, 1.5)
+        ## mirrored arc
+        arc_obj = self.geda_parser._parse_arc(params, mirrored=True)
+        self.assertEquals(arc_obj.x, -4110)
+        self.assertEquals(arc_obj.y, 4850)
+        self.assertEquals(arc_obj.radius, 190)
+        self.assertEquals(arc_obj.start_angle, 1.5)
+        self.assertEquals(arc_obj.end_angle, 1.0)
 
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 44300 49800 500 30 200 3 0 0 0 -1 -1")
@@ -472,7 +480,14 @@ netname=+_1
         self.assertEquals(arc_obj.radius, 50)
         self.assertEquals(arc_obj.start_angle, 1.8)
         self.assertEquals(arc_obj.end_angle, 0.7)
-
+        ## mirrored arc
+        arc_obj = self.geda_parser._parse_arc(params, mirrored=True)
+        self.assertEquals(arc_obj.type, 'arc')
+        self.assertEquals(arc_obj.x, -4430)
+        self.assertEquals(arc_obj.y, 4980)
+        self.assertEquals(arc_obj.radius, 50)
+        self.assertEquals(arc_obj.start_angle, 0.3)
+        self.assertEquals(arc_obj.end_angle, 1.2)
 
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 45100 48400 700 123 291 3 0 0 0 -1 -1")
@@ -484,7 +499,7 @@ netname=+_1
         self.assertEquals(arc_obj.y, 4840)
         self.assertEquals(arc_obj.radius, 70)
         self.assertEquals(arc_obj.start_angle, 1.3)
-        self.assertEquals(arc_obj.end_angle, 0.3)
+        self.assertEquals(arc_obj.end_angle, 1.7)
 
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 45100 48400 700 123 651 3 0 0 0 -1 -1")
@@ -496,14 +511,27 @@ netname=+_1
         self.assertEquals(arc_obj.y, 4840)
         self.assertEquals(arc_obj.radius, 70)
         self.assertEquals(arc_obj.start_angle, 1.3)
-        self.assertEquals(arc_obj.end_angle, 0.3)
+        self.assertEquals(arc_obj.end_angle, 1.7)
+
+        typ, params =  self.geda_parser._parse_command(
+            StringIO.StringIO("A 0 0 500 30 200 3 0 0 0 -1 -1")
+        )
+        self.assertEquals(typ, 'A')
+        arc_obj = self.geda_parser._parse_arc(params, mirrored=True)
+        self.assertEquals(arc_obj.type, 'arc')
+        self.assertEquals(arc_obj.x, 0)
+        self.assertEquals(arc_obj.y, 0)
+        self.assertEquals(arc_obj.radius, 50)
+        ## mirrored to 310 (0.3) + 200 = 510 (1.2)
+        self.assertEquals(arc_obj.start_angle, 0.3)
+        self.assertEquals(arc_obj.end_angle, 1.2)
 
     def test__parse_line(self):
         """ Test parsing a line command into a Line object. """
         test_strings = [
             "L 40800 46600 45700 46600 3 0 0 0 -1 -1",
             "L 42300 45900 42900 45500 3 0 0 0 -1 -1",
-            "L 44500 45000 44100 45200 3 0 0 0 -1 -1",
+            "L -400 500 440 560 3 0 0 0 -1 -1",
         ]
 
         for line_string in test_strings:
@@ -530,6 +558,30 @@ netname=+_1
                 params['y2']/self.geda_parser.SCALE_FACTOR
             )
 
+        for line_string in test_strings:
+            typ, params =  self.geda_parser._parse_command(
+                StringIO.StringIO(line_string)
+            )
+            self.assertEquals(typ, 'L')
+            line_obj = self.geda_parser._parse_line(params, mirrored=True)
+            self.assertEquals(line_obj.type, 'line')
+            self.assertEquals(
+                line_obj.p1.x, 
+                0-params['x1']/self.geda_parser.SCALE_FACTOR
+            )
+            self.assertEquals(
+                line_obj.p1.y, 
+                params['y1']/self.geda_parser.SCALE_FACTOR
+            )
+            self.assertEquals(
+                line_obj.p2.x, 
+                0-params['x2']/self.geda_parser.SCALE_FACTOR
+            )
+            self.assertEquals(
+                line_obj.p2.y, 
+                params['y2']/self.geda_parser.SCALE_FACTOR
+            )
+
     def test__parse_box(self):
         """ Tests parsing box commands into Rectangle objects. """
         test_strings = [
@@ -546,11 +598,11 @@ netname=+_1
             self.assertEquals(rect_obj.type, 'rectangle')
             self.assertEquals(
                 rect_obj.x, 
-                (params['x']+params['height'])/self.geda_parser.SCALE_FACTOR
+                params['x']/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 rect_obj.y, 
-                params['y']/self.geda_parser.SCALE_FACTOR
+                (params['y']+params['height'])/self.geda_parser.SCALE_FACTOR
             )
             self.assertEquals(
                 rect_obj.width, 
@@ -560,6 +612,28 @@ netname=+_1
                 rect_obj.height, 
                 params['height']/self.geda_parser.SCALE_FACTOR
             )
+
+        mirror_test_strings = [
+            (
+                "B 100 300 300 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1",
+                {'x': -40, 'y': 80, 'width': 30, 'height': 50},
+            ),
+            (
+                "B -200 400 500 200 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1",
+                {'x': -30, 'y': 60, 'width': 50, 'height': 20},
+            )
+        ]
+        ## check mirrored rectangle 
+        for rect_string, result_dict in mirror_test_strings:
+            typ, params =  self.geda_parser._parse_command(
+                StringIO.StringIO(rect_string)
+            )
+            rect_obj = self.geda_parser._parse_box(params, mirrored=True)
+            self.assertEquals(rect_obj.type, 'rectangle')
+            self.assertEquals(rect_obj.x, result_dict['x'])
+            self.assertEquals(rect_obj.y, result_dict['y'])
+            self.assertEquals(rect_obj.width, result_dict['width'])
+            self.assertEquals(rect_obj.height, result_dict['height'])
 
     def test__parse_path(self):
         """ Tests parsing path commands into lists of shapes. """
@@ -581,6 +655,29 @@ z"""
             ['line', (60, 20), (55, 29)],
             ['line', (55, 29), (53, 26)],
             ['line', (53, 26), (51, 24)],
+        ]
+
+        self.assertEquals(len(shapes), 4)
+
+        for shape, expected in zip(shapes, expected_results):
+            self.assertEquals(shape.type, expected[0])
+            start_x, start_y = expected[1]
+            self.assertEquals(shape.p1.x, start_x)
+            self.assertEquals(shape.p1.y, start_y)
+            end_x, end_y = expected[2]
+            self.assertEquals(shape.p2.x, end_x) 
+            self.assertEquals(shape.p2.y, end_y) 
+
+        ##NOTE: parse mirrored path
+        stream = StringIO.StringIO(simple_example)
+        typ, params = self.geda_parser._parse_command(stream)
+        shapes = self.geda_parser._parse_path(stream, params, mirrored=True)
+        
+        expected_results = [
+            ['line', (-51, 24), (-60, 20)],
+            ['line', (-60, 20), (-55, 29)],
+            ['line', (-55, 29), (-53, 26)],
+            ['line', (-53, 26), (-51, 24)],
         ]
 
         self.assertEquals(len(shapes), 4)
@@ -641,6 +738,27 @@ z"""
                 params['radius']/self.geda_parser.SCALE_FACTOR
             )
 
+        ##mirrored circles
+        for circle_string in test_strings:
+            typ, params =  self.geda_parser._parse_command(
+                StringIO.StringIO(circle_string)
+            )
+            self.assertEquals(typ, 'V')
+            circle_obj = self.geda_parser._parse_circle(params, mirrored=True)
+            self.assertEquals(circle_obj.type, 'circle')
+            self.assertEquals(
+                circle_obj.x, 
+                0-params['x']/self.geda_parser.SCALE_FACTOR
+            )
+            self.assertEquals(
+                circle_obj.y, 
+                params['y']/self.geda_parser.SCALE_FACTOR
+            )
+            self.assertEquals(
+                circle_obj.radius, 
+                params['radius']/self.geda_parser.SCALE_FACTOR
+            )
+
     def test__parse_pin(self):
         """ Tests parsing pin commands into Pin objects. """
         stream = StringIO.StringIO('P 100 600 200 600 1 0 0\n')
@@ -678,6 +796,18 @@ pintype=in
         self.assertEquals(pin.p2.x, 10)
         self.assertEquals(pin.p2.y, 60)
 
+        ##NOTE: test mirrored pin
+        stream = StringIO.StringIO(pin_sample)
+        typ, params =  self.geda_parser._parse_command(stream)
+        pin = self.geda_parser._parse_pin(stream, params, mirrored=True)
+
+        ## null_end
+        self.assertEquals(pin.p1.x, -20)
+        self.assertEquals(pin.p1.y, 60)
+        ## connect_end
+        self.assertEquals(pin.p2.x, -10)
+        self.assertEquals(pin.p2.y, 60)
+
         reversed_pin_sample = """P 100 600 200 600 1 0 1
 {
 T 150 650 5 8 1 1 0 6 1
@@ -699,6 +829,18 @@ pintype=in
         self.assertEquals(pin.p1.y, 60)
         ## connect_end
         self.assertEquals(pin.p2.x, 20)
+        self.assertEquals(pin.p2.y, 60)
+
+        ##NOTE: test mirrored pin
+        stream = StringIO.StringIO(reversed_pin_sample)
+        typ, params =  self.geda_parser._parse_command(stream)
+        pin = self.geda_parser._parse_pin(stream, params, mirrored=True)
+
+        ## null_end
+        self.assertEquals(pin.p1.x, -10)
+        self.assertEquals(pin.p1.y, 60)
+        ## connect_end
+        self.assertEquals(pin.p2.x, -20)
         self.assertEquals(pin.p2.y, 60)
 
     def test__parse_command(self):

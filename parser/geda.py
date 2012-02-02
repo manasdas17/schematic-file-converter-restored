@@ -78,7 +78,7 @@ class GEDA:
     """ The GEDA Format Parser """
 
     DELIMITER = ' '
-    SCALE_FACTOR = 10 #maps 1000 MILS to 10 pixels
+    SCALE_FACTOR = 10.0 #maps 1000 MILS to 10 pixels
 
 
     OBJECT_TYPES = { 
@@ -469,6 +469,9 @@ class GEDA:
         saved_offset = self.offset
         self.offset = shape.Point(0, 0)
 
+        ## retrieve if component is mirrored around Y-axis 
+        mirrored = bool(params.get('mirror', False))
+
         move_to = None
         if basename.startswith('EMBEDDED'):
             move_to = (params['x'], params['y'])
@@ -488,6 +491,8 @@ class GEDA:
         ##NOTE: adding this attribute to make parsing UPV data easier 
         ## when using re-exported UPV.
         component.add_attribute('_geda_imported', 'true')
+        if mirrored:
+            component.add_attribute('_geda_mirrored', 'true')
 
         while typ is not None:
 
@@ -495,6 +500,8 @@ class GEDA:
                 key, value = self._parse_text(stream, params)
                 if key is None:
                     ##TODO(elbaschid): annotation text in component. what to do?
+                    ##TODO(elbaschid): make this into a label?
+                    ##TODO(elbaschid): add optional mirroring of 
                     pass
                 elif key == '_refdes' and '?' in value:
                     prefix, suffix = value.split('?') 
@@ -505,30 +512,30 @@ class GEDA:
                     component.add_attribute(key, value)
             elif typ == 'L':
                 body.add_shape(
-                    self._parse_line(params)
+                    self._parse_line(params, mirrored)
                 )
 
             elif typ == 'B':
                 body.add_shape(
-                    self._parse_box(params)
+                    self._parse_box(params, mirrored)
                 )
 
             elif typ == 'V':
                 body.add_shape(
-                    self._parse_circle(params)
+                    self._parse_circle(params, mirrored)
                 )
 
             elif typ == 'A':
                 body.add_shape(
-                    self._parse_arc(params)
+                    self._parse_arc(params, mirrored)
                 )
 
             elif typ == 'P':
                 body.add_pin(
-                    self._parse_pin(stream, params)
+                    self._parse_pin(stream, params, mirrored)
                 )
             elif typ == 'H':
-                for new_shape in self._parse_path(stream, params):
+                for new_shape in self._parse_path(stream, params, mirrored):
                     body.add_shape(new_shape)
 
             elif typ == 'G':
@@ -806,7 +813,7 @@ class GEDA:
                 if net_name not in self.net_names.values():
                     self.net_names[pt_a.point_id] = net_name
 
-    def _parse_path(self, stream, params):
+    def _parse_path(self, stream, params, mirrored=False):
         """ Parses a SVG-like path provided path into a list
             of simple shapes. The gEDA formats allows only line
             and curve segments with absolute coordinates. Hence,
@@ -821,13 +828,17 @@ class GEDA:
         if command[0] != 'M':
             raise GEDAError('found invalid path in gEDA file')
 
-        def get_coords(string):
+        def get_coords(string, mirrored):
             """ Get coordinates from string with comma-sparated notation."""
-            x, y = string.strip().split(',')
-            return (self.x_to_px(int(x)), self.y_to_px(int(y)))
+            x, y = [int(value) for value in string.strip().split(',')]
+
+            if mirrored:
+                x = 0-x
+
+            return (self.x_to_px(x), self.y_to_px(y))
 
         shapes = []
-        current_pos = initial_pos = (get_coords(command[1]))
+        current_pos = initial_pos = (get_coords(command[1], mirrored))
 
         ## loop over the remaining lines of commands (after 'M')
         for dummy in range(num_lines-1):
@@ -836,7 +847,7 @@ class GEDA:
             ## draw line from current to given position
             if command[0] == 'L':
                 assert(len(command) == 2)
-                end_pos = get_coords(command[1])
+                end_pos = get_coords(command[1], mirrored)
 
                 line = shape.Line(current_pos, end_pos)
                 shapes.append(line)
@@ -846,9 +857,9 @@ class GEDA:
             ## draw curve from current to given position
             elif command[0] == 'C':
                 assert(len(command) == 4)
-                control1 = get_coords(command[1])
-                control2 = get_coords(command[2])
-                end_pos = get_coords(command[3])
+                control1 = get_coords(command[1], mirrored)
+                control2 = get_coords(command[2], mirrored)
+                end_pos = get_coords(command[3], mirrored)
 
                 curve = shape.BezierCurve(
                     control1,
@@ -873,53 +884,80 @@ class GEDA:
 
         return shapes 
     
-    def _parse_arc(self, params):
+    def _parse_arc(self, params, mirrored=False):
         """ Creates an Arc object from the parameter in *params*. All 
             style related parameters are ignored.
             Returns Arc object.
         """
+        arc_x = params['x']
+        start_angle = params['startangle']
+        sweep_angle = params['sweepangle']
+        if mirrored:
+            arc_x = 0 - arc_x
+    
+            start_angle = start_angle + sweep_angle
+            if start_angle <= 180:
+                start_angle =  180 - start_angle
+            else:
+                start_angle =  (360 - start_angle) + 180
+
         return shape.Arc(
-            self.x_to_px(params['x']),
+            self.x_to_px(arc_x),
             self.y_to_px(params['y']),
-            self.conv_angle(params['startangle']),
-            self.conv_angle(params['startangle'] + params['sweepangle']),
+            self.conv_angle(start_angle),
+            self.conv_angle(start_angle+sweep_angle),
             self.to_px(params['radius']),
         )
 
-    def _parse_line(self, params):
+    def _parse_line(self, params, mirrored=None):
         """ Creates a Line object from the parameters in *params*. All
             style related parameters are ignored.
             Returns a Line object.
         """
+        line_x1 = params['x1']
+        line_x2 = params['x2']
+
+        if mirrored:
+            line_x1 = 0 - params['x1']
+            line_x2 = 0 - params['x2']
+
         return shape.Line(
-            self.conv_coords(params['x1'], params['y1']),
-            self.conv_coords(params['x2'], params['y2']),
+            self.conv_coords(line_x1, params['y1']),
+            self.conv_coords(line_x2, params['y2']),
         )
 
-    def _parse_box(self, params):
+    def _parse_box(self, params, mirrored=False):
         """ Creates rectangle from gEDA box with origin in bottom left
             corner. All style related values are ignored.
             Returns a Rectangle object.
         """
+        rect_x = params['x']
+        if mirrored:
+            rect_x = 0-(rect_x+params['width'])
+
         return shape.Rectangle(
-            self.x_to_px(params['x']+params['height']),
-            self.y_to_px(params['y']),
+            self.x_to_px(rect_x),
+            self.y_to_px(params['y']+params['height']),
             self.to_px(params['width']),
             self.to_px(params['height'])
         )
 
-    def _parse_circle(self, params):
+    def _parse_circle(self, params, mirrored=False):
         """ Creates a Circle object from the gEDA parameters in *params. All
             style related parameters are ignored. 
             Returns a Circle object.
         """
+        vertex_x = params['x']
+        if mirrored:
+            vertex_x = 0-vertex_x
+
         return shape.Circle(
-            self.x_to_px(params['x']),
+            self.x_to_px(vertex_x),
             self.y_to_px(params['y']),
             self.to_px(params['radius']),
         )
 
-    def _parse_pin(self, stream, params):
+    def _parse_pin(self, stream, params, mirrored=False):
         """ Creates a Pin object from the parameters in *param* and
             text attributes provided in the following environment. The
             environment is enclosed in ``{}`` and is required. If no
@@ -945,15 +983,20 @@ class GEDA:
 
         whichend = params['whichend']
 
+        pin_x1, pin_x2 = params['x1'], params['x2']
+        if mirrored:
+            pin_x1 = 0-pin_x1
+            pin_x2 = 0-pin_x2
+            
         ## determine wich end of the pin is the connected end
         ## 0: first point is connector
         ## 1: second point is connector
         if whichend == 0:
-            connect_end = self.conv_coords(params['x1'], params['y1']) 
-            null_end = self.conv_coords(params['x2'], params['y2']) 
+            connect_end = self.conv_coords(pin_x1, params['y1']) 
+            null_end = self.conv_coords(pin_x2, params['y2']) 
         else:
-            null_end = self.conv_coords(params['x1'], params['y1'])
-            connect_end = self.conv_coords(params['x2'], params['y2'])
+            null_end = self.conv_coords(pin_x1, params['y1'])
+            connect_end = self.conv_coords(pin_x2, params['y2'])
 
         label = None
         if '_pinlabel' in attributes:
@@ -1019,7 +1062,7 @@ class GEDA:
             scale factor. 
             Returns an integer value converted to pixels.
         """
-        return int(value / float(cls.SCALE_FACTOR))
+        return int(value / cls.SCALE_FACTOR)
 
     def x_to_px(self, x_mils):
         """ Convert *px* from MILS to pixels using the scale
@@ -1028,7 +1071,7 @@ class GEDA:
 
             Returns translated and converted X coordinate.
         """
-        return int((x_mils - self.offset.x) / self.SCALE_FACTOR)
+        return int(float(x_mils - self.offset.x) / self.SCALE_FACTOR)
 
     def y_to_px(self, y_mils):
         """ Convert *py* from MILS to pixels using the scale
@@ -1037,7 +1080,7 @@ class GEDA:
 
             Returns translated and converted Y coordinate.
         """
-        return int((y_mils - self.offset.y) / self.SCALE_FACTOR)
+        return int(float(y_mils - self.offset.y) / self.SCALE_FACTOR)
 
     def conv_coords(self, orig_x, orig_y):
         """ Converts coordinats *orig_x* and *orig_y* from MILS
@@ -1067,7 +1110,9 @@ class GEDA:
             uses pi radians clockwise. Therefore the direction of
             *angle* is therefore adjusted first.
         """
-        angle = abs(360.0 - angle) % 360.0
+        angle = angle % 360.0
+        if angle > 0:
+            angle = abs(360 - angle)
         return round(angle/180.0, 1)
 
 
