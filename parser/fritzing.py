@@ -105,6 +105,10 @@ class Fritzing(object):
 
         conn_keys = []
 
+        for connect in view.findall('connectors/connector/connects/connect'):
+            if connect.get('layer') == 'breadboardbreadboard':
+                return
+
         for i, connector in enumerate(view.findall('connectors/connector'), 1):
             cid = connector.get('connectorId')
             self.points[index, cid] = (origin_x + get_x(geom, 'x%d' % i),
@@ -114,8 +118,7 @@ class Fritzing(object):
 
             self.connects[index, cid] = \
                 [(c.get('modelIndex'), c.get('connectorId'))
-                 for c in connector.findall('connects/connect')
-                 if c.get('layer') != 'breadboardbreadboard']
+                 for c in connector.findall('connects/connect')]
 
         # connect wire ends to each other
         self.connects[conn_keys[0]].append(conn_keys[1])
