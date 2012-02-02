@@ -1062,8 +1062,12 @@ class GEDA:
 
     @staticmethod
     def conv_angle(angle):
-        """ Converts *angle* (in degrees) to pi radians."""
-        angle = angle % 360.0
+        """ Converts *angle* (in degrees) to pi radians. gEDA
+            sets degree angles counter-clockwise whereas upverter 
+            uses pi radians clockwise. Therefore the direction of
+            *angle* is therefore adjusted first.
+        """
+        angle = abs(360.0 - angle) % 360.0
         return round(angle/180.0, 1)
 
 

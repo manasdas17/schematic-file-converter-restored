@@ -146,10 +146,10 @@ text!"""
         """ Test converting angles from degrees to pi radians. """
         angles = [
             (0, 0), 
-            (90, 0.5), 
+            (90, 1.5), 
             (180, 1.0), 
-            (220, 1.2), 
-            (270, 1.5), 
+            (220, 0.8), 
+            (270, 0.5), 
         ]
     
         for angle, expected in angles:
@@ -459,7 +459,7 @@ netname=+_1
         self.assertEquals(arc_obj.y, 4850)
         self.assertEquals(arc_obj.radius, 190)
         self.assertEquals(arc_obj.start_angle, 0.0)
-        self.assertEquals(arc_obj.end_angle, 0.5)
+        self.assertEquals(arc_obj.end_angle, 1.5)
 
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 44300 49800 500 30 200 3 0 0 0 -1 -1")
@@ -470,8 +470,8 @@ netname=+_1
         self.assertEquals(arc_obj.x, 4430)
         self.assertEquals(arc_obj.y, 4980)
         self.assertEquals(arc_obj.radius, 50)
-        self.assertEquals(arc_obj.start_angle, 0.2)
-        self.assertEquals(arc_obj.end_angle, 1.3)
+        self.assertEquals(arc_obj.start_angle, 1.8)
+        self.assertEquals(arc_obj.end_angle, 0.7)
 
 
         typ, params =  self.geda_parser._parse_command(
@@ -483,7 +483,19 @@ netname=+_1
         self.assertEquals(arc_obj.x, 4510)
         self.assertEquals(arc_obj.y, 4840)
         self.assertEquals(arc_obj.radius, 70)
-        self.assertEquals(arc_obj.start_angle, 0.7)
+        self.assertEquals(arc_obj.start_angle, 1.3)
+        self.assertEquals(arc_obj.end_angle, 0.3)
+
+        typ, params =  self.geda_parser._parse_command(
+            StringIO.StringIO("A 45100 48400 700 123 651 3 0 0 0 -1 -1")
+        )
+        self.assertEquals(typ, 'A')
+        arc_obj = self.geda_parser._parse_arc(params)
+        self.assertEquals(arc_obj.type, 'arc')
+        self.assertEquals(arc_obj.x, 4510)
+        self.assertEquals(arc_obj.y, 4840)
+        self.assertEquals(arc_obj.radius, 70)
+        self.assertEquals(arc_obj.start_angle, 1.3)
         self.assertEquals(arc_obj.end_angle, 0.3)
 
     def test__parse_line(self):
