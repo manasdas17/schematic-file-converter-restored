@@ -373,6 +373,7 @@ class GEDA:
             Returns a tuple of Component and ComponentInstance objects.
         """
         basename, dummy = os.path.splitext(params['basename'])
+
         ## component has not been parsed yet
         if basename in self.design.components.components:
             component = self.design.components.components[basename]
@@ -404,6 +405,10 @@ class GEDA:
                     raise GEDAError(
                         "cannot convert file, not in gEDA format"
                     )
+
+                ## if the file is mirroed compoent generate a mirrored component
+                if params['mirror'] == 1: 
+                    basename += '_MIRRORED'
 
                 component = self.parse_component_data(f_in, params) 
 
@@ -477,6 +482,8 @@ class GEDA:
 
         ## retrieve if component is mirrored around Y-axis 
         mirrored = bool(params.get('mirror', False))
+        if mirrored:
+            basename += '_MIRRORED'
 
         move_to = None
         if basename.startswith('EMBEDDED'):
