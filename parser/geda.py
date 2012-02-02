@@ -446,12 +446,16 @@ class GEDA:
         instance.add_symbol_attribute(symbol)
 
         ## add annotation for refdes
-        symbol.add_annotation(
-            Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
-        )
-        symbol.add_annotation(
-            Annotation('{{device}}', comp_x, comp_y+10, 0.0, 'true')
-        )
+        print component.attributes
+        for idx, attribute_key in enumerate(['_refdes', 'device']):
+            if attribute_key in component.attributes \
+                    or attribute_key in instance.attributes:
+                symbol.add_annotation(
+                    Annotation(
+                        '{{%s}}' % attribute_key, 
+                        0, 0+idx*10, 0.0, 'true'
+                    )
+                )
 
         return component, instance
 
@@ -602,6 +606,8 @@ class GEDA:
             text.append(stream.readline())
 
         text_str = ''.join(text).strip()
+        ## escape special parameter sequence '\_'
+        text_str = text_str.replace("\_", '')
 
         if num_lines == 1 and '=' in text_str:
             return self._parse_attribute(text_str, params['visibility'])
@@ -774,8 +780,7 @@ class GEDA:
             if '_name' in net_obj.attributes:
                 annotation = Annotation(
                     "{{_name}}", ## annotation referencing attribute '_name' 
-                    self.x_to_px(annotation_x),
-                    self.y_to_px(annotation_y),
+                    0, 0, 
                     self.conv_angle(0.0),
                     self.conv_bool(1),
                 )
