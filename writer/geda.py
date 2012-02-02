@@ -962,8 +962,12 @@ class GEDA:
 
             Retuns converted and cut-off angle in degrees.
         """
-        converted_angle = int(angle * 180)
-        return (converted_angle // int(steps)) * steps
+        converted_angle = int(angle * 180) // int(steps)
+        converted_angle *= steps
+
+        ## convert from clockwise rotation to counter-clockwise 
+        ## as used in gEDA schematic
+        return abs(360 - converted_angle) % 360
 
     def conv_coords(self, x_px, y_px):
         """ Converts *x_px*, *y_px* from pixel to mils and translating
