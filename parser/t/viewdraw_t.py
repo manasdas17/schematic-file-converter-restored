@@ -5,7 +5,7 @@ from inspect import getargspec
 from parser.viewdraw import FileStack, ViewDrawBase, ViewDrawSym, ViewDrawSch
 
 from core.annotation import Annotation
-from core.shape import Label
+from core.shape import Label, Point
 from math import sin, cos, pi
 
 _real_fs_init  = FileStack.__init__
@@ -189,8 +189,8 @@ class ViewDrawBaseTests(unittest.TestCase):
         self.assertEqual(len(v), 1)
         self.assertEqual(v[0].type, 'line')
         p1, p2 = v[0].p1, v[0].p2
-        self.assertEqual((p1.x, p1.y), (1, 3))
-        self.assertEqual((p2.x, p2.y), (4, 7))
+        self.assertEqual(p1, Point(1, 3))
+        self.assertEqual(p2, Point(4, 7))
 
     def test_line_multi_seg(self):
         """A multi-segment line, should become many Line objects"""
@@ -203,8 +203,8 @@ class ViewDrawBaseTests(unittest.TestCase):
         # acceptable. The test would need to change for that.
         for i, line in enumerate(v):
             self.assertEqual(line.type, 'line')
-            self.assertEqual(pts[i], (line.p1.x, line.p1.y))
-            self.assertEqual(pts[i + 1], (line.p2.x, line.p2.y))
+            self.assertEqual(Point(pts[i]), line.p1)
+            self.assertEqual(Point(pts[i + 1]), line.p2)
 
     def test_arc(self):
         """ Test multiple arc segment constructions """
@@ -280,8 +280,8 @@ class ViewDrawSymTests(unittest.TestCase):
         """ Common tests for both pin test cases """
         k, v = self.sym.parse_pin('13 2 4 3 5 0 0 0')
         self.assertEqual(k, 'pin')
-        self.assertEqual((v.p1.x, v.p1.y), (3, 5))
-        self.assertEqual((v.p2.x, v.p2.y), (2, 4))
+        self.assertEqual(v.p1, Point(3, 5))
+        self.assertEqual(v.p2, Point(2, 4))
         self.assertEqual(v.pin_number, 13)
         return(v)
 
@@ -439,5 +439,3 @@ class ViewDrawSchTests(unittest.TestCase):
         attrs = v.symbol_attributes[0]
         self.assertEqual((attrs.x, attrs.y), (4, 3))
         self.assertEqual(attrs.rotation, 1)
-
-    
