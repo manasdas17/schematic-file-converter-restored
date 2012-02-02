@@ -21,7 +21,7 @@
 # limitations under the License.
 
 
-from parser.kicad import KiCAD
+from parser.kicad import KiCAD, ComponentParser
 from parser.openjson import JSON
 import unittest
 
@@ -169,6 +169,16 @@ class KiCADTests(unittest.TestCase):
                                               good_sa.annotations)
 
         self.assertEqual(test_insts, [])
+
+
+    def test_bad_x_line_rotation(self):
+        """
+        Test that a bad rotation in an X line raises a ValueError.
+        """
+
+        parser = ComponentParser('DEF 74LS00 U 0 30 Y Y 4 F N')
+        line = 'X GND 7 -200 -200 0 E 40 40 0 0 W N'
+        self.assertRaises(ValueError, parser.parse_x_line, line.split())
 
     def assert_annotations_equal(self, test_anns, good_anns):
         """
