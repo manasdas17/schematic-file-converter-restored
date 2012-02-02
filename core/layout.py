@@ -32,6 +32,12 @@ class Layout:
         """ Generate a netlist from the layout. """
         pass
 
+    def json(self):
+        """ Return the layout as JSON """
+        return {
+            "layers": [layer.json() for layer in self.layers]
+            }
+
 
 class Layer:
     """ A layer in the layout (ie, a PCB layer). """
