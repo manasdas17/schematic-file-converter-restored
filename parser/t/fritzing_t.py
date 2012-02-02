@@ -253,3 +253,15 @@ class FritzingTests(TestCase):
         self.assertEqual(shapes[0].x, 2)
         self.assertEqual(shapes[0].y, -10)
         self.assertEqual(shapes[0].radius, 15)
+
+
+    def test_parse_rect(self):
+        parser = ComponentParser(None, None)
+        elem = FakeElem('rect', x='1', y='2', width=5, height=10)
+        shapes = parser.parse_shapes(elem)
+        self.assertEqual(len(shapes), 1)
+        self.assertEqual(shapes[0].type, 'rectangle')
+        self.assertEqual(shapes[0].x, 1)
+        self.assertEqual(shapes[0].y, -2)
+        self.assertEqual(shapes[0].width, 5)
+        self.assertEqual(shapes[0].height, 10)

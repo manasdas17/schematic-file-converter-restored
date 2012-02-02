@@ -388,7 +388,7 @@ class ComponentParser(object):
 
         x, y = get_x(rect), get_y(rect)
         width, height = get_length(rect, 'width'), get_length(rect, 'height')
-        return [Rectangle(x, y - height, width, height)]
+        return [Rectangle(x, y, width, height)]
 
 
     def parse_line(self, rect):
