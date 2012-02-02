@@ -226,10 +226,7 @@ class GEDA:
         """
 
         f_in = open(filename, "r")
-
-        typ, dummy = self._parse_command(f_in)
-        if typ != 'v':
-            raise GEDAError("cannot convert file, not in gEDA format")
+        self._check_version(f_in)
 
         design = self.parse_schematic(f_in)
 
@@ -334,7 +331,7 @@ class GEDA:
         x, y = params['x'], params['y']
         angle, mirror = params['angle'], params['mirror']
 
-        if mirror == 1:
+        if mirror:
             angle = (angle + 90) % 360
 
         x, y = self.conv_coords(x, y)
@@ -374,13 +371,11 @@ class GEDA:
         """
         basename, dummy = os.path.splitext(params['basename'])
 
-        ## component has not been parsed yet
         if basename in self.design.components.components:
             component = self.design.components.components[basename]
-            ## skipping embedded data is required
 
-            if basename.startswith('EMBEDDED'):
-                self.skip_embedded_section(stream)
+            ## skipping embedded data might be required
+            self.skip_embedded_section(stream)
 
         else:
             ##check if sym file is embedded or referenced 
@@ -394,20 +389,15 @@ class GEDA:
                         "referenced symbol file '%s' unkown" % basename
                     )
                     ## parse optional attached environment before continuing
-                    attributes = self._parse_environment(stream)
+                    self._parse_environment(stream)
                     return None, None
 
                 ## requires parsing of referenced symbol file
                 f_in = open(self.known_symbols[basename], "r")
-
-                typ, dummy = self._parse_command(f_in)
-                if typ != 'v':
-                    raise GEDAError(
-                        "cannot convert file, not in gEDA format"
-                    )
+                self._check_version(f_in)
 
                 ## if the file is mirroed compoent generate a mirrored component
-                if params['mirror'] == 1: 
+                if params['mirror']: 
                     basename += '_MIRRORED'
 
                 component = self.parse_component_data(f_in, params) 
@@ -428,6 +418,9 @@ class GEDA:
                 component.name, 
                 0
             )
+            for key, value in attributes.items():
+                instance.add_attribute(key, value)
+
         else:
             instance = ComponentInstance(
                 component.name, 
@@ -438,22 +431,18 @@ class GEDA:
         ## generate a component instance using attributes
         self.design.add_component_instance(instance)
 
-        if attributes is not None:
-            for key, value in attributes.items():
-                instance.add_attribute(key, value)
-
-        comp_x, comp_y = self.conv_coords(params['x'], params['y'])
-
         symbol = SymbolAttribute(
-            comp_x, comp_y, 
+            self.x_to_px(params['x']), 
+            self.y_to_px(params['y']), 
             self.conv_angle(params['angle'])
         )
         instance.add_symbol_attribute(symbol)
 
-        ## add annotation for refdes
+        ## add annotation for special attributes 
         for idx, attribute_key in enumerate(['_refdes', 'device']):
             if attribute_key in component.attributes \
-                    or attribute_key in instance.attributes:
+               or attribute_key in instance.attributes:
+
                 symbol.add_annotation(
                     Annotation(
                         '{{%s}}' % attribute_key, 
@@ -462,6 +451,18 @@ class GEDA:
                 )
 
         return component, instance
+
+    def _check_version(self, stream):
+        """ Check next line in *stream* for gEDA version data 
+            starting with ``v``. Raises ``GEDAError`` when no version
+            data can be found.
+        """
+        typ, dummy = self._parse_command(stream)
+        if typ != 'v':
+            raise GEDAError(
+                "cannot convert file, not in gEDA format"
+            )
+        return True
 
     def parse_component_data(self, stream, params):
         """ Creates a component from the component *params* and the 
@@ -504,31 +505,15 @@ class GEDA:
         ##NOTE: adding this attribute to make parsing UPV data easier 
         ## when using re-exported UPV.
         component.add_attribute('_geda_imported', 'true')
-        if mirrored:
-            component.add_attribute('_geda_mirrored', 'true')
 
         while typ is not None:
 
             if typ == 'T':
                 key, value = self._parse_text(stream, params)
                 if key is None:
-                    ##TODO(elbaschid): annotation text in component. what to do?
-                    ##TODO(elbaschid): make this into a label?
-                    ##TODO(elbaschid): add optional mirroring 
-                    text_x = params['x']
-
-                    if mirrored:
-                        text_x = 0 - text_x
-
-                    label = shape.Label(
-                        self.x_to_px(text_x),
-                        self.y_to_px(params['y']),
-                        value,
-                        'left',
-                        self.conv_angle(params['angle']),
+                    body.add_shape(
+                        self._create_label(value, params, mirrored)
                     )
-
-                    body.add_shape(label)
 
                 elif key == '_refdes' and '?' in value:
                     prefix, suffix = value.split('?') 
@@ -634,6 +619,27 @@ class GEDA:
             self.y_to_px(params['y']),
             self.conv_angle(params['angle']),
             self.conv_bool(params['visibility']),
+        )
+
+    def _create_label(self, text, params, mirrored=False):
+        """ Create a ``shape.Label`` instance using the *text* string. The
+            location of the Label is determined by the ``x`` and ``y`` 
+            coordinates in *params*. If *mirrored* is true, the bottom left
+            corner of the text (anchor) is mirrored at the Y-axis.
+
+            Returns a ``shape.Label`` object
+        """
+        text_x = params['x']
+
+        if mirrored:
+            text_x = 0 - text_x
+
+        return shape.Label(
+            self.x_to_px(text_x),
+            self.y_to_px(params['y']),
+            text,
+            'left',
+            self.conv_angle(params['angle']),
         )
 
     @staticmethod
@@ -774,14 +780,12 @@ class GEDA:
 
         ## check if names are available for calculated nets 
         for net_obj in nets:
-            annotation_x = annotation_y = 0
-            for point_id, net_point in net_obj.points.items():
+            for point_id in net_obj.points:
                 ## check for stored net names based on pointIDs
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
                     net_obj.attributes['_name'] = self.net_names[point_id]
 
-                    annotation_x, annotation_y = net_point.x, net_point.y
 
             if '_name' in net_obj.attributes:
                 annotation = Annotation(
@@ -802,7 +806,6 @@ class GEDA:
         """
         x1, x2 = params['x1'], params['x2']
         y1, y2 = params['y1'], params['y2']
-        ripperdir = params['ripperdir']
 
         ## ignore bus when length is zero
         if x1 == x2 and y1 == y2:
