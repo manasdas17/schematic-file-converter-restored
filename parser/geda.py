@@ -446,7 +446,6 @@ class GEDA:
         instance.add_symbol_attribute(symbol)
 
         ## add annotation for refdes
-        print component.attributes
         for idx, attribute_key in enumerate(['_refdes', 'device']):
             if attribute_key in component.attributes \
                     or attribute_key in instance.attributes:
