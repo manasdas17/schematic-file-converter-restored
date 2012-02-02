@@ -279,7 +279,7 @@ class GEDA:
 
                 ## ignore title since it only defines the blueprint frame
                 if basename.startswith('title'):
-                    pass 
+                    self._parse_environment(stream)
 
                 ## busripper are virtual components that need separate 
                 ## processing 
@@ -389,9 +389,12 @@ class GEDA:
                     component = self.parse_component_data(stream, params)
             else:
                 if basename not in self.known_symbols:
-                    raise GEDAError(
+                    warnings.warn(
                         "referenced symbol file '%s' unkown" % basename
                     )
+                    ## parse optional attached environment before continuing
+                    attributes = self._parse_environment(stream)
+                    return None, None
 
                 ## requires parsing of referenced symbol file
                 f_in = open(self.known_symbols[basename], "r")
@@ -602,6 +605,9 @@ class GEDA:
 
         if num_lines == 1 and '=' in text_str:
             return self._parse_attribute(text_str, params['visibility'])
+
+        ## text can have environemnt attached: parse & ignore
+        dummy = self._parse_environment(stream)
 
         return None, text_str
     
