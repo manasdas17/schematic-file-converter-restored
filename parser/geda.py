@@ -513,7 +513,7 @@ class GEDA:
                     self._parse_box(params)
                 )
 
-            elif typ == 'C':
+            elif typ == 'V':
                 body.add_shape(
                     self._parse_circle(params)
                 )
