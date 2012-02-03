@@ -30,12 +30,38 @@ from parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
                             CoordPrecedesFormatSpec, CoordMalformed, \
                             FileNotTerminated, DataAfterEOF, \
                             UnintelligibleDataBlock, QuadrantViolation, \
-                            OpenFillBoundary
+                            OpenFillBoundary, IncompatibleAperture
 
 STRIP_DIRS = path.join('parser', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
 TEST_FILES = path.join('test', 'gerber')
 DIR = path.join(BASE_DIR, TEST_FILES)
+
+
+# decorator for tests that use input files
+
+def use_file(filename):
+    """ Parse a gerber file. """
+    def wrap_wrap_tm(test_method):
+        """ Add params to decorator function. """
+        def wrap_tm(self):
+            """ Perform meta operations, then method. """
+            parser = Gerber()
+            self.design = parser.parse(path.join(DIR, filename))
+            test_method(self)
+
+        # correctly identify the decorated method
+        # (otherwise nose will not run the test)
+        wrap_tm.__name__ = test_method.__name__
+        wrap_tm.__doc__ = test_method.__doc__
+        wrap_tm.__dict__.update(test_method.__dict__)
+        wrap_wrap_tm.__name__ = wrap_tm.__name__
+        wrap_wrap_tm.__doc__ = wrap_tm.__doc__
+        wrap_wrap_tm.__dict__.update(wrap_tm.__dict__)
+
+        return wrap_tm
+    return wrap_wrap_tm
+
 
 class GerberTests(unittest.TestCase):
     """ The tests of the gerber parser """
@@ -49,31 +75,6 @@ class GerberTests(unittest.TestCase):
         pass
 
 
-    # decorator for tests that use input files
-
-    def use_file(filename):                             # pylint: disable=E0213
-        """ Parse a gerber file. """
-        def wrap_wrap_tm(test_method):
-            """ Add params to decorator function. """
-            def wrap_tm(self):
-                """ Perform meta operations, then method. """
-                parser = Gerber(path.join(DIR, filename))
-                self.design = parser.parse()
-                test_method(self)
-
-            # correctly identify the decorated method
-            # (otherwise nose will not run the test)
-            wrap_tm.__name__ = test_method.__name__
-            wrap_tm.__doc__ = test_method.__doc__
-            wrap_tm.__dict__.update(test_method.__dict__)
-            wrap_wrap_tm.__name__ = wrap_tm.__name__
-            wrap_wrap_tm.__doc__ = wrap_tm.__doc__
-            wrap_wrap_tm.__dict__.update(wrap_tm.__dict__)
-
-            return wrap_tm
-        return wrap_wrap_tm
-
-
     # tests that pass if no errors are raised
 
     def test_create_new_gerber_parser(self):
@@ -84,25 +85,31 @@ class GerberTests(unittest.TestCase):
     @use_file('simple.ger')
     def test_simple(self):
         """ Parse a simple, correct gerber file. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.traces) == 2
 
     @use_file('arc_segments.ger')
     def test_arcs(self):
         """ Parse some connected arcs and lines - gerber. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.traces) == 2
 
     @use_file('fills.ger')
     def test_outline_fills(self):
         """ Parse outline fills - gerber. """
-        image = self.design.layouts[0].layers[0].images[0]
+        image = self.design.layout.layers[0].images[0]
         assert len(image.fills) == 2
+
+    @use_file('smear.ger')
+    def test_smear(self):
+        """ Parse a smear - gerber. """
+        image = self.design.layout.layers[0].images[0]
+        assert len(image.smears) == 1
 
     @use_file('complex.ger')
     def test_complex(self):
         """ Parse aperture macros - gerber. """
-        image = self.design.layouts[0].layers[0].images[2]
+        image = self.design.layout.layers[0].images[2]
         assert len(image.shape_instances) == 3
 
 
@@ -160,4 +167,10 @@ class GerberTests(unittest.TestCase):
     @use_file('open-fill.ger')
     def test_open_fill(self):
         """ Trap unsuccessful outline fill closure. """
+        pass
+
+    @raises(IncompatibleAperture)
+    @use_file('disallowed-smear.ger')
+    def test_arc_smear(self):
+        """ Trap non-linear smear - gerber. """
         pass
