@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-""" The Eagle XML Format Parser """
+""" The ViewDraw [5.x] format parser """
 
 # upconvert.py - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
@@ -38,8 +38,8 @@ from collections import defaultdict
 
 
 class ViewDrawBase:
-    '''The base class for the parsers. Includes parsing code for commands that are
-    shared between the different files'''
+    '''The base class for the parsers. Includes parsing code for commands that
+    are shared between the different files'''
 
     sheetsizes = ('ASIZE', 'BSIZE', 'CSIZE', 'DSIZE', 'ESIZE', 'A4', 'A3',
                   'A2', 'A1', 'A0', 'CUSTOM')
@@ -64,7 +64,7 @@ class ViewDrawBase:
         self.stream = FileStack(self.filename)
         tree = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             k, v = self.parsenode(cmd)(args)
             tree[k].append(v)
         return tree
@@ -86,13 +86,13 @@ class ViewDrawBase:
 
     def parse_annot(self, args):
         """ Returns a parsed annotation. """
-        x, y, font_size, rot, anchor, viz, val = args.split(' ', 6)
+        x, y, _font_size, _rot, _anchor, viz, val = args.split(' ', 6)
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
         # FIXME use rotation
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('Q'):
                 self.stream.push(phrase)
                 break
@@ -113,7 +113,7 @@ class ViewDrawBase:
 
     def parse_label(self, args):
         """ Returns a parsed label. """
-        x, y, font_size, rot, c, d, e, f, text = args.split(' ', 8)
+        x, y, _font_size, _rot, _c, _d, _e, _f, text = args.split(' ', 8)
         # treat them as annotations for now, I guess.
         # suspect that c, e are anchor and vis, as in parse_annot
         # According to other research, d is scope (0=local, 1=global) and f
@@ -122,20 +122,20 @@ class ViewDrawBase:
         return ('annot', Annotation(text, int(x), int(y), 0, True))
 
     def parse_rev(self, args):
-        """ Returns a parsed revision. """
+        """ Returns the file revision date, parsed into an annotation. """
         # File revision date. Gahh, ugly.
         return ('annot', Annotation('rev=' + args, 0, 0, 0, False))
 
     def parse_size(self, args):
-        """ Returns a parsed size. """
+        """ Returns the sheet size. """
         size = int(args.split()[0])
         return ('sheetsize', (size < len(self.sheetsizes) and
                               self.sheetsizes[size] or 'unknown'))
 
     def parse_circle(self, args):
         """ Returns a parsed circle. """
-        x, y, r = [int(a) for a in args.split()]
-        return ('shape', Circle(x, y, r))
+        x, y, rad = [int(a) for a in args.split()]
+        return ('shape', Circle(x, y, rad))
 
     def parse_box(self, args):
         """ Returns a parsed box. """
@@ -143,19 +143,19 @@ class ViewDrawBase:
         return ('shape', Rectangle.from_corners(x1, y1, x2, y2))
 
     def parse_text(self, args):
-        """ Returns a parsed text. """
-        x, y, size, rot, anchor, text = args.split(' ', 5)
+        """ Parses a text label and returns as a Shape.Label. """
+        x, y, _size, _rot, _anchor, text = args.split(' ', 5)
         # TODO sort out rotation, alignment
         return ('shape', Label(int(x), int(y), text, 'left', 0))
 
     def parse_ver(self, args):
-        """ Returns a parsed version. """
+        """ Returns the ViewDraw output file format version. """
         # Viewdraw file version. So far have only dealt with 50, 51.
         return ('fileversion', args)
 
     def parse_line(self, args):
         """ Returns a parsed line. """
-        numpts, sep, pts = args.partition(' ')
+        numpts, _sep, pts = args.partition(' ')
         pts = [int(p) for p in pts.split()]
         numpts = int(numpts)
         # this next bit would be much easier if open polygons were
@@ -180,21 +180,21 @@ class ViewDrawBase:
         while abs(x0 - x1) < 0.1 or abs(x1 - x2) < 0.1 or abs(y0 - y1) < 0.1:
             x0, y0, x1, y1, x2, y2 = x1, y1, x2, y2, x0, y0
         # slopes of the chords
-        ma, mb = (y1-y0)/(x1-x0), (y2-y1)/(x2-x1)
+        ma, mb = (y1-y0) / (x1-x0), (y2-y1) / (x2-x1)
         # find the centre
-        xc = (ma*mb*(y0-y2) + mb*(x0+x1) - ma*(x1+x2)) / (2*(mb-ma))
-        yc = (-1/ma) * (xc - (x0+x1)/2) + (y0+y1)/2
+        xc = (ma * mb * (y0-y2) + mb * (x0+x1) - ma * (x1+x2)) / (2 * (mb-ma))
+        yc = (-1/ma) * (xc - (x0+x1) / 2) + (y0+y1) / 2
         # radius is the distance from the centre to any of the three points
-        r = sqrt((xc-x0)**2 + (yc-y0)**2)
+        rad = sqrt((xc-x0)**2 + (yc-y0)**2)
 
         # re-init xs,ys so that start and end points don't get confused.
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
 
         def angle(x, y):
-            """ Returns a corrected angle. """
-            # correcting for the y-origin will flip the angle through the y=x
-            # line, so theta=0 is high noon, angle increases CW now, after
-            # correct_y theta=0 is 3 o'clock and angle increases CCW.
+            """ Calculate the angle from the center of the arc to (x, y). """
+            # as parsed, the angle increases CCW. Here, we return an angle
+            # increasing CW, as correct_y will put us in a coordinate system
+            # with the origin at the top-left.
             opp = y - yc
             adj = x - xc
             if abs(adj) < 0.01:
@@ -212,12 +212,12 @@ class ViewDrawBase:
             return ang
 
         return ('shape', Arc(int(round(xc)), int(round(yc)),
-                             angle(x0,y0), angle(x2,y2),
-                             int(round(r))))
+                             angle(x0,y0) / pi, angle(x2,y2) / pi,
+                             int(round(rad))))
 
 
 class ViewDrawSch(ViewDrawBase):
-    """ The schematic parser. """
+    """ Parser for a single schematic file. """
     
     def __init__(self, lib, filename):
         ViewDrawBase.__init__(self, filename)
@@ -249,8 +249,8 @@ class ViewDrawSch(ViewDrawBase):
             # hold on tight, this is ugly
             for (netid, netpt, pinid) in inst.conns:
                 net = [n for n in ckt.nets if n.net_id == netid][0]
-                cc = ConnectedComponent(inst.instance_id, pinid)
-                net.ibpts[netpt - 1].add_connected_component(cc)
+                comp = ConnectedComponent(inst.instance_id, pinid)
+                net.ibpts[netpt - 1].add_connected_component(comp)
             del inst.conns
         for net in ckt.nets:
             del net.ibpts
@@ -269,14 +269,16 @@ class ViewDrawSch(ViewDrawBase):
         return ckt
 
     def parse_net(self, args):
-        """ Returns a parsed net. """
+        """ Assembles a net from a list of junctions, segments, and labels. """
         thisnet = Net(args)
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            print phrase
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
                 self.stream.push(phrase)
                 break
+            print args
             k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         # finish building thisnet
@@ -287,8 +289,8 @@ class ViewDrawSch(ViewDrawBase):
             else:
                 # oh yeah, a net can have a point more than once, because that
                 # makes *great* sense.
-                for pt in netpt.connected_points:
-                    thisnet.points[netpt.point_id].add_connected_point(pt)
+                for point in netpt.connected_points:
+                    thisnet.points[netpt.point_id].add_connected_point(point)
                 for comp in netpt.connected_components:
                     thisnet.points[netpt.point_id].add_connected_component(comp)
                 # update subdata['netpoint'] so that ref to netpt points to the
@@ -299,9 +301,9 @@ class ViewDrawSch(ViewDrawBase):
         # yuck, passing in-band
         thisnet.ibpts = subdata['netpoint']
 
-        for a, b in subdata['segment']:
-            thisnet.connect((subdata['netpoint'][a - 1],
-                             subdata['netpoint'][b - 1]))
+        for pt_a, pt_b in subdata['segment']:
+            thisnet.connect((subdata['netpoint'][pt_a - 1],
+                             subdata['netpoint'][pt_b - 1]))
         for annot in subdata['annot']:
             thisnet.add_annotation(annot)
             if '=' in annot.value:
@@ -309,21 +311,21 @@ class ViewDrawSch(ViewDrawBase):
         return ('net', thisnet)
 
     def parse_junc(self, args):
-        """ Returns a parsed junc. """
-        x, y, unknown = args.split()
+        """ Parses a junction on the net as a NetPoint. """
+        x, y, _unknown = args.split()
         # unknown is suspected to be drawing style for the net at this
         # point (right-angle corner? T-section? Solder dot?) ATM not very
         # useful, not really our responsibility.
         return ('netpoint', NetPoint(x + 'x' + y, int(x), int(y)))
 
     def parse_seg(self, args):
-        """ Returns a parsed seg. """
-        a, b = [int(n) for n in args.split()]
-        return ('segment', (a, b))
+        """ Returns a parsed net segment """
+        pt_a, pt_b = [int(n) for n in args.split()]
+        return ('segment', (pt_a, pt_b))
 
     def parse_inst(self, args):
-        """ Returns a parsed instance. """
-        inst, libname, libnum, x, y, rot, scale, b = args.split()
+        """ Returns a parsed component instance. """
+        inst, libname, libnum, x, y, rot, _scale, _b = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
         if int(rot) > 3:
@@ -336,7 +338,7 @@ class ViewDrawSch(ViewDrawBase):
                                                       float(rot) / 2))
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('|R', 'A', 'C'):
                 self.stream.push(phrase)
                 break
@@ -353,32 +355,32 @@ class ViewDrawSch(ViewDrawBase):
         return ('inst', thisinst)
 
     def parse_conn(self, args):
-        """ Returns a parsed connection. """
-        netid, segpin, pin, a = args.split()
+        """ Returns a parsed connection between component and net. """
+        netid, segpin, pin, _a = args.split()
         # as far as has been observed, a is always 0
         # segpin is the netpoint on the net
         # TODO I have no faith in pin variable here
         return ('conn', (netid, int(segpin), pin))
     
     def parse_bounds(self, args):
-        """ Returns a parsed bounds. """
+        """ Parses the bounds of this schematic sheet. """
         # Not sure if this is quite valid.
         return ('Dbounds', [int(a) for a in args.split()])
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
-        x, y, font_size, rot, anchor, viz, kv = args.split(' ', 6)
-        k, sep, v = kv.partition('=')
+        x, y, _font_size, _rot, _anchor, viz, kv = args.split(' ', 6)
+        k, _sep, v = kv.partition('=')
         # TODO want to do anything with the rest of the info?
         # TODO at least add in the label
         return ('attr', (k, v))
 
     def lookup(self, libname, num):
-        """ Convert a name + number pair. """
+        """ Given a component name and version, returns the filename """
         return libname.lower() + '.' + num
 
     def correct_y(self, des, (xmin, ymin, xmax, ymax)):
-        """ Correct a y value. """
+        """ Flips all placed elements on this sheet about x-axis. """
         for ann in des.design_attributes.annotations:
             ann.y = ymax - ann.y
         # someday, this will happen
@@ -406,6 +408,7 @@ class ViewDrawSch(ViewDrawBase):
 
 
 class ViewDrawSym(ViewDrawBase):
+    """ Parser for a library symbol file. """
     symtypes = ('composite', 'module', 'annotate', 'pin', 'power')
     # TODO A command
 
@@ -419,7 +422,7 @@ class ViewDrawSym(ViewDrawBase):
         self.libdir = libdir
 
     def parse(self):
-        """ Returns a parsed symbol. """
+        """ Parses a component from the library, returns a Compenent. """
         part = Component(self.filename)
         part.add_symbol(Symbol())
         part.symbols[0].add_body(Body())
@@ -444,7 +447,7 @@ class ViewDrawSym(ViewDrawBase):
         """ Returns a parsed attribute. """
         # part properties, some of which look in need of further
         # processing to properly extract the part
-        key, sep, val = args.split(' ', 6)[-1].partition('=')
+        key, _sep, val = args.split(' ', 6)[-1].partition('=')
         # I have seen some properties that have no value set, and don't
         # have '=' in the string. partition() will set val = ''
 
@@ -459,7 +462,7 @@ class ViewDrawSym(ViewDrawBase):
         thispin = Pin(pid, (xb, yb), (xe, ye))
         subdata = defaultdict(list)
         for phrase in self.stream:
-            cmd, sep, args = phrase.partition(' ')
+            cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('L'):
                 self.stream.push(phrase)
                 break
@@ -474,7 +477,7 @@ class ViewDrawSym(ViewDrawBase):
         """ Returns a parsed label. """
         # So far, only seen it for labelling pins, in the symmbol files
         # at least.
-        x, y, pts, rot, anchor, scope, vis, inv, text = args.split()
+        x, y, _pts, rot, _anchor, _scope, _vis, inv, text = args.split()
         return ('label', Label(int(x), int(y),
                          # cheap-o overbar
                          (inv == '1' and '/' or '') + text,
@@ -483,7 +486,7 @@ class ViewDrawSym(ViewDrawBase):
         # vertical alignment thing
 
     def correct_y(self, comp):
-        """ corrects a y value. """
+        """ Flips all elements of the part about the x-axis. """
         for sym in comp.symbols:
             for bod in sym.bodies:
                 for pin in bod.pins:
@@ -508,7 +511,7 @@ class ViewDraw:
         self.schdir, self.symdirs = schdir, symdirs
 
     def parse(self):
-        """ Returns a parsed viewdraw file. """
+        """ Parses a viewdraw project and returns a list of sheets. """
         lib = Components()
         # All the symbol files I have seen have a filename like partname.n
         # where n is a number, for multi-versioned parts I'm guessing
@@ -532,7 +535,13 @@ class ViewDraw:
 
 
 class FileStack:
-    """ Used to step through a file stack. """
+    """ Handles a file as a stack of lines, to be able to push back lines"""
+    # Two reasons for this:
+    # 1) Line continuations are signaled at the beginning of the continuing
+    #   line. This means you can't know if line n is the entirety of a statement
+    #   until you've checked line n+1
+    # 2) Some commands are affected by proceeding commands, so need to check if
+    #   the next command is of concern. If not, need to be able to send it back.
 
     def __init__(self, filename):
         self.f = open(filename)
@@ -543,29 +552,36 @@ class FileStack:
         return self
 
     def next(self):
-        """ Returns the next file. """
+        """ Returns the next command. Continuations handled transparently. """
         tok = self.subpop()
-        nexttok = self.subpop()
-        while nexttok.startswith(' ') or nexttok.startswith('+'):
-            tok = self.continuation(tok, nexttok)
+        try:
             nexttok = self.subpop()
-        self.push(nexttok)
+            while nexttok.startswith(' ') or nexttok.startswith('+'):
+                tok = self.continuation(tok, nexttok)
+                nexttok = self.subpop()
+            self.push(nexttok)
+        except(StopIteration):
+            # don't want to pass that up the chain if tok is valid
+            pass
         return tok.strip('\r\n')
 
     def subpop(self):
-        """ Pops. """
-        self.line += 1
+        """ Next line, from the pushed-back stack if applicable. """
         if len(self.fstack) > 0:
-            return self.fstack.pop()
-        return self.f.next()
+            retval = self.fstack.pop()
+        else:
+            retval = self.f.next()
+        # need to increment after iterators have had a chance to StopIteration
+        self.line += 1
+        return retval
 
     def continuation(self, tok, cont):
-        """ Continues. """
+        """ Tie together multi-line commands. """
         if cont.startswith('+'):
             cont = cont[2:]
         return tok.strip('\r\n') + cont
 
     def push(self, tok):
-        """ Pushes. """
+        """ Push line back on the stack (before what would be the next line) """
         self.line -= 1
         self.fstack.append(tok)
