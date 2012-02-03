@@ -409,7 +409,7 @@ class GEDATests(unittest.TestCase):
             [
                 'P 0 300 0 0 1 0 0', 
                 '{',
-                'T 100 0 5 10 1 1 90 0 1',
+                'T 100 0 5 10 1 1 270 0 1',
                 'pinlabel=p1',
                 'T 100 400 5 10 0 1 0 0 1',
                 'pinseq=1',
@@ -427,7 +427,7 @@ class GEDATests(unittest.TestCase):
         
         self.assertEquals(
             command,
-            ['A 0 0 300 0 125 3 10 0 0 -1 -1'] 
+            ['A 0 0 300 0 235 3 10 0 0 -1 -1'] 
         )
 
         arc = shape.Arc(200, 400, 1.0, 0.5, 10)
@@ -435,7 +435,7 @@ class GEDATests(unittest.TestCase):
         
         self.assertEquals(
             command,
-            ['A 2000 4000 100 180 270 3 10 0 0 -1 -1'] 
+            ['A 2000 4000 100 180 90 3 10 0 0 -1 -1'] 
         )
 
         arc = shape.Arc(200, 400, 0.2, 0.1, 10)
@@ -443,7 +443,7 @@ class GEDATests(unittest.TestCase):
         
         self.assertEquals(
             command,
-            ['A 2000 4000 100 36 342 3 10 0 0 -1 -1'] 
+            ['A 2000 4000 100 324 18 3 10 0 0 -1 -1'] 
         )
 
     def test_convert_circle(self):
@@ -540,7 +540,7 @@ class GEDATests(unittest.TestCase):
         self.assertEquals(
             command,
             [
-                'T 0 0 9 10 1 1 90 0 1',
+                'T 0 0 9 10 1 1 270 0 1',
                 'test label'
             ]
         )
@@ -672,12 +672,11 @@ class GEDATests(unittest.TestCase):
             # angle, steps, expected result
             (0.0, 1, 0),
             (0.0, 10.0, 0),
-            (0.5, 90, 90),
-            (0.7,  1, 125), 
-            (0.7,  90, 90), 
-            (1.8,  1, 324), 
-            (1.5,  1, 270), 
-            (1.5,  90, 270),
+            (0.5, 90, 270),
+            (0.8,  1, 216), 
+            (0.8,  90, 270), 
+            (1.5,  1, 90), 
+            (1.5,  90, 90),
         ]
 
         for angle, steps, expected in angle_samples:

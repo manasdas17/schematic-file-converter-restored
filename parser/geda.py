@@ -78,7 +78,7 @@ class GEDA:
     """ The GEDA Format Parser """
 
     DELIMITER = ' '
-    SCALE_FACTOR = 10 #maps 1000 MILS to 10 pixels
+    SCALE_FACTOR = 10.0 #maps 1000 MILS to 10 pixels
 
 
     OBJECT_TYPES = { 
@@ -226,10 +226,7 @@ class GEDA:
         """
 
         f_in = open(filename, "r")
-
-        typ, dummy = self._parse_command(f_in)
-        if typ != 'v':
-            raise GEDAError("cannot convert file, not in gEDA format")
+        self._check_version(f_in)
 
         design = self.parse_schematic(f_in)
 
@@ -279,7 +276,7 @@ class GEDA:
 
                 ## ignore title since it only defines the blueprint frame
                 if basename.startswith('title'):
-                    pass 
+                    self._parse_environment(stream)
 
                 ## busripper are virtual components that need separate 
                 ## processing 
@@ -334,8 +331,8 @@ class GEDA:
         x, y = params['x'], params['y']
         angle, mirror = params['angle'], params['mirror']
 
-        if mirror == 1:
-            angle = abs(angle - 90)
+        if mirror:
+            angle = (angle + 90) % 360
 
         x, y = self.conv_coords(x, y)
         pt_a = self.get_netpoint(x, y)
@@ -373,13 +370,12 @@ class GEDA:
             Returns a tuple of Component and ComponentInstance objects.
         """
         basename, dummy = os.path.splitext(params['basename'])
-        ## component has not been parsed yet
+
         if basename in self.design.components.components:
             component = self.design.components.components[basename]
-            ## skipping embedded data is required
 
-            if basename.startswith('EMBEDDED'):
-                self.skip_embedded_section(stream)
+            ## skipping embedded data might be required
+            self.skip_embedded_section(stream)
 
         else:
             ##check if sym file is embedded or referenced 
@@ -389,18 +385,20 @@ class GEDA:
                     component = self.parse_component_data(stream, params)
             else:
                 if basename not in self.known_symbols:
-                    raise GEDAError(
+                    warnings.warn(
                         "referenced symbol file '%s' unkown" % basename
                     )
+                    ## parse optional attached environment before continuing
+                    self._parse_environment(stream)
+                    return None, None
 
                 ## requires parsing of referenced symbol file
                 f_in = open(self.known_symbols[basename], "r")
+                self._check_version(f_in)
 
-                typ, dummy = self._parse_command(f_in)
-                if typ != 'v':
-                    raise GEDAError(
-                        "cannot convert file, not in gEDA format"
-                    )
+                ## if the file is mirroed compoent generate a mirrored component
+                if params['mirror']: 
+                    basename += '_MIRRORED'
 
                 component = self.parse_component_data(f_in, params) 
 
@@ -420,6 +418,9 @@ class GEDA:
                 component.name, 
                 0
             )
+            for key, value in attributes.items():
+                instance.add_attribute(key, value)
+
         else:
             instance = ComponentInstance(
                 component.name, 
@@ -430,27 +431,38 @@ class GEDA:
         ## generate a component instance using attributes
         self.design.add_component_instance(instance)
 
-        if attributes is not None:
-            for key, value in attributes.items():
-                instance.add_attribute(key, value)
-
-        comp_x, comp_y = self.conv_coords(params['x'], params['y'])
-
         symbol = SymbolAttribute(
-            comp_x, comp_y, 
+            self.x_to_px(params['x']), 
+            self.y_to_px(params['y']), 
             self.conv_angle(params['angle'])
         )
         instance.add_symbol_attribute(symbol)
 
-        ## add annotation for refdes
-        symbol.add_annotation(
-            Annotation('{{refdes}}', comp_x, comp_y, 0.0, 'true')
-        )
-        symbol.add_annotation(
-            Annotation('{{device}}', comp_x, comp_y+10, 0.0, 'true')
-        )
+        ## add annotation for special attributes 
+        for idx, attribute_key in enumerate(['_refdes', 'device']):
+            if attribute_key in component.attributes \
+               or attribute_key in instance.attributes:
+
+                symbol.add_annotation(
+                    Annotation(
+                        '{{%s}}' % attribute_key, 
+                        0, 0+idx*10, 0.0, 'true'
+                    )
+                )
 
         return component, instance
+
+    def _check_version(self, stream):
+        """ Check next line in *stream* for gEDA version data 
+            starting with ``v``. Raises ``GEDAError`` when no version
+            data can be found.
+        """
+        typ, dummy = self._parse_command(stream)
+        if typ != 'v':
+            raise GEDAError(
+                "cannot convert file, not in gEDA format"
+            )
+        return True
 
     def parse_component_data(self, stream, params):
         """ Creates a component from the component *params* and the 
@@ -468,6 +480,11 @@ class GEDA:
 
         saved_offset = self.offset
         self.offset = shape.Point(0, 0)
+
+        ## retrieve if component is mirrored around Y-axis 
+        mirrored = bool(params.get('mirror', False))
+        if mirrored:
+            basename += '_MIRRORED'
 
         move_to = None
         if basename.startswith('EMBEDDED'):
@@ -494,8 +511,10 @@ class GEDA:
             if typ == 'T':
                 key, value = self._parse_text(stream, params)
                 if key is None:
-                    ##TODO(elbaschid): annotation text in component. what to do?
-                    pass
+                    body.add_shape(
+                        self._create_label(value, params, mirrored)
+                    )
+
                 elif key == '_refdes' and '?' in value:
                     prefix, suffix = value.split('?') 
                     component.add_attribute('_prefix', prefix)
@@ -505,30 +524,30 @@ class GEDA:
                     component.add_attribute(key, value)
             elif typ == 'L':
                 body.add_shape(
-                    self._parse_line(params)
+                    self._parse_line(params, mirrored)
                 )
 
             elif typ == 'B':
                 body.add_shape(
-                    self._parse_box(params)
+                    self._parse_box(params, mirrored)
                 )
 
-            elif typ == 'C':
+            elif typ == 'V':
                 body.add_shape(
-                    self._parse_circle(params)
+                    self._parse_circle(params, mirrored)
                 )
 
             elif typ == 'A':
                 body.add_shape(
-                    self._parse_arc(params)
+                    self._parse_arc(params, mirrored)
                 )
 
             elif typ == 'P':
                 body.add_pin(
-                    self._parse_pin(stream, params)
+                    self._parse_pin(stream, params, mirrored)
                 )
             elif typ == 'H':
-                for new_shape in self._parse_path(stream, params):
+                for new_shape in self._parse_path(stream, params, mirrored):
                     body.add_shape(new_shape)
 
             elif typ == 'G':
@@ -578,9 +597,14 @@ class GEDA:
             text.append(stream.readline())
 
         text_str = ''.join(text).strip()
+        ## escape special parameter sequence '\_'
+        text_str = text_str.replace("\_", '')
 
         if num_lines == 1 and '=' in text_str:
             return self._parse_attribute(text_str, params['visibility'])
+
+        ## text can have environemnt attached: parse & ignore
+        dummy = self._parse_environment(stream)
 
         return None, text_str
     
@@ -595,6 +619,27 @@ class GEDA:
             self.y_to_px(params['y']),
             self.conv_angle(params['angle']),
             self.conv_bool(params['visibility']),
+        )
+
+    def _create_label(self, text, params, mirrored=False):
+        """ Create a ``shape.Label`` instance using the *text* string. The
+            location of the Label is determined by the ``x`` and ``y`` 
+            coordinates in *params*. If *mirrored* is true, the bottom left
+            corner of the text (anchor) is mirrored at the Y-axis.
+
+            Returns a ``shape.Label`` object
+        """
+        text_x = params['x']
+
+        if mirrored:
+            text_x = 0 - text_x
+
+        return shape.Label(
+            self.x_to_px(text_x),
+            self.y_to_px(params['y']),
+            text,
+            'left',
+            self.conv_angle(params['angle']),
         )
 
     @staticmethod
@@ -735,20 +780,17 @@ class GEDA:
 
         ## check if names are available for calculated nets 
         for net_obj in nets:
-            annotation_x = annotation_y = 0
-            for point_id, net_point in net_obj.points.items():
+            for point_id in net_obj.points:
                 ## check for stored net names based on pointIDs
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
                     net_obj.attributes['_name'] = self.net_names[point_id]
 
-                    annotation_x, annotation_y = net_point.x, net_point.y
 
             if '_name' in net_obj.attributes:
                 annotation = Annotation(
                     "{{_name}}", ## annotation referencing attribute '_name' 
-                    self.x_to_px(annotation_x),
-                    self.y_to_px(annotation_y),
+                    0, 0, 
                     self.conv_angle(0.0),
                     self.conv_bool(1),
                 )
@@ -764,10 +806,9 @@ class GEDA:
         """
         x1, x2 = params['x1'], params['x2']
         y1, y2 = params['y1'], params['y2']
-        ripperdir = params['ripperdir']
 
-        ## ignore bus when length or ripperdir is zero
-        if (x1 == x2 and y1 == y2) or ripperdir == 0:
+        ## ignore bus when length is zero
+        if x1 == x2 and y1 == y2:
             return 
 
         pta_x, pta_y = self.conv_coords(x1, y1)
@@ -806,7 +847,7 @@ class GEDA:
                 if net_name not in self.net_names.values():
                     self.net_names[pt_a.point_id] = net_name
 
-    def _parse_path(self, stream, params):
+    def _parse_path(self, stream, params, mirrored=False):
         """ Parses a SVG-like path provided path into a list
             of simple shapes. The gEDA formats allows only line
             and curve segments with absolute coordinates. Hence,
@@ -821,13 +862,17 @@ class GEDA:
         if command[0] != 'M':
             raise GEDAError('found invalid path in gEDA file')
 
-        def get_coords(string):
+        def get_coords(string, mirrored):
             """ Get coordinates from string with comma-sparated notation."""
-            x, y = string.strip().split(',')
-            return (self.x_to_px(int(x)), self.y_to_px(int(y)))
+            x, y = [int(value) for value in string.strip().split(',')]
+
+            if mirrored:
+                x = 0-x
+
+            return (self.x_to_px(x), self.y_to_px(y))
 
         shapes = []
-        current_pos = initial_pos = (get_coords(command[1]))
+        current_pos = initial_pos = (get_coords(command[1], mirrored))
 
         ## loop over the remaining lines of commands (after 'M')
         for dummy in range(num_lines-1):
@@ -836,7 +881,7 @@ class GEDA:
             ## draw line from current to given position
             if command[0] == 'L':
                 assert(len(command) == 2)
-                end_pos = get_coords(command[1])
+                end_pos = get_coords(command[1], mirrored)
 
                 line = shape.Line(current_pos, end_pos)
                 shapes.append(line)
@@ -846,9 +891,9 @@ class GEDA:
             ## draw curve from current to given position
             elif command[0] == 'C':
                 assert(len(command) == 4)
-                control1 = get_coords(command[1])
-                control2 = get_coords(command[2])
-                end_pos = get_coords(command[3])
+                control1 = get_coords(command[1], mirrored)
+                control2 = get_coords(command[2], mirrored)
+                end_pos = get_coords(command[3], mirrored)
 
                 curve = shape.BezierCurve(
                     control1,
@@ -873,53 +918,80 @@ class GEDA:
 
         return shapes 
     
-    def _parse_arc(self, params):
+    def _parse_arc(self, params, mirrored=False):
         """ Creates an Arc object from the parameter in *params*. All 
             style related parameters are ignored.
             Returns Arc object.
         """
+        arc_x = params['x']
+        start_angle = params['startangle']
+        sweep_angle = params['sweepangle']
+        if mirrored:
+            arc_x = 0 - arc_x
+    
+            start_angle = start_angle + sweep_angle
+            if start_angle <= 180:
+                start_angle =  180 - start_angle
+            else:
+                start_angle =  (360 - start_angle) + 180
+
         return shape.Arc(
-            self.x_to_px(params['x']),
+            self.x_to_px(arc_x),
             self.y_to_px(params['y']),
-            self.conv_angle(params['startangle']),
-            self.conv_angle(params['startangle'] + params['sweepangle']),
+            self.conv_angle(start_angle),
+            self.conv_angle(start_angle+sweep_angle),
             self.to_px(params['radius']),
         )
 
-    def _parse_line(self, params):
+    def _parse_line(self, params, mirrored=None):
         """ Creates a Line object from the parameters in *params*. All
             style related parameters are ignored.
             Returns a Line object.
         """
+        line_x1 = params['x1']
+        line_x2 = params['x2']
+
+        if mirrored:
+            line_x1 = 0 - params['x1']
+            line_x2 = 0 - params['x2']
+
         return shape.Line(
-            self.conv_coords(params['x1'], params['y1']),
-            self.conv_coords(params['x2'], params['y2']),
+            self.conv_coords(line_x1, params['y1']),
+            self.conv_coords(line_x2, params['y2']),
         )
 
-    def _parse_box(self, params):
+    def _parse_box(self, params, mirrored=False):
         """ Creates rectangle from gEDA box with origin in bottom left
             corner. All style related values are ignored.
             Returns a Rectangle object.
         """
+        rect_x = params['x']
+        if mirrored:
+            rect_x = 0-(rect_x+params['width'])
+
         return shape.Rectangle(
-            self.x_to_px(params['x']+params['height']),
-            self.y_to_px(params['y']),
+            self.x_to_px(rect_x),
+            self.y_to_px(params['y']+params['height']),
             self.to_px(params['width']),
             self.to_px(params['height'])
         )
 
-    def _parse_circle(self, params):
+    def _parse_circle(self, params, mirrored=False):
         """ Creates a Circle object from the gEDA parameters in *params. All
             style related parameters are ignored. 
             Returns a Circle object.
         """
+        vertex_x = params['x']
+        if mirrored:
+            vertex_x = 0-vertex_x
+
         return shape.Circle(
-            self.x_to_px(params['x']),
+            self.x_to_px(vertex_x),
             self.y_to_px(params['y']),
             self.to_px(params['radius']),
         )
 
-    def _parse_pin(self, stream, params):
+    def _parse_pin(self, stream, params, mirrored=False):
         """ Creates a Pin object from the parameters in *param* and
             text attributes provided in the following environment. The
             environment is enclosed in ``{}`` and is required. If no
@@ -945,15 +1017,20 @@ class GEDA:
 
         whichend = params['whichend']
 
+        pin_x1, pin_x2 = params['x1'], params['x2']
+        if mirrored:
+            pin_x1 = 0-pin_x1
+            pin_x2 = 0-pin_x2
+            
         ## determine wich end of the pin is the connected end
         ## 0: first point is connector
         ## 1: second point is connector
         if whichend == 0:
-            connect_end = self.conv_coords(params['x1'], params['y1']) 
-            null_end = self.conv_coords(params['x2'], params['y2']) 
+            connect_end = self.conv_coords(pin_x1, params['y1']) 
+            null_end = self.conv_coords(pin_x2, params['y2']) 
         else:
-            null_end = self.conv_coords(params['x1'], params['y1'])
-            connect_end = self.conv_coords(params['x2'], params['y2'])
+            null_end = self.conv_coords(pin_x1, params['y1'])
+            connect_end = self.conv_coords(pin_x2, params['y2'])
 
         label = None
         if '_pinlabel' in attributes:
@@ -1019,7 +1096,7 @@ class GEDA:
             scale factor. 
             Returns an integer value converted to pixels.
         """
-        return int(value / float(cls.SCALE_FACTOR))
+        return int(value / cls.SCALE_FACTOR)
 
     def x_to_px(self, x_mils):
         """ Convert *px* from MILS to pixels using the scale
@@ -1028,7 +1105,7 @@ class GEDA:
 
             Returns translated and converted X coordinate.
         """
-        return int((x_mils - self.offset.x) / self.SCALE_FACTOR)
+        return int(float(x_mils - self.offset.x) / self.SCALE_FACTOR)
 
     def y_to_px(self, y_mils):
         """ Convert *py* from MILS to pixels using the scale
@@ -1037,7 +1114,7 @@ class GEDA:
 
             Returns translated and converted Y coordinate.
         """
-        return int((y_mils - self.offset.y) / self.SCALE_FACTOR)
+        return int(float(y_mils - self.offset.y) / self.SCALE_FACTOR)
 
     def conv_coords(self, orig_x, orig_y):
         """ Converts coordinats *orig_x* and *orig_y* from MILS
@@ -1062,8 +1139,14 @@ class GEDA:
 
     @staticmethod
     def conv_angle(angle):
-        """ Converts *angle* (in degrees) to pi radians."""
+        """ Converts *angle* (in degrees) to pi radians. gEDA
+            sets degree angles counter-clockwise whereas upverter 
+            uses pi radians clockwise. Therefore the direction of
+            *angle* is therefore adjusted first.
+        """
         angle = angle % 360.0
+        if angle > 0:
+            angle = abs(360 - angle)
         return round(angle/180.0, 1)
 
 
