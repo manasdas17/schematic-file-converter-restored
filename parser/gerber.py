@@ -24,9 +24,10 @@ from math import sqrt, sin, cos, acos, pi
 from collections import namedtuple
 
 from core.design import Design
-from core.layout import Layout, Layer, Image, Macro, Trace
-from core.shape import Line, Arc, Point, Circle, Rectangle, Obround, \
-                       Polygon, RegularPolygon, Moire, Thermal
+from core.layout import Layout, Layer, Image, Macro, Primitive
+from core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
+from core.shape import Line, Arc, Point, Circle, Rectangle, Obround
+from core.shape import Polygon, RegularPolygon, Moire, Thermal
 
 
 # exceptions
@@ -83,6 +84,10 @@ class ImpossibleGeometry(Unparsable):
     """ Arc radius, center and endpoints don't gel. """
     pass
 
+class IncompatibleAperture(Unparsable):
+    """ Attempted to draw non-linear shape with rect. """
+    pass
+
 
 # token classes
 
@@ -98,6 +103,7 @@ FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: di
 
 # constants
 
+DEBUG = False
 DIGITS = '0123456789'
 PRIMITIVES = {1:'circle',
               2:'vector',
@@ -154,11 +160,8 @@ def snap(float_1, float_2):
 class Gerber:
     """ The Gerber Format Parser """
 
-    def __init__(self, filename='.'):
-        name, ext = filename.rsplit('.', 1)
-        layer_name = ext.lower() == 'ger' and name or ext
-        self.filename = filename
-        self.layer = Layer(layer_name)
+    def __init__(self):
+        self.layer = Layer()
         self.img_buff = Image()
         self.fill_buff = []
 
@@ -174,6 +177,8 @@ class Gerber:
                        'IO':AxisDef(0, 0),    # image offset
                        'IP':True,             # image polarity
                        'IR':0}                # image rotation
+
+        # simulate a photo plotter
         self.status = {'x':0,
                        'y':0,
                        'draw':'OFF',
@@ -185,9 +190,11 @@ class Gerber:
                        'incremental_coords':None}
 
 
-    def parse(self):
+    def parse(self, infile='.'):
         """ Parse tokens from gerber file into a design. """
-        for block in self._tokenize():
+        name, ext = infile.rsplit('.', 1)
+        self.layer.name = ext.lower() == 'ger' and name or ext
+        for block in self._tokenize(infile):
             if isinstance(block, MacroDef):
                 effect = self._build_macro(block)
             elif isinstance(block, Funct):
@@ -195,12 +202,14 @@ class Gerber:
             else:
                 effect = self._move(block)
             self.status.update(effect)
-        for image in self.layer.images:
-            print image.json()
+        if DEBUG:
+            self._debug_stdout()
         layout = Layout()
+        layout.units = (self.params['MO'] == 'IN'
+                        and 'inch' or 'mm')
         layout.layers.append(self.layer)
         design = Design()
-        design.layouts.append(layout)
+        design.layout = layout
         return design
 
 
@@ -212,79 +221,13 @@ class Gerber:
         for p_def in block.primitive_defs:
             type_, mods = (p_def[0], [float(i) for i in p_def[1:]])
             is_additive = type_ in ('moire', 'thermal') or int(mods[0])
-            rotation = type_ not in ('circle', 'moire', 'thermal') and mods[-1]/180
-
-            # create a shape for this primitive
-            if type_ == 'circle':
-                shape = Circle(x=mods[2],
-                               y=mods[3],
-                               radius=mods[1]/2)
-            elif type_ == 'vector':
-
-                # If vect is not horizontal, rotate about the
-                # origin until horizontal. Define it as a
-                # normal rectangle, then incorporate rotated
-                # angle into explicit rotation, so it can be
-                # appropriately redeemed.
-                start, end = (mods[2:4], mods[4:6])
-                start_radius = sqrt(start[0]**2 + start[1]**2)
-                end_radius = sqrt(end[0]**2 + end[1]**2)
-                if start_radius > end_radius:
-                    end, start = (mods[2:4], mods[4:6])
-                    radius = end_radius
-                else:
-                    radius = start_radius
-                x, y = start
-                adj = end[0] - x
-                opp = end[1] - y
-                hyp = sqrt(adj**2 + opp**2)
-                vect_theta =  acos(adj/hyp)/pi
-                if opp > 0:
-                    vect_theta = 2 - vect_theta
-                d_theta = 2 - vect_theta
-                theta = acos(x/radius)/pi 
-                if y > 0:
-                    theta = 2 - theta
-                theta += d_theta
-                rotated_y = sin((2 - theta) * pi) * radius
-                rotated_x = cos((2 - theta) * pi) * radius
-                rotation = (rotation + theta) % 2
-
-                shape = Rectangle(x=rotated_x,
-                                  y=rotated_y + mods[1]/2,
-                                  width=hyp,
-                                  height=mods[1])
-            elif type_ == 'line':
-                shape = Rectangle(x=mods[3] - mods[1]/2,
-                                  y=mods[4] + mods[2]/2,
-                                  width=mods[1],
-                                  height=mods[2])
-            elif type_ == 'rectangle':
-                shape = Rectangle(x=mods[3],
-                                  y=mods[4] + mods[2],
-                                  width=mods[1],
-                                  height=mods[2])
-            elif type_ == 'outline':
-                points = [Point(mods[i], mods[i + 1])
-                          for i in range(2, len(mods[:-1]), 2)]
-                shape = Polygon(points)
-            elif type_ == 'polygon':
-                shape = RegularPolygon(x=mods[2],
-                                       y=mods[3],
-                                       outer=mods[4],
-                                       vertices=mods[1])
-            elif type_ == 'moire':
-                mods[8] = 2 - mods[8]/180
-                shape = Moire(*mods[0:9])
-            elif type_ == 'thermal':
-                mods[5] = 2 - mods[5]/180
-                shape = Thermal(*mods[0:6])
-
-            primitives.append([is_additive, rotation, shape])
+            rotation = type_ not in ('circle', 'moire',
+                                     'thermal') and mods[-1]/180
+            shape, rotation = self._gen_shape(type_, mods, rotation)
+            primitives.append(Primitive(is_additive, rotation, shape))
 
         # generate and stow the macro
-        macro = Macro(block.name, primitives)
-        self.layer.macros[block.name] = macro
+        self.layer.macros[block.name] = Macro(block.name, primitives)
         return {}
 
 
@@ -314,15 +257,14 @@ class Gerber:
 
 
     def _move(self, block):
-        """ Draw a shape, or a segment of a trace. """
+        """ Draw a shape, or a segment of a trace or fill. """
         start = tuple([self.status[k] for k in ('x', 'y')])
         end = self._target_pos(block)
         ends = (Point(start), Point(end))
-        shapes = self.layer.shapes
+        apertures = self.layer.apertures
         if self.status['draw'] == 'ON':
 
             # generate segment
-            #TODO: handle rectangular apertures (smears)
             if self.status['interpolation'] == 'LINEAR':
                 seg = Line(start, end)
             else:
@@ -333,24 +275,30 @@ class Gerber:
             if self.status['outline_fill']:
                 self.fill_buff.append(seg)
 
-            # append segment to trace
             else:
-                aperture = shapes[self.status['aperture']]
-                wid = aperture[0].radius * 2
-                tr_ind = self.img_buff.get_trace(wid, ends)
-                if tr_ind is None:
+                aperture = apertures[self.status['aperture']]
+                if isinstance(aperture.shape, Rectangle):
 
-                    # start a new trace
-                    trace = Trace(wid, [seg])
-                    self.img_buff.traces.append(trace)
+                    # construct a smear
+                    self._check_smear(seg, aperture.shape)
+                    self.img_buff.smears.append(Smear(seg, aperture.shape))
+
                 else:
+                    wid = aperture.shape.radius * 2
+                    tr_ind = self.img_buff.get_trace(wid, ends)
+                    if tr_ind is None:
 
-                    # add to existing trace
-                    self.img_buff.traces[tr_ind].segments.append(seg)
+                        # construct a trace
+                        self.img_buff.traces.append(Trace(wid, [seg]))
+                    else:
+
+                        # append segment to existing trace
+                        self.img_buff.traces[tr_ind].segments.append(seg)
 
         elif self.status['draw'] == 'FLASH':
-            aperture = shapes[self.status['aperture']]
-            self.img_buff.shape_instances.append((ends[1], aperture))
+            aperture = apertures[self.status['aperture']]
+            shape_inst = ShapeInstance(ends[1], aperture)
+            self.img_buff.shape_instances.append(shape_inst)
 
         return {'x':end[0], 'y':end[1]}
 
@@ -371,7 +319,104 @@ class Gerber:
         return (coord['x'], coord['y'])
 
 
-    # circular paths
+    # geometry
+
+    def _gen_shape(self, type_, mods, rotation):
+        """ Create a primitive shape component for a macro. """
+        if type_ == 'circle':
+            shape = Circle(x=mods[2],
+                           y=mods[3],
+                           radius=mods[1]/2)
+        elif type_ == 'vector':
+            shape, rotation = self._vector_to_rect(mods,
+                                                   rotation)
+        elif type_ == 'line':
+            shape = Rectangle(x=mods[3] - mods[1]/2,
+                              y=mods[4] + mods[2]/2,
+                              width=mods[1],
+                              height=mods[2])
+        elif type_ == 'rectangle':
+            shape = Rectangle(x=mods[3],
+                              y=mods[4] + mods[2],
+                              width=mods[1],
+                              height=mods[2])
+        elif type_ == 'outline':
+            points = [Point(mods[i], mods[i + 1])
+                      for i in range(2, len(mods[:-1]), 2)]
+            shape = Polygon(points)
+        elif type_ == 'polygon':
+            shape = RegularPolygon(x=mods[2],
+                                   y=mods[3],
+                                   outer=mods[4],
+                                   vertices=mods[1])
+        elif type_ == 'moire':
+            mods[8] = 2 - mods[8]/180
+            shape = Moire(*mods[0:9])
+        elif type_ == 'thermal':
+            mods[5] = 2 - mods[5]/180
+            shape = Thermal(*mods[0:6])
+        return (shape, rotation)
+
+
+    def _vector_to_rect(self, mods, rotation):
+        """
+        Convert a vector into a Rectangle.
+
+        Strategy
+        ========
+        If vect is not horizontal:
+            - rotate about the origin until horizontal
+            - define it as a normal rectangle
+            - incorporate rotated angle into explicit rotation
+
+        """
+        start, end = (mods[2:4], mods[4:6])
+        start_radius = sqrt(start[0]**2 + start[1]**2)
+        end_radius = sqrt(end[0]**2 + end[1]**2)
+
+        # Reverse the vector if its endpoint is closer
+        # to the origin than its start point (avoids
+        # mucking about with signage later).
+        if start_radius > end_radius:
+            end, start = (mods[2:4], mods[4:6])
+            radius = end_radius
+        else:
+            radius = start_radius
+
+        # Calc the angle of the vector with respect to
+        # the x axis.
+        x, y = start
+        adj = end[0] - x
+        opp = end[1] - y
+        hyp = sqrt(adj**2 + opp**2)
+        theta = acos(adj/hyp)/pi
+        if opp > 0:
+            theta = 2 - theta
+
+        # Represent vector angle as a delta.
+        d_theta = 2 - theta
+
+        # Calc the angle of the start point of the
+        # flattened vector.
+        theta = acos(x/radius)/pi 
+        if y > 0:
+            theta = 2 - theta
+        theta += d_theta
+
+        # Redefine x and y at center of the rect's left
+        # side.
+        y = sin((2 - theta) * pi) * radius
+        x = cos((2 - theta) * pi) * radius
+
+        # Calc the composite rotation angle.
+        rotation = (rotation + theta) % 2
+
+        return (Rectangle(x=x,
+                          y=y + mods[1]/2,
+                          width=hyp,
+                          height=mods[1]),
+                rotation)
+
 
     def _draw_arc(self, end_pts, center_offset):
         """ Convert arc path into shape. """
@@ -435,11 +480,11 @@ class Gerber:
 
     # tokenizer
 
-    def _tokenize(self):
+    def _tokenize(self, infile):
         """ Split gerber file into pythonic tokens. """
         param_block = eof = False
         pos = 0
-        with open(self.filename, 'r') as ger:
+        with open(infile, 'r') as ger:
             content = ger.read()
         match = TOK_RE.match(content)
         while pos < len(content):
@@ -481,7 +526,7 @@ class Gerber:
         self.layer.images.append(self.img_buff)
 
 
-    # tokenizer support methods - macros
+    # tokenizer support - macros
 
     def _parse_macro(self, tok):
         """ Define a macro, with its component shapes. """
@@ -493,7 +538,7 @@ class Gerber:
         return MacroDef(name, prim_defs)
 
 
-    # tokenizer support methods - parameters
+    # tokenizer support - params
 
     def _parse_param(self, tok):
         """ Convert a param specifier into pythonic data. """
@@ -509,7 +554,6 @@ class Gerber:
             self._extract_lp(name, tok)
             return {}
         else:
-            #TODO: handle layer params LN, LP, SR
             tup = tok
         return {name:tup}
 
@@ -531,7 +575,7 @@ class Gerber:
 
 
     def _extract_ad(self, tok):
-        """ Extract aperture definition into shape def. """
+        """ Extract aperture definition into shapes dict. """
         tok = ',' in tok and tok or tok + ','
         code_end = tok[3] in DIGITS and 4 or 3
         code = tok[1:code_end]
@@ -546,14 +590,16 @@ class Gerber:
             shape = Circle(0, 0, mods[0]/2)
             hole_defs = len(mods) > 1 and mods[1:]
         elif type_ == 'R':
-            shape = Rectangle(-mods[0]/2, mods[1]/2, *mods[:2])
+            shape = Rectangle(-mods[0]/2, mods[1]/2,
+                              mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
         elif type_ == 'O':
-            shape = Obround(0, 0, *mods[:2])
+            shape = Obround(0, 0, mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
         elif type_ == 'P':
-            args = len(mods) > 2 and mods[:3] or mods[:2]
-            shape = RegularPolygon(0, 0, *args)
+            if len(mods) < 3:
+                mods.append(0)
+            shape = RegularPolygon(0, 0, mods[0], mods[1], mods[2])
             hole_defs = len(mods) > 3 and mods[3:]
         else:
             shape = type_
@@ -561,10 +607,11 @@ class Gerber:
         hole = hole_defs and (len(hole_defs) > 1 and
                               Rectangle(-hole_defs[0]/2,
                                         hole_defs[1]/2,
-                                        *hole_defs[:2]) or
+                                        hole_defs[0],
+                                        hole_defs[1]) or
                               Circle(0, 0, hole_defs[0]/2))
 
-        self.layer.shapes.update({code:(shape, hole)})
+        self.layer.apertures.update({code:Aperture(code, shape, hole)})
 
 
     def _extract_ap(self, name, tok):
@@ -621,7 +668,7 @@ class Gerber:
         return ab_tup
 
 
-    # tokenizer support methods - functions and coordinates
+    # tokenizer support - funct/coord
 
     def _parse_data_block(self, tok):
         """ Convert a non-param into pythonic data. """
@@ -729,7 +776,14 @@ class Gerber:
             if not start == end:
                 raise OpenFillBoundary('%s != %s' % (start, end))
         self.fill_buff = []
-        return fill
+        return Fill(fill)
+
+
+    def _check_smear(self, seg, shape):
+        """ Enforce linear interpolation constraint. """
+        if not isinstance(seg, Line):
+            raise IncompatibleAperture('%s cannot draw arc %s'
+                                       % (shape, seg))
 
 
     def _check_mq(self, start_angle, end_angle):
@@ -738,6 +792,7 @@ class Gerber:
             if abs(end_angle - start_angle) > 0.5:
                 raise QuadrantViolation('Arc(%s to %s) > 0.5 rad/pi'
                                         % (start_angle, end_angle))
+
 
     def _check_pb(self, param_block, tok, should_be=True):
         """ Ensure we are parsing an appropriate block. """
@@ -765,3 +820,17 @@ class Gerber:
         """ Ensure data block is understood by the parser. """
         if typ == 'UNKNOWN':
             raise UnintelligibleDataBlock(tok)
+
+
+    def _debug_stdout(self):
+        """ Dump what we know. """
+        for j in self.layer.apertures:
+            print '-- D%s --' % j
+            print self.layer.apertures[j].json()
+        for k in self.layer.macros:
+            print '-- %s --' % k
+            print self.layer.macros[k].json()
+        for image in self.layer.images:
+            print '-- %s --' % image.name
+            print image.json()
+        raise Unparsable('deliberate error')

@@ -239,9 +239,13 @@ class GEDA:
         commands = []
 
         for instance in component_instances:
+            mirrored = 0
+            if '_MIRRORED' in instance.library_id:
+                mirrored = 1
+
             ## retrieve symbol for instance
             component_symbol = self.component_library[(
-                instance.library_id, 
+                instance.library_id.replace('_MIRRORED', ''),
                 instance.symbol_index
             )]
 
@@ -254,6 +258,7 @@ class GEDA:
                     symbol_attribute.x,
                     symbol_attribute.y,
                     angle=symbol_attribute.rotation,
+                    mirrored=mirrored,
                     basename=component_symbol,
                 )
 
@@ -319,9 +324,17 @@ class GEDA:
         ## as being imported using the upconverter. If this marker is found
         ## local .sym files will be referenced if available.
         if geda_imported:
+            ##remove mirrored tag from name
+            if '_MIRRORED' in component.name:
+                component.name = component.name.replace('_MIRRORED', '')
+
             ##check if component is known sym file in OS dirs
             symbol_filename = "%s.sym" %  component.name.replace('EMBEDDED', '')
-            self.component_library[(library_id, 0)] = symbol_filename
+
+            self.component_library[(
+                library_id.replace('_MIRRORED', ''), 
+                0
+            )] = symbol_filename
 
             if component.name.replace('EMBEDDED', '') in self.known_symbols:
                 return 
@@ -526,7 +539,7 @@ class GEDA:
 
         return commands
 
-    def _create_component(self, x, y, basename, angle=0):
+    def _create_component(self, x, y, basename, angle=0, mirrored=0):
         """ Creates a gEDA command for a component in symbol file *basename*
             at location *x*, *y*. *angle* allows for specifying the rotation
             angle of the component and is specified in pi radians. Valid values
@@ -536,9 +549,10 @@ class GEDA:
         """
         x, y = self.conv_coords(x, y)
         return [
-            'C %d %d 0 %d 0 %s' % (
+            'C %d %d 0 %d %d %s' % (
                 x, y,
                 self.conv_angle(angle),
+                mirrored,
                 basename
             )
         ]
@@ -962,8 +976,12 @@ class GEDA:
 
             Retuns converted and cut-off angle in degrees.
         """
-        converted_angle = int(angle * 180)
-        return (converted_angle // int(steps)) * steps
+        converted_angle = int(angle * 180) // int(steps)
+        converted_angle *= steps
+
+        ## convert from clockwise rotation to counter-clockwise 
+        ## as used in gEDA schematic
+        return abs(360 - converted_angle) % 360
 
     def conv_coords(self, x_px, y_px):
         """ Converts *x_px*, *y_px* from pixel to mils and translating
