@@ -263,6 +263,10 @@ MATRIX2ROTATION = {(1, 0, 0, 1): 0,
 class ComponentParser(object):
     """I parse components from Fritzing libraries."""
 
+    # The svg files in fritzing libraries are specified in pixels that
+    # are 72dpi. The schematics are in 90dpi.
+    svg_mult = 90.0 / 72.0
+
     def __init__(self, idref, path):
         self.component = Component(idref)
         self.next_pin_number = 0
@@ -353,9 +357,11 @@ class ComponentParser(object):
             return
 
         tree = ElementTree(file=svg_path)
-
         viewbox = tree.getroot().get('viewBox')
+
         self.width, self.height = [float(v) for v in viewbox.split()[-2:]]
+        self.width *= self.svg_mult
+        self.height *= self.svg_mult
 
         for element in tree.getroot().iter():
             for shape in self.parse_shapes(element):
@@ -389,16 +395,20 @@ class ComponentParser(object):
     def parse_rect(self, rect):
         """ Parse a rect element """
 
-        x, y = get_x(rect), get_y(rect)
-        width, height = get_length(rect, 'width'), get_length(rect, 'height')
+        x, y = (get_x(rect, mult=self.svg_mult),
+                get_y(rect, mult=self.svg_mult))
+        width, height = (get_length(rect, 'width', self.svg_mult),
+                         get_length(rect, 'height', self.svg_mult))
         return [Rectangle(x, y, width, height)]
 
 
     def parse_line(self, rect):
         """ Parse a line element """
 
-        return [Line((get_x(rect, 'x1'), get_y(rect, 'y1')),
-                     (get_x(rect, 'x2'), get_y(rect, 'y2')))]
+        return [Line((get_x(rect, 'x1', self.svg_mult),
+                      get_y(rect, 'y1', self.svg_mult)),
+                     (get_x(rect, 'x2', self.svg_mult),
+                      get_y(rect, 'y2', self.svg_mult)))]
 
 
     def parse_polygon(self, poly):
@@ -409,7 +419,8 @@ class ComponentParser(object):
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                shape.add_point(make_x(x), make_y(y))
+                shape.add_point(make_x(x, self.svg_mult),
+                                make_y(y, self.svg_mult))
 
         if shape.points:
             shape.add_point(shape.points[0].x, shape.points[0].y)
@@ -426,7 +437,7 @@ class ComponentParser(object):
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                point = (make_x(x), make_y(y))
+                point = (make_x(x, self.svg_mult), make_y(y, self.svg_mult))
                 if last_point is not None:
                     shapes.append(Line(last_point, point))
                 last_point = point
@@ -437,9 +448,9 @@ class ComponentParser(object):
     def parse_circle(self, circle):
         """ Parse a circle element """
 
-        return [Circle(get_x(circle, 'cx'),
-                       get_y(circle, 'cy'),
-                       get_length(circle, 'r'))]
+        return [Circle(get_x(circle, 'cx', self.svg_mult),
+                       get_y(circle, 'cy', self.svg_mult),
+                       get_length(circle, 'r', self.svg_mult))]
 
 
 def get_pin(shape):
@@ -474,26 +485,26 @@ def rotate_component(cpt, matrix, x, y):
     return (x + (x2 - x1), y + (y2 - y1))
 
 
-def make_x(x):
+def make_x(x, mult=1.0):
     """ Make an openjson x coordinate from a fritzing x coordinate """
-    return int(round(float(x)))
+    return int(round(float(x) * mult))
 
-def make_y(y):
+def make_y(y, mult=1.0):
     """ Make an openjson y coordinate from a fritzing y coordinate """
-    return -int(round(float(y)))
+    return -int(round(float(y) * mult))
 
-def make_length(value):
+def make_length(value, mult=1.0):
     """ Make a length measurement from a fritzing measurement """
-    return int(round(float(value)))
+    return int(round(float(value) * mult))
 
-def get_x(element, name='x', default=0):
+def get_x(element, name='x', mult=1.0):
     """ Get an openjson x coordinate from a fritzing element """
-    return make_x(element.get(name, default))
+    return make_x(element.get(name, 0), mult)
 
-def get_y(element, name='y', default=0):
+def get_y(element, name='y', mult=1.0):
     """ Get an openjson y coordinate from a fritzing element """
-    return make_y(element.get(name, default))
+    return make_y(element.get(name, 0), mult)
 
-def get_length(element, name, default=0):
+def get_length(element, name, mult=1.0):
     """ Get an openjson length from a fritzing element """
-    return make_length(element.get(name, default))
+    return make_length(element.get(name, 0), mult)

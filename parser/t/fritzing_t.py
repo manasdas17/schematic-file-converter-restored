@@ -119,14 +119,14 @@ class FritzingTests(TestCase):
 
         shape = body.shapes[0]
         self.assertEqual(shape.type, 'rectangle')
-        self.assertEqual(shape.x, 12)
+        self.assertEqual(shape.x, 15)
         self.assertEqual(shape.y, -1)
         self.assertEqual(shape.width, 0)
         self.assertEqual(shape.height, 0)
 
         pin = body.pins[0]
         self.assertEqual(pin.pin_number, '0')
-        self.assertEqual(pin.p1.x, 12)
+        self.assertEqual(pin.p1.x, 15)
         self.assertEqual(pin.p1.y, -1)
         self.assertEqual(pin.p2.x, pin.p1.x)
         self.assertEqual(pin.p2.y, pin.p1.y)
@@ -148,8 +148,8 @@ class FritzingTests(TestCase):
         self.assertEqual(len(inst.symbol_attributes), 1)
 
         symbattr = inst.symbol_attributes[0]
-        self.assertEqual(symbattr.x, 293)
-        self.assertEqual(symbattr.y, -147)
+        self.assertEqual(symbattr.x, 288)
+        self.assertEqual(symbattr.y, -159)
         self.assertEqual(symbattr.rotation, 1.5)
 
 
@@ -246,22 +246,23 @@ class FritzingTests(TestCase):
 
     def test_parse_circle(self):
         parser = ComponentParser(None, None)
-        elem = FakeElem('circle', cx='1.5', cy='10.4', r='15')
+        elem = FakeElem('circle', cx='72', cy='144', r='216')
         shapes = parser.parse_shapes(elem)
         self.assertEqual(len(shapes), 1)
         self.assertEqual(shapes[0].type, 'circle')
-        self.assertEqual(shapes[0].x, 2)
-        self.assertEqual(shapes[0].y, -10)
-        self.assertEqual(shapes[0].radius, 15)
+        self.assertEqual(shapes[0].x, 90)
+        self.assertEqual(shapes[0].y, -180)
+        self.assertEqual(shapes[0].radius, 270)
 
 
     def test_parse_rect(self):
         parser = ComponentParser(None, None)
-        elem = FakeElem('rect', x='1', y='2', width=5, height=10)
+        elem = FakeElem('rect', x='0', y='720',
+                        width='72', height='144')
         shapes = parser.parse_shapes(elem)
         self.assertEqual(len(shapes), 1)
         self.assertEqual(shapes[0].type, 'rectangle')
-        self.assertEqual(shapes[0].x, 1)
-        self.assertEqual(shapes[0].y, -2)
-        self.assertEqual(shapes[0].width, 5)
-        self.assertEqual(shapes[0].height, 10)
+        self.assertEqual(shapes[0].x, 0)
+        self.assertEqual(shapes[0].y, -900)
+        self.assertEqual(shapes[0].width, 90)
+        self.assertEqual(shapes[0].height, 180)
