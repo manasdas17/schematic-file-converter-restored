@@ -391,6 +391,22 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_hole.drill, 3.302)
         return
 
+    def test_smd_parse(self):
+        """ Test SMD block parsing """
+
+        _valid_chunk = b''.join((b"\x2b\x80\x00\x01\x96\xb5\xff\xff",
+                                 b"\x0e\x78\x00\x00\xe6\x0c\xb0\x27",
+                                 b"\x00\x00\x00\x31\x34\x00\x00\x00"))
+        _smd = Eagle.SMD.parse(_valid_chunk)
+
+        self.assertEqual(_smd.name, "14")
+        self.assertEqual(_smd.x, -1.905)
+        self.assertEqual(_smd.y, 3.0734)
+        self.assertEqual(_smd.dx, 0.6604)
+        self.assertEqual(_smd.dy, 2.032)
+        self.assertEqual(_smd.layer, 1)
+        return
+
     def test_arc_parse(self):
         """ Test Arc block parsing """
 

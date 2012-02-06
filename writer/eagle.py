@@ -1122,6 +1122,48 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
+    class SMD(Shape):
+        """ A struct that represents an SMD (Surface Mount Device)
+        """
+        constant = 0x2b
+        template = "=4B2i2H3B5s"
+
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y, dx, dy, layer): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.SMD, self).__init__(layer)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.dx = dx
+            self.dy = dy
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len >= len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, self.layer,
+                                   Eagle.Shape.encode_real(self.x),
+                                   Eagle.Shape.encode_real(self.y),
+                                   Eagle.Shape.encode_real(
+                                       self.dx / self.width_xscale),
+                                   Eagle.Shape.encode_real(
+                                       self.dy / self.width_xscale),
+                                   0, 0, 0,
+                                   _name,
+                                  )
+            return _ret_val
+
     class Arc(Wire):
         """ A struct that represents an arc
         """

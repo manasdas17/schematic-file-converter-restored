@@ -1147,6 +1147,49 @@ class Eagle:
                                  )
             return _ret_val
 
+    class SMD(Shape):
+        """ A struct that represents an SMD (Surface Mount Device)
+        """
+        constant = 0x2b
+        template = "=4B2i2H3B5s"
+
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y, dx, dy, layer): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.SMD, self).__init__(layer)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.dx = dx
+            self.dy = dy
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses junction
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.SMD.template, chunk)
+
+            _name = None
+            if Eagle.SMD.no_embed_str != _dta[11][0]:
+                _name = _dta[11].rstrip('\0')
+
+            _ret_val = Eagle.SMD(name=_name,
+                                 x=Eagle.Shape.decode_real(_dta[4]),
+                                 y=Eagle.Shape.decode_real(_dta[5]),
+                                 dx=(Eagle.Hole.width_xscale *
+                                      Eagle.Shape.decode_real(_dta[6])),
+                                 dy=(Eagle.Hole.width_xscale *
+                                      Eagle.Shape.decode_real(_dta[7])),
+                                 layer=_dta[3],
+                                )
+            return _ret_val
+
     class Arc(Wire):
         """ A struct that represents an arc
         """
@@ -1818,6 +1861,8 @@ class Eagle:
                 _cur_segment.shapes.append(self.Wire.parse(_dta))
             elif Eagle.Hole.constant == _type:
                 _cur_segment.shapes.append(self.Hole.parse(_dta))
+            elif Eagle.SMB.constant == _type:
+                _cur_segment.shapes.append(self.SMB.parse(_dta))
             elif Eagle.PinRef.constant == _type:
                 _cur_segment.shapes.append(self.PinRef.parse(_dta))
             elif Eagle.Junction.constant == _type:
@@ -1899,7 +1944,8 @@ class Eagle:
                                 _tt.value = _name
                         else:
 # TODO remove
-                            print("no room for extra attribute " + str(_attr))
+                            print("no room for extra attribute %s: %s" % 
+                                    (str(_attr.name), str(_attr.value)))
             else:
                 break # NoOP: last item is just a b'\0'
 

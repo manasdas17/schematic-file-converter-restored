@@ -480,6 +480,27 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_chunk, _valid_chunk)
         return
 
+    def test_smd_construct(self):
+        """ Test SMD block creation """
+
+        _smd = Eagle.SMD(name="14",
+                         x=-1.905,
+                         y=3.0734,
+                         dx=0.6604,
+                         dy=2.032,
+                         layer=1,
+                        )
+
+        _chunk = _smd.construct()
+
+        _valid_chunk = b''.join((b"\x2b\x00\x00\x01\x96\xb5\xff\xff",
+                                 b"\x0e\x78\x00\x00\xe6\x0c\xb0\x27",
+                                 b"\x00\x00\x00\x31\x34\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
     def test_arc_construct(self):
         """ Test Arc block construction """
 
