@@ -22,7 +22,7 @@
 
 
 from core.shape import Circle, Rectangle, Shape
-from parser.fritzing import Fritzing, ComponentParser
+from parser.fritzing import Fritzing, ComponentParser, PathParser
 from parser.fritzing import make_x, make_y, make_length, get_pin
 from parser.fritzing import get_x, get_y, get_length
 from unittest import TestCase
@@ -245,6 +245,8 @@ class FritzingTests(TestCase):
 
 
     def test_parse_circle(self):
+        """ We parse svg circles correctly. """
+
         parser = ComponentParser(None, None)
         elem = FakeElem('circle', cx='72', cy='144', r='216')
         shapes = parser.parse_shapes(elem)
@@ -256,6 +258,8 @@ class FritzingTests(TestCase):
 
 
     def test_parse_rect(self):
+        """ We parse svg rectangles correctly. """
+
         parser = ComponentParser(None, None)
         elem = FakeElem('rect', x='0', y='720',
                         width='72', height='144')
@@ -266,3 +270,74 @@ class FritzingTests(TestCase):
         self.assertEqual(shapes[0].y, -900)
         self.assertEqual(shapes[0].width, 90)
         self.assertEqual(shapes[0].height, 180)
+
+
+    def test_path_num_re(self):
+        """ The path point regex correctly matches numbers in a path. """
+
+        num = '1'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1')
+
+        num = ' 1 '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1')
+
+        num = ' 1.2 '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1.2')
+
+        num = ' 1.2 , '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1.2')
+
+        num = ' 10.22 , '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '10.22')
+
+        num = '10.22 , 1'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num[:-1])
+        self.assertEqual(match.group(1), '10.22')
+
+        num = '10.22 , M'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num[:-1])
+        self.assertEqual(match.group(1), '10.22')
+
+        num = '-1'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '-1')
+
+
+    def test_parse_nums(self):
+        """ Numbers are parsed from svg paths. """
+
+        pp = PathParser(None)
+
+        self.assertEqual(pp.parse_nums(''), ([], ''))
+        self.assertEqual(pp.parse_nums('1'), ([1.0], ''))
+        self.assertEqual(pp.parse_nums('1.2 3.4'),
+                         ([1.2, 3.4], ''))
+        self.assertEqual(pp.parse_nums('1.2,3.4  5.6'),
+                         ([1.2, 3.4, 5.6], ''))
+        self.assertEqual(pp.parse_nums('1.2,3.4  5.6L12'),
+                         ([1.2, 3.4, 5.6], 'L12'))
+        self.assertEqual(pp.parse_nums('1.2,3.4  5.6 L12'),
+                         ([1.2, 3.4, 5.6], 'L12'))
+
+
+    def test_parse_points(self):
+        """ Sequences of points are parsed from svg paths. """
+
+        pp = PathParser(None)
+
+        self.assertEqual(pp.parse_points(''), ([], ''))
+        self.assertEqual(pp.parse_points('1 2 3.3 4.4 M'),
+                         ([(1, 2), (3.3, 4.4)], 'M'))
