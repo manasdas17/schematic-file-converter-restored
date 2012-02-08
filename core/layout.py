@@ -42,9 +42,9 @@ class Layout:
 class Layer:
     """ A layer in the layout (ie, a PCB layer). """
 
-    def __init__(self, name=''):
+    def __init__(self, name='', type_=''):
         self.name = name
-        self.type = '' # copper/mask/silk/drill
+        self.type = type_ # copper/mask/silk/drill
         self.images = list()
         self.apertures = dict()
         self.macros = dict()
