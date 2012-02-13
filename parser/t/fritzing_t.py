@@ -341,3 +341,55 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.parse_points(''), ([], ''))
         self.assertEqual(pp.parse_points('1 2 3.3 4.4 M'),
                          ([(1, 2), (3.3, 4.4)], 'M'))
+
+
+    def test_get_path_point(self):
+        """ get_path_point returns correct points """
+
+        pp = PathParser(None)
+
+        pp.cur_point = (1, 2)
+
+        self.assertEqual(pp.get_path_point((3, 4), False), (3, 4))
+        self.assertEqual(pp.get_path_point((3, 4), True), (4, 6))
+
+
+    def test_parse_m(self):
+        """ moveto segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        pp.parse_m('72 720 144 288 0 0 rest', False)
+
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (0, 0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 90)
+        self.assertEqual(pp.shapes[0].p1.y, -900)
+        self.assertEqual(pp.shapes[0].p2.x, 180)
+        self.assertEqual(pp.shapes[0].p2.y, -360)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 180)
+        self.assertEqual(pp.shapes[1].p1.y, -360)
+        self.assertEqual(pp.shapes[1].p2.x, 0)
+        self.assertEqual(pp.shapes[1].p2.y, 0)
+
+
+        pp = PathParser(None)
+
+        pp.parse_m('72 720 144 288 0 0 rest', True)
+
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (216.0, 1008.0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 90)
+        self.assertEqual(pp.shapes[0].p1.y, -900)
+        self.assertEqual(pp.shapes[0].p2.x, 270)
+        self.assertEqual(pp.shapes[0].p2.y, -1260)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 270)
+        self.assertEqual(pp.shapes[1].p1.y, -1260)
+        self.assertEqual(pp.shapes[1].p2.x, 270)
+        self.assertEqual(pp.shapes[1].p2.y, -1260)
