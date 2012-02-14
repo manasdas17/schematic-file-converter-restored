@@ -378,8 +378,9 @@ class FritzingTests(TestCase):
 
         pp = PathParser(None)
 
-        pp.parse_m('72 720 144 288 0 0 rest', True)
+        rest = pp.parse_m('72 720 144 288 0 0 rest', True)
 
+        self.assertEqual(rest, 'rest')
         self.assertEqual(pp.start_point, (72.0, 720.0))
         self.assertEqual(pp.cur_point, (216.0, 1008.0))
         self.assertEqual(len(pp.shapes), 2)
@@ -393,3 +394,23 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.shapes[1].p1.y, -1260)
         self.assertEqual(pp.shapes[1].p2.x, 270)
         self.assertEqual(pp.shapes[1].p2.y, -1260)
+
+
+    def test_parse_z(self):
+        """ closepath segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        pp.cur_point = (72, 144)
+        pp.start_point = (-72, -144)
+        rest = pp.parse_z('rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (-72, -144))
+        self.assertEqual(pp.cur_point, (-72, -144))
+        self.assertEqual(len(pp.shapes), 1)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 90)
+        self.assertEqual(pp.shapes[0].p1.y, -180)
+        self.assertEqual(pp.shapes[0].p2.x, -90)
+        self.assertEqual(pp.shapes[0].p2.y, 180)
