@@ -359,8 +359,9 @@ class FritzingTests(TestCase):
 
         pp = PathParser(None)
 
-        pp.parse_m('72 720 144 288 0 0 rest', False)
+        rest = pp.parse_m('72 720 144 288 0 0 rest', False)
 
+        self.assertEqual(rest, 'rest')
         self.assertEqual(pp.start_point, (72.0, 720.0))
         self.assertEqual(pp.cur_point, (0, 0))
         self.assertEqual(len(pp.shapes), 2)
@@ -414,3 +415,56 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.shapes[0].p1.y, -180)
         self.assertEqual(pp.shapes[0].p2.x, -90)
         self.assertEqual(pp.shapes[0].p2.y, 180)
+
+
+    def test_parse_l(self):
+        """ lineto segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        rest = pp.parse_l('72 720 144 288 0 0 rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (0, 0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 90)
+        self.assertEqual(pp.shapes[0].p2.y, -900)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 90)
+        self.assertEqual(pp.shapes[1].p1.y, -900)
+        self.assertEqual(pp.shapes[1].p2.x, 180)
+        self.assertEqual(pp.shapes[1].p2.y, -360)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 180)
+        self.assertEqual(pp.shapes[2].p1.y, -360)
+        self.assertEqual(pp.shapes[2].p2.x, 0)
+        self.assertEqual(pp.shapes[2].p2.y, 0)
+
+
+        pp = PathParser(None)
+
+        rest = pp.parse_l('72 720 144 288 0 0 rest', True)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (216.0, 1008.0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 90)
+        self.assertEqual(pp.shapes[0].p2.y, -900)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 90)
+        self.assertEqual(pp.shapes[1].p1.y, -900)
+        self.assertEqual(pp.shapes[1].p2.x, 270)
+        self.assertEqual(pp.shapes[1].p2.y, -1260)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 270)
+        self.assertEqual(pp.shapes[2].p1.y, -1260)
+        self.assertEqual(pp.shapes[2].p2.x, 270)
+        self.assertEqual(pp.shapes[2].p2.y, -1260)
