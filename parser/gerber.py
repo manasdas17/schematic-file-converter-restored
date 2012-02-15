@@ -22,12 +22,17 @@
 import re
 from math import sqrt, sin, cos, acos, pi
 from collections import namedtuple
+from zipfile import ZipFile
+from tarfile import TarFile, ReadError
+import csv
+from os import path
 
 from core.design import Design
 from core.layout import Layout, Layer, Image, Macro, Primitive
 from core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
 from core.shape import Line, Arc, Point, Circle, Rectangle, Obround
 from core.shape import Polygon, RegularPolygon, Moire, Thermal
+
 
 
 # exceptions
@@ -91,6 +96,7 @@ class IncompatibleAperture(Unparsable):
 
 # token classes
 
+LayerDef = namedtuple('LayerDef', 'name type filename')             # pylint: disable=C0103
 MacroDef = namedtuple('MacroDef', 'name primitive_defs')            # pylint: disable=C0103
 Coord = namedtuple('Coord', 'x y i j')                              # pylint: disable=C0103
 CoordFmt = namedtuple('CoordFmt', 'int dec')                        # pylint: disable=C0103
@@ -104,6 +110,7 @@ FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: di
 # constants
 
 DEBUG = False
+LAYERS_CFG = 'layers.cfg'
 DIGITS = '0123456789'
 PRIMITIVES = {1:'circle',
               2:'vector',
@@ -161,7 +168,8 @@ class Gerber:
     """ The Gerber Format Parser """
 
     def __init__(self):
-        self.layer = Layer()
+        self.layout = Layout()
+        self.layer_buff = None
         self.img_buff = Image()
         self.fill_buff = []
 
@@ -191,29 +199,77 @@ class Gerber:
 
 
     def parse(self, infile='.'):
-        """ Parse tokens from gerber file into a design. """
-        name, ext = infile.rsplit('.', 1)
-        self.layer.name = ext.lower() == 'ger' and name or ext
-        for block in self._tokenize(infile):
-            if isinstance(block, MacroDef):
-                effect = self._build_macro(block)
-            elif isinstance(block, Funct):
-                effect = self._do_funct(block)
+        """ Parse tokens from gerber files into a design. """
+        zip_ = infile.endswith('zip')
+        openarchive = zip_ and ZipFile or TarFile.open
+        archive = batch_member = None
+        try:
+
+            # define multiple layers from folder
+            if LAYERS_CFG in infile:
+                archive = None
+                cfg_name = infile
+                cfg = open(cfg_name, 'r')
+
+            # define multiple layers from archive
             else:
-                effect = self._move(block)
-            self.status.update(effect)
+                archive = openarchive(infile)
+                batch = zip_ and archive.namelist or archive.getnames
+                batch_member = zip_ and archive.open or archive.extractfile
+                cfg_name = [n for n in batch() if LAYERS_CFG in n][0]
+                cfg = batch_member(cfg_name)
+
+        # define single layer from single gerber file
+        except ReadError:
+            name, ext = path.split(infile)[1].rsplit('.', 1)
+            layer_defs = [LayerDef(ext.lower() == 'ger' and name or ext,
+                                   'unknown',
+                                   infile)]
+            self._gen_layers(layer_defs, None, None)
+
+        # tidy up batch specs
+        else:
+            layer_defs = [LayerDef(rec[0],
+                                   rec[1],
+                                   path.join(path.split(cfg_name)[0], rec[2]))
+                          for rec in
+                          csv.reader(cfg, skipinitialspace=True)]
+            cfg.close()
+            self._gen_layers(layer_defs, archive, batch_member)
+
+        # tidy up archive
+        finally:
+            if archive:
+                archive.close()
+
+        # compile design
         if DEBUG:
             self._debug_stdout()
-        layout = Layout()
-        layout.units = (self.params['MO'] == 'IN'
-                        and 'inch' or 'mm')
-        layout.layers.append(self.layer)
+        self.layout.units = (self.params['MO'] == 'IN' and 'inch' or 'mm')
         design = Design()
-        design.layout = layout
+        design.layout = self.layout
         return design
 
 
     # primary parser support methods
+
+    def _gen_layers(self, layer_defs, archive, batch_member):
+        """ Parse gerbers into a PCB layers. """
+        for layer_def in layer_defs:
+            self.layer_buff = Layer(layer_def.name, layer_def.type)
+            layer_file = (archive and
+                          batch_member(layer_def.filename) or
+                          open(layer_def.filename, 'r'))
+            for block in self._tokenize(layer_file):
+                if isinstance(block, MacroDef):
+                    effect = self._build_macro(block)
+                elif isinstance(block, Funct):
+                    effect = self._do_funct(block)
+                else:
+                    effect = self._move(block)
+                self.status.update(effect)
+            self.layout.layers.append(self.layer_buff)
+
 
     def _build_macro(self, block):
         """ Build a macro out of component shape defs. """
@@ -227,7 +283,7 @@ class Gerber:
             primitives.append(Primitive(is_additive, rotation, shape))
 
         # generate and stow the macro
-        self.layer.macros[block.name] = Macro(block.name, primitives)
+        self.layer_buff.macros[block.name] = Macro(block.name, primitives)
         return {}
 
 
@@ -261,7 +317,7 @@ class Gerber:
         start = tuple([self.status[k] for k in ('x', 'y')])
         end = self._target_pos(block)
         ends = (Point(start), Point(end))
-        apertures = self.layer.apertures
+        apertures = self.layer_buff.apertures
         if self.status['draw'] == 'ON':
 
             # generate segment
@@ -480,12 +536,12 @@ class Gerber:
 
     # tokenizer
 
-    def _tokenize(self, infile):
+    def _tokenize(self, layer_file):
         """ Split gerber file into pythonic tokens. """
+        content = layer_file.read()
+        layer_file.close()
         param_block = eof = False
         pos = 0
-        with open(infile, 'r') as ger:
-            content = ger.read()
         match = TOK_RE.match(content)
         while pos < len(content):
             if match is None:
@@ -523,7 +579,7 @@ class Gerber:
                 pos = match.end()
             match = TOK_RE.match(content, pos)
         self._check_eof(eof=eof)
-        self.layer.images.append(self.img_buff)
+        self.layer_buff.images.append(self.img_buff)
 
 
     # tokenizer support - macros
@@ -611,7 +667,7 @@ class Gerber:
                                         hole_defs[1]) or
                               Circle(0, 0, hole_defs[0]/2))
 
-        self.layer.apertures.update({code:Aperture(code, shape, hole)})
+        self.layer_buff.apertures.update({code:Aperture(code, shape, hole)})
 
 
     def _extract_ap(self, name, tok):
@@ -633,7 +689,7 @@ class Gerber:
     def _extract_lp(self, name, tok):
         """ Extract "layer param" and reset image layer. """
         if self.img_buff.not_empty():
-            self.layer.images.append(self.img_buff)
+            self.layer_buff.images.append(self.img_buff)
             self.img_buff = Image('', self.img_buff.is_additive)
             self.status.update({'x':0,
                                 'y':0,
@@ -824,13 +880,17 @@ class Gerber:
 
     def _debug_stdout(self):
         """ Dump what we know. """
-        for j in self.layer.apertures:
-            print '-- D%s --' % j
-            print self.layer.apertures[j].json()
-        for k in self.layer.macros:
-            print '-- %s --' % k
-            print self.layer.macros[k].json()
-        for image in self.layer.images:
-            print '-- %s --' % image.name
-            print image.json()
+        for layer in self.layout.layers:
+            print '-- %s (%s) --' % (layer.name, layer.type)
+            for j in layer.apertures:
+                print '-- D%s --' % j
+                print layer.apertures[j].json()
+            for k in layer.macros:
+                print '-- %s --' % k
+                print layer.macros[k].json()
+            for image in layer.images:
+                print '-- %s (%s) --' % (image.name,
+                                         image.is_additive and
+                                         'additive' or 'subtractive')
+                print image.json()
         raise Unparsable('deliberate error')
