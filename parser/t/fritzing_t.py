@@ -22,7 +22,7 @@
 
 
 from core.shape import Circle, Rectangle, Shape
-from parser.fritzing import Fritzing, ComponentParser
+from parser.fritzing import Fritzing, ComponentParser, PathParser
 from parser.fritzing import make_x, make_y, make_length, get_pin
 from parser.fritzing import get_x, get_y, get_length
 from unittest import TestCase
@@ -119,14 +119,14 @@ class FritzingTests(TestCase):
 
         shape = body.shapes[0]
         self.assertEqual(shape.type, 'rectangle')
-        self.assertEqual(shape.x, 12)
+        self.assertEqual(shape.x, 15)
         self.assertEqual(shape.y, -1)
         self.assertEqual(shape.width, 0)
         self.assertEqual(shape.height, 0)
 
         pin = body.pins[0]
         self.assertEqual(pin.pin_number, '0')
-        self.assertEqual(pin.p1.x, 12)
+        self.assertEqual(pin.p1.x, 15)
         self.assertEqual(pin.p1.y, -1)
         self.assertEqual(pin.p2.x, pin.p1.x)
         self.assertEqual(pin.p2.y, pin.p1.y)
@@ -148,8 +148,8 @@ class FritzingTests(TestCase):
         self.assertEqual(len(inst.symbol_attributes), 1)
 
         symbattr = inst.symbol_attributes[0]
-        self.assertEqual(symbattr.x, 293)
-        self.assertEqual(symbattr.y, -147)
+        self.assertEqual(symbattr.x, 288)
+        self.assertEqual(symbattr.y, -159)
         self.assertEqual(symbattr.rotation, 1.5)
 
 
@@ -245,11 +245,332 @@ class FritzingTests(TestCase):
 
 
     def test_parse_circle(self):
+        """ We parse svg circles correctly. """
+
         parser = ComponentParser(None, None)
-        elem = FakeElem('circle', cx='1.5', cy='10.4', r='15')
+        elem = FakeElem('circle', cx='72', cy='144', r='216')
         shapes = parser.parse_shapes(elem)
         self.assertEqual(len(shapes), 1)
         self.assertEqual(shapes[0].type, 'circle')
-        self.assertEqual(shapes[0].x, 2)
-        self.assertEqual(shapes[0].y, -10)
-        self.assertEqual(shapes[0].radius, 15)
+        self.assertEqual(shapes[0].x, 90)
+        self.assertEqual(shapes[0].y, -180)
+        self.assertEqual(shapes[0].radius, 270)
+
+
+    def test_parse_rect(self):
+        """ We parse svg rectangles correctly. """
+
+        parser = ComponentParser(None, None)
+        elem = FakeElem('rect', x='0', y='720',
+                        width='72', height='144')
+        shapes = parser.parse_shapes(elem)
+        self.assertEqual(len(shapes), 1)
+        self.assertEqual(shapes[0].type, 'rectangle')
+        self.assertEqual(shapes[0].x, 0)
+        self.assertEqual(shapes[0].y, -900)
+        self.assertEqual(shapes[0].width, 90)
+        self.assertEqual(shapes[0].height, 180)
+
+
+    def test_path_num_re(self):
+        """ The path point regex correctly matches numbers in a path. """
+
+        num = '1'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1')
+
+        num = ' 1 '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1')
+
+        num = ' 1.2 '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1.2')
+
+        num = ' 1.2 , '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '1.2')
+
+        num = ' 10.22 , '
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '10.22')
+
+        num = '10.22 , 1'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num[:-1])
+        self.assertEqual(match.group(1), '10.22')
+
+        num = '10.22 , M'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num[:-1])
+        self.assertEqual(match.group(1), '10.22')
+
+        num = '-1'
+        match = PathParser.num_re.match(num)
+        self.assertEqual(match.group(0), num)
+        self.assertEqual(match.group(1), '-1')
+
+
+    def test_parse_nums(self):
+        """ Numbers are parsed from svg paths. """
+
+        pp = PathParser(None)
+
+        self.assertEqual(pp.parse_nums(''), ([], ''))
+        self.assertEqual(pp.parse_nums('1'), ([1.0], ''))
+        self.assertEqual(pp.parse_nums('1.2 3.4'),
+                         ([1.2, 3.4], ''))
+        self.assertEqual(pp.parse_nums('1.2,3.4  5.6'),
+                         ([1.2, 3.4, 5.6], ''))
+        self.assertEqual(pp.parse_nums('1.2,3.4  5.6L12'),
+                         ([1.2, 3.4, 5.6], 'L12'))
+        self.assertEqual(pp.parse_nums('1.2,3.4  5.6 L12'),
+                         ([1.2, 3.4, 5.6], 'L12'))
+
+
+    def test_parse_points(self):
+        """ Sequences of points are parsed from svg paths. """
+
+        pp = PathParser(None)
+
+        self.assertEqual(pp.parse_points(''), ([], ''))
+        self.assertEqual(pp.parse_points('1 2 3.3 4.4 M'),
+                         ([(1, 2), (3.3, 4.4)], 'M'))
+
+
+    def test_get_path_point(self):
+        """ get_path_point returns correct points """
+
+        pp = PathParser(None)
+
+        pp.cur_point = (1, 2)
+
+        self.assertEqual(pp.get_path_point((3, 4), False), (3, 4))
+        self.assertEqual(pp.get_path_point((3, 4), True), (4, 6))
+
+
+    def test_parse_m(self):
+        """ moveto segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        rest = pp.parse_m('72 720 144 288 0 0 rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (0, 0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 90)
+        self.assertEqual(pp.shapes[0].p1.y, -900)
+        self.assertEqual(pp.shapes[0].p2.x, 180)
+        self.assertEqual(pp.shapes[0].p2.y, -360)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 180)
+        self.assertEqual(pp.shapes[1].p1.y, -360)
+        self.assertEqual(pp.shapes[1].p2.x, 0)
+        self.assertEqual(pp.shapes[1].p2.y, 0)
+
+
+        pp = PathParser(None)
+
+        rest = pp.parse_m('72 720 144 288 0 0 rest', True)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (216.0, 1008.0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 90)
+        self.assertEqual(pp.shapes[0].p1.y, -900)
+        self.assertEqual(pp.shapes[0].p2.x, 270)
+        self.assertEqual(pp.shapes[0].p2.y, -1260)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 270)
+        self.assertEqual(pp.shapes[1].p1.y, -1260)
+        self.assertEqual(pp.shapes[1].p2.x, 270)
+        self.assertEqual(pp.shapes[1].p2.y, -1260)
+
+
+    def test_parse_z(self):
+        """ closepath segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        pp.cur_point = (72, 144)
+        pp.start_point = (-72, -144)
+        rest = pp.parse_z('rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (-72, -144))
+        self.assertEqual(pp.cur_point, (-72, -144))
+        self.assertEqual(len(pp.shapes), 1)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 90)
+        self.assertEqual(pp.shapes[0].p1.y, -180)
+        self.assertEqual(pp.shapes[0].p2.x, -90)
+        self.assertEqual(pp.shapes[0].p2.y, 180)
+
+
+    def test_parse_l(self):
+        """ lineto segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        rest = pp.parse_l('72 720 144 288 0 0 rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (0, 0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 90)
+        self.assertEqual(pp.shapes[0].p2.y, -900)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 90)
+        self.assertEqual(pp.shapes[1].p1.y, -900)
+        self.assertEqual(pp.shapes[1].p2.x, 180)
+        self.assertEqual(pp.shapes[1].p2.y, -360)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 180)
+        self.assertEqual(pp.shapes[2].p1.y, -360)
+        self.assertEqual(pp.shapes[2].p2.x, 0)
+        self.assertEqual(pp.shapes[2].p2.y, 0)
+
+
+        pp = PathParser(None)
+
+        rest = pp.parse_l('72 720 144 288 0 0 rest', True)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.cur_point, (216.0, 1008.0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 90)
+        self.assertEqual(pp.shapes[0].p2.y, -900)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 90)
+        self.assertEqual(pp.shapes[1].p1.y, -900)
+        self.assertEqual(pp.shapes[1].p2.x, 270)
+        self.assertEqual(pp.shapes[1].p2.y, -1260)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 270)
+        self.assertEqual(pp.shapes[2].p1.y, -1260)
+        self.assertEqual(pp.shapes[2].p2.x, 270)
+        self.assertEqual(pp.shapes[2].p2.y, -1260)
+
+
+    def test_parse_h(self):
+        """ horizontal lineto segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        rest = pp.parse_h('72 144 288 rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 0.0))
+        self.assertEqual(pp.cur_point, (288, 0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 90)
+        self.assertEqual(pp.shapes[0].p2.y, 0)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 90)
+        self.assertEqual(pp.shapes[1].p1.y, 0)
+        self.assertEqual(pp.shapes[1].p2.x, 180)
+        self.assertEqual(pp.shapes[1].p2.y, 0)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 180)
+        self.assertEqual(pp.shapes[2].p1.y, 0)
+        self.assertEqual(pp.shapes[2].p2.x, 360)
+        self.assertEqual(pp.shapes[2].p2.y, 0)
+
+
+        pp = PathParser(None)
+
+        rest = pp.parse_h('72 72 72 rest', True)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (72.0, 0.0))
+        self.assertEqual(pp.cur_point, (216.0, 0.0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 90)
+        self.assertEqual(pp.shapes[0].p2.y, 0)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 90)
+        self.assertEqual(pp.shapes[1].p1.y, 0)
+        self.assertEqual(pp.shapes[1].p2.x, 180)
+        self.assertEqual(pp.shapes[1].p2.y, 0)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 180)
+        self.assertEqual(pp.shapes[2].p1.y, 0)
+        self.assertEqual(pp.shapes[2].p2.x, 270)
+        self.assertEqual(pp.shapes[2].p2.y, 0)
+
+
+    def test_parse_v(self):
+        """ vertical lineto segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        rest = pp.parse_v('72 144 288 rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (0.0, 72.0))
+        self.assertEqual(pp.cur_point, (0, 288))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 0)
+        self.assertEqual(pp.shapes[0].p2.y, -90)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 0)
+        self.assertEqual(pp.shapes[1].p1.y, -90)
+        self.assertEqual(pp.shapes[1].p2.x, 0)
+        self.assertEqual(pp.shapes[1].p2.y, -180)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 0)
+        self.assertEqual(pp.shapes[2].p1.y, -180)
+        self.assertEqual(pp.shapes[2].p2.x, 0)
+        self.assertEqual(pp.shapes[2].p2.y, -360)
+
+
+        pp = PathParser(None)
+
+        rest = pp.parse_v('72 72 72 rest', True)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (0.0, 72.0))
+        self.assertEqual(pp.cur_point, (0.0, 216.0))
+        self.assertEqual(len(pp.shapes), 3)
+        self.assertEqual(pp.shapes[0].type, 'line')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].p2.x, 0)
+        self.assertEqual(pp.shapes[0].p2.y, -90)
+        self.assertEqual(pp.shapes[1].type, 'line')
+        self.assertEqual(pp.shapes[1].p1.x, 0)
+        self.assertEqual(pp.shapes[1].p1.y, -90)
+        self.assertEqual(pp.shapes[1].p2.x, 0)
+        self.assertEqual(pp.shapes[1].p2.y, -180)
+        self.assertEqual(pp.shapes[2].type, 'line')
+        self.assertEqual(pp.shapes[2].p1.x, 0)
+        self.assertEqual(pp.shapes[2].p1.y, -180)
+        self.assertEqual(pp.shapes[2].p2.x, 0)
+        self.assertEqual(pp.shapes[2].p2.y, -270)
