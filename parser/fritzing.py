@@ -616,9 +616,11 @@ class PathParser(object):
 
         nums, data = self.parse_nums(data)
 
-        for num in nums:
+        for i, num in enumerate(nums):
             point = (num, 0 if is_relative else self.cur_point[1])
             point = self.get_path_point(point, is_relative)
+            if i == 0:
+                self.start_point = point
             self.shapes.append(
                 Line(make_point(self.cur_point, self.svg_mult),
                      make_point(point, self.svg_mult)))
@@ -632,9 +634,11 @@ class PathParser(object):
 
         nums, data = self.parse_nums(data)
 
-        for num in nums:
-            point = (0 if is_relative else self.cur_point[1], num)
+        for i, num in enumerate(nums):
+            point = (0 if is_relative else self.cur_point[0], num)
             point = self.get_path_point(point, is_relative)
+            if i == 0:
+                self.start_point = point
             self.shapes.append(
                 Line(make_point(self.cur_point, self.svg_mult),
                      make_point(point, self.svg_mult)))
