@@ -425,7 +425,7 @@ class FritzingTests(TestCase):
         rest = pp.parse_l('72 720 144 288 0 0 rest', False)
 
         self.assertEqual(rest, 'rest')
-        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (0, 0))
         self.assertEqual(len(pp.shapes), 3)
         self.assertEqual(pp.shapes[0].type, 'line')
@@ -450,7 +450,7 @@ class FritzingTests(TestCase):
         rest = pp.parse_l('72 720 144 288 0 0 rest', True)
 
         self.assertEqual(rest, 'rest')
-        self.assertEqual(pp.start_point, (72.0, 720.0))
+        self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (216.0, 1008.0))
         self.assertEqual(len(pp.shapes), 3)
         self.assertEqual(pp.shapes[0].type, 'line')
@@ -478,7 +478,7 @@ class FritzingTests(TestCase):
         rest = pp.parse_h('72 144 288 rest', False)
 
         self.assertEqual(rest, 'rest')
-        self.assertEqual(pp.start_point, (72.0, 0.0))
+        self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (288, 0))
         self.assertEqual(len(pp.shapes), 3)
         self.assertEqual(pp.shapes[0].type, 'line')
@@ -503,7 +503,7 @@ class FritzingTests(TestCase):
         rest = pp.parse_h('72 72 72 rest', True)
 
         self.assertEqual(rest, 'rest')
-        self.assertEqual(pp.start_point, (72.0, 0.0))
+        self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (216.0, 0.0))
         self.assertEqual(len(pp.shapes), 3)
         self.assertEqual(pp.shapes[0].type, 'line')
@@ -531,7 +531,7 @@ class FritzingTests(TestCase):
         rest = pp.parse_v('72 144 288 rest', False)
 
         self.assertEqual(rest, 'rest')
-        self.assertEqual(pp.start_point, (0.0, 72.0))
+        self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (0, 288))
         self.assertEqual(len(pp.shapes), 3)
         self.assertEqual(pp.shapes[0].type, 'line')
@@ -556,7 +556,7 @@ class FritzingTests(TestCase):
         rest = pp.parse_v('72 72 72 rest', True)
 
         self.assertEqual(rest, 'rest')
-        self.assertEqual(pp.start_point, (0.0, 72.0))
+        self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (0.0, 216.0))
         self.assertEqual(len(pp.shapes), 3)
         self.assertEqual(pp.shapes[0].type, 'line')
@@ -574,3 +574,33 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.shapes[2].p1.y, -180)
         self.assertEqual(pp.shapes[2].p2.x, 0)
         self.assertEqual(pp.shapes[2].p2.y, -270)
+
+
+    def test_parse_c(self):
+        """ cubic bezier segments are parsed correctly """
+
+        pp = PathParser(None)
+
+        rest = pp.parse_c('6 12 12 6 18 24 -6 -12 -12 -24 -36 -42 rest', False)
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (0.0, 0.0))
+        self.assertEqual(pp.cur_point, (-36.0, -42.0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'bezier')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].control1.x, 8)
+        self.assertEqual(pp.shapes[0].control1.y, -15)
+        self.assertEqual(pp.shapes[0].control2.x, 15)
+        self.assertEqual(pp.shapes[0].control2.y, -8)
+        self.assertEqual(pp.shapes[0].p2.x, 23)
+        self.assertEqual(pp.shapes[0].p2.y, -30)
+        self.assertEqual(pp.shapes[1].type, 'bezier')
+        self.assertEqual(pp.shapes[1].p1.x, 23)
+        self.assertEqual(pp.shapes[1].p1.y, -30)
+        self.assertEqual(pp.shapes[1].control1.x, -8)
+        self.assertEqual(pp.shapes[1].control1.y, 15)
+        self.assertEqual(pp.shapes[1].control2.x, -15)
+        self.assertEqual(pp.shapes[1].control2.y, 30)
+        self.assertEqual(pp.shapes[1].p2.x, -45)
+        self.assertEqual(pp.shapes[1].p2.y, 53)
