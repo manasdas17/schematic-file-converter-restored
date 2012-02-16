@@ -582,6 +582,7 @@ class FritzingTests(TestCase):
         pp = PathParser(None)
 
         rest = pp.parse_c('6 12 12 6 18 24 -6 -12 -12 -24 -36 -42 rest', False)
+
         self.assertEqual(rest, 'rest')
         self.assertEqual(pp.start_point, (0.0, 0.0))
         self.assertEqual(pp.cur_point, (-36.0, -42.0))
@@ -604,3 +605,30 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.shapes[1].control2.y, 30)
         self.assertEqual(pp.shapes[1].p2.x, -45)
         self.assertEqual(pp.shapes[1].p2.y, 53)
+
+        pp = PathParser(None)
+
+        rest = pp.parse_c('6 12 12 6 18 24 -6 -12 -12 -24 -36 -42 rest', True)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (0.0, 0.0))
+        self.assertEqual(pp.cur_point, (-18.0, -36.0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'bezier')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].control1.x, 8)
+        self.assertEqual(pp.shapes[0].control1.y, -15)
+        self.assertEqual(pp.shapes[0].control2.x, 23)
+        self.assertEqual(pp.shapes[0].control2.y, -23)
+        self.assertEqual(pp.shapes[0].p2.x, 45)
+        self.assertEqual(pp.shapes[0].p2.y, -53)
+        self.assertEqual(pp.shapes[1].type, 'bezier')
+        self.assertEqual(pp.shapes[1].p1.x, 45)
+        self.assertEqual(pp.shapes[1].p1.y, -53)
+        self.assertEqual(pp.shapes[1].control1.x, 38)
+        self.assertEqual(pp.shapes[1].control1.y, -38)
+        self.assertEqual(pp.shapes[1].control2.x, 23)
+        self.assertEqual(pp.shapes[1].control2.y, -8)
+        self.assertEqual(pp.shapes[1].p2.x, -23)
+        self.assertEqual(pp.shapes[1].p2.y, 45)
