@@ -507,7 +507,7 @@ class PathParser(object):
         self.shapes = []
         self.cur_point = (0, 0) # (x, y) of current point
         self.start_point = (0, 0) # (x, y) of start of current subpath
-        self.prev_cmd = None # previous path command letter
+        self.prev_cmd = '' # previous path command letter
         self.prev_ctl = None # previous control point
 
     def parse(self):
