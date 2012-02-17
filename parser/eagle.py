@@ -25,6 +25,8 @@
 
 import struct
 
+from core.annotation import Annotation
+from core.component_instance import ComponentInstance, SymbolAttribute
 from core.design import Design
 
 #class EagleBinConsts:
@@ -248,6 +250,8 @@ class Eagle:
             _name = None
             if Eagle.Layer.no_embed_str != _dta[9][0]:
                 _name = _dta[9].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Layer(number=_dta[3],
                                    name=_name,
@@ -329,6 +333,9 @@ class Eagle:
             _schematic = None
             if Eagle.AttributeHeader.no_embed_str != _dta[10][0]:
                 _schematic = _dta[10].rstrip('\0')
+            else: # from external string block
+                _schematic = Eagle.attr_jar_list.next().name
+
 # number of shapes + header of shapes
 # number of attributes, excluding this line
 # name can be of length 0 for versions prior to 5.x
@@ -382,6 +389,9 @@ class Eagle:
             _name = None
             if Eagle.Library.no_embed_str != _dta[7][0]:
                 _name = _dta[7].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
+
 # three ints are counters, have to recheck
             _ret_val = Eagle.Library(name=_name,
                                      numofdevsetblocks=_dta[4],
@@ -418,6 +428,8 @@ class Eagle:
             _name = None
             if Eagle.DeviceSetHeader.no_embed_str != _dta[7][0]:
                 _name = _dta[7].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.DeviceSetHeader(name=_name,
                                        numofblocks=_dta[4],
@@ -453,6 +465,8 @@ class Eagle:
             _name = None
             if Eagle.SymbolHeader.no_embed_str != _dta[7][0]:
                 _name = _dta[7].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.SymbolHeader(name=_name,
                                           numofblocks=_dta[4],
@@ -488,6 +502,8 @@ class Eagle:
             _name = None
             if Eagle.PackageHeader.no_embed_str != _dta[7][0]:
                 _name = _dta[7].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.PackageHeader(name=_name,
                                            numofblocks=_dta[4],
@@ -499,7 +515,7 @@ class Eagle:
         """ A struct that represents a symbol
         """
         constant = 0x1d
-        template = "=2BH3I8s"
+        template = "=2BH3I8s" # TODO byte @ +9 is libid
 
         max_embed_len = 8
         no_embed_str = b'\x7f'
@@ -521,6 +537,8 @@ class Eagle:
             _name = None
             if Eagle.Symbol.no_embed_str != _dta[6][0]:
                 _name = _dta[6].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
 # number of shapes, excluding this line
             _ret_val = Eagle.Symbol(name=_name,
@@ -556,9 +574,14 @@ class Eagle:
             _name = None
             if Eagle.Package.no_embed_str != _dta[6][0]:
                 _name = _dta[6].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
+
             _desc = None
             if Eagle.Package.no_embed_str != _dta[7][0]:
                 _desc = _dta[7].rstrip('\0')
+            else: # from external string block
+                _desc = Eagle.attr_jar_list.next().name
 
 # number of shapes, excluding this line
             _ret_val = Eagle.Package(name=_name,
@@ -601,6 +624,8 @@ class Eagle:
             _name = None
             if Eagle.Net.no_embed_str != _dta[6][0]:
                 _name = _dta[6].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Net(name=_name,
                                  nclass=_dta[5],
@@ -620,13 +645,16 @@ class Eagle:
 
         val_sign_mask = 0x01
 
-        def __init__(self, name, libid, value='', # pylint: disable=R0913
+        def __init__(self, name, libid, devsetndx, symvar, techno, value='', # pylint: disable=R0913
                      numofshapes=0, shapes=None):
             """ Just a constructor
             """
             super(Eagle.Part, self).__init__(name, numofshapes, shapes)
             self.value = value
             self.libid = libid
+            self.devsetndx = devsetndx
+            self.symvar = symvar # within a devset!
+            self.techno = techno
             return
 
         @staticmethod
@@ -640,13 +668,20 @@ class Eagle:
             _name = None
             if Eagle.Part.no_embed_str != _dta[8][0]:
                 _name = _dta[8].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _value = None
             if Eagle.Part.no_embed_str != _dta[9][0]:
                 _value = _dta[9].rstrip('\0')
+            else: # from external string block
+                _value = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Part(name=_name,
                                  libid=_dta[3],
+                                 devsetndx=_dta[4],
+                                 symvar=_dta[5],
+                                 techno=_dta[6],
 #                                 valpresence = 
 #                                    True if _dta[7] & Eagle.Part.val_sign_mask 
 #                                            else False,
@@ -696,14 +731,20 @@ class Eagle:
             _prefix = None
             if Eagle.DeviceSet.no_embed_str != _dta[6][0]:
                 _prefix = _dta[6].rstrip('\0')
+            else: # from external string block
+                _prefix = Eagle.attr_jar_list.next().name
 
             _desc = None
             if Eagle.DeviceSet.no_embed_str != _dta[7][0]:
                 _desc = _dta[7].rstrip('\0')
+            else: # from external string block
+                _desc = Eagle.attr_jar_list.next().name
 
             _name = None
             if Eagle.DeviceSet.no_embed_str != _dta[8][0]:
                 _name = _dta[8].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
 # numofshapes excludes connections-related info
 # their num is numofconnblocks
@@ -748,6 +789,8 @@ class Eagle:
             _name = None
             if Eagle.Package.no_embed_str != _dta[3][0]:
                 _name = _dta[3].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Bus(name=_name,
                                  numofshapes=_dta[2],
@@ -827,19 +870,37 @@ class Eagle:
                                     )
             return _ret_val
 
-    class ConnectionHeader(ShapeSet):
+    class ConnectionHeader(NamedShapeSet):
         """ A struct that represents a header for 'connections' blocks
         """
         constant = 0x36
-        template = "=2BHI11s5s"
+        template = "=2B2H13s5s"
 
-        constantmid = "''"
+        constantmid_def = "''"
 
-        def __init__(self, sindex, numofshapes=0, shapes=None):
+        no_embed_str = b'\x7f'
+        max_embed_len = 13
+
+        delim_techs = b'\x04'
+        delim_namesvals = b'\x04'
+        delim_names = b'\x01'
+        delim_vals = b'\x02'
+
+        def __init__(self, sindex, attributes, technologies, name, # pylint: disable=R0913
+                     numofshapes=0, shapes=None):
             """ Just a constructor
             """
-            super(Eagle.ConnectionHeader, self).__init__(numofshapes, shapes)
+            super(Eagle.ConnectionHeader, self).__init__(name, numofshapes, 
+                                                                        shapes)
             self.sindex = sindex
+
+            if None == technologies:
+                technologies = []
+            self.technologies = technologies
+
+            if None == attributes:
+                attributes = []
+            self.attributes = attributes
             return
 
         @staticmethod
@@ -850,8 +911,42 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.ConnectionHeader.template, chunk)
 
+            if Eagle.ConnectionHeader.no_embed_str != _dta[4][0]:
+                _attrstr = _dta[4].rstrip('\0')
+            else: # from external string block
+                _attrstr = Eagle.attr_jar_list.next().name
+
+            _attrs = []
+            _techs = []
+
+            if 0 < len(_attrstr):
+                if Eagle.ConnectionHeader.delim_techs == _attrstr[0]:
+                    for _tt in _attrstr.split(
+                                Eagle.ConnectionHeader.delim_techs)[1:]:
+                        _techs.append(_tt)
+                elif Eagle.ConnectionHeader.delim_names == _attrstr[0]:
+                    _attrparts = _attrstr.split(
+                                Eagle.ConnectionHeader.delim_namesvals)
+                    if 1 < len(_attrparts): # got a correct str
+                        for _nn, _vv in zip(
+                                _attrparts[0].split(
+                                        Eagle.ConnectionHeader.delim_names)[1:],
+                                _attrparts[1].split(
+                                        Eagle.ConnectionHeader.delim_vals)[1:]):
+                            _attrs.append((_nn, _vv))
+
+            if Eagle.ConnectionHeader.no_embed_str != _dta[5][0]:
+                _name = _dta[5].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
+            if Eagle.ConnectionHeader.constantmid_def == _name:
+                _name = ''
+
             _ret_val = Eagle.ConnectionHeader(numofshapes=_dta[2],
                                               sindex=_dta[3],
+                                              technologies=_techs,
+                                              attributes=_attrs,
+                                              name=_name,
                                              )
             return _ret_val
 
@@ -929,6 +1024,22 @@ class Eagle:
             elif 2 == algo:
                 _ret_val = number / Eagle.Shape.scale2
             return _ret_val
+
+        @staticmethod
+        def rotate2piradians(rotate):
+            """ Converts 'rotates' string into pi radians.
+                It could be implemented as a map, but a special handling for 
+                 None as 0. would be needed..
+            """
+            _ret_val = 0.
+
+            if 'R90' == rotate:
+                _ret_val = 0.5
+            elif 'R180' == rotate:
+                _ret_val = 1.
+            elif 'R270' == rotate:
+                _ret_val = 1.5
+            return _ret_val 
 
     class Instance(ShapeSet, Shape):
         """ A struct that represents an instance
@@ -1178,6 +1289,8 @@ class Eagle:
             _name = None
             if Eagle.SMD.no_embed_str != _dta[11][0]:
                 _name = _dta[11].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.SMD(name=_name,
                                  x=Eagle.Shape.decode_real(_dta[4]),
@@ -1276,6 +1389,8 @@ class Eagle:
             _name = None
             if Eagle.Pad.no_embed_str != _dta[10][0]:
                 _name = _dta[10].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Pad(name=_name,
                                  x=Eagle.Shape.decode_real(_dta[4]),
@@ -1316,6 +1431,8 @@ class Eagle:
             _name = None
             if Eagle.Pin.no_embed_str != _dta[8][0]:
                 _name = _dta[8].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Pin(name=_name,
                                  x=Eagle.Shape.decode_real(_dta[4]),
@@ -1347,7 +1464,7 @@ class Eagle:
             self.x = x
             self.y = y
             self.name = name
-            self.sindex = sindex
+            self.sindex = sindex # symbol index
             self.addlevel = addlevel
             return
 
@@ -1362,6 +1479,8 @@ class Eagle:
             _name = None
             if Eagle.Gate.no_embed_str != _dta[9][0]:
                 _name = _dta[9].rstrip('\0')
+            else: # from external string block
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Gate(x=Eagle.Shape.decode_real(_dta[4]),
                                   y=Eagle.Shape.decode_real(_dta[5]),
@@ -1405,6 +1524,8 @@ class Eagle:
             _value = None
             if Eagle.Text.no_embed_str != _dta[11][0]:
                 _value = _dta[11].rstrip('\0')
+            else: # from external string block
+                _value = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Text(value=_value,
                                      x=Eagle.Shape.decode_real(_dta[4]),
@@ -1621,10 +1742,11 @@ class Eagle:
 
             if Eagle.Attribute.no_embed_str != _dta[4][0]: # embedded attr
                 (_name, _value) = Eagle.Attribute._parse(_dta[4].rstrip('\x00'))
-            else:
+            else: # from external string block
 # TODO decode [8] [9] [10]
-# [11] -- a kind of a marker, 0x09; 4 bytes long int, changed on each save as, even with no changes
-                pass
+# [11] -- a kind of a marker, 0x09 / 0x08; 4 bytes long int, changed on each save as, even with no changes
+#  probably just a random int, no any pattern was discovered
+                _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Attribute(name=_name,
                                           value=_value
@@ -1848,7 +1970,7 @@ class Eagle:
                 self.parts.append(_cur_web)
             elif Eagle.Instance.constant == _type:
                 _cur_segment = self.Instance.parse(_dta)
-                _cur_web.shapes.append(_cur_web)
+                _cur_web.shapes.append(_cur_segment)
             elif Eagle.Connections.constant == _type:
                 _cur_connset.shapes.append(self.Connections.parse(_dta))
             elif Eagle.Gate.constant == _type:
@@ -1861,8 +1983,8 @@ class Eagle:
                 _cur_segment.shapes.append(self.Wire.parse(_dta))
             elif Eagle.Hole.constant == _type:
                 _cur_segment.shapes.append(self.Hole.parse(_dta))
-            elif Eagle.SMB.constant == _type:
-                _cur_segment.shapes.append(self.SMB.parse(_dta))
+            elif Eagle.SMD.constant == _type:
+                _cur_segment.shapes.append(self.SMD.parse(_dta))
             elif Eagle.PinRef.constant == _type:
                 _cur_segment.shapes.append(self.PinRef.parse(_dta))
             elif Eagle.Junction.constant == _type:
@@ -1902,12 +2024,33 @@ class Eagle:
             self.netclasses.append(self.NetClass.parse(_some_int, 
                                                        _ncconst, _ncdta))
         return
+
+    attr_jar = [] # attribute list
+
+    @classmethod
+    def attr_jar_iter(cls):
+        """ Returns next attribute on each call
+        """
+        for _aa in cls.attr_jar:
+            yield _aa
  
     def _parse(self, filehandle):
         """ Parse an Eagle file into a set of Eagle objects
         """
 # headers (constant block size driven)
         self.header = self.Header.parse(filehandle.read(self.blocksize))
+
+# parsing of external attributes beforehand helps its placing
+        filehandle.seek(self.header.numofblocks * self.blocksize)
+        _noregblockheader = filehandle.read(4)
+        _unreg_dta = filehandle.read(struct.unpack("I", 
+                        filehandle.read(4))[0]).split(self.noregdelimeter) 
+        filehandle.seek(1 * self.blocksize)
+        for _aa in _unreg_dta:
+            if 0 < len(_aa):
+                Eagle.attr_jar.append(Eagle.Attribute.parse2(_aa))
+        Eagle.attr_jar_list = Eagle.attr_jar_iter()
+
         self._parse_blocks(filehandle, -1 + self.header.numofblocks)
 
 # desc (length driven)
@@ -1917,37 +2060,9 @@ class Eagle:
 #            print("bad constant follows headers!")
 
         # read len in bytes, then read corrsponding number of bytes
+        #  -- just to skip since external attributes were parsed earlier
         _unreg_dta = filehandle.read(struct.unpack("I", 
                             filehandle.read(4))[0]).split(self.noregdelimeter) 
-
-        if 5 <= float(self.header.version):
-            self.schematic = Eagle.Schematic.parse(_unreg_dta[0])
-            _ndx = 1
-        else: # no schematic strings; looks like they're introduced recently
-            self.schematic = Eagle.Schematic()
-            _ndx = 0
-
-# other items are strings: attributes, texts, ..something else?
-        for _aa in _unreg_dta[_ndx:]:
-            if 0 < len(_aa):
-                _attr = Eagle.Attribute.parse2(_aa)
-
-                if None != _attr.name:
-                    for (_nn, _ab) in enumerate(self.attributes):
-                        if None == _ab.name:
-                            self.attributes[_nn] = _attr
-                            break
-                    else:
-                        _name = Eagle.Text.parse2(_aa)
-                        for _tt in self.texts:
-                            if None == _tt.value:
-                                _tt.value = _name
-                        else:
-# TODO remove
-                            print("no room for extra attribute %s: %s" % 
-                                    (str(_attr.name), str(_attr.value)))
-            else:
-                break # NoOP: last item is just a b'\0'
 
 # just to note: the list above ends with two zero bytes
 
@@ -1958,6 +2073,41 @@ class Eagle:
         """ Converts a set of Eagle objects into Design
         """
         design = Design()
+
+# File Version is applied by Design itself
+
+# Component Instances (Array)
+        for _pp in self.parts:
+            _ci = ComponentInstance(instance_id=_pp.name, 
+                                    library_id=str(_pp.libid) + _pp.value, # to avoid same name collisions
+                                    symbol_index=_pp.symvar)    # other candidate is devsetndx:
+                                                                #  'devsets' contains all variants
+                                                                #  used in this schematic
+
+            _sa = SymbolAttribute(x=_pp.shapes[0].x, # shapes' len is always 1 here
+                                  y=_pp.shapes[0].y,
+                                  rotation=Eagle.Shape.rotate2piradians(
+                                        _pp.shapes[0].rotate),
+                                 )
+
+            _dd = self.libraries[-1 + _pp.libid].devsets[0].shapesets[-1 + _pp.devsetndx]
+            _sym = self.libraries[-1 + _pp.libid].symbols[0].shapesets[
+                                                    -1 + _dd.shapes[0].sindex]
+
+            for _ss in _sym.shapes:
+                if isinstance(_ss, Eagle.Text):
+                    _an = Annotation(value=_ss.value, # value from symbol
+                                     x=(_ss.x + _pp.shapes[0].x),
+                                     y=(_ss.y + _pp.shapes[0].y),
+                                     rotation=((
+                                         Eagle.Shape.rotate2piradians(
+                                                    _pp.shapes[0].rotate) + 
+                                         Eagle.Shape.rotate2piradians(
+                                                    _ss.rotate)) % 2),
+                                     visible=True,
+                                    )
+                    _ci.add_symbol_attribute(_an)
+                    design.add_component_instance(_ci)
 
         return design
 

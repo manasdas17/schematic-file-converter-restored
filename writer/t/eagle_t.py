@@ -280,14 +280,17 @@ class EagleTests(unittest.TestCase):
 
         _part = Eagle.Part(name="IC9",
                            libid=1,
+                           devsetndx=2,
+                           symvar=1,
+                           techno=1,
                            value="DS3668",
                            numofshapes=2,
                           )
 
         _chunk = _part.construct()
 
-        _valid_chunk = b''.join((b"\x38\x00\x02\x00\x01\x00\x00\x00",
-                                 b"\x00\x00\x01\x49\x43\x39\x00\x00",
+        _valid_chunk = b''.join((b"\x38\x00\x02\x00\x01\x00\x02\x00",
+                                 b"\x01\x01\x01\x49\x43\x39\x00\x00",
                                  b"\x44\x53\x33\x36\x36\x38\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
@@ -392,6 +395,9 @@ class EagleTests(unittest.TestCase):
 
         _connheader = Eagle.ConnectionHeader(numofshapes=1,
                                              sindex=4,
+                                             attributes=None,
+                                             technologies=None,
+                                             name=None,
                                             )
 
         _chunk = _connheader.construct()
@@ -402,6 +408,7 @@ class EagleTests(unittest.TestCase):
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
+# TODO technology / attributes check, 'name'
         return
 
     def test_connections_construct(self):

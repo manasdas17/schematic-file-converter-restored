@@ -29,7 +29,11 @@ class EagleTests(unittest.TestCase):
 
     def setUp(self):
         """ Setup the test case. """
-        pass
+        Eagle.attr_jar = [Eagle.Attribute('name_a', 'value_a'),
+                            Eagle.Attribute('name_b', 'value_b'),
+                            Eagle.Attribute('name_c', 'value_c'),
+                         ]
+        Eagle.attr_jar_list = Eagle.attr_jar_iter()
 
     def tearDown(self):
         """ Teardown the test case. """
@@ -112,7 +116,7 @@ class EagleTests(unittest.TestCase):
                                  b"\x00\x00\x00\x7f\x10\xfa\x0d\x09"))
         _attrheader = Eagle.AttributeHeader.parse(_valid_chunk)
 
-        self.assertEqual(_attrheader.schematic, None)
+        self.assertEqual(_attrheader.schematic, 'name_a')
         self.assertEqual(_attrheader.numofshapes, 1)
         self.assertEqual(_attrheader.numofattributes, 0) 
 # probably no embedded "schematic" is possible
@@ -212,8 +216,8 @@ class EagleTests(unittest.TestCase):
                                  b"\x2a\x09\x7f\x2b\xe3\x2a\x09\x00"))
         _package = Eagle.Package.parse(_valid_chunk)
 
-        self.assertEqual(_package.name, None)
-        self.assertEqual(_package.desc, None)
+        self.assertEqual(_package.name, 'name_a')
+        self.assertEqual(_package.desc, 'name_b')
         self.assertEqual(_package.numofshapes, 13)
 
         return
@@ -245,6 +249,9 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_part.name, "IC9")
         self.assertEqual(_part.libid, 1)
+        self.assertEqual(_part.devsetndx, 2)
+        self.assertEqual(_part.symvar, 1)
+        self.assertEqual(_part.techno, 1)
         self.assertEqual(_part.value, "DS3668")
         self.assertEqual(_part.numofshapes, 2)
 
@@ -262,7 +269,7 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_devset.name, "1N5333")
         self.assertEqual(_devset.prefix, "D")
-        self.assertEqual(_devset.description, None)
+        self.assertEqual(_devset.description, 'name_a')
         self.assertEqual(_devset.uservalue, False)
         self.assertEqual(_devset.numofshapes, 1)
         self.assertEqual(_devset.numofconnblocks, 2)
@@ -273,7 +280,7 @@ class EagleTests(unittest.TestCase):
                                  b"\x00\x00\x7f\xc1\xd3\xcf\x08\x00"))
         _devset = Eagle.DeviceSet.parse(_valid_chunk)
 
-        self.assertEqual(_devset.name, None)
+        self.assertEqual(_devset.name, 'name_b')
         self.assertEqual(_devset.prefix, "JP")
         self.assertEqual(_devset.description, "")
         self.assertEqual(_devset.uservalue, True)
@@ -333,6 +340,7 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_connheader.numofshapes, 1)
         self.assertEqual(_connheader.sindex, 4)
+# TODO technology / attributes check, 'name'
         return
 
     def test_connections_parse(self):
@@ -532,7 +540,7 @@ class EagleTests(unittest.TestCase):
                                  b"\x00\x00\x7f\xf8\xcd\x35\x09\x00"))
         _text = Eagle.Text.parse(_valid_chunk)
 
-        self.assertEqual(_text.value, None)
+        self.assertEqual(_text.value, 'name_a')
         self.assertEqual(_text.x, 12.7)
         self.assertEqual(_text.y, 93.98)
         self.assertEqual(_text.size, 6.4516)
@@ -619,7 +627,7 @@ class EagleTests(unittest.TestCase):
                                  b"\x88\x2b\x18\x09\x00\x00\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
         _attr = Eagle.Attribute.parse(_valid_chunk)
-        self.assertEqual(_attr.name, None)
+        self.assertEqual(_attr.name, 'name_a')
         self.assertEqual(_attr.value, None)
         return
 
