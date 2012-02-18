@@ -691,3 +691,35 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.shapes[1].control2.y, -30)
         self.assertEqual(pp.shapes[1].p2.x, -23)
         self.assertEqual(pp.shapes[1].p2.y, 23)
+
+
+    def test_parse_q(self):
+        """ quadratic bezier segments are parsed correctly """
+
+        pp = PathParser(None)
+        pp.prev_cmd = 'q'
+
+        rest = pp.parse_q('6 12 18 24 -6 -12 -36 -42 rest', False)
+
+        self.assertEqual(rest, 'rest')
+        self.assertEqual(pp.start_point, (0.0, 0.0))
+        self.assertEqual(pp.cur_point, (-36.0, -42.0))
+        self.assertEqual(len(pp.shapes), 2)
+        self.assertEqual(pp.shapes[0].type, 'bezier')
+        self.assertEqual(pp.shapes[0].p1.x, 0)
+        self.assertEqual(pp.shapes[0].p1.y, 0)
+        self.assertEqual(pp.shapes[0].control1.x, 5)
+        self.assertEqual(pp.shapes[0].control1.y, -10)
+        self.assertEqual(pp.shapes[0].control2.x, 13)
+        self.assertEqual(pp.shapes[0].control2.y, -20)
+        self.assertEqual(pp.shapes[0].p2.x, 23)
+        self.assertEqual(pp.shapes[0].p2.y, -30)
+        self.assertEqual(pp.shapes[1].type, 'bezier')
+        self.assertEqual(pp.shapes[1].p1.x, 23)
+        self.assertEqual(pp.shapes[1].p1.y, -30)
+        self.assertEqual(pp.shapes[1].control1.x, 3)
+        self.assertEqual(pp.shapes[1].control1.y, 0)
+        self.assertEqual(pp.shapes[1].control2.x, -20)
+        self.assertEqual(pp.shapes[1].control2.y, 28)
+        self.assertEqual(pp.shapes[1].p2.x, -45)
+        self.assertEqual(pp.shapes[1].p2.y, 53)
