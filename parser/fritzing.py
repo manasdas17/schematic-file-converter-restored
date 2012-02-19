@@ -507,7 +507,7 @@ class PathParser(object):
         self.shapes = []
         self.cur_point = (0, 0) # (x, y) of current point
         self.start_point = (0, 0) # (x, y) of start of current subpath
-        self.prev_cmd = None # previous path command letter
+        self.prev_cmd = '' # previous path command letter
         self.prev_ctl = None # previous control point
 
     def parse(self):
@@ -601,8 +601,6 @@ class PathParser(object):
 
         for i, point in enumerate(points):
             point = self.get_path_point(point, is_relative)
-            if i == 0:
-                self.start_point = point
             self.shapes.append(
                 Line(make_point(self.cur_point, self.svg_mult),
                      make_point(point, self.svg_mult)))
@@ -619,8 +617,6 @@ class PathParser(object):
         for i, num in enumerate(nums):
             point = (num, 0 if is_relative else self.cur_point[1])
             point = self.get_path_point(point, is_relative)
-            if i == 0:
-                self.start_point = point
             self.shapes.append(
                 Line(make_point(self.cur_point, self.svg_mult),
                      make_point(point, self.svg_mult)))
@@ -637,8 +633,6 @@ class PathParser(object):
         for i, num in enumerate(nums):
             point = (0 if is_relative else self.cur_point[0], num)
             point = self.get_path_point(point, is_relative)
-            if i == 0:
-                self.start_point = point
             self.shapes.append(
                 Line(make_point(self.cur_point, self.svg_mult),
                      make_point(point, self.svg_mult)))
