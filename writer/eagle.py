@@ -591,13 +591,16 @@ class Eagle: # pylint: disable=R0902
 
         val_sign_mask = 0x01
 
-        def __init__(self, name, libid, value='', # pylint: disable=R0913
+        def __init__(self, name, libid, devsetndx, symvar, techno, value='', # pylint: disable=R0913
                      numofshapes=0, shapes=None):
             """ Just a constructor
             """
             super(Eagle.Part, self).__init__(name, numofshapes, shapes)
             self.value = value
             self.libid = libid
+            self.devsetndx = devsetndx
+            self.symvar = symvar # within a devset!
+            self.techno = techno
             return
 
         def construct(self):
@@ -616,8 +619,10 @@ class Eagle: # pylint: disable=R0902
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
                                    self.numofshapes,
-                                   self.libid, 0,
-                                   0, 0,
+                                   self.libid, 
+                                   self.devsetndx,
+                                   self.symvar, 
+                                   self.techno,
                                    self.val_sign_mask 
                                         if 'None' != self.value and
                                             0 != len(self.value) else 0,
@@ -798,15 +803,32 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents a header for 'connections' blocks
         """
         constant = 0x36
-        template = "=2BHI11s5s"
+        template = "=2B2H13s5s"
 
-        constantmid = "''"
+        constantmid_def = "''"
 
-        def __init__(self, sindex, numofshapes=0, shapes=None):
+        no_embed_str = b'\x7f'
+        max_embed_len = 13
+
+        delim_techs = b'\x04'
+        delim_namesvals = b'\x04'
+        delim_names = b'\x01'
+        delim_vals = b'\x02'
+
+        def __init__(self, sindex, attributes, technologies, name, # pylint: disable=R0913
+                     numofshapes=0, shapes=None):
             """ Just a constructor
             """
             super(Eagle.ConnectionHeader, self).__init__(numofshapes, shapes)
             self.sindex = sindex
+            
+            if None == technologies:
+                technologies = []
+            self.technologies = technologies
+
+            if None == attributes:
+                attributes = []
+            self.attributes = attributes
             return
 
         def construct(self):
@@ -814,12 +836,29 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
+            _attrstechs = self.no_embed_str + b'\0\0\0\x09'
+            if 0 < len(self.technologies):
+                _at2 = self.delim_techs + self.delim_techs.join(self.technologies)
+                if self.max_embed_len >= len(_attrstechs):
+                    _attrstechs = _at2
+            elif 0 < len(self.attributes):
+                _at2 = self.delim_namesvals.join((
+                        self.delim_names + self.delim_names.join(
+                                        [x for x, y in self.attributes]),
+                        self.delim_names + self.delim_names.join(
+                                        [y for x, y in self.attributes]),
+                        ))
+                if self.max_embed_len >= len(_attrstechs):
+                    _attrstechs = _at2
+            else:
+                _attrstechs = ''
+
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 
                                    self.numofshapes,
                                    self.sindex,
-                                   '',
-                                   self.constantmid,
+                                   _attrstechs,
+                                   self.constantmid_def,
                                   )
             return _ret_val
 
@@ -1119,6 +1158,48 @@ class Eagle: # pylint: disable=R0902
                                    Eagle.Shape.encode_real(
                                        self.drill / self.width_xscale),
                                    0, 0
+                                  )
+            return _ret_val
+
+    class SMD(Shape):
+        """ A struct that represents an SMD (Surface Mount Device)
+        """
+        constant = 0x2b
+        template = "=4B2i2H3B5s"
+
+        max_embed_len = 5
+        no_embed_str = b'\x7f'
+
+        def __init__(self, name, x, y, dx, dy, layer): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.SMD, self).__init__(layer)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.dx = dx
+            self.dy = dy
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _name = self.no_embed_str + b'\0\0\0\x09'
+            if self.max_embed_len >= len(self.name):
+                _name = self.name
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, 0, self.layer,
+                                   Eagle.Shape.encode_real(self.x),
+                                   Eagle.Shape.encode_real(self.y),
+                                   Eagle.Shape.encode_real(
+                                       self.dx / self.width_xscale),
+                                   Eagle.Shape.encode_real(
+                                       self.dy / self.width_xscale),
+                                   0, 0, 0,
+                                   _name,
                                   )
             return _ret_val
 
