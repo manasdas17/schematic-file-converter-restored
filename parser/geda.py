@@ -55,8 +55,8 @@
 # a blueprint-style frame is present with origin at 
 # (40'000, 40'000). 
 
+import logging
 import os
-import warnings
 import itertools
 
 from core import shape
@@ -67,6 +67,11 @@ from core.design import Design
 from core.annotation import Annotation
 from core.component_instance import ComponentInstance
 from core.component_instance import SymbolAttribute
+
+
+# Logging
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('parser.geda')
 
 
 class GEDAError(Exception):
@@ -214,6 +219,8 @@ class GEDA:
         f = open(filename, 'r')
         data = f.read()
         confidence = 0
+        if data[0:2] == 'v ':
+            confidence += 0.51
         if 'package=' in data:
             confidence += 0.25
         if 'footprint=' in data:
@@ -221,7 +228,7 @@ class GEDA:
         if 'refdes=' in data:
             confidence += 0.25
         if 'netname=' in data:
-            confidence += 0.5
+            confidence += 0.25
         return confidence
 
 
@@ -404,7 +411,7 @@ class GEDA:
             else:
                 if basename not in self.known_symbols:
                     warnings.warn(
-                        "referenced symbol file '%s' unkown" % basename
+                        "referenced symbol file '%s' unknown" % basename
                     )
                     ## parse optional attached environment before continuing
                     self._parse_environment(stream)
@@ -538,7 +545,7 @@ class GEDA:
                     component.add_attribute('_prefix', prefix)
                     component.add_attribute('_suffix', suffix)
                 else:
-                    assert(key not in ['_refdes', 'refdes'])
+                    #assert(key not in ['_refdes', 'refdes'])
                     component.add_attribute(key, value)
             elif typ == 'L':
                 body.add_shape(
