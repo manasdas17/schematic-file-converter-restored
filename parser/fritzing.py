@@ -180,7 +180,7 @@ class Fritzing(object):
         if xform is None:
             rotation = 0.0
         else:
-            matrix = tuple(int(xform.get(key, 0))
+            matrix = tuple(int(float(xform.get(key, 0)))
                            for key in ('m11', 'm12', 'm21', 'm22'))
             x, y = rotate_component(cpt, matrix, x, y)
             rotation = MATRIX2ROTATION.get(matrix, 0.0)
