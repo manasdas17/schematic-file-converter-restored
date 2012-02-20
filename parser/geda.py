@@ -293,9 +293,7 @@ class GEDA:
                     self.design.design_attributes.add_attribute(key, value)
 
             elif obj_type == 'G' : ## picture type is not supported
-                warnings.warn(
-                    "ignoring picture/font in gEDA file. Not supported!"
-                )
+                log.warn("ignoring picture/font in gEDA file. Not supported!")
             elif obj_type == 'C': ## command for component found
                 basename = params['basename']
 
@@ -322,9 +320,7 @@ class GEDA:
 
             elif obj_type == 'H': ## SVG-like path
                 ##TODO(elbaschid): is this a valid assumption?
-                warnings.warn(
-                    'ommiting path outside of component.'
-                )
+                log.warn('ommiting path outside of component.')
                 ## skip description of path
                 num_lines = params['num_lines']
                 for dummy in range(num_lines):
@@ -410,9 +406,7 @@ class GEDA:
                     component = self.parse_component_data(stream, params)
             else:
                 if basename not in self.known_symbols:
-                    warnings.warn(
-                        "referenced symbol file '%s' unknown" % basename
-                    )
+                    log.warn("referenced symbol file '%s' unknown" % basename)
                     ## parse optional attached environment before continuing
                     self._parse_environment(stream)
                     return None, None
@@ -576,9 +570,7 @@ class GEDA:
                     body.add_shape(new_shape)
 
             elif typ == 'G':
-                warnings.warn(
-                    "ignoring picture/font in gEDA file. Not supported!"
-                )
+                log.warn("ignoring picture/font in gEDA file. Not supported!")
 
             else:
                 pass
