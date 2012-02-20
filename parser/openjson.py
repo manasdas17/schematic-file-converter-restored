@@ -45,7 +45,14 @@ class JSON:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an openjson file """
-        return 0
+        f = open(filename, 'r')
+        data = f.read()
+        confidence = 0
+        if 'component_instances' in data:
+            confidence += 0.3
+        if 'design_attributes' in data:
+            confidence += 0.6
+        return confidence
 
 
     def parse(self, filename):

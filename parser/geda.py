@@ -211,7 +211,16 @@ class GEDA:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an geda schematic """
-        return 0
+        f = open(filename, 'r')
+        data = f.read()
+        confidence = 0
+        if 'package=' in data:
+            confidence += 0.25
+        if 'footprint=' in data:
+            confidence += 0.25
+        if 'refdes=' in data:
+            confidence += 0.25
+        return confidence
 
 
     def set_offset(self, point):

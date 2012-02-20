@@ -155,7 +155,7 @@ if __name__ == "__main__":
         confidence = {}
         for name, parser in PARSERS.iteritems():
             confidence[name] = parser.auto_detect(inputfile)
-        ordered = sorted(confidence.iteritems(), key=operator.itemgetter(1))
+        ordered = sorted(confidence.iteritems(), key=operator.itemgetter(1), reverse=True)
         if ordered[0][1] >= 0.7:
             inputtype = ordered[0][0]
             log.info('Auto-detected input type: %s', inputtype)
