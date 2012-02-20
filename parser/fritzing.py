@@ -284,7 +284,12 @@ class ComponentParser(object):
 
         tree = ElementTree(file=self.path)
 
-        self.component.add_attribute('_prefix', tree.find('label').text)
+        try:
+            prefix = tree.find('label').text
+        except AttributeError:
+            pass
+        else:
+            self.component.add_attribute('_prefix', prefix)
 
         symbol = Symbol()
         self.component.add_symbol(symbol)
