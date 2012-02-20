@@ -371,7 +371,8 @@ class ComponentParser(object):
         self.width *= self.svg_mult
         self.height *= self.svg_mult
 
-        for element in tree.getroot().iter():
+        _iter = tree.getroot().getiterator()
+        for element in _iter:
             for shape in self.parse_shapes(element):
                 body.add_shape(shape)
                 if element.get('id') in self.terminals:
