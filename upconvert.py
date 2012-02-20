@@ -156,11 +156,12 @@ if __name__ == "__main__":
         for name, parser in PARSERS.iteritems():
             confidence[name] = parser.auto_detect(inputfile)
         ordered = sorted(confidence.iteritems(), key=operator.itemgetter(1), reverse=True)
-        if ordered[0][1] >= 0.7:
+        if ordered[0][1] >= 0.5:
             inputtype = ordered[0][0]
             log.info('Auto-detected input type: %s', inputtype)
         else:
-            log.error('Failed to auto-detect input type. best guess: %s, confidence: %s', ordered[0][0], ordered[0][1])
+            log.error('Failed to auto-detect input type for %s. best guess: %s, confidence: %s',
+                      inputfile, ordered[0][0], ordered[0][1])
             ap.print_help()
             exit(1)
 

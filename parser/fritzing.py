@@ -134,8 +134,9 @@ class Fritzing(object):
                  for c in connector.findall('connects/connect')]
 
         # connect wire ends to each other
-        self.connects[conn_keys[0]].append(conn_keys[1])
-        self.connects[conn_keys[1]].append(conn_keys[0])
+        if len(conn_keys) >= 2:
+            self.connects[conn_keys[0]].append(conn_keys[1])
+            self.connects[conn_keys[1]].append(conn_keys[0])
 
 
     def ensure_component(self, inst):
@@ -295,7 +296,9 @@ class ComponentParser(object):
 
         tree = ElementTree(file=self.path)
 
-        self.component.add_attribute('_prefix', tree.find('label').text)
+        label = tree.find('label')
+        if label != None:
+            self.component.add_attribute('_prefix', label.text)
 
         symbol = Symbol()
         self.component.add_symbol(symbol)
@@ -372,9 +375,10 @@ class ComponentParser(object):
         tree = ElementTree(file=svg_path)
         viewbox = tree.getroot().get('viewBox')
 
-        self.width, self.height = [float(v) for v in viewbox.split()[-2:]]
-        self.width *= self.svg_mult
-        self.height *= self.svg_mult
+        if viewbox != None:
+            self.width, self.height = [float(v) for v in viewbox.split()[-2:]]
+            self.width *= self.svg_mult
+            self.height *= self.svg_mult
 
         _iter = tree.getroot().getiterator()
         for element in _iter:

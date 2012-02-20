@@ -220,6 +220,8 @@ class GEDA:
             confidence += 0.25
         if 'refdes=' in data:
             confidence += 0.25
+        if 'netname=' in data:
+            confidence += 0.5
         return confidence
 
 
