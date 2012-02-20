@@ -510,6 +510,13 @@ class ViewDraw:
         # ^-that could be parsed out of a viewdraw.ini some day
         self.schdir, self.symdirs = schdir, symdirs
 
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an viewdraw file """
+        return 0
+
+
     def parse(self):
         """ Parses a viewdraw project and returns a list of sheets. """
         lib = Components()

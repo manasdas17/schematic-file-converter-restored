@@ -1908,6 +1908,13 @@ class Eagle:
         self.netclasses = []
         return
 
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an eagle schematic """
+        return 0
+
+
     def _parse_blocks(self, filehandle, numofblocks): # pylint: disable=R0912
         """ Parse fixed length block part of a file
         """

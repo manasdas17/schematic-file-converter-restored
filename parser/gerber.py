@@ -198,6 +198,12 @@ class Gerber:
                        'incremental_coords':None}
 
 
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an gerber file """
+        return 0
+
+
     def parse(self, infile='.'):
         """ Parse tokens from gerber files into a design. """
         zip_ = infile.endswith('zip')

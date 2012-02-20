@@ -207,6 +207,13 @@ class GEDA:
 
         # FIXME: Converter currently will ignore style and color data in gEDA format!
 
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an geda schematic """
+        return 0
+
+
     def set_offset(self, point):
         """ Set the offset point for the gEDA output. As OpenJSON
             positions the origin in the center of the viewport and

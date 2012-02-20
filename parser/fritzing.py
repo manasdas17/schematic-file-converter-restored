@@ -61,6 +61,12 @@ class Fritzing(object):
         self.fritzing_version = None
 
 
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an fritzing file """
+        return 0
+
+
     def parse(self, filename):
         """ Parse a Fritzing file into a design """
 

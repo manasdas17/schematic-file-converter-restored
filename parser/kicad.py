@@ -46,6 +46,13 @@ from os.path import exists, splitext
 class KiCAD(object):
     """ The KiCAD Format Parser """
 
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an kicad schematic """
+        return 0
+
+
     def parse(self, filename, library_filename=None):
         """ Parse a kicad file into a design """
 

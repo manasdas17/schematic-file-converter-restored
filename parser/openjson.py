@@ -42,6 +42,12 @@ class JSON:
         self.design = Design()
 
 
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an openjson file """
+        return 0
+
+
     def parse(self, filename):
         """ Parse the openjson file into the core. """
         f = open(filename)

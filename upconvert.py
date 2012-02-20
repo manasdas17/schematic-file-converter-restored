@@ -48,13 +48,21 @@ Upverter's Open JSON Interchange Format """
 #   ./upconvert.py -i test/openjson/simple.upv -o example.upv 
 
 
+import logging
+import os
+import operator
+from argparse import ArgumentParser
+
 import parser.openjson, parser.kicad, parser.geda
 import parser.fritzing, parser.gerber
 import parser.eagle
 import writer.openjson, writer.kicad, writer.geda
 import writer.eagle, writer.gerber
 
-from argparse import ArgumentParser
+
+# Logging
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('main')
 
 PARSERS = {
     'openjson': parser.openjson.JSON,
@@ -71,6 +79,15 @@ WRITERS = {
     'geda': writer.geda.GEDA,
     'eagle': writer.eagle.Eagle,
     'gerber': writer.gerber.Gerber,
+}
+
+EXTENSIONS = {
+    'openjson': '.upv',
+    'kicad': '.sch',
+    'geda': '.sch',
+    'eagle': '.sch',
+    'fritzing': '.fz',
+    'gerber': '.grb',
 }
 
 
@@ -100,25 +117,24 @@ def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
         print "ERROR: Unsupported output type:", out_format
         exit(1)
     return w.write(dsgn, out_file)
-
+    
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("-i", "--input", dest="inputfile",
+    ap = ArgumentParser()
+    ap.add_argument("-i", "--input", dest="inputfile",
             help="read INPUT file in", metavar="INPUT")
-    parser.add_argument("-f", "--from", dest="inputtype",
-            help="read input file as TYPE", metavar="TYPE",
-            default="openjson")
-    parser.add_argument("-o", "--output", dest="outputfile",
+    ap.add_argument("-f", "--from", dest="inputtype",
+            help="read input file as TYPE", metavar="TYPE")
+    ap.add_argument("-o", "--output", dest="outputfile",
             help="write OUTPUT file out", metavar="OUTPUT")
-    parser.add_argument("-s", "--sym-dirs", dest="sym_dirs",
+    ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
             help="specify SYMDIRS to search for .sym files (for gEDA only)", 
             metavar="SYMDIRS", nargs="+")
-    parser.add_argument("-t", "--to", dest="outputtype",
+    ap.add_argument("-t", "--to", dest="outputtype",
             help="write output file as TYPE", metavar="TYPE",
             default="openjson")
 
-    args = parser.parse_args()
+    args = ap.parse_args()
     inputtype = args.inputtype
     outputtype = args.outputtype
     inputfile = args.inputfile
@@ -128,14 +144,45 @@ if __name__ == "__main__":
     if args.sym_dirs:
         parser_kwargs['symbol_dirs'] = args.sym_dirs
 
-    if None == inputfile:
-        print_help()
+    # Test for input file
+    if inputfile == None:
+        log.error('No input file provided.')
+        ap.print_help()
         exit(1)
+
+    # Autodetect input type
+    if inputtype == None:
+        confidence = {}
+        for name, parser in PARSERS.iteritems():
+            confidence[name] = parser.auto_detect(inputfile)
+        ordered = sorted(confidence.iteritems(), key=operator.itemgetter(1))
+        if ordered[0][1] >= 0.7:
+            inputtype = ordered[0][0]
+            log.info('Auto-detected input type: %s', inputtype)
+        else:
+            log.error('Failed to auto-detect input type. best guess: %s, confidence: %s', ordered[0][0], ordered[0][1])
+            ap.print_help()
+            exit(1)
+
+    # Autoset output file
+    if outputfile == None:
+        try:
+            fileName, fileExtension = os.path.splitext(inputfile)
+            outputfile = fileName + EXTENSIONS[outputtype]
+            log.info('Auto-set output file: %s', outputfile)
+        except:
+            log.error('Failed to auto-set output file.')
+            ap.print_help()
+            exit(1)
 
     # parse and export the data
     design = parse(inputfile, inputtype, **parser_kwargs)
-    if design is not None: # we got a good result
+
+    # we got a good result
+    if design is not None:
         write(design, outputfile, outputtype, **parser_kwargs)
-    else: # parse returned None -> something went wrong
+
+    # parse returned None -> something went wrong
+    else:
         print "Output cancelled due to previous errors."
         exit(1)
