@@ -33,7 +33,12 @@ class Altium:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an altium schematic """
-        return 0
+        f = open(filename, 'r')
+        data = f.read()
+        confidence = 0
+        if 'altium' in data:
+            confidence += 0.5
+        return confidence
 
 
     def parse(self, filename):

@@ -228,11 +228,11 @@ class ViewDrawBaseTests(unittest.TestCase):
             self.assertEqual(v.type, 'arc')
             # allow for points to be off by up to one unit, to account for
             # rounding error in calculating center point, radius.
-            self.assertLessEqual(abs(v.x - x_c), 1)
-            self.assertLessEqual(abs(v.y - y_c), 1)
-            self.assertLessEqual(abs(v.radius - radius), 1)
-            self.assertLess(abs(reflang(v.start_angle) - (ang[0])), 0.01)
-            self.assertLess(abs(reflang(v.end_angle) - (ang[2])), 0.01)
+            self.assertTrue(abs(v.x - x_c) <= 1)
+            self.assertTrue(abs(v.y - y_c) <= 1)
+            self.assertTrue(abs(v.radius - radius) <= 1)
+            self.assertTrue(abs(reflang(v.start_angle) - (ang[0])) < 0.01)
+            self.assertTrue(abs(reflang(v.end_angle) - (ang[2])) < 0.01)
 
 class ViewDrawSymTests(unittest.TestCase):
     """ Tests for ViewDraw library symbol files """
@@ -288,7 +288,7 @@ class ViewDrawSymTests(unittest.TestCase):
     def test_pin(self):
         """ Test parsing a simple pin """
         v = self.subtest_pin()
-        self.assertIsNone(v.label)
+        self.assertTrue(v.label == None)
 
     def test_pin_with_label(self):
         """ Test parsing a pin with an attached label """
@@ -373,13 +373,13 @@ class ViewDrawSchTests(unittest.TestCase):
         self.assertEqual(len(net.points), len(pts_dict))
         for pt in net.points.values():
             # make sure pt is one of the ones we created
-            self.assertIn((pt.x, pt.y), pts_dict)
+            self.assertTrue((pt.x, pt.y) in pts_dict)
             # make sure it's connected to the other point
             self.assertEqual(len(pt.connected_points),
                              len(pts_dict[(pt.x, pt.y)]))
             for ptid in pt.connected_points:
                 otherpt = net.points[ptid]
-                self.assertIn((otherpt.x, otherpt.y), pts_dict[(pt.x, pt.y)])
+                self.assertTrue((otherpt.x, otherpt.y) in pts_dict[(pt.x, pt.y)])
                 self.assertEqual(len(pt.connected_components), 0)
 
     def test_net_two_points(self):

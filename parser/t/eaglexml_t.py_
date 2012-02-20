@@ -40,4 +40,4 @@ class EagleXMLTests(unittest.TestCase):
     def test_create_new_eaglexml_parser(self):
         """ Test creating an empty parser. """
         parser = EagleXML()
-        assert parser != None
+        self.assertTrue(parser != None)
