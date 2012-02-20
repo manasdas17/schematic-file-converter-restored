@@ -127,12 +127,12 @@ if __name__ == "__main__":
             help="read input file as TYPE", metavar="TYPE")
     ap.add_argument("-o", "--output", dest="outputfile",
             help="write OUTPUT file out", metavar="OUTPUT")
-    ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
-            help="specify SYMDIRS to search for .sym files (for gEDA only)", 
-            metavar="SYMDIRS", nargs="+")
     ap.add_argument("-t", "--to", dest="outputtype",
             help="write output file as TYPE", metavar="TYPE",
             default="openjson")
+    ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
+            help="specify SYMDIRS to search for .sym files (for gEDA only)", 
+            metavar="SYMDIRS", nargs="+")
 
     args = ap.parse_args()
     inputtype = args.inputtype
