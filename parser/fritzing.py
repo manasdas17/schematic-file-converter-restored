@@ -31,7 +31,7 @@ from xml.etree.ElementTree import ElementTree
 
 from os.path import basename, dirname, exists, join
 
-import re
+import re, zipfile
 
 
 class Fritzing(object):
@@ -76,7 +76,7 @@ class Fritzing(object):
     def parse(self, filename):
         """ Parse a Fritzing file into a design """
 
-        tree = ElementTree(file=filename)
+        tree = self.make_tree(filename)
 
         self.fritzing_version = tree.getroot().get('fritzingVersion', '0')
 
@@ -94,6 +94,17 @@ class Fritzing(object):
 
         return self.design
 
+
+    def make_tree(self, filename):
+        """
+        Return an ElementTree for the given file name.
+        """
+
+        if filename.endswith('.fzz'):
+            zipf = zipfile.ZipFile(filename)
+            return ElementTree(file=zipf.open(basename(filename[:-1])))
+        else:
+            return ElementTree(file=filename)
 
     def parse_instance(self, instance):
         """ Parse a Fritzing instance block """
