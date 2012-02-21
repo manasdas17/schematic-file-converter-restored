@@ -1,0 +1,83 @@
+v 20080127 1
+L 200 200 1400 800 3 0 0 0 -1 -1
+L 1400 800 200 1400 3 0 0 0 -1 -1
+L 200 1400 200 200 3 0 0 0 -1 -1
+P 600 200 600 400 1 0 0
+{
+T 600 200 5 10 0 0 0 0 1
+pintype=pas
+T 595 500 5 8 1 1 180 4 1
+pinlabel=VH
+T 550 305 5 10 0 1 90 6 1
+pinnumber=3
+T 600 200 5 10 0 0 0 0 1
+pinseq=3
+}
+P 1200 500 1200 700 1 0 0
+{
+T 1200 500 5 10 0 0 0 0 1
+pintype=pas
+T 1095 750 5 8 1 1 180 4 1
+pinlabel=VHS
+T 1150 605 5 10 0 1 90 6 1
+pinnumber=4
+T 1200 500 5 10 0 0 0 0 1
+pinseq=4
+}
+P 900 300 900 550 1 0 0
+{
+T 900 400 5 10 0 0 0 0 1
+pintype=pas
+T 845 650 5 8 1 1 180 4 1
+pinlabel=VM
+T 850 505 5 10 0 1 90 6 1
+pinnumber=5
+T 900 400 5 10 0 0 0 0 1
+pinseq=5
+}
+P 0 800 200 800 1 0 0
+{
+T 0 800 5 10 0 0 0 0 1
+pintype=pas
+T 255 795 5 15 0 1 0 1 1
+pinlabel=AIN
+T 105 845 5 10 0 1 0 6 1
+pinnumber=1
+T 0 800 5 10 0 0 0 0 1
+pinseq=1
+}
+P 1600 800 1400 800 1 0 0
+{
+T 1600 800 5 10 0 0 0 0 1
+pintype=pas
+T 1345 795 5 10 0 1 0 6 1
+pinlabel=AOUT
+T 1495 845 5 10 0 1 0 0 1
+pinnumber=2
+T 1600 800 5 10 0 0 0 0 1
+pinseq=2
+}
+T 2000 1800 5 10 0 0 0 0 1
+device=PrE2
+T 700 1200 8 10 1 1 0 0 1
+refdes=X?
+T 2000 1600 8 10 0 0 0 0 1
+model-name=PrE2
+T 600 1400 8 10 0 0 0 0 1
+numslots=0
+T 2000 1400 8 10 0 1 0 0 1
+description=Preamplifier
+T 600 1200 8 10 0 1 0 0 1
+documentation=http://research.kek.jp/people/ikeda/openIP
+T 600 2000 8 10 0 0 0 0 1
+symversion=1.0
+T 600 1800 8 10 0 1 0 0 1
+author=jpd@noqsi.com
+T 600 1600 8 10 0 0 0 0 1
+footprint=none
+T 300 750 9 10 1 0 0 0 1
+PrE2
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 0 0 8 10 0 0 0 0 1
+use-license=unlimited

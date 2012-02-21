@@ -1,0 +1,242 @@
+v 20040111 1
+T 1700 4350 8 10 1 1 180 6 1
+refdes=U?
+T 400 8450 5 10 0 0 0 0 1
+Copyright Mark Salyzyn
+T 400 8650 5 10 0 1 0 0 1
+description=AVR Microcontroller
+T 400 8850 5 10 0 1 0 0 1
+documentation=http://rocky.digikey.com/WebLib/Atmel/Web Data/doc2543.pdf
+T 400 9050 5 10 0 0 0 0 1
+device=ATmega2313_DIP
+T 400 9250 5 10 0 0 0 0 1
+footprint=DIP20
+T 400 9450 5 10 0 0 0 0 1
+net=GND:10
+T 400 9650 5 10 0 0 0 0 1
+net=Vcc:20
+T 400 10050 5 10 0 0 0 0 1
+numslots=0
+T 1350 4700 9 8 1 0 0 0 1
+ATtiny2313
+B 1300 1400 900 6900 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 1700 1100 1700 1300 1 0 0
+{
+T 1550 1200 5 8 1 1 0 0 1
+pinnumber=1
+T 1750 1200 5 8 0 1 0 2 1
+pinseq=1
+T 1800 1450 9 8 1 1 0 3 1
+pinlabel=Reset/PA2
+T 1700 1600 5 8 0 1 0 3 1
+pintype=io
+}
+L 1408 1574 1792 1574 3 0 0 0 -1 -1
+V 1700 1350 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 1000 4900 1300 4900 1 0 0
+{
+T 1200 4750 5 8 1 1 0 6 1
+pinnumber=2
+T 1200 4850 5 8 0 1 0 8 1
+pinseq=2
+T 1350 4900 9 8 1 1 0 0 1
+pinlabel=PD0 (RXD)
+T 1350 4900 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 4500 1300 4500 1 0 0
+{
+T 1200 4350 5 8 1 1 0 6 1
+pinnumber=3
+T 1200 4450 5 8 0 1 0 8 1
+pinseq=3
+T 1350 4500 9 8 1 1 0 0 1
+pinlabel=PD1 (TXD)
+T 1350 4500 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 2500 1300 2500 1 0 0
+{
+T 1200 2350 5 8 1 1 0 6 1
+pinnumber=11
+T 1200 2450 5 8 0 1 0 8 1
+pinseq=11
+T 1350 2500 9 8 1 1 0 0 1
+pinlabel=PD6 (ICP)
+T 1350 2500 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 2900 1300 2900 1 0 0
+{
+T 1200 2750 5 8 1 1 0 6 1
+pinnumber=9
+T 1200 2850 5 8 0 1 0 8 1
+pinseq=9
+T 1350 2900 9 8 1 1 0 0 1
+pinlabel=PD5
+T 1350 2900 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 3300 1300 3300 1 0 0
+{
+T 1200 3150 5 8 1 1 0 6 1
+pinnumber=8
+T 1200 3250 5 8 0 1 0 8 1
+pinseq=8
+T 1350 3300 9 8 1 1 0 0 1
+pinlabel=PD4 (T0)
+T 1350 3300 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 3700 1300 3700 1 0 0
+{
+T 1200 3550 5 8 1 1 0 6 1
+pinnumber=7
+T 1200 3650 5 8 0 1 0 8 1
+pinseq=7
+T 1350 3700 9 8 1 1 0 0 1
+pinlabel=PD3 (INT1)
+T 1350 3700 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 4100 1300 4100 1 0 0
+{
+T 1200 3950 5 8 1 1 0 6 1
+pinnumber=6
+T 1200 4050 5 8 0 1 0 8 1
+pinseq=6
+T 1350 4100 9 8 1 1 0 0 1
+pinlabel=PD2
+T 1350 4100 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 5400 1300 5400 1 0 0
+{
+T 1200 5450 5 8 1 1 0 6 1
+pinnumber=19
+T 1200 5350 5 8 0 1 0 8 1
+pinseq=19
+T 1350 5400 9 8 1 1 0 0 1
+pinlabel=PB7 (UCSK
+T 1350 5400 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 5800 1300 5800 1 0 0
+{
+T 1200 5850 5 8 1 1 0 6 1
+pinnumber=18
+T 1200 5750 5 8 0 1 0 8 1
+pinseq=18
+T 1350 5800 9 8 1 1 0 0 1
+pinlabel=PB6 (MISO
+T 1350 5800 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 6200 1300 6200 1 0 0
+{
+T 1200 6250 5 8 1 1 0 6 1
+pinnumber=17
+T 1200 6150 5 8 0 1 0 8 1
+pinseq=17
+T 1350 6200 9 8 1 1 0 0 1
+pinlabel=PB5 (MOSI
+T 1350 6200 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 6600 1300 6600 1 0 0
+{
+T 1200 6650 5 8 1 1 0 6 1
+pinnumber=16
+T 1200 6550 5 8 0 1 0 8 1
+pinseq=16
+T 1350 6600 9 8 1 1 0 0 1
+pinlabel=PB4 (OC1B
+T 1350 6600 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 7000 1300 7000 1 0 0
+{
+T 1200 7050 5 8 1 1 0 6 1
+pinnumber=15
+T 1200 6950 5 8 0 1 0 8 1
+pinseq=15
+T 1350 7000 9 8 1 1 0 0 1
+pinlabel=PB3 (OC1A
+T 1350 7000 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 7400 1300 7400 1 0 0
+{
+T 1200 7450 5 8 1 1 0 6 1
+pinnumber=14
+T 1200 7350 5 8 0 1 0 8 1
+pinseq=14
+T 1350 7400 9 8 1 1 0 0 1
+pinlabel=PB2 (OC0A
+T 1350 7400 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 7800 1300 7800 1 0 0
+{
+T 1200 7850 5 8 1 1 0 6 1
+pinnumber=13
+T 1200 7750 5 8 0 1 0 8 1
+pinseq=13
+T 1350 7800 9 8 1 1 0 0 1
+pinlabel=PB1 (AIN1
+T 1350 7800 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 8200 1300 8200 1 0 0
+{
+T 1200 8250 5 8 1 1 0 6 1
+pinnumber=12
+T 1200 8150 5 8 0 1 0 8 1
+pinseq=12
+T 1350 8100 9 8 1 1 0 0 1
+pinlabel=PB0 (AIN0
+T 1350 8200 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 1700 1300 1700 1 0 0
+{
+T 1200 1750 5 8 1 1 0 6 1
+pinnumber=4
+T 1200 1650 5 8 0 1 0 8 1
+pinseq=4
+T 1350 1700 9 8 1 1 0 0 1
+pinlabel=PA1(XTAL2)
+T 1350 1700 5 8 0 1 0 2 1
+pintype=io
+}
+P 1000 2100 1300 2100 1 0 0
+{
+T 1200 2150 5 8 1 1 0 6 1
+pinnumber=5
+T 1200 2050 5 8 0 1 0 8 1
+pinseq=5
+T 1350 2100 9 8 1 1 0 0 1
+pinlabel=PA0(XTAL1)
+T 1350 2100 5 8 0 1 0 2 1
+pintype=io
+}
+T 1400 3950 8 8 1 1 0 0 1
+pinlabel=(XCK/INT0)
+T 1400 2750 8 8 1 1 0 0 1
+pinlabel=(OC0B/T1)
+T 1400 5250 8 6 1 1 0 0 1
+pinlabel=SCK/PCINT7)
+T 1400 5650 8 6 1 1 0 0 1
+pinlabel=DO/PCINT6)
+T 1350 6050 8 6 1 1 0 0 1
+pinlabel=DI/SDA/PCINT5)
+T 1400 6450 8 8 1 1 0 0 1
+pinlabel=PCINT4)
+T 1400 6850 8 8 1 1 0 0 1
+pinlabel=PCINT3)
+T 1400 7250 8 8 1 1 0 0 1
+pinlabel=PCINT2)
+T 1400 7650 8 8 1 1 0 0 1
+pinlabel=PCINT1)
+T 1400 7950 8 8 1 1 0 0 1
+pinlabel=PCINT0)

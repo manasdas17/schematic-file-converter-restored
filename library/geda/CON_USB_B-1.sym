@@ -1,0 +1,88 @@
+v 20081231 1
+P 1500 800 1200 800 1 0 0
+{
+T 1300 850 5 8 1 1 0 0 1
+pinnumber=3
+T 1300 750 5 8 0 1 0 2 1
+pinseq=3
+T 1150 800 9 8 1 1 0 6 1
+pinlabel=D+
+T 1150 800 5 8 0 1 0 8 1
+pintype=io
+}
+P 1500 1100 1200 1100 1 0 0
+{
+T 1300 1150 5 8 1 1 0 0 1
+pinnumber=2
+T 1300 1050 5 8 0 1 0 2 1
+pinseq=2
+T 1150 1100 9 8 1 1 0 6 1
+pinlabel=D-
+T 1150 1100 5 8 0 1 0 8 1
+pintype=io
+}
+P 1500 1400 1200 1400 1 0 0
+{
+T 1300 1450 5 8 1 1 0 0 1
+pinnumber=1
+T 1300 1350 5 8 0 1 0 2 1
+pinseq=1
+T 1150 1400 9 8 1 1 0 6 1
+pinlabel=VCC
+T 1150 1400 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 1500 500 1200 500 1 0 0
+{
+T 1300 550 5 8 1 1 0 0 1
+pinnumber=4
+T 1300 450 5 8 0 1 0 2 1
+pinseq=4
+T 1150 500 9 8 1 1 0 6 1
+pinlabel=GND
+T 1150 500 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 400 0 400 300 1 0 0
+{
+T 450 200 5 8 1 1 0 2 1
+pinnumber=5
+T 350 200 5 8 0 1 0 8 1
+pinseq=5
+T 600 350 9 8 1 1 0 3 1
+pinlabel=CASE
+T 400 500 5 8 0 1 0 3 1
+pintype=pas
+}
+B 0 300 1200 1300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1200 1700 8 10 1 1 0 6 1
+refdes=CONN?
+T 400 1000 9 10 1 0 0 4 1
+USB_B
+T 0 3400 5 10 0 0 0 0 1
+device=CON_USB_B
+T 0 3200 5 10 0 0 0 0 1
+footprint=CON_USB_TYPEB__Keystone_924
+T 0 2000 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 0 2200 5 10 0 0 0 0 1
+documentation=http://en.wikipedia.org/wiki/Usb
+T 0 2400 5 10 0 0 0 0 1
+description=USB Connector Type B
+T 0 2600 5 10 0 0 0 0 1
+numslots=0
+T 0 2800 5 10 0 0 0 0 1
+dist-license=GPL
+T 0 3000 5 10 0 0 0 0 1
+use-license=unlimited
+P 800 0 800 300 1 0 0
+{
+T 850 200 5 8 1 1 0 2 1
+pinnumber=6
+T 750 200 5 8 0 1 0 8 1
+pinseq=6
+T 800 350 9 8 0 1 0 3 1
+pinlabel=CASE
+T 800 500 5 8 0 1 0 3 1
+pintype=pas
+}

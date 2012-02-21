@@ -1,0 +1,36 @@
+v 20040111 1
+B 0 100 1100 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 0 1200 9 10 0 1 0 0 1
+device=DUMMY
+T 200 800 9 10 1 1 0 0 1
+refdes=RIM?
+T 0 1000 8 10 0 0 0 0 1
+numslots=0
+T 0 1400 9 10 0 1 0 0 1
+author=Karel 'Clock' Kulhavy, http://ronja.twibright.com
+T 0 1600 9 10 0 1 0 0 1
+description=Dummy symbol for PCB rims
+P 1300 500 1100 500 1 0 0
+{
+T 1057 455 9 10 1 1 180 2 1
+pinlabel=Component
+T 2100 700 5 10 0 0 180 0 1
+pinseq=1
+T 1145 553 5 8 1 1 0 0 1
+pinnumber=1
+T 1700 540 5 10 0 1 180 0 1
+pintype=pas
+}
+P 1300 200 1100 200 1 0 0
+{
+T 1058 183 9 10 1 1 180 2 1
+pinlabel=Solder
+T 2200 340 5 10 0 0 180 0 1
+pinseq=2
+T 1146 142 5 8 1 1 0 2 1
+pinnumber=2
+T 1700 180 5 10 0 1 180 0 1
+pintype=pas
+}
+T 0 1800 9 10 0 0 0 0 1
+footprint=solderstrip_both_tbl

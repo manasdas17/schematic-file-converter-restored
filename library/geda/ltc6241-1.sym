@@ -1,0 +1,70 @@
+v 20080109 1
+T 600 650 8 10 1 1 0 0 1
+refdes=U?
+P 200 600 0 600 1 0 1
+{
+T 150 650 5 8 1 1 0 6 1
+pinnumber=3
+T 200 550 5 8 0 1 0 8 1
+pinseq=3
+T 350 600 9 8 0 1 0 0 1
+pinlabel=IN+
+T 350 600 5 8 0 1 0 2 1
+pintype=in
+}
+P 200 200 0 200 1 0 1
+{
+T 150 250 5 8 1 1 0 6 1
+pinnumber=2
+T 200 150 5 8 0 1 0 8 1
+pinseq=2
+T 350 200 9 8 0 1 0 0 1
+pinlabel=IN-
+T 350 200 5 8 0 1 0 2 1
+pintype=in
+}
+P 800 400 1000 400 1 0 1
+{
+T 850 450 5 8 1 1 0 0 1
+pinnumber=1
+T 800 350 5 8 0 1 0 2 1
+pinseq=1
+T 650 400 9 8 0 1 0 6 1
+pinlabel=OUT
+T 650 400 5 8 0 1 0 8 1
+pintype=out
+}
+L 250 600 350 600 3 0 0 0 -1 -1
+L 300 650 300 550 3 0 0 0 -1 -1
+L 200 0 200 800 3 0 0 0 -1 -1
+L 200 800 800 400 3 0 0 0 -1 -1
+L 800 400 200 0 3 0 0 0 -1 -1
+L 250 200 350 200 3 0 0 0 -1 -1
+T 675 3500 5 10 0 0 0 0 1
+author=Thomas Reinemann
+T 675 3300 5 10 0 0 0 0 1
+dist-license=public domain
+T 675 3100 5 10 0 0 0 0 1
+use-license=unlimited
+T 675 2900 5 10 0 0 0 0 1
+description=dual, low noise, rail-to-rail, cmos op amps
+T 675 2700 5 10 0 0 0 0 1
+documentation=http://www.linear.com/pc/downloadDocument.do?navId=H0,C1,C1154,C1009,C1026,P19892,D8817
+T 675 2500 5 10 0 0 0 0 1
+footprint=SO8
+T 675 2300 5 10 0 0 0 0 1
+numslots=2
+T 675 2100 5 10 0 0 0 0 1
+slotdef=1:1,2,3
+T 675 1900 5 10 0 0 0 0 1
+slotdef=2:7,6,5
+T 675 1700 5 10 0 0 0 0 1
+slot=1
+T 675 1500 5 10 0 0 0 0 1
+net=Vcc:8
+T 675 1300 5 10 0 0 0 0 1
+net=-Vcc:4
+T 675 1100 5 10 0 0 0 0 1
+device=LTC6241
+T 225 850 9 8 1 0 0 0 1
+LTC6241

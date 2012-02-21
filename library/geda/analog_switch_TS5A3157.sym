@@ -1,0 +1,63 @@
+v 20090328 2
+L 380 300 200 200 3 0 0 0 -1 -1
+P 400 100 500 100 1 0 1
+{
+T 450 150 5 8 1 1 0 0 1
+pinnumber=1
+T 450 150 5 8 0 1 0 0 1
+pinseq=1
+T 450 -50 5 8 0 1 0 0 1
+pintype=pas
+}
+P 200 200 100 200 1 0 1
+{
+T 100 250 5 8 1 1 0 0 1
+pinnumber=4
+T 100 250 5 8 0 1 0 0 1
+pinseq=4
+T 100 50 5 8 0 1 0 0 1
+pintype=pas
+}
+T 500 800 8 10 1 1 0 0 1
+refdes=U?
+V 200 200 20 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 300 2300 5 8 0 0 0 0 1
+description=analog switch, TS53157
+T 300 1500 5 8 0 0 0 0 1
+author=K-M. Knaak, kmk@lilalaser.de
+T 300 1300 5 8 0 0 0 0 1
+dist-license=GPL3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 300 1100 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 300 1900 5 8 0 0 0 0 1
+comment=analog_switch_TS5A3157_pwr.sym for power pins
+V 400 100 20 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 300 250 300 400 1 0 1
+{
+T 300 400 5 8 1 1 0 0 1
+pinnumber=6
+T 300 400 5 8 0 1 0 0 1
+pinseq=6
+T 50 400 5 8 0 1 0 0 1
+pintype=pas
+}
+T 300 2500 5 8 0 0 0 0 1
+device=analog_switch
+P 400 300 500 300 1 0 1
+{
+T 450 350 5 8 1 1 0 0 1
+pinnumber=3
+T 450 350 5 8 0 1 0 0 1
+pinseq=3
+T 550 150 5 8 0 1 0 0 1
+pintype=pas
+}
+V 400 300 20 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 500 600 8 10 1 1 0 0 1
+value=TS5A3157
+T 500 400 8 8 1 1 0 0 1
+footprint=SOT23-6
+T 300 2100 5 8 0 0 0 0 1
+documentation=http://www.ti.com/lit/gpn/ts5a3157
+T 300 1700 5 8 0 0 0 0 1
+comment=signal must be positive

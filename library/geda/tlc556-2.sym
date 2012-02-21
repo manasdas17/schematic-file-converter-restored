@@ -1,0 +1,66 @@
+v 20081231 1
+T 300 1200 5 10 0 0 0 0 1
+device=TLC556
+T 300 1400 5 10 0 0 0 0 1
+footprint=SO14
+T 300 1600 5 10 0 0 0 0 1
+description=Dual LinCMOS Timer
+T 300 1800 5 10 0 0 0 0 1
+documentation=http://focus.ti.com/docs/prod/folders/print/tlc556.html
+T 300 2000 5 10 0 0 0 0 1
+author=Bill Gatliff <bgat@billgatliff.com>
+T 300 2200 5 10 0 0 0 0 1
+dist-license=GPL
+T 300 2400 5 10 0 0 0 0 1
+use-license=unlimited
+T 300 2600 5 10 0 0 0 0 1
+numslots=2
+T 300 2800 5 10 0 0 0 0 1
+slotdef=1:6,5,4
+T 300 3000 5 10 0 0 0 0 1
+slotdef=2:8,9,10
+T 300 3200 5 10 0 0 0 0 1
+slot=1
+L 300 1200 1300 1200 3 0 0 0 -1 -1
+L 300 1200 300 200 3 0 0 0 -1 -1
+L 300 200 1300 200 3 0 0 0 -1 -1
+L 1300 1200 1300 200 3 0 0 0 -1 -1
+P 0 900 200 900 1 0 0
+{
+T 0 900 5 10 0 0 180 0 1
+pintype=in
+T 345 905 9 8 1 1 180 7 1
+pinlabel=\_TRIG\_
+T 205 945 5 8 1 1 0 6 1
+pinnumber=6
+T 0 900 5 10 0 0 180 0 1
+pinseq=1
+}
+P 1600 700 1300 700 1 0 0
+{
+T 1600 700 5 10 0 0 270 0 1
+pintype=out
+T 1245 695 9 8 1 1 0 7 1
+pinlabel=OUT
+T 1395 745 5 8 1 1 0 0 1
+pinnumber=5
+T 1600 700 5 10 0 0 270 0 1
+pinseq=2
+}
+P 0 500 200 500 1 0 0
+{
+T 0 500 5 10 0 0 180 0 1
+pintype=in
+T 345 505 9 8 1 1 180 7 1
+pinlabel=\_RESET\_
+T 205 545 5 8 1 1 0 6 1
+pinnumber=4
+T 0 500 5 10 0 0 180 0 1
+pinseq=3
+}
+T 300 0 9 8 1 0 0 0 1
+TLC556
+T 1295 1300 5 10 1 1 0 6 1
+refdes=U?
+V 250 500 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 250 900 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1

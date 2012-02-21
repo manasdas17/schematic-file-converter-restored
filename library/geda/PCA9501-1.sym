@@ -1,0 +1,246 @@
+v 20071229 1
+B 300 300 1400 3700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 400 4100 8 10 1 1 0 0 1
+refdes=U?
+T 300 4600 5 10 0 0 0 0 1
+footprint=SO20N
+T 300 6000 5 10 0 0 0 0 1
+description=8bit IO, I2C, interrupt, 6 adresses, 2k EEPROM
+T 300 4400 5 10 0 0 0 0 1
+numslots=0
+P 300 3400 0 3400 1 0 1
+{
+T 200 3450 5 8 1 1 0 6 1
+pinnumber=18
+T 200 3350 5 8 0 1 0 8 1
+pinseq=18
+T 350 3400 5 8 0 1 0 2 1
+pintype=in
+T 350 3400 9 8 1 1 0 0 1
+pinlabel=SCL
+}
+P 300 3700 0 3700 1 0 1
+{
+T 200 3750 5 8 1 1 0 6 1
+pinnumber=19
+T 200 3650 5 8 0 1 0 8 1
+pinseq=19
+T 350 3700 5 8 0 1 0 2 1
+pintype=io
+T 350 3700 9 8 1 1 0 0 1
+pinlabel=SDA
+}
+P 1700 3400 2000 3400 1 0 1
+{
+T 1800 3450 5 8 1 1 0 0 1
+pinnumber=5
+T 1800 3350 5 8 0 1 0 2 1
+pinseq=5
+T 1650 3400 5 8 0 1 0 8 1
+pintype=io
+T 1650 3400 9 8 1 1 0 6 1
+pinlabel=IO1
+}
+P 1700 3700 2000 3700 1 0 1
+{
+T 1800 3750 5 8 1 1 0 0 1
+pinnumber=4
+T 1800 3650 5 8 0 1 0 2 1
+pinseq=4
+T 1650 3700 5 8 0 1 0 8 1
+pintype=io
+T 1650 3700 9 8 1 1 0 6 1
+pinlabel=IO0
+}
+P 1000 300 1000 0 1 0 1
+{
+T 1050 100 5 8 1 1 0 0 1
+pinnumber=10
+T 1050 100 5 8 0 1 0 2 1
+pinseq=10
+T 1000 500 5 8 0 1 0 3 1
+pintype=pwr
+T 1000 350 9 8 1 1 0 3 1
+pinlabel=GND
+}
+P 1000 4000 1000 4300 1 0 1
+{
+T 1050 4100 5 8 1 1 0 0 1
+pinnumber=20
+T 1050 4100 5 8 0 1 0 2 1
+pinseq=20
+T 1000 3800 5 8 0 1 0 5 1
+pintype=pwr
+T 1000 3950 9 8 1 1 0 5 1
+pinlabel=Vdd
+}
+P 1700 2800 2000 2800 1 0 1
+{
+T 1800 2850 5 8 1 1 0 0 1
+pinnumber=7
+T 1800 2750 5 8 0 1 0 2 1
+pinseq=7
+T 1650 2800 5 8 0 1 0 8 1
+pintype=io
+T 1650 2800 9 8 1 1 0 6 1
+pinlabel=IO3
+}
+P 1700 3100 2000 3100 1 0 1
+{
+T 1800 3150 5 8 1 1 0 0 1
+pinnumber=6
+T 1800 3050 5 8 0 1 0 2 1
+pinseq=6
+T 1650 3100 5 8 0 1 0 8 1
+pintype=io
+T 1650 3100 9 8 1 1 0 6 1
+pinlabel=IO2
+}
+T 300 4800 5 10 0 0 0 0 1
+device=PCA9501
+P 1700 2500 2000 2500 1 0 1
+{
+T 1800 2550 5 8 1 1 0 0 1
+pinnumber=13
+T 1800 2450 5 8 0 1 0 2 1
+pinseq=13
+T 1650 2500 5 8 0 1 0 8 1
+pintype=io
+T 1650 2500 9 8 1 1 0 6 1
+pinlabel=IO4
+}
+P 1700 2200 2000 2200 1 0 1
+{
+T 1800 2250 5 8 1 1 0 0 1
+pinnumber=14
+T 1800 2150 5 8 0 1 0 2 1
+pinseq=14
+T 1650 2200 5 8 0 1 0 8 1
+pintype=io
+T 1650 2200 9 8 1 1 0 6 1
+pinlabel=IO5
+}
+P 1700 1900 2000 1900 1 0 1
+{
+T 1800 1950 5 8 1 1 0 0 1
+pinnumber=15
+T 1800 1850 5 8 0 1 0 2 1
+pinseq=15
+T 1650 1900 5 8 0 1 0 8 1
+pintype=io
+T 1650 1900 9 8 1 1 0 6 1
+pinlabel=IO6
+}
+P 1700 1600 2000 1600 1 0 1
+{
+T 1800 1650 5 8 1 1 0 0 1
+pinnumber=16
+T 1800 1550 5 8 0 1 0 2 1
+pinseq=16
+T 1650 1600 5 8 0 1 0 8 1
+pintype=io
+T 1650 1600 9 8 1 1 0 6 1
+pinlabel=IO7
+}
+P 300 2200 0 2200 1 0 1
+{
+T 200 2250 5 8 1 1 0 6 1
+pinnumber=1
+T 200 2150 5 8 0 1 0 8 1
+pinseq=1
+T 350 2200 5 8 0 1 0 2 1
+pintype=in
+T 350 2200 9 8 1 1 0 0 1
+pinlabel=A0
+}
+P 300 1900 0 1900 1 0 1
+{
+T 200 1950 5 8 1 1 0 6 1
+pinnumber=2
+T 200 1850 5 8 0 1 0 8 1
+pinseq=2
+T 350 1900 5 8 0 1 0 2 1
+pintype=in
+T 350 1900 9 8 1 1 0 0 1
+pinlabel=A1
+}
+P 300 1600 0 1600 1 0 1
+{
+T 200 1650 5 8 1 1 0 6 1
+pinnumber=3
+T 200 1550 5 8 0 1 0 8 1
+pinseq=3
+T 350 1600 5 8 0 1 0 2 1
+pintype=in
+T 350 1600 9 8 1 1 0 0 1
+pinlabel=A2
+}
+P 1800 1000 2000 1000 1 0 1
+{
+T 1800 1050 5 8 1 1 0 0 1
+pinnumber=8
+T 1800 950 5 8 0 1 0 2 1
+pinseq=8
+T 1650 1000 5 8 0 1 0 8 1
+pintype=out
+T 1650 1000 9 8 1 1 0 6 1
+pinlabel=\_INT\_
+}
+P 300 1300 0 1300 1 0 1
+{
+T 200 1350 5 8 1 1 0 6 1
+pinnumber=12
+T 200 1250 5 8 0 1 0 8 1
+pinseq=12
+T 350 1300 5 8 0 1 0 2 1
+pintype=in
+T 350 1300 9 8 1 1 0 0 1
+pinlabel=A3
+}
+P 300 1000 0 1000 1 0 1
+{
+T 200 1050 5 8 1 1 0 6 1
+pinnumber=11
+T 200 950 5 8 0 1 0 8 1
+pinseq=11
+T 350 1000 5 8 0 1 0 2 1
+pintype=in
+T 350 1000 9 8 1 1 0 0 1
+pinlabel=A4
+}
+P 300 700 0 700 1 0 1
+{
+T 200 750 5 8 1 1 0 6 1
+pinnumber=9
+T 200 650 5 8 0 1 0 8 1
+pinseq=9
+T 350 700 5 8 0 1 0 2 1
+pintype=in
+T 350 700 9 8 1 1 0 0 1
+pinlabel=A5
+}
+P 200 2800 0 2800 1 0 1
+{
+T 200 2850 5 8 1 1 0 6 1
+pinnumber=17
+T 200 2750 5 8 0 1 0 8 1
+pinseq=17
+T 350 2800 5 8 0 1 0 2 1
+pintype=in
+T 350 2800 9 8 1 1 0 0 1
+pinlabel=\_WC\_
+}
+T 300 5000 5 10 0 0 0 0 1
+symversion=0.1
+T 300 5200 5 10 0 0 0 0 1
+use-license=unlimited
+T 300 5400 5 10 0 0 0 0 1
+dist-license=GPL2
+T 300 5600 5 10 0 0 0 0 1
+author=Thomas Kohler <thomas.kohlerATmb.tu-chemnitz.de>, Werner Hoch <werner.hoATgmx.de>
+T 300 5800 5 10 0 0 0 0 1
+documentation=http://www.nxp.com/acrobat/datasheets/PCA9501_3.pdf
+T 1300 4100 9 10 1 0 0 0 1
+PCA9501
+V 1749 1002 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 249 2802 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1

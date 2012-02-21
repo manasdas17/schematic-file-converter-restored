@@ -1,0 +1,103 @@
+v 20070626 1
+B 300 300 1200 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1700 1700 5 10 0 0 0 0 1
+device=MUX2B
+P 0 600 300 600 1 0 0
+{
+T 205 645 5 8 0 1 0 6 1
+pinnumber=4
+T 200 550 5 8 0 1 0 8 1
+pinseq=4
+T 355 595 9 8 1 1 0 1 1
+pinlabel=ENB
+T 350 600 5 8 0 1 0 2 1
+pintype=in
+}
+T 400 1100 8 10 1 1 0 0 1
+refdes=X?
+T 1700 1500 8 10 0 0 0 0 1
+model-name=MUX2B
+T 800 750 9 8 1 0 180 4 1
+MUX2B
+T 300 1300 8 10 0 0 0 0 1
+numslots=0
+T 1700 1300 8 10 0 1 0 0 1
+description=Gated Output Amplifier
+T 300 1100 8 10 0 1 0 0 1
+documentation=http://research.kek.jp/people/ikeda/openIP
+T 300 1900 8 10 0 0 0 0 1
+symversion=1.0
+T 300 1700 8 10 0 1 0 0 1
+author=jpd@noqsi.com
+T 300 1500 8 10 0 0 0 0 1
+footprint=none
+P 1500 600 1800 600 1 0 1
+{
+T 1595 645 5 8 0 1 0 0 1
+pinnumber=2
+T 1600 550 5 8 0 1 0 2 1
+pinseq=2
+T 1445 595 9 8 1 1 0 7 1
+pinlabel=AOUT0
+T 1450 600 5 8 0 1 0 8 1
+pintype=pas
+}
+P 900 300 900 0 1 0 1
+{
+T 850 205 5 8 0 1 90 6 1
+pinnumber=7
+T 850 200 5 8 0 1 270 2 1
+pinseq=7
+T 945 400 9 8 1 1 180 4 1
+pinlabel=VM
+T 900 350 5 8 0 1 270 8 1
+pintype=pas
+}
+P 500 300 500 0 1 0 1
+{
+T 450 205 5 8 0 1 90 6 1
+pinnumber=5
+T 450 200 5 8 0 1 270 2 1
+pinseq=5
+T 545 400 9 8 1 1 180 4 1
+pinlabel=VH
+T 500 350 5 8 0 1 270 8 1
+pintype=pas
+}
+P 0 900 300 900 1 0 0
+{
+T 205 945 5 8 0 1 0 6 1
+pinnumber=1
+T 200 850 5 8 0 1 0 8 1
+pinseq=1
+T 355 895 9 8 1 1 0 1 1
+pinlabel=AIN
+T 350 900 5 8 0 1 0 2 1
+pintype=pas
+}
+P 1300 300 1300 0 1 0 1
+{
+T 1250 205 5 8 0 1 90 6 1
+pinnumber=6
+T 1250 200 5 8 0 1 270 2 1
+pinseq=6
+T 1345 400 9 8 1 1 180 4 1
+pinlabel=VL
+T 1300 350 5 8 0 1 270 8 1
+pintype=pas
+}
+P 1500 900 1800 900 1 0 1
+{
+T 1595 945 5 8 0 1 0 0 1
+pinnumber=3
+T 1600 850 5 8 0 1 0 2 1
+pinseq=3
+T 1445 895 9 8 1 1 0 7 1
+pinlabel=AOUT1
+T 1450 900 5 8 0 1 0 8 1
+pintype=pas
+}
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 0 0 8 10 0 0 0 0 1
+use-license=unlimited

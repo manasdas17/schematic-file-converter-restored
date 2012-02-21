@@ -1,0 +1,66 @@
+v 20090328 2
+T 190 2400 5 8 0 0 0 0 1
+device=quad_analog_switch_pwr
+T 190 2200 5 8 0 0 0 0 1
+description=power pins for quad analog switch, model DG201, DG211, ADG1312
+T 190 2000 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 190 1800 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 190 1600 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 900 800 8 10 1 1 0 0 1
+refdes=U?
+P 200 1100 200 1000 1 0 0
+{
+T 100 1100 5 8 0 1 0 7 1
+pinseq=13
+T 100 1100 5 8 1 1 0 7 1
+pinnumber=13
+T 100 1300 5 8 0 1 0 7 1
+pintype=pwr
+T 150 900 5 8 1 1 0 4 1
+pinlabel=+Ub
+}
+P 200 200 200 300 1 0 0
+{
+T 100 200 5 8 0 1 0 7 1
+pinseq=5
+T 100 200 5 8 1 1 0 7 1
+pinnumber=5
+T 200 0 5 8 0 1 0 6 1
+pintype=pwr
+T 225 400 5 8 1 1 0 4 1
+pinlabel=GND
+}
+B 0 300 800 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 600 200 600 300 1 0 0
+{
+T 500 200 5 8 1 1 0 7 1
+pinseq=4
+T 500 200 5 8 1 1 0 7 1
+pinnumber=4
+T 900 200 5 8 0 1 0 6 1
+pintype=pwr
+T 625 400 5 8 1 1 0 4 1
+pinlabel=-Ub
+}
+T 400 550 9 8 1 0 0 4 1
+switch
+T 400 650 9 8 1 0 0 3 1
+4x analog
+T 900 600 8 10 1 1 0 0 1
+value=DG201
+T 900 400 8 8 1 1 0 0 1
+footprint=SO16
+P 600 1100 600 1000 1 0 0
+{
+T 550 1100 5 8 0 1 0 7 1
+pinseq=12
+T 550 1100 5 8 1 1 0 7 1
+pinnumber=12
+T 500 1300 5 8 0 1 0 7 1
+pintype=pwr
+T 600 900 5 8 1 1 0 4 1
+pinlabel=VL
+}

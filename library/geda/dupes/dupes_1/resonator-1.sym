@@ -1,0 +1,53 @@
+v 20080110 1
+T 700 200 8 10 1 1 0 2 1
+refdes=U?
+T 300 750 5 10 0 0 0 0 1
+device=resonator
+T 300 950 5 10 0 0 0 0 1
+footprint=none
+T 300 1350 5 10 0 0 0 0 1
+author=Werner Hoch <werner.ho(AT)gmx.de>
+T 300 1550 5 10 0 0 0 0 1
+description=ceramic resonator with buildin capacitors
+T 300 1150 5 10 0 0 0 0 1
+numslots=0
+P 1000 500 700 500 1 0 0
+{
+T 800 550 5 8 1 1 0 0 1
+pinnumber=3
+T 800 450 5 8 0 1 0 2 1
+pinseq=3
+T 650 500 9 8 0 1 0 6 1
+pinlabel=in
+T 650 500 5 8 0 1 0 8 1
+pintype=pas
+}
+P 0 500 300 500 1 0 0
+{
+T 200 550 5 8 1 1 0 6 1
+pinnumber=1
+T 200 450 5 8 0 1 0 8 1
+pinseq=1
+T 350 500 9 8 0 1 0 0 1
+pinlabel=out
+T 350 500 5 8 0 1 0 2 1
+pintype=pas
+}
+P 500 0 500 300 1 0 0
+{
+T 550 100 5 8 1 1 0 0 1
+pinnumber=2
+T 550 100 5 8 0 1 0 2 1
+pinseq=2
+T 500 350 9 8 0 1 0 3 1
+pinlabel=gnd
+T 500 500 5 8 0 1 0 3 1
+pintype=pas
+}
+B 400 300 200 400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 300 700 300 300 3 0 0 0 -1 -1
+L 700 700 700 300 3 0 0 0 -1 -1
+T 300 1750 5 10 0 0 0 0 1
+use-license=unlimited
+T 300 1950 5 10 0 0 0 0 1
+dist-license=GPL2

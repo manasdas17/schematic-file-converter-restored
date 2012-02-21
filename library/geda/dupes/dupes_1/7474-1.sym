@@ -1,0 +1,98 @@
+v 20081231 1
+P 900 0 900 300 1 0 0
+{
+T 950 200 5 8 1 1 0 2 1
+pinnumber=1
+T 850 200 5 8 0 1 0 8 1
+pinseq=1
+T 900 350 9 8 1 1 0 3 1
+pinlabel=\_RD\_
+T 900 500 5 8 0 1 0 3 1
+pintype=in
+}
+P 0 900 300 900 1 0 0
+{
+T 200 950 5 8 1 1 0 6 1
+pinnumber=2
+T 200 850 5 8 0 1 0 8 1
+pinseq=2
+T 350 900 9 8 1 1 0 0 1
+pinlabel=D
+T 350 900 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 600 300 600 1 0 0
+{
+T 200 650 5 8 1 1 0 6 1
+pinnumber=3
+T 200 550 5 8 0 1 0 8 1
+pinseq=3
+T 450 600 9 8 1 1 0 0 1
+pinlabel=CP
+T 350 600 5 8 0 1 0 2 1
+pintype=clk
+}
+L 400 600 300 675 3 0 0 0 -1 -1
+L 400 600 300 525 3 0 0 0 -1 -1
+P 900 1500 900 1200 1 0 0
+{
+T 950 1300 5 8 1 1 0 0 1
+pinnumber=4
+T 850 1300 5 8 0 1 0 6 1
+pinseq=4
+T 900 1150 9 8 1 1 0 5 1
+pinlabel=\_SD\_
+T 900 1000 5 8 0 1 0 5 1
+pintype=in
+}
+P 1800 900 1500 900 1 0 0
+{
+T 1600 950 5 8 1 1 0 0 1
+pinnumber=5
+T 1600 850 5 8 0 1 0 2 1
+pinseq=5
+T 1450 900 9 8 1 1 0 6 1
+pinlabel=Q
+T 1450 900 5 8 0 1 0 8 1
+pintype=out
+}
+P 1800 600 1500 600 1 0 0
+{
+T 1600 650 5 8 1 1 0 0 1
+pinnumber=6
+T 1600 550 5 8 0 1 0 2 1
+pinseq=6
+T 1450 600 9 8 1 1 0 6 1
+pinlabel=\_Q\_
+T 1450 600 5 8 0 1 0 8 1
+pintype=out
+}
+B 300 300 1200 900 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1500 1300 8 10 1 1 0 6 1
+refdes=U?
+T 300 1550 5 10 0 0 0 0 1
+device=7474
+T 300 1750 5 10 0 0 0 0 1
+footprint=SO14
+T 300 1950 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 300 2150 5 10 0 0 0 0 1
+documentation=http://www.nxp.com/acrobat_download/datasheets/74HC_HCT74_3.pdf
+T 300 2350 5 10 0 0 0 0 1
+description=74HC74 Dual D-type flip-flop with set and reset; positive-edge trigger
+T 300 2550 5 10 0 0 0 0 1
+numslots=2
+T 300 2750 5 10 0 0 0 0 1
+dist-license=GPL
+T 300 2950 5 10 0 0 0 0 1
+use-license=unlimited
+T 300 3150 5 10 0 0 0 0 1
+slot=1
+T 300 3350 5 10 0 0 0 0 1
+slotdef=1:1,2,3,4,5,6
+T 300 3550 5 10 0 0 0 0 1
+slotdef=2:13,12,11,10,9,8
+T 300 3750 5 10 0 0 0 0 1
+comment=generated with Python script tragesym
+T 900 850 5 10 1 1 0 4 1
+value=7474

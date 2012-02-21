@@ -1,0 +1,106 @@
+v 20080127 1
+B 300 300 1600 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 0 600 300 600 1 0 0
+{
+T 100 700 5 8 0 0 180 4 1
+pinseq=7
+T 275 650 5 10 1 1 0 6 1
+pinnumber=7
+T 358 548 3 8 1 1 0 0 1
+pinlabel=Vin
+T 0 600 5 10 0 0 0 0 1
+pintype=pwr
+}
+P 800 0 800 300 1 0 0
+{
+T 800 200 5 8 0 0 180 4 1
+pinseq=5
+T 700 200 5 10 1 1 180 0 1
+pinnumber=5
+T 707 338 3 8 1 1 0 0 1
+pinlabel=ON
+T 800 0 5 10 0 1 0 0 1
+pintype=in
+}
+P 1300 0 1300 300 1 0 0
+{
+T 1200 200 5 8 0 0 180 4 1
+pinseq=6
+T 1400 225 5 10 1 1 180 6 1
+pinnumber=6
+T 1143 350 3 8 1 1 0 0 1
+pinlabel=GND
+T 1200 700 5 10 0 1 0 0 1
+pintype=pwr
+}
+P 2200 700 1900 700 1 0 0
+{
+T 2500 900 5 8 0 0 180 4 1
+pinseq=1
+T 1950 775 5 10 1 1 0 0 1
+pinnumber=1
+T 1885 665 3 8 1 1 0 6 1
+pinlabel=Cb
+T 2200 700 5 10 0 1 0 0 1
+pintype=in
+}
+P 2200 400 1900 400 1 0 0
+{
+T 2500 500 5 8 0 0 180 4 1
+pinseq=8
+T 1950 300 5 10 1 1 180 6 1
+pinnumber=8
+T 1867 378 3 8 1 1 0 6 1
+pinlabel=Vsw
+T 2100 400 5 10 0 1 0 0 1
+pintype=out
+}
+T 1100 650 9 10 1 1 0 4 1
+device=LM2671
+T 500 1500 8 10 0 0 0 0 1
+description=LM2671 FAMILY
+T 500 1300 8 10 0 0 0 0 1
+footprint=SO-8
+T 1900 1100 8 10 1 1 0 0 1
+refdes=U?
+P 1700 1300 1700 1000 1 0 0
+{
+T 1600 1100 5 8 0 0 0 4 1
+pinseq=4
+T 1600 1100 5 10 1 1 0 6 1
+pinnumber=4
+T 1805 954 3 8 1 1 180 0 1
+pinlabel=FB
+T 1700 1300 5 10 0 1 0 0 1
+pintype=in
+}
+P 1100 1300 1100 1000 1 0 0
+{
+T 1000 1100 5 8 0 0 0 4 1
+pinseq=3
+T 1000 1100 5 10 1 1 0 6 1
+pinnumber=3
+T 1337 961 3 8 1 1 180 0 1
+pinlabel=SYNC
+T 1100 1300 5 10 0 1 0 0 1
+pintype=in
+}
+P 500 1300 500 1000 1 0 0
+{
+T 400 1100 5 8 0 0 0 4 1
+pinseq=2
+T 400 1100 5 10 1 1 0 6 1
+pinnumber=2
+T 621 966 3 8 1 1 180 0 1
+pinlabel=SS
+T 500 1300 5 10 0 1 0 0 1
+pintype=in
+}
+T 500 1700 8 10 0 0 0 0 1
+numslots=0
+T 500 1900 8 10 0 1 0 0 1
+description=Switched regulator
+T 500 2100 8 10 0 1 0 0 1
+documentation=http://www.national.com/pf/LM/LM2671.html
+T 500 2300 8 10 0 1 0 0 1
+author=Karel 'Clock' Kulhavy, http://ronja.twibright.com

@@ -1,0 +1,58 @@
+v 20110116 2
+T 0 1500 8 10 1 1 0 0 1
+value=PS-3pin
+T 0 3000 5 8 0 0 0 0 1
+description=three pin DC power connector
+T 0 2400 5 8 0 0 0 0 1
+author=Kai-Martin Knaak
+T 0 2200 5 8 0 0 0 0 1
+dist-license=GPL3, see http://www.gnu.org/licenses/gpl.txt
+T 0 1700 8 10 1 1 0 0 1
+refdes=CONN?
+T 0 1300 8 8 1 1 0 0 1
+footprint=PS_3PIN
+P 700 200 600 200 1 0 0
+{
+T 700 250 5 8 1 1 0 3 1
+pinnumber=1
+T 700 250 5 8 0 1 0 3 1
+pinseq=1
+T 550 200 9 12 1 1 0 7 1
+pinlabel=-
+T 550 200 5 8 0 1 0 8 1
+pintype=pas
+}
+P 700 600 600 600 1 0 0
+{
+T 700 650 5 8 1 1 0 3 1
+pinnumber=2
+T 700 650 5 8 0 1 0 3 1
+pinseq=2
+T 550 600 9 8 1 1 0 7 1
+pinlabel=GND
+T 550 600 5 8 0 1 0 8 1
+pintype=pas
+}
+B 0 0 600 1200 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 700 1000 600 1000 1 0 0
+{
+T 700 1050 5 8 1 1 0 3 1
+pinnumber=3
+T 700 1050 5 8 0 1 0 3 1
+pinseq=3
+T 550 1000 3 12 1 1 0 7 1
+pinlabel=+
+T 550 1000 5 8 0 1 0 8 1
+pintype=pas
+}
+L 100 1200 100 700 3 10 0 0 -1 -1
+L 100 0 100 500 3 10 0 0 -1 -1
+L 100 700 25 700 3 10 0 0 -1 -1
+L 25 700 25 500 3 10 0 0 -1 -1
+L 25 500 100 500 3 10 0 0 -1 -1
+T 0 2000 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 0 2800 5 8 0 0 0 0 1
+symversion=1.0
+T 0 2600 5 8 0 0 0 0 1
+footprints=PS_3PIN, XLR-3PIN, XLR_3PIN_b, XLR_3PIN_c, XLR_3PIN_LAY, XLR_PCB, XLR3_silk, XLR3_vert, RIACON_383_3PIN, RIACON_383_LAY

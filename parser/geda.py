@@ -1077,7 +1077,8 @@ class GEDA:
 
             Raises GEDAError when object type is not known.
         """
-        command_data = stream.readline().strip().split(self.DELIMITER)
+        line = stream.readline()
+        command_data = line.strip().split(self.DELIMITER)
 
         if len(command_data[0]) == 0 or command_data[0] in [']', '}']:
             return None, []
@@ -1086,6 +1087,8 @@ class GEDA:
 
         params = {}
         for idx, (name, typ) in enumerate(self.OBJECT_TYPES[object_type]):
+            if idx >= len(command_data):
+                print line, object_type, command_data
             params[name] = typ(command_data[idx])
 
         assert(len(params) == len(self.OBJECT_TYPES[object_type]))

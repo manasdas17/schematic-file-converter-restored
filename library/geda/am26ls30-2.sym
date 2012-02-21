@@ -1,0 +1,76 @@
+v 20070216 1
+P 0 1400 300 1400 1 0 0
+{
+T 200 1450 5 8 1 1 0 6 1
+pinnumber=16
+T 200 1350 5 8 0 1 0 8 1
+pinseq=1
+T 350 1400 9 8 1 1 0 0 1
+pinlabel=VCC
+T 350 1400 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 1000 300 1000 1 0 0
+{
+T 200 1050 5 8 1 1 0 6 1
+pinnumber=5
+T 200 950 5 8 0 1 0 8 1
+pinseq=2
+T 350 1000 9 8 1 1 0 0 1
+pinlabel=GND
+T 350 1000 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 600 300 600 1 0 0
+{
+T 200 650 5 8 1 1 0 6 1
+pinnumber=4
+T 200 550 5 8 0 1 0 8 1
+pinseq=3
+T 350 600 9 8 1 1 0 0 1
+pinlabel=MODE
+T 350 600 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 200 300 200 1 0 0
+{
+T 200 250 5 8 1 1 0 6 1
+pinnumber=8
+T 200 150 5 8 0 1 0 8 1
+pinseq=4
+T 350 200 9 8 1 1 0 0 1
+pinlabel=Vee
+T 350 200 5 8 0 1 0 2 1
+pintype=in
+}
+B 300 0 1000 1700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1400 1800 8 10 1 1 0 6 1
+refdes=U?
+T 300 1740 9 10 1 0 0 0 1
+26ls30
+T 300 2100 5 10 0 0 0 0 1
+device=am26ls30
+T 300 2300 5 10 0 0 0 0 1
+slot=1
+T 300 2500 5 10 0 0 0 0 1
+numslots=4
+T 300 2900 5 10 0 0 0 0 1
+pins=16
+T 300 2700 5 10 0 0 0 0 1
+class=IC
+T 300 3500 5 10 0 0 0 0 1
+net=GND:5
+T 300 3100 5 10 0 0 0 0 1
+net=Vee:8
+T 300 3700 5 10 0 0 0 0 1
+footprint=DIP16
+T 300 3900 5 10 0 0 0 0 1
+description=4 single-ended line drivers
+T 300 3300 5 10 0 0 0 0 1
+net=Vcc:1
+T 300 4500 5 10 0 0 0 0 1
+author=Oliver Lehmann <lehmann@ans-netz.de>
+T 300 4100 5 10 0 0 0 0 1
+dist-license=GPL
+T 300 4300 5 10 0 0 0 0 1
+use-license=unlimited

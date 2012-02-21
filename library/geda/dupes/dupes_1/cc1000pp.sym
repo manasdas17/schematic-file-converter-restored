@@ -1,0 +1,156 @@
+v 20060123 1
+P 200 2300 500 2300 1 0 0
+{
+T 400 2350 5 8 1 1 0 6 1
+pinnumber=P1_6
+T 400 2250 5 8 0 1 0 8 1
+pinseq=1
+T 550 2300 9 8 1 1 0 0 1
+pinlabel=CHIP_OUT/LOCK
+T 550 2300 5 8 0 1 0 2 1
+pintype=io
+}
+P 3200 2300 2900 2300 1 0 0
+{
+T 3000 2350 5 8 1 1 0 0 1
+pinnumber=P2_6
+T 3000 2250 5 8 0 1 0 2 1
+pinseq=12
+T 2850 2300 9 8 1 1 0 6 1
+pinlabel=GND
+T 2850 2300 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 200 1900 500 1900 1 0 0
+{
+T 400 1950 5 8 1 1 0 6 1
+pinnumber=P1_5
+T 400 1850 5 8 0 1 0 8 1
+pinseq=2
+T 550 1900 9 8 1 1 0 0 1
+pinlabel=DIO
+T 550 1900 5 8 0 1 0 2 1
+pintype=io
+}
+P 3200 1900 2900 1900 1 0 0
+{
+T 3000 1950 5 8 1 1 0 0 1
+pinnumber=P2_5
+T 3000 1850 5 8 0 1 0 2 1
+pinseq=11
+T 2850 1900 9 8 1 1 0 6 1
+pinlabel=RSSI/IF
+T 2850 1900 5 8 0 1 0 8 1
+pintype=io
+}
+P 200 1500 500 1500 1 0 0
+{
+T 400 1550 5 8 1 1 0 6 1
+pinnumber=P1_4
+T 400 1450 5 8 0 1 0 8 1
+pinseq=3
+T 550 1500 9 8 1 1 0 0 1
+pinlabel=DCLK
+T 550 1500 5 8 0 1 0 2 1
+pintype=io
+}
+P 3200 1500 2900 1500 1 0 0
+{
+T 3000 1550 5 8 1 1 0 0 1
+pinnumber=P2_4
+T 3000 1450 5 8 0 1 0 2 1
+pinseq=10
+T 2850 1500 9 8 1 1 0 6 1
+pinlabel=VDD
+T 2850 1500 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 200 1100 500 1100 1 0 0
+{
+T 400 1150 5 8 1 1 0 6 1
+pinnumber=P1_3
+T 400 1050 5 8 0 1 0 8 1
+pinseq=4
+T 550 1100 9 8 1 1 0 0 1
+pinlabel=PCLK
+T 550 1100 5 8 0 1 0 2 1
+pintype=io
+}
+P 3200 1100 2900 1100 1 0 0
+{
+T 3000 1150 5 8 1 1 0 0 1
+pinnumber=P2_3
+T 3000 1050 5 8 0 1 0 2 1
+pinseq=9
+T 2850 1100 9 8 1 1 0 6 1
+pinlabel=GND
+T 2850 1100 5 8 0 1 0 8 1
+pintype=pwr
+}
+B 500 0 2400 2600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 200 3040 5 10 0 0 0 0 1
+device=CC1000PP
+T 200 2840 5 10 0 0 0 0 1
+footprint=CC1000PP
+T 500 2640 9 10 1 0 0 0 1
+CC1000PP
+T 2800 2700 8 10 1 1 0 6 1
+refdes=U?
+T 200 3250 5 10 0 0 0 0 1
+description=CHIPCON 1000PP Wireless module
+T 200 3450 5 10 0 0 0 0 1
+numslots=0
+P 3200 700 2900 700 1 0 0
+{
+T 3000 750 5 8 1 1 0 0 1
+pinnumber=P2_2
+T 3000 650 5 8 0 1 0 2 1
+pinseq=8
+T 2850 700 9 8 1 1 0 6 1
+pinlabel=ANTENNA
+T 2850 700 5 8 0 1 0 8 1
+pintype=out
+}
+P 3200 300 2900 300 1 0 0
+{
+T 3000 350 5 8 1 1 0 0 1
+pinnumber=P2_1
+T 3000 250 5 8 0 1 0 2 1
+pinseq=7
+T 2850 300 9 8 1 1 0 6 1
+pinlabel=GND
+T 2850 300 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 200 700 500 700 1 0 0
+{
+T 400 750 5 8 1 1 0 6 1
+pinnumber=P1_2
+T 400 650 5 8 0 1 0 8 1
+pinseq=5
+T 550 700 9 8 1 1 0 0 1
+pinlabel=PDATA
+T 550 700 5 8 0 1 0 2 1
+pintype=io
+}
+P 200 300 500 300 1 0 0
+{
+T 400 350 5 8 1 1 0 6 1
+pinnumber=P1_1
+T 400 250 5 8 0 1 0 8 1
+pinseq=6
+T 550 300 9 8 1 1 0 0 1
+pinlabel=PALE
+T 550 300 5 8 0 1 0 2 1
+pintype=in
+}
+T 200 3650 8 10 0 1 0 0 1
+documentation=http://www.chipcon.com/files/CC1000PP_User_Manual_1_22.pdf
+T 3600 0 8 10 0 0 0 0 1
+author=Wojciech Zabolotny wzabATise.pw.edu.pl
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 1600 0 8 10 0 0 0 0 1
+use-license=unlimited
+T 0 200 8 10 0 0 0 0 1
+comment=Suggested library: rf

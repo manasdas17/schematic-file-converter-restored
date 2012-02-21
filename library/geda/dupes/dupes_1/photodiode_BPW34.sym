@@ -1,0 +1,55 @@
+v 20110619 2
+L 575 300 225 300 3 10 0 0 -1 -1
+P 400 200 400 300 1 0 0
+{
+T 400 50 5 8 0 1 0 6 1
+pinnumber=1
+T 350 150 9 8 0 1 180 0 1
+pinlabel=CATHODE
+T 400 250 5 8 0 1 0 7 1
+pintype=pas
+T 400 50 5 8 0 1 0 6 1
+pinseq=1
+}
+P 400 700 400 600 1 0 0
+{
+T 400 750 5 8 0 1 0 6 1
+pinnumber=2
+T 300 750 9 8 0 1 0 6 1
+pinlabel=ANODE
+T 400 700 5 8 0 1 0 7 1
+pintype=pas
+T 400 750 5 8 0 1 0 6 1
+pinseq=2
+}
+T 700 600 8 10 1 1 0 0 1
+refdes=D?
+L 5 345 155 495 3 10 0 0 -1 -1
+T 200 2800 5 8 0 0 0 0 1
+description=photo diode BPW34
+T 700 200 8 8 1 1 0 0 1
+footprint=BPW34
+L 75 275 225 425 3 10 0 0 -1 -1
+T 200 1800 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilaser.de
+T 200 1400 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 700 400 8 10 1 1 0 0 1
+value=BPW34
+T 200 1600 5 8 0 0 0 0 1
+dist-license=GPL3 , see http://www.gnu.org/licenses/gpl-3.0.txt
+T 200 2400 5 8 0 0 0 0 1
+documentation=http://www.vishay.com/docs/81521/bpw34.pdf
+L 400 300 225 600 3 10 2 0 -1 -1
+L 575 600 400 300 3 10 2 0 -1 -1
+L 575 600 225 600 3 10 2 0 -1 -1
+T 200 2600 5 8 0 0 0 0 1
+comment=the upside down footprints are meant for looking through a hole in the board.
+T 200 2200 5 8 0 0 0 0 1
+footprints=BPW34, BPW34S, BPW34_upsidedown, BPW34S_upsidedown
+T 200 2000 5 8 0 0 0 0 1
+symversion=1.0
+L 200 350 225 425 3 10 2 0 -1 -1
+L 225 425 150 400 3 10 2 0 -1 -1
+L 130 420 155 495 3 10 2 0 -1 -1
+L 155 495 80 470 3 10 2 0 -1 -1

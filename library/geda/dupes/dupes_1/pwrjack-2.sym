@@ -1,0 +1,44 @@
+v 20041228 1
+T 100 700 5 10 0 0 0 0 1
+device=PWRJACK
+P 600 100 900 100 1 0 1
+{
+T 50 50 5 8 1 1 0 0 1
+pinlabel=2
+T 650 150 5 8 0 0 0 0 1
+pinseq=2
+T 1300 100 5 10 0 0 0 0 1
+pinnumber=2
+T 2400 100 5 10 0 0 0 0 1
+pintype=pas
+}
+P 600 300 900 300 1 0 1
+{
+T 50 250 5 8 1 1 0 0 1
+pinlabel=1
+T 650 350 5 8 0 0 0 0 1
+pinseq=1
+T 2400 300 5 10 0 0 0 0 1
+pintype=pas
+T 1300 300 5 10 0 0 0 0 1
+pinnumber=1
+}
+L 400 100 300 200 3 0 0 0 -1 -1
+L 300 200 200 100 3 0 0 0 -1 -1
+L 400 100 600 100 3 0 0 0 -1 -1
+L 200 300 600 300 3 0 0 0 -1 -1
+B 0 0 600 400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 0 500 8 10 1 1 0 0 1
+refdes=CONN?
+T 100 900 5 10 0 0 0 0 1
+numslots=0
+T 100 1100 5 10 0 0 0 0 1
+footprint=unknown
+T 100 1300 5 10 0 0 0 0 1
+author=Walter Fetter Lages <w.fetter@ieee.org>
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 1600 0 8 10 0 0 0 0 1
+use-license=unlimited
+T 0 200 8 10 0 0 0 0 1
+comment=Suggested library: connector

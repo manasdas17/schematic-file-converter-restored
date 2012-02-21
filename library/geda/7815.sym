@@ -1,0 +1,55 @@
+v 20090328 2
+B 300 300 1000 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 300 1200 8 10 1 1 0 0 1
+value=7805
+P 300 600 0 600 1 0 1
+{
+T 250 650 5 8 1 1 0 6 1
+pinnumber=1
+T 250 650 5 8 0 1 0 6 1
+pinseq=1
+T 250 450 5 10 0 1 0 6 1
+pintype=in
+T 350 550 5 8 1 1 0 0 1
+pinlabel=IN
+}
+P 800 0 800 300 1 0 0
+{
+T 750 250 5 8 1 1 0 8 1
+pinnumber=2
+T 750 250 5 8 0 1 0 8 1
+pinseq=2
+T 850 150 5 10 0 1 0 0 1
+pintype=pas
+T 800 350 5 8 1 1 0 3 1
+pinlabel=GND
+}
+P 1300 600 1600 600 1 0 1
+{
+T 1330 650 5 8 1 1 0 0 1
+pinnumber=3
+T 1430 650 5 8 0 1 0 0 1
+pinseq=3
+T 1250 550 5 8 1 1 0 6 1
+pinlabel=OUT
+T 1350 450 5 10 0 1 0 0 1
+pintype=pwr
+}
+T 300 1400 8 10 1 1 0 0 1
+refdes=U?
+T 300 2100 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 300 2700 5 8 0 0 0 0 1
+description=voltage regulator, +15V, 1A 
+T 300 1000 8 8 1 1 0 0 1
+footprint=TO220
+T 300 2500 5 8 0 0 0 0 1
+documentation=http://www.datasheetcatalog.com/datasheets_pdf/7/8/0/5/7805.shtml
+T 300 1900 5 8 0 0 0 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 300 2300 5 8 0 0 0 0 1
+comment=Alternative footprint: D-PAK
+T 300 1700 5 8 0 0 0 0 1
+use-license=free, no restrictions
+L 700 750 900 750 3 0 0 0 -1 -1
+L 800 850 800 650 3 0 0 0 -1 -1

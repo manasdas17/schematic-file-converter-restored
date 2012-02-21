@@ -1,0 +1,296 @@
+v 20100214 2
+B 400 600 2000 2800 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1800 1800 5 10 0 0 0 0 1
+device=TB6560AHQ
+P 400 2400 100 2400 1 0 1
+{
+T 300 2450 5 8 1 1 0 6 1
+pinnumber=8
+T 300 2350 5 8 0 1 0 8 1
+pinseq=3
+T 475 2400 9 8 1 1 0 0 1
+pinlabel=VMB
+T 475 2400 5 8 0 1 0 2 1
+pintype=clk
+}
+P 2200 3400 2200 3700 1 0 1
+{
+T 2250 3500 5 8 1 1 0 0 1
+pinnumber=1
+T 2250 3500 5 8 0 1 0 2 1
+pinseq=1
+T 2200 3350 9 8 1 1 0 5 1
+pinlabel=TQ2
+T 2200 3250 5 8 0 1 0 5 1
+pintype=in
+}
+T 1500 2400 8 10 1 1 0 6 1
+refdes=U?
+T 1800 2400 5 10 0 0 0 0 1
+pins=25
+T 1800 2200 5 10 0 0 0 0 1
+net=Vdd:20
+T 1800 2000 5 10 0 0 0 0 1
+net=GND:6
+T 1800 2800 5 10 0 0 0 0 1
+footprint=25-HZIP
+T 1800 2600 5 10 0 0 0 0 1
+description=PWM Chopper-Type Bipolar Driver IC for Stepping Motor Control
+T 1000 1650 9 8 1 0 0 2 1
+TB6560AHQ
+T 1800 3000 5 10 0 0 0 0 1
+documentation=http://www.toshiba.com/taec/components2/Datasheet_Sync//382/27885.pdf
+P 1800 3400 1800 3700 1 0 1
+{
+T 1850 3500 5 8 1 1 0 0 1
+pinnumber=2
+T 1850 3500 5 8 0 1 0 2 1
+pinseq=1
+T 1800 3350 9 8 1 1 0 5 1
+pinlabel=TQ1
+T 1800 3250 5 8 0 1 0 5 1
+pintype=in
+}
+P 400 2100 100 2100 1 0 1
+{
+T 300 2150 5 8 1 1 0 6 1
+pinnumber=9
+T 300 2050 5 8 0 1 0 8 1
+pinseq=3
+T 475 2100 9 8 1 1 0 0 1
+pinlabel=OUT_BM
+T 475 2100 5 8 0 1 0 2 1
+pintype=clk
+}
+P 400 1800 100 1800 1 0 1
+{
+T 300 1850 5 8 1 1 0 6 1
+pinnumber=10
+T 300 1750 5 8 0 1 0 8 1
+pinseq=3
+T 475 1800 9 8 1 1 0 0 1
+pinlabel=PGNDB
+T 475 1800 5 8 0 1 0 2 1
+pintype=clk
+}
+P 400 1500 100 1500 1 0 1
+{
+T 300 1550 5 8 1 1 0 6 1
+pinnumber=11
+T 300 1450 5 8 0 1 0 8 1
+pinseq=3
+T 475 1500 9 8 1 1 0 0 1
+pinlabel=NFB
+T 475 1500 5 8 0 1 0 2 1
+pintype=clk
+}
+P 400 1200 100 1200 1 0 1
+{
+T 300 1250 5 8 1 1 0 6 1
+pinnumber=12
+T 300 1150 5 8 0 1 0 8 1
+pinseq=3
+T 475 1200 9 8 1 1 0 0 1
+pinlabel=OUT_BP
+T 475 1200 5 8 0 1 0 2 1
+pintype=clk
+}
+P 1400 3400 1400 3700 1 0 1
+{
+T 1450 3500 5 8 1 1 0 0 1
+pinnumber=3
+T 1450 3500 5 8 0 1 0 2 1
+pinseq=1
+T 1400 3350 9 8 1 1 0 5 1
+pinlabel=CLK
+T 1400 3250 5 8 0 1 0 5 1
+pintype=in
+}
+P 1000 3400 1000 3700 1 0 1
+{
+T 1050 3500 5 8 1 1 0 0 1
+pinnumber=4
+T 1050 3500 5 8 0 1 0 2 1
+pinseq=1
+T 1000 3350 9 8 1 1 0 5 1
+pinlabel=ENA
+T 1000 3250 5 8 0 1 0 5 1
+pintype=in
+}
+P 400 3000 100 3000 1 0 1
+{
+T 300 3050 5 8 1 1 0 6 1
+pinnumber=6
+T 300 2950 5 8 0 1 0 8 1
+pinseq=3
+T 475 3000 9 8 1 1 0 0 1
+pinlabel=SGND
+T 475 3000 5 8 0 1 0 2 1
+pintype=clk
+}
+P 400 2700 100 2700 1 0 1
+{
+T 300 2750 5 8 1 1 0 6 1
+pinnumber=7
+T 300 2650 5 8 0 1 0 8 1
+pinseq=3
+T 475 2700 9 8 1 1 0 0 1
+pinlabel=OSC
+T 475 2700 5 8 0 1 0 2 1
+pintype=clk
+}
+P 400 900 100 900 1 0 1
+{
+T 300 950 5 8 1 1 0 6 1
+pinnumber=13
+T 300 850 5 8 0 1 0 8 1
+pinseq=3
+T 475 900 9 8 1 1 0 0 1
+pinlabel=OUT_AM
+T 475 900 5 8 0 1 0 2 1
+pintype=clk
+}
+P 600 3500 600 3700 1 0 1
+{
+T 650 3500 5 8 1 1 0 0 1
+pinnumber=5
+T 650 3500 5 8 0 1 0 2 1
+pinseq=1
+T 600 3350 9 8 1 1 0 5 1
+pinlabel=\_RST\_
+T 600 3250 5 8 0 1 0 5 1
+pintype=in
+}
+V 600 3450 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 600 750 9 8 1 1 0 5 1
+pinlabel=NFA
+P 600 600 600 300 1 0 1
+{
+T 650 400 5 8 1 1 0 0 1
+pinnumber=14
+T 1150 1100 5 8 0 1 0 2 1
+pinseq=1
+T 1100 850 5 8 0 1 0 5 1
+pintype=in
+}
+P 1100 600 1100 300 1 0 1
+{
+T 1150 400 5 8 1 1 0 0 1
+pinnumber=15
+T 1650 1100 5 8 0 1 0 2 1
+pinseq=1
+T 1600 850 5 8 0 1 0 5 1
+pintype=in
+}
+T 1100 750 9 8 1 1 0 5 1
+pinlabel=PGNDA
+P 1700 600 1700 300 1 0 1
+{
+T 1750 400 5 8 1 1 0 0 1
+pinnumber=16
+T 2250 1100 5 8 0 1 0 2 1
+pinseq=1
+T 2200 850 5 8 0 1 0 5 1
+pintype=in
+}
+T 1700 750 9 8 1 1 0 5 1
+pinlabel=OUT_AP
+P 2200 600 2200 300 1 0 1
+{
+T 2250 400 5 8 1 1 0 0 1
+pinnumber=17
+T 2750 1100 5 8 0 1 0 2 1
+pinseq=1
+T 2700 850 5 8 0 1 0 5 1
+pintype=in
+}
+T 2200 750 9 8 1 1 0 5 1
+pinlabel=MO
+P 2400 2400 2700 2400 1 0 1
+{
+T 2495 2445 5 8 1 1 0 0 1
+pinnumber=23
+T 2500 2350 5 8 0 1 0 2 1
+pinseq=3
+T 2345 2395 9 8 1 1 0 6 1
+pinlabel=M1
+T 2325 2400 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 2100 2700 2100 1 0 1
+{
+T 2495 2145 5 8 1 1 0 0 1
+pinnumber=22
+T 2500 2050 5 8 0 1 0 2 1
+pinseq=3
+T 2345 2095 9 8 1 1 0 6 1
+pinlabel=M2
+T 2325 2100 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 1800 2700 1800 1 0 1
+{
+T 2495 1845 5 8 1 1 0 0 1
+pinnumber=21
+T 2500 1750 5 8 0 1 0 2 1
+pinseq=3
+T 2345 1795 9 8 1 1 0 6 1
+pinlabel=CW/CCW
+T 2325 1800 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 1500 2700 1500 1 0 1
+{
+T 2495 1545 5 8 1 1 0 0 1
+pinnumber=20
+T 2500 1450 5 8 0 1 0 2 1
+pinseq=3
+T 2345 1495 9 8 1 1 0 6 1
+pinlabel=VDD
+T 2325 1500 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 1200 2700 1200 1 0 1
+{
+T 2495 1245 5 8 1 1 0 0 1
+pinnumber=19
+T 2500 1150 5 8 0 1 0 2 1
+pinseq=3
+T 2345 1195 9 8 1 1 0 6 1
+pinlabel=Protect
+T 2325 1200 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 3000 2700 3000 1 0 1
+{
+T 2495 3045 5 8 1 1 0 0 1
+pinnumber=25
+T 2500 2950 5 8 0 1 0 2 1
+pinseq=3
+T 2345 2995 9 8 1 1 0 6 1
+pinlabel=DCY1
+T 2325 3000 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 2700 2700 2700 1 0 1
+{
+T 2495 2745 5 8 1 1 0 0 1
+pinnumber=24
+T 2500 2650 5 8 0 1 0 2 1
+pinseq=3
+T 2345 2695 9 8 1 1 0 6 1
+pinlabel=DCY2
+T 2325 2700 5 8 0 1 0 8 1
+pintype=clk
+}
+P 2400 900 2700 900 1 0 1
+{
+T 2495 945 5 8 1 1 0 0 1
+pinnumber=18
+T 2500 850 5 8 0 1 0 2 1
+pinseq=3
+T 2345 895 9 8 1 1 0 6 1
+pinlabel=VMA
+T 2325 900 5 8 0 1 0 8 1
+pintype=clk
+}

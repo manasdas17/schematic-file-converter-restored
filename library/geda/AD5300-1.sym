@@ -1,0 +1,89 @@
+v 20110619 2
+B 300 0 1000 800 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 275 2950 5 10 0 0 0 0 1
+device=AD5300
+T 1100 850 8 10 1 1 0 0 1
+refdes=U?
+T 275 2150 5 10 0 0 0 0 1
+footprint=MSOP8
+T 300 850 9 10 1 0 0 0 1
+AD5300
+T 275 1550 5 10 0 0 0 0 1
+author=Anton Dubniak <twister@tfsoft.org.ua>
+T 275 1950 5 10 0 0 0 0 1
+numslots=0
+T 275 1350 5 10 0 0 0 0 1
+dist-license=GPL
+T 275 1150 5 10 0 0 0 0 1
+use-license=unlimited
+T 275 2750 5 10 0 0 0 0 1
+description=Rail-to-Rail Output 8-Bit DAC with 3-wire serial interface (SPI, QSPI, MICROWIRE)
+T 275 2550 5 10 0 0 0 0 1
+documentation=http://www.analog.com/static/imported-files/data_sheets/AD5300.pdf
+P 1600 600 1300 600 1 0 0
+{
+T 1395 645 5 8 1 1 0 0 1
+pinnumber=4
+T 1150 775 5 8 0 1 0 2 1
+pinseq=4
+T 1245 545 9 8 1 1 0 6 1
+pinlabel=Vout
+T 1100 775 5 8 0 1 0 8 1
+pintype=out
+}
+V 250 200 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 0 200 200 200 1 0 0
+{
+T 205 245 5 8 1 1 0 6 1
+pinnumber=5
+T 450 375 5 8 0 1 0 8 1
+pinseq=5
+T 355 145 9 8 1 1 0 0 1
+pinlabel=\_SYNC\_
+T 500 375 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 400 300 400 1 0 0
+{
+T 205 445 5 8 1 1 0 6 1
+pinnumber=6
+T 450 525 5 8 0 1 0 8 1
+pinseq=6
+T 355 345 9 8 1 1 0 0 1
+pinlabel=SCLK
+T 475 525 5 8 0 1 0 2 1
+pintype=clk
+}
+P 0 600 300 600 1 0 0
+{
+T 205 645 5 8 1 1 0 6 1
+pinnumber=7
+T 450 725 5 8 0 1 0 8 1
+pinseq=7
+T 355 545 9 8 1 1 0 0 1
+pinlabel=DIN
+T 500 725 5 8 0 1 0 2 1
+pintype=in
+}
+P 1600 200 1300 200 1 0 0
+{
+T 1395 245 5 8 1 1 0 0 1
+pinnumber=8
+T 1175 375 5 8 0 1 0 2 1
+pinseq=8
+T 1245 145 9 8 1 1 0 6 1
+pinlabel=GND
+T 1150 375 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 1600 400 1300 400 1 0 0
+{
+T 1395 445 5 8 1 1 0 0 1
+pinnumber=1
+T 1175 575 5 8 0 1 0 2 1
+pinseq=1
+T 1245 345 9 8 1 1 0 6 1
+pinlabel=VCC
+T 1150 575 5 8 0 1 0 8 1
+pintype=pwr
+}

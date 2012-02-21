@@ -1,0 +1,110 @@
+v 20090324 1 1
+P 100 1300 400 1300 1 0 0
+{
+T 300 1350 5 8 1 1 0 6 1
+pinnumber=1
+T 300 1250 5 8 0 1 0 8 1
+pinseq=1
+T 450 1300 9 8 1 1 0 0 1
+pinlabel=VREF
+T 450 1300 5 8 0 1 0 2 1
+pintype=pas
+}
+P 2100 1300 1800 1300 1 0 0
+{
+T 1900 1350 5 8 1 1 0 0 1
+pinnumber=5
+T 1900 1250 5 8 0 1 0 2 1
+pinseq=2
+T 1750 1300 9 8 1 1 0 6 1
+pinlabel=VDD
+T 1750 1300 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 100 1000 400 1000 1 0 0
+{
+T 300 1050 5 8 1 1 0 6 1
+pinnumber=2
+T 300 950 5 8 0 1 0 8 1
+pinseq=3
+T 450 1000 9 8 1 1 0 0 1
+pinlabel=IN+
+T 450 1000 5 8 0 1 0 2 1
+pintype=pas
+}
+P 2100 1000 1800 1000 1 0 0
+{
+T 1900 1050 5 8 1 1 0 0 1
+pinnumber=6
+T 1900 950 5 8 0 1 0 2 1
+pinseq=4
+T 1750 1000 9 8 1 1 0 6 1
+pinlabel=CLK
+T 1750 1000 5 8 0 1 0 8 1
+pintype=in
+}
+P 100 700 400 700 1 0 0
+{
+T 300 750 5 8 1 1 0 6 1
+pinnumber=3
+T 300 650 5 8 0 1 0 8 1
+pinseq=5
+T 450 700 9 8 1 1 0 0 1
+pinlabel=IN-
+T 450 700 5 8 0 1 0 2 1
+pintype=pas
+}
+P 2100 700 1800 700 1 0 0
+{
+T 1900 750 5 8 1 1 0 0 1
+pinnumber=7
+T 1900 650 5 8 0 1 0 2 1
+pinseq=6
+T 1750 700 9 8 1 1 0 6 1
+pinlabel=DOUT
+T 1750 700 5 8 0 1 0 8 1
+pintype=tri
+}
+P 100 400 400 400 1 0 0
+{
+T 300 450 5 8 1 1 0 6 1
+pinnumber=4
+T 300 350 5 8 0 1 0 8 1
+pinseq=7
+T 450 400 9 8 1 1 0 0 1
+pinlabel=VSS
+T 450 400 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 2100 400 1800 400 1 0 0
+{
+T 1900 450 5 8 1 1 0 0 1
+pinnumber=8
+T 1900 350 5 8 0 1 0 2 1
+pinseq=8
+T 1750 400 9 8 1 1 0 6 1
+pinlabel=\_CS\_/SHDN
+T 1750 400 5 8 0 1 0 8 1
+pintype=in
+}
+B 400 100 1400 1500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1800 1700 8 10 1 1 0 6 1
+refdes=J?
+T 400 1700 9 10 1 0 0 0 1
+MCP3201
+T 400 1900 5 10 0 0 0 0 1
+device=MCP3201
+T 400 2100 5 10 0 0 0 0 1
+footprint=DIL 8
+T 400 2300 5 10 0 0 0 0 1
+author=Wojciech Zabolotny <wzab@ise.pw.edu.pl>
+T 400 2500 5 10 0 0 0 0 1
+documentation=http://ww1.microchip.com/downloads/en/DeviceDoc/21290D.pdf
+T 400 2700 5 10 0 0 0 0 1
+description=MCP3201 2.7V 12-Bit A/D Converter with SPI(TM) Serial Interface
+T 400 2900 5 10 0 0 0 0 1
+numslots=0
+T 400 3100 5 10 0 0 0 0 1
+dist-license=public domain
+T 400 3300 5 10 0 0 0 0 1
+use-license=public domain

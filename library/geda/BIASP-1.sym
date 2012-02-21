@@ -1,0 +1,81 @@
+v 20070902 1
+B 300 300 800 1000 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1700 1700 5 10 0 0 0 0 1
+device=BIASP
+P 1100 800 1400 800 1 0 1
+{
+T 1195 845 5 8 0 1 0 0 1
+pinnumber=5
+T 1200 750 5 8 0 1 0 2 1
+pinseq=5
+T 1045 795 9 8 1 1 0 6 1
+pinlabel=VM
+T 1050 800 5 8 0 1 0 8 1
+pintype=pas
+}
+P 0 600 300 600 1 0 0
+{
+T 205 645 5 8 0 1 0 6 1
+pinnumber=2
+T 200 550 5 8 0 1 0 8 1
+pinseq=2
+T 355 595 9 8 1 1 0 0 1
+pinlabel=IIN
+T 350 600 5 8 0 1 0 2 1
+pintype=pas
+}
+T 400 1400 8 10 1 1 0 0 1
+refdes=X?
+T 1700 1500 8 10 0 0 0 0 1
+model-name=BIASP
+T 650 900 9 8 1 0 90 4 1
+BIASP
+T 300 1300 8 10 0 0 0 0 1
+numslots=0
+T 1700 1300 8 10 0 1 0 0 1
+description=Bias Generator
+T 300 1100 8 10 0 1 0 0 1
+documentation=http://research.kek.jp/people/ikeda/openIP
+T 300 1900 8 10 0 0 0 0 1
+symversion=1.0
+T 300 1700 8 10 0 1 0 0 1
+author=jpd@noqsi.com
+T 300 1500 8 10 0 0 0 0 1
+footprint=none
+P 1100 500 1400 500 1 0 1
+{
+T 1195 545 5 8 0 1 0 0 1
+pinnumber=4
+T 1200 450 5 8 0 1 0 2 1
+pinseq=4
+T 1045 495 9 8 1 1 0 6 1
+pinlabel=VL
+T 1050 500 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 1100 1400 1100 1 0 1
+{
+T 1195 1145 5 8 0 1 0 0 1
+pinnumber=3
+T 1200 1050 5 8 0 1 0 2 1
+pinseq=3
+T 1045 1095 9 8 1 1 0 6 1
+pinlabel=VH
+T 1050 1100 5 8 0 1 0 8 1
+pintype=pas
+}
+P 700 300 700 0 1 0 1
+{
+T 650 205 5 8 0 1 90 6 1
+pinnumber=1
+T 650 200 5 8 0 1 270 2 1
+pinseq=1
+T 645 400 9 8 1 1 180 4 1
+pinlabel=DG
+T 700 350 5 8 0 1 270 8 1
+pintype=pwr
+}
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 0 0 8 10 0 0 0 0 1
+use-license=unlimited

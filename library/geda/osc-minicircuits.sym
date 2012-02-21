@@ -1,0 +1,118 @@
+v 20070216 1
+B 0 300 900 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 500 1200 8 10 1 1 0 0 1
+device=POS-XX
+T 500 1400 8 10 1 1 0 0 1
+refdes=U?
+T 500 1000 8 8 1 1 0 0 1
+footprint=MINICIRCUITS_8PIN
+T 0 2500 5 8 0 0 0 0 1
+documentation=http://www.minicircuits.com/pdfs/POS-50P.pdf
+T 0 1900 5 8 0 0 0 0 1
+author=K-M. Knaak
+P 1200 800 900 800 1 0 0
+{
+T 950 850 5 10 1 1 0 0 1
+pinnumber=2
+T 950 850 5 10 0 1 0 0 1
+pinseq=2
+T 950 650 5 10 0 1 0 0 1
+pintype=out
+T 575 750 5 8 1 1 0 0 1
+pinlabel=OUT
+}
+P 100 1200 100 900 1 0 0
+{
+T 150 1000 5 10 1 1 0 0 1
+pinnumber=1
+T 150 1000 5 10 0 1 0 0 1
+pinseq=1
+T 450 1350 5 10 0 1 180 0 1
+pintype=pwr
+T 50 750 5 8 1 1 0 0 1
+pinlabel=Vcc
+}
+L 75 475 225 475 3 0 0 0 -1 -1
+L 225 475 225 700 3 0 0 0 -1 -1
+L 225 700 400 700 3 0 0 0 -1 -1
+L 400 700 400 475 3 0 0 0 -1 -1
+L 400 475 575 475 3 0 0 0 -1 -1
+L 575 475 575 700 3 0 0 0 -1 -1
+L 575 700 725 700 3 0 0 0 -1 -1
+P 800 0 800 300 1 0 0
+{
+T 450 150 5 10 1 1 0 0 1
+pinnumber=3
+T 850 150 5 10 0 1 0 0 1
+pinseq=3
+T 450 150 5 10 0 1 0 0 1
+pintype=pas
+T 550 350 5 8 1 1 0 0 1
+pinlabel=GND
+}
+P 100 0 100 300 1 0 0
+{
+T 150 150 5 10 1 1 0 0 1
+pinnumber=8
+T 150 150 5 10 0 1 0 0 1
+pinseq=8
+T 150 50 5 10 0 1 0 0 1
+pintype=pas
+T 50 350 5 8 1 1 0 0 1
+pinlabel=tune
+}
+T 0 2100 5 8 0 0 0 0 1
+license=GPL, see http://www.gnu.org/licenses/gpl.txt
+T 0 1700 5 8 0 0 0 0 1
+numslots=0
+T 0 2700 5 8 0 0 0 0 1
+description=Oscillator Minicircuits POS-xxx
+P 800 0 800 300 1 0 0
+{
+T 950 150 5 10 1 1 0 0 1
+pinnumber=7
+T 850 150 5 10 0 1 0 0 1
+pinseq=7
+T 450 150 5 10 0 1 0 0 1
+pintype=pas
+T 550 350 5 8 1 1 0 0 1
+pinlabel=GND
+}
+P 800 0 800 300 1 0 0
+{
+T 850 150 5 10 1 1 0 0 1
+pinnumber=6
+T 850 150 5 10 0 1 0 0 1
+pinseq=6
+T 450 150 5 10 0 1 0 0 1
+pintype=pas
+T 550 350 5 8 1 1 0 0 1
+pinlabel=GND
+}
+P 800 0 800 300 1 0 0
+{
+T 750 150 5 10 1 1 0 3 1
+pinnumber=5
+T 850 150 5 10 0 1 0 0 1
+pinseq=5
+T 450 150 5 10 0 1 0 0 1
+pintype=pas
+T 550 350 5 8 1 1 0 0 1
+pinlabel=GND
+}
+P 800 0 800 300 1 0 0
+{
+T 550 150 5 10 1 1 0 0 1
+pinnumber=4
+T 850 150 5 10 0 1 0 0 1
+pinseq=4
+T 450 150 5 10 0 1 0 0 1
+pintype=pas
+T 550 350 5 8 1 1 0 0 1
+pinlabel=GND
+}
+L 940 130 950 150 3 0 0 0 -1 -1
+L 530 130 540 150 3 0 0 0 -1 -1
+T 0 2300 5 8 0 0 0 0 1
+comment=pins 3, 4, 5 ,6 ,7  all connect to ground
+L 630 130 640 150 3 0 0 0 -1 -1

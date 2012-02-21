@@ -1,0 +1,177 @@
+v 20081231 1
+T 300 3300 5 10 0 0 0 0 1
+device=TLC556
+T 300 3500 5 10 0 0 0 0 1
+footprint=SO14
+T 300 3700 5 10 0 0 0 0 1
+description=Dual LinCMOS Timer
+T 300 3900 5 10 0 0 0 0 1
+documentation=http://focus.ti.com/docs/prod/folders/print/tlc556.html
+T 300 4100 5 10 0 0 0 0 1
+author=Bill Gatliff <bgat@billgatliff.com>
+T 300 4300 5 10 0 0 0 0 1
+dist-license=GPL
+T 300 4500 5 10 0 0 0 0 1
+use-license=unlimited
+L 300 3200 1900 3200 3 0 0 0 -1 -1
+L 300 3200 300 200 3 0 0 0 -1 -1
+L 300 200 1900 200 3 0 0 0 -1 -1
+L 1900 3200 1900 200 3 0 0 0 -1 -1
+P 2200 2500 1900 2500 1 0 0
+{
+T 2200 2500 5 10 0 0 90 0 1
+pintype=in
+T 1845 2495 9 8 1 1 0 7 1
+pinlabel=DISCH2
+T 1995 2545 5 8 1 1 0 0 1
+pinnumber=13
+T 2200 2500 5 10 0 0 90 0 1
+pinseq=13
+}
+P 0 500 300 500 1 0 0
+{
+T 0 500 5 10 0 0 90 0 1
+pintype=pwr
+T 355 495 9 8 1 1 0 1 1
+pinlabel=GND
+T 205 545 5 8 1 1 0 6 1
+pinnumber=7
+T 0 500 5 10 0 0 90 0 1
+pinseq=7
+}
+P 0 900 300 900 1 0 0
+{
+T 0 900 5 10 0 0 180 0 1
+pintype=in
+T 345 905 9 8 1 1 180 7 1
+pinlabel=TRIG1
+T 205 945 5 8 1 1 0 6 1
+pinnumber=6
+T 0 900 5 10 0 0 180 0 1
+pinseq=6
+}
+P 0 1300 300 1300 1 0 0
+{
+T 0 1300 5 10 0 0 90 0 1
+pintype=out
+T 355 1295 9 8 1 1 0 1 1
+pinlabel=OUT1
+T 205 1345 5 8 1 1 0 6 1
+pinnumber=5
+T 0 1300 5 10 0 0 90 0 1
+pinseq=5
+}
+P 0 1700 300 1700 1 0 0
+{
+T 0 1700 5 10 0 0 180 0 1
+pintype=in
+T 345 1705 9 8 1 1 180 7 1
+pinlabel=RESET1
+T 205 1745 5 8 1 1 0 6 1
+pinnumber=4
+T 0 1700 5 10 0 0 180 0 1
+pinseq=4
+}
+P 0 2100 300 2100 1 0 0
+{
+T 0 2100 5 10 0 0 180 0 1
+pintype=in
+T 345 2105 9 8 1 1 180 7 1
+pinlabel=CONT1
+T 205 2145 5 8 1 1 0 6 1
+pinnumber=3
+T 0 2100 5 10 0 0 180 0 1
+pinseq=3
+}
+P 0 2500 300 2500 1 0 0
+{
+T 0 2500 5 10 0 0 90 0 1
+pintype=in
+T 355 2495 9 8 1 1 0 1 1
+pinlabel=THRES1
+T 205 2545 5 8 1 1 0 6 1
+pinnumber=2
+T 0 2500 5 10 0 0 90 0 1
+pinseq=2
+}
+P 0 2900 300 2900 1 0 0
+{
+T 0 2900 5 10 0 0 180 0 1
+pintype=in
+T 345 2905 9 8 1 1 180 7 1
+pinlabel=DISCH1
+T 205 2945 5 8 1 1 0 6 1
+pinnumber=1
+T 0 2900 5 10 0 0 180 0 1
+pinseq=1
+}
+T 300 0 9 8 1 0 0 0 1
+TLC556
+P 2200 2900 1900 2900 1 0 0
+{
+T 2200 2900 5 10 0 0 90 0 1
+pintype=pwr
+T 1845 2895 9 8 1 1 0 7 1
+pinlabel=VDD
+T 1995 2945 5 8 1 1 0 0 1
+pinnumber=14
+T 2200 2900 5 10 0 0 90 0 1
+pinseq=14
+}
+P 2200 2100 1900 2100 1 0 0
+{
+T 2200 2100 5 10 0 0 90 0 1
+pintype=in
+T 1845 2095 9 8 1 1 0 7 1
+pinlabel=THRES2
+T 1995 2145 5 8 1 1 0 0 1
+pinnumber=12
+T 2200 2100 5 10 0 0 90 0 1
+pinseq=12
+}
+P 2200 1700 1900 1700 1 0 0
+{
+T 2200 1700 5 10 0 0 90 0 1
+pintype=in
+T 1845 1695 9 8 1 1 0 7 1
+pinlabel=CONT2
+T 1995 1745 5 8 1 1 0 0 1
+pinnumber=11
+T 2200 1700 5 10 0 0 90 0 1
+pinseq=11
+}
+P 2200 1300 1900 1300 1 0 0
+{
+T 2200 1300 5 10 0 0 90 0 1
+pintype=in
+T 1845 1295 9 8 1 1 0 7 1
+pinlabel=RESET2
+T 1995 1345 5 8 1 1 0 0 1
+pinnumber=10
+T 2200 1300 5 10 0 0 90 0 1
+pinseq=10
+}
+P 2200 900 1900 900 1 0 0
+{
+T 2200 900 5 10 0 0 90 0 1
+pintype=out
+T 1845 895 9 8 1 1 0 7 1
+pinlabel=OUT2
+T 1995 945 5 8 1 1 0 0 1
+pinnumber=19
+T 2200 900 5 10 0 0 90 0 1
+pinseq=9
+}
+P 2200 500 1900 500 1 0 0
+{
+T 2200 500 5 10 0 0 90 0 1
+pintype=in
+T 1845 495 9 8 1 1 0 7 1
+pinlabel=TRIG2
+T 1995 545 5 8 1 1 0 0 1
+pinnumber=8
+T 2200 500 5 10 0 0 90 0 1
+pinseq=8
+}
+T 1895 3300 5 10 1 1 0 6 1
+refdes=U?

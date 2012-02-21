@@ -1,0 +1,73 @@
+v 20070902 1
+P 200 900 500 900 1 0 0
+{
+T 400 950 5 8 1 1 0 6 1
+pinnumber=2
+T 400 850 5 8 0 1 0 8 1
+pinseq=1
+T 550 900 9 8 1 1 0 0 1
+pinlabel=+Vin
+T 550 900 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 200 500 500 500 1 0 0
+{
+T 400 550 5 8 1 1 0 6 1
+pinnumber=1
+T 400 450 5 8 0 1 0 8 1
+pinseq=2
+T 550 500 9 8 1 1 0 0 1
+pinlabel=-Vin
+T 550 500 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 2300 900 2000 900 1 0 0
+{
+T 2100 950 5 8 1 1 0 0 1
+pinnumber=5
+T 2100 850 5 8 0 1 0 2 1
+pinseq=3
+T 1950 900 9 8 1 1 0 6 1
+pinlabel=+Vout
+T 1950 900 5 8 0 1 0 8 1
+pintype=in
+}
+P 2300 500 2000 500 1 0 0
+{
+T 2100 550 5 8 1 1 0 0 1
+pinnumber=4
+T 2100 450 5 8 0 1 0 2 1
+pinseq=4
+T 1950 500 9 8 1 1 0 6 1
+pinlabel=-Vout
+T 1950 500 5 8 0 1 0 8 1
+pintype=pwr
+}
+T 500 1400 8 10 1 1 0 0 1
+refdes=U?
+T 500 1200 9 10 1 0 0 0 1
+TSM0515S
+T 400 1600 5 10 0 0 0 0 1
+device=TSM0515S
+T 400 1800 5 10 0 0 0 0 1
+footprint=SO8
+T 400 2000 5 10 0 0 0 0 1
+author=Thomas Reinemann
+T 400 2200 5 10 0 0 0 0 1
+documentation=http://www.tracopower.com/datasheet_g/tsm-d.pdf
+T 400 2400 5 10 0 0 0 0 1
+description=Micropower 50 mA ultra low-dropout regulator
+T 400 2600 5 10 0 0 0 0 1
+numslots=0
+T 400 2800 5 10 0 0 0 0 1
+dist-license=public domain
+T 400 3000 5 10 0 0 0 0 1
+use-license=unlimited
+L 500 400 1000 400 3 0 0 0 -1 -1
+L 1000 400 1300 1100 3 0 0 0 -1 -1
+L 1300 1100 500 1100 3 0 0 0 -1 -1
+L 500 1100 500 400 3 0 0 0 -1 -1
+L 2000 1100 1400 1100 3 0 0 0 -1 -1
+L 1100 400 1400 1100 3 0 0 0 -1 -1
+L 1100 400 2000 400 3 0 0 0 -1 -1
+L 2000 1100 2000 400 3 0 0 0 -1 -1

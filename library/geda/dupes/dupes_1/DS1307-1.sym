@@ -1,0 +1,104 @@
+v 20110115 2
+B 300 0 1000 1200 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 275 4050 5 10 0 0 0 0 1
+device=DS1307
+T 1000 1350 8 10 1 1 0 0 1
+refdes=U?
+T 275 2650 5 10 0 0 0 0 1
+footprint=DIP8
+T 300 1350 9 10 1 0 0 0 1
+DS1307
+T 275 2050 5 10 0 0 0 0 1
+author=Anton Dubniak <twister@tfsoft.org.ua>
+T 275 2450 5 10 0 0 0 0 1
+numslots=0
+T 275 1850 5 10 0 0 0 0 1
+dist-license=GPL
+T 275 1650 5 10 0 0 0 0 1
+use-license=unlimited
+T 275 3850 5 10 0 0 0 0 1
+description=I2C real-time clock and calendar
+T 275 3650 5 10 0 0 0 0 1
+documentation=http://datasheets.maxim-ic.com/en/ds/DS1307.pdf
+V 875 725 175 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 875 725 200 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 800 800 875 725 3 0 0 0 -1 -1
+L 875 725 975 825 3 0 0 0 -1 -1
+T 850 825 9 3 1 0 0 0 1
+XII
+T 1000 700 9 3 1 0 0 0 1
+III
+T 850 575 9 3 1 0 0 0 1
+VI
+T 725 700 9 3 1 0 0 0 1
+IX
+T 275 3250 5 10 0 0 0 0 1
+net=GND:4
+T 275 3050 5 10 0 0 0 0 1
+net=Vcc:8
+P 0 1000 300 1000 1 0 0
+{
+T 205 1045 5 8 1 1 0 6 1
+pinnumber=5
+T 450 1175 5 8 0 1 0 8 1
+pinseq=5
+T 355 995 9 8 1 1 0 0 1
+pinlabel=SDA
+T 500 1175 5 8 0 1 0 2 1
+pintype=io
+}
+P 0 800 300 800 1 0 0
+{
+T 205 845 5 8 1 1 0 6 1
+pinnumber=6
+T 450 975 5 8 0 1 0 8 1
+pinseq=6
+T 355 795 9 8 1 1 0 0 1
+pinlabel=SCL
+T 500 975 5 8 0 1 0 2 1
+pintype=io
+}
+P 0 400 300 400 1 0 0
+{
+T 205 445 5 8 1 1 0 6 1
+pinnumber=7
+T 450 575 5 8 0 1 0 8 1
+pinseq=7
+T 355 395 9 8 1 1 0 0 1
+pinlabel=SQW
+T 500 575 5 8 0 1 0 2 1
+pintype=out
+}
+P 0 200 300 200 1 0 0
+{
+T 205 245 5 8 1 1 0 6 1
+pinnumber=3
+T 450 375 5 8 0 1 0 8 1
+pinseq=3
+T 355 195 9 8 1 1 0 0 1
+pinlabel=VBAT
+T 500 375 5 8 0 1 0 2 1
+pintype=in
+}
+P 1600 1000 1300 1000 1 0 0
+{
+T 1395 1045 5 8 1 1 0 0 1
+pinnumber=1
+T 1150 1175 5 8 0 1 0 2 1
+pinseq=1
+T 1245 995 9 8 1 1 0 6 1
+pinlabel=X1
+T 1100 1175 5 8 0 1 0 8 1
+pintype=in
+}
+P 1600 200 1300 200 1 0 0
+{
+T 1395 245 5 8 1 1 0 0 1
+pinnumber=2
+T 1150 375 5 8 0 1 0 2 1
+pinseq=2
+T 1245 195 9 8 1 1 0 6 1
+pinlabel=X2
+T 1100 375 5 8 0 1 0 8 1
+pintype=out
+}

@@ -1,0 +1,109 @@
+v 20110116 2
+T 300 4300 5 8 0 0 0 0 1
+device=74123
+T 300 4100 5 8 0 0 0 0 1
+description=2 retriggerable monoflops with clear
+T 300 3900 5 8 0 0 0 0 1
+documentation=http://www.semiconductors.philips.com/acrobat/datasheets/74HC_HCT123_CNV_2.pdf
+T 300 3700 5 8 0 0 0 0 1
+comment=Use 74_pwr16.sym for supplies
+T 300 3500 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 300 3300 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 300 3100 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 300 2900 5 8 0 0 0 0 1
+numslots=2
+T 300 2700 5 8 0 0 0 0 1
+slotdef=1:1,13,2,4,3,14,15
+T 300 2500 5 8 0 0 0 0 1
+slotdef=2:9,5,10,12,11,6,7
+T 200 1900 8 10 1 1 0 0 1
+refdes=U?
+T 200 1700 8 10 1 1 0 0 1
+value=74HC123
+T 200 1500 8 8 1 1 0 0 1
+footprint=SO16
+T 700 1500 8 10 1 0 0 0 1
+slot=1
+P 100 1300 200 1300 1 0 0
+{
+T 150 1350 5 8 1 1 0 6 1
+pinnumber=1
+T 150 1250 5 8 0 1 0 8 1
+pinseq=1
+T 300 1300 9 8 1 1 0 1 1
+pinlabel=A
+T 250 1250 5 8 0 1 0 2 1
+pintype=in
+}
+P 1100 1300 1000 1300 1 0 0
+{
+T 1050 1350 5 8 1 1 0 0 1
+pinnumber=13
+T 1050 1250 5 8 0 1 0 2 1
+pinseq=2
+T 950 1300 9 8 1 1 0 7 1
+pinlabel=Q
+T 950 1250 5 8 0 1 0 8 1
+pintype=out
+}
+P 100 900 200 900 1 0 0
+{
+T 150 950 5 8 1 1 0 6 1
+pinnumber=2
+T 150 850 5 8 0 1 0 8 1
+pinseq=3
+T 300 900 9 8 1 1 0 1 1
+pinlabel=B
+T 250 850 5 8 0 1 0 2 1
+pintype=in
+}
+P 1100 500 1000 500 1 0 0
+{
+T 1050 550 5 8 1 1 0 0 1
+pinnumber=14
+T 1050 450 5 8 0 1 0 2 1
+pinseq=6
+T 950 500 9 8 1 1 0 7 1
+pinlabel=Ce
+T 950 450 5 8 0 1 0 8 1
+pintype=pas
+}
+P 100 500 200 500 1 0 0
+{
+T 150 550 5 8 1 1 0 6 1
+pinnumber=3
+T 150 450 5 8 0 1 0 8 1
+pinseq=5
+T 300 500 9 8 1 1 0 1 1
+pinlabel=\_CLR\_
+T 250 450 5 8 0 1 0 2 1
+pintype=in
+}
+P 1100 100 1000 100 1 0 0
+{
+T 1050 150 5 8 1 1 0 0 1
+pinnumber=15
+T 1050 50 5 8 0 1 0 2 1
+pinseq=7
+T 950 100 9 8 1 1 0 7 1
+pinlabel=Re/Ce
+T 950 300 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 900 1000 900 1 0 0
+{
+T 1050 950 5 8 1 1 0 0 1
+pinnumber=4
+T 1050 850 5 8 0 1 0 2 1
+pinseq=4
+T 950 900 9 8 1 1 0 7 1
+pinlabel=\_Q\_
+T 950 850 5 8 0 1 0 8 1
+pintype=out
+}
+B 200 0 800 1450 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 160 1300 40 6 0 0 0 -1 -1 1 -1 -1 -1 -1 -1
+V 160 500 40 6 0 0 0 -1 -1 1 -1 -1 -1 -1 -1

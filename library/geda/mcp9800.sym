@@ -1,0 +1,77 @@
+v 20080127 1
+T 400 1200 9 10 1 0 0 0 1
+MCP9800
+P 1700 900 1400 900 1 0 0
+{
+T 1700 900 5 10 0 0 180 0 1
+pintype=tri
+T 1345 895 5 10 1 1 0 6 1
+pinlabel=SDA
+T 1495 945 5 10 1 1 0 0 1
+pinnumber=5
+T 1700 900 5 10 0 0 180 0 1
+pinseq=5
+}
+P 1700 600 1400 600 1 0 0
+{
+T 1700 600 5 10 0 0 0 0 1
+pintype=in
+T 1345 595 5 10 1 1 0 6 1
+pinlabel=SCL
+T 1495 645 5 10 1 1 0 0 1
+pinnumber=4
+T 1700 600 5 10 0 0 0 0 1
+pinseq=4
+}
+P 0 300 300 300 1 0 0
+{
+T 0 500 5 10 0 0 180 0 1
+pintype=out
+T 355 295 5 10 1 1 0 0 1
+pinlabel=ALERT
+T 205 345 5 10 1 1 0 6 1
+pinnumber=3
+T 0 500 5 10 0 0 180 0 1
+pinseq=3
+}
+P 0 600 300 600 1 0 0
+{
+T 0 800 5 10 0 0 180 0 1
+pintype=pwr
+T 355 595 5 10 1 1 0 0 1
+pinlabel=GND
+T 205 645 5 10 1 1 0 6 1
+pinnumber=2
+T 0 800 5 10 0 0 180 0 1
+pinseq=2
+}
+P 0 900 300 900 1 0 0
+{
+T 0 1100 5 10 0 0 180 0 1
+pintype=pwr
+T 355 895 5 10 1 1 0 0 1
+pinlabel=Vdd
+T 205 945 5 10 1 1 0 6 1
+pinnumber=1
+T 0 1100 5 10 0 0 180 0 1
+pinseq=1
+}
+B 300 200 1100 900 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T -5 200 8 10 0 1 0 0 1
+email=andreas@kemnade.info
+T 95 0 8 10 1 1 0 0 1
+refdes=U?
+T -5 -5 8 10 0 1 0 0 1
+numslots=0
+T -5 -5 8 10 0 1 0 0 1
+device=MCP9800
+T -5 -5 8 10 0 1 0 0 1
+description=I2C 12bit temperature sensor
+T -5 -5 8 10 0 1 0 0 1
+author=Andreas Kemnade
+T -5 -5 8 10 0 1 0 0 1
+use-license=unlimited
+T -5 -5 8 10 0 1 0 0 1
+dist-license=GPL
+T -5 -5 8 10 0 1 0 0 1
+footprint=SOT26

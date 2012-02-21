@@ -1,0 +1,48 @@
+v 20050313 1
+L 200 800 200 200 3 0 0 0 -1 -1
+P 0 500 200 500 1 0 0
+{
+T 100 550 5 6 0 0 0 0 1
+pinnumber=G
+T 100 550 5 6 0 0 0 0 1
+pinseq=2
+T 0 500 5 10 0 0 0 0 1
+pinlabel=G
+}
+P 500 1000 500 800 1 0 0
+{
+T 600 750 5 6 0 0 0 0 1
+pinnumber=D
+T 600 850 5 6 0 0 0 0 1
+pinseq=1
+T 600 900 5 10 0 0 0 0 1
+pinlabel=D
+}
+P 500 200 500 0 1 0 1
+{
+T 600 150 5 6 0 0 0 0 1
+pinnumber=S
+T 400 50 5 6 0 0 0 0 1
+pinseq=3
+T 600 200 5 10 0 0 0 0 1
+pinlabel=S
+}
+L 200 700 500 700 3 0 0 0 -1 -1
+L 200 300 500 300 3 0 0 0 -1 -1
+T 600 500 8 10 1 1 0 0 1
+refdes=J?
+L 500 200 500 300 3 0 0 0 -1 -1
+L 500 800 500 700 3 0 0 0 -1 -1
+L 500 300 350 350 3 0 0 0 -1 -1
+L 350 350 350 250 3 0 0 0 -1 -1
+L 350 250 500 300 3 0 0 0 -1 -1
+T 600 300 8 10 0 0 0 0 1
+device=NFET_TRANSISTOR
+T 3600 0 8 10 0 0 0 0 1
+author=John johnATjcoppens.com
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 1600 0 8 10 0 0 0 0 1
+use-license=unlimited
+T 0 200 8 10 0 0 0 0 1
+comment=Suggested library: analog
