@@ -8,14 +8,14 @@
                 {
                     "annotations": [
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "U3", 
                             "visible": "true", 
                             "x": 1650, 
                             "y": -3600
                         }, 
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "LAA110", 
                             "visible": "true", 
                             "x": 1650, 
@@ -37,14 +37,14 @@
                 {
                     "annotations": [
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "U2", 
                             "visible": "true", 
                             "x": 1830, 
                             "y": -2580
                         }, 
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "NSL-32", 
                             "visible": "true", 
                             "x": 1750, 
@@ -66,14 +66,14 @@
                 {
                     "annotations": [
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "U1", 
                             "visible": "true", 
                             "x": 1700, 
                             "y": -1300
                         }, 
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "74LS00", 
                             "visible": "true", 
                             "x": 1700, 
@@ -95,14 +95,14 @@
                 {
                     "annotations": [
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "U4", 
                             "visible": "true", 
                             "x": 2000, 
                             "y": -7200
                         }, 
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "LP3966", 
                             "visible": "true", 
                             "x": 2000, 
@@ -124,21 +124,21 @@
                 {
                     "annotations": [
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "IC1", 
                             "visible": "true", 
                             "x": 3450, 
                             "y": -6100
                         }, 
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "ATMEGA8-P", 
                             "visible": "true", 
                             "x": 4400, 
                             "y": -3450
                         }, 
                         {
-                            "rotation": 1, 
+                            "rotation": 0, 
                             "value": "DIL28", 
                             "visible": "true", 
                             "x": 4650, 
@@ -3243,45 +3243,11 @@
             "name": "", 
             "owner": "", 
             "slug": "", 
-            "updated_timestamp": 1324482613
+            "updated_timestamp": 1329893985
         }
     }, 
+    "layout": null, 
     "nets": [
-        {
-            "annotations": [], 
-            "attributes": {}, 
-            "net_id": "", 
-            "points": [
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "2700a-3950"
-                    ], 
-                    "point_id": "2700a-6450", 
-                    "x": 2700, 
-                    "y": -6450
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "3250a-3950", 
-                        "2700a-6450"
-                    ], 
-                    "point_id": "2700a-3950", 
-                    "x": 2700, 
-                    "y": -3950
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "2700a-3950"
-                    ], 
-                    "point_id": "3250a-3950", 
-                    "x": 3250, 
-                    "y": -3950
-                }
-            ]
-        }, 
         {
             "annotations": [], 
             "attributes": {}, 
@@ -3334,8 +3300,8 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "5150a-5350", 
-                        "6100a-4950"
+                        "6100a-4950", 
+                        "5150a-5350"
                     ], 
                     "point_id": "6100a-5350", 
                     "x": 6100, 
@@ -3374,51 +3340,6 @@
                     "point_id": "6900a-4950", 
                     "x": 6900, 
                     "y": -4950
-                }
-            ]
-        }, 
-        {
-            "annotations": [], 
-            "attributes": {}, 
-            "net_id": "", 
-            "points": [
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "7550a-3500"
-                    ], 
-                    "point_id": "6900a-3500", 
-                    "x": 6900, 
-                    "y": -3500
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "7550a-3500", 
-                        "6900a-3100"
-                    ], 
-                    "point_id": "7550a-3100", 
-                    "x": 7550, 
-                    "y": -3100
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "7550a-3100"
-                    ], 
-                    "point_id": "6900a-3100", 
-                    "x": 6900, 
-                    "y": -3100
-                }, 
-                {
-                    "connected_components": [], 
-                    "connected_points": [
-                        "7550a-3100", 
-                        "6900a-3500"
-                    ], 
-                    "point_id": "7550a-3500", 
-                    "x": 7550, 
-                    "y": -3500
                 }
             ]
         }, 
@@ -3485,6 +3406,41 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
+                        "2700a-3950"
+                    ], 
+                    "point_id": "2700a-6450", 
+                    "x": 2700, 
+                    "y": -6450
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2700a-6450", 
+                        "3250a-3950"
+                    ], 
+                    "point_id": "2700a-3950", 
+                    "x": 2700, 
+                    "y": -3950
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "2700a-3950"
+                    ], 
+                    "point_id": "3250a-3950", 
+                    "x": 3250, 
+                    "y": -3950
+                }
+            ]
+        }, 
+        {
+            "annotations": [], 
+            "attributes": {}, 
+            "net_id": "", 
+            "points": [
+                {
+                    "connected_components": [], 
+                    "connected_points": [
                         "2950a-4450"
                     ], 
                     "point_id": "3250a-4450", 
@@ -3494,8 +3450,8 @@
                 {
                     "connected_components": [], 
                     "connected_points": [
-                        "2700a-6650", 
-                        "2950a-4450"
+                        "2950a-4450", 
+                        "2700a-6650"
                     ], 
                     "point_id": "2950a-6650", 
                     "x": 2950, 
@@ -3519,6 +3475,51 @@
                     "point_id": "2950a-4450", 
                     "x": 2950, 
                     "y": -4450
+                }
+            ]
+        }, 
+        {
+            "annotations": [], 
+            "attributes": {}, 
+            "net_id": "", 
+            "points": [
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "7550a-3100", 
+                        "6900a-3500"
+                    ], 
+                    "point_id": "7550a-3500", 
+                    "x": 7550, 
+                    "y": -3500
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "7550a-3500"
+                    ], 
+                    "point_id": "6900a-3500", 
+                    "x": 6900, 
+                    "y": -3500
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "6900a-3100", 
+                        "7550a-3500"
+                    ], 
+                    "point_id": "7550a-3100", 
+                    "x": 7550, 
+                    "y": -3100
+                }, 
+                {
+                    "connected_components": [], 
+                    "connected_points": [
+                        "7550a-3100"
+                    ], 
+                    "point_id": "6900a-3100", 
+                    "x": 6900, 
+                    "y": -3100
                 }
             ]
         }

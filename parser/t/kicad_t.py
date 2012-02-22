@@ -36,10 +36,17 @@ GOOD_OUTPUT_FILE = join(TEST_DIR, 'test.upv')
 class KiCADTests(unittest.TestCase):
     """ The tests of the kicad parser """
 
+    good = None
+    actual = None
+
     def setUp(self):
         """ Set load the test files """
-        self.good = JSON().parse(GOOD_OUTPUT_FILE)
-        self.actual = KiCAD().parse(TEST_INPUT_FILE)
+
+        if KiCADTests.good is None:
+            KiCADTests.good = JSON().parse(GOOD_OUTPUT_FILE)
+
+        if KiCADTests.actual is None:
+            KiCADTests.actual = KiCAD().parse(TEST_INPUT_FILE)
 
 
     def test_design_attributes(self):
@@ -192,3 +199,11 @@ class KiCADTests(unittest.TestCase):
             self.assertEqual(test_ann.y, good_ann.y)
             self.assertEqual(test_ann.rotation, good_ann.rotation)
             self.assertEqual(test_ann.visible, good_ann.visible)
+
+
+    def test_annotation_spaces(self):
+        design = KiCAD().parse(join(TEST_DIR, 'jtag_schematic.sch'))
+        inst = [i for i in design.component_instances
+                if i.library_id == 'CONN_4X2'][0]
+        self.assertEqual(inst.symbol_attributes[0].annotations[1].value,
+                         'MAPLE JTAG')

@@ -46,7 +46,6 @@ from os.path import exists, splitext
 class KiCAD(object):
     """ The KiCAD Format Parser """
 
-
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an kicad schematic """
@@ -154,10 +153,12 @@ class KiCAD(object):
 
         while line.strip() not in ("$EndComp", ''):
             if line.startswith('F '):
-                parts = line.split()
+                parts = line.split('"', 2)
+                value = parts[1]
+                parts = parts[2].strip().split()
                 annotations.append(
-                    Annotation(parts[2][1:-1], int(parts[4]), -int(parts[5]),
-                               0 if parts[1] == 'H' else 1, 'true'))
+                    Annotation(value, int(parts[1]), -int(parts[2]),
+                               0 if parts[0] == 'H' else 1, 'true'))
             elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
