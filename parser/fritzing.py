@@ -59,6 +59,7 @@ class Fritzing(object):
         self.components = {} # idref -> ComponentParser
 
         self.fritzing_version = None
+        self.fzz_zipfile = None # The ZipFile if we are parsing an fzz
 
 
     @staticmethod
@@ -101,10 +102,12 @@ class Fritzing(object):
         """
 
         if filename.endswith('.fzz'):
-            zipf = zipfile.ZipFile(filename)
-            return ElementTree(file=zipf.open(basename(filename[:-1])))
+            self.fzz_zipfile = zipfile.ZipFile(filename)
+            fz_file = self.fzz_zipfile.open(basename(filename[:-1]))
         else:
-            return ElementTree(file=filename)
+            fz_file = filename
+
+        return ElementTree(file=fz_file)
 
     def parse_instance(self, instance):
         """ Parse a Fritzing instance block """
@@ -161,20 +164,60 @@ class Fritzing(object):
         if idref in self.components:
             return self.components[idref]
 
-        path = inst.get('path')
-        if not path:
+        fzp_path = inst.get('path')
+        if not fzp_path:
             return None
 
-        if not exists(path):
-            path = lookup_part(path, self.fritzing_version)
+        if exists(fzp_path):
+            fzp_file = fzp_path
+        else:
+            fzp_file = self.lookup_fzz_file(fzp_path, 'part')
 
-        if not path or not exists(path):
+        if not fzp_file:
+            fzp_file = lookup_part(fzp_path, self.fritzing_version)
+            if fzp_file is not None:
+                fzp_path = fzp_file
+
+        if not fzp_file:
             return None
 
-        parser = ComponentParser(idref, path)
+        parser = ComponentParser(idref)
+        parser.parse_fzp(fzp_file)
+
+        if parser.image is not None:
+            svg_file = self.lookup_fzz_file(parser.image, 'svg.schematic')
+
+            if svg_file is None:
+                fzp_dir = dirname(fzp_path)
+                parts_dir = dirname(fzp_dir)
+                svg_path = join(parts_dir, 'svg', basename(fzp_dir),
+                                parser.image)
+
+                if exists(svg_path):
+                    svg_file = svg_path
+
+            if svg_file is not None:
+                parser.parse_svg(svg_file)
+
         self.components[idref] = parser
-        parser.parse()
+
         return parser
+
+
+    def lookup_fzz_file(self, path, prefix):
+        """ Find a file in our fzz archive, if any """
+
+        if not self.fzz_zipfile:
+            return None
+
+        fzz_name = prefix + '.' + basename(path)
+
+        try:
+            self.fzz_zipfile.getinfo(fzz_name)
+        except KeyError:
+            return None
+        else:
+            return self.fzz_zipfile.open(fzz_name)
 
 
     def parse_component_instance(self, inst):
@@ -293,20 +336,20 @@ class ComponentParser(object):
     # are 72dpi. The schematics are in 90dpi.
     svg_mult = 90.0 / 72.0
 
-    def __init__(self, idref, path):
+    def __init__(self, idref):
         self.component = Component(idref)
         self.next_pin_number = 0
         self.cid2termid = {} # connid -> termid
         self.termid2pin = {} # termid -> Pin
         self.terminals = set()
-        self.path = path
         self.width = 0.0
         self.height = 0.0
 
-    def parse(self):
-        """ Parse the Fritzing component """
 
-        tree = ElementTree(file=self.path)
+    def parse_fzp(self, fzp_file):
+        """ Parse the Fritzing component file """
+
+        tree = ElementTree(file=fzp_file)
 
         try:
             prefix = tree.find('label').text
@@ -318,15 +361,17 @@ class ComponentParser(object):
         symbol = Symbol()
         self.component.add_symbol(symbol)
 
-        body = Body()
-        symbol.add_body(body)
+        self.body = Body()
+        symbol.add_body(self.body)
 
         self.cid2termid.update(self.parse_terminals(tree))
         self.terminals.update(self.cid2termid.values())
 
-        self.parse_svg(body, tree, self.path)
-
-        return self.component
+        layers = tree.find('views/schematicView/layers')
+        if layers is None:
+            self.image = None
+        else:
+            self.image = layers.get('image')
 
 
     def connect_point(self, cid, inst, point):
@@ -369,25 +414,10 @@ class ComponentParser(object):
         return cid2termid
 
 
-    def parse_svg(self, body, tree, fzp_path):
+    def parse_svg(self, svg_file):
         """ Parse the shapes and pins from an svg file """
 
-        layers = tree.find('views/schematicView/layers')
-        if layers is None:
-            return
-
-        image = layers.get('image')
-        if image is None:
-            return
-
-        fzp_dir = dirname(fzp_path)
-        parts_dir = dirname(fzp_dir)
-        svg_path = join(parts_dir, 'svg', basename(fzp_dir), image)
-
-        if not exists(svg_path):
-            return
-
-        tree = ElementTree(file=svg_path)
+        tree = ElementTree(file=svg_file)
         viewbox = tree.getroot().get('viewBox')
 
         if viewbox != None:
@@ -398,13 +428,13 @@ class ComponentParser(object):
         _iter = tree.getroot().getiterator()
         for element in _iter:
             for shape in self.parse_shapes(element):
-                body.add_shape(shape)
+                self.body.add_shape(shape)
                 if element.get('id') in self.terminals:
                     pin = get_pin(shape)
                     if pin is not None:
                         pin.pin_number = self.get_next_pin_number()
                         self.termid2pin[element.get('id')] = pin
-                        body.add_pin(pin)
+                        self.body.add_pin(pin)
 
 
     def parse_shapes(self, element):
@@ -557,6 +587,7 @@ class PathParser(object):
                 self.prev_cmd = cmd
 
         def is_empty_line(shape):
+            """ Return True if the shape is an empty line """
             return shape.type == 'line' and shape.p1 == shape.p2
 
         return [s for s in self.shapes if not is_empty_line(s)]
@@ -630,7 +661,7 @@ class PathParser(object):
 
         points, data = self.parse_points(data)
 
-        for i, point in enumerate(points):
+        for point in points:
             point = self.get_path_point(point, is_relative)
             self.shapes.append(
                 Line(make_point(self.cur_point, self.svg_mult),
@@ -645,7 +676,7 @@ class PathParser(object):
 
         nums, data = self.parse_nums(data)
 
-        for i, num in enumerate(nums):
+        for num in nums:
             point = (num, 0 if is_relative else self.cur_point[1])
             point = self.get_path_point(point, is_relative)
             self.shapes.append(
@@ -661,7 +692,7 @@ class PathParser(object):
 
         nums, data = self.parse_nums(data)
 
-        for i, num in enumerate(nums):
+        for num in nums:
             point = (0 if is_relative else self.cur_point[0], num)
             point = self.get_path_point(point, is_relative)
             self.shapes.append(
