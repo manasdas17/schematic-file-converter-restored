@@ -51,7 +51,8 @@ class KiCAD(object):
     def auto_detect(filename):
         """ Return our confidence that the given file is an kicad schematic """
         f = open(filename, 'r')
-        data = f.read()
+        data = f.readline()
+        f.close()
         confidence = 0
         if 'EESchema Schematic' in data:
             confidence += 0.75
