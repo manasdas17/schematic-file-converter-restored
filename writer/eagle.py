@@ -475,15 +475,16 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents a symbol
         """
         constant = 0x1d
-        template = "=2BH3I8s"
+        template = "=2BHI4BI8s"
 
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofshapes=0, shapes=None):
+        def __init__(self, libid, name, numofshapes=0, shapes=None):
             """ Just a constructor; shown for a sake of clarity
             """
             super(Eagle.Symbol, self).__init__(name, numofshapes, shapes)
+            self.libid = libid
             return
 
         def construct(self):
@@ -498,7 +499,7 @@ class Eagle: # pylint: disable=R0902
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 
                                    self.numofshapes,
-                                   0, 0, 0,
+                                   0, 0, self.libid, 0, 0, 0,
                                    _name,
                                   )
             return _ret_val
@@ -946,7 +947,7 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents an instance
         """
         constant = 0x30
-        template = "=2BH2IH6BI"
+        template = "=2BH2iH6BI"
 
         smashed_mask = 0x01
 
@@ -1068,9 +1069,17 @@ class Eagle: # pylint: disable=R0902
         constant = 0x22
         template = "=4B4iH2B"
 
+        stylemask = 0x0f
+        styles = {
+                  0x00: "Continuous",
+                  0x01: "LongDash",
+                  0x02: "ShortDash",
+                  0x03: "DashDot",
+                 }
+
         arc_sign = 0x81
 
-        def __init__(self, x1, y1, x2, y2, layer, width): # pylint: disable=R0913
+        def __init__(self, x1, y1, x2, y2, style, layer, width): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Wire, self).__init__(layer)
@@ -1079,12 +1088,19 @@ class Eagle: # pylint: disable=R0902
             self.x2 = x2
             self.y2 = y2
             self.width = width
+            self.style = style
             return
 
         def construct(self):
             """ Prepares a binary block
             """
             _ret_val = None
+
+            _signs = 0
+            for _ss in self.styles:
+                if self.styles[_ss] == self.style:
+                    _signs += _ss
+                    break
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 
@@ -1095,7 +1111,7 @@ class Eagle: # pylint: disable=R0902
                                    Eagle.Shape.encode_real(self.y2),
                                    Eagle.Shape.encode_real(
                                        self.width / self.width_xscale),
-                                   0, 0
+                                   _signs, 0
                                   )
             return _ret_val
 
@@ -1217,10 +1233,11 @@ class Eagle: # pylint: disable=R0902
                       0x20: "counterclockwise",
                      }
 
-        def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction): # pylint: disable=R0913
+        def __init__(self, x1, y1, x2, y2, style, layer, width, # pylint: disable=R0913
+                        curve, cap, direction):
             """ Just a constructor
             """
-            super(Eagle.Arc, self).__init__(x1, y1, x2, y2, layer, width)
+            super(Eagle.Arc, self).__init__(x1, y1, x2, y2, style, layer, width)
             self.curve = curve
             self.cap = cap
             self.direction = direction
@@ -1240,6 +1257,11 @@ class Eagle: # pylint: disable=R0902
                 if self.caps[_cc] == self.cap:
                     _signs += _cc
                     break
+            for _ss in self.styles:
+                if self.styles[_ss] == self.style:
+                    _signs += _ss
+                    break
+
 
             _curve = self.encode_real(self.curve)
 
@@ -1305,7 +1327,7 @@ class Eagle: # pylint: disable=R0902
             is used both for uniformity and convertors)
         """
         constant = 0x2c
-        template = "=4B2I2B10s"
+        template = "=4B2i2B10s"
 
         max_embed_len = 10
         no_embed_str = b'\x7f'
@@ -1395,7 +1417,7 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents a text
         """
         constant = 0x31
-        template = "=4B2IH4B6s"
+        template = "=4B2iH4B6s"
 
         max_embed_len = 5
         delimeter = b'!'

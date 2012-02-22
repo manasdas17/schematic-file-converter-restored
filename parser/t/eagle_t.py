@@ -201,6 +201,7 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_symbol.name, "ZD")
         self.assertEqual(_symbol.numofshapes, 10)
+        self.assertEqual(_symbol.libid, 1)
 
 # TODO external name
         return
@@ -375,13 +376,14 @@ class EagleTests(unittest.TestCase):
 
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xd8\x09\x05\x00",
                                  b"\x40\x4d\x09\x00\xd8\x09\x05\x00",
-                                 b"\x60\xc0\x07\x00\xfa\x02\x00\x00"))
+                                 b"\x60\xc0\x07\x00\xfa\x02\x03\x00"))
         _wire = Eagle.Wire.parse(_valid_chunk)
 
         self.assertEqual(_wire.x1, 33.02)
         self.assertEqual(_wire.y1, 60.96)
         self.assertEqual(_wire.x2, 33.02)
         self.assertEqual(_wire.y2, 50.8)
+        self.assertEqual(_wire.style, "DashDot")
         self.assertEqual(_wire.width, 0.1524)
         self.assertEqual(_wire.layer, 91)
         return
@@ -420,7 +422,7 @@ class EagleTests(unittest.TestCase):
 
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xc0\x80\x0f\xd8",
                                  b"\x48\xd0\x05\x70\xa0\x0d\x11\x11",
-                                 b"\x40\x4d\x09\x00\xe8\x0b\x30\x81"))
+                                 b"\x40\x4d\x09\x00\xe8\x0b\x32\x81"))
         _arc = Eagle.Wire.parse(_valid_chunk)
 
         self.assertEqual(_arc.x1, 101.6)
@@ -431,6 +433,7 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_arc.curve, 116.7552) # <---- probably wrong
         self.assertEqual(_arc.cap, "flat")
         self.assertEqual(_arc.direction, "counterclockwise")
+        self.assertEqual(_arc.style, "ShortDash")
         self.assertEqual(_arc.layer, 91)
         return
 
