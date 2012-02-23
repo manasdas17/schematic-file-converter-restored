@@ -236,7 +236,7 @@ $EndDescr
             end = round(shape.end_angle * 1800)
             return ('A %d %d %d %d %d %%(unit)d %%(convert)d 0 N\n' %
                     (make_length(shape.x), make_length(shape.y),
-                     make_length(shape.radius), start, end))
+                     make_length(shape.radius), end, start))
         elif shape.type == 'circle':
             return ('C %d %d %d %%(unit)d %%(convert)d 0 N\n' %
                     (make_length(shape.x), make_length(shape.y),

@@ -386,7 +386,7 @@ class ComponentParser(object):
         start = start / 1800.0
         end = end / 1800.0
         return Arc(make_length(x), make_length(y),
-                   start, end, make_length(radius))
+                   end, start, make_length(radius))
 
 
     def parse_c_line(self, parts):

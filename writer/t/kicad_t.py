@@ -26,7 +26,7 @@ from core.design import Design
 from core.components import Pin
 from core.net import Net, NetPoint
 from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Label, Rectangle, Polygon
+from core.shape import Label, Rectangle, Polygon, Arc
 from core.annotation import Annotation
 from parser.openjson import JSON
 
@@ -224,3 +224,14 @@ $EndComp
         poly.add_point(10, 0)
         line = writer.get_shape_line(poly)
         self.assertEqual(line, 'P 5 %(unit)d %(convert)d 0 0 0 0 111 111 111 111 0 0 0 N\n')
+
+
+    def test_arc(self):
+        """
+        Arcs are output correctly.
+        """
+
+        writer = KiCAD()
+        arc = Arc(0, 0, -0.5, 0.5, 1)
+        line = writer.get_shape_line(arc)
+        self.assertEqual(line, 'A 0 0 11 900 -900 %(unit)d %(convert)d 0 N\n')
