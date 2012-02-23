@@ -1,0 +1,63 @@
+v 20061020 1
+B 300 600 1100 1200 3 0 0 0 0 0 0 -1 -1 -1 -1 -1
+T 300 550 5 10 1 1 0 2 1
+refdes=U?
+T 300 350 5 10 1 1 0 2 1
+device=MMA2260
+T 200 550 5 10 0 0 0 8 1
+copyright=2007 Ben Jackson
+T 200 350 5 10 0 0 0 8 1
+author=Ben Jackson
+T 200 150 5 10 0 0 0 8 1
+uselicense=unlimited
+T 200 -50 5 10 0 0 0 8 1
+distlicense=GPL
+T 200 -250 5 10 0 0 0 8 1
+description=Freescale X-Axis Micromachined Accelerometer
+T 200 -450 5 10 0 0 0 8 1
+footprint=SO16W
+P 1400 1600 1700 1600 1 0 1
+{
+T 1350 1600 5 8 1 1 0 7 1
+pinlabel=STATUS
+T 1450 1625 5 8 1 1 0 0 1
+pinnumber=5
+T 1450 1625 5 8 0 1 0 0 1
+pinseq=12
+}
+P 1400 1200 1700 1200 1 0 1
+{
+T 1350 1200 5 8 1 1 0 7 1
+pinlabel=VOUT
+T 1450 1225 5 8 1 1 0 0 1
+pinnumber=4
+T 1450 1225 5 8 0 1 0 0 1
+pinseq=13
+}
+P 300 1600 0 1600 1 0 1
+{
+T 350 1600 5 8 1 1 0 1 1
+pinlabel=ST
+T 250 1625 5 8 1 1 0 6 1
+pinnumber=8
+T 250 1625 5 8 0 1 0 6 1
+pinseq=9
+}
+P 300 1200 0 1200 1 0 1
+{
+T 350 1200 5 8 1 1 0 1 1
+pinlabel=VDD
+T 250 1225 5 8 1 1 0 6 1
+pinnumber=6
+T 250 1225 5 8 0 1 0 6 1
+pinseq=10
+}
+P 300 800 0 800 1 0 1
+{
+T 350 800 5 8 1 1 0 1 1
+pinlabel=VSS
+T 250 825 5 8 1 1 0 6 1
+pinnumber=7
+T 250 825 5 8 0 1 0 6 1
+pinseq=11
+}

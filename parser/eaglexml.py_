@@ -80,6 +80,13 @@ class EagleXML:
         self.parts = dict()     # key:instance_id val:{lib, devset, dev}
         self.version = None     # EAGLE program version that generated this file ('V.RR')
 
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an eagle xml schematic """
+        return 0
+
+
     def parse(self, filename):
         """ Parse an Eagle XML file into a design """
         xmltree = ElementTree(file=filename)

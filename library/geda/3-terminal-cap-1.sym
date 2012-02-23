@@ -1,0 +1,58 @@
+v 20100214 2
+A 500 150 200 45 90 3 0 0 0 -1 -1
+A 500 650 200 225 90 3 0 0 0 -1 -1
+B 200 200 600 400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 300 400 700 400 3 0 0 0 -1 -1
+T 500 700 8 10 1 1 0 0 1
+refdes=C?
+P 500 0 500 200 1 0 0
+{
+T 200 0 5 8 0 0 0 6 1
+pintype=pwr
+T 550 50 9 8 1 1 0 0 1
+pinlabel=GND
+T 400 100 5 8 0 1 180 0 1
+pinnumber=2
+T 200 -200 5 8 0 0 0 6 1
+pinseq=2
+}
+P 0 400 200 400 1 0 0
+{
+T -100 700 5 8 0 0 0 6 1
+pintype=io
+T 100 500 5 8 0 1 0 6 1
+pinnumber=1
+T -100 500 5 8 0 0 0 6 1
+pinseq=1
+}
+P 1000 400 800 400 1 0 0
+{
+T 1100 700 5 8 0 0 0 0 1
+pintype=io
+T 900 500 5 8 0 1 0 0 1
+pinnumber=3
+T 1100 500 5 8 0 0 0 0 1
+pinseq=3
+}
+L 500 350 500 270 3 0 0 0 -1 -1
+L 470 270 530 270 3 0 0 0 -1 -1
+L 480 260 520 260 3 0 0 0 -1 -1
+L 490 250 510 250 3 0 0 0 -1 -1
+T -100 -500 5 8 0 0 0 0 1
+device=NFM?
+T 500 900 8 10 0 0 0 0 1
+value=?
+T -95 -1695 5 8 0 0 0 0 1
+numslots=0
+T -95 -1495 5 8 0 0 0 0 1
+footprint=MURATA-NFx21y?
+T -100 -1300 5 8 0 0 0 0 1
+dist-license=GPL
+T -100 -1100 5 8 0 0 0 0 1
+use-license=unlimited
+T -100 -1900 5 8 0 0 0 0 1
+author=Stefan Tauner
+T -100 -700 5 8 0 0 0 0 1
+description=3-terminal capacitor like Murata NFM series
+T -100 -900 5 8 0 0 0 0 1
+documentation=http://search.murata.co.jp/Ceramy/image/img/PDF/ENG/L0111S0111NFM21PC.pdf

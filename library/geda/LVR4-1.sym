@@ -1,0 +1,84 @@
+v 20070902 1
+L 200 1000 200 0 3 0 0 0 -1 -1
+T 700 500 8 10 1 1 0 4 1
+device=LVR4
+L 200 0 1200 500 3 0 0 0 -1 -1
+L 1200 500 200 1000 3 0 0 0 -1 -1
+P 600 1000 600 800 1 0 0
+{
+T 600 1000 5 10 0 0 180 6 1
+pinnumber=4
+T 600 1000 5 10 0 0 180 6 1
+pinseq=4
+T 600 1000 5 10 0 0 180 6 1
+pintype=pas
+T 600 700 5 6 1 1 180 4 1
+pinlabel=VL
+}
+P 1400 500 1200 500 1 0 0
+{
+T 1400 500 5 10 0 0 0 0 1
+pinnumber=5
+T 1400 500 5 10 0 0 0 0 1
+pinseq=5
+T 1400 500 5 10 0 0 0 0 1
+pintype=out
+T 1400 500 5 10 0 0 0 0 1
+pinlabel=Y
+}
+P 0 700 200 700 1 0 0
+{
+T 0 700 5 10 0 0 0 0 1
+pinseq=2
+T 0 700 5 10 0 0 0 0 1
+pinnumber=2
+T 0 700 5 10 0 0 0 0 1
+pintype=in
+T 300 700 5 10 0 1 0 4 1
+pinlabel=D1
+}
+P 0 300 100 300 1 0 0
+{
+T 0 300 5 10 0 0 0 0 1
+pinnumber=1
+T 0 300 5 10 0 0 0 0 1
+pinseq=1
+T 0 300 5 10 0 0 0 0 1
+pintype=in
+T 300 300 5 10 0 1 0 4 1
+pinlabel=D0
+}
+T 200 1100 8 10 1 1 0 0 1
+refdes=X?
+T 1600 1800 8 10 0 0 0 0 1
+model-name=LVR4
+P 600 0 600 200 1 0 0
+{
+T 600 0 5 10 0 0 0 6 1
+pinnumber=3
+T 600 0 5 10 0 0 0 6 1
+pinseq=3
+T 600 0 5 10 0 0 0 6 1
+pintype=in
+T 600 300 5 6 1 1 0 4 1
+pinlabel=ENB
+}
+T 1600 2000 5 10 0 0 0 0 1
+device=LVR4
+T 1600 1600 8 10 0 1 0 0 1
+description=LVD receiver
+T 200 2200 8 10 0 0 0 0 1
+symversion=1.0
+T 200 2000 8 10 0 1 0 0 1
+author=jpd@noqsi.com
+T 200 1400 8 10 0 1 0 0 1
+documentation=http://research.kek.jp/people/ikeda/openIP
+T 200 1600 8 10 0 0 0 0 1
+numslots=0
+T 200 1800 8 10 0 0 0 0 1
+footprint=none
+V 149 300 52 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 0 0 8 10 0 0 0 0 1
+use-license=unlimited

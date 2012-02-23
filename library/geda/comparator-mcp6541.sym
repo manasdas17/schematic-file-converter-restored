@@ -1,0 +1,62 @@
+v 20110115 2
+L 200 800 200 0 3 0 0 0 -1 -1
+L 200 800 800 400 3 0 0 0 -1 -1
+T 200 850 5 10 1 1 0 0 1
+device=MCP6541
+L 800 400 200 0 3 0 0 0 -1 -1
+L 300 650 300 550 3 0 0 0 -1 -1
+L 250 600 350 600 3 0 0 0 -1 -1
+L 250 200 350 200 3 0 0 0 -1 -1
+P 0 600 200 600 1 0 0
+{
+T 150 650 5 8 1 1 0 6 1
+pinnumber=3
+T 150 550 5 8 0 1 0 8 1
+pinseq=3
+T 250 600 9 8 0 1 0 0 1
+pinlabel=in+
+T 250 600 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 200 200 200 1 0 0
+{
+T 150 250 5 8 1 1 0 6 1
+pinnumber=4
+T 150 150 5 8 0 1 0 8 1
+pinseq=4
+T 250 200 9 8 0 1 0 0 1
+pinlabel=in-
+T 250 200 5 8 0 1 0 2 1
+pintype=in
+}
+P 800 400 1000 400 1 0 1
+{
+T 800 450 5 8 1 1 0 0 1
+pinnumber=1
+T 800 350 5 8 0 1 0 2 1
+pinseq=1
+T 750 400 9 8 0 1 0 6 1
+pinlabel=out
+T 750 400 5 8 0 1 0 8 1
+pintype=out
+}
+T 700 600 8 10 1 1 0 0 1
+refdes=U?
+T 200 1450 5 10 0 0 0 0 1
+description=Push-Pull Output Sub-Microamp Comparator
+T 200 2050 5 10 0 0 0 0 1
+numslots=0
+L 630 460 490 460 3 0 0 0 -1 -1
+L 470 300 550 460 3 0 0 0 -1 -1
+L 410 300 490 460 3 0 0 0 -1 -1
+L 470 300 330 300 3 0 0 0 -1 -1
+T 200 1850 5 10 0 0 0 0 1
+net=GND:2
+T 200 1650 5 10 0 0 0 0 1
+net=Vcc:5
+T 200 2250 5 10 0 0 0 0 1
+documentation=http://ww1.microchip.com/downloads/en/DeviceDoc/21696g.pdf
+T 200 1050 5 10 0 0 0 0 1
+footprint2=SC70_5
+T 200 1250 5 10 0 0 0 0 1
+footprint=SOT25D

@@ -1,0 +1,74 @@
+v 20081231 1
+P 0 500 300 500 1 0 0
+{
+T 200 550 5 8 1 1 0 6 1
+pinnumber=2
+T 200 450 5 8 0 1 0 8 1
+pinseq=2
+T 350 500 9 10 0 1 0 0 1
+pinlabel=2
+T 350 500 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 100 300 100 1 0 0
+{
+T 200 150 5 8 1 1 0 6 1
+pinnumber=3
+T 200 50 5 8 0 1 0 8 1
+pinseq=3
+T 350 100 9 10 0 1 0 0 1
+pinlabel=3
+T 350 100 5 8 0 1 0 2 1
+pintype=in
+}
+P 1300 300 1100 300 1 0 0
+{
+T 1100 350 5 8 1 1 0 0 1
+pinnumber=1
+T 1100 250 5 8 0 1 0 2 1
+pinseq=1
+T 1050 300 9 8 0 1 0 6 1
+pinlabel=out
+T 1050 300 5 8 0 1 0 8 1
+pintype=out
+}
+T 950 550 8 10 1 1 0 0 1
+refdes=U?
+T 0 3600 5 10 0 0 0 0 1
+device=7402
+T 0 800 5 10 0 0 0 0 1
+footprint=SO14
+T 0 1000 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 0 1600 5 10 0 0 0 0 1
+description=Quad 2-Input NOR Gate
+T 0 3000 5 10 0 0 0 0 1
+numslots=4
+T 0 3200 5 10 0 0 0 0 1
+dist-license=GPL
+T 0 3400 5 10 0 0 0 0 1
+use-license=unlimited
+T 0 2000 5 10 0 0 0 0 1
+slotdef=4:11,12,13
+T 0 2200 5 10 0 0 0 0 1
+slotdef=3:8,9,10
+T 0 2800 5 10 0 0 0 0 1
+slot=1
+A 600 200 400 15 75 3 0 0 0 -1 -1
+A 600 400 400 270 75 3 0 0 0 -1 -1
+A -50 300 425 315 90 3 0 0 0 -1 -1
+V 1050 300 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 250 600 600 600 3 0 0 0 -1 -1
+L 600 0 250 0 3 0 0 0 -1 -1
+T 0 2400 5 10 0 0 0 0 1
+slotdef=2:5,6,4
+T 0 2600 5 10 0 0 0 0 1
+slotdef=1:2,3,1
+T 0 1200 5 10 0 0 0 0 1
+comment=arcs: 400,15,75 and 425,-45,90
+T 0 1400 5 10 0 0 0 0 1
+documentation=http://www.onsemi.com/PowerSolutions/product.do?id=74HC02
+T 0 1800 5 10 0 0 0 0 1
+comment=Vcc:14; GND:7; use 74xx-14N-Pwr-1.sym or net attributes
+T 650 300 5 10 1 1 0 4 1
+value=7402

@@ -1,0 +1,45 @@
+v 20081231 1
+T 0 1100 5 10 0 0 0 0 1
+device=TLC556
+T 0 1300 5 10 0 0 0 0 1
+footprint=SO14
+T 0 1500 5 10 0 0 0 0 1
+description=Dual LinCMOS Timer
+T 0 1700 5 10 0 0 0 0 1
+documentation=http://focus.ti.com/docs/prod/folders/print/tlc556.html
+T 0 1900 5 10 0 0 0 0 1
+author=Bill Gatliff <bgat@billgatliff.com>
+T 0 2100 5 10 0 0 0 0 1
+dist-license=GPL
+T 0 2300 5 10 0 0 0 0 1
+use-license=unlimited
+T 0 100 9 8 1 0 0 0 1
+TLC556
+T 1495 1100 5 10 1 1 0 6 1
+refdes=U?
+L 0 1000 1500 1000 3 0 0 0 -1 -1
+L 0 1000 0 300 3 0 0 0 -1 -1
+L 0 300 1500 300 3 0 0 0 -1 -1
+L 1500 1000 1500 300 3 0 0 0 -1 -1
+P 800 0 800 300 1 0 0
+{
+T 800 0 5 10 0 0 180 0 1
+pintype=pwr
+T 755 500 9 8 1 1 0 4 1
+pinlabel=GND
+T 750 205 5 8 1 1 90 6 1
+pinnumber=7
+T 800 0 5 10 0 0 180 0 1
+pinseq=7
+}
+P 800 1300 800 1000 1 0 0
+{
+T 800 1300 5 10 0 0 180 0 1
+pintype=pwr
+T 745 800 9 8 1 1 0 4 1
+pinlabel=VDD
+T 750 1095 5 8 1 1 90 0 1
+pinnumber=14
+T 800 1300 5 10 0 0 180 0 1
+pinseq=14
+}

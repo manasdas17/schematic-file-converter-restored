@@ -1,0 +1,127 @@
+v 20070902 1
+B 300 0 1300 1400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1500 1800 5 10 0 0 0 0 1
+device=COUNTA
+P 300 1100 0 1100 1 0 1
+{
+T 200 1150 5 8 0 1 0 6 1
+pinnumber=2
+T 200 1050 5 8 0 1 0 8 1
+pinseq=2
+T 350 1100 9 8 1 1 0 1 1
+pinlabel=EIN
+T 350 1100 5 8 0 1 0 2 1
+pintype=in
+}
+P 300 800 0 800 1 0 1
+{
+T 200 850 5 8 0 1 0 6 1
+pinnumber=1
+T 200 750 5 8 0 1 0 8 1
+pinseq=1
+T 400 800 9 8 1 1 0 1 1
+pinlabel=CK
+T 400 800 5 8 0 1 0 2 1
+pintype=in
+}
+L 300 900 400 800 3 0 0 0 -1 -1
+L 400 800 300 700 3 0 0 0 -1 -1
+P 1900 1100 1600 1100 1 0 0
+{
+T 1700 1150 5 8 0 1 0 0 1
+pinnumber=3
+T 1700 1050 5 8 0 1 0 2 1
+pinseq=3
+T 1550 1100 9 8 1 1 0 7 1
+pinlabel=EOUT
+T 1550 1100 5 8 0 1 0 8 1
+pintype=out
+}
+T 1500 1500 8 10 1 1 0 0 1
+refdes=X?
+T 1500 1600 8 10 0 0 0 0 1
+model-name=COUNTA
+T 1200 200 9 10 1 0 0 4 1
+COUNTA
+T 100 1400 8 10 0 0 0 0 1
+numslots=0
+T 1500 1400 8 10 0 1 0 0 1
+description=4 bit counter
+T 100 1200 8 10 0 1 0 0 1
+documentation=http://research.kek.jp/people/ikeda/openIP
+T 100 2000 8 10 0 0 0 0 1
+symversion=1.0
+T 100 1800 8 10 0 1 0 0 1
+author=jpd@noqsi.com
+T 100 1600 8 10 0 0 0 0 1
+footprint=none
+P 300 500 0 500 1 0 1
+{
+T 200 550 5 8 0 1 0 6 1
+pinnumber=4
+T 200 450 5 8 0 1 0 8 1
+pinseq=4
+T 350 500 9 8 1 1 0 1 1
+pinlabel=MODE
+T 350 500 5 8 0 1 0 2 1
+pintype=in
+}
+P 300 200 0 200 1 0 1
+{
+T 200 250 5 8 0 1 0 6 1
+pinnumber=9
+T 200 150 5 8 0 1 0 8 1
+pinseq=9
+T 350 200 9 8 1 1 0 1 1
+pinlabel=RST
+T 350 200 5 8 0 1 0 2 1
+pintype=in
+}
+P 500 1700 500 1400 1 0 0
+{
+T 450 1495 5 8 0 1 90 0 1
+pinnumber=5
+T 550 1500 5 8 0 1 90 2 1
+pinseq=5
+T 505 1300 9 8 1 1 180 4 1
+pinlabel=Q0
+T 500 1350 5 8 0 1 90 8 1
+pintype=out
+}
+P 800 1700 800 1400 1 0 0
+{
+T 750 1495 5 8 0 1 90 0 1
+pinnumber=6
+T 850 1500 5 8 0 1 90 2 1
+pinseq=6
+T 805 1300 9 8 1 1 180 4 1
+pinlabel=Q1
+T 800 1350 5 8 0 1 90 8 1
+pintype=out
+}
+P 1100 1700 1100 1400 1 0 0
+{
+T 1050 1495 5 8 0 1 90 0 1
+pinnumber=7
+T 1150 1500 5 8 0 1 90 2 1
+pinseq=7
+T 1105 1300 9 8 1 1 180 4 1
+pinlabel=Q2
+T 1100 1350 5 8 0 1 90 8 1
+pintype=out
+}
+P 1400 1700 1400 1400 1 0 0
+{
+T 1350 1495 5 8 0 1 90 0 1
+pinnumber=8
+T 1450 1500 5 8 0 1 90 2 1
+pinseq=8
+T 1405 1300 9 8 1 1 180 4 1
+pinlabel=Q3
+T 1400 1350 5 8 0 1 90 8 1
+pintype=out
+}
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 0 0 8 10 0 0 0 0 1
+use-license=unlimited

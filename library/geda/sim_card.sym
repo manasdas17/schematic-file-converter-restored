@@ -1,0 +1,88 @@
+v 20060113 1 1
+P 100 1000 400 1000 1 0 0
+{
+T 300 1050 5 8 1 1 0 6 1
+pinnumber=1
+T 300 950 5 8 0 1 0 8 1
+pinseq=1
+T 450 1000 9 8 1 1 0 0 1
+pinlabel=VCC
+T 450 1000 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 2500 1000 2200 1000 1 0 0
+{
+T 2300 1050 5 8 1 1 0 0 1
+pinnumber=5
+T 2300 950 5 8 0 1 0 2 1
+pinseq=2
+T 2150 1000 9 8 1 1 0 6 1
+pinlabel=GND
+T 2150 1000 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 100 700 400 700 1 0 0
+{
+T 300 750 5 8 1 1 0 6 1
+pinnumber=2
+T 300 650 5 8 0 1 0 8 1
+pinseq=3
+T 450 700 9 8 1 1 0 0 1
+pinlabel=RST
+T 450 700 5 8 0 1 0 2 1
+pintype=in
+}
+P 2500 700 2200 700 1 0 0
+{
+T 2300 750 5 8 1 1 0 0 1
+pinnumber=6
+T 2300 650 5 8 0 1 0 2 1
+pinseq=4
+T 2150 700 9 8 1 1 0 6 1
+pinlabel=VPP
+T 2150 700 5 8 0 1 0 8 1
+pintype=pwr
+}
+P 100 400 400 400 1 0 0
+{
+T 300 450 5 8 1 1 0 6 1
+pinnumber=3
+T 300 350 5 8 0 1 0 8 1
+pinseq=5
+T 450 400 9 8 1 1 0 0 1
+pinlabel=CLOCK
+T 450 400 5 8 0 1 0 2 1
+pintype=in
+}
+P 2500 400 2200 400 1 0 0
+{
+T 2300 450 5 8 1 1 0 0 1
+pinnumber=7
+T 2300 350 5 8 0 1 0 2 1
+pinseq=6
+T 2150 400 9 8 1 1 0 6 1
+pinlabel=I/O
+T 2150 400 5 8 0 1 0 8 1
+pintype=io
+}
+B 400 100 1800 1200 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 2200 1400 8 10 1 1 0 6 1
+refdes=J?
+T 400 1400 9 10 1 0 0 0 1
+SIM_card
+T 400 1600 5 10 0 0 0 0 1
+device=SIM_card
+T 400 1800 5 10 0 0 0 0 1
+footprint=SIM_card
+T 400 2000 5 10 0 0 0 0 1
+author=Wojciech Zabolotny <wzab@ise.pw.edu.pl>
+T 400 2200 5 10 0 0 0 0 1
+documentation=http://www.interfacebus.com/SIM_Card.html
+T 400 2400 5 10 0 0 0 0 1
+description=SIM card connector
+T 400 2600 5 10 0 0 0 0 1
+numslots=0
+T 400 2800 5 10 0 0 0 0 1
+dist-license=public domain
+T 400 3000 5 10 0 0 0 0 1
+use-license=public domain

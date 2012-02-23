@@ -1,0 +1,42 @@
+v 20090328 2
+B 0 100 600 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 300 450 9 8 1 0 0 4 1
+INA163
+P 300 900 300 800 1 0 0
+{
+T 200 900 5 8 0 1 0 4 1
+pinseq=11
+T 200 900 5 8 1 1 0 4 1
+pinnumber=11
+T 300 1000 5 8 0 1 0 7 1
+pintype=pwr
+T 300 700 5 8 1 1 0 4 1
+pinlabel=+Ub
+}
+P 300 0 300 100 1 0 0
+{
+T 200 0 5 8 0 1 0 4 1
+pinseq=6
+T 200 0 5 8 1 1 0 4 1
+pinnumber=6
+T 600 0 5 8 0 1 0 6 1
+pintype=pwr
+T 300 200 5 8 1 1 0 4 1
+pinlabel=-Ub
+}
+T 400 900 8 10 1 1 0 1 1
+refdes=U?
+T 90 2500 5 8 0 0 0 0 1
+description=Power pins for INA163
+T 90 1700 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 90 2100 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 90 1900 5 8 0 0 0 0 1
+dist-license=GPL 3 (see http://www.gnu.org/licenses/licenses.html for the details)
+T 90 1500 5 8 0 0 0 0 1
+numslots=0
+T 90 2300 5 8 0 0 0 0 1
+documentation=http://focus.ti.com/lit/ds/symlink/ina163.pdf
+T 90 2700 5 8 0 0 0 0 1
+device=instr_amp_INA163_pwr

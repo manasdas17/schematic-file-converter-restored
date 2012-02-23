@@ -1,0 +1,61 @@
+v 20081231 1
+P 1200 0 1200 300 1 0 0
+{
+T 1250 200 5 8 1 1 0 2 1
+pinnumber=17
+T 1150 200 5 8 0 1 0 8 1
+pinseq=40
+T 1200 350 9 8 1 1 0 3 1
+pinlabel=CM
+T 1200 500 5 8 0 1 0 3 1
+pintype=out
+}
+P 0 900 300 900 1 0 0
+{
+T 200 950 5 8 1 1 0 6 1
+pinnumber=19
+T 200 850 5 8 0 1 0 8 1
+pinseq=41
+T 400 900 9 8 1 1 0 1 1
+pinlabel=INP
+T 350 900 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 500 300 500 1 0 0
+{
+T 200 550 5 8 1 1 0 6 1
+pinnumber=20
+T 200 450 5 8 0 1 0 8 1
+pinseq=42
+T 400 500 9 8 1 1 0 1 1
+pinlabel=INM
+T 350 500 5 8 0 1 0 2 1
+pintype=in
+}
+T 1700 1200 8 10 1 1 0 6 1
+refdes=U?
+T 0 1400 5 10 0 0 0 0 1
+device=ADS5521
+T 0 1600 5 10 0 0 0 0 1
+footprint=TQFP64_14
+T 0 1800 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 0 2000 5 10 0 0 0 0 1
+documentation=http://focus.ti.com/docs/prod/folders/print/ads5521.html
+T 0 2200 5 10 0 0 0 0 1
+description=ADC from TI, 12-bit, upto 105MSPS
+T 0 2400 5 10 0 0 0 0 1
+numslots=0
+T 0 2600 5 10 0 0 0 0 1
+dist-license=GPL
+T 0 2800 5 10 0 0 0 0 1
+use-license=unlimited
+T 0 3000 5 10 0 0 0 0 1
+comment=generated with Python script tragesym
+L 100 700 500 1100 3 0 0 0 -1 -1
+L 100 700 500 300 3 0 0 0 -1 -1
+L 500 1100 1700 1100 3 0 0 0 -1 -1
+L 500 300 1700 300 3 0 0 0 -1 -1
+L 1700 300 1700 1100 3 0 0 0 -1 -1
+T 1200 700 5 10 1 1 0 4 1
+value=ADS5521

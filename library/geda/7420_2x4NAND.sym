@@ -1,0 +1,92 @@
+v 20080127 1
+T 300 3300 5 8 0 0 0 0 1
+device=7420
+T 300 2900 5 8 0 0 0 0 1
+description=2 NAND gates with 4 inputs
+T 300 3100 5 8 0 0 0 0 1
+documentation=http://www-s.ti.com/sc/ds/sn74hc20.pdf
+T 300 2700 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 300 2500 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 300 2300 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 300 2100 5 8 0 0 0 0 1
+numslots=2
+T 300 1700 5 8 0 0 0 0 1
+slotdef=1:1,2,4,5,6
+T 300 1900 5 8 0 0 0 0 1
+slotdef=2:9,10,12,13,8
+T 300 1300 8 10 1 1 0 0 1
+refdes=U?
+T 300 1100 8 10 1 1 0 0 1
+value=74HC20
+T 300 900 8 8 1 1 0 0 1
+footprint=SO14
+T 800 900 8 10 1 0 0 0 1
+slot=1
+P 850 500 900 500 1 0 1
+{
+T 900 550 5 8 1 1 0 0 1
+pinnumber=6
+T 900 550 5 8 0 1 0 0 1
+pinseq=6
+T 750 500 9 8 0 1 0 6 1
+pinlabel=Y
+T 750 500 5 8 0 1 0 8 1
+pintype=out
+}
+P 100 0 0 0 1 0 1
+{
+T 100 50 5 8 1 1 0 6 1
+pinnumber=5
+T 100 50 5 8 0 1 0 6 1
+pinseq=5
+T 150 0 9 8 0 1 0 0 1
+pinlabel=D
+T 150 0 5 8 0 1 0 2 1
+pintype=in
+}
+P 100 1000 0 1000 1 0 1
+{
+T 100 1050 5 8 1 1 0 6 1
+pinnumber=1
+T 100 1050 5 8 0 1 0 6 1
+pinseq=1
+T 150 1000 9 8 0 1 0 0 1
+pinlabel=A
+T 150 1000 5 8 0 1 0 2 1
+pintype=in
+}
+P 100 700 0 700 1 0 1
+{
+T 100 750 5 8 1 1 0 6 1
+pinnumber=2
+T 100 750 5 8 0 1 0 6 1
+pinseq=2
+T 150 600 9 8 0 1 0 0 1
+pinlabel=B
+T 150 600 5 8 0 1 0 2 1
+pintype=in
+}
+P 100 300 0 300 1 0 1
+{
+T 100 350 5 8 1 1 0 6 1
+pinnumber=4
+T 100 350 5 8 0 1 0 6 1
+pinseq=4
+T 150 300 9 8 0 1 0 0 1
+pinlabel=C
+T 150 300 5 8 0 1 0 2 1
+pintype=in
+}
+L 100 200 100 0 3 0 0 0 -1 -1
+L 100 1000 100 800 3 0 0 0 -1 -1
+L 100 200 100 800 3 0 0 0 -1 -1
+L 100 800 500 800 3 0 0 0 -1 -1
+L 100 200 500 200 3 0 0 0 -1 -1
+A 500 500 299 270 180 3 0 0 0 -1 -1
+V 800 500 51 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 450 400 9 10 1 0 0 4 2
+NAND
+

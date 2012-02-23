@@ -1,0 +1,52 @@
+v 20090328 2
+T 90 2900 5 8 0 0 0 0 1
+device=comparator_dual_pwr
+T 100 2700 5 8 0 0 0 0 1
+description=power pins for dual comparator, LM393 style
+T 100 2500 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 100 2100 5 8 0 0 0 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 100 1900 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 100 1700 5 8 0 0 0 0 1
+numslots=0
+T 700 700 8 10 1 1 0 1 1
+refdes=U?
+B 0 100 600 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 100 450 9 8 1 0 0 1 1
+2x
+P 300 900 300 800 1 0 0
+{
+T 250 850 5 8 0 1 0 6 1
+pinseq=8
+T 250 850 5 8 1 1 0 6 1
+pinnumber=8
+T 300 1050 5 8 0 1 0 7 1
+pintype=pwr
+T 300 700 5 20 0 1 0 4 1
+pinlabel=+
+}
+P 300 0 300 100 1 0 0
+{
+T 250 0 5 8 1 1 0 7 1
+pinseq=4
+T 300 0 5 8 0 1 0 7 1
+pinnumber=4
+T 600 0 5 8 0 1 0 6 1
+pintype=pwr
+T 300 200 5 20 0 1 0 4 1
+pinlabel=-
+}
+L 275 350 375 350 3 0 0 0 -1 -1
+L 375 350 375 550 3 0 0 0 -1 -1
+L 375 550 475 550 3 0 0 0 -1 -1
+T 700 500 8 10 1 1 0 1 1
+value=LM393
+T 700 300 8 8 1 1 0 1 1
+footprint=SO8
+L 300 750 300 650 3 0 0 0 -1 -1
+L 250 700 350 700 3 0 0 0 -1 -1
+L 250 200 350 200 3 0 0 0 -1 -1
+T 100 2300 5 8 0 0 0 0 1
+documentation=http://www.onsemi.com/pub/Collateral/LM393-D.PDF

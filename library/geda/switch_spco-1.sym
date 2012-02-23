@@ -1,0 +1,53 @@
+v 20040111 1
+T 410 850 8 10 0 0 0 0 1
+device=switch_singlePole_changeOver
+P 310 200 10 200 1 0 1
+{
+T 560 250 5 10 0 0 0 0 1
+pinseq=2
+T 110 300 5 10 0 1 0 0 1
+pinnumber=2
+T 10 100 5 10 0 0 0 0 1
+pintype=passive
+T 310 200 5 10 0 0 0 0 1
+pinlabel=B
+}
+P 710 400 1000 400 1 0 1
+{
+T 760 650 5 10 0 0 0 0 1
+pinseq=1
+T 710 500 5 10 0 1 0 0 1
+pinnumber=1
+T 810 500 5 10 0 0 0 0 1
+pintype=passive
+T 710 400 5 10 0 0 0 0 1
+pinlabel=A
+}
+P 710 0 1000 0 1 0 1
+{
+T 1660 150 5 10 0 0 0 0 1
+pinseq=3
+T 1500 50 5 10 0 1 0 0 1
+pinnumber=3
+T 1710 0 5 10 0 0 0 0 1
+pintype=passive
+T 710 0 5 10 0 0 0 0 1
+pinlabel=C
+}
+L 310 200 660 350 3 0 0 0 -1 -1
+T 410 600 8 10 1 1 0 0 1
+refdes=S?
+V 660 400 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 660 0 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 410 1000 8 10 0 0 0 0 1
+footprint=none
+T 410 1150 8 10 0 0 0 0 1
+numslots=0
+T 3600 0 8 10 0 0 0 0 1
+author=Wilbert Knol w.knolATniwa.co.nz
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 1600 0 8 10 0 0 0 0 1
+use-license=unlimited
+T 0 200 8 10 0 0 0 0 1
+comment=Suggested library: unknown

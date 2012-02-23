@@ -1,0 +1,72 @@
+v 20110619 2
+T 300 3500 5 8 0 0 0 0 1
+description=generic dual operational amplifier, SO8
+T 300 3300 5 8 0 0 0 0 1
+comment=Use symbol opamp_dual_pwr.sym to connect power pins.
+T 300 2500 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 300 2900 5 8 0 0 0 0 1
+documentation=http://www.national.com/ds.cgi/TL/TL082.pdf
+T 300 1800 5 8 0 0 0 0 1
+numslots=2
+T 300 1400 5 8 0 0 0 0 1
+slotdef=1:1,2,3
+T 300 1600 5 8 0 0 0 0 1
+slotdef=2:7,6,5
+T 1100 600 8 8 1 0 0 0 1
+slot=1
+T 700 1000 8 10 1 1 0 0 1
+refdes=U?
+T 700 800 8 10 1 1 0 0 1
+value=TL082
+T 700 600 8 8 1 1 0 0 1
+footprint=SO8
+L 200 800 1000 400 3 10 0 0 -1 -1
+L 200 0 1000 400 3 10 0 0 -1 -1
+P 1000 400 1100 400 1 0 1
+{
+T 1000 450 5 8 1 1 0 0 1
+pinnumber=1
+T 1000 450 5 8 0 1 0 0 1
+pinseq=1
+T 1000 250 5 8 0 1 0 0 1
+pintype=out
+T 1000 250 9 8 0 1 0 0 1
+pinlabel=out
+}
+P 100 200 200 200 1 0 0
+{
+T 150 250 5 8 1 1 0 6 1
+pinnumber=2
+T 150 250 5 8 0 1 0 6 1
+pinseq=2
+T 250 100 9 16 0 1 0 0 1
+pinlabel=-
+T 150 150 5 8 0 1 0 8 1
+pintype=in
+}
+P 100 600 200 600 1 0 0
+{
+T 150 650 5 8 1 1 0 6 1
+pinnumber=3
+T 150 650 5 8 0 1 0 6 1
+pinseq=3
+T 250 500 9 16 0 1 0 0 1
+pinlabel=+
+T 150 550 5 8 0 1 0 8 1
+pintype=in
+}
+T 450 400 9 10 1 0 0 4 1
+dual
+T 300 2100 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 300 2300 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+L 250 600 350 600 3 10 0 0 -1 -1
+L 300 650 300 550 3 10 0 0 -1 -1
+L 250 200 350 200 3 10 0 0 -1 -1
+L 200 800 200 0 3 10 2 0 -1 -1
+T 300 2700 5 8 0 0 0 0 1
+symversion=1.0
+T 300 3100 5 8 0 0 0 0 1
+footprints=SO8, DIP8

@@ -1,0 +1,50 @@
+v 20110116 2
+T 100 1700 5 8 0 0 0 0 1
+description=BNC connector
+T 100 1300 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 800 500 8 10 1 1 0 0 1
+refdes=CONN?
+T 800 300 8 10 1 1 0 0 1
+value=XXX
+T 800 150 8 8 1 1 0 0 1
+footprint=BNC_LAY
+P 0 400 100 400 1 0 0
+{
+T 250 450 5 8 0 1 0 6 1
+pinnumber=1
+T 250 450 5 8 0 1 0 6 1
+pinseq=1
+T 250 450 9 8 0 1 0 6 1
+pinlabel=1
+T 150 300 5 8 0 1 0 0 1
+pintype=pas
+}
+V 400 400 60 3 20 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 400 0 400 90 1 0 0
+{
+T 400 150 5 8 0 1 0 6 1
+pinnumber=2
+T 400 150 5 8 0 1 0 6 1
+pinseq=2
+T 400 150 9 8 0 1 0 6 1
+pinlabel=2
+T 400 200 5 8 0 1 0 0 1
+pintype=pas
+}
+V 400 400 310 3 20 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 400 90 24 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1
+L 100 400 340 400 3 10 0 0 -1 -1
+V 340 400 24 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1
+L 590 140 610 120 3 20 1 0 -1 -1
+L 610 120 680 190 3 20 1 0 -1 -1
+L 680 190 660 210 3 20 1 0 -1 -1
+L 210 660 190 680 3 20 1 0 -1 -1
+L 190 680 120 610 3 20 1 0 -1 -1
+L 120 610 140 590 3 20 1 0 -1 -1
+T 100 1500 5 8 0 0 0 0 1
+footprints=BNC_LAY, BNC_LAY2, BNC_LAY_BOTTOM, BNC_VERT, BNC_VERT2, BNC_VERT3, HF_MULTI
+T 100 1100 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl.txt
+T 100 900 5 8 0 0 0 0 1
+use-license=free, no restrictions

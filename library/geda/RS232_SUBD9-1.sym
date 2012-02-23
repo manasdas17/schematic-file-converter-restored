@@ -1,0 +1,123 @@
+v 20071229 1
+T 200 3650 8 10 1 1 0 0 1
+refdes=X?
+T 1000 1850 5 10 0 0 0 0 1
+device=RS232_SUBD9
+T 1000 2050 5 10 0 0 0 0 1
+footprint=none
+T 1000 2250 5 10 0 0 0 0 1
+numslots=0
+T 1000 3450 5 10 0 0 0 0 1
+description=serial port connector RS232 with 9 pins
+P 600 3400 900 3400 1 0 1
+{
+T 700 3450 5 8 1 1 0 0 1
+pinnumber=1
+T 700 3350 5 8 0 1 0 2 1
+pinseq=1
+T 550 3400 9 8 1 1 0 6 1
+pinlabel=CD
+T 550 3400 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 3000 900 3000 1 0 1
+{
+T 700 3050 5 8 1 1 0 0 1
+pinnumber=2
+T 700 2950 5 8 0 1 0 2 1
+pinseq=2
+T 550 3000 9 8 1 1 0 6 1
+pinlabel=RxD
+T 550 3000 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 2600 900 2600 1 0 1
+{
+T 700 2650 5 8 1 1 0 0 1
+pinnumber=3
+T 700 2550 5 8 0 1 0 2 1
+pinseq=3
+T 550 2600 9 8 1 1 0 6 1
+pinlabel=TxD
+T 550 2600 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 2200 900 2200 1 0 1
+{
+T 700 2250 5 8 1 1 0 0 1
+pinnumber=4
+T 700 2150 5 8 0 1 0 2 1
+pinseq=4
+T 550 2200 9 8 1 1 0 6 1
+pinlabel=DTR
+T 550 2200 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 1800 900 1800 1 0 1
+{
+T 700 1850 5 8 1 1 0 0 1
+pinnumber=5
+T 700 1750 5 8 0 1 0 2 1
+pinseq=5
+T 550 1800 9 8 1 1 0 6 1
+pinlabel=GND
+T 550 1800 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 1400 900 1400 1 0 1
+{
+T 700 1450 5 8 1 1 0 0 1
+pinnumber=6
+T 700 1350 5 8 0 1 0 2 1
+pinseq=6
+T 550 1400 9 8 1 1 0 6 1
+pinlabel=DSR
+T 550 1400 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 1000 900 1000 1 0 1
+{
+T 700 1050 5 8 1 1 0 0 1
+pinnumber=7
+T 700 950 5 8 0 1 0 2 1
+pinseq=7
+T 550 1000 9 8 1 1 0 6 1
+pinlabel=RTS
+T 550 1000 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 600 900 600 1 0 1
+{
+T 700 650 5 8 1 1 0 0 1
+pinnumber=8
+T 700 550 5 8 0 1 0 2 1
+pinseq=8
+T 550 600 9 8 1 1 0 6 1
+pinlabel=CTS
+T 550 600 5 8 0 1 0 8 1
+pintype=pas
+}
+P 600 200 900 200 1 0 1
+{
+T 700 250 5 8 1 1 0 0 1
+pinnumber=9
+T 700 150 5 8 0 1 0 2 1
+pinseq=9
+T 550 200 9 8 1 1 0 6 1
+pinlabel=RI
+T 550 200 5 8 0 1 0 8 1
+pintype=pas
+}
+B 200 0 400 3600 3 0 0 0 -1 -1 0 0 -1 -1 -1 -1
+T 1000 2450 5 10 0 0 0 0 1
+symversion=0.1
+T 1000 2650 5 10 0 0 0 0 1
+use-license=unlimited
+T 1000 2850 5 10 0 0 0 0 1
+dist-license=GPL2
+T 1000 3050 5 10 0 0 0 0 1
+author=Werner Hoch <werner.ho@gmx.de>
+T 1000 3250 5 10 0 0 0 0 1
+documentation=http://en.wikipedia.org/wiki/RS-232
+T 150 0 9 10 1 0 90 0 1
+RS232

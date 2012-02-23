@@ -1,0 +1,43 @@
+v 20110619 2
+T 200 2200 5 8 0 0 0 0 1
+description=Power pins for dual opamp
+T 200 1800 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 200 1600 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 200 1400 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 200 2000 5 8 0 0 0 0 1
+symversion=1.0
+T 650 550 8 10 1 1 0 0 1
+refdes=U?
+B 0 100 600 700 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 50 350 9 8 1 0 0 0 1
+opamp
+T 50 450 9 8 1 0 0 0 1
+dual
+P 300 900 300 800 1 0 0
+{
+T 250 850 5 8 0 1 0 6 1
+pinseq=8
+T 250 850 5 8 1 1 0 6 1
+pinnumber=8
+T 250 1000 5 8 0 1 0 6 1
+pintype=pwr
+T 300 700 5 20 0 1 0 4 1
+pinlabel=+
+}
+P 300 0 300 100 1 0 0
+{
+T 250 -50 5 8 0 1 0 6 1
+pinseq=4
+T 250 -50 5 8 1 1 0 6 1
+pinnumber=4
+T 200 -200 5 8 0 1 0 6 1
+pintype=pwr
+T 300 200 5 20 0 1 0 4 1
+pinlabel=-
+}
+L 250 700 350 700 3 10 0 0 -1 -1
+L 300 750 300 650 3 10 0 0 -1 -1
+L 250 200 350 200 3 10 0 0 -1 -1

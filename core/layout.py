@@ -25,25 +25,31 @@ class Layout:
     """ Represents the design schematic as a PCB Layout. """
 
     def __init__(self):
-        self.layers = []
+        self.layers = list()
 
 
     def generate_netlist(self):
         """ Generate a netlist from the layout. """
         pass
 
+    def json(self):
+        """ Return the layout as JSON """
+        return {
+            "layers": [layer.json() for layer in self.layers]
+            }
+
 
 class Layer:
     """ A layer in the layout (ie, a PCB layer). """
 
-    def __init__(self, name=''):
+    def __init__(self, name='', type_=''):
         self.name = name
-        self.type = '' # copper/mask/silk/drill
-        self.images = []
-        self.shapes = {}
-        self.macros = {}
-        self.vias = []
-        self.components = []
+        self.type = type_ # copper/mask/silk/drill
+        self.images = list()
+        self.apertures = dict()
+        self.macros = dict()
+        self.vias = list()
+        self.components = list()
 
 
     def json(self):
@@ -51,7 +57,7 @@ class Layer:
         return {
             "type": self.type,
             "images": [i.json() for i in self.images],
-            "shapes": [self.shapes[k].json() for k in self.shapes],
+            "apertures": [self.apertures[k].json() for k in self.apertures],
             "macros": [self.macros[m].json() for m in self.macros],
             "vias": [v.json() for v in self.vias],
             "components": [c.json() for c in self.components]
@@ -90,10 +96,10 @@ class Image:
         self.x_step = None
         self.y_repeats = 1
         self.y_step = None
-        self.traces = []
-        self.fills = []
-        self.smears = []
-        self.shape_instances = []
+        self.traces = list()
+        self.fills = list()
+        self.smears = list()
+        self.shape_instances = list()
 
 
     def not_empty(self):
@@ -136,8 +142,9 @@ class Image:
             "y_repeats": self.y_repeats,
             "y_step": self.y_step,
             "traces": [t.json() for t in self.traces],
-            "fills": [[s.json() for s in f] for f in self.fills],
-            "shape_instances": self.shape_instances
+            "fills": [f.json() for f in self.fills],
+            "smears": [s.json() for s in self.smears],
+            "shape_instances": [i.json() for i in self.shape_instances]
             }
 
 
@@ -156,8 +163,30 @@ class Trace:
             "segments": [s.json() for s in self.segments]
             }
 
+
+class Fill:
+    """
+    A closed loop of connected segments (lines/arcs).
+
+    The segments define the outline of the fill. They
+    must be contiguous, listed in order (ie, each seg
+    connects with the previous seg and the next seg)
+    and not intersect each other.
+
+    """
+    def __init__(self, segments=None):
+        self.segments = segments or list()
+
+
+    def json(self):
+        """ Return the trace as JSON """
+        return {
+            "segments": [s.json() for s in self.segments]
+            }
+
+
 class Smear:
-    """ Line drawn by any shape other than a tiny circle. """
+    """ A line drawn by a rectangular aperture. """
 
     def __init__(self, line, shape):
         self.line = line
@@ -172,6 +201,84 @@ class Smear:
             }
 
 
+class ShapeInstance:
+    """
+    An instance of a shape defined by an aperture.
+
+    Instead of wrapping the aperture itself, we wrap
+    its constituent shape and hole defs, because
+    gerber does not prohibit an aperture from being
+    redefined at some arbitrary point in the file.
+
+    x and y attributes serve as an offset.
+
+    """
+    def __init__(self, point, aperture):
+        self.x = point.x
+        self.y = point.y
+        self.shape = aperture.shape
+        self.hole = aperture.hole
+
+
+    def json(self):
+        """ Return the shape instance as JSON """
+        return {
+            "x": self.x,
+            "y": self.y,
+            "shape": (isinstance(self.shape, str) and
+                      self.shape or self.shape.json()),
+            "hole": self.hole and self.hole.json()
+            }
+
+
+class Aperture:
+    """
+    A simple shape, with or without a hole.
+
+    If the shape is not defined by a macro, its class
+    must be one of Circle, Rectangle, Obround or
+    RegularPolygon.
+
+    If the shape is not defined by a macro, it may have
+    a hole. The class of the hole must be either Circle
+    or Rectangle. Shape and hole are both centered on
+    the origin. Placement is handled by metadata
+    connected to the aperture when it used.
+
+    Holes must be fully contained within the shape.
+
+    Holes never rotate, even if the shape is rotatable
+    (ie, a RegularPolygon).
+
+    """
+    def __init__(self, code, shape, hole):
+        self.code = code
+        self.shape = shape
+        self.hole = hole
+
+
+    def __eq__(self, other):
+        """ Compare 2 apertures. """
+        if (isinstance(self.shape, str) or
+            isinstance(other.shape, str)):
+            equal = self.shape == other.shape
+        else:
+            equal = (self.shape.__dict__ == other.shape.__dict__ and
+                     (self.hole == other.hole or
+                      self.hole.__dict__ == other.hole.__dict__))
+        return equal
+
+
+    def json(self):
+        """ Return the aperture as JSON """
+        return {
+            "code": self.code,
+            "shape": (isinstance(self.shape, str) and
+                      self.shape or self.shape.json()),
+            "hole": self.hole and self.hole.json()
+            }
+
+
 class Macro:
     """
     Complex shape built from multiple primitives.
@@ -181,10 +288,9 @@ class Macro:
     from prior shapes, not subsequent shapes.
 
     """
-    def __init__(self, name, prim_defs):
+    def __init__(self, name, primitives):
         self.name = name
-        self.primitives = [Primitive(d[0], d[1], d[2])
-                           for d in prim_defs]
+        self.primitives = primitives
 
 
     def json(self):

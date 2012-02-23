@@ -1,0 +1,59 @@
+v 20110619 2
+T 600 2700 5 8 0 0 0 0 1
+symversion=1.0
+P 1000 400 1000 500 1 0 0
+{
+T 950 350 5 8 1 1 0 6 1
+pinnumber=3
+T 950 450 9 8 0 1 180 0 1
+pinlabel=CATHODE
+T 1000 550 5 8 0 1 0 7 1
+pintype=pas
+T 1100 350 5 8 0 1 0 6 1
+pinseq=2
+}
+P 1000 900 1000 800 1 0 0
+{
+T 950 850 5 8 1 1 0 6 1
+pinnumber=1
+T 900 850 9 8 0 1 0 6 1
+pinlabel=ANODE
+T 1000 800 5 8 0 1 0 7 1
+pintype=pas
+T 1200 850 5 8 0 1 0 6 1
+pinseq=1
+}
+T 1300 1000 8 10 1 1 0 0 1
+refdes=D?
+T 600 3100 5 8 0 0 0 0 1
+description=Two independend LEDs integrated in a SMD package
+T 600 1900 5 8 0 0 0 0 1
+numslots=2
+T 1300 400 8 8 1 1 0 0 1
+footprint=LTST-C150
+T 600 2500 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilaser.de
+T 600 2300 5 8 0 0 0 0 1
+dist-license=GPL3, see http://gnu.org for the details
+T 1300 600 8 10 1 1 0 0 1
+value=LTST-C155GEKT
+T 600 1700 5 8 0 0 0 0 1
+slotdef=1:1,3
+T 600 1500 5 8 0 0 0 0 1
+slotdef=2:2,4
+T 600 2900 5 8 0 0 0 0 1
+comment=With LITEON bicolor LEDs slot 1 is on the blue side and slot 2 is on the red side of the spectrum
+T 600 2100 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 1300 800 8 10 1 0 0 0 1
+slot=1
+L 1175 500 825 500 3 10 0 0 -1 -1
+L 775 725 625 575 3 10 0 0 -1 -1
+L 850 650 700 500 3 10 0 0 -1 -1
+L 700 500 725 575 3 10 2 0 -1 -1
+L 775 525 700 500 3 10 2 0 -1 -1
+L 625 575 650 650 3 10 2 0 -1 -1
+L 700 600 625 575 3 10 2 0 -1 -1
+L 1175 800 825 800 3 10 2 0 -1 -1
+L 1000 500 825 800 3 10 2 0 -1 -1
+L 1175 800 1000 500 3 10 2 0 -1 -1

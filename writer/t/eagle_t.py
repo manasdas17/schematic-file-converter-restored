@@ -280,14 +280,17 @@ class EagleTests(unittest.TestCase):
 
         _part = Eagle.Part(name="IC9",
                            libid=1,
+                           devsetndx=2,
+                           symvar=1,
+                           techno=1,
                            value="DS3668",
                            numofshapes=2,
                           )
 
         _chunk = _part.construct()
 
-        _valid_chunk = b''.join((b"\x38\x00\x02\x00\x01\x00\x00\x00",
-                                 b"\x00\x00\x01\x49\x43\x39\x00\x00",
+        _valid_chunk = b''.join((b"\x38\x00\x02\x00\x01\x00\x02\x00",
+                                 b"\x01\x01\x01\x49\x43\x39\x00\x00",
                                  b"\x44\x53\x33\x36\x36\x38\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
@@ -392,6 +395,9 @@ class EagleTests(unittest.TestCase):
 
         _connheader = Eagle.ConnectionHeader(numofshapes=1,
                                              sindex=4,
+                                             attributes=None,
+                                             technologies=None,
+                                             name=None,
                                             )
 
         _chunk = _connheader.construct()
@@ -402,6 +408,7 @@ class EagleTests(unittest.TestCase):
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
+# TODO technology / attributes check, 'name'
         return
 
     def test_connections_construct(self):
@@ -475,6 +482,27 @@ class EagleTests(unittest.TestCase):
         _valid_chunk = b''.join((b"\x28\x00\x00\x00\x00\x00\x00\x00",
                                  b"\x90\xb4\x01\x00\x7e\x40\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_smd_construct(self):
+        """ Test SMD block creation """
+
+        _smd = Eagle.SMD(name="14",
+                         x=-1.905,
+                         y=3.0734,
+                         dx=0.6604,
+                         dy=2.032,
+                         layer=1,
+                        )
+
+        _chunk = _smd.construct()
+
+        _valid_chunk = b''.join((b"\x2b\x00\x00\x01\x96\xb5\xff\xff",
+                                 b"\x0e\x78\x00\x00\xe6\x0c\xb0\x27",
+                                 b"\x00\x00\x00\x31\x34\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)

@@ -1,0 +1,56 @@
+v 20081231 1
+P 800 400 800 200 1 0 1
+{
+T 650 450 9 8 1 1 0 0 1
+pinlabel=GND
+T 850 250 5 8 1 1 0 0 1
+pinnumber=2
+T 750 50 5 8 0 0 0 0 1
+pinseq=2
+}
+P 1400 1200 1600 1200 1 0 1
+{
+T 1050 1150 9 8 1 1 0 0 1
+pinlabel=OUT
+T 1450 1250 5 10 1 1 0 0 1
+pinnumber=5
+T 1850 1350 5 10 0 0 0 0 1
+pinseq=5
+T 1800 1500 5 10 0 0 0 0 1
+pintype=pwr
+}
+P 0 1200 200 1200 1 0 0
+{
+T 250 1150 9 8 1 1 0 0 1
+pinlabel=IN
+T 100 1250 5 10 1 1 0 0 1
+pinnumber=1
+T 400 1250 5 10 0 0 0 0 1
+pinseq=1
+T 300 1400 5 10 0 0 0 0 1
+pintype=pwr
+}
+P 200 700 0 700 1 0 1
+{
+T 250 650 9 8 1 1 0 0 1
+pinlabel=EN
+T 50 750 5 10 1 1 0 0 1
+pinnumber=3
+T 550 650 5 10 0 0 0 0 1
+pinseq=3
+T 500 800 5 10 0 0 0 0 1
+pintype=in
+}
+T 400 900 9 10 1 0 0 0 1
+TPS713x
+B 200 400 1200 1100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 700 1600 8 10 1 1 0 0 1
+refdes=U?
+T 200 2200 8 10 0 0 0 0 1
+footprint=SOT23-5
+T 195 2595 8 10 0 0 0 0 1
+author=David Griffith <davidgriffith@acm.org>
+T 195 2395 8 10 0 0 0 0 1
+device=TPS7613x
+T 195 1995 8 10 0 1 0 0 1
+documentation=http://www.ti.com/lit/gpn/TPS76133

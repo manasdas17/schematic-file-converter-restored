@@ -1,0 +1,57 @@
+v 20081231 1
+P 0 2000 300 2000 1 0 0
+{
+T 200 2050 5 8 1 1 0 6 1
+pinnumber=10
+T 200 1950 5 8 0 1 0 8 1
+pinseq=10
+T 350 2000 9 8 1 1 0 0 1
+pinlabel=INP
+T 350 2000 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 600 300 600 1 0 0
+{
+T 200 650 5 8 1 1 0 6 1
+pinnumber=11
+T 200 550 5 8 0 1 0 8 1
+pinseq=11
+T 350 600 9 8 1 1 0 0 1
+pinlabel=INM
+T 350 600 5 8 0 1 0 2 1
+pintype=in
+}
+P 900 0 900 300 1 0 0
+{
+T 950 200 5 8 1 1 0 2 1
+pinnumber=14
+T 850 200 5 8 0 1 0 8 1
+pinseq=14
+T 900 350 9 8 1 1 0 3 1
+pinlabel=VCM
+T 900 500 5 8 0 1 0 3 1
+pintype=io
+}
+T 1500 2400 8 10 1 1 0 6 1
+refdes=U?
+T 300 2650 5 10 0 0 0 0 1
+device=ADS6125
+T 300 2850 5 10 0 0 0 0 1
+footprint=QFN32_5_EP
+T 300 3050 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 300 3250 5 10 0 0 0 0 1
+documentation=http://focus.ti.com/docs/prod/folders/print/ads6125.html
+T 300 3450 5 10 0 0 0 0 1
+description=ADC from TI, 12-bit, upto 125MSPS
+T 300 3650 5 10 0 0 0 0 1
+numslots=0
+T 300 3850 5 10 0 0 0 0 1
+dist-license=GPL
+T 300 4050 5 10 0 0 0 0 1
+use-license=unlimited
+T 300 4250 5 10 0 0 0 0 1
+comment=generated with Python script tragesym
+B 300 300 1200 2000 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 900 1350 5 10 1 1 0 4 1
+value=ADS6125

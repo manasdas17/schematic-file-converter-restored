@@ -1,0 +1,131 @@
+v 20040111 1
+T 2300 2400 8 10 1 1 0 6 1
+refdes=U?
+T 1300 1350 9 10 1 0 0 3 1
+AD5624
+T 300 3150 5 10 0 0 0 0 1
+device=AD5624
+T 300 3350 5 10 0 0 0 0 1
+footprint=MSOP10
+T 300 3750 5 10 0 0 0 0 1
+author=Marek Peca <mp@duch.cz>
+T 300 2750 5 10 0 0 0 0 1
+description=AD5624/AD5664 12/14/16-bit Analog to Digital Converter, 3 wire
+T 300 2950 5 10 0 0 0 0 1
+numslots=0
+P 1100 2600 1100 2300 1 0 0
+{
+T 1050 2400 5 8 1 1 90 0 1
+pinnumber=9
+T 1150 2400 5 8 0 1 90 2 1
+pinseq=9
+T 1100 2250 9 8 1 1 90 6 1
+pinlabel=Vdd
+T 1100 2250 5 8 0 1 90 8 1
+pintype=pwr
+}
+P 1500 2600 1500 2300 1 0 0
+{
+T 1450 2400 5 8 1 1 90 0 1
+pinnumber=10
+T 1550 2400 5 8 0 1 90 2 1
+pinseq=10
+T 1500 2250 9 8 1 1 90 6 1
+pinlabel=Vref
+T 1500 2250 5 8 0 1 90 8 1
+pintype=in
+}
+P 2600 1900 2300 1900 1 0 0
+{
+T 2400 1950 5 8 1 1 0 0 1
+pinnumber=1
+T 2400 1850 5 8 0 1 0 2 1
+pinseq=1
+T 2250 1900 9 8 1 1 0 6 1
+pinlabel=A OUT
+T 2250 1900 5 8 0 1 0 8 1
+pintype=out
+}
+P 2600 1500 2300 1500 1 0 0
+{
+T 2400 1550 5 8 1 1 0 0 1
+pinnumber=2
+T 2400 1450 5 8 0 1 0 2 1
+pinseq=2
+T 2250 1500 9 8 1 1 0 6 1
+pinlabel=B OUT
+T 2250 1500 5 8 0 1 0 8 1
+pintype=out
+}
+P 2600 1100 2300 1100 1 0 0
+{
+T 2400 1150 5 8 1 1 0 0 1
+pinnumber=4
+T 2400 1050 5 8 0 1 0 2 1
+pinseq=4
+T 2250 1100 9 8 1 1 0 6 1
+pinlabel=C OUT
+T 2250 1100 5 8 0 1 0 8 1
+pintype=out
+}
+P 2600 700 2300 700 1 0 0
+{
+T 2400 750 5 8 1 1 0 0 1
+pinnumber=5
+T 2400 650 5 8 0 1 0 2 1
+pinseq=5
+T 2250 700 9 8 1 1 0 6 1
+pinlabel=D OUT
+T 2250 700 5 8 0 1 0 8 1
+pintype=out
+}
+P 0 1900 300 1900 1 0 0
+{
+T 200 1950 5 8 1 1 0 6 1
+pinnumber=8
+T 200 1850 5 8 0 1 0 8 1
+pinseq=8
+T 350 1900 9 8 1 1 0 0 1
+pinlabel=DIN
+T 350 1900 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 1500 300 1500 1 0 0
+{
+T 200 1550 5 8 1 1 0 6 1
+pinnumber=7
+T 200 1450 5 8 0 1 0 8 1
+pinseq=7
+T 350 1500 9 8 1 1 0 0 1
+pinlabel=SCLK
+T 350 1500 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 1100 300 1100 1 0 0
+{
+T 200 1150 5 8 1 1 0 6 1
+pinnumber=6
+T 200 1050 5 8 0 1 0 8 1
+pinseq=6
+T 350 1100 9 8 1 1 0 0 1
+pinlabel=SYNC
+T 350 1100 5 8 0 1 0 2 1
+pintype=in
+}
+L 350 1224 774 1224 3 0 0 0 -1 -1
+P 1300 0 1300 300 1 0 0
+{
+T 1250 200 5 8 1 1 90 6 1
+pinnumber=3
+T 1350 200 5 8 0 1 90 8 1
+pinseq=3
+T 1300 350 9 8 1 1 90 0 1
+pinlabel=GND
+T 1300 350 5 8 0 1 90 2 1
+pintype=pwr
+}
+B 300 300 2000 2000 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 350 2800 8 10 0 0 0 0 1
+dist-license=GPL
+T 350 2600 8 10 0 0 0 0 1
+use-license=ask

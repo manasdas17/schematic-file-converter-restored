@@ -1,0 +1,71 @@
+v 20110619 2
+T 200 2600 5 8 0 0 0 0 1
+description=IGBT, N-channel
+T 200 2400 5 8 0 0 0 0 1
+documentation=http://www.irf.com/product-info/datasheets/data/irg4bc30kpbf%20.pdf
+T 200 2200 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 200 1600 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 200 1400 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 600 600 8 10 1 1 0 0 1
+refdes=Q?
+T 600 400 8 10 1 1 0 0 1
+value=IRG4BC30
+T 600 200 8 8 1 1 0 0 1
+footprint=TO220_GCE
+P 0 200 200 200 1 0 0
+{
+T 100 300 5 10 0 1 0 4 1
+pinnumber=G
+T 100 300 9 10 0 1 0 4 1
+pinlabel=G
+T 100 400 5 10 0 1 0 0 1
+pinseq=1
+T 0 0 5 10 0 1 0 0 1
+pintype=pas
+}
+P 500 650 500 800 1 0 1
+{
+T 300 725 5 10 0 1 0 0 1
+pinnumber=C
+T 300 725 9 10 0 1 0 0 1
+pinlabel=C
+T 600 800 5 10 0 1 0 3 1
+pinseq=3
+T 700 800 5 10 0 1 0 0 1
+pintype=pas
+}
+P 500 150 500 0 1 0 1
+{
+T 300 -50 5 10 0 1 0 0 1
+pinnumber=E
+T 300 -50 9 10 0 1 0 0 1
+pinlabel=E
+T 600 0 5 10 0 1 0 3 1
+pinseq=2
+T 700 0 5 10 0 1 0 0 1
+pintype=pas
+}
+L 200 600 200 200 3 10 1 0 -1 -1
+L 250 300 250 175 3 30 0 0 -1 -1
+T 200 1800 5 8 0 0 0 0 1
+symversion=1.0
+T 200 2000 5 8 0 0 0 0 1
+footprints=TO247_GCE, TO220_GCE
+H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 4
+M 500,150
+L 378,170
+L 400,225
+z
+L 410 190 260 250 3 10 1 0 -1 -1
+H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 4
+M 260,550
+L 382,570
+L 360,625
+z
+L 350 590 500 650 3 10 1 0 -1 -1
+L 400 350 260 400 3 10 1 0 -1 -1
+L 250 450 250 350 3 30 0 0 -1 -1
+L 250 625 250 500 3 30 0 0 -1 -1

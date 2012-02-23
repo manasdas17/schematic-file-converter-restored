@@ -1,0 +1,133 @@
+v 20110115 2
+B 300 0 1000 1400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 275 3650 5 10 0 0 0 0 1
+device=AD5304
+T 1100 1450 8 10 1 1 0 0 1
+refdes=U?
+T 275 2850 5 10 0 0 0 0 1
+footprint=MSOP10
+T 300 1450 9 10 1 0 0 0 1
+AD5304
+T 275 2250 5 10 0 0 0 0 1
+author=Anton Dubniak <twister@tfsoft.org.ua>
+T 275 2650 5 10 0 0 0 0 1
+numslots=0
+T 275 2050 5 10 0 0 0 0 1
+dist-license=GPL
+T 275 1850 5 10 0 0 0 0 1
+use-license=unlimited
+T 275 3450 5 10 0 0 0 0 1
+description=AD5304/AD5314/AD5324: 2.5 V to 5.5 V, 500 uA, Quad Voltage Output 8-/10-/12-Bit DACs, 3-wire
+T 275 3250 5 10 0 0 0 0 1
+documentation=http://www.analog.com/static/imported-files/data_sheets/AD5304_5314_5324.pdf
+P 1600 800 1300 800 1 0 0
+{
+T 1395 845 5 8 1 1 0 0 1
+pinnumber=4
+T 1150 975 5 8 0 1 0 2 1
+pinseq=4
+T 1245 745 9 8 1 1 0 6 1
+pinlabel=VoutC
+T 1100 975 5 8 0 1 0 8 1
+pintype=out
+}
+P 0 1000 300 1000 1 0 0
+{
+T 205 1045 5 8 1 1 0 6 1
+pinnumber=5
+T 450 1175 5 8 0 1 0 8 1
+pinseq=5
+T 355 945 9 8 1 1 0 0 1
+pinlabel=REF
+T 500 1175 5 8 0 1 0 2 1
+pintype=in
+}
+V 250 400 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 0 400 200 400 1 0 0
+{
+T 205 445 5 8 1 1 0 6 1
+pinnumber=10
+T 450 575 5 8 0 1 0 8 1
+pinseq=10
+T 355 345 9 8 1 1 0 0 1
+pinlabel=\_SYNC\_
+T 500 575 5 8 0 1 0 2 1
+pintype=in
+}
+P 1600 600 1300 600 1 0 0
+{
+T 1395 645 5 8 1 1 0 0 1
+pinnumber=6
+T 1150 775 5 8 0 1 0 2 1
+pinseq=6
+T 1245 545 9 8 1 1 0 6 1
+pinlabel=VoutD
+T 1100 775 5 8 0 1 0 8 1
+pintype=out
+}
+P 1600 1000 1300 1000 1 0 0
+{
+T 1395 1045 5 8 1 1 0 0 1
+pinnumber=3
+T 1150 1175 5 8 0 1 0 2 1
+pinseq=3
+T 1245 945 9 8 1 1 0 6 1
+pinlabel=VoutB
+T 1100 1175 5 8 0 1 0 8 1
+pintype=out
+}
+P 1600 1200 1300 1200 1 0 0
+{
+T 1395 1245 5 8 1 1 0 0 1
+pinnumber=2
+T 1150 1375 5 8 0 1 0 2 1
+pinseq=2
+T 1245 1145 9 8 1 1 0 6 1
+pinlabel=VoutA
+T 1100 1375 5 8 0 1 0 8 1
+pintype=out
+}
+P 0 600 300 600 1 0 0
+{
+T 205 645 5 8 1 1 0 6 1
+pinnumber=9
+T 450 725 5 8 0 1 0 8 1
+pinseq=9
+T 355 545 9 8 1 1 0 0 1
+pinlabel=SCLK
+T 475 725 5 8 0 1 0 2 1
+pintype=clk
+}
+P 0 800 300 800 1 0 0
+{
+T 205 845 5 8 1 1 0 6 1
+pinnumber=8
+T 450 925 5 8 0 1 0 8 1
+pinseq=8
+T 355 745 9 8 1 1 0 0 1
+pinlabel=DIN
+T 500 925 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 200 300 200 1 0 0
+{
+T 205 245 5 8 1 1 0 6 1
+pinnumber=7
+T 425 375 5 8 0 1 0 8 1
+pinseq=7
+T 355 145 9 8 1 1 0 0 1
+pinlabel=GND
+T 450 375 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 0 1200 300 1200 1 0 0
+{
+T 205 1245 5 8 1 1 0 6 1
+pinnumber=1
+T 425 1375 5 8 0 1 0 8 1
+pinseq=1
+T 355 1145 9 8 1 1 0 0 1
+pinlabel=VCC
+T 450 1375 5 8 0 1 0 2 1
+pintype=pwr
+}

@@ -55,8 +55,8 @@
 # a blueprint-style frame is present with origin at 
 # (40'000, 40'000). 
 
+import logging
 import os
-import warnings
 import itertools
 
 from StringIO import StringIO
@@ -69,6 +69,11 @@ from core.design import Design
 from core.annotation import Annotation
 from core.component_instance import ComponentInstance
 from core.component_instance import SymbolAttribute
+
+
+# Logging
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('parser.geda')
 
 
 class GEDAError(Exception):
@@ -213,6 +218,26 @@ class GEDA:
 
         # FIXME: Converter currently will ignore style and color data in gEDA format!
 
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an geda schematic """
+        f = open(filename, 'rU')
+        data = f.read()
+        confidence = 0
+        if data[0:2] == 'v ':
+            confidence += 0.51
+        if 'package=' in data:
+            confidence += 0.25
+        if 'footprint=' in data:
+            confidence += 0.25
+        if 'refdes=' in data:
+            confidence += 0.25
+        if 'netname=' in data:
+            confidence += 0.25
+        return confidence
+
+
     def set_offset(self, point):
         """ Set the offset point for the gEDA output. As OpenJSON
             positions the origin in the center of the viewport and
@@ -237,7 +262,7 @@ class GEDA:
         self.design = Design()
 
         ##TODO: parse frame data of first file
-        with open(inputfiles[0], 'r') as stream:
+        with open(inputfiles[0], 'rU') as stream:
             self._check_version(stream)
 
             for line in stream.readlines():
@@ -250,7 +275,7 @@ class GEDA:
             self._parse_title_frame(params)
 
         for filename in inputfiles:
-            f_in = open(filename, "r")
+            f_in = open(filename, "rU")
             self._check_version(f_in)
 
             self.parse_schematic(f_in)
@@ -297,9 +322,7 @@ class GEDA:
                     self.design.design_attributes.add_attribute(key, value)
 
             elif obj_type == 'G' : ## picture type is not supported
-                warnings.warn(
-                    "ignoring picture/font in gEDA file. Not supported!"
-                )
+                log.warn("ignoring picture/font in gEDA file. Not supported!")
             elif obj_type == 'C': ## command for component found
                 basename = params['basename']
 
@@ -326,9 +349,7 @@ class GEDA:
 
             elif obj_type == 'H': ## SVG-like path
                 ##TODO(elbaschid): is this a valid assumption?
-                warnings.warn(
-                    'ommiting path outside of component.'
-                )
+                log.warn('ommiting path outside of component.')
                 ## skip description of path
                 num_lines = params['num_lines']
                 for dummy in range(num_lines):
@@ -359,7 +380,7 @@ class GEDA:
             return
 
         ##TODO: get position from parameter
-        stream = open(filename, 'r')
+        stream = open(filename, 'rU')
 
         obj_type, params = self._parse_command(stream)
 
@@ -447,15 +468,14 @@ class GEDA:
                     component = self.parse_component_data(stream, params)
             else:
                 if basename not in self.known_symbols:
-                    warnings.warn(
-                        "referenced symbol file '%s' unkown" % basename
-                    )
+                    log.warn("referenced symbol file '%s' unknown" % basename)
                     ## parse optional attached environment before continuing
                     self._parse_environment(stream)
                     return None, None
 
                 ## requires parsing of referenced symbol file
-                f_in = open(self.known_symbols[basename], "r")
+                print self.known_symbols[basename]
+                f_in = open(self.known_symbols[basename], "rU")
                 self._check_version(f_in)
 
                 ## if the file is mirroed compoent generate a mirrored component
@@ -582,7 +602,7 @@ class GEDA:
                     component.add_attribute('_prefix', prefix)
                     component.add_attribute('_suffix', suffix)
                 else:
-                    assert(key not in ['_refdes', 'refdes'])
+                    #assert(key not in ['_refdes', 'refdes'])
                     component.add_attribute(key, value)
             elif typ == 'L':
                 body.add_shape(
@@ -613,9 +633,7 @@ class GEDA:
                     body.add_shape(new_shape)
 
             elif typ == 'G':
-                warnings.warn(
-                    "ignoring picture/font in gEDA file. Not supported!"
-                )
+                log.warn("ignoring picture/font in gEDA file. Not supported!")
 
             else:
                 pass
@@ -1122,7 +1140,14 @@ class GEDA:
 
             Raises GEDAError when object type is not known.
         """
-        command_data = stream.readline().strip().split(self.DELIMITER)
+        line = stream.readline()
+
+        while line.startswith('#') or line == '\n':
+            line = stream.readline()
+
+        line = line.strip()
+
+        command_data = line.strip().split(self.DELIMITER)
 
         if len(command_data[0]) == 0 or command_data[0] in [']', '}']:
             return None, []
@@ -1131,6 +1156,8 @@ class GEDA:
 
         params = {}
         for idx, (name, typ) in enumerate(self.OBJECT_TYPES[object_type]):
+            if idx >= len(command_data):
+                print line, object_type, command_data
             params[name] = typ(command_data[idx])
 
         assert(len(params) == len(self.OBJECT_TYPES[object_type]))

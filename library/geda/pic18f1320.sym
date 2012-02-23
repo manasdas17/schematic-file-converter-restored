@@ -1,0 +1,222 @@
+v 20080127 1
+T 300 2800 9 10 1 0 0 0 1
+PIC18F1320
+P 0 2500 300 2500 1 0 0
+{
+T 0 2500 5 10 0 0 0 0 1
+pintype=tri
+T 350 2500 5 10 1 1 0 0 1
+pinlabel=RA0/AN0
+T 200 2550 5 10 1 1 0 6 1
+pinnumber=1
+T 0 2500 5 10 0 0 0 0 1
+pinseq=1
+}
+P 0 2200 300 2200 1 0 0
+{
+T 0 2200 5 10 0 0 0 0 1
+pintype=tri
+T 350 2200 5 10 1 1 0 0 1
+pinlabel=RA1/AN1/LVDIN
+T 200 2250 5 10 1 1 0 6 1
+pinnumber=2
+T 0 2200 5 10 0 0 0 0 1
+pinseq=2
+}
+P 0 1900 300 1900 1 0 0
+{
+T 0 1900 5 10 0 0 0 0 1
+pintype=tri
+T 350 1900 5 10 1 1 0 0 1
+pinlabel=RA2/AN2/CVref/Vref-
+T 200 1950 5 10 1 1 0 6 1
+pinnumber=6
+T 0 1900 5 10 0 0 0 0 1
+pinseq=6
+}
+P 0 1600 300 1600 1 0 0
+{
+T 0 1600 5 10 0 0 0 0 1
+pintype=tri
+T 350 1600 5 10 1 1 0 0 1
+pinlabel=RA3/AN3/Vref+
+T 200 1650 5 10 1 1 0 6 1
+pinnumber=7
+T 0 1600 5 10 0 0 0 0 1
+pinseq=7
+}
+P 0 1300 300 1300 1 0 0
+{
+T 0 1300 5 10 0 0 0 0 1
+pintype=tri
+T 350 1300 5 10 1 1 0 0 1
+pinlabel=RA4/T0CKI
+T 200 1350 5 10 1 1 0 6 1
+pinnumber=3
+T 0 1300 5 10 0 0 0 0 1
+pinseq=3
+}
+P 0 1000 300 1000 1 0 0
+{
+T 0 1000 5 10 0 0 0 0 1
+pintype=in
+T 350 1000 5 10 1 1 0 0 1
+pinlabel=RA5/MCLR/Vpp
+T 200 1050 5 10 1 1 0 6 1
+pinnumber=4
+T 0 1000 5 10 0 0 0 0 1
+pinseq=4
+}
+P 0 700 300 700 1 0 0
+{
+T 0 700 5 10 0 0 0 0 1
+pintype=tri
+T 350 700 5 10 1 1 0 0 1
+pinlabel=RA6/OSC2/CLKO
+T 200 750 5 10 1 1 0 6 1
+pinnumber=15
+T 0 700 5 10 0 0 0 0 1
+pinseq=15
+}
+P 0 400 300 400 1 0 0
+{
+T 0 400 5 10 0 0 0 0 1
+pintype=tri
+T 350 400 5 10 1 1 0 0 1
+pinlabel=RA7/OSC1/CLKI
+T 200 450 5 10 1 1 0 6 1
+pinnumber=16
+T 0 400 5 10 0 0 0 0 1
+pinseq=16
+}
+P 5400 2500 5100 2500 1 0 0
+{
+T 5400 2500 5 10 0 0 0 0 1
+pintype=tri
+T 5050 2500 5 10 1 1 0 6 1
+pinlabel=RB0/AN4/INT0
+T 5200 2550 5 10 1 1 0 0 1
+pinnumber=8
+T 5400 2500 5 10 0 0 0 0 1
+pinseq=8
+}
+P 5400 2200 5100 2200 1 0 0
+{
+T 5400 2200 5 10 0 0 0 0 1
+pintype=tri
+T 5050 2200 5 10 1 1 0 6 1
+pinlabel=RB1/AN5/TX/CKINT1
+T 5200 2250 5 10 1 1 0 0 1
+pinnumber=9
+T 5400 2200 5 10 0 0 0 0 1
+pinseq=9
+}
+P 5400 1900 5100 1900 1 0 0
+{
+T 5400 1900 5 10 0 0 0 0 1
+pintype=tri
+T 5050 1900 5 10 1 1 0 6 1
+pinlabel=RB2/P1B/INT2
+T 5200 1950 5 10 1 1 0 0 1
+pinnumber=17
+T 5400 1900 5 10 0 0 0 0 1
+pinseq=17
+}
+P 5400 1600 5100 1600 1 0 0
+{
+T 5400 1600 5 10 0 0 0 0 1
+pintype=tri
+T 5050 1600 5 10 1 1 0 6 1
+pinlabel=RB3/CCP1/P1A
+T 5200 1650 5 10 1 1 0 0 1
+pinnumber=18
+T 5400 1600 5 10 0 0 0 0 1
+pinseq=18
+}
+P 5400 1300 5100 1300 1 0 0
+{
+T 5400 1300 5 10 0 0 0 0 1
+pintype=tri
+T 5050 1300 5 10 1 1 0 6 1
+pinlabel=RB4/AN6/RX/DR/KBIO
+T 5200 1350 5 10 1 1 0 0 1
+pinnumber=10
+T 5400 1300 5 10 0 0 0 0 1
+pinseq=10
+}
+P 5400 1000 5100 1000 1 0 0
+{
+T 5400 1000 5 10 0 0 0 0 1
+pintype=tri
+T 5050 1000 5 10 1 1 0 6 1
+pinlabel=RB5/PGM/KBI1
+T 5200 1050 5 10 1 1 0 0 1
+pinnumber=11
+T 5400 1000 5 10 0 0 0 0 1
+pinseq=11
+}
+P 5400 700 5100 700 1 0 0
+{
+T 5400 700 5 10 0 0 0 0 1
+pintype=tri
+T 5050 700 5 10 1 1 0 6 1
+pinlabel=RB6/AN5/PGC/T1OSO/T1CKI
+T 5200 750 5 10 1 1 0 0 1
+pinnumber=12
+T 5400 700 5 10 0 0 0 0 1
+pinseq=12
+}
+P 5400 400 5100 400 1 0 0
+{
+T 5400 400 5 10 0 0 0 0 1
+pintype=tri
+T 5050 400 5 10 1 1 0 6 1
+pinlabel=RB7/AN6/PGD/T1OSI
+T 5200 450 5 10 1 1 0 0 1
+pinnumber=13
+T 5400 400 5 10 0 0 0 0 1
+pinseq=13
+}
+T -400 -700 8 10 0 0 0 0 1
+device=PIC18F1320
+T -600 -700 8 10 0 0 0 0 1
+numslots=0
+T 200 2400 8 10 0 0 0 0 1
+description=PIC18F1320 Microcontroller
+T 1400 2800 8 10 1 1 0 0 1
+refdes=U?
+T -400 -700 8 10 0 1 0 0 1
+footprint=SO18W
+B 300 300 4800 2400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 2200 3000 2200 2700 1 0 0
+{
+T 2200 3000 5 10 0 0 0 0 1
+pintype=pwr
+T 2200 2650 5 10 1 1 90 6 1
+pinlabel=Vdd
+T 2150 2800 5 10 1 1 90 0 1
+pinnumber=14
+T 2200 3000 5 10 0 0 0 0 1
+pinseq=14
+}
+P 2200 0 2200 300 1 0 0
+{
+T 2200 0 5 10 0 0 0 0 1
+pintype=pwr
+T 2200 350 5 10 1 1 90 0 1
+pinlabel=GND
+T 2150 200 5 10 1 1 90 6 1
+pinnumber=5
+T 2200 0 5 10 0 0 0 0 1
+pinseq=5
+}
+L 4100 1200 4300 1200 3 0 0 0 -1 -1
+L 800 1200 1300 1200 3 0 0 0 -1 -1
+T 50 -60 8 10 0 1 0 0 1
+author=Andreas Kemnade
+T 50 -60 8 10 0 1 0 0 1
+email=andreas@kemnade.info
+T 50 -60 8 10 0 1 0 0 1
+use-license=unlimited
+T 50 -60 8 10 0 1 0 0 1
+dist-license=GPL

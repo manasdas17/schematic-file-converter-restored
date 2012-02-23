@@ -1,0 +1,72 @@
+v 20110116 2
+T 400 3700 5 8 0 0 0 0 1
+device=7402
+T 400 3500 5 8 0 0 0 0 1
+description=4 OR gates with 2 inputs each
+T 400 3100 5 8 0 0 0 0 1
+comment=use 74_pwr.sym for power supply
+T 400 3300 5 8 0 0 0 0 1
+documentation=http://www-s.ti.com/sc/ds/sn74hc02.pdf
+T 400 2900 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 400 2700 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 400 2500 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 400 2300 5 8 0 0 0 0 1
+numslots=4
+T 400 2100 5 8 0 0 0 0 1
+slotdef=1:2,3,1
+T 400 1900 5 8 0 0 0 0 1
+slotdef=2:5,6,4
+T 400 1700 5 8 0 0 0 0 1
+slotdef=3:9,8,10
+T 400 1500 5 8 0 0 0 0 1
+slotdef=4:12,11,13
+T 400 1100 8 10 1 1 0 0 1
+refdes=U?
+T 400 900 8 10 1 1 0 0 1
+value=74HC02
+T 400 700 8 8 1 1 0 0 1
+footprint=SO14
+T 900 700 8 8 1 0 0 0 1
+slot=1
+P 300 100 200 100 1 0 1
+{
+T 275 150 5 8 1 1 0 6 1
+pinnumber=2
+T 300 -50 5 8 0 1 0 6 1
+pinseq=2
+T 350 100 9 8 0 1 0 1 1
+pinlabel=B
+T 450 200 5 8 0 1 0 2 1
+pintype=in
+}
+P 300 500 200 500 1 0 1
+{
+T 275 450 5 8 1 1 0 8 1
+pinnumber=1
+T 300 650 5 8 0 1 0 6 1
+pinseq=1
+T 350 450 9 8 0 1 0 0 1
+pinlabel=A
+T 450 600 5 8 0 1 0 2 1
+pintype=in
+}
+A -47 302 400 317 85 3 0 0 0 -1 -1
+A 478 581 597 247 85 3 0 0 0 -1 -1
+A 476 18 596 28 84 3 0 0 0 -1 -1
+T 650 300 9 12 1 0 0 4 1
+NOR
+P 1000 300 1100 300 1 0 1
+{
+T 1100 350 5 8 1 1 0 3 1
+pinnumber=3
+T 1100 250 5 8 0 1 0 5 1
+pinseq=3
+T 1050 400 5 8 0 1 0 6 1
+pinlabel=Y
+T 1150 100 5 8 0 1 0 8 1
+pintype=out
+}
+V 1000 300 40 6 0 0 0 -1 -1 1 -1 -1 -1 -1 -1

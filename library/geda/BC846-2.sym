@@ -1,0 +1,58 @@
+v 20081231 1
+P 0 400 300 400 1 0 0
+{
+T 200 450 5 8 0 1 0 6 1
+pinnumber=1
+T 200 350 5 8 0 1 0 8 1
+pinseq=1
+T 350 400 9 8 0 1 0 0 1
+pinlabel=B
+T 350 400 5 8 0 1 0 2 1
+pintype=pas
+}
+P 500 0 500 200 1 0 0
+{
+T 550 100 5 8 0 1 0 2 1
+pinnumber=2
+T 450 100 5 8 0 1 0 8 1
+pinseq=2
+T 500 250 9 8 0 1 0 3 1
+pinlabel=E
+T 500 400 5 8 0 1 0 3 1
+pintype=pas
+}
+P 500 800 500 600 1 0 0
+{
+T 550 700 5 8 0 1 0 0 1
+pinnumber=3
+T 450 700 5 8 0 1 0 6 1
+pinseq=3
+T 500 550 9 8 0 1 0 5 1
+pinlabel=C
+T 500 400 5 8 0 1 0 5 1
+pintype=pas
+}
+T 800 500 8 10 1 1 0 0 1
+refdes=Q?
+T 100 2050 5 10 0 0 0 0 1
+device=Transistor NPN
+T 100 1050 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 100 1250 5 10 0 0 0 0 1
+description=Transistor NPN
+T 100 850 5 10 0 0 0 0 1
+footprint=SOT23-95P-240L1-3N__On-Semi_318-08-Package
+T 100 1650 5 10 0 0 0 0 1
+dist-license=GPL
+T 100 1850 5 10 0 0 0 0 1
+use-license=unlimited
+V 400 400 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 300 600 300 200 3 0 0 0 -1 -1
+L 500 600 300 500 3 0 0 0 -1 -1
+L 450 225 350 225 3 0 0 0 -1 -1
+L 500 200 300 300 3 0 0 0 -1 -1
+L 450 225 390 305 3 0 0 0 -1 -1
+T 800 250 5 10 1 1 0 0 1
+value=BC846
+T 100 1450 5 10 0 0 0 0 1
+numslots=0

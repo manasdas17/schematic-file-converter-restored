@@ -1,0 +1,46 @@
+v 20110116 2
+T 90 2700 5 8 0 0 0 0 1
+device=opamp_quad_pwr
+T 100 2500 5 8 0 0 0 0 1
+description=power pins for quad opamp
+T 100 2300 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 100 2100 5 8 0 0 0 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 100 1900 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 100 1700 5 8 0 0 0 0 1
+numslots=0
+T 400 900 8 10 1 1 0 1 1
+refdes=U?
+B 0 100 600 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 100 450 9 8 1 0 0 1 1
+4x
+P 300 900 300 800 1 0 0
+{
+T 250 850 5 8 0 1 0 6 1
+pinseq=3
+T 250 850 5 8 1 1 0 6 1
+pinnumber=3
+T 300 1050 5 8 0 1 0 7 1
+pintype=pwr
+T 300 700 3 20 0 1 0 4 1
+pinlabel=+
+}
+P 300 0 300 100 1 0 0
+{
+T 250 0 5 8 1 1 0 7 1
+pinseq=12
+T 300 0 5 8 0 1 0 7 1
+pinnumber=12
+T 600 0 5 8 0 1 0 6 1
+pintype=pwr
+T 300 200 3 20 0 1 0 4 1
+pinlabel=-
+}
+L 275 350 375 350 3 0 0 0 -1 -1
+L 375 350 375 550 3 0 0 0 -1 -1
+L 375 550 475 550 3 0 0 0 -1 -1
+L 240 700 360 700 3 0 0 0 -1 -1
+L 300 760 300 640 3 0 0 0 -1 -1
+L 240 200 360 200 3 0 0 0 -1 -1

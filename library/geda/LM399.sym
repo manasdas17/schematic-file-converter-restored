@@ -1,0 +1,80 @@
+v 20060824 1
+T 300 2900 5 8 0 0 0 0 1
+device=lm399
+T 300 2700 5 8 0 0 0 0 1
+description=precision voltage reference
+T 300 2500 5 8 0 0 0 0 1
+documentation=http://www.national.com/ds/LM/LM199.pdf
+T 300 2300 5 8 0 0 0 0 1
+comment=Lm199 and LM299 are compatible.
+T 300 2100 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 300 1900 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 300 1700 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 300 1500 5 8 0 0 0 0 1
+numslots=0
+T 900 800 8 10 1 1 0 0 1
+refdes=U?
+T 900 600 8 10 1 1 0 0 1
+value=LM399
+T 900 400 8 8 1 1 0 0 1
+footprint=LM399
+P 600 1200 600 900 1 0 0
+{
+T 525 975 5 8 0 1 0 0 1
+pinseq=1
+T 525 975 5 8 0 1 0 0 1
+pinnumber=1
+T 575 775 9 8 1 1 0 6 1
+pinlabel=cat
+T 650 975 5 8 0 1 0 0 1
+pintype=pas
+}
+P 600 0 600 300 1 0 0
+{
+T 575 250 5 8 0 1 180 0 1
+pinseq=2
+T 575 250 5 8 0 1 180 0 1
+pinnumber=2
+T 575 325 9 8 1 1 0 6 1
+pinlabel=an
+T 900 250 5 8 0 1 180 0 1
+pintype=pas
+}
+P 200 0 200 300 1 0 0
+{
+T 150 225 5 8 0 1 180 0 1
+pinseq=4
+T 150 225 5 8 0 1 180 0 1
+pinnumber=4
+T 200 350 9 12 1 1 0 7 1
+pinlabel=-
+T 475 250 5 8 0 1 180 0 1
+pintype=pas
+}
+P 200 1200 200 900 1 0 0
+{
+T 75 975 5 8 0 1 0 0 1
+pinseq=3
+T 75 975 5 8 0 1 0 0 1
+pinnumber=3
+T 200 850 9 12 1 1 0 7 1
+pinlabel=+
+T 250 975 5 8 0 1 0 0 1
+pintype=pas
+}
+B 0 300 800 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+B 125 450 150 300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 450 650 500 700 3 0 0 0 -1 -1
+L 500 700 700 700 3 0 0 0 -1 -1
+L 700 700 750 750 3 0 0 0 -1 -1
+L 600 700 500 500 3 0 0 0 -1 -1
+L 500 500 700 500 3 0 0 0 -1 -1
+L 700 500 600 700 3 0 0 0 -1 -1
+L 600 500 600 300 3 0 0 0 -1 -1
+L 600 700 600 900 3 0 0 0 -1 -1
+L 750 750 725 725 3 0 0 0 -1 -1
+L 200 450 200 300 3 0 0 0 -1 -1
+L 200 750 200 900 3 0 0 0 -1 -1

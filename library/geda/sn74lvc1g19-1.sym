@@ -1,0 +1,62 @@
+v 20081231 1
+P 1400 700 1100 700 1 0 0
+{
+T 1200 750 5 8 1 1 0 0 1
+pinnumber=6
+T 1200 650 5 8 0 1 0 2 1
+pinseq=4
+T 1050 700 9 8 1 1 0 6 1
+pinlabel=Y0
+T 1050 700 5 8 0 1 0 8 1
+pintype=out
+}
+P 0 700 300 700 1 0 0
+{
+T 200 750 5 8 1 1 0 6 1
+pinnumber=1
+T 200 650 5 8 0 1 0 8 1
+pinseq=1
+T 350 700 9 8 1 1 0 0 1
+pinlabel=A
+T 350 700 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 400 300 400 1 0 0
+{
+T 200 450 5 8 1 1 0 6 1
+pinnumber=3
+T 200 350 5 8 0 1 0 8 1
+pinseq=2
+T 350 400 9 8 1 1 0 0 1
+pinlabel=\_E\_
+T 350 400 5 8 0 1 0 2 1
+pintype=in
+}
+B 300 200 800 700 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1100 1000 5 10 1 1 0 6 1
+refdes=U?
+T 200 0 9 8 1 0 0 0 1
+SN74LVC1G19
+T -400 500 5 10 0 0 0 0 1
+device=SN74LVC1G19
+T -400 700 5 10 0 0 0 0 1
+author=Bill Gatliff <bgat@billgatliff.com>
+T -400 1100 5 10 0 0 0 0 1
+description=1-of-2 Decoder/Demultiplexer
+T -400 1300 5 10 0 0 0 0 1
+dist-license=GPL
+T -400 1500 5 10 0 0 0 0 1
+use-license=unlimited
+T -400 1700 5 10 0 0 0 0 1
+footprint=SOT26
+P 1400 400 1100 400 1 0 0
+{
+T 1200 450 5 8 1 1 0 0 1
+pinnumber=4
+T 1200 350 5 8 0 1 0 2 1
+pinseq=3
+T 1050 400 9 8 1 1 0 6 1
+pinlabel=Y1
+T 1050 400 5 8 0 1 0 8 1
+pintype=out
+}

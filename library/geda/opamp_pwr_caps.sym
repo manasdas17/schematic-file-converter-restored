@@ -1,0 +1,62 @@
+v 20111231 2
+N 300 700 300 1000 4
+N 300 2200 300 1900 4
+C 100 2200 1 0 0 Ub+.sym
+{
+T 200 4100 5 8 0 0 0 0 1
+footprint=none
+T 200 3900 5 8 0 0 0 0 1
+symversion=1.0
+}
+C 0 300 1 0 0 Ub-.sym
+{
+T 200 2000 5 8 0 0 0 0 1
+footprint=none
+T 200 1800 5 8 0 0 0 0 1
+symversion=1.0
+}
+C 0 1000 1 0 0 opamp_pwr.sym
+{
+T 650 1400 5 10 1 1 0 0 1
+refdes=U?
+T 100 2700 5 8 0 0 0 0 1
+symversion=1.0
+}
+C 1200 1600 1 0 0 gnd.sym
+{
+T 1300 3000 5 8 0 0 0 0 1
+symversion=1.0
+T 1300 3200 5 8 0 0 0 0 1
+footprint=none
+}
+C 1200 500 1 0 0 gnd.sym
+{
+T 1300 1900 5 8 0 0 0 0 1
+symversion=1.0
+T 1300 2100 5 8 0 0 0 0 1
+footprint=none
+}
+N 1300 800 1300 900 4
+N 1300 1900 1300 2000 4
+C 300 1400 1 0 0 cap_SMD.sym
+{
+T 400 3300 5 8 0 0 0 0 1
+device=capacitor
+T 900 2300 5 10 1 1 0 0 1
+value=100n
+T 900 2100 5 8 1 1 0 0 1
+footprint=0805
+T 900 2500 5 10 1 1 0 0 1
+refdes=C?
+}
+C 1300 300 1 0 1 cap_SMD.sym
+{
+T 1200 2200 5 8 0 0 0 6 1
+device=capacitor
+T 600 300 5 10 1 1 0 0 1
+value=100n
+T 600 100 5 8 1 1 0 0 1
+footprint=0805
+T 600 500 5 10 1 1 0 0 1
+refdes=C?
+}

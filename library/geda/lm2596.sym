@@ -1,0 +1,80 @@
+v 20060906 1
+B 200 300 1300 1000 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 400 100 400 300 1 0 0
+{
+T 400 100 5 10 0 0 180 0 1
+pintype=pwr
+T 250 400 5 10 1 1 0 0 1
+pinlabel=GND
+T 300 50 5 10 1 1 0 6 1
+pinnumber=3
+T 400 100 5 10 0 0 180 0 1
+pinseq=3
+}
+P 1200 100 1200 300 1 0 0
+{
+T 1200 100 5 10 0 0 0 0 1
+pintype=in
+T 950 400 5 10 1 1 0 0 1
+pinlabel=/EN
+T 1100 50 5 10 1 1 0 6 1
+pinnumber=5
+T 1200 100 5 10 0 0 0 0 1
+pinseq=5
+}
+P 1700 600 1500 600 1 0 0
+{
+T 1700 600 5 10 0 0 0 0 1
+pintype=pwr
+T 1450 600 5 10 1 1 0 6 1
+pinlabel=Vout
+T 1600 650 5 10 1 1 0 0 1
+pinnumber=2
+T 1700 600 5 10 0 0 0 0 1
+pinseq=2
+}
+P 1700 1100 1500 1100 1 0 0
+{
+T 1700 1100 5 10 0 0 0 0 1
+pintype=in
+T 1450 1000 5 10 1 1 0 6 1
+pinlabel=FB
+T 1600 1150 5 10 1 1 0 0 1
+pinnumber=4
+T 1700 1100 5 10 0 0 0 0 1
+pinseq=4
+}
+P 0 800 200 800 1 0 0
+{
+T 0 800 5 10 0 0 0 0 1
+pintype=pwr
+T 250 800 5 10 1 1 0 0 1
+pinlabel=Vin
+T 100 850 5 10 1 1 0 6 1
+pinnumber=1
+T 0 800 5 10 0 0 0 0 1
+pinseq=1
+}
+T 300 1600 8 10 0 0 0 0 1
+footprint=TO263-5L.fp
+T 300 1800 8 10 0 0 0 0 1
+documentation=http://www.national.com/pf/LM/LM2596.html
+T 300 2000 8 10 0 0 0 0 1
+author=lekovacs@interware.hu
+T 300 2200 8 10 0 0 0 0 1
+dist-licence=GPL
+T 300 2400 8 10 0 0 0 0 1
+use-licence=unlimited
+T 300 1400 8 10 1 1 0 0 1
+refdes=U?
+P 700 100 700 300 1 0 0
+{
+T 700 100 5 10 0 0 180 0 1
+pintype=pwr
+T 550 400 5 10 0 1 0 0 1
+pinlabel=GND
+T 600 50 5 10 1 1 0 6 1
+pinnumber=6
+T 700 100 5 10 0 0 180 0 1
+pinseq=6
+}

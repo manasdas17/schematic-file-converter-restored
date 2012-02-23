@@ -1,0 +1,60 @@
+v 20091004 2
+L 300 600 800 300 3 0 0 0 -1 -1
+T 600 2300 5 10 0 0 0 0 1
+device=TC7WU04F
+T 600 1300 5 10 0 0 0 0 1
+slot=1
+T 600 2100 5 10 0 0 0 0 1
+numslots=3
+T 600 1900 5 10 0 0 0 0 1
+slotdef=1:1,7
+T 600 1700 5 10 0 0 0 0 1
+slotdef=2:3,5
+T 600 1500 5 10 0 0 0 0 1
+slotdef=3:6,2
+L 800 300 300 0 3 0 0 0 -1 -1
+L 300 600 300 300 3 0 0 0 -1 -1
+L 300 300 300 0 3 0 0 0 -1 -1
+V 850 300 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 300 300 0 300 1 0 1
+{
+T 200 350 5 8 1 1 0 6 1
+pinnumber=1
+T 200 250 5 8 0 1 0 8 1
+pinseq=1
+T 350 300 9 8 0 1 0 0 1
+pinlabel=A
+T 350 300 5 8 0 1 0 2 1
+pintype=in
+}
+P 1100 300 900 300 1 0 0
+{
+T 900 350 5 8 1 1 0 0 1
+pinnumber=2
+T 900 250 5 8 0 1 0 2 1
+pinseq=2
+T 750 300 9 8 0 1 0 6 1
+pinlabel=Y
+T 750 300 5 8 0 1 0 8 1
+pintype=out
+}
+T 600 0 9 8 1 0 0 0 1
+7WU04
+T 300 700 8 10 1 1 0 0 1
+refdes=U?
+T 600 2700 5 10 0 0 0 0 1
+pins=8
+T 600 2500 5 10 0 0 0 0 1
+class=IC
+T 600 3100 5 10 0 0 0 0 1
+net=GND:4
+T 600 2900 5 10 0 0 0 0 1
+net=Vcc:8
+T 600 3300 5 10 0 0 0 0 1
+footprint=SO8
+T 600 3500 5 10 0 0 0 0 1
+description=3 Inverters, derived from stock gEDA 7404.  Bad pin numbering in datasheet has been corrected.
+T 600 3700 5 10 0 0 0 0 1
+documentation=http://www.toshiba.com/taec/components2/Datasheet_Sync//165/7434.pdf
+T 600 3900 5 10 0 0 0 0 1
+author=gEDA Team, Vanessa Ezekowitz

@@ -1,0 +1,201 @@
+v 20071229 1
+B 300 300 1400 2800 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 400 3200 8 10 1 1 0 0 1
+refdes=U?
+T 300 3650 5 10 0 0 0 0 1
+footprint=SO16
+T 300 5050 5 10 0 0 0 0 1
+description=8bit I2C LED dimmer
+T 300 3450 5 10 0 0 0 0 1
+numslots=0
+P 300 2500 0 2500 1 0 1
+{
+T 200 2550 5 8 1 1 0 6 1
+pinnumber=14
+T 200 2450 5 8 0 1 0 8 1
+pinseq=14
+T 350 2500 5 8 0 1 0 2 1
+pintype=in
+T 350 2500 9 8 1 1 0 0 1
+pinlabel=SCL
+}
+P 300 2800 0 2800 1 0 1
+{
+T 200 2850 5 8 1 1 0 6 1
+pinnumber=15
+T 200 2750 5 8 0 1 0 8 1
+pinseq=15
+T 350 2800 5 8 0 1 0 2 1
+pintype=io
+T 350 2800 9 8 1 1 0 0 1
+pinlabel=SDA
+}
+P 1700 2500 2000 2500 1 0 1
+{
+T 1800 2550 5 8 1 1 0 0 1
+pinnumber=5
+T 1800 2450 5 8 0 1 0 2 1
+pinseq=5
+T 1650 2500 5 8 0 1 0 8 1
+pintype=io
+T 1650 2500 9 8 1 1 0 6 1
+pinlabel=LED1
+}
+P 1700 2800 2000 2800 1 0 1
+{
+T 1800 2850 5 8 1 1 0 0 1
+pinnumber=4
+T 1800 2750 5 8 0 1 0 2 1
+pinseq=4
+T 1650 2800 5 8 0 1 0 8 1
+pintype=io
+T 1650 2800 9 8 1 1 0 6 1
+pinlabel=LED0
+}
+P 1000 300 1000 0 1 0 1
+{
+T 1050 100 5 8 1 1 0 0 1
+pinnumber=8
+T 1050 100 5 8 0 1 0 2 1
+pinseq=8
+T 1000 500 5 8 0 1 0 3 1
+pintype=pwr
+T 1000 350 9 8 1 1 0 3 1
+pinlabel=GND
+}
+P 1000 3100 1000 3400 1 0 1
+{
+T 1050 3200 5 8 1 1 0 0 1
+pinnumber=16
+T 1050 3200 5 8 0 1 0 2 1
+pinseq=16
+T 1000 2900 5 8 0 1 0 5 1
+pintype=pwr
+T 1000 3050 9 8 1 1 0 5 1
+pinlabel=Vdd
+}
+P 1700 1900 2000 1900 1 0 1
+{
+T 1800 1950 5 8 1 1 0 0 1
+pinnumber=7
+T 1800 1850 5 8 0 1 0 2 1
+pinseq=7
+T 1650 1900 5 8 0 1 0 8 1
+pintype=io
+T 1650 1900 9 8 1 1 0 6 1
+pinlabel=LED3
+}
+P 1700 2200 2000 2200 1 0 1
+{
+T 1800 2250 5 8 1 1 0 0 1
+pinnumber=6
+T 1800 2150 5 8 0 1 0 2 1
+pinseq=6
+T 1650 2200 5 8 0 1 0 8 1
+pintype=io
+T 1650 2200 9 8 1 1 0 6 1
+pinlabel=LED2
+}
+T 300 3850 5 10 0 0 0 0 1
+device=PCA9531
+P 1700 1600 2000 1600 1 0 1
+{
+T 1800 1650 5 8 1 1 0 0 1
+pinnumber=9
+T 1800 1550 5 8 0 1 0 2 1
+pinseq=9
+T 1650 1600 5 8 0 1 0 8 1
+pintype=io
+T 1650 1600 9 8 1 1 0 6 1
+pinlabel=LED4
+}
+P 1700 1300 2000 1300 1 0 1
+{
+T 1800 1350 5 8 1 1 0 0 1
+pinnumber=10
+T 1800 1250 5 8 0 1 0 2 1
+pinseq=10
+T 1650 1300 5 8 0 1 0 8 1
+pintype=io
+T 1650 1300 9 8 1 1 0 6 1
+pinlabel=LED5
+}
+P 1700 1000 2000 1000 1 0 1
+{
+T 1800 1050 5 8 1 1 0 0 1
+pinnumber=11
+T 1800 950 5 8 0 1 0 2 1
+pinseq=11
+T 1650 1000 5 8 0 1 0 8 1
+pintype=io
+T 1650 1000 9 8 1 1 0 6 1
+pinlabel=LED6
+}
+P 1700 700 2000 700 1 0 1
+{
+T 1800 750 5 8 1 1 0 0 1
+pinnumber=12
+T 1800 650 5 8 0 1 0 2 1
+pinseq=12
+T 1650 700 5 8 0 1 0 8 1
+pintype=io
+T 1650 700 9 8 1 1 0 6 1
+pinlabel=LED7
+}
+P 300 1300 0 1300 1 0 1
+{
+T 200 1350 5 8 1 1 0 6 1
+pinnumber=1
+T 200 1250 5 8 0 1 0 8 1
+pinseq=1
+T 350 1300 5 8 0 1 0 2 1
+pintype=in
+T 350 1300 9 8 1 1 0 0 1
+pinlabel=A0
+}
+P 300 1000 0 1000 1 0 1
+{
+T 200 1050 5 8 1 1 0 6 1
+pinnumber=2
+T 200 950 5 8 0 1 0 8 1
+pinseq=2
+T 350 1000 5 8 0 1 0 2 1
+pintype=in
+T 350 1000 9 8 1 1 0 0 1
+pinlabel=A1
+}
+P 300 700 0 700 1 0 1
+{
+T 200 750 5 8 1 1 0 6 1
+pinnumber=3
+T 200 650 5 8 0 1 0 8 1
+pinseq=3
+T 350 700 5 8 0 1 0 2 1
+pintype=in
+T 350 700 9 8 1 1 0 0 1
+pinlabel=A2
+}
+P 200 2000 0 2000 1 0 1
+{
+T 200 2050 5 8 1 1 0 6 1
+pinnumber=13
+T 200 1950 5 8 0 1 0 8 1
+pinseq=13
+T 350 2000 5 8 0 1 0 2 1
+pintype=in
+T 350 2000 9 8 1 1 0 0 1
+pinlabel=\_RESET\_
+}
+T 300 4050 5 10 0 0 0 0 1
+symversion=0.1
+T 300 4250 5 10 0 0 0 0 1
+use-license=unlimited
+T 300 4450 5 10 0 0 0 0 1
+dist-license=GPL2
+T 300 4650 5 10 0 0 0 0 1
+author=Thomas Kohler <thomas.kohlerATmb.tu-chemnitz.de>, Werner Hoch <werner.hoATgmx.de>
+T 300 4850 5 10 0 0 0 0 1
+documentation=http://www.nxp.com/acrobat/datasheets/PCA9531_5.pdf
+T 1300 3200 9 10 1 0 0 0 1
+PCA9531
+V 248 2002 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1

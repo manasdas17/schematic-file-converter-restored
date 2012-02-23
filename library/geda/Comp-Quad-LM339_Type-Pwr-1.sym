@@ -1,0 +1,42 @@
+v 20081231 1
+P 400 0 400 200 1 0 0
+{
+T 450 150 5 8 1 1 0 2 1
+pinnumber=12
+T 350 150 5 8 0 1 0 8 1
+pinseq=12
+T 400 250 9 10 1 1 0 4 1
+pinlabel=-
+T 450 -150 5 8 0 1 0 3 1
+pintype=pwr
+}
+P 400 900 400 700 1 0 0
+{
+T 450 750 5 8 1 1 0 0 1
+pinnumber=3
+T 350 750 5 8 0 1 0 6 1
+pinseq=3
+T 400 650 9 10 1 1 0 4 1
+pinlabel=+
+T 450 1050 5 8 0 1 0 5 1
+pintype=pwr
+}
+T 650 750 8 10 1 1 0 0 1
+refdes=U?
+T 400 525 9 10 1 0 0 4 1
+Comp
+T 0 2100 5 10 0 0 0 0 1
+device=Comp Quad
+T 0 1100 5 10 0 0 0 0 1
+author=Stefan Salewski
+T 0 1300 5 10 0 0 0 0 1
+description=Power Supply for Quad Comparator LM339 Type
+T 0 1500 5 10 0 0 0 0 1
+dist-license=GPL
+T 0 1700 5 10 0 0 0 0 1
+use-license=unlimited
+T 400 375 9 10 1 0 0 4 1
+Quad
+B 0 200 800 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 0 1900 5 10 0 0 0 0 1
+footprint=SO14

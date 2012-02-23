@@ -1,0 +1,57 @@
+v 20100214 2
+T 125 2700 5 8 0 0 0 0 1
+description=MMIC HF amplifier, BGA427, 20dB
+T 100 2500 5 8 0 0 0 0 1
+comment=compatible: BGA420
+T 100 2300 5 8 0 0 0 0 1
+documentation=http://de.sitestat.com/infineon/infineon/s?infineon.en.product.findProductTypeByName.html_dgdl_bga427.pdf&ns_type=pdf&ns_url=http://www.infineon.com/dgdl/bga427.pdf?folderId=db3a30431441fb5d0114b654e6581730&fileId=db3a304314dca3890115418dca4d1638
+T 600 1000 8 10 1 1 0 0 1
+refdes=U?
+T 100 2100 5 8 0 0 0 0 1
+author=Kai-Martin Knaak kmk@lilalaser.de
+T 100 1900 5 8 0 0 0 0 1
+dist-license=GPL 3, http://www.gnu.org/licenses/gpl-3.0.txt
+T 600 800 8 10 1 1 0 0 1
+value=BGA427
+T 600 600 8 8 1 1 0 0 1
+footprint=SOT343
+L 100 600 100 0 3 0 0 0 -1 -1
+L 100 600 700 300 3 0 0 0 -1 -1
+L 100 0 700 300 3 0 0 0 -1 -1
+P 0 300 100 300 1 0 0
+{
+T -50 350 5 8 0 1 0 0 1
+pinnumber=1
+T -50 200 5 8 0 1 0 0 1
+pintype=in
+}
+P 300 600 300 500 1 0 0
+{
+T 500 450 5 8 0 1 0 3 1
+pinnumber=3
+T 250 300 5 8 0 1 0 0 1
+pintype=pwr
+T 200 375 5 6 1 1 0 0 1
+pinlabel=pwr
+}
+P 700 300 800 300 1 0 1
+{
+T 725 350 5 8 0 1 0 0 1
+pinnumber=4
+T 700 150 5 8 0 1 0 0 1
+pintype=out
+}
+T 100 1700 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 100 1500 5 8 0 0 0 0 1
+numslots=0
+P 300 0 300 100 1 0 0
+{
+T 500 150 5 8 0 1 0 8 1
+pinnumber=2
+T 250 200 5 8 0 1 0 0 1
+pintype=pwr
+T 175 150 5 6 1 1 0 0 1
+pinlabel=GND
+}
+V 180 300 40 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1

@@ -1,0 +1,103 @@
+v 20070902 1
+B 300 0 800 1900 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 1700 1400 5 10 0 0 0 0 1
+device=BIASGEN
+P 0 300 300 300 1 0 0
+{
+T 205 345 5 8 0 1 0 6 1
+pinnumber=1
+T 200 250 5 8 0 1 0 8 1
+pinseq=1
+T 355 295 9 8 1 1 0 0 1
+pinlabel=IIN
+T 350 300 5 8 0 1 0 2 1
+pintype=pas
+}
+T 400 2000 8 10 1 1 0 0 1
+refdes=X?
+T 1700 1200 8 10 0 0 0 0 1
+model-name=BIASGEN
+T 450 1100 9 8 1 0 90 4 1
+BIASGEN
+T 300 1000 8 10 0 0 0 0 1
+numslots=0
+T 1700 1000 8 10 0 1 0 0 1
+description=Bias Generator
+T 300 800 8 10 0 1 0 0 1
+documentation=http://research.kek.jp/people/ikeda/openIP
+T 300 1600 8 10 0 0 0 0 1
+symversion=1.0
+T 300 1400 8 10 0 1 0 0 1
+author=jpd@noqsi.com
+T 300 1200 8 10 0 0 0 0 1
+footprint=none
+P 1100 200 1400 200 1 0 1
+{
+T 1195 245 5 8 0 1 0 0 1
+pinnumber=7
+T 1200 150 5 8 0 1 0 2 1
+pinseq=7
+T 1045 195 9 8 1 1 0 6 1
+pinlabel=VL1
+T 1050 200 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 500 1400 500 1 0 1
+{
+T 1195 545 5 8 0 1 0 0 1
+pinnumber=6
+T 1200 450 5 8 0 1 0 2 1
+pinseq=6
+T 1045 495 9 8 1 1 0 6 1
+pinlabel=VH1
+T 1050 500 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 800 1400 800 1 0 1
+{
+T 1195 845 5 8 0 1 0 0 1
+pinnumber=2
+T 1200 750 5 8 0 1 0 2 1
+pinseq=2
+T 1045 795 9 8 1 1 0 6 1
+pinlabel=IOUT2
+T 1050 800 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 1100 1400 1100 1 0 1
+{
+T 1195 1145 5 8 0 1 0 0 1
+pinnumber=3
+T 1200 1050 5 8 0 1 0 2 1
+pinseq=3
+T 1045 1095 9 8 1 1 0 6 1
+pinlabel=IOUT3
+T 1050 1100 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 1400 1400 1400 1 0 1
+{
+T 1195 1445 5 8 0 1 0 0 1
+pinnumber=4
+T 1200 1350 5 8 0 1 0 2 1
+pinseq=4
+T 1045 1395 9 8 1 1 0 6 1
+pinlabel=IOUT4
+T 1050 1400 5 8 0 1 0 8 1
+pintype=pas
+}
+P 1100 1700 1400 1700 1 0 1
+{
+T 1195 1745 5 8 0 1 0 0 1
+pinnumber=5
+T 1200 1650 5 8 0 1 0 2 1
+pinseq=5
+T 1045 1695 9 8 1 1 0 6 1
+pinlabel=IOUT5
+T 1050 1700 5 8 0 1 0 8 1
+pintype=pas
+}
+T 0 0 8 10 0 0 0 0 1
+dist-license=GPL
+T 0 0 8 10 0 0 0 0 1
+use-license=unlimited

@@ -1,0 +1,91 @@
+v 20081231 1
+P 1700 1400 1400 1400 1 0 0
+{
+T 1700 1400 5 10 0 0 270 2 1
+pintype=pwr
+T 1345 1395 9 8 1 1 0 7 1
+pinlabel=VCC
+T 1495 1445 5 8 1 1 0 0 1
+pinnumber=4
+T 1700 1400 5 10 0 0 270 2 1
+pinseq=4
+}
+P 1700 800 1400 800 1 0 0
+{
+T 1700 800 5 10 0 0 270 2 1
+pintype=pwr
+T 1345 795 9 8 1 1 0 7 1
+pinlabel=GND
+T 1495 845 5 8 1 1 0 0 1
+pinnumber=3
+T 1700 800 5 10 0 0 270 2 1
+pinseq=3
+}
+P 1700 1100 1400 1100 1 0 0
+{
+T 1700 1100 5 10 0 0 90 0 1
+pintype=io
+T 1345 1095 9 8 1 1 0 7 1
+pinlabel=SDI
+T 1495 1145 5 8 1 1 0 0 1
+pinnumber=16
+T 1700 1100 5 10 0 0 90 0 1
+pinseq=16
+}
+P 0 1100 300 1100 1 0 0
+{
+T 0 1100 5 10 0 0 270 0 1
+pintype=io
+T 355 1095 9 8 1 1 0 1 1
+pinlabel=SCK
+T 205 1145 5 8 1 1 0 6 1
+pinnumber=15
+T 0 1100 5 10 0 0 270 0 1
+pinseq=15
+}
+P 0 800 300 800 1 0 0
+{
+T 0 800 5 10 0 0 90 2 1
+pintype=io
+T 355 795 9 8 1 1 0 1 1
+pinlabel=RESET
+T 205 845 5 8 1 1 0 6 1
+pinnumber=24
+T 0 800 5 10 0 0 90 2 1
+pinseq=24
+}
+P 0 1400 300 1400 1 0 0
+{
+T 0 1400 5 10 0 0 90 2 1
+pintype=io
+T 355 1395 9 8 1 1 0 1 1
+pinlabel=SDO
+T 205 1445 5 8 1 1 0 6 1
+pinnumber=17
+T 0 1400 5 10 0 0 90 2 1
+pinseq=17
+}
+L 1400 500 1400 1700 3 0 0 0 -1 -1
+T 800 300 9 8 1 0 0 4 1
+AT90USB82/162
+T 900 100 9 8 1 0 0 4 1
+TQFP32 - ISP
+T 200 2895 5 10 0 0 0 0 1
+footprint=TQFP32
+T 200 3100 5 10 0 0 0 0 1
+documentation=http://www.atmel.com/dyn/products/product_card.asp?part_id=4096
+T 200 2700 5 10 0 0 0 0 1
+description=AVR 8-bit USB Microcontroller
+T 200 2500 5 10 0 0 0 0 1
+device=at90usb82
+T 1400 1800 5 10 1 1 0 6 1
+refdes=U?
+T 200 3300 5 10 0 0 0 0 1
+author=Bill Gatliff <bgat@billgatliff.com>
+T 200 3500 5 10 0 0 0 0 1
+dist-license=GPL
+T 200 3700 5 10 0 0 0 0 1
+use-license=unlimited
+L 300 500 300 1700 3 0 0 0 -1 -1
+L 1400 500 300 500 3 0 0 0 -1 -1
+L 1400 1700 300 1700 3 0 0 0 -1 -1

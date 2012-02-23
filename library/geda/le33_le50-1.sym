@@ -1,0 +1,66 @@
+v 20040111 1
+T -600 -4900 5 10 0 0 0 0 1
+device=LF33CDT
+T -600 -5100 5 10 0 0 0 0 1
+net=GND:4
+P 0 600 300 600 1 0 0
+{
+T 150 650 5 10 1 1 0 0 1
+pinnumber=8
+T 0 600 5 10 0 1 0 0 1
+pinseq=8
+T 350 600 5 10 1 1 0 0 1
+pinlabel=IN
+T 0 600 5 10 0 1 0 0 1
+pintype=pwr
+}
+P 1600 600 1300 600 1 0 0
+{
+T 1500 650 5 10 1 1 0 6 1
+pinnumber=1
+T 1600 600 5 10 0 1 0 6 1
+pinseq=1
+T 1300 600 5 10 1 1 0 6 1
+pinlabel=OUT
+T 1600 600 5 10 0 1 0 0 1
+pintype=pwr
+}
+P 1000 0 1000 300 1 0 0
+{
+T 950 100 5 10 1 1 0 6 1
+pinnumber=2
+T 1000 0 5 10 0 1 270 6 1
+pinseq=2
+T 1250 350 5 10 1 1 0 6 1
+pinlabel=GND
+T 1000 0 5 10 0 1 0 0 1
+pintype=pwr
+}
+P 600 0 600 300 1 0 0
+{
+T 550 100 5 10 1 1 0 6 1
+pinnumber=5
+T 600 0 5 10 0 1 270 6 1
+pinseq=5
+T 400 350 5 10 1 1 0 0 1
+pinlabel=Inh.
+T 600 0 5 10 0 1 0 0 1
+pintype=pwr
+}
+B 300 300 1000 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 300 1000 8 10 1 1 0 0 1
+device=LE50CD
+T 1400 1000 8 10 1 1 0 6 1
+refdes=U?
+T 300 1300 8 10 0 0 0 0 1
+footprint=SO8
+T 300 1500 8 10 0 0 0 0 1
+numslots=0
+T 300 1700 8 10 0 0 0 0 1
+net=GND:2,3,6,7
+T 350 3000 8 10 0 0 0 0 1
+author=Marek Peca <mp@duch.cz>
+T 350 2800 8 10 0 0 0 0 1
+dist-license=GPL
+T 350 2600 8 10 0 0 0 0 1
+use-license=ask

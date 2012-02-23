@@ -1,0 +1,53 @@
+v 20110619 2
+L 410 230 200 200 3 10 0 0 -1 -1
+P 400 200 500 200 1 0 1
+{
+T 450 250 5 8 1 1 0 0 1
+pinnumber=6
+T 450 250 5 8 0 1 0 0 1
+pinseq=6
+T 350 150 5 8 0 1 0 2 1
+pintype=pas
+}
+P 200 200 100 200 1 0 1
+{
+T 150 250 5 8 1 1 0 6 1
+pinnumber=1
+T 150 250 5 8 0 1 0 6 1
+pinseq=1
+T 300 150 5 8 0 1 0 8 1
+pintype=pas
+}
+T 500 800 8 10 1 1 0 0 1
+refdes=U?
+V 200 200 20 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1
+T 400 2800 5 8 0 0 0 0 1
+description=analog switch, DG467
+T 400 1800 5 8 0 0 0 0 1
+author=K-M. Knaak, kmk@lilalaser.de
+T 400 1600 5 8 0 0 0 0 1
+dist-license=GPL3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 400 1400 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 400 2400 5 8 0 0 0 0 1
+comment=analog_switch_TSOP_pwr.sym for power pins
+V 400 200 20 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1
+P 300 210 300 400 1 0 1
+{
+T 350 350 5 8 1 1 0 0 1
+pinnumber=3
+T 350 350 5 8 0 1 0 0 1
+pinseq=3
+T 300 400 5 8 0 1 0 6 1
+pintype=pas
+}
+T 500 600 8 10 1 1 0 0 1
+value=DG467
+T 500 400 8 8 1 1 0 0 1
+footprint=TSOP6
+T 400 2600 5 8 0 0 0 0 1
+documentation=http://www.vishay.com/docs/74413/dg467.pdf
+T 400 2200 5 8 0 0 0 0 1
+comment=pin compatible model DG447
+T 400 2000 5 8 0 0 0 0 1
+symversion=1.0

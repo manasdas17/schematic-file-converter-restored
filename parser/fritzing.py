@@ -22,7 +22,7 @@
 from core.design import Design
 from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Circle, Line, Polygon, Rectangle
+from core.shape import Circle, Line, Polygon, Rectangle, BezierCurve
 from core.net import Net, NetPoint, ConnectedComponent
 
 from library.fritzing import lookup_part
@@ -30,6 +30,8 @@ from library.fritzing import lookup_part
 from xml.etree.ElementTree import ElementTree
 
 from os.path import basename, dirname, exists, join
+
+import re
 
 
 class Fritzing(object):
@@ -57,6 +59,17 @@ class Fritzing(object):
         self.components = {} # idref -> ComponentParser
 
         self.fritzing_version = None
+
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is an fritzing file """
+        f = open(filename, 'r')
+        data = f.read()
+        confidence = 0
+        if 'fritzingVersion' in data:
+            confidence += 0.9
+        return confidence
 
 
     def parse(self, filename):
@@ -105,6 +118,10 @@ class Fritzing(object):
 
         conn_keys = []
 
+        for connect in view.findall('connectors/connector/connects/connect'):
+            if connect.get('layer') == 'breadboardbreadboard':
+                return
+
         for i, connector in enumerate(view.findall('connectors/connector'), 1):
             cid = connector.get('connectorId')
             self.points[index, cid] = (origin_x + get_x(geom, 'x%d' % i),
@@ -114,12 +131,12 @@ class Fritzing(object):
 
             self.connects[index, cid] = \
                 [(c.get('modelIndex'), c.get('connectorId'))
-                 for c in connector.findall('connects/connect')
-                 if c.get('layer') != 'breadboardbreadboard']
+                 for c in connector.findall('connects/connect')]
 
         # connect wire ends to each other
-        self.connects[conn_keys[0]].append(conn_keys[1])
-        self.connects[conn_keys[1]].append(conn_keys[0])
+        if len(conn_keys) >= 2:
+            self.connects[conn_keys[0]].append(conn_keys[1])
+            self.connects[conn_keys[1]].append(conn_keys[0])
 
 
     def ensure_component(self, inst):
@@ -175,7 +192,7 @@ class Fritzing(object):
         if xform is None:
             rotation = 0.0
         else:
-            matrix = tuple(int(xform.get(key, 0))
+            matrix = tuple(int(float(xform.get(key, 0)))
                            for key in ('m11', 'm12', 'm21', 'm22'))
             x, y = rotate_component(cpt, matrix, x, y)
             rotation = MATRIX2ROTATION.get(matrix, 0.0)
@@ -260,6 +277,10 @@ MATRIX2ROTATION = {(1, 0, 0, 1): 0,
 class ComponentParser(object):
     """I parse components from Fritzing libraries."""
 
+    # The svg files in fritzing libraries are specified in pixels that
+    # are 72dpi. The schematics are in 90dpi.
+    svg_mult = 90.0 / 72.0
+
     def __init__(self, idref, path):
         self.component = Component(idref)
         self.next_pin_number = 0
@@ -275,7 +296,12 @@ class ComponentParser(object):
 
         tree = ElementTree(file=self.path)
 
-        self.component.add_attribute('_prefix', tree.find('label').text)
+        try:
+            prefix = tree.find('label').text
+        except AttributeError:
+            pass
+        else:
+            self.component.add_attribute('_prefix', prefix)
 
         symbol = Symbol()
         self.component.add_symbol(symbol)
@@ -350,11 +376,15 @@ class ComponentParser(object):
             return
 
         tree = ElementTree(file=svg_path)
-
         viewbox = tree.getroot().get('viewBox')
-        self.width, self.height = [float(v) for v in viewbox.split()[-2:]]
 
-        for element in tree.getroot().iter():
+        if viewbox != None:
+            self.width, self.height = [float(v) for v in viewbox.split()[-2:]]
+            self.width *= self.svg_mult
+            self.height *= self.svg_mult
+
+        _iter = tree.getroot().getiterator()
+        for element in _iter:
             for shape in self.parse_shapes(element):
                 body.add_shape(shape)
                 if element.get('id') in self.terminals:
@@ -376,6 +406,8 @@ class ComponentParser(object):
             return self.parse_rect(element)
         elif tag == 'line':
             return self.parse_line(element)
+        elif tag == 'path':
+            return self.parse_path(element)
         elif tag == 'polygon':
             return self.parse_polygon(element)
         elif tag == 'polyline':
@@ -386,16 +418,26 @@ class ComponentParser(object):
     def parse_rect(self, rect):
         """ Parse a rect element """
 
-        x, y = get_x(rect), get_y(rect)
-        width, height = get_length(rect, 'width'), get_length(rect, 'height')
-        return [Rectangle(x, y - height, width, height)]
+        x, y = (get_x(rect, mult=self.svg_mult),
+                get_y(rect, mult=self.svg_mult))
+        width, height = (get_length(rect, 'width', self.svg_mult),
+                         get_length(rect, 'height', self.svg_mult))
+        return [Rectangle(x, y, width, height)]
 
 
     def parse_line(self, rect):
         """ Parse a line element """
 
-        return [Line((get_x(rect, 'x1'), get_y(rect, 'y1')),
-                     (get_x(rect, 'x2'), get_y(rect, 'y2')))]
+        return [Line((get_x(rect, 'x1', self.svg_mult),
+                      get_y(rect, 'y1', self.svg_mult)),
+                     (get_x(rect, 'x2', self.svg_mult),
+                      get_y(rect, 'y2', self.svg_mult)))]
+
+
+    def parse_path(self, path):
+        """ Parse a path element """
+
+        return PathParser(path).parse()
 
 
     def parse_polygon(self, poly):
@@ -406,7 +448,8 @@ class ComponentParser(object):
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                shape.add_point(make_x(x), make_y(y))
+                shape.add_point(make_x(x, self.svg_mult),
+                                make_y(y, self.svg_mult))
 
         if shape.points:
             shape.add_point(shape.points[0].x, shape.points[0].y)
@@ -423,7 +466,7 @@ class ComponentParser(object):
         for point in poly.get('points', '').split():
             if point:
                 x, y = point.split(',')
-                point = (make_x(x), make_y(y))
+                point = (make_x(x, self.svg_mult), make_y(y, self.svg_mult))
                 if last_point is not None:
                     shapes.append(Line(last_point, point))
                 last_point = point
@@ -434,9 +477,9 @@ class ComponentParser(object):
     def parse_circle(self, circle):
         """ Parse a circle element """
 
-        return [Circle(get_x(circle, 'cx'),
-                       get_y(circle, 'cy'),
-                       get_length(circle, 'r'))]
+        return [Circle(get_x(circle, 'cx', self.svg_mult),
+                       get_y(circle, 'cy', self.svg_mult),
+                       get_length(circle, 'r', self.svg_mult))]
 
 
 def get_pin(shape):
@@ -471,26 +514,296 @@ def rotate_component(cpt, matrix, x, y):
     return (x + (x2 - x1), y + (y2 - y1))
 
 
-def make_x(x):
+class PathParser(object):
+    """ A parser for svg path elements. """
+
+    num_re = re.compile(r'\s*(-?\d+(?:\.\d+)?)\s*,?\s*')
+
+    svg_mult = ComponentParser.svg_mult
+
+    def __init__(self, path):
+        self.path = path
+        self.shapes = []
+        self.cur_point = (0, 0) # (x, y) of current point
+        self.start_point = (0, 0) # (x, y) of start of current subpath
+        self.prev_cmd = '' # previous path command letter
+        self.prev_ctl = None # previous control point
+
+    def parse(self):
+        """ Parse the path element and return a list of shapes. """
+
+        data = self.path.get('d', '').strip()
+
+        while data:
+            cmd = data[0].lower()
+            is_relative = data[0] == cmd
+            handler = getattr(self, 'parse_' + cmd, None)
+            if handler is None:
+                break
+            else:
+                data = handler(data[1:], is_relative)
+                self.prev_cmd = cmd
+
+        def is_empty_line(shape):
+            return shape.type == 'line' and shape.p1 == shape.p2
+
+        return [s for s in self.shapes if not is_empty_line(s)]
+
+    def parse_nums(self, data):
+        """ Parse a series of numbers in an svg path. Return the
+        list of numbers and the remaining portion of the path. """
+
+        nums = []
+
+        while data:
+            match = self.num_re.match(data)
+
+            if match is None:
+                break
+            else:
+                nums.append(float(match.group(1)))
+                data = data[len(match.group(0)):]
+
+        return nums, data
+
+    def parse_points(self, data):
+        """ Parse a series of points in an svg path. Return the
+        list of points and the remaining portion of the path """
+
+        nums, data = self.parse_nums(data)
+
+        return zip(nums[::2], nums[1::2]), data
+
+    def get_path_point(self, base_point, is_relative):
+        """ Return a path point given a base point and whether we
+        are in relative path mode. """
+
+        if is_relative:
+            return (base_point[0] + self.cur_point[0],
+                    base_point[1] + self.cur_point[1])
+        else:
+            return base_point
+
+    def parse_m(self, data, is_relative):
+        """ Parse an M or m (moveto) segment. """
+
+        points, data = self.parse_points(data)
+
+        for i, point in enumerate(points):
+            point = self.get_path_point(point, is_relative)
+            if i == 0:
+                self.start_point = self.cur_point = point
+            else: # subsequent moves are lineto's
+                self.shapes.append(
+                    Line(make_point(self.cur_point, self.svg_mult),
+                         make_point(point, self.svg_mult)))
+                self.cur_point = point
+
+        return data
+
+
+    def parse_z(self, data, is_relative):
+        """ Parse a Z or z (closepath) segment. """
+
+        self.shapes.append(
+            Line(make_point(self.cur_point, self.svg_mult),
+                 make_point(self.start_point, self.svg_mult)))
+        self.cur_point = self.start_point
+
+        return data
+
+
+    def parse_l(self, data, is_relative):
+        """ Parse an L or l (lineto) segment. """
+
+        points, data = self.parse_points(data)
+
+        for i, point in enumerate(points):
+            point = self.get_path_point(point, is_relative)
+            self.shapes.append(
+                Line(make_point(self.cur_point, self.svg_mult),
+                     make_point(point, self.svg_mult)))
+            self.cur_point = point
+
+        return data
+
+
+    def parse_h(self, data, is_relative):
+        """ Parse an H or h (horizontal line) segment. """
+
+        nums, data = self.parse_nums(data)
+
+        for i, num in enumerate(nums):
+            point = (num, 0 if is_relative else self.cur_point[1])
+            point = self.get_path_point(point, is_relative)
+            self.shapes.append(
+                Line(make_point(self.cur_point, self.svg_mult),
+                     make_point(point, self.svg_mult)))
+            self.cur_point = point
+
+        return data
+
+
+    def parse_v(self, data, is_relative):
+        """ Parse a V or v (vertical line) segment. """
+
+        nums, data = self.parse_nums(data)
+
+        for i, num in enumerate(nums):
+            point = (0 if is_relative else self.cur_point[0], num)
+            point = self.get_path_point(point, is_relative)
+            self.shapes.append(
+                Line(make_point(self.cur_point, self.svg_mult),
+                     make_point(point, self.svg_mult)))
+            self.cur_point = point
+
+        return data
+
+
+    def parse_c(self, data, is_relative):
+        """ Parse a C or c (cubic bezier) segment. """
+
+        points, data = self.parse_points(data)
+
+        while points:
+            start = self.cur_point
+
+            (ctl1, ctl2, end), points = points[:3], points[3:]
+
+            self.cur_point = ctl1 = self.get_path_point(ctl1, is_relative)
+            self.cur_point = ctl2 = self.get_path_point(ctl2, is_relative)
+            self.cur_point = end = self.get_path_point(end, is_relative)
+
+            self.prev_ctl = ctl2
+
+            self.shapes.append(
+                BezierCurve(make_point(ctl1, self.svg_mult),
+                            make_point(ctl2, self.svg_mult),
+                            make_point(start, self.svg_mult),
+                            make_point(end, self.svg_mult)))
+
+        return data
+
+
+    def parse_s(self, data, is_relative):
+        """ Parse an S or s (cubic shorthand bezier) segment. """
+
+        points, data = self.parse_points(data)
+
+        while points:
+            start = self.cur_point
+
+            (ctl2, end), points = points[:2], points[2:]
+
+            self.cur_point = ctl2 = self.get_path_point(ctl2, is_relative)
+            self.cur_point = end = self.get_path_point(end, is_relative)
+
+            if self.prev_cmd not in 'cs' or not self.prev_ctl:
+                ctl1 = start
+            else:
+                ctl1 = (start[0] - (self.prev_ctl[0] - start[0]),
+                        start[1] - (self.prev_ctl[1] - start[1]))
+
+            self.prev_ctl = ctl2
+
+            self.shapes.append(
+                BezierCurve(make_point(ctl1, self.svg_mult),
+                            make_point(ctl2, self.svg_mult),
+                            make_point(start, self.svg_mult),
+                            make_point(end, self.svg_mult)))
+
+        return data
+
+
+    def parse_q(self, data, is_relative):
+        """ Parse a Q or q (quadratic bezier) segment. """
+
+        points, data = self.parse_points(data)
+
+        while points:
+            start = self.cur_point
+
+            (ctl, end), points = points[:2], points[2:]
+
+            self.cur_point = ctl = self.get_path_point(ctl, is_relative)
+            self.cur_point = end = self.get_path_point(end, is_relative)
+
+            self.prev_ctl = ctl
+
+            ctl1 = (start[0] + (2.0 / 3.0 * (ctl[0] - start[0])),
+                    start[1] + (2.0 / 3.0 * (ctl[1] - start[1])))
+
+            ctl2 = (end[0] + (2.0 / 3.0 * (ctl[0] - end[0])),
+                    end[1] + (2.0 / 3.0 * (ctl[1] - end[1])))
+
+            self.shapes.append(
+                BezierCurve(make_point(ctl1, self.svg_mult),
+                            make_point(ctl2, self.svg_mult),
+                            make_point(start, self.svg_mult),
+                            make_point(end, self.svg_mult)))
+
+        return data
+
+
+    def parse_t(self, data, is_relative):
+        """ Parse a T or t (quadratic shorthand bezier) segment. """
+
+        points, data = self.parse_points(data)
+
+        while points:
+            start = self.cur_point
+
+            end, points = points[0], points[1:]
+
+            self.cur_point = end = self.get_path_point(end, is_relative)
+
+            if self.prev_cmd not in 'qt' or not self.prev_ctl:
+                ctl = start
+            else:
+                ctl = (start[0] - (self.prev_ctl[0] - start[0]),
+                       start[1] - (self.prev_ctl[1] - start[1]))
+
+            self.prev_ctl = ctl
+
+            ctl1 = (start[0] + (2.0 / 3.0 * (ctl[0] - start[0])),
+                    start[1] + (2.0 / 3.0 * (ctl[1] - start[1])))
+
+            ctl2 = (end[0] + (2.0 / 3.0 * (ctl[0] - end[0])),
+                    end[1] + (2.0 / 3.0 * (ctl[1] - end[1])))
+
+            self.shapes.append(
+                BezierCurve(make_point(ctl1, self.svg_mult),
+                            make_point(ctl2, self.svg_mult),
+                            make_point(start, self.svg_mult),
+                            make_point(end, self.svg_mult)))
+
+        return data
+
+
+def make_x(x, mult=1.0):
     """ Make an openjson x coordinate from a fritzing x coordinate """
-    return int(round(float(x)))
+    return int(round(float(x) * mult))
 
-def make_y(y):
+def make_y(y, mult=1.0):
     """ Make an openjson y coordinate from a fritzing y coordinate """
-    return -int(round(float(y)))
+    return -int(round(float(y) * mult))
 
-def make_length(value):
+def make_length(value, mult=1.0):
     """ Make a length measurement from a fritzing measurement """
-    return int(round(float(value)))
+    return int(round(float(value) * mult))
 
-def get_x(element, name='x', default=0):
+def make_point(point, mult=1.0):
+    """ Make a point from a fritzing point """
+    return (make_x(point[0], mult=mult), make_y(point[1], mult=mult))
+
+def get_x(element, name='x', mult=1.0):
     """ Get an openjson x coordinate from a fritzing element """
-    return make_x(element.get(name, default))
+    return make_x(element.get(name, 0), mult)
 
-def get_y(element, name='y', default=0):
+def get_y(element, name='y', mult=1.0):
     """ Get an openjson y coordinate from a fritzing element """
-    return make_y(element.get(name, default))
+    return make_y(element.get(name, 0), mult)
 
-def get_length(element, name, default=0):
+def get_length(element, name, mult=1.0):
     """ Get an openjson length from a fritzing element """
-    return make_length(element.get(name, default))
+    return make_length(element.get(name, 0), mult)

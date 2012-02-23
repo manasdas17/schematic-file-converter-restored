@@ -1,0 +1,1002 @@
+v 20100214 2
+C 2900 3700 1 0 0 EMBEDDED7805.sym
+[
+L 3700 4500 3700 4300 3 0 0 0 -1 -1
+L 3600 4400 3800 4400 3 0 0 0 -1 -1
+T 3200 5400 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 3200 6000 5 8 0 0 0 0 1
+comment=Alternative footprint: D-PAK
+T 3200 5600 5 8 0 0 0 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 3200 6200 5 8 0 0 0 0 1
+documentation=http://www.datasheetcatalog.com/datasheets_pdf/7/8/0/5/7805.shtml
+T 3200 6400 5 8 0 0 0 0 1
+description=voltage constant, 5V, 1A 
+T 3200 5800 5 8 0 0 0 0 1
+numslots=0
+P 4200 4300 4500 4300 1 0 1
+{
+T 4330 4350 5 8 1 1 0 0 1
+pinnumber=3
+T 4330 4350 5 8 0 1 0 0 1
+pinseq=3
+T 4200 4300 5 8 1 1 0 6 1
+pinlabel=OUT
+T 4400 4200 5 10 0 1 0 5 1
+pintype=pwr
+}
+P 3700 3700 3700 4000 1 0 0
+{
+T 3600 3800 5 8 1 1 0 0 1
+pinnumber=2
+T 3600 3800 5 8 0 1 0 0 1
+pinseq=2
+T 3800 3800 5 10 0 1 0 0 1
+pintype=pas
+T 3700 4100 5 8 1 1 0 3 1
+pinlabel=GND
+}
+P 3200 4300 2900 4300 1 0 1
+{
+T 3000 4350 5 8 1 1 0 0 1
+pinnumber=1
+T 3000 4350 5 8 0 1 0 0 1
+pinseq=1
+T 3000 4100 5 10 0 1 0 0 1
+pintype=in
+T 3300 4300 5 8 1 1 0 0 1
+pinlabel=IN
+}
+B 3200 4000 1000 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+]
+{
+T 3000 5100 5 10 1 1 0 0 1
+refdes=U?
+T 3000 4700 5 8 1 1 0 0 1
+footprint=TO220
+T 3000 4900 5 10 1 1 0 0 1
+value=7805
+}
+C 5200 3300 1 90 0 EMBEDDEDcap_SMD.sym
+[
+L 4600 3700 4650 3750 3 0 0 0 -1 -1
+L 4600 3750 4600 3600 3 0 0 0 -1 -1
+L 4600 3850 4600 4000 3 0 0 0 -1 -1
+L 4400 3850 4800 3850 3 0 0 0 -1 -1
+L 4400 3750 4800 3750 3 0 0 0 -1 -1
+T 4300 3400 5 8 0 0 90 0 1
+numslots=0
+P 4600 4300 4600 4000 1 0 0
+{
+T 4550 4125 5 8 0 1 90 0 1
+pinnumber=2
+T 4550 4125 5 8 0 1 90 0 1
+pinseq=2
+T 4550 4125 5 8 0 1 90 0 1
+pinlabel=2
+T 4725 4075 5 8 0 1 90 0 1
+pintype=pas
+}
+P 4600 3300 4600 3600 1 0 0
+{
+T 4550 3425 5 8 0 1 90 0 1
+pinnumber=1
+T 4550 3425 5 8 0 1 90 0 1
+pinseq=1
+T 4550 3425 5 8 0 1 90 0 1
+pinlabel=1
+T 4725 3350 5 8 0 1 90 0 1
+pintype=pas
+}
+T 4100 3400 5 8 0 0 90 0 1
+use-license=free, no restrictions
+T 4100 3400 5 8 0 0 90 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 3900 3400 5 8 0 0 90 0 1
+author=Kai-Martin Knaak kmk@familieknaak.de
+T 3700 3400 5 8 0 0 90 0 1
+documentation=none
+T 3500 3400 5 8 0 0 90 0 1
+description=capacitor, SMD
+]
+{
+T 5000 5000 5 8 0 0 0 6 1
+device=capacitor
+T 4300 3600 5 10 1 1 0 6 1
+value=10n
+T 4300 3400 5 8 1 1 0 6 1
+footprint=0805
+T 4300 3800 5 10 1 1 0 6 1
+refdes=C?
+}
+C 5000 3300 1 0 0 EMBEDDEDelko.sym
+[
+B 5000 3800 400 100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 5200 3900 5200 4100 3 0 0 0 -1 -1
+L 5200 3500 5200 3700 3 0 0 0 -1 -1
+L 5400 3700 5000 3700 3 0 0 0 -1 -1
+P 5200 3300 5200 3500 1 0 0
+{
+T 5150 3400 5 8 0 1 0 6 1
+pinnumber=2
+T 5150 3400 5 8 0 1 0 6 1
+pinseq=2
+T 5350 3600 9 16 0 1 0 4 1
+pinlabel=-
+T 5250 3400 5 8 0 1 0 0 1
+pintype=pas
+}
+P 5200 4300 5200 4100 1 0 0
+{
+T 5150 4100 5 8 0 1 0 6 1
+pinnumber=1
+T 5150 4100 5 8 0 1 0 6 1
+pinseq=1
+T 5300 3950 9 16 1 1 90 1 1
+pinlabel=+
+T 5250 4150 5 8 0 1 0 0 1
+pintype=pas
+}
+T 5300 4500 5 8 0 0 0 0 1
+numslots=0
+T 5300 4700 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 5300 4900 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 5300 5100 5 8 0 0 0 0 1
+author=Kai-Martin. Knaak, kmk@lilalaser.de
+T 5300 5300 5 8 0 0 0 0 1
+description=generic polarized capacitor
+]
+{
+T 4900 4300 5 10 0 0 0 0 1
+device=POLARIZED_CAPACITOR
+T 4900 4800 5 10 1 1 0 0 1
+refdes=C?
+T 4900 4400 5 8 1 1 0 0 1
+footprint=elko_RM35_D8
+T 4900 4600 5 10 1 1 0 0 1
+value=100uF/16V
+}
+N 3700 2700 3700 3700 4
+N 5200 3100 5200 3300 4
+N 6400 4500 6400 4300 4
+N 4500 4300 6400 4300 4
+C 3500 3200 1 90 0 EMBEDDEDcap_SMD.sym
+[
+L 2900 3600 2950 3650 3 0 0 0 -1 -1
+L 2900 3650 2900 3500 3 0 0 0 -1 -1
+L 2900 3750 2900 3900 3 0 0 0 -1 -1
+L 2700 3750 3100 3750 3 0 0 0 -1 -1
+L 2700 3650 3100 3650 3 0 0 0 -1 -1
+T 2600 3300 5 8 0 0 90 0 1
+numslots=0
+P 2900 4200 2900 3900 1 0 0
+{
+T 2850 4025 5 8 0 1 90 0 1
+pinnumber=2
+T 2850 4025 5 8 0 1 90 0 1
+pinseq=2
+T 2850 4025 5 8 0 1 90 0 1
+pinlabel=2
+T 3025 3975 5 8 0 1 90 0 1
+pintype=pas
+}
+P 2900 3200 2900 3500 1 0 0
+{
+T 2850 3325 5 8 0 1 90 0 1
+pinnumber=1
+T 2850 3325 5 8 0 1 90 0 1
+pinseq=1
+T 2850 3325 5 8 0 1 90 0 1
+pinlabel=1
+T 3025 3250 5 8 0 1 90 0 1
+pintype=pas
+}
+T 2400 3300 5 8 0 0 90 0 1
+use-license=free, no restrictions
+T 2400 3300 5 8 0 0 90 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 2200 3300 5 8 0 0 90 0 1
+author=Kai-Martin Knaak kmk@familieknaak.de
+T 2000 3300 5 8 0 0 90 0 1
+documentation=none
+T 1800 3300 5 8 0 0 90 0 1
+description=capacitor, SMD
+]
+{
+T 2500 4900 5 8 0 0 0 0 1
+device=capacitor
+T 2600 3600 5 10 1 1 0 6 1
+value=1u
+T 2600 3400 5 8 1 1 0 6 1
+footprint=0805
+T 2600 3800 5 10 1 1 0 6 1
+refdes=C?
+}
+N 2700 4300 2900 4300 4
+N 2900 4200 2900 4300 4
+C 6200 4500 1 0 0 EMBEDDEDUb+.sym
+[
+T 6300 6000 5 8 0 0 0 0 1
+license=GPL2
+T 6300 5400 5 8 0 0 0 0 1
+numslots=0
+T 6300 5200 5 8 0 0 0 0 1
+net=+Ub:1
+T 6300 5600 5 8 0 0 0 0 1
+refdes=none
+T 6300 6200 5 8 0 0 0 0 1
+author= Kai-Martin Knaak, kmk@lilalaser.de
+T 6300 6400 5 8 0 0 0 0 1
+documentation=none
+T 6300 6600 5 8 0 0 0 0 1
+description=positive supply voltage
+T 6200 4750 9 10 1 0 0 0 1
++Ub
+P 6400 4600 6400 4500 1 0 1
+{
+T 6300 4550 5 10 0 1 0 0 1
+pinnumber=1
+T 6300 4550 5 10 0 1 0 0 1
+pinseq=1
+T 6300 4550 5 10 0 1 0 0 1
+pinlabel=1
+T 6500 4550 5 10 0 1 0 0 1
+pintype=pwr
+}
+V 6400 4650 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+]
+{
+T 6300 5800 5 8 0 0 0 0 1
+device=none
+}
+C 4100 5800 1 180 0 EMBEDDEDdus.sym
+[
+L 3400 5200 3400 5600 3 0 0 0 -1 -1
+L 3400 5400 3700 5600 3 0 0 0 -1 -1
+L 3700 5200 3400 5400 3 0 0 0 -1 -1
+L 3700 5200 3700 5600 3 0 0 0 -1 -1
+P 3300 5400 3400 5400 1 0 0
+{
+T 3300 5350 5 8 0 1 180 0 1
+pinnumber=1
+T 3300 5350 5 8 0 1 180 0 1
+pinseq=1
+T 3400 5250 5 8 0 1 180 0 1
+pinlabel=cathode
+T 3300 5550 5 8 0 1 180 0 1
+pintype=pas
+}
+P 3800 5400 3700 5400 1 0 0
+{
+T 3800 5350 5 8 0 1 180 6 1
+pinnumber=2
+T 3800 5350 5 8 0 1 180 6 1
+pinseq=2
+T 3700 5250 5 8 0 1 180 6 1
+pinlabel=anode
+T 3700 5550 5 8 0 1 180 6 1
+pintype=pas
+}
+T 3700 4600 5 8 0 0 180 0 1
+numslots=0
+T 3700 4400 5 8 0 0 180 0 1
+license=free, no restrictions
+T 3700 4200 5 8 0 0 180 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 3700 4000 5 8 0 0 180 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 3700 3800 5 8 0 0 180 0 1
+documentation=http://www.vishay.com/docs/88503/1n4001.pdf
+T 3700 3600 5 8 0 0 180 0 1
+description=diode universal silicon
+]
+{
+T 5000 3800 5 8 0 0 180 0 1
+device=diode-DUS
+T 3800 5700 5 10 1 1 0 0 1
+refdes=D?
+T 3800 5500 5 10 1 1 0 0 1
+value=1N4148
+T 3800 5200 5 8 1 1 0 0 1
+footprint=dio_1812
+}
+C 1900 3900 1 0 0 EMBEDDEDdus.sym
+[
+L 2600 4500 2600 4100 3 0 0 0 -1 -1
+L 2600 4300 2300 4100 3 0 0 0 -1 -1
+L 2300 4500 2600 4300 3 0 0 0 -1 -1
+L 2300 4500 2300 4100 3 0 0 0 -1 -1
+P 2700 4300 2600 4300 1 0 0
+{
+T 2700 4350 5 8 0 1 0 0 1
+pinnumber=1
+T 2700 4350 5 8 0 1 0 0 1
+pinseq=1
+T 2600 4450 5 8 0 1 0 0 1
+pinlabel=cathode
+T 2700 4150 5 8 0 1 0 0 1
+pintype=pas
+}
+P 2200 4300 2300 4300 1 0 0
+{
+T 2200 4350 5 8 0 1 0 6 1
+pinnumber=2
+T 2200 4350 5 8 0 1 0 6 1
+pinseq=2
+T 2300 4450 5 8 0 1 0 6 1
+pinlabel=anode
+T 2300 4150 5 8 0 1 0 6 1
+pintype=pas
+}
+T 2300 5100 5 8 0 0 0 0 1
+numslots=0
+T 2300 5300 5 8 0 0 0 0 1
+license=free, no restrictions
+T 2300 5500 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 2300 5700 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 2300 5900 5 8 0 0 0 0 1
+documentation=http://www.vishay.com/docs/88503/1n4001.pdf
+T 2300 6100 5 8 0 0 0 0 1
+description=diode universal silicon
+]
+{
+T 2700 6600 5 8 0 0 0 0 1
+device=diode-DUS
+T 2500 5000 5 10 1 1 0 6 1
+refdes=D?
+T 2500 4800 5 10 1 1 0 6 1
+value=1N4001
+T 2500 4600 5 8 1 1 0 6 1
+footprint=dio_1812
+}
+N 3800 5400 4500 5400 4
+N 4500 5400 4500 4300 4
+N 3300 5400 2800 5400 4
+N 2800 5400 2800 4300 4
+C 2900 2700 1 180 1 EMBEDDED7905.sym
+[
+L 3600 2000 3800 2000 3 0 0 0 -1 -1
+T 3200 1000 5 8 0 0 180 6 1
+use-license=freee, no restrictions
+T 3200 400 5 8 0 0 180 6 1
+comment=alternative footprint: D-PAK
+T 3200 800 5 8 0 0 180 6 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 3200 200 5 8 0 0 180 6 1
+documentation=http://www.fairchildsemi.com/ds/KA/KA7905.pdf
+T 3200 0 5 8 0 0 180 6 1
+description=voltage constant, -5V, 1A 
+T 3200 600 5 8 0 0 180 6 1
+numslots=0
+P 4200 2100 4500 2100 1 0 1
+{
+T 4330 2050 5 8 1 1 180 6 1
+pinnumber=3
+T 4330 2050 5 8 0 1 180 6 1
+pinseq=3
+T 4300 2300 5 10 0 1 180 6 1
+pintype=pwr
+T 4200 2100 5 8 1 1 180 0 1
+pinlabel=OUT
+}
+P 3700 2700 3700 2400 1 0 0
+{
+T 3600 2600 5 8 1 1 180 6 1
+pinnumber=1
+T 3600 2600 5 8 0 1 180 6 1
+pinseq=1
+T 3800 2600 5 10 0 1 180 6 1
+pintype=pas
+T 3700 2300 5 8 1 1 180 3 1
+pinlabel=GND
+}
+P 3200 2100 2900 2100 1 0 1
+{
+T 3000 2050 5 8 1 1 180 6 1
+pinnumber=2
+T 3000 2050 5 8 0 1 180 6 1
+pinseq=2
+T 3000 2300 5 10 0 1 180 6 1
+pintype=in
+T 3300 2100 5 8 1 1 180 6 1
+pinlabel=IN
+}
+B 3200 1800 1000 600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+]
+{
+T 3100 1600 5 10 1 1 0 0 1
+refdes=U?
+T 3100 1200 5 8 1 1 0 0 1
+footprint=TO220
+T 3100 1400 5 10 1 1 0 0 1
+value=7905
+}
+C 5200 2100 1 90 0 EMBEDDEDcap_SMD.sym
+[
+L 4600 2500 4650 2550 3 0 0 0 -1 -1
+L 4600 2550 4600 2400 3 0 0 0 -1 -1
+L 4600 2650 4600 2800 3 0 0 0 -1 -1
+L 4400 2650 4800 2650 3 0 0 0 -1 -1
+L 4400 2550 4800 2550 3 0 0 0 -1 -1
+T 4300 2200 5 8 0 0 90 0 1
+numslots=0
+P 4600 3100 4600 2800 1 0 0
+{
+T 4550 2925 5 8 0 1 90 0 1
+pinnumber=2
+T 4550 2925 5 8 0 1 90 0 1
+pinseq=2
+T 4550 2925 5 8 0 1 90 0 1
+pinlabel=2
+T 4725 2875 5 8 0 1 90 0 1
+pintype=pas
+}
+P 4600 2100 4600 2400 1 0 0
+{
+T 4550 2225 5 8 0 1 90 0 1
+pinnumber=1
+T 4550 2225 5 8 0 1 90 0 1
+pinseq=1
+T 4550 2225 5 8 0 1 90 0 1
+pinlabel=1
+T 4725 2150 5 8 0 1 90 0 1
+pintype=pas
+}
+T 4100 2200 5 8 0 0 90 0 1
+use-license=free, no restrictions
+T 4100 2200 5 8 0 0 90 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 3900 2200 5 8 0 0 90 0 1
+author=Kai-Martin Knaak kmk@familieknaak.de
+T 3700 2200 5 8 0 0 90 0 1
+documentation=none
+T 3500 2200 5 8 0 0 90 0 1
+description=capacitor, SMD
+]
+{
+T 5000 3600 5 8 0 0 0 6 1
+device=capacitor
+T 4300 2700 5 10 1 1 0 6 1
+value=10n
+T 4300 2500 5 8 1 1 0 6 1
+footprint=0805
+T 4300 2900 5 10 1 1 0 6 1
+refdes=C?
+}
+C 5000 2100 1 0 0 EMBEDDEDelko.sym
+[
+B 5000 2600 400 100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 5200 2700 5200 2900 3 0 0 0 -1 -1
+L 5200 2300 5200 2500 3 0 0 0 -1 -1
+L 5400 2500 5000 2500 3 0 0 0 -1 -1
+P 5200 2100 5200 2300 1 0 0
+{
+T 5150 2200 5 8 0 1 0 6 1
+pinnumber=2
+T 5150 2200 5 8 0 1 0 6 1
+pinseq=2
+T 5350 2400 9 16 0 1 0 4 1
+pinlabel=-
+T 5250 2200 5 8 0 1 0 0 1
+pintype=pas
+}
+P 5200 3100 5200 2900 1 0 0
+{
+T 5150 2900 5 8 0 1 0 6 1
+pinnumber=1
+T 5150 2900 5 8 0 1 0 6 1
+pinseq=1
+T 5300 2750 9 16 1 1 90 1 1
+pinlabel=+
+T 5250 2950 5 8 0 1 0 0 1
+pintype=pas
+}
+T 5300 3300 5 8 0 0 0 0 1
+numslots=0
+T 5300 3500 5 8 0 0 0 0 1
+use-license=free, no restrictions
+T 5300 3700 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 5300 3900 5 8 0 0 0 0 1
+author=Kai-Martin. Knaak, kmk@lilalaser.de
+T 5300 4100 5 8 0 0 0 0 1
+description=generic polarized capacitor
+]
+{
+T 4400 4200 5 10 0 0 0 0 1
+device=POLARIZED_CAPACITOR
+T 5000 1800 5 10 1 1 0 0 1
+refdes=C?
+T 5000 1400 5 8 1 1 0 0 1
+footprint=elko_RM35_D8
+T 5000 1600 5 10 1 1 0 0 1
+value=100uF/16V
+}
+N 4500 2100 6400 2100 4
+C 3500 2100 1 90 0 EMBEDDEDcap_SMD.sym
+[
+L 2900 2500 2950 2550 3 0 0 0 -1 -1
+L 2900 2550 2900 2400 3 0 0 0 -1 -1
+L 2900 2650 2900 2800 3 0 0 0 -1 -1
+L 2700 2650 3100 2650 3 0 0 0 -1 -1
+L 2700 2550 3100 2550 3 0 0 0 -1 -1
+T 2600 2200 5 8 0 0 90 0 1
+numslots=0
+P 2900 3100 2900 2800 1 0 0
+{
+T 2850 2925 5 8 0 1 90 0 1
+pinnumber=2
+T 2850 2925 5 8 0 1 90 0 1
+pinseq=2
+T 2850 2925 5 8 0 1 90 0 1
+pinlabel=2
+T 3025 2875 5 8 0 1 90 0 1
+pintype=pas
+}
+P 2900 2100 2900 2400 1 0 0
+{
+T 2850 2225 5 8 0 1 90 0 1
+pinnumber=1
+T 2850 2225 5 8 0 1 90 0 1
+pinseq=1
+T 2850 2225 5 8 0 1 90 0 1
+pinlabel=1
+T 3025 2150 5 8 0 1 90 0 1
+pintype=pas
+}
+T 2400 2200 5 8 0 0 90 0 1
+use-license=free, no restrictions
+T 2400 2200 5 8 0 0 90 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 2200 2200 5 8 0 0 90 0 1
+author=Kai-Martin Knaak kmk@familieknaak.de
+T 2000 2200 5 8 0 0 90 0 1
+documentation=none
+T 1800 2200 5 8 0 0 90 0 1
+description=capacitor, SMD
+]
+{
+T 2500 5800 5 8 0 0 0 0 1
+device=capacitor
+T 3200 2700 5 10 1 1 0 0 1
+value=1u
+T 3200 2500 5 8 1 1 0 0 1
+footprint=0805
+T 3200 2900 5 10 1 1 0 0 1
+refdes=C?
+}
+N 2700 2100 2900 2100 4
+N 6400 2100 6400 2000 4
+C 6100 1600 1 0 0 EMBEDDEDUb-.sym
+[
+T 6300 3200 5 8 0 0 0 0 1
+license=GPL2
+T 6300 2600 5 8 0 0 0 0 1
+numslots=0
+T 6300 2400 5 8 0 0 0 0 1
+net=-Ub:1
+T 6300 2800 5 8 0 0 0 0 1
+refdes=none
+T 6300 3400 5 8 0 0 0 0 1
+author= Kai-Martin Knaak, kmk@lilalaser.de
+T 6300 3600 5 8 0 0 0 0 1
+documentation=none
+T 6300 3800 5 8 0 0 0 0 1
+description=negative supply voltage
+T 6400 1600 9 10 1 0 0 3 1
+-Ub
+P 6400 1900 6400 2000 1 0 1
+{
+T 6200 1800 5 10 0 1 0 0 1
+pinnumber=1
+T 6200 1800 5 10 0 1 0 0 1
+pinseq=1
+T 6200 1800 5 10 0 1 0 0 1
+pinlabel=1
+T 6500 1800 5 10 0 1 0 0 1
+pintype=pwr
+}
+V 6400 1850 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+]
+{
+T 5900 3000 5 8 0 0 0 6 1
+device=none
+}
+C 3400 600 1 0 0 EMBEDDEDdus.sym
+[
+L 4100 1200 4100 800 3 0 0 0 -1 -1
+L 4100 1000 3800 800 3 0 0 0 -1 -1
+L 3800 1200 4100 1000 3 0 0 0 -1 -1
+L 3800 1200 3800 800 3 0 0 0 -1 -1
+P 4200 1000 4100 1000 1 0 0
+{
+T 4200 1050 5 8 0 1 0 0 1
+pinnumber=1
+T 4200 1050 5 8 0 1 0 0 1
+pinseq=1
+T 4100 1150 5 8 0 1 0 0 1
+pinlabel=cathode
+T 4200 850 5 8 0 1 0 0 1
+pintype=pas
+}
+P 3700 1000 3800 1000 1 0 0
+{
+T 3700 1050 5 8 0 1 0 6 1
+pinnumber=2
+T 3700 1050 5 8 0 1 0 6 1
+pinseq=2
+T 3800 1150 5 8 0 1 0 6 1
+pinlabel=anode
+T 3800 850 5 8 0 1 0 6 1
+pintype=pas
+}
+T 3800 1800 5 8 0 0 0 0 1
+numslots=0
+T 3800 2000 5 8 0 0 0 0 1
+license=free, no restrictions
+T 3800 2200 5 8 0 0 0 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 3800 2400 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 3800 2600 5 8 0 0 0 0 1
+documentation=http://www.vishay.com/docs/88503/1n4001.pdf
+T 3800 2800 5 8 0 0 0 0 1
+description=diode universal silicon
+]
+{
+T 3000 -800 5 8 0 0 180 0 1
+device=diode-DUS
+T 3800 1500 5 10 1 1 0 0 1
+refdes=D?
+T 3800 1300 5 10 1 1 0 0 1
+value=1N4148
+T 3800 600 5 8 1 1 0 0 1
+footprint=dio_1812
+}
+C 3000 2500 1 180 0 EMBEDDEDdus.sym
+[
+L 2300 1900 2300 2300 3 0 0 0 -1 -1
+L 2300 2100 2600 2300 3 0 0 0 -1 -1
+L 2600 1900 2300 2100 3 0 0 0 -1 -1
+L 2600 1900 2600 2300 3 0 0 0 -1 -1
+P 2200 2100 2300 2100 1 0 0
+{
+T 2200 2050 5 8 0 1 180 0 1
+pinnumber=1
+T 2200 2050 5 8 0 1 180 0 1
+pinseq=1
+T 2300 1950 5 8 0 1 180 0 1
+pinlabel=cathode
+T 2200 2250 5 8 0 1 180 0 1
+pintype=pas
+}
+P 2700 2100 2600 2100 1 0 0
+{
+T 2700 2050 5 8 0 1 180 6 1
+pinnumber=2
+T 2700 2050 5 8 0 1 180 6 1
+pinseq=2
+T 2600 1950 5 8 0 1 180 6 1
+pinlabel=anode
+T 2600 2250 5 8 0 1 180 6 1
+pintype=pas
+}
+T 2600 1300 5 8 0 0 180 0 1
+numslots=0
+T 2600 1100 5 8 0 0 180 0 1
+license=free, no restrictions
+T 2600 900 5 8 0 0 180 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 2600 700 5 8 0 0 180 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 2600 500 5 8 0 0 180 0 1
+documentation=http://www.vishay.com/docs/88503/1n4001.pdf
+T 2600 300 5 8 0 0 180 0 1
+description=diode universal silicon
+]
+{
+T 4100 3900 5 8 0 0 0 0 1
+device=diode-DUS
+T 2500 1700 5 10 1 1 0 6 1
+refdes=D?
+T 2500 1500 5 10 1 1 0 6 1
+value=1N4001
+T 2500 1300 5 8 1 1 0 6 1
+footprint=dio_1812
+}
+N 3700 1000 2800 1000 4
+N 2800 1000 2800 2100 4
+N 4200 1000 4700 1000 4
+N 4700 1000 4700 2100 4
+N 2500 3200 3700 3200 4
+N 3700 3200 5200 3200 4
+N 5200 3200 6700 3200 4
+C 6600 2900 1 0 0 EMBEDDEDgnd.sym
+[
+T 6900 2950 8 10 0 0 0 0 1
+net=GND:1
+L 6680 3010 6720 3010 3 0 0 0 -1 -1
+L 6655 3050 6745 3050 3 0 0 0 -1 -1
+L 6600 3100 6800 3100 3 0 0 0 -1 -1
+P 6700 3100 6700 3200 1 0 1
+{
+T 6758 3061 5 4 0 1 0 0 1
+pinnumber=1
+T 6758 3061 5 4 0 1 0 0 1
+pinseq=1
+T 6758 3061 5 4 0 1 0 0 1
+pinlabel=1
+T 6558 3061 5 4 0 1 0 0 1
+pintype=pwr
+}
+]
+N 2200 4300 2000 4300 4
+N 2000 4300 2000 3600 4
+N 2000 3600 1600 3600 4
+N 1600 2800 1900 2800 4
+N 1900 2800 1900 2100 4
+N 1900 2100 2200 2100 4
+N 4600 3300 4600 3200 4
+N 4600 3200 4600 3100 4
+N 2900 3100 2900 3200 4
+T 400 5300 9 20 1 0 0 0 2
++/- 5V supply with
+virtual ground
+C 1600 3800 1 180 0 EMBEDDEDPS-3.sym
+[
+L 1150 3300 1150 3800 3 0 0 0 -1 -1
+L 1150 2600 1150 3100 3 0 0 0 -1 -1
+L 1100 3300 1150 3300 3 0 0 0 -1 -1
+L 1100 3100 1100 3300 3 0 0 0 -1 -1
+L 1150 3100 1100 3100 3 0 0 0 -1 -1
+V 1350 3600 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 1600 3600 1400 3600 1 0 0
+{
+T 1400 3550 5 8 0 1 180 6 1
+pinnumber=3
+T 1400 3650 5 8 0 1 180 8 1
+pinseq=3
+T 1350 3650 5 8 0 1 180 2 1
+pintype=pas
+T 1170 3600 9 8 1 1 180 7 1
+pinlabel=3
+}
+B 1050 2600 500 1200 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 1350 3200 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 1600 3200 1400 3200 1 0 0
+{
+T 1400 3150 5 8 0 1 180 6 1
+pinnumber=2
+T 1400 3250 5 8 0 1 180 8 1
+pinseq=2
+T 1350 3250 5 8 0 1 180 2 1
+pintype=pas
+T 1220 3200 9 8 1 1 180 4 1
+pinlabel=2
+}
+V 1350 2800 50 6 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 1600 2800 1400 2800 1 0 0
+{
+T 1400 2750 5 8 0 1 180 6 1
+pinnumber=1
+T 1400 2850 5 8 0 1 180 8 1
+pinseq=1
+T 1350 2850 5 8 0 1 180 2 1
+pintype=pas
+T 1220 2800 9 8 1 1 180 4 1
+pinlabel=1
+}
+T 1500 2500 8 8 0 1 180 0 1
+footprint=PS_1x3PIN
+T 1500 2300 8 10 0 1 180 0 1
+value=PS-3Pin
+T 1500 2100 8 10 0 1 180 0 1
+refdes=CONN?
+T 1500 1800 5 8 0 0 180 0 1
+numslots=0
+T 1500 1600 5 8 0 0 180 0 1
+license=GPL 2, see http://www.gnu.org/licenses/gpl.txt
+T 1500 1400 5 8 0 0 180 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 1500 1200 5 8 0 0 180 0 1
+documentation=http://jae-connector.com/en/general_en.cfm?series_code=IL%2DG
+T 1500 1000 5 8 0 0 180 0 1
+description=connector by JAE, IL-G series, 3 pins, model IL-G-3S-S3C2-SA
+]
+{
+T 1600 4300 5 10 1 1 0 6 1
+refdes=CONN?
+T 1600 4100 5 10 1 1 0 6 1
+value=PS-3Pin
+T 1600 3900 5 8 1 1 0 6 1
+footprint=PS_1x3PIN_gerade
+}
+C 1800 3300 1 270 0 EMBEDDEDjumper_SMD.sym
+[
+T 2600 3200 5 8 0 0 270 0 1
+value=JMP
+T 3600 3200 5 8 0 0 270 0 1
+comment=use jumper_default.sym to mark a closed jumper
+T 2800 3200 5 8 0 0 270 0 1
+nobom=1
+T 3000 3200 5 8 0 0 270 0 1
+use-license=free, no restriction
+T 3200 3200 5 8 0 0 270 0 1
+dist-license=GPL3, http://www.gnu.org/licenses/gpl-3.0.txt
+T 3400 3200 5 8 0 0 270 0 1
+author=K-M. Knaak kmk@lilalaser.de
+T 3800 3200 5 8 0 0 270 0 1
+description=SMD jumper
+L 2000 3175 2075 3100 3 0 0 0 -1 -1
+T 2000 3000 8 8 0 1 270 0 1
+footprint=JMP_SMD
+T 2200 3000 8 10 0 1 270 0 1
+refdes=J?
+B 2000 3100 400 200 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 2100 3200 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+V 2300 3200 50 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 1900 3200 2000 3200 1 0 0
+{
+T 1850 3150 5 8 0 1 270 0 1
+pinnumber=1
+T 1850 3150 5 8 0 1 270 0 1
+pinseq=1
+T 1850 3150 5 8 0 1 270 0 1
+pinlabel=1
+T 1850 3050 5 8 0 1 270 0 1
+pintype=pas
+}
+P 2500 3200 2400 3200 1 0 0
+{
+T 2450 3150 5 8 0 1 270 0 1
+pinnumber=2
+T 2450 3150 5 8 0 1 270 0 1
+pinseq=2
+T 2450 3150 5 8 0 1 270 0 1
+pinlabel=2
+T 2450 3050 5 8 0 1 270 0 1
+pintype=pas
+}
+]
+{
+T 2000 3400 5 10 1 1 0 0 1
+refdes=J?
+T 2000 2900 5 8 1 1 0 0 1
+footprint=JMP_SMD
+T 2600 3700 5 8 0 0 270 0 1
+value=JMP
+}
+N 1900 3200 1600 3200 4
+T 1000 3600 9 10 1 0 0 6 1
++8V
+T 1000 2800 9 10 1 0 0 6 1
+-8V
+T 1000 3200 9 10 1 0 0 6 1
+GND
+C 6200 3200 1 90 0 EMBEDDEDdus.sym
+[
+L 5600 3900 6000 3900 3 0 0 0 -1 -1
+L 5800 3900 6000 3600 3 0 0 0 -1 -1
+L 5600 3600 5800 3900 3 0 0 0 -1 -1
+L 5600 3600 6000 3600 3 0 0 0 -1 -1
+P 5800 4000 5800 3900 1 0 0
+{
+T 5750 4000 5 8 0 1 90 0 1
+pinnumber=1
+T 5750 4000 5 8 0 1 90 0 1
+pinseq=1
+T 5650 3900 5 8 0 1 90 0 1
+pinlabel=cathode
+T 5950 4000 5 8 0 1 90 0 1
+pintype=pas
+}
+P 5800 3500 5800 3600 1 0 0
+{
+T 5750 3500 5 8 0 1 90 6 1
+pinnumber=2
+T 5750 3500 5 8 0 1 90 6 1
+pinseq=2
+T 5650 3600 5 8 0 1 90 6 1
+pinlabel=anode
+T 5950 3600 5 8 0 1 90 6 1
+pintype=pas
+}
+T 6200 3600 5 8 0 1 90 0 1
+footprint=dio_1210
+T 5500 3600 8 10 0 1 90 0 1
+value=1N4001
+T 5300 3600 8 10 0 1 90 0 1
+refdes=D?
+T 5000 3600 5 8 0 0 90 0 1
+numslots=0
+T 4800 3600 5 8 0 0 90 0 1
+license=free, no restrictions
+T 4600 3600 5 8 0 0 90 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 4400 3600 5 8 0 0 90 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 4200 3600 5 8 0 0 90 0 1
+documentation=http://www.vishay.com/docs/88503/1n4001.pdf
+T 4000 3600 5 8 0 0 90 0 1
+description=diode universal silicon
+T 3800 3600 5 8 0 0 90 0 1
+device=DIODE
+]
+{
+T 3800 3600 5 8 0 0 90 0 1
+device=DIODE
+T 6100 3800 5 10 1 1 0 0 1
+refdes=D?
+T 6100 3600 5 10 1 1 0 0 1
+value=1N4001
+T 6100 3400 5 8 1 1 0 0 1
+footprint=dio_1210
+}
+N 5800 4000 5800 4300 4
+C 6200 2100 1 90 0 EMBEDDEDdus.sym
+[
+L 5600 2800 6000 2800 3 0 0 0 -1 -1
+L 5800 2800 6000 2500 3 0 0 0 -1 -1
+L 5600 2500 5800 2800 3 0 0 0 -1 -1
+L 5600 2500 6000 2500 3 0 0 0 -1 -1
+P 5800 2900 5800 2800 1 0 0
+{
+T 5750 2900 5 8 0 1 90 0 1
+pinnumber=1
+T 5750 2900 5 8 0 1 90 0 1
+pinseq=1
+T 5650 2800 5 8 0 1 90 0 1
+pinlabel=cathode
+T 5950 2900 5 8 0 1 90 0 1
+pintype=pas
+}
+P 5800 2400 5800 2500 1 0 0
+{
+T 5750 2400 5 8 0 1 90 6 1
+pinnumber=2
+T 5750 2400 5 8 0 1 90 6 1
+pinseq=2
+T 5650 2500 5 8 0 1 90 6 1
+pinlabel=anode
+T 5950 2500 5 8 0 1 90 6 1
+pintype=pas
+}
+T 6200 2500 5 8 0 1 90 0 1
+footprint=dio_1210
+T 5500 2500 8 10 0 1 90 0 1
+value=1N4001
+T 5300 2500 8 10 0 1 90 0 1
+refdes=D?
+T 5000 2500 5 8 0 0 90 0 1
+numslots=0
+T 4800 2500 5 8 0 0 90 0 1
+license=free, no restrictions
+T 4600 2500 5 8 0 0 90 0 1
+dist-license=GPL 3, see http://www.gnu.org/licenses/gpl-3.0.txt
+T 4400 2500 5 8 0 0 90 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 4200 2500 5 8 0 0 90 0 1
+documentation=http://www.vishay.com/docs/88503/1n4001.pdf
+T 4000 2500 5 8 0 0 90 0 1
+description=diode universal silicon
+T 3800 2500 5 8 0 0 90 0 1
+device=DIODE
+]
+{
+T 3800 2500 5 8 0 0 90 0 1
+device=DIODE
+T 6100 2700 5 10 1 1 0 0 1
+refdes=D?
+T 6100 2500 5 10 1 1 0 0 1
+value=1N4001
+T 6100 2300 5 8 1 1 0 0 1
+footprint=dio_1210
+}
+N 5800 2400 5800 2100 4
+N 5800 2900 5800 3200 4
+N 5800 3200 5800 3500 4

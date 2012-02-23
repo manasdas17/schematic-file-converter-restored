@@ -1,0 +1,59 @@
+v 20110116 2
+B 200 200 1000 600 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 200 1100 8 10 1 1 0 0 1
+value=7805
+P 200 500 100 500 1 0 1
+{
+T 150 550 5 8 1 1 0 6 1
+pinnumber=1
+T 150 550 5 8 0 1 0 6 1
+pinseq=1
+T 150 450 5 8 0 1 0 8 1
+pintype=in
+T 300 500 5 10 1 1 0 1 1
+pinlabel=in
+}
+P 700 100 700 200 1 0 0
+{
+T 650 150 5 8 1 1 0 8 1
+pinnumber=2
+T 650 150 5 8 0 1 0 8 1
+pinseq=2
+T 800 0 5 10 0 1 0 0 1
+pintype=pas
+T 700 250 5 10 1 1 0 3 1
+pinlabel=GND
+}
+P 1200 500 1300 500 1 0 1
+{
+T 1250 550 5 8 1 1 0 0 1
+pinnumber=3
+T 1250 550 5 8 0 1 0 0 1
+pinseq=3
+T 1150 500 5 10 1 1 0 7 1
+pinlabel=out
+T 1250 450 5 10 0 1 0 2 1
+pintype=pwr
+}
+T 200 1300 8 10 1 1 0 0 1
+refdes=U?
+T 200 2000 5 8 0 0 0 0 1
+author=Kai-Martin Knaak, kmk@lilalaser.de
+T 200 3000 5 8 0 0 0 0 1
+description=positive regulator voltage regulator
+T 200 900 8 8 1 1 0 0 1
+footprint=TO220
+T 200 2800 5 8 0 0 0 0 1
+documentation=http://www.datasheetcatalog.com/datasheets_pdf/7/8/0/5/7805.shtml
+T 200 1800 5 8 0 0 0 0 1
+dist-license=GPL , see http://www.gnu.org/licenses/gpl.txt
+T 200 2400 5 8 0 0 0 0 1
+values=7805, 7809, 7812, 7815, 7818, 7824, 78L05, 78L12, 78L15, 78L18
+T 200 1600 5 8 0 0 0 0 1
+use-license=free, no restrictions
+L 600 600 800 600 3 10 0 0 -1 -1
+L 700 700 700 500 3 10 0 0 -1 -1
+T 200 2600 5 8 0 0 0 0 1
+footprints=TO220, TO220_LAY, TO220_bighole, TO220_block TO92, SOT89, DPAK, D2PAK
+T 200 2200 5 8 0 0 0 0 1
+symversion=2.0

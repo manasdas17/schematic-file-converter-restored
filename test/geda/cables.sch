@@ -1,0 +1,843 @@
+v 20100214 2
+N 50300 47000 49300 47000 4
+{
+T 49400 47000 5 10 1 1 0 0 1
+netname=GND
+}
+N 50300 46600 49300 46600 4
+{
+T 49400 46600 5 10 1 1 0 0 1
+netname=+6v
+}
+N 50300 46200 49300 46200 4
+{
+T 49400 46200 5 10 1 1 0 0 1
+netname=Contrast
+}
+N 50300 45800 49300 45800 4
+{
+T 49400 45800 5 10 1 1 0 0 1
+netname=RS
+}
+N 50300 45400 49300 45400 4
+{
+T 49400 45400 5 10 1 1 0 0 1
+netname=Read/(/Write)
+}
+N 50300 45000 49300 45000 4
+{
+T 49400 45000 5 10 1 1 0 0 1
+netname=E
+}
+N 50300 44600 49300 44600 4
+{
+T 49400 44600 5 10 1 1 0 0 1
+netname=DB0
+}
+N 50300 44200 49300 44200 4
+{
+T 49400 44200 5 10 1 1 0 0 1
+netname=DB1
+}
+N 50300 43800 49300 43800 4
+{
+T 49400 43800 5 10 1 1 0 0 1
+netname=DB2
+}
+N 50300 43400 49300 43400 4
+{
+T 49400 43400 5 10 1 1 0 0 1
+netname=DB3
+}
+N 50300 43000 49300 43000 4
+{
+T 49400 43000 5 10 1 1 0 0 1
+netname=DB4
+}
+N 50300 42600 49300 42600 4
+{
+T 49400 42600 5 10 1 1 0 0 1
+netname=DB5
+}
+N 50300 42200 49300 42200 4
+{
+T 49400 42200 5 10 1 1 0 0 1
+netname=DB6
+}
+N 50300 41800 49300 41800 4
+{
+T 49400 41800 5 10 1 1 0 0 1
+netname=DB7
+}
+N 50300 41400 49300 41400 4
+{
+T 49400 41400 5 10 1 1 0 0 1
+netname=Backlight_A
+}
+N 50300 41000 49300 41000 4
+{
+T 49400 41000 5 10 1 1 0 0 1
+netname=Backlight_K
+}
+T 46600 46500 9 10 1 0 0 0 5
+15 Pin RA KK Male Header 0.1" spacing
+Latch is on the inside of the board
+Pin 1 marked on PCB
+Header Farnell #9732730
+LCD Farnell #1220431
+C 49300 41400 1 180 0 busripper-1.sym
+{
+T 49300 41000 5 8 0 0 180 0 1
+device=none
+}
+C 49300 41800 1 180 0 busripper-1.sym
+{
+T 49300 41400 5 8 0 0 180 0 1
+device=none
+}
+C 49300 42200 1 180 0 busripper-1.sym
+{
+T 49300 41800 5 8 0 0 180 0 1
+device=none
+}
+C 49300 42600 1 180 0 busripper-1.sym
+{
+T 49300 42200 5 8 0 0 180 0 1
+device=none
+}
+C 49300 43000 1 180 0 busripper-1.sym
+{
+T 49300 42600 5 8 0 0 180 0 1
+device=none
+}
+C 49300 43400 1 180 0 busripper-1.sym
+{
+T 49300 43000 5 8 0 0 180 0 1
+device=none
+}
+C 49300 43800 1 180 0 busripper-1.sym
+{
+T 49300 43400 5 8 0 0 180 0 1
+device=none
+}
+C 49300 44200 1 180 0 busripper-1.sym
+{
+T 49300 43800 5 8 0 0 180 0 1
+device=none
+}
+C 49300 44600 1 180 0 busripper-1.sym
+{
+T 49300 44200 5 8 0 0 180 0 1
+device=none
+}
+C 49300 45000 1 180 0 busripper-1.sym
+{
+T 49300 44600 5 8 0 0 180 0 1
+device=none
+}
+C 49300 45400 1 180 0 busripper-1.sym
+{
+T 49300 45000 5 8 0 0 180 0 1
+device=none
+}
+C 49300 45800 1 180 0 busripper-1.sym
+{
+T 49300 45400 5 8 0 0 180 0 1
+device=none
+}
+C 49300 46200 1 180 0 busripper-1.sym
+{
+T 49300 45800 5 8 0 0 180 0 1
+device=none
+}
+C 49300 46600 1 180 0 busripper-1.sym
+{
+T 49300 46200 5 8 0 0 180 0 1
+device=none
+}
+C 49300 47000 1 180 0 busripper-1.sym
+{
+T 49300 46600 5 8 0 0 180 0 1
+device=none
+}
+U 49100 47000 49100 40800 10 0
+N 52100 47000 53100 47000 4
+{
+T 53000 47000 5 10 1 1 0 6 1
+netname=GND
+}
+N 52100 46600 55400 46700 4
+{
+T 53000 46600 5 10 1 1 0 6 1
+netname=+6v
+}
+N 52100 46200 53100 46200 4
+{
+T 53000 46200 5 10 1 1 0 6 1
+netname=Contrast
+}
+N 52100 45800 53100 45800 4
+{
+T 53000 45800 5 10 1 1 0 6 1
+netname=RS
+}
+N 52100 45400 53100 45400 4
+{
+T 53000 45400 5 10 1 1 0 6 1
+netname=Read/(/Write)
+}
+N 52100 45000 53100 45000 4
+{
+T 53000 45000 5 10 1 1 0 6 1
+netname=E
+}
+N 52100 44600 53100 44600 4
+{
+T 53000 44600 5 10 1 1 0 6 1
+netname=DB0
+}
+N 52100 44200 53100 44200 4
+{
+T 53000 44200 5 10 1 1 0 6 1
+netname=DB1
+}
+N 52100 43800 53100 43800 4
+{
+T 53000 43800 5 10 1 1 0 6 1
+netname=DB2
+}
+N 52100 43400 53100 43400 4
+{
+T 53000 43400 5 10 1 1 0 6 1
+netname=DB3
+}
+N 52100 43000 53100 43000 4
+{
+T 53000 43000 5 10 1 1 0 6 1
+netname=DB4
+}
+N 52100 42600 53100 42600 4
+{
+T 53000 42600 5 10 1 1 0 6 1
+netname=DB5
+}
+N 52100 42200 53100 42200 4
+{
+T 53000 42200 5 10 1 1 0 6 1
+netname=DB6
+}
+N 52100 41800 53100 41800 4
+{
+T 53000 41800 5 10 1 1 0 6 1
+netname=DB7
+}
+C 53100 41800 1 180 1 busripper-1.sym
+{
+T 53100 41400 5 8 0 0 180 6 1
+device=none
+}
+C 53100 42200 1 180 1 busripper-1.sym
+{
+T 53100 41800 5 8 0 0 180 6 1
+device=none
+}
+C 53100 42600 1 180 1 busripper-1.sym
+{
+T 53100 42200 5 8 0 0 180 6 1
+device=none
+}
+C 53100 43000 1 180 1 busripper-1.sym
+{
+T 53100 42600 5 8 0 0 180 6 1
+device=none
+}
+C 53100 43400 1 180 1 busripper-1.sym
+{
+T 53100 43000 5 8 0 0 180 6 1
+device=none
+}
+C 53100 43800 1 180 1 busripper-1.sym
+{
+T 53100 43400 5 8 0 0 180 6 1
+device=none
+}
+C 53100 44200 1 180 1 busripper-1.sym
+{
+T 53100 43800 5 8 0 0 180 6 1
+device=none
+}
+C 53100 44600 1 180 1 busripper-1.sym
+{
+T 53100 44200 5 8 0 0 180 6 1
+device=none
+}
+C 53100 45000 1 180 1 busripper-1.sym
+{
+T 53100 44600 5 8 0 0 180 6 1
+device=none
+}
+C 53100 45400 1 180 1 busripper-1.sym
+{
+T 53100 45000 5 8 0 0 180 6 1
+device=none
+}
+C 53100 45800 1 180 1 busripper-1.sym
+{
+T 53100 45400 5 8 0 0 180 6 1
+device=none
+}
+C 53100 46200 1 180 1 busripper-1.sym
+{
+T 53100 45800 5 8 0 0 180 6 1
+device=none
+}
+C 53100 47000 1 180 1 busripper-1.sym
+{
+T 53100 46600 5 8 0 0 180 6 1
+device=none
+}
+U 53300 47000 53300 41500 10 0
+C 57500 44600 1 0 0 header10-2.sym
+{
+T 57500 46600 5 10 0 1 0 0 1
+device=HEADER10
+T 57900 46600 5 10 1 1 0 0 1
+refdes=Control
+}
+N 57500 44800 56500 44800 4
+{
+T 56600 44800 5 10 1 1 180 6 1
+netname=GND
+}
+N 57500 46000 56500 46000 4
+{
+T 57500 46000 5 10 1 1 0 6 1
+netname=Read/(/Write)
+}
+C 57500 40600 1 0 0 header10-2.sym
+{
+T 57500 42600 5 10 0 1 0 0 1
+device=HEADER10
+T 58000 42700 5 10 1 1 0 0 1
+refdes=Data
+}
+N 57500 42400 56500 42400 4
+{
+T 56500 42400 5 10 1 1 0 0 1
+netname=DB0
+}
+N 57500 42000 56500 42000 4
+{
+T 56500 42000 5 10 1 1 0 0 1
+netname=DB2
+}
+N 57500 41600 56500 41600 4
+{
+T 56500 41600 5 10 1 1 0 0 1
+netname=DB4
+}
+N 57500 41200 56500 41200 4
+{
+T 56500 41200 5 10 1 1 0 0 1
+netname=DB6
+}
+N 58900 41200 59900 41200 4
+{
+T 59500 41200 5 10 1 1 0 0 1
+netname=DB7
+}
+N 58900 41600 59900 41600 4
+{
+T 59500 41600 5 10 1 1 0 0 1
+netname=DB5
+}
+N 58900 42000 59900 42000 4
+{
+T 59500 42000 5 10 1 1 0 0 1
+netname=DB3
+}
+N 58900 42400 59900 42400 4
+{
+T 59500 42400 5 10 1 1 0 0 1
+netname=DB1
+}
+C 56500 41200 1 180 0 busripper-1.sym
+{
+T 56500 40800 5 8 0 0 180 0 1
+device=none
+}
+C 56500 41600 1 180 0 busripper-1.sym
+{
+T 56500 41200 5 8 0 0 180 0 1
+device=none
+}
+C 56500 42000 1 180 0 busripper-1.sym
+{
+T 56500 41600 5 8 0 0 180 0 1
+device=none
+}
+C 56500 42400 1 180 0 busripper-1.sym
+{
+T 56500 42000 5 8 0 0 180 0 1
+device=none
+}
+C 59900 42400 1 0 0 busripper-1.sym
+{
+T 59900 42800 5 8 0 0 0 0 1
+device=none
+}
+C 59900 42000 1 0 0 busripper-1.sym
+{
+T 59900 42400 5 8 0 0 0 0 1
+device=none
+}
+C 59900 41600 1 0 0 busripper-1.sym
+{
+T 59900 42000 5 8 0 0 0 0 1
+device=none
+}
+C 59900 41200 1 0 0 busripper-1.sym
+{
+T 59900 41600 5 8 0 0 0 0 1
+device=none
+}
+C 59900 46400 1 0 0 busripper-1.sym
+{
+T 59900 46800 5 8 0 0 0 0 1
+device=none
+}
+C 59900 46000 1 0 0 busripper-1.sym
+{
+T 59900 46400 5 8 0 0 0 0 1
+device=none
+}
+C 56500 44800 1 90 1 busripper-1.sym
+{
+T 56100 44800 5 8 0 0 90 6 1
+device=none
+}
+C 56500 46000 1 90 1 busripper-1.sym
+{
+T 56100 46000 5 8 0 0 90 6 1
+device=none
+}
+U 56300 44800 56300 41000 10 0
+U 56300 41000 53800 41000 10 0
+U 53800 41000 53300 41000 10 0
+U 53300 41000 53300 41500 10 0
+U 56300 44800 56300 46800 10 0
+N 58900 46400 59900 46400 4
+{
+T 59900 46400 5 10 1 1 180 0 1
+netname=RS
+}
+N 59900 46000 58900 46000 4
+{
+T 59900 46000 5 10 1 1 180 0 1
+netname=E
+}
+C 57500 43700 1 180 1 pot-2.sym
+{
+T 58300 42800 5 10 0 0 180 6 1
+device=VARIABLE_RESISTOR
+T 58100 43300 5 10 1 1 180 6 1
+refdes=R2
+T 58300 42200 5 10 0 0 180 6 1
+footprint=none
+T 57900 43900 5 10 1 1 180 6 1
+value=5k
+}
+N 57500 44800 57500 43600 4
+N 58000 43100 56500 43100 4
+{
+T 56500 43300 5 10 1 1 180 6 1
+netname=Contrast
+}
+C 56500 43100 1 90 1 busripper-1.sym
+{
+T 56100 43100 5 8 0 0 90 6 1
+device=none
+}
+U 56300 46800 60100 46800 10 0
+T 57100 46900 9 10 1 0 0 0 4
+2x5 0.1" Connector housing
+Control Pins on USBKey J5
+Housing Farnell #9689338
+Crimp Farnell #1283033
+T 57200 39700 9 10 1 0 0 0 4
+2x5 0.1" Connector housing
+Data bus on USBKey J7
+Housing Farnell #9689338
+Crimp Farnell #1283033
+T 51400 40300 9 10 1 0 0 0 3
+15 Pin KK Female Housing
+Housing Farnell #269232
+Crimp Farnell #9773789
+C 52100 40900 1 0 1 connector15-2.sym
+{
+T 51400 47500 5 10 1 1 0 0 1
+refdes=Cable
+T 51800 47450 5 10 0 0 0 6 1
+device=CONNECTOR_15
+T 51800 47650 5 10 0 0 0 6 1
+footprint=SIP15N
+}
+C 49300 41000 1 180 0 busripper-1.sym
+{
+T 49300 40600 5 8 0 0 180 0 1
+device=none
+}
+C 50300 40900 1 0 0 connector15-2.sym
+{
+T 51000 47500 5 10 1 1 0 6 1
+refdes=HD44780 LCD
+T 50600 47450 5 10 0 0 0 0 1
+device=CONNECTOR_15
+T 50600 47650 5 10 0 0 0 0 1
+footprint=SIP15N
+}
+T 46600 45600 9 10 1 0 0 0 4
+LCD Has 16 pins; 15,16 are
+backlight pins and this
+display has no backlight so
+leave them as NC
+C 59500 38400 1 180 1 connector2-2.sym
+{
+T 60200 37100 5 10 1 1 180 0 1
+refdes=Power Connector
+T 59800 37150 5 10 0 0 180 6 1
+device=CONNECTOR_2
+T 59800 36950 5 10 0 0 180 6 1
+footprint=SIP2N
+}
+C 61500 38400 1 180 0 connector2-2.sym
+{
+T 60800 37100 5 10 1 1 180 6 1
+refdes=J8
+T 61200 37150 5 10 0 0 180 0 1
+device=CONNECTOR_2
+T 61200 36950 5 10 0 0 180 0 1
+footprint=SIP2N
+}
+C 62600 38000 1 270 1 busripper-1.sym
+{
+T 63000 38000 5 8 0 0 270 6 1
+device=none
+}
+T 57600 44000 9 10 1 0 0 0 1
+Contrast pot attached to wire
+N 61500 37600 62600 37600 4
+{
+T 62100 37800 5 10 1 1 180 6 1
+netname=GND
+}
+C 62600 37600 1 270 1 busripper-1.sym
+{
+T 63000 37600 5 8 0 0 270 6 1
+device=none
+}
+N 61500 38000 62600 38000 4
+{
+T 62200 38200 5 10 1 1 180 6 1
+netname=+6v
+}
+U 62800 38200 62800 37800 10 0
+T 60800 39200 9 10 1 0 180 6 4
+2 Pin RA KK Male Header 0.1" spacing
+USBKey J8 External power
+Latch is on the inside of the board
+Pin 1 closest to USBKey joystick.
+T 58100 39200 9 10 1 0 180 6 4
+2 Pin KK Female Housing
++6V line for LCD is crimped
+to wire from battery box
+inside KK housing
+N 47200 37600 59500 37600 4
+{
+T 59100 37800 5 10 1 1 180 6 1
+netname=GND
+}
+C 50000 37800 1 0 1 battery-1.sym
+{
+T 49700 38700 5 10 0 0 0 6 1
+device=BATTERY
+T 49700 38300 5 10 1 1 0 6 1
+refdes=B2
+T 49700 39100 5 10 0 0 0 6 1
+symversion=0.1
+}
+C 49300 37800 1 0 1 battery-1.sym
+{
+T 49000 38700 5 10 0 0 0 6 1
+device=BATTERY
+T 49000 38300 5 10 1 1 0 6 1
+refdes=B4
+T 49000 39100 5 10 0 0 0 6 1
+symversion=0.1
+}
+C 48600 37800 1 0 1 battery-1.sym
+{
+T 48300 38700 5 10 0 0 0 6 1
+device=BATTERY
+T 48300 38300 5 10 1 1 0 6 1
+refdes=B6
+T 48300 39100 5 10 0 0 0 6 1
+symversion=0.1
+}
+C 47900 37800 1 0 1 battery-1.sym
+{
+T 47600 38700 5 10 0 0 0 6 1
+device=BATTERY
+T 47600 38300 5 10 1 1 0 6 1
+refdes=B8
+T 47600 39100 5 10 0 0 0 6 1
+symversion=0.1
+}
+N 47200 38000 47200 37600 4
+T 47300 37700 9 10 1 0 180 6 1
+4x AA Battery box
+T 47200 39100 9 10 1 0 180 6 3
+LCD Requires ~=5v to display data.
+USBKey only has +3v3 available on io headers
++3v3 is not sufficient for this panel.
+N 50000 38000 59500 38000 4
+{
+T 59200 38100 5 10 1 1 0 0 1
+netname=+6v
+}
+C 62100 44600 1 0 0 header10-2.sym
+{
+T 62100 46600 5 10 0 1 0 0 1
+device=HEADER10
+T 62700 46700 5 10 1 1 0 0 1
+refdes=J5
+}
+C 62100 40600 1 0 0 header10-2.sym
+{
+T 62100 42600 5 10 0 1 0 0 1
+device=HEADER10
+T 62700 42700 5 10 1 1 0 0 1
+refdes=J7
+}
+U 60100 41400 60100 46800 10 0
+N 62100 46400 61100 46400 4
+{
+T 61400 46400 5 10 1 1 0 0 1
+netname=PC0
+}
+N 62100 46000 61100 46000 4
+{
+T 61400 46000 5 10 1 1 0 0 1
+netname=PC2
+}
+N 62100 45600 61100 45600 4
+{
+T 61400 45600 5 10 1 1 0 0 1
+netname=PC4
+}
+N 62100 45200 61100 45200 4
+{
+T 61400 45200 5 10 1 1 0 0 1
+netname=PC6
+}
+N 62100 44800 61100 44800 4
+{
+T 61400 44800 5 10 1 1 0 0 1
+netname=GND
+}
+N 64500 46400 63500 46400 4
+{
+T 63800 46400 5 10 1 1 0 0 1
+netname=PC1
+}
+N 64500 46000 63500 46000 4
+{
+T 63800 46000 5 10 1 1 0 0 1
+netname=PC3
+}
+N 64500 45600 63500 45600 4
+{
+T 63800 45600 5 10 1 1 0 0 1
+netname=PC5
+}
+N 64500 45200 63500 45200 4
+{
+T 63800 45200 5 10 1 1 0 0 1
+netname=PC7
+}
+N 64500 44800 63500 44800 4
+{
+T 63800 44800 5 10 1 1 0 0 1
+netname=Vcc
+}
+N 64500 42400 63500 42400 4
+{
+T 63800 42400 5 10 1 1 0 0 1
+netname=PA1
+}
+N 64500 42000 63500 42000 4
+{
+T 63800 42000 5 10 1 1 0 0 1
+netname=PA3
+}
+N 64500 41600 63500 41600 4
+{
+T 63800 41600 5 10 1 1 0 0 1
+netname=PA5
+}
+N 64500 41200 63500 41200 4
+{
+T 63800 41200 5 10 1 1 0 0 1
+netname=PA7
+}
+N 64500 40800 63500 40800 4
+{
+T 63800 40800 5 10 1 1 0 0 1
+netname=Vcc
+}
+N 62100 42400 61100 42400 4
+{
+T 61400 42400 5 10 1 1 0 0 1
+netname=PA0
+}
+N 62100 42000 61100 42000 4
+{
+T 61400 42000 5 10 1 1 0 0 1
+netname=PA2
+}
+N 62100 41600 61100 41600 4
+{
+T 61400 41600 5 10 1 1 0 0 1
+netname=PA4
+}
+N 62100 41200 61100 41200 4
+{
+T 61400 41200 5 10 1 1 0 0 1
+netname=PA6
+}
+N 62100 40800 61100 40800 4
+{
+T 61400 40800 5 10 1 1 0 0 1
+netname=GND
+}
+B 60600 36800 4400 10400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 62300 47300 9 10 1 0 0 0 1
+AT90USBKey
+B 51300 36800 9100 10900 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 55500 47800 9 10 1 0 0 0 1
+Cable
+N 55400 46700 55400 38000 4
+B 47000 36800 4000 2400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 48400 39300 9 10 1 0 0 0 1
+Power supply
+B 46500 40600 4600 7100 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 48400 47800 9 10 1 0 0 0 1
+LCD
+C 61100 40800 1 180 0 busripper-1.sym
+{
+T 61100 40400 5 8 0 0 180 0 1
+device=none
+}
+C 61100 41200 1 180 0 busripper-1.sym
+{
+T 61100 40800 5 8 0 0 180 0 1
+device=none
+}
+C 61100 41600 1 180 0 busripper-1.sym
+{
+T 61100 41200 5 8 0 0 180 0 1
+device=none
+}
+C 61100 42000 1 180 0 busripper-1.sym
+{
+T 61100 41600 5 8 0 0 180 0 1
+device=none
+}
+C 61100 42400 1 90 1 busripper-1.sym
+{
+T 60700 42400 5 8 0 0 90 6 1
+device=none
+}
+C 61100 44800 1 180 0 busripper-1.sym
+{
+T 61100 44400 5 8 0 0 180 0 1
+device=none
+}
+C 61100 45200 1 180 0 busripper-1.sym
+{
+T 61100 44800 5 8 0 0 180 0 1
+device=none
+}
+C 61100 45600 1 180 0 busripper-1.sym
+{
+T 61100 45200 5 8 0 0 180 0 1
+device=none
+}
+C 61100 46000 1 180 0 busripper-1.sym
+{
+T 61100 45600 5 8 0 0 180 0 1
+device=none
+}
+C 61100 46400 1 90 1 busripper-1.sym
+{
+T 60700 46400 5 8 0 0 90 6 1
+device=none
+}
+C 64500 46400 1 0 0 busripper-1.sym
+{
+T 64500 46800 5 8 0 0 0 0 1
+device=none
+}
+C 64500 46000 1 0 0 busripper-1.sym
+{
+T 64500 46400 5 8 0 0 0 0 1
+device=none
+}
+C 64500 45600 1 0 0 busripper-1.sym
+{
+T 64500 46000 5 8 0 0 0 0 1
+device=none
+}
+C 64500 45200 1 0 0 busripper-1.sym
+{
+T 64500 45600 5 8 0 0 0 0 1
+device=none
+}
+C 64500 44800 1 270 1 busripper-1.sym
+{
+T 64900 44800 5 8 0 0 270 6 1
+device=none
+}
+C 64500 42400 1 0 0 busripper-1.sym
+{
+T 64500 42800 5 8 0 0 0 0 1
+device=none
+}
+C 64500 42000 1 0 0 busripper-1.sym
+{
+T 64500 42400 5 8 0 0 0 0 1
+device=none
+}
+C 64500 41600 1 0 0 busripper-1.sym
+{
+T 64500 42000 5 8 0 0 0 0 1
+device=none
+}
+C 64500 41200 1 0 0 busripper-1.sym
+{
+T 64500 41600 5 8 0 0 0 0 1
+device=none
+}
+C 64500 40800 1 270 1 busripper-1.sym
+{
+T 64900 40800 5 8 0 0 270 6 1
+device=none
+}
+U 60900 40600 60900 47000 10 0
+U 62800 38200 64700 38200 10 0
+U 60900 47000 64700 47000 10 0
+U 64700 47000 64700 38200 10 0
+T 61700 44300 9 10 1 0 0 0 1
+2x5 0.1" Spacing pin header
+T 61700 40300 9 10 1 0 0 0 1
+2x5 0.1" Spacing pin header

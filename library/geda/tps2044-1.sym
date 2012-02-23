@@ -1,0 +1,201 @@
+v 20081231 1
+T 1700 3700 8 10 1 1 0 6 1
+refdes=U?
+T 300 3650 9 10 1 0 0 0 1
+TPS2044
+T 300 4050 8 10 0 0 0 0 1
+device=TPS2044
+T 300 4250 8 10 0 0 0 0 1
+footprint=DIP16
+T 300 4450 8 10 0 0 0 0 1
+author=David Griffith <davidgriffith@acm.org>
+T 300 4650 8 10 0 0 0 0 1
+documentation=http://www.ti.com/lit/gpn/TPS2044B
+T 300 4850 8 10 0 0 0 0 1
+description=Current-Limited Power Distribution Switches
+T 300 5050 8 10 0 0 0 0 1
+numslots=0
+P 0 3200 300 3200 1 0 0
+{
+T 200 3250 5 8 1 1 0 6 1
+pinnumber=1
+T 200 3150 5 8 0 1 0 8 1
+pinseq=1
+T 350 3200 9 8 1 1 0 0 1
+pinlabel=GND
+T 350 3200 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 0 2800 300 2800 1 0 0
+{
+T 200 2850 5 8 1 1 0 6 1
+pinnumber=2
+T 200 2750 5 8 0 1 0 8 1
+pinseq=2
+T 350 2800 9 8 1 1 0 0 1
+pinlabel=IN1
+T 350 2800 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 2400 300 2400 1 0 0
+{
+T 200 2450 5 8 1 1 0 6 1
+pinnumber=3
+T 200 2350 5 8 0 1 0 8 1
+pinseq=3
+T 350 2400 9 8 1 1 0 0 1
+pinlabel=EN1
+T 350 2400 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 2000 300 2000 1 0 0
+{
+T 200 2050 5 8 1 1 0 6 1
+pinnumber=4
+T 200 1950 5 8 0 1 0 8 1
+pinseq=4
+T 350 2000 9 8 1 1 0 0 1
+pinlabel=EN2
+T 350 2000 5 8 0 1 0 2 1
+pintype=in
+}
+P 2000 2000 1700 2000 1 0 0
+{
+T 1800 2050 5 8 1 1 0 0 1
+pinnumber=13
+T 1800 1950 5 8 0 1 0 2 1
+pinseq=13
+T 1650 2000 9 8 1 1 0 6 1
+pinlabel=OC2
+T 1650 2000 5 8 0 1 0 8 1
+pintype=out
+}
+P 2000 2400 1700 2400 1 0 0
+{
+T 1800 2450 5 8 1 1 0 0 1
+pinnumber=14
+T 1800 2350 5 8 0 1 0 2 1
+pinseq=14
+T 1650 2400 9 8 1 1 0 6 1
+pinlabel=OUT2
+T 1650 2400 5 8 0 1 0 8 1
+pintype=out
+}
+P 2000 2800 1700 2800 1 0 0
+{
+T 1800 2850 5 8 1 1 0 0 1
+pinnumber=15
+T 1800 2750 5 8 0 1 0 2 1
+pinseq=15
+T 1650 2800 9 8 1 1 0 6 1
+pinlabel=OUT1
+T 1650 2800 5 8 0 1 0 8 1
+pintype=out
+}
+P 2000 3200 1700 3200 1 0 0
+{
+T 1800 3250 5 8 1 1 0 0 1
+pinnumber=16
+T 1800 3150 5 8 0 1 0 2 1
+pinseq=16
+T 1650 3200 9 8 1 1 0 6 1
+pinlabel=OC1
+T 1650 3200 5 8 0 1 0 8 1
+pintype=out
+}
+L 350 2150 650 2150 3 0 0 0 -1 -1
+P 0 1600 300 1600 1 0 0
+{
+T 200 1650 5 8 1 1 0 6 1
+pinnumber=5
+T 200 1550 5 8 0 1 0 8 1
+pinseq=5
+T 350 1600 9 8 1 1 0 0 1
+pinlabel=GND
+T 350 1600 5 8 0 1 0 2 1
+pintype=pwr
+}
+P 0 1200 300 1200 1 0 0
+{
+T 200 1250 5 8 1 1 0 6 1
+pinnumber=6
+T 200 1150 5 8 0 1 0 8 1
+pinseq=6
+T 350 1200 9 8 1 1 0 0 1
+pinlabel=IN2
+T 350 1200 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 800 300 800 1 0 0
+{
+T 200 850 5 8 1 1 0 6 1
+pinnumber=7
+T 200 750 5 8 0 1 0 8 1
+pinseq=7
+T 350 800 9 8 1 1 0 0 1
+pinlabel=EN3
+T 350 800 5 8 0 1 0 2 1
+pintype=in
+}
+P 0 400 300 400 1 0 0
+{
+T 200 450 5 8 1 1 0 6 1
+pinnumber=8
+T 200 350 5 8 0 1 0 8 1
+pinseq=8
+T 350 400 9 8 1 1 0 0 1
+pinlabel=EN4
+T 350 400 5 8 0 1 0 2 1
+pintype=in
+}
+L 350 2550 600 2550 3 0 0 0 -1 -1
+L 350 950 650 950 3 0 0 0 -1 -1
+P 2000 400 1700 400 1 0 0
+{
+T 1800 450 5 8 1 1 0 0 1
+pinnumber=9
+T 1800 350 5 8 0 1 0 2 1
+pinseq=9
+T 1650 400 9 8 1 1 0 6 1
+pinlabel=OC4
+T 1650 400 5 8 0 1 0 8 1
+pintype=out
+}
+P 2000 800 1700 800 1 0 0
+{
+T 1800 850 5 8 1 1 0 0 1
+pinnumber=10
+T 1800 750 5 8 0 1 0 2 1
+pinseq=10
+T 1650 800 9 8 1 1 0 6 1
+pinlabel=OUT4
+T 1650 800 5 8 0 1 0 8 1
+pintype=out
+}
+L 1650 550 1300 550 3 0 0 0 -1 -1
+P 2000 1200 1700 1200 1 0 0
+{
+T 1800 1250 5 8 1 1 0 0 1
+pinnumber=11
+T 1800 1150 5 8 0 1 0 2 1
+pinseq=11
+T 1650 1200 9 8 1 1 0 6 1
+pinlabel=OUT3
+T 1650 1200 5 8 0 1 0 8 1
+pintype=out
+}
+P 2000 1600 1700 1600 1 0 0
+{
+T 1800 1650 5 8 1 1 0 0 1
+pinnumber=12
+T 1800 1550 5 8 0 1 0 2 1
+pinseq=12
+T 1650 1600 9 8 1 1 0 6 1
+pinlabel=OC3
+T 1650 1600 5 8 0 1 0 8 1
+pintype=out
+}
+L 1650 1750 1300 1750 3 0 0 0 -1 -1
+L 1650 2150 1300 2150 3 0 0 0 -1 -1
+B 300 0 1400 3600 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+L 1650 3350 1300 3350 3 0 0 0 -1 -1
