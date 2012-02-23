@@ -246,10 +246,13 @@ $EndDescr
                     (make_length(shape.p1.x), make_length(shape.p1.y),
                      make_length(shape.p2.x), make_length(shape.p2.y)))
         elif shape.type == 'polygon':
+            points = list(shape.points)
+            if points[0] != points[-1]:
+                points.append(points[0]) # close the polygon
             return ('P %d %%(unit)d %%(convert)d 0 %s N\n' %
-                    (len(shape.points),
+                    (len(points),
                      ' '.join('%d %d' % (make_length(p.x), make_length(p.y))
-                              for p in shape.points)))
+                              for p in points)))
         elif shape.type == 'rectangle':
             return ('S %d %d %d %d %%(unit)d %%(convert)d 0 N\n' %
                     (make_length(shape.x), make_length(shape.y),
