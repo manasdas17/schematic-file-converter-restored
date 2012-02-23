@@ -254,7 +254,7 @@ $EndDescr
             return ('S %d %d %d %d %%(unit)d %%(convert)d 0 N\n' %
                     (make_length(shape.x), make_length(shape.y),
                      make_length(shape.x + shape.width),
-                     make_length(shape.y + shape.height)))
+                     make_length(shape.y - shape.height)))
         elif shape.type == 'label':
             angle = round(shape.rotation * 1800)
             align = shape.align[0].upper()

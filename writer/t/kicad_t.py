@@ -26,7 +26,7 @@ from core.design import Design
 from core.components import Pin
 from core.net import Net, NetPoint
 from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Label
+from core.shape import Label, Rectangle
 from core.annotation import Annotation
 from parser.openjson import JSON
 
@@ -198,3 +198,14 @@ $EndComp
         buf = StringIO()
         writer.write_library_footer(buf)
         self.assertEqual(buf.getvalue(), '#\n#End Library\n')
+
+
+    def test_rectangle(self):
+        """
+        Rectangles are output correctly.
+        """
+
+        writer = KiCAD()
+        rect = Rectangle(10, 20, 5, 10)
+        line = writer.get_shape_line(rect)
+        self.assertEqual(line, 'S 111 222 167 111 %(unit)d %(convert)d 0 N\n')
