@@ -37,7 +37,7 @@ from core.design import Design
 from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
 from core.net import Net, NetPoint, ConnectedComponent
-from core.shape import Arc, Circle, Polygon, Rectangle, Label
+from core.shape import Arc, Circle, Line, Rectangle, Label
 from core.annotation import Annotation
 
 from collections import defaultdict
@@ -371,7 +371,10 @@ class ComponentParser(object):
                 if prefix == 'X':
                     body.add_pin(obj)
                 else:
-                    body.add_shape(obj)
+                    if isinstance(obj, (list, tuple)):
+                        [body.add_shape(o) for o in obj]
+                    else:
+                        body.add_shape(obj)
 
         return self.component
 
@@ -395,11 +398,15 @@ class ComponentParser(object):
     def parse_p_line(self, parts):
         """ Parse a P (Polyline) line """
         num_points = int(parts[1])
-        poly = Polygon()
+        lines = []
+        last_point = None
         for i in xrange(num_points):
             x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-            poly.add_point(make_length(x), make_length(y))
-        return poly
+            point = (make_length(x), make_length(y))
+            if last_point is not None:
+                lines.append(Line(last_point, point))
+            last_point = point
+        return lines
 
 
     def parse_s_line(self, parts):
