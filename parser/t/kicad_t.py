@@ -23,9 +23,12 @@
 
 from parser.kicad import KiCAD, ComponentParser
 from parser.openjson import JSON
+from writer.openjson import JSON as JSONWriter
+
 import unittest
 
 from os.path import dirname, join
+from os import devnull
 
 TEST_DIR = join(dirname(__file__), '..', '..', 'test', 'kicad')
 
@@ -207,3 +210,8 @@ class KiCADTests(unittest.TestCase):
                 if i.library_id == 'CONN_4X2'][0]
         self.assertEqual(inst.symbol_attributes[0].annotations[1].value,
                          'MAPLE JTAG')
+
+
+    def test_utf8_annotations(self):
+        design = KiCAD().parse(join(TEST_DIR, 'ps2toserial.sch'))
+        JSONWriter().write(design, devnull)
