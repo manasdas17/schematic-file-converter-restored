@@ -31,6 +31,7 @@
 # OpenJSON, y coordinates increase upwards, so we negate them. In the
 # KiCAD library file (where components are stored) y coordinates
 # increase upwards as in OpenJSON and no transformation is needed.
+# KiCAD units are mils (1/1000th of an inch)
 
 from core.design import Design
 from core.components import Component, Symbol, Body, Pin
@@ -127,7 +128,8 @@ class KiCAD(object):
         x, y, rotation = int(parts[2]), int(parts[3]), int(parts[4])
         rotation = rotation / 1800.0
         value = f.readline().decode('utf-8', errors='replace').strip()
-        return Annotation(value, x, -y, rotation, 'true')
+        return Annotation(value, make_length(x), -make_length(y),
+                          rotation, 'true')
 
     def parse_component_instance(self, f):
         """ Parse a component instance from a $Comp block """
@@ -157,7 +159,8 @@ class KiCAD(object):
                 value = parts[1].decode('utf-8', errors='replace')
                 parts = parts[2].strip().split()
                 annotations.append(
-                    Annotation(value, int(parts[1]), -int(parts[2]),
+                    Annotation(value, make_length(parts[1]),
+                               -make_length(parts[2]),
                                0 if parts[0] == 'H' else 1, 'true'))
             elif line.startswith('\t'):
                 parts = line.strip().split()
@@ -167,7 +170,8 @@ class KiCAD(object):
             line = f.readline()
 
         inst = ComponentInstance(reference, name, convert - 1)
-        symbattr = SymbolAttribute(compx, -compy, rotation)
+        symbattr = SymbolAttribute(make_length(compx), -make_length(compy),
+                                   rotation)
         for ann in annotations:
             symbattr.add_annotation(ann)
         inst.add_symbol_attribute(symbattr)
@@ -229,6 +233,7 @@ class KiCAD(object):
 
         def get_point(point):
             """ Return a new or existing NetPoint for an (x,y) point """
+            point = (make_length(point[0]), make_length(point[1]))
             if point not in points:
                 points[point] = NetPoint('%da%d' % point, point[0], point[1])
             return points[point]
@@ -377,13 +382,14 @@ class ComponentParser(object):
         # convert tenths of degrees to pi radians
         start = start / 1800.0
         end = end / 1800.0
-        return Arc(x, y, start, end, radius)
+        return Arc(make_length(x), make_length(y),
+                   start, end, make_length(radius))
 
 
     def parse_c_line(self, parts):
         """ Parse a C (Circle) line """
         x, y, radius = [int(i) for i in parts[1:4]]
-        return Circle(x, y, radius)
+        return Circle(make_length(x), make_length(y), make_length(radius))
 
 
     def parse_p_line(self, parts):
@@ -392,14 +398,15 @@ class ComponentParser(object):
         poly = Polygon()
         for i in xrange(num_points):
             x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-            poly.add_point(x, y)
+            poly.add_point(make_length(x), make_length(y))
         return poly
 
 
     def parse_s_line(self, parts):
         """ Parse an S (Rectangle) line """
         x, y, x2, y2 = [int(i) for i in parts[1:5]]
-        return Rectangle(x, y, x2 - x, y2 - y)
+        return Rectangle(make_length(x), make_length(y),
+                         make_length(x2 - x), make_length(y2 - y))
 
 
     def parse_t_line(self, parts):
@@ -408,7 +415,7 @@ class ComponentParser(object):
         angle = angle / 1800.0
         text = parts[8].replace('~', ' ')
         align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
-        return Label(x, y, text, align, angle)
+        return Label(make_length(x), make_length(y), text, align, angle)
 
 
     def parse_x_line(self, parts):
@@ -446,6 +453,16 @@ class ComponentParser(object):
         if name == '~':
             label = None
         else:
-            label = Label(label_x, label_y, name, 'center', label_rotation)
+            label = Label(make_length(label_x), make_length(label_y),
+                          name, 'center', label_rotation)
 
-        return Pin(num, (p1x, p1y), (p2x, p2y), label)
+        return Pin(num,
+                   (make_length(p1x), make_length(p1y)),
+                   (make_length(p2x), make_length(p2y)), label)
+
+
+MULT = 90.0 / 1000.0 # mils to 90 dpi
+
+def make_length(value):
+    """ Make a length measurement from a kicad measurement """
+    return int(round(float(value) * MULT))
