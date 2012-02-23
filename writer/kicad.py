@@ -131,6 +131,11 @@ $EndDescr
         f.write('U %d 1 00000000\n' % (inst.symbol_index,))
         f.write('P %d %d\n' % (make_length(inst.symbol_attributes[0].x),
                                -make_length(inst.symbol_attributes[0].y)))
+        for i, ann in enumerate(inst.symbol_attributes[0].annotations):
+            f.write('F %d "%s" %s %d %d 60  0000 C CNN\n' %
+                    (i, ann.value, 'H' if ann.rotation == 0 else 'V',
+                     make_length(inst.symbol_attributes[0].x + ann.x),
+                     -make_length(inst.symbol_attributes[0].y + ann.y)))
         f.write('\t1    %d %d\n' % (make_length(inst.symbol_attributes[0].x),
                                     -make_length(inst.symbol_attributes[0].y)))
         f.write('\t%d    %d    %d    %d\n' %
