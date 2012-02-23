@@ -59,6 +59,8 @@ import os
 import warnings
 import itertools
 
+from StringIO import StringIO
+
 from core import shape
 from core import components
 from core import net
@@ -187,6 +189,10 @@ class GEDA:
                     files
         """
         self.offset = shape.Point(40000, 40000)
+        ##FIXME: whats a good guess for frame if not known??
+        self.frame_width = 0 
+        self.frame_height = 0 
+
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
@@ -219,23 +225,45 @@ class GEDA:
         self.offset.x = point.x
         self.offset.y = point.y
     
-    def parse(self, filename):
+    def parse(self, inputfiles):
         """ Parse a gEDA file into a design.
 
             Returns the design corresponding to the gEDA file.
         """
 
-        f_in = open(filename, "r")
-        self._check_version(f_in)
+        if isinstance(inputfiles, basestring):
+            inputfiles = [inputfiles]
 
-        design = self.parse_schematic(f_in)
+        self.design = Design()
 
-        basename, dummy = os.path.splitext(os.path.basename(filename))
-        design.design_attributes.metadata.set_name(basename)
+        ##TODO: parse frame data of first file
+        with open(inputfiles[0], 'r') as stream:
+            self._check_version(stream)
 
-        f_in.close()
+            for line in stream.readlines():
+                if 'title' in line and line.startswith('C'):
+                    obj_type, params = self._parse_command(StringIO(line))
+                    assert(obj_type == 'C')
 
-        return design
+                    params['basename'], dummy = os.path.splitext(params['basename'])
+
+            self._parse_title_frame(params)
+
+        for filename in inputfiles:
+            f_in = open(filename, "r")
+            self._check_version(f_in)
+
+            self.parse_schematic(f_in)
+
+            basename, dummy = os.path.splitext(os.path.basename(filename))
+            self.design.design_attributes.metadata.set_name(basename)
+
+            ##TODO: modify offset for next page
+            self.offset.x = self.offset.x - self.frame_width
+
+            f_in.close()
+
+        return self.design
 
     def parse_schematic(self, stream):
         """ Parse a gEDA schematic provided as a *stream* object into a 
@@ -244,8 +272,9 @@ class GEDA:
             Returns the design corresponding to the schematic.
         """
         # pylint: disable=R0912
+        if self.design is None:
+            self.design = Design()
 
-        self.design = Design()
         self.segments = set()
         self.net_points = dict() 
         self.net_names = dict() 
@@ -317,7 +346,40 @@ class GEDA:
         for cnet in calculated_nets:
             self.design.add_net(cnet)
 
-        return self.design
+    def _parse_title_frame(self, params):
+        ## set offset based on bottom-left corner of frame
+        self.offset.x = params['x']
+        self.offset.y = params['y'] 
+
+        filename = self.known_symbols.get(params['basename'])
+        if not filename or not os.path.exists(filename):
+            warnings.warn(
+                "could not find title symbol '%s'" % params['basename']
+            )
+            return
+
+        ##TODO: get position from parameter
+        stream = open(filename, 'r')
+
+        obj_type, params = self._parse_command(stream)
+
+        while obj_type is not None:
+
+            if obj_type == 'B':
+                ## use box set at (0, 0) as page frame 
+                if params['x'] == params['y'] == 0: 
+                    self.frame_width = params['width'] 
+                    self.frame_height = params['height']
+
+            ## skip commands covering multiple lines
+            elif obj_type in ['T', 'H']:
+                for dummy in range(params['num_lines']):
+                    stream.readline()
+
+            obj_type, params = self._parse_command(stream)
+        
+        ##TODO: extract title, page, file, drawn by, revision
+        stream.close()
 
     def _create_ripper_segment(self, params):
         """ Creates a new segement from the busripper provided 
