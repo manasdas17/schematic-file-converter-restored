@@ -98,7 +98,7 @@ class KiCADTests(unittest.TestCase):
         ann = Annotation('test', 1, 2, .5, 'true')
         writer.write_annotation(buf, ann)
         self.assertEqual(buf.getvalue(),
-                         'Text Label 1 -2 900 60 ~ 0\ntest\n')
+                         'Text Label 11 -22 900 60 ~ 0\ntest\n')
 
     def test_write_instance(self):
         """
@@ -115,8 +115,8 @@ class KiCADTests(unittest.TestCase):
 $Comp
 L libid id
 U 1 1 00000000
-P 3 -4
-\t1    3 -4
+P 33 -44
+\t1    33 -44
 \t0    1    1    0
 $EndComp
 ''')
@@ -144,7 +144,7 @@ $EndComp
         writer.write_net(buf, net)
         self.assertEqual(
             buf.getvalue(),
-            'Wire Wire Line\n\t0 0 0 -1\nWire Wire Line\n\t0 0 1 0\n')
+            'Wire Wire Line\n\t0 0 0 -11\nWire Wire Line\n\t0 0 11 0\n')
 
     def test_write_footer(self):
         """
@@ -166,28 +166,28 @@ $EndComp
         pin = Pin('1', (-300, 100), (-600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 -600 100 300 R 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 -6667 1111 300 R 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('1', (300, 100), (600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 600 100 300 L 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 6667 1111 300 L 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, -1300), (0, -1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 -1500 200 U 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 -16667 200 U 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 1500 200 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 16667 200 D 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500),
                   Label(0, 0, 'name', 'center', 0))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X name 2 0 1500 200 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X name 2 0 16667 200 D 60 60 %(unit)d %(convert)d B\n')
 
     def test_write_library_footer(self):
         """
