@@ -406,7 +406,7 @@ class ComponentParser(object):
         """ Parse an S (Rectangle) line """
         x, y, x2, y2 = [int(i) for i in parts[1:5]]
         return Rectangle(make_length(x), make_length(y),
-                         make_length(x2 - x), make_length(y2 - y))
+                         make_length(x2 - x), make_length(y - y2))
 
 
     def parse_t_line(self, parts):
