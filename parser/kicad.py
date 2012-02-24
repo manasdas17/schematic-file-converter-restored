@@ -159,8 +159,9 @@ class KiCAD(object):
                 value = parts[1].decode('utf-8', errors='replace')
                 parts = parts[2].strip().split()
                 annotations.append(
-                    Annotation(value, make_length(parts[1]),
-                               -make_length(parts[2]),
+                    Annotation(value,
+                               make_length(int(parts[1]) - compx),
+                               -make_length(int(parts[2]) - compy),
                                0 if parts[0] == 'H' else 1, 'true'))
             elif line.startswith('\t'):
                 parts = line.strip().split()
