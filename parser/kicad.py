@@ -62,8 +62,6 @@ class KiCAD(object):
     def parse(self, filename, library_filename=None):
         """ Parse a kicad file into a design """
 
-        # Rough'n'dirty parsing, assume nothing useful comes before
-        # the description
         circuit = Design()
         segments = set() # each wire segment
         junctions = set() # wire junction point (connects all wires under it)
@@ -75,7 +73,8 @@ class KiCAD(object):
 
         f = open(filename)
 
-        # Read until the end of the description
+        # Read until the end of the description, assume nothing
+        # useful comes before it.
         while f.readline().strip() != "$EndDescr":
             pass
 
