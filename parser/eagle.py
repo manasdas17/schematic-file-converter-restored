@@ -28,6 +28,9 @@ import struct
 from core.annotation import Annotation
 from core.component_instance import ComponentInstance, SymbolAttribute
 from core.design import Design
+from core.net import Net, NetPoint, ConnectedComponent
+from core.components import Component, Symbol, Body, Pin
+from core.shape import Point, Line
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
@@ -515,15 +518,16 @@ class Eagle:
         """ A struct that represents a symbol
         """
         constant = 0x1d
-        template = "=2BH3I8s" # TODO byte @ +9 is libid
+        template = "=2BHI4BI8s"
 
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofshapes=0, shapes=None):
+        def __init__(self, libid, name, numofshapes=0, shapes=None):
             """ Just a constructor; shown for a sake of clarity
             """
             super(Eagle.Symbol, self).__init__(name, numofshapes, shapes)
+            self.libid = libid
             return
 
         @staticmethod
@@ -535,13 +539,14 @@ class Eagle:
             _dta = struct.unpack(Eagle.Symbol.template, chunk)
 
             _name = None
-            if Eagle.Symbol.no_embed_str != _dta[6][0]:
-                _name = _dta[6].rstrip('\0')
+            if Eagle.Symbol.no_embed_str != _dta[9][0]:
+                _name = _dta[9].rstrip('\0')
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
 # number of shapes, excluding this line
-            _ret_val = Eagle.Symbol(name=_name,
+            _ret_val = Eagle.Symbol(libid=_dta[5],
+                                    name=_name,
                                     numofshapes=_dta[2],
                                    )
             return _ret_val
@@ -1045,7 +1050,7 @@ class Eagle:
         """ A struct that represents an instance
         """
         constant = 0x30
-        template = "=2BH2IH6BI"
+        template = "=2BH2iH6BI"
 
         smashed_mask = 0x01
 
@@ -1159,9 +1164,17 @@ class Eagle:
         constant = 0x22
         template = "=4B4iH2B"
 
+        stylemask = 0x0f
+        styles = {
+                  0x00: "Continuous",
+                  0x01: "LongDash",
+                  0x02: "ShortDash",
+                  0x03: "DashDot",
+                 }
+
         arc_sign = 0x81
 
-        def __init__(self, x1, y1, x2, y2, layer, width): # pylint: disable=R0913
+        def __init__(self, x1, y1, x2, y2, style, layer, width): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.Wire, self).__init__(layer)
@@ -1170,6 +1183,7 @@ class Eagle:
             self.x2 = x2
             self.y2 = y2
             self.width = width
+            self.style = style
             return
 
         @staticmethod
@@ -1186,6 +1200,8 @@ class Eagle:
                                       y1=Eagle.Shape.decode_real(_dta[5]),
                                       x2=Eagle.Shape.decode_real(_dta[6]),
                                       y2=Eagle.Shape.decode_real(_dta[7]),
+                                      style=Eagle.Wire.styles[
+                                          Eagle.Wire.stylemask & _dta[9]],
                                       layer=_dta[3],
                                       width=(Eagle.Wire.width_xscale *
                                              Eagle.Shape.decode_real(
@@ -1319,10 +1335,11 @@ class Eagle:
                       0x20: "counterclockwise",
                      }
 
-        def __init__(self, x1, y1, x2, y2, layer, width, curve, cap, direction): # pylint: disable=R0913
+        def __init__(self, x1, y1, x2, y2, style, layer, width, # pylint: disable=R0913
+                        curve, cap, direction):
             """ Just a constructor
             """
-            super(Eagle.Arc, self).__init__(x1, y1, x2, y2, layer, width)
+            super(Eagle.Arc, self).__init__(x1, y1, x2, y2, style, layer, width)
             self.curve = curve
             self.cap = cap
             self.direction = direction
@@ -1345,6 +1362,8 @@ class Eagle:
                                   width=(Eagle.Wire.width_xscale *
                                          Eagle.Shape.decode_real(
                                                                 _dta[8])),
+                          style=Eagle.Wire.styles[
+                              Eagle.Wire.stylemask & _dta[9]],
 # TODO decode curve...
                           curve=Eagle.Shape.decode_real(
                                   (_dta[4] & 0xff000000 >> 24) +
@@ -1405,7 +1424,7 @@ class Eagle:
             is used both for uniformity and convertors)
         """
         constant = 0x2c
-        template = "=4B2I2B10s"
+        template = "=4B2i2B10s"
 
         max_embed_len = 10
         no_embed_str = b'\x7f'
@@ -1494,7 +1513,7 @@ class Eagle:
         """ A struct that represents a text
         """
         constant = 0x31
-        template = "=4B2IH4B6s"
+        template = "=4B2iH4B6s"
 
         max_embed_len = 5
         delimeter = b'!'
@@ -2083,14 +2102,14 @@ class Eagle:
 
 # File Version is applied by Design itself
 
-# Component Instances (Array)
+# Component Instances (Array) / Components (Array)
         for _pp in self.parts:
+            _libid = str(_pp.libid) + _pp.value # to avoid same name collisions
             _ci = ComponentInstance(instance_id=_pp.name, 
-                                    library_id=str(_pp.libid) + _pp.value, # to avoid same name collisions
+                                    library_id=_libid,
                                     symbol_index=_pp.symvar)    # other candidate is devsetndx:
                                                                 #  'devsets' contains all variants
                                                                 #  used in this schematic
-
             _sa = SymbolAttribute(x=_pp.shapes[0].x, # shapes' len is always 1 here
                                   y=_pp.shapes[0].y,
                                   rotation=Eagle.Shape.rotate2piradians(
@@ -2101,9 +2120,21 @@ class Eagle:
             _sym = self.libraries[-1 + _pp.libid].symbols[0].shapesets[
                                                     -1 + _dd.shapes[0].sindex]
 
+            _co = None
+            if not _libid in design.components.components:
+                _co = Component(_sym.name)
+                _sy = Symbol()
+                _bd = Body()
+                _pc = 1 # Eagle counts from 1
+
             for _ss in _sym.shapes:
                 if isinstance(_ss, Eagle.Text):
-                    _an = Annotation(value=_ss.value, # value from symbol
+                    _val = 'undef'
+                    if r'>NAME' == _ss.value:
+                        _val = _pp.name
+                    elif r'>VALUE' == _ss.value:
+                        _val = _pp.value
+                    _an = Annotation(value=_val, # value from symbol
                                      x=(_ss.x + _pp.shapes[0].x),
                                      y=(_ss.y + _pp.shapes[0].y),
                                      rotation=((
@@ -2113,8 +2144,85 @@ class Eagle:
                                                     _ss.rotate)) % 2),
                                      visible=True,
                                     )
-                    _ci.add_symbol_attribute(_an)
-                    design.add_component_instance(_ci)
+                    _sa.add_annotation(_an)
+                else:
+                    if None != _co:
+                        if isinstance(_ss, Eagle.Pin):
+                            _pn = Pin(label=None, #_ss.name, # no coordinates here..
+                                      p1=Point(_ss.x, _ss.y), #None, # don't know..
+                                      p2=Point(_ss.x, _ss.y),
+                                      pin_number=_pc)
+                            _bd.add_pin(_pn)
+                            _pc += 1
+                        else:
+                            if isinstance(_ss, Eagle.Wire):
+                                _sp = Line(p1=Point(_ss.x1, _ss.y1),
+                                           p2=Point(_ss.x2, _ss.y2))
+                                _bd.add_shape(_sp)
+
+            _ci.add_symbol_attribute(_sa)
+            design.add_component_instance(_ci)
+            if None != _co:
+                _sy.add_body(_bd)
+                _co.add_symbol(_sy)
+                design.add_component(_libid, _co)
+
+# Nets (Array)
+        for _bb in self.shapeheader.buses + self.shapeheader.nets:
+            for _nn, _sg in enumerate(_bb.shapes): # segments, they don't share any common points
+                _net = Net('%s-%d' % (_bb.name, _nn))
+                if isinstance(_bb, Eagle.Net):
+                    _net.add_attribute(u'type', u'bus')
+                for _ss in _sg.shapes: # wires only for buses, wires + pinrefs + junctions for nets
+                    if isinstance(_ss, Eagle.Wire):
+                        _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
+                        _p2name = "%s-%s" % (str(_ss.x2), str(_ss.y2))
+
+                        if not _p1name in _net.points:
+                            _net.add_point(NetPoint(_p1name, _ss.x1, _ss.y1))
+                        if not _p2name in _net.points:
+                            _net.add_point(NetPoint(_p2name, _ss.x2, _ss.y2))
+
+                        if not _p2name in _net.points[_p1name].connected_points:
+                            _net.points[_p1name].add_connected_point(_p2name)
+                        if not _p1name in _net.points[_p2name].connected_points:
+                            _net.points[_p2name].add_connected_point(_p1name)
+                    elif isinstance(_ss, Eagle.PinRef):
+                        _prt = self.parts[-1 + _ss.partno]
+                        _dst = self.libraries[-1 + _prt.libid].devsets[0
+                                    ].shapesets[-1 + _prt.devsetndx]
+                        _sym = self.libraries[-1 + _prt.libid].symbols[0
+                                    ].shapesets[-1 + _dst.shapes[0].sindex]
+                        _prno = 1
+                        for _yy in _sym.shapes:
+                            if isinstance(_yy, Eagle.Pin):
+                                if _ss.pinno == _prno:
+                                    _pname = "%s-%s" % (str(_prt.shapes[0].x + _yy.x),
+                                                str(_prt.shapes[0].y + _yy.y))
+                                    if not _pname in _net.points:
+                                        _net.add_point(NetPoint(_pname, 
+                                                        _prt.shapes[0].x + _yy.x, 
+                                                        _prt.shapes[0].y + _yy.y))
+                                    _net.points[_pname].add_connected_component(
+                                            ConnectedComponent(_prt.name, _ss.pinno))
+                                _prno += 1
+                    elif isinstance(_ss, Eagle.Junction):
+                        pass # has to be skipped: junction points are implemented as 
+                             #  connected_points arrays in OJSON
+                    elif isinstance(_ss, Eagle.Label):
+                        pass # has to be skipped: no use here
+                    else:
+# TODO remove
+                        print("unexpected block %s in bus/net" % _ss.__class__.__name__)
+                design.add_net(_net)
+
+# Components (Array) -- above
+#        for _ll in self.libraries:
+#            for _ss in _ll.symbols[0].shapesets:
+#                _co = Component(_ss.name)
+#                pass
+#                design.add_component(str(_ss.libid) + 'xx', _co)
+            
 
         return design
 
