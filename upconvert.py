@@ -153,6 +153,9 @@ if __name__ == "__main__":
         ap.print_help()
         exit(1)
 
+    if len(inputfiles) > 1:
+        inputfile = inputfiles[0]
+
     # Autodetect input type
     if inputtype == None:
         confidence = {}

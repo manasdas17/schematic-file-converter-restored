@@ -7,7 +7,7 @@
     implements all parsing functionality. To parse a gEDA 
     schematic file into a design do the following:
     
-    >>> parser = GEDA(auto_include=True)
+    >>> parser = GEDA()
     >>> design = parser.parse('example_geda_file.sch')
 
     The gEDA format relies highly on referencing symbol files
@@ -194,9 +194,9 @@ class GEDA:
                     files
         """
         self.offset = shape.Point(40000, 40000)
-        ##FIXME: whats a good guess for frame if not known??
-        self.frame_width = 0 
-        self.frame_height = 0 
+        ## Initialise frame size with largest possible size
+        self.frame_width = 46800
+        self.frame_height = 34000 
 
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
@@ -215,9 +215,6 @@ class GEDA:
         self.net_names = None
 
         self.known_symbols = find_symbols(symbol_dirs)
-
-        # FIXME: Converter currently will ignore style and color data in gEDA format!
-
 
     @staticmethod
     def auto_detect(filename):
@@ -261,7 +258,8 @@ class GEDA:
 
         self.design = Design()
 
-        ##TODO: parse frame data of first file
+        ## parse frame data of first schematic to extract 
+        ## page size (assumes same frame for all files) 
         with open(inputfiles[0], 'rU') as stream:
             self._check_version(stream)
 
@@ -270,7 +268,9 @@ class GEDA:
                     obj_type, params = self._parse_command(StringIO(line))
                     assert(obj_type == 'C')
 
-                    params['basename'], dummy = os.path.splitext(params['basename'])
+                    params['basename'], dummy = os.path.splitext(
+                        params['basename']
+                    )
 
             self._parse_title_frame(params)
 
@@ -283,7 +283,7 @@ class GEDA:
             basename, dummy = os.path.splitext(os.path.basename(filename))
             self.design.design_attributes.metadata.set_name(basename)
 
-            ##TODO: modify offset for next page
+            ## modify offset for next page to be shifted to the right
             self.offset.x = self.offset.x - self.frame_width
 
             f_in.close()
@@ -348,7 +348,6 @@ class GEDA:
                 self._parse_segment(stream, params)
 
             elif obj_type == 'H': ## SVG-like path
-                ##TODO(elbaschid): is this a valid assumption?
                 log.warn('ommiting path outside of component.')
                 ## skip description of path
                 num_lines = params['num_lines']
@@ -368,18 +367,19 @@ class GEDA:
             self.design.add_net(cnet)
 
     def _parse_title_frame(self, params):
+        """ Parse the frame component in *params* to extract the
+            page size to be used in the design. The offset is adjusted
+            according to the bottom-left position of the frame. 
+        """
         ## set offset based on bottom-left corner of frame
         self.offset.x = params['x']
         self.offset.y = params['y'] 
 
         filename = self.known_symbols.get(params['basename'])
         if not filename or not os.path.exists(filename):
-            warnings.warn(
-                "could not find title symbol '%s'" % params['basename']
-            )
+            log.warn("could not find title symbol '%s'" % params['basename'])
             return
 
-        ##TODO: get position from parameter
         stream = open(filename, 'rU')
 
         obj_type, params = self._parse_command(stream)
@@ -399,7 +399,6 @@ class GEDA:
 
             obj_type, params = self._parse_command(stream)
         
-        ##TODO: extract title, page, file, drawn by, revision
         stream.close()
 
     def _create_ripper_segment(self, params):
@@ -474,7 +473,6 @@ class GEDA:
                     return None, None
 
                 ## requires parsing of referenced symbol file
-                print self.known_symbols[basename]
                 f_in = open(self.known_symbols[basename], "rU")
                 self._check_version(f_in)
 
