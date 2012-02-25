@@ -26,12 +26,6 @@
 # 2) Write each component into a .sym file (even EMBEDDED components)
 # 3) Write component instances to .sch file
 # 4) Store net segments at the end of .sch file
-#
-# NOTE: The gEDA format is based on a 100x100 MILS grid where
-# 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
-# a blueprint-style frame is present with origin at 
-# (40'000, 40'000). 
-
 
 # Note: in a KiCAD schematic, the y coordinates increase downwards. In
 # OpenJSON, y coordinates increase upwards, so we negate them. In the
@@ -42,7 +36,7 @@ import time
 
 from os.path import splitext
 
-from parser.kicad import MATRIX2ROTATION
+from parser.kicad import MATRIX2ROTATION, MULT as INMULT
 
 ROTATION2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.items())
 
@@ -126,7 +120,8 @@ $EndDescr
     def write_annotation(self, f, ann):
         """ Write a design annotation to a kiCAD schematic """
         f.write('Text Label %d %d %d 60 ~ 0\n' %
-                (ann.x, -ann.y, int(ann.rotation * 1800)))
+                (make_length(ann.x), -make_length(ann.y),
+                 int(ann.rotation * 1800)))
         f.write(ann.value + '\n')
 
     def write_instance(self, f, inst):
@@ -134,10 +129,15 @@ $EndDescr
         f.write('$Comp\n')
         f.write('L %s %s\n' % (inst.library_id, inst.instance_id))
         f.write('U %d 1 00000000\n' % (inst.symbol_index,))
-        f.write('P %d %d\n' % (inst.symbol_attributes[0].x,
-                               -inst.symbol_attributes[0].y))
-        f.write('\t1    %d %d\n' % (inst.symbol_attributes[0].x,
-                                    -inst.symbol_attributes[0].y))
+        f.write('P %d %d\n' % (make_length(inst.symbol_attributes[0].x),
+                               -make_length(inst.symbol_attributes[0].y)))
+        for i, ann in enumerate(inst.symbol_attributes[0].annotations):
+            f.write('F %d "%s" %s %d %d 60  0000 C CNN\n' %
+                    (i, ann.value, 'H' if ann.rotation == 0 else 'V',
+                     make_length(inst.symbol_attributes[0].x + ann.x),
+                     -make_length(inst.symbol_attributes[0].y + ann.y)))
+        f.write('\t1    %d %d\n' % (make_length(inst.symbol_attributes[0].x),
+                                    -make_length(inst.symbol_attributes[0].y)))
         f.write('\t%d    %d    %d    %d\n' %
                 ROTATION2MATRIX[inst.symbol_attributes[0].rotation])
         f.write('$EndComp\n')
@@ -156,8 +156,10 @@ $EndDescr
 
         for seg in sorted(segments):
             f.write('Wire Wire Line\n')
-            f.write('\t%d %d %d %d\n' % (seg[0][0], -seg[0][1],
-                                         seg[1][0], -seg[1][1]))
+            f.write('\t%d %d %d %d\n' % (make_length(seg[0][0]),
+                                         -make_length(seg[0][1]),
+                                         make_length(seg[1][0]),
+                                         -make_length(seg[1][1])))
 
 
     def write_footer(self, f):
@@ -238,26 +240,34 @@ $EndDescr
             start = round(shape.start_angle * 1800)
             end = round(shape.end_angle * 1800)
             return ('A %d %d %d %d %d %%(unit)d %%(convert)d 0 N\n' %
-                    (shape.x, shape.y, shape.radius, start, end))
+                    (make_length(shape.x), make_length(shape.y),
+                     make_length(shape.radius), end, start))
         elif shape.type == 'circle':
             return ('C %d %d %d %%(unit)d %%(convert)d 0 N\n' %
-                    (shape.x, shape.y, shape.radius))
+                    (make_length(shape.x), make_length(shape.y),
+                     make_length(shape.radius)))
         elif shape.type == 'line':
             return ('P 2 %%(unit)d %%(convert)d 0 %d %d %d %d N\n' %
-                    (shape.p1.x, shape.p1.y, shape.p2.x, shape.p2.y))
+                    (make_length(shape.p1.x), make_length(shape.p1.y),
+                     make_length(shape.p2.x), make_length(shape.p2.y)))
         elif shape.type == 'polygon':
+            points = list(shape.points)
+            if points[0] != points[-1]:
+                points.append(points[0]) # close the polygon
             return ('P %d %%(unit)d %%(convert)d 0 %s N\n' %
-                    (len(shape.points),
-                     ' '.join('%d %d' % (p.x, p.y) for p in shape.points)))
+                    (len(points),
+                     ' '.join('%d %d' % (make_length(p.x), make_length(p.y))
+                              for p in points)))
         elif shape.type == 'rectangle':
             return ('S %d %d %d %d %%(unit)d %%(convert)d 0 N\n' %
-                    (shape.x, shape.y, shape.x + shape.width,
-                     shape.y + shape.height))
+                    (make_length(shape.x), make_length(shape.y),
+                     make_length(shape.x + shape.width),
+                     make_length(shape.y - shape.height)))
         elif shape.type == 'label':
             angle = round(shape.rotation * 1800)
             align = shape.align[0].upper()
             return ('T %d %d %d 20 0 %%(unit)d %%(convert)d %s Normal 0 %s C\n' %
-                    (angle, shape.x, shape.y,
+                    (angle, make_length(shape.x), make_length(shape.y),
                      shape.text.replace(' ', '~'), align))
 
 
@@ -284,9 +294,17 @@ $EndDescr
             name = pin.label.text
 
         return ('X %s %s %d %d %d %s 60 60 %%(unit)d %%(convert)d B\n' %
-                (name, pin.pin_number, x, y, abs(length), direction))
+                (name, pin.pin_number, make_length(x), make_length(y),
+                 abs(length), direction))
 
 
     def write_library_footer(self, f):
         """ Write a kiCAD library file footer """
         f.write('#\n#End Library\n')
+
+
+MULT = 1.0 / INMULT
+
+def make_length(value):
+    """ Make a kicad length measurement from an openjson measurement """
+    return int(round(float(value) * MULT))

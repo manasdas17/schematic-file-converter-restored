@@ -173,26 +173,10 @@ class FritzingTests(TestCase):
         self.assertEqual(get_pin(Shape()), None)
 
 
-    def test_missing_layers(self):
-        """The component parser handles a missing schematic layer """
-
-        parser = ComponentParser(None, None)
-
-        class FakeTree(object):
-            """A fake tree """
-
-            def find(self, path):
-                """ Return None for the layers """
-                assert path == 'views/schematicView/layers'
-                return None
-
-        parser.parse_svg(None, FakeTree(), None)
-
-
     def test_missing_p(self):
         """The component parser handles a connector missing a p element """
 
-        parser = ComponentParser(None, None)
+        parser = ComponentParser(None)
 
         class FakeConn(object):
             """A fake connector"""
@@ -247,7 +231,7 @@ class FritzingTests(TestCase):
     def test_parse_circle(self):
         """ We parse svg circles correctly. """
 
-        parser = ComponentParser(None, None)
+        parser = ComponentParser(None)
         elem = FakeElem('circle', cx='72', cy='144', r='216')
         shapes = parser.parse_shapes(elem)
         self.assertEqual(len(shapes), 1)
@@ -260,7 +244,7 @@ class FritzingTests(TestCase):
     def test_parse_rect(self):
         """ We parse svg rectangles correctly. """
 
-        parser = ComponentParser(None, None)
+        parser = ComponentParser(None)
         elem = FakeElem('rect', x='0', y='720',
                         width='72', height='144')
         shapes = parser.parse_shapes(elem)
@@ -807,3 +791,14 @@ class FritzingTests(TestCase):
         self.assertEqual(pp.shapes[1].control2.y, -20)
         self.assertEqual(pp.shapes[1].p2.x, 0)
         self.assertEqual(pp.shapes[1].p2.y, 0)
+
+
+    def test_fzz(self):
+        """ The parser loads fzz files correctly """
+
+        design = self.load_file('sharePower33.fzz')
+
+        self.assertEqual(len(design.components.components), 2)
+
+        cpt = design.components.components['5369801f2bc46a8d540d4f863544ec31']
+        self.assertTrue(len(cpt.symbols[0].bodies[0].pins) > 0)

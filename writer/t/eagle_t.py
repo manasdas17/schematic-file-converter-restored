@@ -219,14 +219,15 @@ class EagleTests(unittest.TestCase):
         """ Test Symbol block creation """
 
 # embedded text
-        _symbol = Eagle.Symbol(name="ZD", 
+        _symbol = Eagle.Symbol(libid=1,
+                               name="ZD", 
                                numofshapes=10,
                               )
 
         _chunk = _symbol.construct()
 
         _valid_chunk = b''.join((b"\x1d\x00\x0a\x00\x00\x00\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x00\x00",
+                                 b"\x00\x01\x00\x00\x00\x00\x00\x00",
                                  b"\x5a\x44\x00\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
@@ -456,6 +457,7 @@ class EagleTests(unittest.TestCase):
                            x2=33.02,
                            y2=50.8,
                            width=0.1524,
+                           style="DashDot",
                            layer=91,
                           )
 
@@ -463,7 +465,7 @@ class EagleTests(unittest.TestCase):
 
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xd8\x09\x05\x00",
                                  b"\x40\x4d\x09\x00\xd8\x09\x05\x00",
-                                 b"\x60\xc0\x07\x00\xfa\x02\x00\x00"))
+                                 b"\x60\xc0\x07\x00\xfa\x02\x03\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
@@ -519,6 +521,7 @@ class EagleTests(unittest.TestCase):
                          curve=0, # <---- wrong
                          cap="flat",
                          direction="counterclockwise",
+                         style="ShortDash",
                          layer=91,
                         )
 
@@ -526,7 +529,7 @@ class EagleTests(unittest.TestCase):
 
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xc0\x80\x0f\x00",
                                  b"\x48\xd0\x05\x00\xa0\x0d\x11\x00",
-                                 b"\x40\x4d\x09\x00\xe8\x0b\x30\x81"))
+                                 b"\x40\x4d\x09\x00\xe8\x0b\x32\x81"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)

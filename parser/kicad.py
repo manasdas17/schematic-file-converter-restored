@@ -31,12 +31,13 @@
 # OpenJSON, y coordinates increase upwards, so we negate them. In the
 # KiCAD library file (where components are stored) y coordinates
 # increase upwards as in OpenJSON and no transformation is needed.
+# KiCAD units are mils (1/1000th of an inch)
 
 from core.design import Design
 from core.components import Component, Symbol, Body, Pin
 from core.component_instance import ComponentInstance, SymbolAttribute
 from core.net import Net, NetPoint, ConnectedComponent
-from core.shape import Arc, Circle, Polygon, Rectangle, Label
+from core.shape import Arc, Circle, Line, Rectangle, Label
 from core.annotation import Annotation
 
 from collections import defaultdict
@@ -46,12 +47,12 @@ from os.path import exists, splitext
 class KiCAD(object):
     """ The KiCAD Format Parser """
 
-
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an kicad schematic """
         f = open(filename, 'r')
-        data = f.read()
+        data = f.readline()
+        f.close()
         confidence = 0
         if 'EESchema Schematic' in data:
             confidence += 0.75
@@ -126,8 +127,9 @@ class KiCAD(object):
         parts = line.split()
         x, y, rotation = int(parts[2]), int(parts[3]), int(parts[4])
         rotation = rotation / 1800.0
-        value = f.readline().strip()
-        return Annotation(value, x, -y, rotation, 'true')
+        value = f.readline().decode('utf-8', errors='replace').strip()
+        return Annotation(value, make_length(x), -make_length(y),
+                          rotation, 'true')
 
     def parse_component_instance(self, f):
         """ Parse a component instance from a $Comp block """
@@ -153,10 +155,14 @@ class KiCAD(object):
 
         while line.strip() not in ("$EndComp", ''):
             if line.startswith('F '):
-                parts = line.split()
+                parts = line.split('"', 2)
+                value = parts[1].decode('utf-8', errors='replace')
+                parts = parts[2].strip().split()
                 annotations.append(
-                    Annotation(parts[2][1:-1], int(parts[4]), -int(parts[5]),
-                               0 if parts[1] == 'H' else 1, 'true'))
+                    Annotation(value,
+                               make_length(int(parts[1]) - compx),
+                               -make_length(int(parts[2]) - compy),
+                               0 if parts[0] == 'H' else 1, 'true'))
             elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
@@ -165,7 +171,8 @@ class KiCAD(object):
             line = f.readline()
 
         inst = ComponentInstance(reference, name, convert - 1)
-        symbattr = SymbolAttribute(compx, -compy, rotation)
+        symbattr = SymbolAttribute(make_length(compx), -make_length(compy),
+                                   rotation)
         for ann in annotations:
             symbattr.add_annotation(ann)
         inst.add_symbol_attribute(symbattr)
@@ -227,6 +234,7 @@ class KiCAD(object):
 
         def get_point(point):
             """ Return a new or existing NetPoint for an (x,y) point """
+            point = (make_length(point[0]), make_length(point[1]))
             if point not in points:
                 points[point] = NetPoint('%da%d' % point, point[0], point[1])
             return points[point]
@@ -364,7 +372,10 @@ class ComponentParser(object):
                 if prefix == 'X':
                     body.add_pin(obj)
                 else:
-                    body.add_shape(obj)
+                    if isinstance(obj, (list, tuple)):
+                        [body.add_shape(o) for o in obj]
+                    else:
+                        body.add_shape(obj)
 
         return self.component
 
@@ -375,29 +386,35 @@ class ComponentParser(object):
         # convert tenths of degrees to pi radians
         start = start / 1800.0
         end = end / 1800.0
-        return Arc(x, y, start, end, radius)
+        return Arc(make_length(x), make_length(y),
+                   end, start, make_length(radius))
 
 
     def parse_c_line(self, parts):
         """ Parse a C (Circle) line """
         x, y, radius = [int(i) for i in parts[1:4]]
-        return Circle(x, y, radius)
+        return Circle(make_length(x), make_length(y), make_length(radius))
 
 
     def parse_p_line(self, parts):
         """ Parse a P (Polyline) line """
         num_points = int(parts[1])
-        poly = Polygon()
+        lines = []
+        last_point = None
         for i in xrange(num_points):
             x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-            poly.add_point(x, y)
-        return poly
+            point = (make_length(x), make_length(y))
+            if last_point is not None:
+                lines.append(Line(last_point, point))
+            last_point = point
+        return lines
 
 
     def parse_s_line(self, parts):
         """ Parse an S (Rectangle) line """
         x, y, x2, y2 = [int(i) for i in parts[1:5]]
-        return Rectangle(x, y, x2 - x, y2 - y)
+        return Rectangle(make_length(x), make_length(y),
+                         make_length(x2 - x), make_length(y - y2))
 
 
     def parse_t_line(self, parts):
@@ -406,7 +423,7 @@ class ComponentParser(object):
         angle = angle / 1800.0
         text = parts[8].replace('~', ' ')
         align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
-        return Label(x, y, text, align, angle)
+        return Label(make_length(x), make_length(y), text, align, angle)
 
 
     def parse_x_line(self, parts):
@@ -444,6 +461,16 @@ class ComponentParser(object):
         if name == '~':
             label = None
         else:
-            label = Label(label_x, label_y, name, 'center', label_rotation)
+            label = Label(make_length(label_x), make_length(label_y),
+                          name, 'center', label_rotation)
 
-        return Pin(num, (p1x, p1y), (p2x, p2y), label)
+        return Pin(num,
+                   (make_length(p1x), make_length(p1y)),
+                   (make_length(p2x), make_length(p2y)), label)
+
+
+MULT = 90.0 / 1000.0 # mils to 90 dpi
+
+def make_length(value):
+    """ Make a length measurement from a kicad measurement """
+    return int(round(float(value) * MULT))

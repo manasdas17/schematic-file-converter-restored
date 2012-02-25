@@ -26,7 +26,7 @@ from core.design import Design
 from core.components import Pin
 from core.net import Net, NetPoint
 from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Label
+from core.shape import Label, Rectangle, Polygon, Arc
 from core.annotation import Annotation
 from parser.openjson import JSON
 
@@ -98,7 +98,7 @@ class KiCADTests(unittest.TestCase):
         ann = Annotation('test', 1, 2, .5, 'true')
         writer.write_annotation(buf, ann)
         self.assertEqual(buf.getvalue(),
-                         'Text Label 1 -2 900 60 ~ 0\ntest\n')
+                         'Text Label 11 -22 900 60 ~ 0\ntest\n')
 
     def test_write_instance(self):
         """
@@ -115,8 +115,8 @@ class KiCADTests(unittest.TestCase):
 $Comp
 L libid id
 U 1 1 00000000
-P 3 -4
-\t1    3 -4
+P 33 -44
+\t1    33 -44
 \t0    1    1    0
 $EndComp
 ''')
@@ -144,7 +144,7 @@ $EndComp
         writer.write_net(buf, net)
         self.assertEqual(
             buf.getvalue(),
-            'Wire Wire Line\n\t0 0 0 -1\nWire Wire Line\n\t0 0 1 0\n')
+            'Wire Wire Line\n\t0 0 0 -11\nWire Wire Line\n\t0 0 11 0\n')
 
     def test_write_footer(self):
         """
@@ -166,28 +166,28 @@ $EndComp
         pin = Pin('1', (-300, 100), (-600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 -600 100 300 R 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 -6667 1111 300 R 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('1', (300, 100), (600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 600 100 300 L 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 6667 1111 300 L 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, -1300), (0, -1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 -1500 200 U 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 -16667 200 U 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 1500 200 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 16667 200 D 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500),
                   Label(0, 0, 'name', 'center', 0))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X name 2 0 1500 200 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X name 2 0 16667 200 D 60 60 %(unit)d %(convert)d B\n')
 
     def test_write_library_footer(self):
         """
@@ -198,3 +198,40 @@ $EndComp
         buf = StringIO()
         writer.write_library_footer(buf)
         self.assertEqual(buf.getvalue(), '#\n#End Library\n')
+
+
+    def test_rectangle(self):
+        """
+        Rectangles are output correctly.
+        """
+
+        writer = KiCAD()
+        rect = Rectangle(10, 20, 5, 10)
+        line = writer.get_shape_line(rect)
+        self.assertEqual(line, 'S 111 222 167 111 %(unit)d %(convert)d 0 N\n')
+
+
+    def test_polygon(self):
+        """
+        Polygons are output correctly.
+        """
+
+        writer = KiCAD()
+        poly = Polygon()
+        poly.add_point(0, 0)
+        poly.add_point(0, 10)
+        poly.add_point(10, 10)
+        poly.add_point(10, 0)
+        line = writer.get_shape_line(poly)
+        self.assertEqual(line, 'P 5 %(unit)d %(convert)d 0 0 0 0 111 111 111 111 0 0 0 N\n')
+
+
+    def test_arc(self):
+        """
+        Arcs are output correctly.
+        """
+
+        writer = KiCAD()
+        arc = Arc(0, 0, -0.5, 0.5, 1)
+        line = writer.get_shape_line(arc)
+        self.assertEqual(line, 'A 0 0 11 900 -900 %(unit)d %(convert)d 0 N\n')
