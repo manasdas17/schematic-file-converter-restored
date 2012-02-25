@@ -342,6 +342,7 @@ class GEDA:
                     self._parse_environment(stream)
 
                 else:
+                    print 'parsing component with params', params
                     self.parse_component(stream, params)
 
             elif obj_type == 'N': ## net segement (in schematic ONLY)
@@ -453,8 +454,12 @@ class GEDA:
         """
         basename, dummy = os.path.splitext(params['basename'])
 
-        if basename in self.design.components.components:
-            component = self.design.components.components[basename]
+        component_name = basename
+        if params['mirror']:
+            component_name += '_MIRRORED'
+
+        if component_name in self.design.components.components:
+            component = self.design.components.components[component_name]
 
             ## skipping embedded data might be required
             self.skip_embedded_section(stream)
@@ -476,15 +481,11 @@ class GEDA:
                 f_in = open(self.known_symbols[basename], "rU")
                 self._check_version(f_in)
 
-                ## if the file is mirroed compoent generate a mirrored component
-                if params['mirror']: 
-                    basename += '_MIRRORED'
-
                 component = self.parse_component_data(f_in, params) 
 
                 f_in.close()
                         
-            self.design.add_component(basename, component)
+            self.design.add_component(component_name, component)
 
         ## get all attributes assigned to component instance
         attributes = self._parse_environment(stream)
