@@ -69,7 +69,8 @@ class KiCAD(object):
         if library_filename is None:
             library_filename = splitext(filename)[0] + '-cache.lib'
             if exists(library_filename):
-                self.parse_library(library_filename, circuit)
+                for cpt in parse_library(library_filename):
+                    circuit.add_component(cpt.name, cpt)
 
         f = open(filename)
 
@@ -178,21 +179,6 @@ class KiCAD(object):
 
         return inst
 
-    def parse_library(self, filename, circuit):
-        """
-        Parse the library file and add the components to the given
-        circuit.
-        """
-
-        f = open(filename)
-
-        for line in f:
-            if line.startswith('DEF '):
-                cpt = ComponentParser(line).parse(f)
-                circuit.add_component(cpt.name, cpt)
-
-        f.close()
-
 
     def intersect(self, segment, ptc):
         """ Does point c intersect the segment """
@@ -293,6 +279,21 @@ MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, -1, -1, 0): 1.5}
 
 
+def parse_library(filename):
+    """
+    Parse the library file and return the list of components found.
+    """
+
+    components = []
+
+    with open(filename) as f:
+        for line in f:
+            if line.startswith('DEF '):
+                components.append(ComponentParser(line).parse(f))
+
+    return components
+
+
 class ComponentParser(object):
     """I parse components from KiCAD libraries."""
 
@@ -304,7 +305,7 @@ class ComponentParser(object):
         parts = line.split()
         self.component = Component(parts[1])
         self.component.add_attribute('_prefix', parts[2])
-        self.num_units = int(parts[7])
+        self.num_units = max(int(parts[7]), 1)
 
 
     def build_symbols(self, has_convert):
@@ -421,7 +422,12 @@ class ComponentParser(object):
         angle, x, y = [int(i) for i in parts[1:4]]
         angle = angle / 1800.0
         text = parts[8].replace('~', ' ')
-        align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+
+        if len(parts) >= 12:
+            align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+        else:
+            align = 'left'
+
         return Label(make_length(x), make_length(y), text, align, angle)
 
 

@@ -205,6 +205,10 @@ class KiCADTests(unittest.TestCase):
 
 
     def test_annotation_spaces(self):
+        """
+        Annotations with spaces are handled correctly.
+        """
+
         design = KiCAD().parse(join(TEST_DIR, 'jtag_schematic.sch'))
         inst = [i for i in design.component_instances
                 if i.library_id == 'CONN_4X2'][0]
@@ -213,5 +217,22 @@ class KiCADTests(unittest.TestCase):
 
 
     def test_utf8_annotations(self):
+        """
+        Annotations with special chars are handled correctly.
+        """
+
         design = KiCAD().parse(join(TEST_DIR, 'ps2toserial.sch'))
         JSONWriter().write(design, devnull)
+
+
+    def test_t_line_no_alignment(self):
+        """
+        T lines with no alignment are handled correctly.
+        """
+
+        parser = ComponentParser('DEF 74LS00 U 0 30 Y Y 4 F N')
+        shape = parser.parse_t_line(['T', '0', '150', '-235', '50',
+                                     '0', '4', '0', 'Common'])
+        self.assertEqual(shape.type, 'label')
+        self.assertEqual(shape.text, 'Common')
+        self.assertEqual(shape.align, 'left')
