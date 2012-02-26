@@ -40,6 +40,8 @@ from core.net import Net, NetPoint, ConnectedComponent
 from core.shape import Arc, Circle, Line, Rectangle, Label
 from core.annotation import Annotation
 
+from library.kicad import lookup_part
+
 from collections import defaultdict
 from os.path import exists, splitext
 
@@ -74,10 +76,14 @@ class KiCAD(object):
 
         f = open(filename)
 
-        # Read until the end of the description, assume nothing
-        # useful comes before it.
-        while f.readline().strip() != "$EndDescr":
-            pass
+        libs = []
+        line = f.readline().strip()
+
+        # parse the library references
+        while line != "$EndDescr":
+            if line.startswith('LIBS:'):
+                libs.extend(line.split(':', 1)[1].split(','))
+            line = f.readline().strip()
 
         # Now parse wires and components, ignore connections, we get
         # connectivity from wire segments
@@ -95,7 +101,12 @@ class KiCAD(object):
                 design.design_attributes.add_annotation(
                     self.parse_text(f, line))
             elif prefix == "$Comp": # Component Instance
-                design.add_component_instance(self.parse_component_instance(f))
+                inst = self.parse_component_instance(f)
+                design.add_component_instance(inst)
+                if inst.library_id not in design.components.components:
+                    cpt = lookup_part(inst.library_id, libs)
+                    if cpt is not None:
+                        design.components.add_component(cpt.name, cpt)
 
             line = f.readline()
 
@@ -340,8 +351,10 @@ class ComponentParser(object):
 
         for symbol_index in symbol_indices:
             for body_index in body_indices:
-                yield self.component.symbols[symbol_index].bodies[body_index]
-
+                try:
+                    yield self.component.symbols[symbol_index].bodies[body_index]
+                except IndexError:
+                    pass
 
     def parse(self, f):
         """ Parse a DEF block and return the Component """
