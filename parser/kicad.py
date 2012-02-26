@@ -62,7 +62,7 @@ class KiCAD(object):
     def parse(self, filename, library_filename=None):
         """ Parse a kicad file into a design """
 
-        circuit = Design()
+        design = Design()
         segments = set() # each wire segment
         junctions = set() # wire junction point (connects all wires under it)
 
@@ -70,7 +70,7 @@ class KiCAD(object):
             library_filename = splitext(filename)[0] + '-cache.lib'
             if exists(library_filename):
                 for cpt in parse_library(library_filename):
-                    circuit.add_component(cpt.name, cpt)
+                    design.add_component(cpt.name, cpt)
 
         f = open(filename)
 
@@ -92,20 +92,20 @@ class KiCAD(object):
             elif prefix == "Connection": # Store these to apply later
                 self.parse_connection(line, junctions)
             elif prefix == "Text":
-                circuit.design_attributes.add_annotation(
+                design.design_attributes.add_annotation(
                     self.parse_text(f, line))
             elif prefix == "$Comp": # Component Instance
-                circuit.add_component_instance(self.parse_component_instance(f))
+                design.add_component_instance(self.parse_component_instance(f))
 
             line = f.readline()
 
         f.close()
 
         segments = self.divide(segments, junctions)
-        circuit.nets = self.calc_nets(segments)
-        self.calc_connected_components(circuit)
+        design.nets = self.calc_nets(segments)
+        self.calc_connected_components(design)
 
-        return circuit
+        return design
 
 
     def parse_wire(self, f, segments):
@@ -251,21 +251,21 @@ class KiCAD(object):
         return nets
 
 
-    def calc_connected_components(self, circuit):
+    def calc_connected_components(self, design):
         """ Add all the connected components to the nets """
 
         pins = defaultdict(set) # (x, y) -> set([(instance_id, pin_number)])
 
-        for inst in circuit.component_instances:
-            if inst.library_id in circuit.components.components:
-                cpt = circuit.components.components[inst.library_id]
+        for inst in design.component_instances:
+            if inst.library_id in design.components.components:
+                cpt = design.components.components[inst.library_id]
                 for symba, body in zip(inst.symbol_attributes,
                                        cpt.symbols[inst.symbol_index].bodies):
                     for pin in body.pins:
                         pins[symba.x + pin.p2.x, symba.y - pin.p2.y].add(
                             (inst.instance_id, pin.pin_number))
 
-        for net in circuit.nets:
+        for net in design.nets:
             for point in net.points.values():
                 for instance_id, pin_number in pins.get((point.x, point.y), ()):
                     conncpt = ConnectedComponent(instance_id, pin_number)
