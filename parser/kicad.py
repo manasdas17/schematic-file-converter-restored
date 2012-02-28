@@ -40,6 +40,8 @@ from core.net import Net, NetPoint, ConnectedComponent
 from core.shape import Arc, Circle, Line, Rectangle, Label
 from core.annotation import Annotation
 
+from library.kicad import lookup_part
+
 from collections import defaultdict
 from os.path import exists, splitext
 
@@ -51,7 +53,7 @@ class KiCAD(object):
     def auto_detect(filename):
         """ Return our confidence that the given file is an kicad schematic """
         f = open(filename, 'r')
-        data = f.readline()
+        data = f.read(4096)
         f.close()
         confidence = 0
         if 'EESchema Schematic' in data:
@@ -62,22 +64,26 @@ class KiCAD(object):
     def parse(self, filename, library_filename=None):
         """ Parse a kicad file into a design """
 
-        # Rough'n'dirty parsing, assume nothing useful comes before
-        # the description
-        circuit = Design()
+        design = Design()
         segments = set() # each wire segment
         junctions = set() # wire junction point (connects all wires under it)
 
         if library_filename is None:
             library_filename = splitext(filename)[0] + '-cache.lib'
             if exists(library_filename):
-                self.parse_library(library_filename, circuit)
+                for cpt in parse_library(library_filename):
+                    design.add_component(cpt.name, cpt)
 
         f = open(filename)
 
-        # Read until the end of the description
-        while f.readline().strip() != "$EndDescr":
-            pass
+        libs = []
+        line = f.readline().strip()
+
+        # parse the library references
+        while line != "$EndDescr":
+            if line.startswith('LIBS:'):
+                libs.extend(line.split(':', 1)[1].split(','))
+            line = f.readline().strip()
 
         # Now parse wires and components, ignore connections, we get
         # connectivity from wire segments
@@ -92,20 +98,25 @@ class KiCAD(object):
             elif prefix == "Connection": # Store these to apply later
                 self.parse_connection(line, junctions)
             elif prefix == "Text":
-                circuit.design_attributes.add_annotation(
+                design.design_attributes.add_annotation(
                     self.parse_text(f, line))
             elif prefix == "$Comp": # Component Instance
-                circuit.add_component_instance(self.parse_component_instance(f))
+                inst = self.parse_component_instance(f)
+                design.add_component_instance(inst)
+                if inst.library_id not in design.components.components:
+                    cpt = lookup_part(inst.library_id, libs)
+                    if cpt is not None:
+                        design.components.add_component(cpt.name, cpt)
 
             line = f.readline()
 
         f.close()
 
         segments = self.divide(segments, junctions)
-        circuit.nets = self.calc_nets(segments)
-        self.calc_connected_components(circuit)
+        design.nets = self.calc_nets(segments)
+        self.calc_connected_components(design)
 
-        return circuit
+        return design
 
 
     def parse_wire(self, f, segments):
@@ -179,21 +190,6 @@ class KiCAD(object):
 
         return inst
 
-    def parse_library(self, filename, circuit):
-        """
-        Parse the library file and add the components to the given
-        circuit.
-        """
-
-        f = open(filename)
-
-        for line in f:
-            if line.startswith('DEF '):
-                cpt = ComponentParser(line).parse(f)
-                circuit.add_component(cpt.name, cpt)
-
-        f.close()
-
 
     def intersect(self, segment, ptc):
         """ Does point c intersect the segment """
@@ -266,21 +262,21 @@ class KiCAD(object):
         return nets
 
 
-    def calc_connected_components(self, circuit):
+    def calc_connected_components(self, design):
         """ Add all the connected components to the nets """
 
         pins = defaultdict(set) # (x, y) -> set([(instance_id, pin_number)])
 
-        for inst in circuit.component_instances:
-            if inst.library_id in circuit.components.components:
-                cpt = circuit.components.components[inst.library_id]
+        for inst in design.component_instances:
+            if inst.library_id in design.components.components:
+                cpt = design.components.components[inst.library_id]
                 for symba, body in zip(inst.symbol_attributes,
                                        cpt.symbols[inst.symbol_index].bodies):
                     for pin in body.pins:
                         pins[symba.x + pin.p2.x, symba.y - pin.p2.y].add(
                             (inst.instance_id, pin.pin_number))
 
-        for net in circuit.nets:
+        for net in design.nets:
             for point in net.points.values():
                 for instance_id, pin_number in pins.get((point.x, point.y), ()):
                     conncpt = ConnectedComponent(instance_id, pin_number)
@@ -294,6 +290,21 @@ MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, -1, -1, 0): 1.5}
 
 
+def parse_library(filename):
+    """
+    Parse the library file and return the list of components found.
+    """
+
+    components = []
+
+    with open(filename) as f:
+        for line in f:
+            if line.startswith('DEF '):
+                components.append(ComponentParser(line).parse(f))
+
+    return components
+
+
 class ComponentParser(object):
     """I parse components from KiCAD libraries."""
 
@@ -305,7 +316,7 @@ class ComponentParser(object):
         parts = line.split()
         self.component = Component(parts[1])
         self.component.add_attribute('_prefix', parts[2])
-        self.num_units = int(parts[7])
+        self.num_units = max(int(parts[7]), 1)
 
 
     def build_symbols(self, has_convert):
@@ -340,8 +351,10 @@ class ComponentParser(object):
 
         for symbol_index in symbol_indices:
             for body_index in body_indices:
-                yield self.component.symbols[symbol_index].bodies[body_index]
-
+                try:
+                    yield self.component.symbols[symbol_index].bodies[body_index]
+                except IndexError:
+                    pass
 
     def parse(self, f):
         """ Parse a DEF block and return the Component """
@@ -422,7 +435,12 @@ class ComponentParser(object):
         angle, x, y = [int(i) for i in parts[1:4]]
         angle = angle / 1800.0
         text = parts[8].replace('~', ' ')
-        align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+
+        if len(parts) >= 12:
+            align = {'C': 'center', 'L': 'left', 'R': 'right'}.get(parts[11])
+        else:
+            align = 'left'
+
         return Label(make_length(x), make_length(y), text, align, angle)
 
 
