@@ -91,7 +91,7 @@ EXTENSIONS = {
 }
 
 
-def parse(in_files, in_format='openjson', **parser_kwargs):
+def parse(in_file, in_format='openjson', **parser_kwargs):
     """ Parse the given input file using the in_format """
 
     try:
@@ -99,13 +99,10 @@ def parse(in_files, in_format='openjson', **parser_kwargs):
             p = PARSERS[in_format](**parser_kwargs)
         else:
             p = PARSERS[in_format]()
-            ## ensure that non-GEDA formats don't break with multiple
-            ## input files
-            return p.parse(in_files[0])
     except KeyError:
         print "ERROR: Unsupported input type:", in_format
         exit(1)
-    return p.parse(in_files)
+    return p.parse(in_file)
 
 
 def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
@@ -124,8 +121,8 @@ def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
 
 if __name__ == "__main__":
     ap = ArgumentParser()
-    ap.add_argument("-i", "--input", nargs='+', dest="inputfiles",
-            help="read INPUT file(s) in", metavar="INPUT")
+    ap.add_argument("-i", "--input", dest="inputfile",
+            help="read INPUT file in", metavar="INPUT")
     ap.add_argument("-f", "--from", dest="inputtype",
             help="read input file as TYPE", metavar="TYPE")
     ap.add_argument("-o", "--output", dest="outputfile",
@@ -139,8 +136,8 @@ if __name__ == "__main__":
 
     args = ap.parse_args()
     inputtype = args.inputtype
-    inputfiles = args.inputfiles
     outputtype = args.outputtype
+    inputfile = args.inputfile
     outputfile = args.outputfile
 
     parser_kwargs = {}
@@ -148,13 +145,10 @@ if __name__ == "__main__":
         parser_kwargs['symbol_dirs'] = args.sym_dirs
 
     # Test for input file
-    if inputfiles == None:
+    if inputfile == None:
         log.error('No input file provided.')
         ap.print_help()
         exit(1)
-
-    if len(inputfiles) > 1:
-        inputfile = inputfiles[0]
 
     # Autodetect input type
     if inputtype == None:
@@ -183,7 +177,7 @@ if __name__ == "__main__":
             exit(1)
 
     # parse and export the data
-    design = parse(inputfiles, inputtype, **parser_kwargs)
+    design = parse(inputfile, inputtype, **parser_kwargs)
 
     # we got a good result
     if design is not None:
