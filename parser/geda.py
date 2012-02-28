@@ -55,8 +55,10 @@
 # a blueprint-style frame is present with origin at 
 # (40'000, 40'000). 
 
-import logging
 import os
+import zipfile
+import logging
+import tempfile
 import itertools
 
 from StringIO import StringIO
@@ -215,6 +217,7 @@ class GEDA:
         self.net_names = None
 
         self.known_symbols = find_symbols(symbol_dirs)
+        self.geda_zip = None
 
     @staticmethod
     def auto_detect(filename):
@@ -247,35 +250,44 @@ class GEDA:
         self.offset.x = point.x
         self.offset.y = point.y
     
-    def parse(self, inputfiles):
+
+    def parse(self, inputfile):
         """ Parse a gEDA file into a design.
 
             Returns the design corresponding to the gEDA file.
         """
+        inputfiles = []        
 
-        if isinstance(inputfiles, basestring):
-            inputfiles = [inputfiles]
+        ## check if inputfile is in ZIP format
+        if zipfile.is_zipfile(inputfile):
+            self.geda_zip = zipfile.ZipFile(inputfile)
+            for filename in self.geda_zip.namelist():
+                if filename.endswith('.sch'): 
+                    inputfiles.append(filename)
+        else:
+            inputfiles = [inputfile]
 
         self.design = Design()
 
+
         ## parse frame data of first schematic to extract 
         ## page size (assumes same frame for all files) 
-        with open(inputfiles[0], 'rU') as stream:
-            self._check_version(stream)
+        stream = self._open_file_or_zip(inputfiles[0])
+        self._check_version(stream)
 
-            for line in stream.readlines():
-                if 'title' in line and line.startswith('C'):
-                    obj_type, params = self._parse_command(StringIO(line))
-                    assert(obj_type == 'C')
+        for line in stream.readlines():
+            if 'title' in line and line.startswith('C'):
+                obj_type, params = self._parse_command(StringIO(line))
+                assert(obj_type == 'C')
 
-                    params['basename'], dummy = os.path.splitext(
-                        params['basename']
-                    )
+                params['basename'], dummy = os.path.splitext(
+                    params['basename']
+                )
 
-            self._parse_title_frame(params)
+        self._parse_title_frame(params)
 
         for filename in inputfiles:
-            f_in = open(filename, "rU")
+            f_in = self._open_file_or_zip(filename)
             self._check_version(f_in)
 
             self.parse_schematic(f_in)
@@ -876,6 +888,14 @@ class GEDA:
                 net_obj.add_annotation(annotation)
 
         return nets
+
+    def _open_file_or_zip(self, filename, mode='rU'):
+        if self.geda_zip is not None:
+            temp_dir = tempfile.mkdtemp()
+            self.geda_zip.extract(filename, temp_dir)
+            filename = os.path.join(temp_dir, filename)
+
+        return open(filename, mode)
 
     def _parse_bus(self, params): 
         """ Processing a bus instance with start end end coordinates
