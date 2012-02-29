@@ -290,9 +290,17 @@ class Gerber:
     def _do_funct(self, block):
         """ Set drawing modes, fill terminators. """
         code = int(block.code)
-        if block.type_ == 'D':
+        if 'D' in block.type_:
             if code < 10:
                 effect = {'draw':D_MAP[code]}
+
+                # flash current pos/aperture
+                if 'X' in block.type_:
+                    apertures = self.layer_buff.apertures
+                    aperture = apertures[self.status['aperture']]
+                    pos = Point(self.status['x'], self.status['y'])
+                    shape_inst = ShapeInstance(pos, aperture)
+                    self.img_buff.shape_instances.append(shape_inst)
 
                 # terminate fill mid mode
                 if (self.status['outline_fill'] and
@@ -735,7 +743,11 @@ class Gerber:
                 yield Funct('G', g_code)
         tok, d_code = self._pop_val('D', tok, coerce_=False)
         if d_code:
-            yield Funct('D', d_code)
+
+            # identify D03 without coord - flash at current pos
+            type_ = (d_code == '03' and not tok) and 'XD' or 'D'
+
+            yield Funct(type_, d_code)
         if tok:
             yield self._parse_coord(tok)
 
