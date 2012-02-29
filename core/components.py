@@ -147,6 +147,12 @@ class Pin:
         self.p1 = Point(p1) # null end
         self.p2 = Point(p2) # connect end
         self.pin_number = pin_number
+        self.attributes = dict()
+
+
+    def add_attribute(self, key, value):
+        """ Add attribute to a pin """
+        self.attributes[key] = value
 
 
     def bounds(self):
@@ -165,7 +171,8 @@ class Pin:
         ret = {
             "pin_number":self.pin_number,
             "p1":self.p1.json(),
-            "p2":self.p2.json()
+            "p2":self.p2.json(),
+            "attributes" : self.attributes,
             }
         if self.label is not None:
             ret["label"] = self.label.json()

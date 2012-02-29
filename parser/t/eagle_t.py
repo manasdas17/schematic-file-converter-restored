@@ -228,7 +228,7 @@ class EagleTests(unittest.TestCase):
 
 # embedded name
         _valid_chunk = b''.join((b"\x1f\x80\x05\x00\xff\x7f\xff\x7f",
-                                 b"\x00\x80\x00\x80\x01\x00\x00\x00",
+                                 b"\x00\x80\x00\x80\x00\x01\x00\x00",
                                  b"\x4e\x24\x31\x00\x00\x00\x00\x00"))
         _net = Eagle.Net.parse(_valid_chunk)
 
@@ -329,6 +329,19 @@ class EagleTests(unittest.TestCase):
 
         self.assertEqual(_segment.numofshapes, 4)
         self.assertEqual(_segment.cumulativenumofshapes, 19)
+        return
+
+    def test_polygon_parse(self):
+        """ Test Polygon block parsing """
+
+        _valid_chunk = b''.join((b"\x21\x00\x03\x00\x05\xff\xfe\xff",
+                                 b"\x27\xff\x34\x00\xfc\x01\xce\x18",
+                                 b"\x00\x00\x15\x8e\x00\x00\x00\x00"))
+        _polygon = Eagle.Polygon.parse(_valid_chunk)
+
+        self.assertEqual(_polygon.numofshapes, 3)
+        self.assertEqual(_polygon.width, 0.1016)
+        self.assertEqual(_polygon.layer, 21)
         return
 
     def test_connectionheader_parse(self):
@@ -497,6 +510,27 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_pin.name, "C")
         self.assertEqual(_pin.x, 2.54)
         self.assertEqual(_pin.y, 0.)
+        self.assertEqual(_pin.visible, "off")
+        self.assertEqual(_pin.direction, "pas")
+        self.assertEqual(_pin.rotate, "R180")
+        self.assertEqual(_pin.length, "short")
+        self.assertEqual(_pin.function, None)
+        self.assertEqual(_pin.swaplevel, 0)
+
+        _valid_chunk = b''.join((b"\x2c\x80\x41\x00\x90\x39\xff\xff",
+                                 b"\x38\x63\x00\x00\x11\x01\x49\x4e",
+                                 b"\x2b\x00\x00\x00\x00\x00\x00\x00"))
+        _pin = Eagle.Pin.parse(_valid_chunk)
+
+        self.assertEqual(_pin.name, "IN+")
+        self.assertEqual(_pin.x, -5.08)
+        self.assertEqual(_pin.y, 2.54)
+        self.assertEqual(_pin.visible, "pad")
+        self.assertEqual(_pin.direction, "in")
+        self.assertEqual(_pin.rotate, None)
+        self.assertEqual(_pin.length, "short")
+        self.assertEqual(_pin.function, "dot")
+        self.assertEqual(_pin.swaplevel, 1)
 
 # TODO external name
         return

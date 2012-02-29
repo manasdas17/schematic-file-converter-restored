@@ -29,8 +29,14 @@ class Shape(object):
 
     def __init__(self):
         self.type = None
+        self.attributes = dict()
     
     
+    def add_attribute(self, key, value):
+        """ Add attribute to a shape """
+        self.attributes[key] = value
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         raise NotImplementedError("Not implemented")
@@ -371,6 +377,7 @@ class Line(Shape):
             "type": self.type,
             "p1": self.p1.json(),
             "p2": self.p2.json(),
+            "attributes" : self.attributes,
             }
 
 
