@@ -78,7 +78,7 @@ class GEDATests(unittest.TestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertEquals(len(geda_parser.known_symbols), len(symbols)+1)
+        self.assertEquals(len(geda_parser.known_symbols), len(symbols))
         self.assertEquals(
             geda_parser.known_symbols['opamp'],
             './test/geda/simple_example/symbols/opamp.sym'
@@ -89,7 +89,6 @@ class GEDATests(unittest.TestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertTrue(len(geda_parser.known_symbols) > len(symbols))
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
         geda_parser = GEDA()
@@ -108,6 +107,11 @@ class GEDATests(unittest.TestCase):
             'title-A2': (23300, 16500),
             'title-A3': (16500, 11600),
             'title-A4': (11600, 8200),
+            'title-A0-2': (46800, 33100),
+            'title-A1-2': (33100, 23300),
+            'title-A2-2': (23300, 16500),
+            'title-A3-2': (16500, 11600),
+            'title-A4-2': (11600, 8200),
             'title-D': (34000, 22000),
             'title-B': (17000, 11000),
             'title-C': (22000, 17000),
@@ -117,6 +121,16 @@ class GEDATests(unittest.TestCase):
             'title-bordered-A0': (46800, 33100),
             'title-bordered-A3': (16500, 11600),
             'title-bordered-A2': (23300, 16500),
+            'title-dg-1': (17000, 11000),
+            'title-small-square': (7600, 6900),
+            'titleblock': (7500, 1800),
+            'titleblock1': (11000, 8500),
+            'titleblock2': (22000, 17000),
+            'titleblock3': (33000, 25500),
+            'titleblock4': (44000, 34000),
+            'title-B-nameOnEdge': (26600, 17000),
+            'title-B-cibolo': (26600, 17000),
+            'title-block': (7500, 1800),
         }
 
         params = {
@@ -129,11 +143,17 @@ class GEDATests(unittest.TestCase):
             if name.startswith('title'):
                 params['basename'] = name
 
+                print name
+
+                ## reset geda parser 
+                geda_parser.frame_width = 0
+                geda_parser.frame_height = 0
+
                 geda_parser._parse_title_frame(params)
 
                 self.assertEquals(geda_parser.offset.x, params['x'])
                 self.assertEquals(geda_parser.offset.y, params['y'])
-
+                
                 self.assertEquals(
                     geda_parser.frame_width, 
                     title_frames[name][0]
@@ -152,8 +172,9 @@ class GEDATests(unittest.TestCase):
         self.assertEquals(geda_parser.offset.x, params['x'])
         self.assertEquals(geda_parser.offset.y, params['y'])
 
-        self.assertEquals(geda_parser.frame_width, 0)
-        self.assertEquals(geda_parser.frame_height, 0)
+        ## check if default is set correctly
+        self.assertEquals(geda_parser.frame_width, 46800)
+        self.assertEquals(geda_parser.frame_height, 34000)
 
     def test__parse_text(self):
         """ Test extracting text commands from input stream. """

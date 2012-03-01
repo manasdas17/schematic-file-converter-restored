@@ -92,89 +92,89 @@ class GEDA:
 
     OBJECT_TYPES = { 
         'v': ( # gEDA version
-            ('version', int),
-            ('fileformat_version', int),
+            ('version', int, None),
+            ('fileformat_version', int, None),
         ),
         'C': ( #component
-            ('x', int),
-            ('y', int),
-            ('selectable', int),
-            ('angle', int),
-            ('mirror', int),
-            ('basename', str),
+            ('x', int, None),
+            ('y', int, None),
+            ('selectable', int, None),
+            ('angle', int, None),
+            ('mirror', int, None),
+            ('basename', str, None),
         ),
         'N': ( # net segment
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
         ),
         'U': ( # bus (only graphical aid, not a component)
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
-            ('color', int),
-            ('ripperdir', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
+            ('color', int, None),
+            ('ripperdir', int, None),
         ),
         'T': ( # text or attribute (context)
-            ('x', int),
-            ('y', int),
-            ('color', int),
-            ('size', int),
-            ('visibility', int),
-            ('show_name_value', int),
-            ('angle', int),
-            ('alignment', int),
-            ('num_lines', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('color', int, None),
+            ('size', int, None),
+            ('visibility', int, None),
+            ('show_name_value', int, None),
+            ('angle', int, None),
+            ('alignment', int, None),
+            ('num_lines', int, 1),
         ),
         'P': ( # pin (in sym)
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
-            ('color', int),
-            ('pintype', int),
-            ('whichend', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
+            ('color', int, None),
+            ('pintype', int, None),
+            ('whichend', int, None),
         ),
         'L': ( # line
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
         ),
         'B': ( # box
-            ('x', int),
-            ('y', int),
-            ('width', int),
-            ('height', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('width', int, None),
+            ('height', int, None),
         ),
         'V': ( # circle
-            ('x', int),
-            ('y', int),
-            ('radius', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('radius', int, None),
         ),
         'A': ( # arc
-            ('x', int),
-            ('y', int),
-            ('radius', int),
-            ('startangle', int),
-            ('sweepangle', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('radius', int, None),
+            ('startangle', int, None),
+            ('sweepangle', int, None),
         ),
         'H': ( # SVG-like path
-            ('color', int),
-            ('width', int),
-            ('capstyle', int),
-            ('dashstyle', int),
-            ('dashlength', int),
-            ('dashspace', int),
-            ('filltype', int),
-            ('fillwidth', int),
-            ('angle1', int),
-            ('pitch1', int),
-            ('angle2', int),
-            ('pitch2', int),
-            ('num_lines', int),         
+            ('color', int, None),
+            ('width', int, None),
+            ('capstyle', int, None),
+            ('dashstyle', int, None),
+            ('dashlength', int, None),
+            ('dashspace', int, None),
+            ('filltype', int, None),
+            ('fillwidth', int, None),
+            ('angle1', int, None),
+            ('pitch1', int, None),
+            ('angle2', int, None),
+            ('pitch2', int, None),
+            ('num_lines', int, None),         
         ),
         ## environments
         '{': [], 
@@ -197,8 +197,8 @@ class GEDA:
         """
         self.offset = shape.Point(40000, 40000)
         ## Initialise frame size with largest possible size
-        self.frame_width = 46800
-        self.frame_height = 34000 
+        self.frame_width = 0 
+        self.frame_height = 0 
 
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
@@ -284,6 +284,8 @@ class GEDA:
                     params['basename']
                 )
 
+        log.debug("using title file: %s", params['basename'])
+
         self._parse_title_frame(params)
 
         for filename in inputfiles:
@@ -354,7 +356,6 @@ class GEDA:
                     self._parse_environment(stream)
 
                 else:
-                    print 'parsing component with params', params
                     self.parse_component(stream, params)
 
             elif obj_type == 'N': ## net segement (in schematic ONLY)
@@ -391,6 +392,9 @@ class GEDA:
         filename = self.known_symbols.get(params['basename'])
         if not filename or not os.path.exists(filename):
             log.warn("could not find title symbol '%s'" % params['basename'])
+
+            self.frame_width = 46800
+            self.frame_height = 34000 
             return
 
         stream = open(filename, 'rU')
@@ -400,9 +404,10 @@ class GEDA:
         while obj_type is not None:
 
             if obj_type == 'B':
-                ## use box set at (0, 0) as page frame 
-                if params['x'] == params['y'] == 0: 
+                if params['width'] > self.frame_width:
                     self.frame_width = params['width'] 
+
+                if params['height'] > self.frame_height:
                     self.frame_height = params['height']
 
             ## skip commands covering multiple lines
@@ -411,6 +416,14 @@ class GEDA:
                     stream.readline()
 
             obj_type, params = self._parse_command(stream)
+
+        ## set width to estimated max value when no box was found
+        if self.frame_width == 0:
+            self.frame_width = 46800
+
+        ## set height to estimated max value when no box was found
+        if self.frame_height == 0:
+            self.frame_height = 34000 
         
         stream.close()
 
@@ -1174,10 +1187,12 @@ class GEDA:
         object_type, command_data = command_data[0].strip(), command_data[1:]
 
         params = {}
-        for idx, (name, typ) in enumerate(self.OBJECT_TYPES[object_type]):
+        for idx, (name, typ, default) in enumerate(self.OBJECT_TYPES[object_type]):
             if idx >= len(command_data):
-                print line, object_type, command_data
-            params[name] = typ(command_data[idx])
+                ## prevent text commands of version 1 from breaking
+                params[name] = default
+            else:
+                params[name] = typ(command_data[idx])
 
         assert(len(params) == len(self.OBJECT_TYPES[object_type]))
 
@@ -1268,7 +1283,7 @@ def find_symbols(symbol_dirs):
     """
     known_symbols = {}
 
-    for symbol_dir in symbol_dirs:
+    for symbol_dir in reversed(symbol_dirs):
         if os.path.exists(symbol_dir):
             for dirpath, dummy, filenames in os.walk(symbol_dir):
                 for filename in filenames:
