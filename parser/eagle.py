@@ -317,6 +317,10 @@ class Eagle:
         max_embed_len = 5
         no_embed_str = b'\x7f'
 
+        defxreflabel = ":%F%N/%S.%C%R"
+        defxrefpart = "/%S.%C%R"
+        delimeter = b'\t'
+
         def __init__(self, schematic, numofshapes=0, numofattributes=0):
             """ Just a constructor
             """
@@ -1999,12 +2003,8 @@ class Eagle:
         self.attributes = []
         self.libraries = []
         self.shapeheader = None
-#        self.shapes = []
-#        self.nets = []
-#        self.buses = []
-        self.parts = []
+#        self.parts = []
         self.texts = []
-        self.schematic = None
         self.netclasses = []
         return
 
@@ -2073,7 +2073,7 @@ class Eagle:
                 _prev_segment = None
             elif Eagle.Part.constant == _type:
                 _cur_web = self.Part.parse(_dta)
-                self.parts.append(_cur_web)
+                self.shapeheader.parts.append(_cur_web)
             elif Eagle.Polygon.constant == _type:
                 if None == _prev_segment: # next polygon in the same segment
                     _prev_segment = _cur_segment
@@ -2190,7 +2190,7 @@ class Eagle:
 # File Version is applied by Design itself
 
 # Component Instances (Array) / Components (Array)
-        for _pp in self.parts:
+        for _pp in self.shapeheader.parts:
             _libid = ':'.join((self.libraries[-1 + _pp.libid].name,
                                _pp.value)) # to avoid same name collisions
             _ci = ComponentInstance(instance_id=_pp.name, 
@@ -2335,7 +2335,7 @@ class Eagle:
                         if not _p1name in _net.points[_p2name].connected_points:
                             _net.points[_p2name].add_connected_point(_p1name)
                     elif isinstance(_ss, Eagle.PinRef):
-                        _prt = self.parts[-1 + _ss.partno]
+                        _prt = self.shapeheader.parts[-1 + _ss.partno]
                         _dst = self.libraries[-1 + _prt.libid].devsets[0
                                     ].shapesets[-1 + _prt.devsetndx]
                         _sym = self.libraries[-1 + _prt.libid].symbols[0
