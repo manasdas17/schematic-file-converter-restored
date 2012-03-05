@@ -30,7 +30,7 @@ from core.component_instance import ComponentInstance, SymbolAttribute
 from core.design import Design
 from core.net import Net, NetPoint, ConnectedComponent
 from core.components import Component, Symbol, Body, Pin
-from core.shape import Point, Line
+from core.shape import Point, Line, Label
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
@@ -317,6 +317,10 @@ class Eagle:
         max_embed_len = 5
         no_embed_str = b'\x7f'
 
+        defxreflabel = ":%F%N/%S.%C%R"
+        defxrefpart = "/%S.%C%R"
+        delimeter = b'\t'
+
         def __init__(self, schematic, numofshapes=0, numofattributes=0):
             """ Just a constructor
             """
@@ -599,7 +603,7 @@ class Eagle:
         """ A struct that represents a net
         """
         constant = 0x1f
-        template = "=2BH3I8s"
+        template = "=2BH2I4B8s"
 
         constantmid1 = 0x7fff7fff
         constantmid2 = 0x80008000
@@ -627,13 +631,13 @@ class Eagle:
                 pass # strange mid-constants in net
 
             _name = None
-            if Eagle.Net.no_embed_str != _dta[6][0]:
-                _name = _dta[6].rstrip('\0')
+            if Eagle.Net.no_embed_str != _dta[9][0]:
+                _name = _dta[9].rstrip('\0')
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
             _ret_val = Eagle.Net(name=_name,
-                                 nclass=_dta[5],
+                                 nclass=_dta[6],
                                  numofshapes=_dta[2],
                                 )
             return _ret_val
@@ -998,12 +1002,17 @@ class Eagle:
         size_xscale = 2
         ratio_sscale = 2
 
-        rotatemask = 0x0f
+        rotatemask = 0x0c # in some cases 0x0f works as well
         rotates = {
                    0x00: None,
                    0x04: "R90",
                    0x08: "R180",
                    0x0c: "R270",
+# ones below are possible for text -- don't apply the mask there
+                   0x10: "MR0",
+                   0x14: "MR90",
+                   0x18: "MR180",
+                   0x1c: "MR270",
                   }
 
         fonts = {
@@ -1045,6 +1054,36 @@ class Eagle:
             elif 'R270' == rotate:
                 _ret_val = 1.5
             return _ret_val 
+
+    class Polygon(ShapeSet, Shape):
+        """ A struct that represents a polygon
+        """
+        constant = 0x21
+        template = "=2BH2I2H4BI"
+
+        def __init__(self, width, layer, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Polygon, self).__init__(numofshapes, shapes)
+            self.layer = layer # no Shape constructor will be called
+            self.width = width
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses segment
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Polygon.template, chunk)
+
+            _ret_val = Eagle.Polygon(numofshapes=_dta[2],
+                                     width=(Eagle.Polygon.width_xscale *
+                                             Eagle.Shape.decode_real(
+                                                                    _dta[5])),
+                                     layer=_dta[9],
+                                    )
+            return _ret_val
 
     class Instance(ShapeSet, Shape):
         """ A struct that represents an instance
@@ -1429,14 +1468,48 @@ class Eagle:
         max_embed_len = 10
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, x, y):
+        visiblemask = 0xf0
+        visibles = {
+                    0x00: "off",
+                    0x40: "pad",
+                    0xc0: None, # default
+                   }
+        dirmask = 0x0f
+        directions = {
+                      0x00: "nc",
+                      0x01: "in",
+                      0x02: "out",
+                      0x03: None, # default
+                      0x05: "pwr",
+                      0x06: "pas",
+                      0x07: "hiz",
+                     }
+        lengthmask = 0x30
+        lengths = {
+                   0x10: "short",
+                   0x20: "middle",
+                  }
+        funcmask = 0x0f
+        functions = {
+                     0x00: None, # default
+                     0x01: "dot",
+                    }
+
+        def __init__(self, name, x, y, visible, direction, rotate, length, # pylint: disable=R0913
+                     function=None, swaplevel=0): 
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
             self.name = name
             self.x = x
             self.y = y
-# TODO visible len direction rotate(12:0xe0)
+            self.visible = visible
+            self.direction = direction # signal direction
+# rotation codes line direction: R0 means left, R90 - down, R180 - right, R270 - up
+            self.rotate = rotate
+            self.length = length # not a number
+            self.function = function
+            self.swaplevel = swaplevel
             return
 
         @staticmethod
@@ -1456,6 +1529,18 @@ class Eagle:
             _ret_val = Eagle.Pin(name=_name,
                                  x=Eagle.Shape.decode_real(_dta[4]),
                                  y=Eagle.Shape.decode_real(_dta[5]),
+                                 visible=Eagle.Pin.visibles[_dta[2] & 
+                                                Eagle.Pin.visiblemask],
+                                 direction=Eagle.Pin.directions[_dta[6] & 
+                                                Eagle.Pin.dirmask],
+                                 rotate=Eagle.Pin.rotates[
+                                              ((Eagle.Pin.rotatemask << 4) & 
+                                              _dta[6]) >> 4],
+                                 length=Eagle.Pin.lengths[_dta[6] &
+                                                Eagle.Pin.lengthmask],
+                                 function=Eagle.Pin.functions[_dta[2] & 
+                                                Eagle.Pin.funcmask],
+                                 swaplevel=_dta[7],
                                 )
             return _ret_val
 
@@ -1918,12 +2003,8 @@ class Eagle:
         self.attributes = []
         self.libraries = []
         self.shapeheader = None
-#        self.shapes = []
-#        self.nets = []
-#        self.buses = []
-        self.parts = []
+#        self.parts = []
         self.texts = []
-        self.schematic = None
         self.netclasses = []
         return
 
@@ -1941,6 +2022,7 @@ class Eagle:
         _cur_lib = None
         _cur_web = None # consists of one or more shapesets/segments
         _cur_segment = None # consists of one or more shapes
+        _prev_segment = None # for polygons only
         _cur_connset = None # consists of one or more shapes (deviceset shows two types)
 
 # loop through 24 byte long blocks
@@ -1971,9 +2053,11 @@ class Eagle:
             elif Eagle.Symbol.constant == _type:
                 _cur_segment = self.Symbol.parse(_dta)
                 _cur_web.shapesets.append(_cur_segment)
+                _prev_segment = None
             elif Eagle.Package.constant == _type:
                 _cur_segment = self.Package.parse(_dta)
                 _cur_web.shapesets.append(_cur_segment)
+                _prev_segment = None
             elif Eagle.ShapeHeader.constant == _type:
                 self.shapeheader = self.ShapeHeader.parse(_dta)
             elif Eagle.Bus.constant == _type:
@@ -1985,18 +2069,27 @@ class Eagle:
             elif Eagle.Segment.constant == _type:
                 _cur_segment = self.Segment.parse(_dta)
                 _cur_web.shapes.append(_cur_segment)
+                _prev_segment = None
             elif Eagle.DeviceSet.constant == _type:
                 _cur_segment = self.DeviceSet.parse(_dta)
                 _cur_web.shapesets.append(_cur_segment)
+                _prev_segment = None
             elif Eagle.ConnectionHeader.constant == _type:
                 _cur_connset = self.ConnectionHeader.parse(_dta)
                 _cur_segment.connblocks.append(_cur_connset)
+                _prev_segment = None
             elif Eagle.Part.constant == _type:
                 _cur_web = self.Part.parse(_dta)
-                self.parts.append(_cur_web)
+                self.shapeheader.parts.append(_cur_web)
+            elif Eagle.Polygon.constant == _type:
+                if None == _prev_segment: # next polygon in the same segment
+                    _prev_segment = _cur_segment
+                _cur_segment = self.Polygon.parse(_dta)
+                _prev_segment.shapes.append(_cur_segment)
             elif Eagle.Instance.constant == _type:
                 _cur_segment = self.Instance.parse(_dta)
                 _cur_web.shapes.append(_cur_segment)
+                _prev_segment = None
             elif Eagle.Connections.constant == _type:
                 _cur_connset.shapes.append(self.Connections.parse(_dta))
             elif Eagle.Gate.constant == _type:
@@ -2032,6 +2125,7 @@ class Eagle:
             else:
 # TODO remove
                 print("unknown block tag %s" % hex(_type))
+
         return
 
     def _parse_netclasses(self, filehandle):
@@ -2103,8 +2197,9 @@ class Eagle:
 # File Version is applied by Design itself
 
 # Component Instances (Array) / Components (Array)
-        for _pp in self.parts:
-            _libid = str(_pp.libid) + _pp.value # to avoid same name collisions
+        for _pp in self.shapeheader.parts:
+            _libid = ':'.join((self.libraries[-1 + _pp.libid].name,
+                               _pp.value)) # to avoid same name collisions
             _ci = ComponentInstance(instance_id=_pp.name, 
                                     library_id=_libid,
                                     symbol_index=_pp.symvar)    # other candidate is devsetndx:
@@ -2120,12 +2215,22 @@ class Eagle:
             _sym = self.libraries[-1 + _pp.libid].symbols[0].shapesets[
                                                     -1 + _dd.shapes[0].sindex]
 
+            if 0 != len(_dd.connblocks[0].technologies):
+                _ci.add_attribute("technology",
+                        _dd.connblocks[0].technologies[-1 + _pp.techno])
+
             _co = None
             if not _libid in design.components.components:
                 _co = Component(_sym.name)
                 _sy = Symbol()
                 _bd = Body()
                 _pc = 1 # Eagle counts from 1
+
+                if 0 != len(_dd.connblocks[0].attributes):
+                    for _aa in _dd.connblocks[0].attributes:
+                        _co.add_attribute(_aa[0], _aa[1])
+                _co.add_attribute("prefix", _dd.prefix)
+                _co.add_attribute("description", _dd.description)
 
             for _ss in _sym.shapes:
                 if isinstance(_ss, Eagle.Text):
@@ -2148,16 +2253,55 @@ class Eagle:
                 else:
                     if None != _co:
                         if isinstance(_ss, Eagle.Pin):
-                            _pn = Pin(label=None, #_ss.name, # no coordinates here..
-                                      p1=Point(_ss.x, _ss.y), #None, # don't know..
+
+                            _opx, _lx = _ss.x, _ss.x
+                            _opy, _ly = _ss.y, _ss.y
+                            _lrot = 0.
+                            if None == _ss.rotate: # left
+                                _opx += 10
+                                _lx = (_ss.x + _opx) / 2
+                                _ly += 10
+                            elif "R90" == _ss.rotate: # down
+                                _opy += 10
+                                _lx += 10
+                                _ly = (_ss.y + _opy) / 2
+                                #_lrot = 0.5 or 1.5 if label rotation is required
+                            elif "R180" == _ss.rotate: # right
+                                _opx -= 10
+                                _lx = (_ss.x + _opx) / 2
+                                _ly += 10
+                            elif "R270" == _ss.rotate: # up
+                                _opy -= 10
+                                _lx += 10
+                                _ly = (_ss.y + _opy) / 2
+                                #_lrot = 0.5 or 1.5 if label rotation is required
+
+                            _label = Label (x=_lx, y=_ly, 
+                                            text=_ss.name, 
+                                            align='center', rotation=_lrot)
+                            _pn = Pin(label=_label,
+                                      p1=Point(_opx, _opy), # just 10pix in an opposite direction
                                       p2=Point(_ss.x, _ss.y),
                                       pin_number=_pc)
+
+                            _pn.add_attribute('visible', _ss.visible)
+                            _pn.add_attribute('direction', _ss.direction) # signal direction
+                            _pn.add_attribute('length', _ss.length) # not a number
+                            _pn.add_attribute('function', _ss.function)
+                            _pn.add_attribute('swaplevel', _ss.swaplevel)
+ 
                             _bd.add_pin(_pn)
                             _pc += 1
                         else:
+                            _sp = None
                             if isinstance(_ss, Eagle.Wire):
                                 _sp = Line(p1=Point(_ss.x1, _ss.y1),
                                            p2=Point(_ss.x2, _ss.y2))
+                                _sp.add_attribute('style', _ss.style)
+                                _sp.add_attribute('width', _ss.width)
+
+                            if None != _sp: # i.e. label (!= text), hole, ..
+                                _sp.add_attribute('layer', _ss.layer)
                                 _bd.add_shape(_sp)
 
             _ci.add_symbol_attribute(_sa)
@@ -2171,8 +2315,18 @@ class Eagle:
         for _bb in self.shapeheader.buses + self.shapeheader.nets:
             for _nn, _sg in enumerate(_bb.shapes): # segments, they don't share any common points
                 _net = Net('%s-%d' % (_bb.name, _nn))
-                if isinstance(_bb, Eagle.Net):
+                if isinstance(_bb, Eagle.Bus):
                     _net.add_attribute(u'type', u'bus')
+                else: # Net
+                    _net.add_attribute(u'type', u'net')
+                    _net.add_attribute(u'netclass', _bb.nclass)
+
+                    _nc = self.netclasses[_bb.nclass] # yes, info will be duplicated
+                    _net.add_attribute(u'netname', _nc.name)
+                    _net.add_attribute(u'netwidth', _nc.width)
+                    _net.add_attribute(u'netdrill', _nc.drill)
+                    for _cc in _nc.clearances:
+                        _net.add_attribute(u'netclearance' + str(_cc[0]), _cc[1])
                 for _ss in _sg.shapes: # wires only for buses, wires + pinrefs + junctions for nets
                     if isinstance(_ss, Eagle.Wire):
                         _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
@@ -2188,7 +2342,7 @@ class Eagle:
                         if not _p1name in _net.points[_p2name].connected_points:
                             _net.points[_p2name].add_connected_point(_p1name)
                     elif isinstance(_ss, Eagle.PinRef):
-                        _prt = self.parts[-1 + _ss.partno]
+                        _prt = self.shapeheader.parts[-1 + _ss.partno]
                         _dst = self.libraries[-1 + _prt.libid].devsets[0
                                     ].shapesets[-1 + _prt.devsetndx]
                         _sym = self.libraries[-1 + _prt.libid].symbols[0

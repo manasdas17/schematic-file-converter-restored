@@ -30,6 +30,9 @@
 #
 
 import struct
+import re
+
+from core.shape import Point, Line, Label
 
 #from parser.eagle import EagleBinConsts
 
@@ -229,6 +232,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, _vis_act_link, 
@@ -289,6 +294,10 @@ class Eagle: # pylint: disable=R0902
         max_embed_len = 5
         no_embed_str = b'\x7f'
 
+        defxreflabel = ":%F%N/%S.%C%R"
+        defxrefpart = "/%S.%C%R"
+        delimeter = b'\t'
+
         def __init__(self, schematic, numofshapes=0, numofattributes=0):
             """ Just a constructor
             """
@@ -305,6 +314,8 @@ class Eagle: # pylint: disable=R0902
             _schematic = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.schematic):
                 _schematic = self.schematic
+            else:
+                Eagle.attr_jar_append(self.schematic)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -356,6 +367,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -391,6 +404,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -426,6 +441,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -461,6 +478,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -495,6 +514,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 
@@ -529,9 +550,14 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_nlen >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
+
             _desc = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_dlen >= len(self.desc):
                 _desc = self.desc
+            else:
+                Eagle.attr_jar_append(self.desc)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 
@@ -546,7 +572,7 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents a net
         """
         constant = 0x1f
-        template = "=2BH3I8s"
+        template = "=2BH2I4B8s"
 
         constantmid1 = 0x7fff7fff
         constantmid2 = 0x80008000
@@ -569,13 +595,15 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
                                    self.numofshapes,
                                    self.constantmid1,
                                    self.constantmid2,
-                                   self.nclass,
+                                   0, self.nclass, 0, 0,
                                    _name,
                                   )
             return _ret_val
@@ -612,10 +640,14 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len1 >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _value = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len2 >= len(self.value):
                 _value = self.value
+            else:
+                Eagle.attr_jar_append(self.value)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
@@ -676,14 +708,20 @@ class Eagle: # pylint: disable=R0902
             _prefix = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len1 >= len(self.prefix):
                 _prefix = self.prefix
+            else:
+                Eagle.attr_jar_append(self.prefix)
 
             _desc = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len2 >= len(self.description):
                 _desc = self.description
+            else:
+                Eagle.attr_jar_append(self.description)
 
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len3 >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
@@ -719,6 +757,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
@@ -842,6 +882,8 @@ class Eagle: # pylint: disable=R0902
                 _at2 = self.delim_techs + self.delim_techs.join(self.technologies)
                 if self.max_embed_len >= len(_attrstechs):
                     _attrstechs = _at2
+                else:
+                    Eagle.attr_jar_append(_at2)
             elif 0 < len(self.attributes):
                 _at2 = self.delim_namesvals.join((
                         self.delim_names + self.delim_names.join(
@@ -851,6 +893,8 @@ class Eagle: # pylint: disable=R0902
                         ))
                 if self.max_embed_len >= len(_attrstechs):
                     _attrstechs = _at2
+                else:
+                    Eagle.attr_jar_append(_at2)
             else:
                 _attrstechs = ''
 
@@ -907,12 +951,17 @@ class Eagle: # pylint: disable=R0902
         size_xscale = 2
         ratio_sscale = 2
 
-        rotatemask = 0x0f
+        rotatemask = 0x0c # in some cases 0x0f works as well
         rotates = {
                    0x00: None,
                    0x04: "R90",
                    0x08: "R180",
                    0x0c: "R270",
+# ones below are possible for text -- don't apply the mask there
+                   0x10: "MR0",
+                   0x14: "MR90",
+                   0x18: "MR180",
+                   0x1c: "MR270",
                   }
 
         fonts = {
@@ -942,6 +991,54 @@ class Eagle: # pylint: disable=R0902
                 else:
                     _ret_val -= 0.01
             return int(_ret_val)
+
+        @staticmethod
+        def rotate2strings(rotate):
+            """ Converts pi-radian number into 'rotates' string
+                It could be implemented as a map, but a special handling for 
+                 None as 0. would be needed..
+            """
+            _ret_val = None
+
+            if 0.5 == rotate:
+                _ret_val = 'R90'
+            elif 1.0 == rotate:
+                _ret_val = 'R180'
+            elif 1.5 == rotate:
+                _ret_val = 'R270'
+            return _ret_val 
+
+    class Polygon(ShapeSet, Shape):
+        """ A struct that represents a polygon
+        """
+        constant = 0x21
+        template = "=2BH2I2H4BI"
+
+        def __init__(self, width, layer, numofshapes=0, shapes=None):
+            """ Just a constructor
+            """
+            super(Eagle.Polygon, self).__init__(numofshapes, shapes)
+            self.layer = layer # no Shape constructor will be called
+            self.width = width
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0,
+                                   self.numofshapes,
+                                   0, # maybe a constant 0xfffeff05
+                                   0,
+                                   Eagle.Shape.encode_real(
+                                       self.width / self.width_xscale),
+                                   0,
+                                   0, 0, self.layer, 0,
+                                   0,
+                                  )
+            return _ret_val
 
     class Instance(ShapeSet, Shape):
         """ A struct that represents an instance
@@ -1205,6 +1302,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, self.layer,
@@ -1310,6 +1409,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -1332,14 +1433,48 @@ class Eagle: # pylint: disable=R0902
         max_embed_len = 10
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, x, y):
+        visiblemask = 0xf0
+        visibles = {
+                    0x00: "off",
+                    0x40: "pad",
+                    0xc0: None, # default
+                   }
+        dirmask = 0x0f
+        directions = {
+                      0x00: "nc",
+                      0x01: "in",
+                      0x02: "out",
+                      0x03: None, # default
+                      0x05: "pwr",
+                      0x06: "pas",
+                      0x07: "hiz",
+                     }
+        lengthmask = 0x30
+        lengths = {
+                   0x10: "short",
+                   0x20: "middle",
+                  }
+        funcmask = 0x0f
+        functions = {
+                     0x00: None, # default
+                     0x01: "dot",
+                    }
+ 
+        def __init__(self, name, x, y, visible, direction, rotate, length, # pylint: disable=R0913
+                     function=None, swaplevel=0): 
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
             self.name = name
             self.x = x
             self.y = y
-# TODO visible len direction rotate(12:0xe0)
+            self.visible = visible
+            self.direction = direction
+# rotation codes direction: R0 means left, R90 - down, R180 - right, R270 - up
+            self.rotate = rotate
+            self.length = length
+            self.function = function
+            self.swaplevel = swaplevel
             return
 
         def construct(self):
@@ -1350,12 +1485,37 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
+
+            _viz = 0
+            for _vv in self.visibles:
+                if self.visibles[_vv] == self.visible:
+                    _viz += _vv
+                    break
+            for _ff in self.functions:
+                if self.functions[_ff] == self.function:
+                    _viz += _ff
+                    break
+            _rotdir = 0
+            for _rr in self.rotates:
+                if self.rotates[_rr] == self.rotate:
+                    _rotdir += _rr << 4
+                    break
+            for _ll in self.lengths:
+                if self.lengths[_ll] == self.length:
+                    _rotdir += _ll
+                    break
+            for _dd in self.directions:
+                if self.directions[_dd] == self.direction:
+                    _rotdir += _dd
+                    break
 
             _ret_val = struct.pack(self.template,
-                                   self.constant, 0, 0, 0,
+                                   self.constant, 0, _viz, 0,
                                    self.encode_real(self.x),
                                    self.encode_real(self.y),
-                                   0, 0, 
+                                   _rotdir, self.swaplevel, 
                                    _name,
                                   )
             return _ret_val
@@ -1402,6 +1562,8 @@ class Eagle: # pylint: disable=R0902
             _name = self.no_embed_str + b'\0\0\0\x09'
             if self.max_embed_len >= len(self.name):
                 _name = self.name
+            else:
+                Eagle.attr_jar_append(self.name)
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, 0,
@@ -1419,7 +1581,7 @@ class Eagle: # pylint: disable=R0902
         constant = 0x31
         template = "=4B2iH4B6s"
 
-        max_embed_len = 5
+        max_embed_len = 6
         delimeter = b'!'
         no_embed_str = b'\x7f'
 
@@ -1451,10 +1613,13 @@ class Eagle: # pylint: disable=R0902
                 if Eagle.Text.rotates[_rr] == self.rotate:
                     _rotate = _rr
                     break
+
             if self.max_embed_len >= len(self.value):
                 _value = self.value
             else:
                 _value = self.no_embed_str + b'\0\0\0\x09'
+                Eagle.attr_jar_append(self.value)
+
             _ret_val = struct.pack(self.template,
                                    self.constant, 0,
                                    _font, self.layer,
@@ -1648,6 +1813,7 @@ class Eagle: # pylint: disable=R0902
                 _str2 = _str
             else:
                 _str2 = self.no_embed_str + b'\0\0\0\x09'
+                Eagle.attr_jar_append(_str)
 
             _ret_val = struct.pack(self.template,
                                    Eagle.Attribute.constant, 
@@ -1778,6 +1944,9 @@ class Eagle: # pylint: disable=R0902
     def __init__(self):
         """ Construct a writer object and initialize it.
         """
+#        self.shapes = []
+#        self.nets = []
+#        self.buses = []
         self.header = None
         self.layers = []
         self.settings = []
@@ -1786,9 +1955,7 @@ class Eagle: # pylint: disable=R0902
         self.attributes = []
         self.libraries = []
         self.shapeheader = None
-        self.shapes = []
-        self.nets = []
-        self.buses = []
+        self.parts = []
         self.texts = []
         self.schematic = None
         self.netclasses = []
@@ -1811,12 +1978,263 @@ class Eagle: # pylint: disable=R0902
                         sum([_ss.numofshapes for _ss in _nn.segments]))
         return
 
+    attr_jar = [] # attribute list
+
+    @classmethod
+    def attr_jar_append(cls, value):
+        """ Puts one more string into the jar
+        """
+        cls.attr_jar.append(value)
+
+    def _convert_library(self, design):
+        """ Converts library part into a set of Eagle objects
+        """
+
+        for _cc in design.components.components:
+            _libid = 'default'
+            _compname = _cc
+            _tech = []
+            _attrs = []
+            if -1 != _cc.find(':'):
+                _libid, _compname = _cc.split(':')
+
+            _lib = None
+            _libnid = -1
+            for _li, _ll in enumerate(self.libraries):
+                if _libid == _ll.name:
+                    _lib = _ll
+                    _libnid = 1 + _li # numbered from 1
+                    break
+            else:
+                _lib = Eagle.Library(name=_libid)
+                _libnid = len(self.libraries) # numbered from 1
+                self.libraries.append(_lib)
+
+# checking if symbols / devsets / packages are in the library already
+#  (adding them if not)
+            _co = design.components.components[_cc]
+
+            if 0 == len(_lib.devsets):
+                _lib.devsets.append(Eagle.DeviceSetHeader(name='default'))
+
+            for _di, _dd in enumerate(_lib.devsets[0].shapesets):
+                if _compname == _dd.name:
+                    _dset = _dd
+                    _dsetnid = 1 + _di # numbered from 1 ; if i need it?..
+                    break
+            else:
+                _prefix = 'xC'
+                _desc = 'n/a'
+                if 'prefix' in _co.attributes:
+                    _prefix = _co.attributes['prefix']
+                if 'description' in _co.attributes:
+                    _desc = _co.attributes['description']
+                _dset = Eagle.DeviceSet(name=_compname, prefix=_prefix, 
+                            description=_desc, uservalue=False)
+
+                _lib.devsets[0].shapesets.append(_dset)
+
+            if 0 == len(_lib.symbols):
+                _lib.symbols.append(Eagle.SymbolHeader(name='default'))
+
+            for _si, _ss in enumerate(_lib.symbols[0].shapesets):
+                if _compname == _ss.name:
+                    _symbol = _ss
+                    _symnid = 1 + _si # numbered from 1
+                    break
+            else: # no such symbol yet
+                _symbol = Eagle.Symbol(libid=_libnid, name=_compname)
+                _symnid = len(_lib.symbols[0].shapesets) # numbered from 1
+
+                for _css in _co.symbols:
+                    for _cbb in _css.bodies:
+
+                        for _ci in design.component_instances:
+                            if _cc != _ci.library_id:
+                                continue
+                            for _xaa in _ci.attributes:
+                                if 'technology' == _xaa:
+                                    _tech.append(_ci.attributes[_xaa])
+                                elif _xaa in ('prefix', 'description'):
+                                    pass
+                                else:
+                                    _attrs.append((_xaa, _ci.attributes[_xaa]))
+                            for _sa in _ci.symbol_attributes:
+                                for _an, _aa in enumerate(_sa.annotations):
+                                    _val = 'n/a'
+                                    if 0 == _an:
+                                        _val = '>NAME'
+                                    elif 1 == _an:
+                                        _val = '>VALUE'
+
+                                    _rot = self.Shape.rotate2strings(_aa.rotation)
+
+                                    _symbol.shapes.append(Eagle.Text(
+                                                value=_val,
+                                                x=_aa.x - _sa.x,
+                                                y=_aa.y - _sa.y,
+                                                size=1.778, layer=95, 
+                                                rotate=_rot, font=None,
+                                                ratio=10))
+
+                        for _cpp in _cbb.pins:
+
+                            _name = _cpp.label.text
+
+                            _visible = None
+                            if 'visible' in _cpp.attributes:
+                                _visible = _cpp.attributes['visible']
+
+                            _dir = None
+                            if 'direction' in _cpp.attributes:
+                                _dir = _cpp.attributes['direction']
+
+                            _rot = None
+
+                            _len = 'short'
+                            if 'length' in _cpp.attributes:
+                                _len = _cpp.attributes['length']
+                            
+                            _func = None
+                            if 'function' in _cpp.attributes:
+                                _func = _cpp.attributes['function']
+                            
+                            _swap = 0
+                            if 'swaplevel' in _cpp.attributes:
+                                _swap = _cpp.attributes['swaplevel']
+                            
+                            _symbol.shapes.append(Eagle.Pin(name=_name,
+                                    x=_cpp.p2.x, y=_cpp.p2.y, visible=_visible,
+                                    direction=_dir, rotate=_rot, length=_len,
+                                    function=_func, swaplevel=_swap))
+                        for _cff in _cbb.shapes:
+                            if isinstance(_cff, Line):
+                                _style = 'Continuous'
+                                if 'style' in _cff.attributes:
+                                    _style = _cff.attributes['style']
+
+                                _layer = 94
+                                if 'label' in _cff.attributes:
+                                    _layer = _cff.attributes['layer']
+
+                                _width = 0.254
+                                if 'width' in _cff.attributes:
+                                    _width = _cff.attributes['width']
+
+                                _symbol.shapes.append(Eagle.Wire(
+                                        x1=_cff.p1.x, y1=_cff.p1.y,
+                                        x2=_cff.p2.x, y2=_cff.p2.y,
+                                        style=_style, layer=_layer, width=_width))
+                            else:
+                                raise ValueError("cannot process " + _cff.__class__.__name__)
+
+                _lib.symbols[0].shapesets.append(_symbol)
+
+                _dset.shapes.append(Eagle.Gate(name='G$1', x=0., y=0., 
+                            sindex=_symnid, addlevel=False))
+                _dset.connblocks.append(Eagle.ConnectionHeader(name='default', 
+                            attributes=_attrs, technologies=_tech,
+                            sindex=_symnid))
+                
+            if 0 == len(_lib.packages):
+                _lib.packages.append(Eagle.PackageHeader(name='default'))
+            # TODO to load from a library file
+        return
+
+    def _convert_shapes1(self, design):
+        """ Converts shapes (parts) into a set of Eagle objects
+        """
+        for _pp in design.component_instances:
+            _libid = -1
+            _devn = -1
+            _libname = 'default'
+            _pname = _pp.library_id
+            if -1 != _pp.library_id.find(':'):
+                _libname, _pname = _pp.library_id.split(':')
+                
+            for _li, _ll in enumerate(self.libraries):
+                if _libname == _ll.name:
+                    _libid = _li
+                    for _di, _dd in enumerate(_ll.devsets[0].shapesets):
+                        if _pname == _dd.name:
+                            _devn = _di
+                            break
+                    break
+
+            self.shapeheader.parts.append(Eagle.Part(
+                    name=_pp.instance_id, libid=_libid, devsetndx=_devn,
+                    symvar=1, techno=1)) # after OpenJSON all parts are split
+        return
+
+    def _convert_shapes2(self, design):
+        """ Converts shapes (buses/nets) into a set of Eagle objects
+        """
+        for _nn in design.nets:
+            _isbus = False
+            _web = None
+            if 'type' in _nn.attributes:
+                if 'bus' == _nn.attributes['type']:
+                    _isbus = True
+                    _width = 0.762
+                    _web = Eagle.Bus(name=_nn.net_id)
+                    self.shapeheader.buses.append(_web)
+                else:
+                    _clrs = []
+                    _attrre = re.compile(r'^netclearance(\d+)$')
+                    for _aa in _nn.attributes:
+                        _attr = _attrre.match(_aa)
+                        if None != _attr:
+                            _clrs.append((_attr.group(1), _nn.attributes[_aa]))
+
+                    self.netclasses.append(Eagle.NetClass( # duplicates are cleared below
+                            num=_nn.attributes['netclass'], 
+                            name=_nn.attributes['netname'], 
+                            width=_nn.attributes['netwidth'],
+                            drill=_nn.attributes['netdrill'],
+                            clearances=_clrs,
+                        ))
+                    _width = 0.1524 # _nn.attributes['netwidth']
+                    _web = Eagle.Net(name=_nn.net_id, 
+                                nclass=_nn.attributes['netclass'])
+                    self.shapeheader.nets.append(_web)
+            else:
+                _width = 0.1524
+                _web = Eagle.Net(name=_nn.net_id, nclass=0)
+                self.shapeheader.nets.append(_web)
+
+            _prpts = set() # processed points
+            for _pp in _nn.points:
+                _pt = _nn.points[_pp]
+                for _opp in _pt.connected_points:
+                    if not _opp in _prpts: # not yet processed
+                        _web.shapes.append(Eagle.Wire(
+                                x1=_pt.x, y1=_pt.y,
+                                x2=_nn.points[_opp].x,
+                                y2=_nn.points[_opp].y,
+                                style="Continuous", layer=91, width=_width))
+                _prpts.add(_pp)
+                for _rr in _pt.connected_components:
+                    _pno = -1
+                    for _in, _ii in enumerate(self.shapeheader.parts):
+                        if _rr.instance_id == _ii.name:
+                            _pno = 1 + _in
+                            break
+                    _web.shapes.append(Eagle.PinRef(
+                            partno= _pno, gateno=1, 
+                            pinno=_rr.pin_number,
+                        ))
+        return
+
     def _convert(self, design):
         """ Converts design into a set of Eagle objects
         """
-        pass
+        self._convert_library(design)
+        self.shapeheader = Eagle.ShapeHeader()
+        self._convert_shapes1(design)
+        self._convert_shapes2(design)
+        return
 
-    def _validate(self):
+    def _validate(self, design):
         """ Add extra structures required by an Eagle format and
             calculate section counters
         """
@@ -1832,38 +2250,124 @@ class Eagle: # pylint: disable=R0902
         if None == self.grid:
             self.grid = Eagle.Grid()
 
+        for _ll in self.layers:
+            if 91 == _ll.number:
+                break
+        else: # default layer set
+            _deflayers = ((91, 'Nets', 2),
+                          (92, 'Busses', 1),
+                          (93, 'Pins', 2),
+                          (94, 'Symbols', 4),
+                          (95, 'Names', 7),
+                          (96, 'Values', 7),
+                          (97, 'Info', 7),
+                          (98, 'Guide', 6),
+                         )
+            for _ll in _deflayers:
+                self.layers.append(
+                        Eagle.Layer(number=_ll[0], name=_ll[1], color=_ll[2], 
+                                    fill=1, visible=True, active=True))
+
         if None == self.attributeheader:
-            self.attributeheader = Eagle.AttributeHeader()
+            self.attributeheader = Eagle.AttributeHeader(
+                    schematic=Eagle.AttributeHeader.delimeter.join((
+                        Eagle.AttributeHeader.defxreflabel,
+                        Eagle.AttributeHeader.defxrefpart)))
 
         if None == self.shapeheader:
             self.shapeheader = Eagle.ShapeHeader()
 
-        if None == self.schematic:
-            self.schematic = Eagle.Schematic()
-
         if None == self.netclasses:
             self.netclasses = []
+        else: # clear duplicates
+            _ncsm = {}
+            for _nc in self.netclasses:
+                _ncsm[_nc.num] = _nc
+
+            self.netclasses = []
+            for _nc in sorted(_ncsm):
+                self.netclasses.append(_ncsm[_nc])
+
         if 0 == len(self.netclasses):
             self.netclasses.append(Eagle.NetClass(0, 'default'))
+
         while 8 > len(self.netclasses):
             self.netclasses.append(Eagle.NetClass(len(self.netclasses)))
 
 # calculate num of blocks
-        self._calculateweb(self.nets)
-        self._calculateweb(self.buses)
+        self._calculatelibs()
+        self._calculateshapes()
 
-        _numfromwebs = sum([_nn.getnumofblocks() for _nn in 
-                            self.nets + self.buses])
-        self.header.numofblocks = (1 + len(self.settings) +
-                                   1 + len(self.layers) + 
-                                   1 + len(self.attributes) + 
-                                   1 + len(self.shapes) +
-                                   _numfromwebs
-                                  )
-        self.attributeheader.numofshapes = len(self.shapes) + _numfromwebs
+        self.attributeheader.numofshapes = (self.shapeheader.numofshapes +
+                sum(x.numofdevsetblocks + x.numofsymbolblocks + 
+                    x.numofpackageblocks for x in self.libraries))
         self.attributeheader.numofattributes = len(self.attributes)
-        self.shapeheader.numofshapes = len(self.shapes)
 
+        return
+
+    def _calculatelibs(self):
+        """ Refreshes all library (and nested) blocks
+        """
+
+        for _ll in self.libraries:
+
+            for _ds in _ll.devsets: # usually a single entry
+                _ds.numofshapesets = len(_ds.shapesets)
+                _nb = 0
+                for _ss in _ds.shapesets:
+                    for _cc in _ss.connblocks:
+                        _cc.numofshapes = len(_cc.shapes) # conns
+                        _nb += 1 + _cc.numofshapes
+                    _nb += 1 # connblocks hdr
+
+                    _ss.numofshapes = len(_ss.shapes) # gates
+                    _nb += 1 + _ss.numofshapes
+                _ds.numofblocks = _nb
+
+            _ll.numofdevsetblocks = 1 + sum(x.numofblocks for x in _ll.devsets)
+
+            for _sh in _ll.symbols: # usually a single entry
+                _sh.numofshapesets = len(_sh.shapesets)
+                _nb = 0
+                for _ss in _sh.shapesets:
+                    _ss.numofshapes = len(_ss.shapes)
+                    _nb += 1 + _ss.numofshapes
+                _sh.numofblocks = _nb
+            _ll.numofsymbolblocks = 1 + sum(x.numofblocks for x in _ll.symbols)
+
+            for _ph in _ll.packages: # usually a single entry
+                _ph.numofshapesets = len(_ph.shapesets)
+                _nb = 0
+                for _ss in _ph.shapesets:
+                    _ss.numofshapes = len(_ss.shapes)
+                    _nb += 1 + _ss.numofshapes
+                _ph.numofblocks = _nb
+            _ll.numofpackageblocks = 1 + sum(x.numofblocks for x in _ll.packages)
+
+        return
+
+    def _calculateshapes(self):
+        """ Refreshes shape header (and nested) blocks
+        """
+        self.shapeheader.numofshapes = 1 
+        for _ss in self.shapeheader.shapes:
+            if not isinstance(_ss, Eagle.Polygon):
+                self.shapeheader.numofshapes += 1 
+            else:
+                _ss.numofshapes = len(_ss.shapes)
+                self.shapeheader.numofshapes += 1 + _ss.numofshapes
+
+        self.shapeheader.numofpartblocks = 1 + len(self.shapeheader.parts)
+
+        self.shapeheader.numofbusblocks = 1
+        for _bb in self.shapeheader.buses:
+            _bb.numofshapes = len(_bb.shapes)
+            self.shapeheader.numofbusblocks += 1 + _bb.numofshapes
+
+        self.shapeheader.numofnetblocks = 1
+        for _nn in self.shapeheader.nets:
+            _nn.numofshapes = len(_nn.shapes)
+            self.shapeheader.numofnetblocks += 1 + _nn.numofshapes
         return
 
     def write(self, design, filename):
@@ -1871,7 +2375,7 @@ class Eagle: # pylint: disable=R0902
         """
 
         self._convert(design)
-        self._validate()
+        self._validate(design)
 
         with open(filename, 'wb') as _of:
 
@@ -1890,27 +2394,51 @@ class Eagle: # pylint: disable=R0902
             for _aa in self.attributes:
                 _of.write(_aa.construct())
 
+            for _ll in self.libraries:
+                _of.write(_ll.construct())
+                for _ds in _ll.devsets: # usually a single entry
+                    _of.write(_ds.construct())
+                    for _ss in _ds.shapesets:
+                        _of.write(_ss.construct())
+                        for _cc in _ss.connblocks:
+                            _of.write(_cc.construct())
+                            for _hh in _cc.shapes: # connections
+                                _of.write(_hh.construct())
+                        for _gg in _ss.shapes: # gates, usually a single entry
+                            _of.write(_gg.construct())
+                for _sh in _ll.symbols: # usually a single entry
+                    _of.write(_sh.construct())
+                    for _ss in _sh.shapesets:
+                        _of.write(_ss.construct())
+                        for _pp in _ss.shapes: # pins, lines, texts
+                            _of.write(_pp.construct())
+                for _ph in _ll.packages: # usually a single entry
+                    _of.write(_ph.construct())
+
             _of.write(self.shapeheader.construct())
 
-            for _ss in self.shapes:
+            for _ss in self.shapeheader.shapes:
                 _of.write(_ss.construct())
 
-            for _nn in self.nets:
+            for _pp in self.shapeheader.parts:
+                _of.write(_pp.construct())
+                for _ss in _pp.shapes:
+                    _of.write(_ss.construct())
+
+            for _bb in self.shapeheader.buses:
+                _of.write(_bb.construct())
+                for _ss in _bb.shapes:
+                    _of.write(_ss.construct())
+
+            for _nn in self.shapeheader.nets:
                 _of.write(_nn.construct())
+                for _ss in _nn.shapes:
+                    _of.write(_ss.construct())
 
             _of.write(Eagle.noregblockconst)
 
-            _xattr = []
-            _xattr.append(self.schematic.construct())
-            for _aa in self.attributes:
-                _attr = _aa.construct2()
-                if None != _attr: # None if it was embedded
-                    _xattr.append(_attr)
-            for _tt in self.texts:
-                _textname = _tt.construct2()
-                if None != _textname: # None if it was embedded
-                    _xattr.append(_textname)
-            _dta = self.noregdelimeter.join(_xattr+[self.noregdelimeter,])
+            _dta = self.noregdelimeter.join(self.attr_jar + 
+                                        [self.noregdelimeter,])
             _of.write(struct.pack("I", len(_dta))) # length of noreg block
             _of.write(_dta) # noreg block itself
 

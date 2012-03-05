@@ -269,7 +269,7 @@ class EagleTests(unittest.TestCase):
         _chunk = _net.construct()
 
         _valid_chunk = b''.join((b"\x1f\x00\x05\x00\xff\x7f\xff\x7f",
-                                 b"\x00\x80\x00\x80\x01\x00\x00\x00",
+                                 b"\x00\x80\x00\x80\x00\x01\x00\x00",
                                  b"\x4e\x24\x31\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
@@ -424,6 +424,24 @@ class EagleTests(unittest.TestCase):
         _valid_chunk = b''.join((b"\x3c\x00\x21\x22\x23\x24\x25\x26",
                                  b"\x27\x28\x29\x2a\x2b\x2c\x2d\x2e",
                                  b"\x2f\x30\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_polygon_construct(self):
+        """ Test Polygon block creation """
+
+        _polygon = Eagle.Polygon(numofshapes=3,
+                                 width=0.1016,
+                                 layer=21,
+                                )
+
+        _chunk = _polygon.construct()
+
+        _valid_chunk = b''.join((b"\x21\x00\x03\x00\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\xfc\x01\x00\x00",
+                                 b"\x00\x00\x15\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
@@ -601,13 +619,39 @@ class EagleTests(unittest.TestCase):
         _pin = Eagle.Pin(name="C",
                          x=2.54,
                          y=0.,
+                         visible="off",
+                         direction="pas",
+                         rotate="R180",
+                         length="short",
+                         function=None,
+                         swaplevel=0,
                         )
 
         _chunk = _pin.construct()
 
         _valid_chunk = b''.join((b"\x2c\x00\x00\x00\x38\x63\x00\x00",
-                                 b"\x00\x00\x00\x00\x00\x00\x43\x00",
+                                 b"\x00\x00\x00\x00\x96\x00\x43\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+
+        _pin = Eagle.Pin(name="IN+",
+                         x=-5.08,
+                         y=2.54,
+                         visible="pad",
+                         direction="in",
+                         rotate=None,
+                         length="short",
+                         function="dot",
+                         swaplevel=1,
+                        )
+
+        _chunk = _pin.construct()
+
+        _valid_chunk = b''.join((b"\x2c\x00\x41\x00\x90\x39\xff\xff",
+                                 b"\x38\x63\x00\x00\x11\x01\x49\x4e",
+                                 b"\x2b\x00\x00\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
