@@ -78,7 +78,7 @@ class GEDATests(unittest.TestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertEquals(len(geda_parser.known_symbols), len(symbols)+1)
+        self.assertEquals(len(geda_parser.known_symbols), len(symbols))
         self.assertEquals(
             geda_parser.known_symbols['opamp'],
             './test/geda/simple_example/symbols/opamp.sym'
@@ -89,11 +89,92 @@ class GEDATests(unittest.TestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertTrue(len(geda_parser.known_symbols) > len(symbols))
         self.assertTrue('title-B' in geda_parser.known_symbols)
 
         geda_parser = GEDA()
         self.assertTrue('title-B' in geda_parser.known_symbols)
+
+    def test__parse_title_frame(self):
+        title_frames = {
+            'title-E': (44000, 34000),
+            'title-bordered-E': (44000, 34000),
+            'title-bordered-D': (34000, 22000),
+            'title-bordered-A': (11000, 8500),
+            'title-bordered-C': (22000, 17000),
+            'title-bordered-B': (17000, 11000),
+            'title-A0': (46800, 33100),
+            'title-A1': (33100, 23300),
+            'title-A2': (23300, 16500),
+            'title-A3': (16500, 11600),
+            'title-A4': (11600, 8200),
+            'title-A0-2': (46800, 33100),
+            'title-A1-2': (33100, 23300),
+            'title-A2-2': (23300, 16500),
+            'title-A3-2': (16500, 11600),
+            'title-A4-2': (11600, 8200),
+            'title-D': (34000, 22000),
+            'title-B': (17000, 11000),
+            'title-C': (22000, 17000),
+            'title-A': (11000, 8500),
+            'title-bordered-A4': (11600, 8200),
+            'title-bordered-A1': (33100, 23300),
+            'title-bordered-A0': (46800, 33100),
+            'title-bordered-A3': (16500, 11600),
+            'title-bordered-A2': (23300, 16500),
+            'title-dg-1': (17000, 11000),
+            'title-small-square': (7600, 6900),
+            'titleblock': (7500, 1800),
+            'titleblock1': (11000, 8500),
+            'titleblock2': (22000, 17000),
+            'titleblock3': (33000, 25500),
+            'titleblock4': (44000, 34000),
+            'title-B-nameOnEdge': (26600, 17000),
+            'title-B-cibolo': (26600, 17000),
+            'title-block': (7500, 1800),
+        }
+
+        params = {
+            'x': 3200,
+            'y': 3109,
+        }
+
+        geda_parser = GEDA()
+        for name, filename in geda_parser.known_symbols.items():
+            if name.startswith('title'):
+                params['basename'] = name
+
+                print name
+
+                ## reset geda parser 
+                geda_parser.frame_width = 0
+                geda_parser.frame_height = 0
+
+                geda_parser._parse_title_frame(params)
+
+                self.assertEquals(geda_parser.offset.x, params['x'])
+                self.assertEquals(geda_parser.offset.y, params['y'])
+                
+                self.assertEquals(
+                    geda_parser.frame_width, 
+                    title_frames[name][0]
+                )
+                self.assertEquals(
+                    geda_parser.frame_height, 
+                    title_frames[name][1]
+                )
+
+        ## check that method does not break when invalid file is passed
+        params['basename'] = 'invalid_symbol.sym' 
+
+        geda_parser = GEDA()
+        geda_parser._parse_title_frame(params)
+
+        self.assertEquals(geda_parser.offset.x, params['x'])
+        self.assertEquals(geda_parser.offset.y, params['y'])
+
+        ## check if default is set correctly
+        self.assertEquals(geda_parser.frame_width, 46800)
+        self.assertEquals(geda_parser.frame_height, 34000)
 
     def test__parse_text(self):
         """ Test extracting text commands from input stream. """
@@ -241,7 +322,8 @@ netname=another name
 }
 N 55700 44400 55700 43500 4"""
         stream = StringIO.StringIO(net_sample)
-        design = self.geda_parser.parse_schematic(stream)
+        self.geda_parser.parse_schematic(stream)
+        design = self.geda_parser.design
 
         ## check nets from design
         self.assertEquals(len(design.nets), 3)
@@ -361,7 +443,8 @@ T 1000 400 5 8 0 0 270 0 1
 device=none
 }"""
         stream = StringIO.StringIO(bus_data)
-        design = self.geda_parser.parse_schematic(stream)
+        self.geda_parser.parse_schematic(stream)
+        design = self.geda_parser.design
 
         ## check nets from design
         self.assertEquals(len(design.nets), 1)

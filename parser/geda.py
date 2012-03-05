@@ -7,7 +7,7 @@
     implements all parsing functionality. To parse a gEDA 
     schematic file into a design do the following:
     
-    >>> parser = GEDA(auto_include=True)
+    >>> parser = GEDA()
     >>> design = parser.parse('example_geda_file.sch')
 
     The gEDA format relies highly on referencing symbol files
@@ -55,9 +55,13 @@
 # a blueprint-style frame is present with origin at 
 # (40'000, 40'000). 
 
-import logging
 import os
+import zipfile
+import logging
+import tempfile
 import itertools
+
+from StringIO import StringIO
 
 from core import shape
 from core import components
@@ -88,89 +92,89 @@ class GEDA:
 
     OBJECT_TYPES = { 
         'v': ( # gEDA version
-            ('version', int),
-            ('fileformat_version', int),
+            ('version', int, None),
+            ('fileformat_version', int, None),
         ),
         'C': ( #component
-            ('x', int),
-            ('y', int),
-            ('selectable', int),
-            ('angle', int),
-            ('mirror', int),
-            ('basename', str),
+            ('x', int, None),
+            ('y', int, None),
+            ('selectable', int, None),
+            ('angle', int, None),
+            ('mirror', int, None),
+            ('basename', str, None),
         ),
         'N': ( # net segment
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
         ),
         'U': ( # bus (only graphical aid, not a component)
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
-            ('color', int),
-            ('ripperdir', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
+            ('color', int, None),
+            ('ripperdir', int, None),
         ),
         'T': ( # text or attribute (context)
-            ('x', int),
-            ('y', int),
-            ('color', int),
-            ('size', int),
-            ('visibility', int),
-            ('show_name_value', int),
-            ('angle', int),
-            ('alignment', int),
-            ('num_lines', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('color', int, None),
+            ('size', int, None),
+            ('visibility', int, None),
+            ('show_name_value', int, None),
+            ('angle', int, None),
+            ('alignment', int, None),
+            ('num_lines', int, 1),
         ),
         'P': ( # pin (in sym)
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
-            ('color', int),
-            ('pintype', int),
-            ('whichend', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
+            ('color', int, None),
+            ('pintype', int, None),
+            ('whichend', int, None),
         ),
         'L': ( # line
-            ('x1', int),
-            ('y1', int),
-            ('x2', int),
-            ('y2', int),
+            ('x1', int, None),
+            ('y1', int, None),
+            ('x2', int, None),
+            ('y2', int, None),
         ),
         'B': ( # box
-            ('x', int),
-            ('y', int),
-            ('width', int),
-            ('height', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('width', int, None),
+            ('height', int, None),
         ),
         'V': ( # circle
-            ('x', int),
-            ('y', int),
-            ('radius', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('radius', int, None),
         ),
         'A': ( # arc
-            ('x', int),
-            ('y', int),
-            ('radius', int),
-            ('startangle', int),
-            ('sweepangle', int),
+            ('x', int, None),
+            ('y', int, None),
+            ('radius', int, None),
+            ('startangle', int, None),
+            ('sweepangle', int, None),
         ),
         'H': ( # SVG-like path
-            ('color', int),
-            ('width', int),
-            ('capstyle', int),
-            ('dashstyle', int),
-            ('dashlength', int),
-            ('dashspace', int),
-            ('filltype', int),
-            ('fillwidth', int),
-            ('angle1', int),
-            ('pitch1', int),
-            ('angle2', int),
-            ('pitch2', int),
-            ('num_lines', int),         
+            ('color', int, None),
+            ('width', int, None),
+            ('capstyle', int, None),
+            ('dashstyle', int, None),
+            ('dashlength', int, None),
+            ('dashspace', int, None),
+            ('filltype', int, None),
+            ('fillwidth', int, None),
+            ('angle1', int, None),
+            ('pitch1', int, None),
+            ('angle2', int, None),
+            ('pitch2', int, None),
+            ('num_lines', int, None),         
         ),
         ## environments
         '{': [], 
@@ -192,6 +196,10 @@ class GEDA:
                     files
         """
         self.offset = shape.Point(40000, 40000)
+        ## Initialise frame size with largest possible size
+        self.frame_width = 0 
+        self.frame_height = 0 
+
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
@@ -209,14 +217,12 @@ class GEDA:
         self.net_names = None
 
         self.known_symbols = find_symbols(symbol_dirs)
-
-        # FIXME: Converter currently will ignore style and color data in gEDA format!
-
+        self.geda_zip = None
 
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an geda schematic """
-        f = open(filename, 'r')
+        f = open(filename, 'rU')
         data = f.read()
         confidence = 0
         if data[0:2] == 'v ':
@@ -244,23 +250,59 @@ class GEDA:
         self.offset.x = point.x
         self.offset.y = point.y
     
-    def parse(self, filename):
+
+    def parse(self, inputfile):
         """ Parse a gEDA file into a design.
 
             Returns the design corresponding to the gEDA file.
         """
+        inputfiles = []        
 
-        f_in = open(filename, "r")
-        self._check_version(f_in)
+        ## check if inputfile is in ZIP format
+        if zipfile.is_zipfile(inputfile):
+            self.geda_zip = zipfile.ZipFile(inputfile)
+            for filename in self.geda_zip.namelist():
+                if filename.endswith('.sch'): 
+                    inputfiles.append(filename)
+        else:
+            inputfiles = [inputfile]
 
-        design = self.parse_schematic(f_in)
+        self.design = Design()
 
-        basename, dummy = os.path.splitext(os.path.basename(filename))
-        design.design_attributes.metadata.set_name(basename)
 
-        f_in.close()
+        ## parse frame data of first schematic to extract 
+        ## page size (assumes same frame for all files) 
+        stream = self._open_file_or_zip(inputfiles[0])
+        self._check_version(stream)
 
-        return design
+        for line in stream.readlines():
+            if 'title' in line and line.startswith('C'):
+                obj_type, params = self._parse_command(StringIO(line))
+                assert(obj_type == 'C')
+
+                params['basename'], dummy = os.path.splitext(
+                    params['basename']
+                )
+
+        log.debug("using title file: %s", params['basename'])
+
+        self._parse_title_frame(params)
+
+        for filename in inputfiles:
+            f_in = self._open_file_or_zip(filename)
+            self._check_version(f_in)
+
+            self.parse_schematic(f_in)
+
+            basename, dummy = os.path.splitext(os.path.basename(filename))
+            self.design.design_attributes.metadata.set_name(basename)
+
+            ## modify offset for next page to be shifted to the right
+            self.offset.x = self.offset.x - self.frame_width
+
+            f_in.close()
+
+        return self.design
 
     def parse_schematic(self, stream):
         """ Parse a gEDA schematic provided as a *stream* object into a 
@@ -269,8 +311,9 @@ class GEDA:
             Returns the design corresponding to the schematic.
         """
         # pylint: disable=R0912
+        if self.design is None:
+            self.design = Design()
 
-        self.design = Design()
         self.segments = set()
         self.net_points = dict() 
         self.net_names = dict() 
@@ -319,7 +362,6 @@ class GEDA:
                 self._parse_segment(stream, params)
 
             elif obj_type == 'H': ## SVG-like path
-                ##TODO(elbaschid): is this a valid assumption?
                 log.warn('ommiting path outside of component.')
                 ## skip description of path
                 num_lines = params['num_lines']
@@ -338,7 +380,52 @@ class GEDA:
         for cnet in calculated_nets:
             self.design.add_net(cnet)
 
-        return self.design
+    def _parse_title_frame(self, params):
+        """ Parse the frame component in *params* to extract the
+            page size to be used in the design. The offset is adjusted
+            according to the bottom-left position of the frame. 
+        """
+        ## set offset based on bottom-left corner of frame
+        self.offset.x = params['x']
+        self.offset.y = params['y'] 
+
+        filename = self.known_symbols.get(params['basename'])
+        if not filename or not os.path.exists(filename):
+            log.warn("could not find title symbol '%s'" % params['basename'])
+
+            self.frame_width = 46800
+            self.frame_height = 34000 
+            return
+
+        stream = open(filename, 'rU')
+
+        obj_type, params = self._parse_command(stream)
+
+        while obj_type is not None:
+
+            if obj_type == 'B':
+                if params['width'] > self.frame_width:
+                    self.frame_width = params['width'] 
+
+                if params['height'] > self.frame_height:
+                    self.frame_height = params['height']
+
+            ## skip commands covering multiple lines
+            elif obj_type in ['T', 'H']:
+                for dummy in range(params['num_lines']):
+                    stream.readline()
+
+            obj_type, params = self._parse_command(stream)
+
+        ## set width to estimated max value when no box was found
+        if self.frame_width == 0:
+            self.frame_width = 46800
+
+        ## set height to estimated max value when no box was found
+        if self.frame_height == 0:
+            self.frame_height = 34000 
+        
+        stream.close()
 
     def _create_ripper_segment(self, params):
         """ Creates a new segement from the busripper provided 
@@ -392,8 +479,12 @@ class GEDA:
         """
         basename, dummy = os.path.splitext(params['basename'])
 
-        if basename in self.design.components.components:
-            component = self.design.components.components[basename]
+        component_name = basename
+        if params['mirror']:
+            component_name += '_MIRRORED'
+
+        if component_name in self.design.components.components:
+            component = self.design.components.components[component_name]
 
             ## skipping embedded data might be required
             self.skip_embedded_section(stream)
@@ -412,18 +503,14 @@ class GEDA:
                     return None, None
 
                 ## requires parsing of referenced symbol file
-                f_in = open(self.known_symbols[basename], "r")
+                f_in = open(self.known_symbols[basename], "rU")
                 self._check_version(f_in)
-
-                ## if the file is mirroed compoent generate a mirrored component
-                if params['mirror']: 
-                    basename += '_MIRRORED'
 
                 component = self.parse_component_data(f_in, params) 
 
                 f_in.close()
                         
-            self.design.add_component(basename, component)
+            self.design.add_component(component_name, component)
 
         ## get all attributes assigned to component instance
         attributes = self._parse_environment(stream)
@@ -815,6 +902,14 @@ class GEDA:
 
         return nets
 
+    def _open_file_or_zip(self, filename, mode='rU'):
+        if self.geda_zip is not None:
+            temp_dir = tempfile.mkdtemp()
+            self.geda_zip.extract(filename, temp_dir)
+            filename = os.path.join(temp_dir, filename)
+
+        return open(filename, mode)
+
     def _parse_bus(self, params): 
         """ Processing a bus instance with start end end coordinates
             at (x1, y1) and (x2, y2). *color* is ignored. *ripperdir*
@@ -1078,6 +1173,12 @@ class GEDA:
             Raises GEDAError when object type is not known.
         """
         line = stream.readline()
+
+        while line.startswith('#') or line == '\n':
+            line = stream.readline()
+
+        line = line.strip()
+
         command_data = line.strip().split(self.DELIMITER)
 
         if len(command_data[0]) == 0 or command_data[0] in [']', '}']:
@@ -1086,10 +1187,12 @@ class GEDA:
         object_type, command_data = command_data[0].strip(), command_data[1:]
 
         params = {}
-        for idx, (name, typ) in enumerate(self.OBJECT_TYPES[object_type]):
+        for idx, (name, typ, default) in enumerate(self.OBJECT_TYPES[object_type]):
             if idx >= len(command_data):
-                print line, object_type, command_data
-            params[name] = typ(command_data[idx])
+                ## prevent text commands of version 1 from breaking
+                params[name] = default
+            else:
+                params[name] = typ(command_data[idx])
 
         assert(len(params) == len(self.OBJECT_TYPES[object_type]))
 
@@ -1180,7 +1283,7 @@ def find_symbols(symbol_dirs):
     """
     known_symbols = {}
 
-    for symbol_dir in symbol_dirs:
+    for symbol_dir in reversed(symbol_dirs):
         if os.path.exists(symbol_dir):
             for dirpath, dummy, filenames in os.walk(symbol_dir):
                 for filename in filenames:
