@@ -112,25 +112,20 @@ class GerberTests(unittest.TestCase):
         image = self.design.layout.layers[0].images[2]
         assert len(image.shape_instances) == 3
 
-    @use_file('squarish/layers.cfg')
-    def test_folder_batch(self):
-        """ Parse a batch of gerber files in a folder. """
-        assert len(self.design.layout.layers) == 2
-
-    @use_file('squarish.zip')
+    @use_file('simple.zip')
     def test_zip_batch(self):
         """ Parse a batch of gerber files in a zip file. """
-        assert len(self.design.layout.layers) == 2
+        assert self.design.layout.layers[0].name == 'top'
 
-    @use_file('squarish.bz2')
+    @use_file('simple.bz2')
     def test_bz_batch(self):
         """ Parse a batch of gerber files in a bz2 tarball. """
-        assert len(self.design.layout.layers) == 2
+        assert self.design.layout.layers[0].name == 'top'
 
-    @use_file('squarish.tgz')
+    @use_file('simple.tgz')
     def test_gz_batch(self):
         """ Parse a batch of gerber files in a gz tarball. """
-        assert len(self.design.layout.layers) == 2
+        assert self.design.layout.layers[0].name == 'top'
 
 
     # tests that pass if they raise expected errors

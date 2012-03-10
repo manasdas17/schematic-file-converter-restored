@@ -119,6 +119,33 @@ class GerberTests(unittest.TestCase):
         start_subtractive_image = '%LPC*%\r\nG36*\r\nX10000Y25000D02*'
         assert start_subtractive_image in self.output
 
+    @in_out('flash-current-pos.ger')
+    def test_flash_curr_pos(self):
+        """ Correctly handle unusual D03 usage - gerber. """
+        shape_instance = 'D10*\r\n%LNUntitled Image*%\r\nX10000Y60000D03*'
+        assert shape_instance in self.output
+
+    @in_out('squarish/layers.cfg')
+    def test_folder_batch(self):
+        """ Parse a batch of gerber files in a folder. """
+        layer_boundary = 'copper.ger\r\nTop'
+        assert layer_boundary in self.output
+
+    @in_out('simple.zip')
+    def test_zip_batch(self):
+        """ Parse a batch of gerber files in a zip file. """
+        pass
+
+    @in_out('simple.bz2')
+    def test_bz_batch(self):
+        """ Parse a batch of gerber files in a bz2 tarball. """
+        pass
+
+    @in_out('simple.tgz')
+    def test_gz_batch(self):
+        """ Parse a batch of gerber files in a gz tarball. """
+        pass
+
 
     # tests that pass if they raise expected errors
 

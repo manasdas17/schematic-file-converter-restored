@@ -20,6 +20,11 @@
 # limitations under the License.
 
 from sys import stdout
+from os import path, mkdir, listdir, makedirs, stat
+from shutil import rmtree
+from collections import namedtuple
+from tarfile import TarFile
+from zipfile import ZipFile
 
 from core.shape import Circle, Rectangle, Obround, RegularPolygon
 from core.shape import Polygon, Moire, Thermal
@@ -47,6 +52,10 @@ class UnitsNotSpecified(Unwritable):
 
 class ImageContainsNoData(Unwritable):
     """ One of the layers contains an empty image. """
+    pass
+
+class NotBatch(ValueError):
+    """ The intended output is a single file. """
     pass
 
 
@@ -77,6 +86,16 @@ SHAPE_TAGS = {'circle': {'int': 1, 'char': 'C'},
               'polygon': {'int': 4},
               'moire': {'int': 6},
               'thermal': {'int': 7}}
+LAYERS_CFG = 'layers.cfg'
+TAR_MODES = {'.tar': 'w',
+             '.gz': 'w:gz',
+             '.tgz': 'w:gz',
+             '.bz2': 'w:bz2'}
+
+
+# archive class
+
+Batch = namedtuple('Batch', 'archive add_ rootdir')             # pylint: disable=C0103
 
 
 # writer
@@ -99,44 +118,113 @@ class Gerber:
 
 
     def write(self, design, outfile=None):
-        """ Main logic for producing a gerber file. """
+        """ Main logic for producing a set of output files. """
         self._check_design(design)
-        layer = design.layout.layers[0]
-        units = design.layout.units
-        self.images = layer.images
-        self._define_apertures()
-        with outfile and open(outfile, 'w') or stdout as f:
-
-            # write params
-            f.write(LINE.format(self._get_format_spec(units)))
-            if units != 'inch':
-                f.write(LINE.format(MM_UNITS))
-            for k in layer.macros:
-                f.write(self._get_macro_def(layer.macros[k]))
-            for aperture in self.apertures:
-                f.write(self._get_ap_def(aperture))
-
-            # select an arbitrary aperture for trace[0] check
-            if self.apertures:
-                self.status['aperture'] = self.apertures[0]
-                f.write(LINE.format(FUNCT.format(type='D',
-                                                 code=self.apertures[0].code)))
-
-            # build image layers - main data section
-            for i in range(len(layer.images)):
-                for param in self._get_image_meta(i):
-                    f.write(param)
-                for block in self._gen_paths(layer.images[i]):
-                    f.write(block)
-
-            # tidy up
-            f.write(EOF)
+        units = design.layout.units #TODO: handle inline units
+        if outfile:
+            dir_ = path.dirname(outfile)
+            if dir_:
+                try:
+                    stat(dir_)
+                except OSError:
+                    makedirs(dir_)
+        batch = self._get_archive(outfile)
+        try:
+            cfg_name = self._config_batch(batch, outfile)
+            cfg = open(cfg_name, 'w')
+        except NotBatch:
+            #TODO: check that there's actually only one layer
+            with outfile and open(outfile, 'w') or stdout as f:
+                self._gerberize(design.layout.layers[0], units, f)
+        else:
+            for layer in design.layout.layers:
+                member_name = layer.name.lower().replace(' ', '_') + '.ger'
+                with open(batch.rootdir and
+                          path.join(batch.rootdir, member_name) or
+                          path.join(dir_, member_name), 'w') as member:
+                    self._gerberize(layer, units, member)
+                cfg.write(LINE.format(', '.join([layer.name,
+                                                 layer.type,
+                                                 member_name])))
+        finally:
+            if batch:
+                cfg.close()
+                if batch.archive:
+                    batch.add_(batch.rootdir)
+                    for member_name in listdir(batch.rootdir):
+                        batch.add_(path.join(batch.rootdir, member_name))
+                    batch.archive.close()
+                    rmtree(batch.rootdir)
 
 
     # primary writer support methods
 
+    def _get_archive(self, outfile):
+        """ Establish zip or tarfile for batch output. """
+        batch = None
+        if outfile:
+            filename = path.basename(outfile)
+            rootdir, ext = path.splitext(filename)
+            if ext in TAR_MODES.keys() + ['.zip']:
+                if ext == '.zip':
+                    archive = ZipFile(outfile, 'w')
+                    add_ = archive.write
+                else:
+                    archive = TarFile.open(outfile, TAR_MODES[ext])
+                    add_ = archive.add
+                rootdir = filename.split('.')[0]
+                batch = Batch(archive, add_, rootdir)
+            elif LAYERS_CFG in filename:
+                batch = Batch(False, False, False)
+        return batch
+
+
+    def _config_batch(self, batch, outfile):
+        """ Establish config file for batch output. """
+        if not batch:
+            raise NotBatch
+        else:
+            if batch.rootdir:
+                mkdir(batch.rootdir)
+                cfg_name = path.join(batch.rootdir, LAYERS_CFG)
+            else:
+                cfg_name = outfile
+        return cfg_name
+
+
+    def _gerberize(self, layer, units, f):
+        """ Logic for producing a single gerber file. """
+        self.images = layer.images
+        self._define_apertures()
+
+        # write params
+        f.write(LINE.format(self._get_format_spec(units)))
+        if units != 'inch':
+            f.write(LINE.format(MM_UNITS))
+        for k in layer.macros:
+            f.write(self._get_macro_def(layer.macros[k]))
+        for aperture in self.apertures:
+            f.write(self._get_ap_def(aperture))
+
+        # select an arbitrary aperture for trace[0] check
+        if self.apertures:
+            self.status['aperture'] = self.apertures[0]
+            f.write(LINE.format(FUNCT.format(type='D',
+                                             code=self.apertures[0].code)))
+
+        # build image layers - main data section
+        for i in range(len(layer.images)):
+            for param in self._get_image_meta(i):
+                f.write(param)
+            for block in self._gen_paths(layer.images[i]):
+                f.write(block)
+
+        # tidy up
+        f.write(EOF)
+
+
     def _define_apertures(self):
-        """ Build the apertures needed to make our shapes. """
+        """ Build the apertures needed to make shapes. """
         for image in self.images:
             for trace in image.traces:
                 shape = Circle(0 , 0, trace.width / 2.0)
