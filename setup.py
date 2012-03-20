@@ -6,5 +6,5 @@ setup(
     name='python-upconvert',
     version='0.1',
     description='Upconvert library',
-    packages=['upconvert'],
+    packages=['upconvert', 'upconvert.core', 'upconvert.library', 'upconvert.library.fritzing', 'upconvert.library.kicad', 'upconvert.parser', 'upconvert.writer'],
 )
