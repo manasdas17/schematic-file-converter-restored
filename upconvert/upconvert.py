@@ -53,11 +53,11 @@ import os
 import operator
 from argparse import ArgumentParser
 
-import parser.openjson, parser.kicad, parser.geda
-import parser.fritzing, parser.gerber
-import parser.eagle
-import writer.openjson, writer.kicad, writer.geda
-import writer.eagle, writer.gerber
+import upconvert.parser.openjson, upconvert.parser.kicad, upconvert.parser.geda
+import upconvert.parser.fritzing, upconvert.parser.gerber
+import upconvert.parser.eagle
+import upconvert.writer.openjson, upconvert.writer.kicad, upconvert.writer.geda
+import upconvert.writer.eagle, upconvert.writer.gerber
 
 
 # Logging
@@ -65,20 +65,20 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('main')
 
 PARSERS = {
-    'openjson': parser.openjson.JSON,
-    'kicad': parser.kicad.KiCAD,
-    'geda': parser.geda.GEDA,
-    'eagle': parser.eagle.Eagle,
-    'fritzing': parser.fritzing.Fritzing,
-    'gerber': parser.gerber.Gerber,
+    'openjson': upconvert.parser.openjson.JSON,
+    'kicad': upconvert.parser.kicad.KiCAD,
+    'geda': upconvert.parser.geda.GEDA,
+    'eagle': upconvert.parser.eagle.Eagle,
+    'fritzing': upconvert.parser.fritzing.Fritzing,
+    'gerber': upconvert.parser.gerber.Gerber,
 }
 
 WRITERS = {
-    'openjson': writer.openjson.JSON,
-    'kicad': writer.kicad.KiCAD,
-    'geda': writer.geda.GEDA,
-    'eagle': writer.eagle.Eagle,
-    'gerber': writer.gerber.Gerber,
+    'openjson': upconvert.writer.openjson.JSON,
+    'kicad': upconvert.writer.kicad.KiCAD,
+    'geda': upconvert.writer.geda.GEDA,
+    'eagle': upconvert.writer.eagle.Eagle,
+    'gerber': upconvert.writer.gerber.Gerber,
 }
 
 EXTENSIONS = {
