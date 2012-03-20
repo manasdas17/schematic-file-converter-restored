@@ -91,33 +91,87 @@ EXTENSIONS = {
 }
 
 
-def parse(in_file, in_format='openjson', **parser_kwargs):
-    """ Parse the given input file using the in_format """
+class upconvert(object):
 
-    try:
-        if in_format == 'geda':
-            p = PARSERS[in_format](**parser_kwargs)
-        else:
-            p = PARSERS[in_format]()
-    except KeyError:
-        print "ERROR: Unsupported input type:", in_format
-        exit(1)
-    return p.parse(in_file)
+    @staticmethod
+    def autodetect(inputfile):
+        """ Autodetect the given input files formatting """
+        confidence = {}
+
+        for name, parser in PARSERS.iteritems():
+            confidence[name] = parser.auto_detect(inputfile)
+
+        ordered = sorted(confidence.iteritems(), key=operator.itemgetter(1), reverse=True)
+        if ordered[0][1] < 0.5:
+            log.error('Failed to auto-detect input type for %s. best guess: %s, confidence: %s',
+                      inputfile, ordered[0][0], ordered[0][1])
+            raise Exception('failed to autodetect')
+
+        log.info('Auto-detected input type: %s', ordered[0][0])
+        return ordered[0][0]
 
 
-def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
-    """ Write the converted input file to the out_format """
+    @staticmethod
+    def parse(in_file, in_format='openjson', **parser_kwargs):
+        """ Parse the given input file using the in_format """
 
-    try:
-        if out_format == 'geda':
-            w = WRITERS[out_format](**parser_kwargs)
-        else:
-            w = WRITERS[out_format]()
-    except KeyError:
-        print "ERROR: Unsupported output type:", out_format
-        exit(1)
-    return w.write(dsgn, out_file)
-    
+        try:
+            if in_format == 'geda':
+                p = PARSERS[in_format](**parser_kwargs)
+            else:
+                p = PARSERS[in_format]()
+        except KeyError:
+            print "ERROR: Unsupported input type:", in_format
+            exit(1)
+        return p.parse(in_file)
+
+
+    @staticmethod
+    def write(dsgn, out_file, out_format='openjson', **parser_kwargs):
+        """ Write the converted input file to the out_format """
+
+        try:
+            if out_format == 'geda':
+                w = WRITERS[out_format](**parser_kwargs)
+            else:
+                w = WRITERS[out_format]()
+        except KeyError:
+            print "ERROR: Unsupported output type:", out_format
+            exit(1)
+        return w.write(dsgn, out_file)
+
+
+    @staticmethod
+    def file_to_upv(file_content):
+        """ convert file_content into upv data pre-jsonification """
+
+        tmp_fd, tmp_path = tempfile.mkstemp()
+        tmp_fd.write(file_content)
+
+        format = upconvert.autodetect(path)
+        design = upconvert.parse(path, format)
+
+        tmp_fd2, tmp_path2 = tempfile.mkstemp()
+        upconvert.write(design, tmp_path2, 'openjson')
+
+        return json.loads(tmp_fd2.read())
+
+
+    @staticmethod
+    def json_to_format(upv_json_data, format, path):
+        """ convert upv_json_data into format as a file @ path """
+
+        path_w_ext = path + EXTENSIONS[format]
+        final_file = open(path_w_ext)
+
+        tmp_fd, tmp_path = tempfile.mkstemp()
+        tmp_fd.write(upv_json_data)
+
+        design = upconvert.parse(tmp_path, 'openjson')
+        upconvert.write(design, final_file, format)
+
+        return path_w_ext
+
 
 if __name__ == "__main__":
     ap = ArgumentParser()
@@ -152,16 +206,9 @@ if __name__ == "__main__":
 
     # Autodetect input type
     if inputtype == None:
-        confidence = {}
-        for name, parser in PARSERS.iteritems():
-            confidence[name] = parser.auto_detect(inputfile)
-        ordered = sorted(confidence.iteritems(), key=operator.itemgetter(1), reverse=True)
-        if ordered[0][1] >= 0.5:
-            inputtype = ordered[0][0]
-            log.info('Auto-detected input type: %s', inputtype)
-        else:
-            log.error('Failed to auto-detect input type for %s. best guess: %s, confidence: %s',
-                      inputfile, ordered[0][0], ordered[0][1])
+        try:
+            inputtype = autodetect(inputfile)
+        except:
             ap.print_help()
             exit(1)
 
@@ -177,11 +224,11 @@ if __name__ == "__main__":
             exit(1)
 
     # parse and export the data
-    design = parse(inputfile, inputtype, **parser_kwargs)
+    design = upconvert.parse(inputfile, inputtype, **parser_kwargs)
 
     # we got a good result
     if design is not None:
-        write(design, outputfile, outputtype, **parser_kwargs)
+        upconvert.write(design, outputfile, outputtype, **parser_kwargs)
 
     # parse returned None -> something went wrong
     else:
