@@ -53,11 +53,8 @@ import os
 import operator
 from argparse import ArgumentParser
 
-import upconvert.parser.openjson, upconvert.parser.kicad, upconvert.parser.geda
-import upconvert.parser.fritzing, upconvert.parser.gerber
-import upconvert.parser.eagle
-import upconvert.writer.openjson, upconvert.writer.kicad, upconvert.writer.geda
-import upconvert.writer.eagle, upconvert.writer.gerber
+from upconvert.parser import openjson, kicad, geda, eagle, fritzing, gerber
+from upconvert.writer import openjson, kicad, geda, eagle, gerber
 
 
 # Logging
@@ -65,20 +62,20 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('main')
 
 PARSERS = {
-    'openjson': upconvert.parser.openjson.JSON,
-    'kicad': upconvert.parser.kicad.KiCAD,
-    'geda': upconvert.parser.geda.GEDA,
-    'eagle': upconvert.parser.eagle.Eagle,
-    'fritzing': upconvert.parser.fritzing.Fritzing,
-    'gerber': upconvert.parser.gerber.Gerber,
+    'openjson': openjson.JSON,
+    'kicad': kicad.KiCAD,
+    'geda': geda.GEDA,
+    'eagle': eagle.Eagle,
+    'fritzing': fritzing.Fritzing,
+    'gerber': gerber.Gerber,
 }
 
 WRITERS = {
-    'openjson': upconvert.writer.openjson.JSON,
-    'kicad': upconvert.writer.kicad.KiCAD,
-    'geda': upconvert.writer.geda.GEDA,
-    'eagle': upconvert.writer.eagle.Eagle,
-    'gerber': upconvert.writer.gerber.Gerber,
+    'openjson': openjson.JSON,
+    'kicad': kicad.KiCAD,
+    'geda': geda.GEDA,
+    'eagle': eagle.Eagle,
+    'gerber': gerber.Gerber,
 }
 
 EXTENSIONS = {
@@ -91,7 +88,7 @@ EXTENSIONS = {
 }
 
 
-class upconvert(object):
+class Upconverter(object):
 
     @staticmethod
     def autodetect(inputfile):
@@ -148,11 +145,11 @@ class upconvert(object):
         tmp_fd, tmp_path = tempfile.mkstemp()
         tmp_fd.write(file_content)
 
-        format = upconvert.autodetect(path)
-        design = upconvert.parse(path, format)
+        format = Upconverter.autodetect(path)
+        design = Upconverter.parse(path, format)
 
         tmp_fd2, tmp_path2 = tempfile.mkstemp()
-        upconvert.write(design, tmp_path2, 'openjson')
+        Upconverter.write(design, tmp_path2, 'openjson')
 
         return json.loads(tmp_fd2.read())
 
@@ -167,8 +164,8 @@ class upconvert(object):
         tmp_fd, tmp_path = tempfile.mkstemp()
         tmp_fd.write(upv_json_data)
 
-        design = upconvert.parse(tmp_path, 'openjson')
-        upconvert.write(design, final_file, format)
+        design = Upconverter.parse(tmp_path, 'openjson')
+        Upconverter.write(design, final_file, format)
 
         return path_w_ext
 
@@ -224,11 +221,11 @@ if __name__ == "__main__":
             exit(1)
 
     # parse and export the data
-    design = upconvert.parse(inputfile, inputtype, **parser_kwargs)
+    design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
 
     # we got a good result
     if design is not None:
-        upconvert.write(design, outputfile, outputtype, **parser_kwargs)
+        Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
 
     # parse returned None -> something went wrong
     else:
