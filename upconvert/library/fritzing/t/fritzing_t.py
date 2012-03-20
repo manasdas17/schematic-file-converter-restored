@@ -22,7 +22,7 @@
 # limitations under the License.
 
 
-from library.fritzing import lookup_part
+from upconvert.library.fritzing import lookup_part
 
 from unittest import TestCase
 from os.path import basename, exists

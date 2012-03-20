@@ -22,19 +22,19 @@
 # limitations under the License.
 
 
-from core.shape import Shape
-from core.shape import Rectangle
-from core.shape import RoundedRectangle
-from core.shape import Arc
-from core.shape import Circle
-from core.shape import Label
-from core.shape import Line
-from core.shape import Polygon
-from core.shape import RegularPolygon
-from core.shape import Moire
-from core.shape import Thermal
-from core.shape import BezierCurve
-from core.shape import Point
+from upconvert.core.shape import Shape
+from upconvert.core.shape import Rectangle
+from upconvert.core.shape import RoundedRectangle
+from upconvert.core.shape import Arc
+from upconvert.core.shape import Circle
+from upconvert.core.shape import Label
+from upconvert.core.shape import Line
+from upconvert.core.shape import Polygon
+from upconvert.core.shape import RegularPolygon
+from upconvert.core.shape import Moire
+from upconvert.core.shape import Thermal
+from upconvert.core.shape import BezierCurve
+from upconvert.core.shape import Point
 import unittest
 from math import sin, cos, pi
 

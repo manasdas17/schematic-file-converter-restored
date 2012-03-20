@@ -22,12 +22,12 @@
 # limitations under the License.
 
 
-from core.components import Components
-from core.components import Component
-from core.components import Symbol
-from core.components import Body
-from core.components import Pin
-from core.shape import Point, Shape, Label
+from upconvert.core.components import Components
+from upconvert.core.components import Component
+from upconvert.core.components import Symbol
+from upconvert.core.components import Body
+from upconvert.core.components import Pin
+from upconvert.core.shape import Point, Shape, Label
 import unittest
 
 

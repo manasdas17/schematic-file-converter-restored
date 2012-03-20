@@ -33,14 +33,14 @@
 # increase upwards as in OpenJSON and no transformation is needed.
 # KiCAD units are mils (1/1000th of an inch)
 
-from core.design import Design
-from core.components import Component, Symbol, Body, Pin
-from core.component_instance import ComponentInstance, SymbolAttribute
-from core.net import Net, NetPoint, ConnectedComponent
-from core.shape import Arc, Circle, Line, Rectangle, Label
-from core.annotation import Annotation
+from upconvert.core.design import Design
+from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.shape import Arc, Circle, Line, Rectangle, Label
+from upconvert.core.annotation import Annotation
 
-from library.kicad import lookup_part
+from upconvert.library.kicad import lookup_part
 
 from collections import defaultdict
 from os.path import exists, splitext

@@ -32,9 +32,9 @@
 import struct
 import re
 
-from core.shape import Point, Line, Label
+from upconvert.core.shape import Point, Line, Label
 
-#from parser.eagle import EagleBinConsts
+#from upconvert.parser.eagle import EagleBinConsts
 
 class Eagle: # pylint: disable=R0902
     """ The Eagle format writer """

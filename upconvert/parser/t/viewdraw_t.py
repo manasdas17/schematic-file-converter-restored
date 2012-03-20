@@ -2,10 +2,10 @@
 
 import unittest
 from inspect import getargspec
-from parser.viewdraw import FileStack, ViewDrawBase, ViewDrawSym, ViewDrawSch
+from upconvert.parser.viewdraw import FileStack, ViewDrawBase, ViewDrawSym, ViewDrawSch
 
-from core.annotation import Annotation
-from core.shape import Label, Point
+from upconvert.core.annotation import Annotation
+from upconvert.core.shape import Label, Point
 from math import sin, cos, pi
 
 _real_fs_init  = FileStack.__init__

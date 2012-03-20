@@ -22,8 +22,8 @@
 # limitations under the License.
 
 
-from core.design_attributes import DesignAttributes
-from core.design_attributes import Metadata
+from upconvert.core.design_attributes import DesignAttributes
+from upconvert.core.design_attributes import Metadata
 import unittest
 
 

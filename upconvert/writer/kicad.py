@@ -36,7 +36,7 @@ import time
 
 from os.path import splitext
 
-from parser.kicad import MATRIX2ROTATION, MULT as INMULT
+from upconvert.parser.kicad import MATRIX2ROTATION, MULT as INMULT
 
 ROTATION2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.items())
 

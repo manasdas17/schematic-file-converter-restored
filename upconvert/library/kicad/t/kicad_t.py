@@ -22,8 +22,8 @@
 # limitations under the License.
 
 
-from library.kicad import lookup_part
-from core.components import Component
+from upconvert.library.kicad import lookup_part
+from upconvert.core.components import Component
 
 from unittest import TestCase
 

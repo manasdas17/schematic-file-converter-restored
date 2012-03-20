@@ -22,7 +22,7 @@
 # limitations under the License.
 
 
-from writer.openjson import JSON
+from upconvert.writer.openjson import JSON
 import unittest
 
 

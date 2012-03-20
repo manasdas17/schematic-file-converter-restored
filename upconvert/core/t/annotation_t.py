@@ -22,7 +22,7 @@
 # limitations under the License.
 
 
-from core.annotation import Annotation
+from upconvert.core.annotation import Annotation
 import unittest
 
 

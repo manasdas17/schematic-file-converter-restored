@@ -22,7 +22,7 @@
 
 import unittest
 
-from writer.eagle import Eagle
+from upconvert.writer.eagle import Eagle
 
 class EagleTests(unittest.TestCase):
     """ The tests of the eagle writer """

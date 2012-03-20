@@ -20,7 +20,7 @@
 # limitations under the License.
 
 
-from core.design import Design
+from upconvert.core.design import Design
 
 
 class Altium:

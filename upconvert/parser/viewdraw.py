@@ -20,12 +20,12 @@
 # limitations under the License.
 
 
-from core.net import Net, NetPoint, ConnectedComponent
-from core.annotation import Annotation
-from core.design import Design
-from core.components import Components, Component, Symbol, Body, Pin
-from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Circle, Line, Rectangle, Label, Arc
+from upconvert.core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.annotation import Annotation
+from upconvert.core.design import Design
+from upconvert.core.components import Components, Component, Symbol, Body, Pin
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.shape import Circle, Line, Rectangle, Label, Arc
 from os import listdir
 from math import pi, sqrt, atan
 from collections import defaultdict

@@ -26,15 +26,15 @@ import unittest
 
 from nose.tools import raises
 
-from core.design import Design
-from core.layout import Layout, Layer, Image
-from parser.gerber import Gerber as Parser
-from writer.gerber import Gerber as Writer
-from writer.gerber import MissingLayout, NoLayersFound
-from writer.gerber import UnitsNotSpecified, ImageContainsNoData
+from upconvert.core.design import Design
+from upconvert.core.layout import Layout, Layer, Image
+from upconvert.parser.gerber import Gerber as Parser
+from upconvert.writer.gerber import Gerber as Writer
+from upconvert.writer.gerber import MissingLayout, NoLayersFound
+from upconvert.writer.gerber import UnitsNotSpecified, ImageContainsNoData
 
 
-STRIP_DIRS = path.join('writer', 't')
+STRIP_DIRS = path.join('upconvert', 'writer', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
 TEST_FILES = path.join('test', 'gerber')
 DIR = path.join(BASE_DIR, TEST_FILES)
@@ -43,7 +43,7 @@ DIR = path.join(BASE_DIR, TEST_FILES)
 # decorator for tests that use input files
 
 def in_out(infile):
-    """ Write gerber file based on design from parser. """
+    """ Write gerber file based on design from upconvert.parser. """
     def wrap_wrap_tm(test_method):
         """ Add params to decorator function. """
         def wrap_tm(self):

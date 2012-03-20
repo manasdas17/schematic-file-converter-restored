@@ -22,8 +22,8 @@
 # limitations under the License.
 
 
-from core.component_instance import ComponentInstance
-from core.component_instance import SymbolAttribute
+from upconvert.core.component_instance import ComponentInstance
+from upconvert.core.component_instance import SymbolAttribute
 import unittest
 
 

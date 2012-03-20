@@ -63,13 +63,13 @@ import os
 import types
 import codecs
 
-from core import shape
-from core import components
-from core.shape import Point
-from core.annotation import Annotation
+from upconvert.core import shape
+from upconvert.core import components
+from upconvert.core.shape import Point
+from upconvert.core.annotation import Annotation
 
-from parser.geda import GEDAError
-from parser.geda import find_symbols 
+from upconvert.parser.geda import GEDAError
+from upconvert.parser.geda import find_symbols 
 
 class GEDAColor:
     """ Enumeration of gEDA colors """

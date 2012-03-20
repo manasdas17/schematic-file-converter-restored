@@ -23,7 +23,7 @@
 
 import unittest
 
-from parser.eagle import Eagle
+from upconvert.parser.eagle import Eagle
 
 class EagleTests(unittest.TestCase):
     """ The tests of the eagle parser """

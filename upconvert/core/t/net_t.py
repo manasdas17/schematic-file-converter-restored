@@ -22,9 +22,9 @@
 # limitations under the License.
 
 
-from core.net import Net
-from core.net import NetPoint
-from core.net import ConnectedComponent
+from upconvert.core.net import Net
+from upconvert.core.net import NetPoint
+from upconvert.core.net import ConnectedComponent
 import unittest
 
 

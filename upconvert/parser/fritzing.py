@@ -19,13 +19,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from core.design import Design
-from core.components import Component, Symbol, Body, Pin
-from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Circle, Line, Polygon, Rectangle, BezierCurve
-from core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.design import Design
+from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.shape import Circle, Line, Polygon, Rectangle, BezierCurve
+from upconvert.core.net import Net, NetPoint, ConnectedComponent
 
-from library.fritzing import lookup_part
+from upconvert.library.fritzing import lookup_part
 
 from xml.etree.ElementTree import ElementTree
 

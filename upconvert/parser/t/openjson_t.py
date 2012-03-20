@@ -22,7 +22,7 @@
 # limitations under the License.
 
 
-from parser.openjson import JSON
+from upconvert.parser.openjson import JSON
 import unittest
 
 

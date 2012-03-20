@@ -26,12 +26,12 @@ import os
 import unittest
 import StringIO
 import shutil
-from core.net import NetPoint
-from core import shape
-from core import components 
-import parser.geda 
-from writer.geda import GEDA
-from parser.openjson import JSON
+from upconvert.core.net import NetPoint
+from upconvert.core import shape
+from upconvert.core import components 
+import upconvert.parser.geda 
+from upconvert.writer.geda import GEDA
+from upconvert.parser.openjson import JSON
 
 
 class GEDATests(unittest.TestCase):
@@ -99,7 +99,7 @@ class GEDATests(unittest.TestCase):
         if os.path.exists(sym_dir):
             shutil.rmtree(sym_dir)
 
-        geda_parser = parser.geda.GEDA(
+        geda_parser = upconvert.parser.geda.GEDA(
             symbol_dirs=['test/geda/simple_example/symbols']
         )
         geda_parser.set_offset(shape.Point(0, 0))
@@ -115,7 +115,7 @@ class GEDATests(unittest.TestCase):
         )
 
         ## parse design again to make sure it is a clean slate
-        geda_parser = parser.geda.GEDA(
+        geda_parser = upconvert.parser.geda.GEDA(
             symbol_dirs=['test/geda/simple_example/symbols']
         )
         geda_parser.set_offset(shape.Point(0, 0))
@@ -255,7 +255,7 @@ class GEDATests(unittest.TestCase):
         self.geda_writer.component_library = dict()
         self.geda_writer.project_dirs['symbol'] = sym_dir 
 
-        geda_parser = parser.geda.GEDA(
+        geda_parser = upconvert.parser.geda.GEDA(
             symbol_dirs=['test/geda/simple_example/symbols']
         )
         converted_design = geda_parser.parse(
@@ -322,7 +322,7 @@ class GEDATests(unittest.TestCase):
         commands += [
             'v 20110115 2\n',
         ]
-        geda_parser = parser.geda.GEDA()
+        geda_parser = upconvert.parser.geda.GEDA()
         new_design = geda_parser.parse_schematic(
             StringIO.StringIO('\n'.join(commands))
         )

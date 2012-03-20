@@ -21,16 +21,16 @@
 # limitations under the License.
 
 
-from parser.kicad import KiCAD, ComponentParser
-from parser.openjson import JSON
-from writer.openjson import JSON as JSONWriter
+from upconvert.parser.kicad import KiCAD, ComponentParser
+from upconvert.parser.openjson import JSON
+from upconvert.writer.openjson import JSON as JSONWriter
 
 import unittest
 
 from os.path import dirname, join
 from os import devnull
 
-TEST_DIR = join(dirname(__file__), '..', '..', 'test', 'kicad')
+TEST_DIR = join(dirname(__file__), '..', '..', '..', 'test', 'kicad')
 
 TEST_INPUT_FILE = join(TEST_DIR, 'test.sch')
 GOOD_OUTPUT_FILE = join(TEST_DIR, 'test.upv')

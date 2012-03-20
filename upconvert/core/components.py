@@ -20,7 +20,7 @@
 # limitations under the License.
 
 
-from core.shape import Point
+from upconvert.core.shape import Point
 
 
 class Components:

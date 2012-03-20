@@ -19,7 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from core.shape import Arc
+from upconvert.core.shape import Arc
 
 class Layout:
     """ Represents the design schematic as a PCB Layout. """

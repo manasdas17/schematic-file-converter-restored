@@ -26,10 +26,10 @@ from collections import namedtuple
 from tarfile import TarFile
 from zipfile import ZipFile
 
-from core.shape import Circle, Rectangle, Obround, RegularPolygon
-from core.shape import Polygon, Moire, Thermal
-from core.shape import Point, Arc
-from core.layout import Aperture
+from upconvert.core.shape import Circle, Rectangle, Obround, RegularPolygon
+from upconvert.core.shape import Polygon, Moire, Thermal
+from upconvert.core.shape import Point, Arc
+from upconvert.core.layout import Aperture
 
 
 # exceptions

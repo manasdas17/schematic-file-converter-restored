@@ -21,14 +21,14 @@
 # limitations under the License.
 
 
-from writer.kicad import KiCAD
-from core.design import Design
-from core.components import Pin
-from core.net import Net, NetPoint
-from core.component_instance import ComponentInstance, SymbolAttribute
-from core.shape import Label, Rectangle, Polygon, Arc
-from core.annotation import Annotation
-from parser.openjson import JSON
+from upconvert.writer.kicad import KiCAD
+from upconvert.core.design import Design
+from upconvert.core.components import Pin
+from upconvert.core.net import Net, NetPoint
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.shape import Label, Rectangle, Polygon, Arc
+from upconvert.core.annotation import Annotation
+from upconvert.parser.openjson import JSON
 
 import os
 import unittest
@@ -37,7 +37,7 @@ import tempfile
 from cStringIO import StringIO
 
 
-from parser.t.kicad_t import GOOD_OUTPUT_FILE as TEST_UPV_FILE
+from upconvert.parser.t.kicad_t import GOOD_OUTPUT_FILE as TEST_UPV_FILE
 
 
 class KiCADTests(unittest.TestCase):

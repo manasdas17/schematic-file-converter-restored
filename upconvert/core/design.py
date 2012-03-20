@@ -20,9 +20,9 @@
 # limitations under the License.
 
 
-from core.design_attributes import DesignAttributes
-from core.components import Components
-from core.shape import Point
+from upconvert.core.design_attributes import DesignAttributes
+from upconvert.core.components import Components
+from upconvert.core.shape import Point
 
 
 class Design:

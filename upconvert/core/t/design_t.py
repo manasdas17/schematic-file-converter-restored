@@ -22,12 +22,12 @@
 # limitations under the License.
 
 
-from core.design import Design
-from core.net import Net
-from core.shape import Point
-from core.annotation import Annotation
-from core.components import Component, Symbol, Body
-from core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.design import Design
+from upconvert.core.net import Net
+from upconvert.core.shape import Point
+from upconvert.core.annotation import Annotation
+from upconvert.core.components import Component, Symbol, Body
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 import unittest
 
 

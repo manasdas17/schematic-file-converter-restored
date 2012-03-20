@@ -25,12 +25,12 @@
 
 import struct
 
-from core.annotation import Annotation
-from core.component_instance import ComponentInstance, SymbolAttribute
-from core.design import Design
-from core.net import Net, NetPoint, ConnectedComponent
-from core.components import Component, Symbol, Body, Pin
-from core.shape import Point, Line, Label
+from upconvert.core.annotation import Annotation
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.design import Design
+from upconvert.core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.shape import Point, Line, Label
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer

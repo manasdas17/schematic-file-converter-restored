@@ -27,11 +27,11 @@ from tarfile import TarFile, ReadError
 import csv
 from os import path
 
-from core.design import Design
-from core.layout import Layout, Layer, Image, Macro, Primitive
-from core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
-from core.shape import Line, Arc, Point, Circle, Rectangle, Obround
-from core.shape import Polygon, RegularPolygon, Moire, Thermal
+from upconvert.core.design import Design
+from upconvert.core.layout import Layout, Layer, Image, Macro, Primitive
+from upconvert.core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
+from upconvert.core.shape import Line, Arc, Point, Circle, Rectangle, Obround
+from upconvert.core.shape import Polygon, RegularPolygon, Moire, Thermal
 
 
 

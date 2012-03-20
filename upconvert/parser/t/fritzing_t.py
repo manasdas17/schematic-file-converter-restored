@@ -21,15 +21,15 @@
 # limitations under the License.
 
 
-from core.shape import Circle, Rectangle, Shape
-from parser.fritzing import Fritzing, ComponentParser, PathParser
-from parser.fritzing import make_x, make_y, make_length, get_pin
-from parser.fritzing import get_x, get_y, get_length
+from upconvert.core.shape import Circle, Rectangle, Shape
+from upconvert.parser.fritzing import Fritzing, ComponentParser, PathParser
+from upconvert.parser.fritzing import make_x, make_y, make_length, get_pin
+from upconvert.parser.fritzing import get_x, get_y, get_length
 from unittest import TestCase
 
 from os.path import dirname, join
 
-TEST_DIR = join(dirname(__file__), '..', '..', 'test', 'fritzing')
+TEST_DIR = join(dirname(__file__), '..', '..', '..', 'test', 'fritzing')
 
 
 class FakeElem(dict):

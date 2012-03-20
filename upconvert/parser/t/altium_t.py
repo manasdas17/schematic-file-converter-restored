@@ -22,7 +22,7 @@
 # limitations under the License.
 
 
-from parser.altium import Altium
+from upconvert.parser.altium import Altium
 import unittest
 
 

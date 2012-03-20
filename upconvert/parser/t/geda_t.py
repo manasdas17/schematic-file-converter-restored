@@ -25,8 +25,8 @@
 import os
 import unittest
 import StringIO
-from parser.geda import GEDA, GEDAError
-import core.shape
+from upconvert.parser.geda import GEDA, GEDAError
+import upconvert.core.shape
 
 
 class GEDAEmpty(unittest.TestCase):
@@ -57,7 +57,7 @@ class GEDATests(unittest.TestCase):
         self.geda_parser = GEDA()
         ## for easier validation 
         self.geda_parser.SCALE_FACTOR = 10
-        self.geda_parser.set_offset(core.shape.Point(0, 0))
+        self.geda_parser.set_offset(upconvert.core.shape.Point(0, 0))
 
     def test_constructor(self):
         """ Test constructor with different parameters to ensure
@@ -257,7 +257,7 @@ text!"""
             (-1238, -123),
         ]
 
-        self.geda_parser.set_offset(core.shape.Point(0, 0))
+        self.geda_parser.set_offset(upconvert.core.shape.Point(0, 0))
         for mils, expected in test_mils:
             self.assertEquals(
                 self.geda_parser.y_to_px(mils),

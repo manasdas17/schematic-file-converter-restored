@@ -32,7 +32,7 @@ def read_library(lib):
     libfile = join(PARTS_DIR, lib + '.lib')
 
     if exists(libfile):
-        from parser.kicad import parse_library
+        from upconvert.parser.kicad import parse_library
         return dict((cpt.name, cpt) for cpt in parse_library(libfile))
     else:
         return {}

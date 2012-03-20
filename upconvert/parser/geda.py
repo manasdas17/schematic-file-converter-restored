@@ -63,14 +63,14 @@ import itertools
 
 from StringIO import StringIO
 
-from core import shape
-from core import components
-from core import net
+from upconvert.core import shape
+from upconvert.core import components
+from upconvert.core import net
 
-from core.design import Design
-from core.annotation import Annotation
-from core.component_instance import ComponentInstance
-from core.component_instance import SymbolAttribute
+from upconvert.core.design import Design
+from upconvert.core.annotation import Annotation
+from upconvert.core.component_instance import ComponentInstance
+from upconvert.core.component_instance import SymbolAttribute
 
 
 # Logging

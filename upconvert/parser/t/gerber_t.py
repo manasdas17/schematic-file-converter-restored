@@ -26,13 +26,13 @@ import unittest
 
 from nose.tools import raises
 
-from parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
+from upconvert.parser.gerber import Gerber, DelimiterMissing, ParamContainsBadData, \
                             CoordPrecedesFormatSpec, CoordMalformed, \
                             FileNotTerminated, DataAfterEOF, \
                             UnintelligibleDataBlock, QuadrantViolation, \
                             OpenFillBoundary, IncompatibleAperture
 
-STRIP_DIRS = path.join('parser', 't')
+STRIP_DIRS = path.join('upconvert', 'parser', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
 TEST_FILES = path.join('test', 'gerber')
 DIR = path.join(BASE_DIR, TEST_FILES)

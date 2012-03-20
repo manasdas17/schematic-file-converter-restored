@@ -24,13 +24,13 @@
 # 0) 1:1 Input of the data model
 
 import json
-from core.annotation import Annotation
-from core.component_instance import ComponentInstance, SymbolAttribute
-from core.components import Component, Symbol, Body, Pin
-from core.design import Design
-from core.design_attributes import DesignAttributes, Metadata
-from core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, Point
-from core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.annotation import Annotation
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.design import Design
+from upconvert.core.design_attributes import DesignAttributes, Metadata
+from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, Point
+from upconvert.core.net import Net, NetPoint, ConnectedComponent
 
 
 class JSON:

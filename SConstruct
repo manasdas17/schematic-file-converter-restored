@@ -54,13 +54,13 @@ bld_pyflakes = Builder(action=build_pyflakes)
 
 def build_test(target, source, env):
     args = ['nosetests', '--all-modules',
-            'core', 'library', 'parser', 'writer']
+            'upconvert/core', 'upconvert/library', 'upconvert/parser', 'upconvert/writer']
     return subprocess.call(args)
 bld_test = Builder(action=build_test)
 
 def build_coverage(target, source, env):
     args = ['nosetests', '--with-coverage', '--all-modules',
-            'core', 'library', 'parser', 'writer']
+            'upconvert/core', 'upconvert/library', 'upconvert/parser', 'upconvert/writer']
     return subprocess.call(args)
 bld_coverage = Builder(action=build_coverage)
 
@@ -97,16 +97,16 @@ def filter_test(arg, top, names):
 ###################
 
 core_source = []
-os.path.walk('./core', filter_source, core_source)
+os.path.walk('./upconvert/core', filter_source, core_source)
 
 parser_source = []
-os.path.walk('./parser', filter_source, parser_source)
+os.path.walk('./upconvert/parser', filter_source, parser_source)
 
 library_source = []
-os.path.walk('./library', filter_source, library_source)
+os.path.walk('./upconvert/library', filter_source, library_source)
 
 writer_source = []
-os.path.walk('./writer', filter_source, writer_source)
+os.path.walk('./upconvert/writer', filter_source, writer_source)
 
 all_source = []
 all_source.extend([str(py) for py in core_source])
@@ -115,16 +115,16 @@ all_source.extend([str(py) for py in library_source])
 all_source.extend([str(py) for py in writer_source])
 
 core_tests = []
-os.path.walk('./core', filter_test, core_tests)
+os.path.walk('./upconvert/core', filter_test, core_tests)
 
 parser_tests = []
-os.path.walk('./parser', filter_test, parser_tests)
+os.path.walk('./upconvert/parser', filter_test, parser_tests)
 
 library_tests = []
-os.path.walk('./library', filter_test, library_tests)
+os.path.walk('./upconvert/library', filter_test, library_tests)
 
 writer_tests = []
-os.path.walk('./writer', filter_test, writer_tests)
+os.path.walk('./upconvert/writer', filter_test, writer_tests)
 
 all_tests = []
 all_tests.extend([str(py) for py in core_tests])
