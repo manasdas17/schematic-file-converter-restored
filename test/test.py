@@ -183,13 +183,14 @@ if __name__ == "__main__":
             test = test_diff_generator(f, format)
             setattr(test_class, test_name, test)
 
-        for f in upverter_upv_files:
+        # TODO: The below call is hacked to 100 due to too many open files
+        for f in upverter_upv_files[:100]:
             base = os.path.basename(f)
 
             test_name = 'test_%s_%s_%s' % (format, base, 'write')
             test = test_write_generator(f, format)
-            # TODO: Right now the below attr call makes everything break due to too many open files
-            #setattr(test_class, test_name, test)
+            # TODO: The below attr call breaks everything due to too many open files
+            setattr(test_class, test_name, test)
 
 
     for c in test_classes:
