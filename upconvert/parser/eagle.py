@@ -2012,7 +2012,13 @@ class Eagle:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an eagle schematic """
-        return 0
+        f = open(filename, 'r')
+        data = f.read(4096)
+        f.close()
+        confidence = 0
+        if 'ÄA' in data:
+            confidence += 0.9
+        return confidence
 
 
     def _parse_blocks(self, filehandle, numofblocks): # pylint: disable=R0912

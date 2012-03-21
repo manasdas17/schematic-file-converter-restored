@@ -51,10 +51,15 @@ Upverter's Open JSON Interchange Format """
 import logging
 import os
 import operator
+import tempfile
 from argparse import ArgumentParser
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
-from upconvert.parser import openjson, kicad, geda, eagle, fritzing, gerber
-from upconvert.writer import openjson, kicad, geda, eagle, gerber
+from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, eagle as eagle_p, fritzing as fritzing_p, gerber as gerber_p
+from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, eagle as eagle_w, gerber as gerber_w
 
 
 # Logging
@@ -62,20 +67,20 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('main')
 
 PARSERS = {
-    'openjson': openjson.JSON,
-    'kicad': kicad.KiCAD,
-    'geda': geda.GEDA,
-    'eagle': eagle.Eagle,
-    'fritzing': fritzing.Fritzing,
-    'gerber': gerber.Gerber,
+    'openjson': openjson_p.JSON,
+    'kicad': kicad_p.KiCAD,
+    'geda': geda_p.GEDA,
+    'eagle': eagle_p.Eagle,
+    'fritzing': fritzing_p.Fritzing,
+    'gerber': gerber_p.Gerber,
 }
 
 WRITERS = {
-    'openjson': openjson.JSON,
-    'kicad': kicad.KiCAD,
-    'geda': geda.GEDA,
-    'eagle': eagle.Eagle,
-    'gerber': gerber.Gerber,
+    'openjson': openjson_w.JSON,
+    'kicad': kicad_w.KiCAD,
+    'geda': geda_w.GEDA,
+    'eagle': eagle_w.Eagle,
+    'gerber': gerber_w.Gerber,
 }
 
 EXTENSIONS = {
@@ -118,8 +123,8 @@ class Upconverter(object):
             else:
                 p = PARSERS[in_format]()
         except KeyError:
-            print "ERROR: Unsupported input type:", in_format
-            exit(1)
+            raise Exception('ERROR: Unsupported input type: %s' % (in_format))
+
         return p.parse(in_file)
 
 
@@ -133,39 +138,44 @@ class Upconverter(object):
             else:
                 w = WRITERS[out_format]()
         except KeyError:
-            print "ERROR: Unsupported output type:", out_format
-            exit(1)
+            raise Exception('ERROR: Unsupported input type: %s' % (out_format))
+
         return w.write(dsgn, out_file)
 
 
     @staticmethod
     def file_to_upv(file_content):
         """ convert file_content into upv data pre-jsonification """
+        
+        log.info('Starting to convert content into upv')
 
         tmp_fd, tmp_path = tempfile.mkstemp()
-        tmp_fd.write(file_content)
+        os.write(tmp_fd, file_content.read())
 
-        format = Upconverter.autodetect(path)
-        design = Upconverter.parse(path, format)
+        format = Upconverter.autodetect(tmp_path)
+        design = Upconverter.parse(tmp_path, format)
 
         tmp_fd2, tmp_path2 = tempfile.mkstemp()
         Upconverter.write(design, tmp_path2, 'openjson')
 
-        return json.loads(tmp_fd2.read())
+        final_file = open(tmp_path2, 'r')
+        return json.loads(final_file.read())
 
 
     @staticmethod
     def json_to_format(upv_json_data, format, path):
         """ convert upv_json_data into format as a file @ path """
+        
+        log.info('Converting upv data into %s at %s', format, path)
 
         path_w_ext = path + EXTENSIONS[format]
-        final_file = open(path_w_ext)
+        #final_file = open(path_w_ext, 'w')
 
         tmp_fd, tmp_path = tempfile.mkstemp()
-        tmp_fd.write(upv_json_data)
+        os.write(tmp_fd, upv_json_data)
 
         design = Upconverter.parse(tmp_path, 'openjson')
-        Upconverter.write(design, final_file, format)
+        Upconverter.write(design, path_w_ext, format)
 
         return path_w_ext
 
@@ -221,11 +231,19 @@ if __name__ == "__main__":
             exit(1)
 
     # parse and export the data
-    design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
+    try:
+        design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
+    except:
+        print "ERROR: Unsupported input type:", in_format
+        exit(1)
 
     # we got a good result
     if design is not None:
-        Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
+        try:
+            Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
+        except:
+            print "ERROR: Unsupported input type:", in_format
+            exit(1)
 
     # parse returned None -> something went wrong
     else:
