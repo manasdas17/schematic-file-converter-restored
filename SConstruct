@@ -65,7 +65,7 @@ def build_coverage(target, source, env):
 bld_coverage = Builder(action=build_coverage)
 
 def build_regression(target, source, env):
-    args = ['test/test.py']
+    args = ['python', 'test/test.py']
     #args.extend([str(t) for t in source])
     return subprocess.call(args)
 bld_regression = Builder(action=build_regression)
@@ -219,7 +219,7 @@ check = env.check(['fake_target_to_force_check'], all_source)
 pyflakes = env.pyflakes(['fake_target_to_force_pyflakes'], all_source)
 test = env.test(['fake_target_to_force_test'], all_tests)
 coverage = env.coverage(['fake_target_to_force_coverage'], all_tests)
-regression = env.coverage(['fake_target_to_force_regression'], all_test_files)
+regression = env.coverage(['fake_target_to_force_regression'], [])
 
 env.Alias('lint', lint)
 env.Alias('check', check)
