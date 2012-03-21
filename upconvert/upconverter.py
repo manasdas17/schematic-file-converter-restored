@@ -158,8 +158,14 @@ class Upconverter(object):
         tmp_fd2, tmp_path2 = tempfile.mkstemp()
         Upconverter.write(design, tmp_path2, 'openjson')
 
-        final_file = open(tmp_path2, 'r')
-        return json.loads(final_file.read())
+        json_data = None
+        with open(tmp_path2, 'r') as final_file:
+            json_data = final_file.read()
+
+        os.remove(tmp_path)
+        os.remove(tmp_path2)
+
+        return json.loads(json_data)
 
 
     @staticmethod
@@ -169,13 +175,14 @@ class Upconverter(object):
         log.info('Converting upv data into %s at %s', format, path)
 
         path_w_ext = path + EXTENSIONS[format]
-        #final_file = open(path_w_ext, 'w')
 
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.write(tmp_fd, upv_json_data)
 
         design = Upconverter.parse(tmp_path, 'openjson')
         Upconverter.write(design, path_w_ext, format)
+
+        os.remove(tmp_path)
 
         return path_w_ext
 

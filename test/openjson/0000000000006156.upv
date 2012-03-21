@@ -1,0 +1,682 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "D1"
+      }, 
+      "instance_id": "aa18e37585859da7", 
+      "library_id": "d49edac3491ac5c0", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 20, 
+              "y": 30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 690, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "D2"
+      }, 
+      "instance_id": "98c5d4b69de6e933", 
+      "library_id": "d49edac3491ac5c0", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 20, 
+              "y": 30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 540, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "GND"
+      }, 
+      "instance_id": "359249ea6784cdb3", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": 60, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 940, 
+          "y": 400
+        }
+      ], 
+      "symbol_index": 2
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "91d60f1faeb4266a", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -10, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 350, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "d49edac3491ac5c0": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/SSL-LX5093GD-Lumex-datasheet-49812.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Lumex", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "175809231", 
+        "_part_number": "SSL-LX5093GD", 
+        "_prefix": "D", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "LED", 
+        "_type": "integrated circuit", 
+        "color": "Green", 
+        "forward_voltage": "2.20V", 
+        "lens_color": "Green", 
+        "lens_type": "Diffused", 
+        "luminous_intensity": "0.03cd", 
+        "min_operating_temperature": "-40.00\u00b0C", 
+        "mounting_type": "through hole", 
+        "peak_wavelength": "0.57 um", 
+        "power_dissipation": "0.10W", 
+        "size_diameter": "0.01m", 
+        "size_height": "0.01m", 
+        "wavelength": "0.57 um"
+      }, 
+      "name": "LED Green", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 25, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006156", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "petercoulton", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1317050701
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "3d741cd0eb187096", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "0221d1e3d219688b", 
+          "x": 340, 
+          "y": 500
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "CATHODE"
+      }, 
+      "net_id": "a2ddeceb441dd504", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7860615789abdefa"
+          ], 
+          "point_id": "c6cd7f6a45f897e5", 
+          "x": 700, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "98c5d4b69de6e933", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "7860615789abdefa"
+          ], 
+          "point_id": "9e945b3d62ef424b", 
+          "x": 580, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c6cd7f6a45f897e5", 
+            "9e945b3d62ef424b"
+          ], 
+          "point_id": "7860615789abdefa", 
+          "x": 590, 
+          "y": 400
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "net_id": "e6e7c6f6bfc28831", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "98c5d4b69de6e933", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "5ecae291b561e506"
+          ], 
+          "point_id": "2e286c8fe749ae03", 
+          "x": 540, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5ecae291b561e506"
+          ], 
+          "point_id": "bbc1b4c42202bd36", 
+          "x": 360, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bbc1b4c42202bd36", 
+            "2e286c8fe749ae03"
+          ], 
+          "point_id": "5ecae291b561e506", 
+          "x": 530, 
+          "y": 400
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "GND"
+      }, 
+      "net_id": "9b6d3ee733f8acbe", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "aa18e37585859da7", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "965c33cfd366f993"
+          ], 
+          "point_id": "09537cf099a1ba0e", 
+          "x": 730, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "07340b14c3497943", 
+            "965c33cfd366f993"
+          ], 
+          "point_id": "984b3cc3fd6c0763", 
+          "x": 850, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "984b3cc3fd6c0763"
+          ], 
+          "point_id": "07340b14c3497943", 
+          "x": 950, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "984b3cc3fd6c0763", 
+            "09537cf099a1ba0e"
+          ], 
+          "point_id": "965c33cfd366f993", 
+          "x": 740, 
+          "y": 400
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -171,9 +171,8 @@ class GEDA:
         ## output is a list of lines 
         output = self.write_schematic_file(design)
 
-        f_out = codecs.open(filename, encoding='utf-8', mode='w')
-        f_out.write(self.commands_to_string(output))
-        f_out.close()
+        with codecs.open(filename, encoding='utf-8', mode='w') as f_out:
+            f_out.write(self.commands_to_string(output))
         return
 
     def create_project_files(self, filename):
@@ -195,13 +194,12 @@ class GEDA:
         ## create project file to allow gEDA find symbol files
         project_file = os.path.join(project_dir, 'gafrc')
         if not os.path.exists(project_file):
-            f_out = codecs.open(
+            with codecs.open(
                 os.path.join(project_dir, 'gafrc'), 
                 encoding='utf-8',
                 mode='w'
-            )
-            f_out.write('(component-library "./symbols")')
-            f_out.close()
+            ) as f_out:
+                f_out.write('(component-library "./symbols")')
         else:
             print "gafrc file exists. Make sure it contains the following line:"
             print "(component-library './symbols')"
@@ -376,9 +374,8 @@ class GEDA:
                 self.project_dirs['symbol'],
                 symbol_filename
             )
-            fout = codecs.open(path, encoding='utf-8', mode='w')
-            fout.write(self.commands_to_string(commands))
-            fout.close()
+            with codecs.open(path, encoding='utf-8', mode='w') as fout:
+                fout.write(self.commands_to_string(commands))
 
             ## required for instantiating components later
             self.component_library[(library_id, sym_idx)] = symbol_filename

@@ -1,0 +1,257 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "d804d484366e1cf8", 
+      "library_id": "bdbdb64190c3c3f0", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 770, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "bdbdb64190c3c3f0": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/EG1213-E-Switch-datasheet-132892.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "E-Switch", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "105625808179", 
+        "_part_number": "EG1213", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "contacts_type": "SPDT", 
+        "current_rating": "0.20A", 
+        "max_contact_resistance": "0.02\u03a9", 
+        "max_operating_temperature": "70.00\u00b0C", 
+        "mounting_type": "Through Hole", 
+        "number_of_positions": "2.00", 
+        "orientation": "Right Angle", 
+        "size_height": "5mm", 
+        "size_length": "10mm", 
+        "size_width": "3.8mm"
+      }, 
+      "name": "EG1213", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000003908", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "bsx", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316002866
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 1000, 
+          "y": 435
+        }
+      ], 
+      "attributes": {
+        "name": "3"
+      }, 
+      "net_id": "38dec37cb68ac692", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cacbf15aef8ed844"
+          ], 
+          "point_id": "db1087861db89f8c", 
+          "x": 1110, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "d804d484366e1cf8", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "a57ce7b679a36baf"
+          ], 
+          "point_id": "ce2b04f8932920b2", 
+          "x": 890, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ce2b04f8932920b2", 
+            "163884df86619bcd"
+          ], 
+          "point_id": "a57ce7b679a36baf", 
+          "x": 900, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a57ce7b679a36baf", 
+            "226a4d866019cf56"
+          ], 
+          "point_id": "163884df86619bcd", 
+          "x": 1110, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "163884df86619bcd", 
+            "103b69b3fd8f82a9"
+          ], 
+          "point_id": "226a4d866019cf56", 
+          "x": 1110, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "226a4d866019cf56", 
+            "2a9212889ea4d314"
+          ], 
+          "point_id": "103b69b3fd8f82a9", 
+          "x": 1060, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "103b69b3fd8f82a9", 
+            "cacbf15aef8ed844"
+          ], 
+          "point_id": "2a9212889ea4d314", 
+          "x": 1110, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "db1087861db89f8c", 
+            "2a9212889ea4d314"
+          ], 
+          "point_id": "cacbf15aef8ed844", 
+          "x": 1060, 
+          "y": 350
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

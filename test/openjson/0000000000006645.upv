@@ -1,0 +1,225 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "6372c514c38907c8", 
+      "library_id": "0ee2516076ee61b9", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 800, 
+          "y": 500
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0ee2516076ee61b9": {
+      "attributes": {
+        "Category": "Connectors, Interconnects", 
+        "Connector Type": "USB - A ", 
+        "Family": "USB, IEEE-1394 (Firewire), DVI, HDMI", 
+        "Features": "Board Lock ", 
+        "Gender": "Receptacle", 
+        "Mounting Type": "Through Hole, Right Angle, Horizontal  ", 
+        "Number of Contacts": "4", 
+        "Other Names": "151-1080 690-004-621-013-ND ", 
+        "Series": "690", 
+        "Specifications": "USB 2.0 ", 
+        "_datasheet": "http://www.edac.net/file_library/series/14_690%20series%20(new).pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "EDAC Inc", 
+        "_num_pins": "4", 
+        "_octopart_part_number": "31419453807", 
+        "_part_number": "690-004-621-013", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "CONN USB JACK TYPE A HORIZON R/A", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "4", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006645", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "ParagonRG", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1318113080
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 720, 
+          "y": 490
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "30c9ff72f8fccd80", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "6372c514c38907c8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "7c642290e44fddb1"
+          ], 
+          "point_id": "27495b592eed2708", 
+          "x": 800, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cce28e978fdf310c", 
+            "27495b592eed2708"
+          ], 
+          "point_id": "7c642290e44fddb1", 
+          "x": 790, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7c642290e44fddb1"
+          ], 
+          "point_id": "cce28e978fdf310c", 
+          "x": 640, 
+          "y": 490
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

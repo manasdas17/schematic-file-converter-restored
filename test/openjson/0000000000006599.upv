@@ -1,0 +1,316 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "G1"
+      }, 
+      "instance_id": "24e12ae959d75219", 
+      "library_id": "49ec9f634a6143af", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 540, 
+          "y": 450
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "e861e59d360ed221", 
+      "library_id": "649d4d3a1465e3d4", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 640, 
+          "y": 370
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C2"
+      }, 
+      "instance_id": "dbaa8278afb0b52c", 
+      "library_id": "649d4d3a1465e3d4", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 640, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "49ec9f634a6143af": {
+      "attributes": {
+        "_datasheet": "", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "OPAMP", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_symbol_0_0": "OR", 
+        "_type": "gate"
+      }, 
+      "name": "Op-amp", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 9, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "control1": {
+                    "x": 25, 
+                    "y": 0
+                  }, 
+                  "control2": {
+                    "x": 35, 
+                    "y": -5
+                  }, 
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "type": "bezier"
+                }, 
+                {
+                  "control1": {
+                    "x": 25, 
+                    "y": -40
+                  }, 
+                  "control2": {
+                    "x": 35, 
+                    "y": -35
+                  }, 
+                  "p1": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "type": "bezier"
+                }, 
+                {
+                  "control1": {
+                    "x": 16, 
+                    "y": -12
+                  }, 
+                  "control2": {
+                    "x": 16, 
+                    "y": -28
+                  }, 
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "649d4d3a1465e3d4": {
+      "attributes": {
+        "_capacitance": "0.10 uF", 
+        "_datasheet": "http://datasheet.octopart.com/BFC237021104-Vishay-datasheet-5313737.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "Vishay", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "717351660411", 
+        "_part_number": "BFC237021104", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_suffix": "F", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "integrated circuit", 
+        "capacitance": "0.10 uF", 
+        "dielectric_material": "Polyester", 
+        "insulation_resistance": "0.50 G\u03a9", 
+        "lead_length": "0.00m", 
+        "max_capacitance_tolerance": "10.00%", 
+        "min_capacitance_tolerance": "-10.00%", 
+        "mounting_type": "through hole", 
+        "termination_style": "Radial", 
+        "voltage_rating_ac": "63.00V", 
+        "voltage_rating_dc": "100.00V"
+      }, 
+      "name": "0.10 uF C", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_gate_counter": "1", 
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006599", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "janrod", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1317971397
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

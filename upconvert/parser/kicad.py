@@ -52,9 +52,8 @@ class KiCAD(object):
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an kicad schematic """
-        f = open(filename, 'r')
-        data = f.read(4096)
-        f.close()
+        with open(filename, 'r') as f:
+            data = f.read(4096)
         confidence = 0
         if 'EESchema Schematic' in data:
             confidence += 0.75
@@ -74,43 +73,40 @@ class KiCAD(object):
                 for cpt in parse_library(library_filename):
                     design.add_component(cpt.name, cpt)
 
-        f = open(filename)
-
-        libs = []
-        line = f.readline().strip()
-
-        # parse the library references
-        while line != "$EndDescr":
-            if line.startswith('LIBS:'):
-                libs.extend(line.split(':', 1)[1].split(','))
+        with open(filename) as f:
+            libs = []
             line = f.readline().strip()
 
-        # Now parse wires and components, ignore connections, we get
-        # connectivity from wire segments
+            # parse the library references
+            while line != "$EndDescr":
+                if line.startswith('LIBS:'):
+                    libs.extend(line.split(':', 1)[1].split(','))
+                line = f.readline().strip()
 
-        line = f.readline()
-
-        while line:
-            prefix = line.split()[0]
-
-            if line.startswith('Wire Wire Line'):
-                self.parse_wire(f, segments)
-            elif prefix == "Connection": # Store these to apply later
-                self.parse_connection(line, junctions)
-            elif prefix == "Text":
-                design.design_attributes.add_annotation(
-                    self.parse_text(f, line))
-            elif prefix == "$Comp": # Component Instance
-                inst = self.parse_component_instance(f)
-                design.add_component_instance(inst)
-                if inst.library_id not in design.components.components:
-                    cpt = lookup_part(inst.library_id, libs)
-                    if cpt is not None:
-                        design.components.add_component(cpt.name, cpt)
+            # Now parse wires and components, ignore connections, we get
+            # connectivity from wire segments
 
             line = f.readline()
 
-        f.close()
+            while line:
+                prefix = line.split()[0]
+
+                if line.startswith('Wire Wire Line'):
+                    self.parse_wire(f, segments)
+                elif prefix == "Connection": # Store these to apply later
+                    self.parse_connection(line, junctions)
+                elif prefix == "Text":
+                    design.design_attributes.add_annotation(
+                        self.parse_text(f, line))
+                elif prefix == "$Comp": # Component Instance
+                    inst = self.parse_component_instance(f)
+                    design.add_component_instance(inst)
+                    if inst.library_id not in design.components.components:
+                        cpt = lookup_part(inst.library_id, libs)
+                        if cpt is not None:
+                            design.components.add_component(cpt.name, cpt)
+
+                line = f.readline()
 
         segments = self.divide(segments, junctions)
         design.nets = self.calc_nets(segments)

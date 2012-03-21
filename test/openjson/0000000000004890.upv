@@ -1,0 +1,417 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "4af2ffc8b947cd70", 
+      "library_id": "4821d7ac6ffad8e5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 490, 
+          "y": 460
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "4f4288ec2fca1433", 
+      "library_id": "4821d7ac6ffad8e5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 330
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "4821d7ac6ffad8e5": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/68786-202LF-Areva-datasheet-141246.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "FCI", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "11095414081", 
+        "_part_number": "68786-202LF", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "color": "White", 
+        "contact_material": "Polyester,Flame Retardant", 
+        "contact_plating": "Gold", 
+        "contact_resistance": "0.02\u03a9", 
+        "current_rating": "2.50A", 
+        "flammability_rating": "UL 94 V-0", 
+        "housing_color": "Black", 
+        "insulation_resistance": "50.00 G\u03a9", 
+        "max_operating_temperature": "120.00\u00b0C", 
+        "number_of_mating_cycles": "50.00", 
+        "pin_pitch": "2.54 mm", 
+        "size_height": "5.5mm", 
+        "size_width": "2.11 mm", 
+        "voltage_rating_ac": "0.80 kV"
+      }, 
+      "name": "68786-202LF", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004890", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "iceman", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316105990
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "c16503b0f94344db", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "8a841562d03e530c", 
+          "x": 570, 
+          "y": 350
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "284083a1ec46f300", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "4af2ffc8b947cd70", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "1968af13af0df023"
+          ], 
+          "point_id": "9b4130bfce10f375", 
+          "x": 490, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9b4130bfce10f375", 
+            "850ef6c08b098bb1"
+          ], 
+          "point_id": "1968af13af0df023", 
+          "x": 480, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1968af13af0df023", 
+            "0935fdc0540d6995"
+          ], 
+          "point_id": "850ef6c08b098bb1", 
+          "x": 430, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "850ef6c08b098bb1", 
+            "799fdb6f9f55f962"
+          ], 
+          "point_id": "0935fdc0540d6995", 
+          "x": 430, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0935fdc0540d6995", 
+            "a623707620160144"
+          ], 
+          "point_id": "799fdb6f9f55f962", 
+          "x": 520, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "4f4288ec2fca1433", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "799fdb6f9f55f962"
+          ], 
+          "point_id": "a623707620160144", 
+          "x": 530, 
+          "y": 320
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "3fe8711fe177cec8", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "674437cf8a325411"
+          ], 
+          "point_id": "b9cbfd595cb7d25c", 
+          "x": 800, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b9cbfd595cb7d25c", 
+            "f96b9a75713a3cc5"
+          ], 
+          "point_id": "674437cf8a325411", 
+          "x": 790, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "674437cf8a325411", 
+            "048833fa936fabfa"
+          ], 
+          "point_id": "f96b9a75713a3cc5", 
+          "x": 790, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f96b9a75713a3cc5", 
+            "a23f48438ea9d3ff"
+          ], 
+          "point_id": "048833fa936fabfa", 
+          "x": 780, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "048833fa936fabfa", 
+            "78a0acb620b78c96"
+          ], 
+          "point_id": "a23f48438ea9d3ff", 
+          "x": 780, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a23f48438ea9d3ff", 
+            "1b629b3d25b3b6fd"
+          ], 
+          "point_id": "78a0acb620b78c96", 
+          "x": 740, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "78a0acb620b78c96", 
+            "dad2fbc74450d1b7"
+          ], 
+          "point_id": "1b629b3d25b3b6fd", 
+          "x": 740, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1b629b3d25b3b6fd", 
+            "03eb5d1d74415495"
+          ], 
+          "point_id": "dad2fbc74450d1b7", 
+          "x": 680, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dad2fbc74450d1b7", 
+            "f2d918dcf800b4ad"
+          ], 
+          "point_id": "03eb5d1d74415495", 
+          "x": 680, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "03eb5d1d74415495", 
+            "7d6b61a276fb2a43"
+          ], 
+          "point_id": "f2d918dcf800b4ad", 
+          "x": 680, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f2d918dcf800b4ad", 
+            "7975347cada893ed"
+          ], 
+          "point_id": "7d6b61a276fb2a43", 
+          "x": 570, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7d6b61a276fb2a43", 
+            "0c8969cb50e114e9"
+          ], 
+          "point_id": "7975347cada893ed", 
+          "x": 570, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7975347cada893ed", 
+            "12cb642fcec049ec"
+          ], 
+          "point_id": "0c8969cb50e114e9", 
+          "x": 570, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0c8969cb50e114e9", 
+            "0a1f16662c162f10"
+          ], 
+          "point_id": "12cb642fcec049ec", 
+          "x": 610, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "12cb642fcec049ec"
+          ], 
+          "point_id": "0a1f16662c162f10", 
+          "x": 610, 
+          "y": 440
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

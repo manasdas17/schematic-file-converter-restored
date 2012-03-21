@@ -1,0 +1,526 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "4a6bdabd217587fc", 
+      "library_id": "ac8adc9bfcfff9f9", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -100
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -110
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 420, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "2c7de95718574a91", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 630, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "GND"
+      }, 
+      "instance_id": "f21eb52b1ca62b24", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 250, 
+          "y": 500
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ac8adc9bfcfff9f9": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/NE555N-STMicroelectronics-datasheet-503160.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "8", 
+        "_package": "PDIP-8", 
+        "_part_number": "NE555N", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "imported from Octopart": "yes", 
+        "max_frequency": "0.50 MHz", 
+        "max_input_voltage_dc": "15.00 V", 
+        "max_operating_temperature": "70.00 \u00b0C", 
+        "max_output_current": "200.00 mA", 
+        "max_supply_current": "15.00 mA", 
+        "max_supply_voltage_dc": "16.00 V", 
+        "min_supply_voltage_dc": "4.50 V", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "59446783"
+      }, 
+      "name": "NE555N", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -70
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -50
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "8"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 80, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "1", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -13
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "2", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -33
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "3", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -53
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "4", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -73
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "5", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -73
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "6", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -53
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "7", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -33
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "8", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -13
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000003770", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "koenig", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1315978782
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

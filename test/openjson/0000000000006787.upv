@@ -1,0 +1,594 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "f157167ec9df7c76", 
+      "library_id": "d0a14b7346e818c6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 30, 
+              "y": 30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 550, 
+          "y": 950
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "ae2d13633ff4e37d", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": 0, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 430, 
+          "y": 1090
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "GND"
+      }, 
+      "instance_id": "d5ff348b1b590a32", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 510, 
+          "y": 780
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "d0a14b7346e818c6": {
+      "attributes": {
+        "Contact Material: ": "Brass, Copper ", 
+        "Number of Positions / Contacts: ": "2 (TS, Mono) ", 
+        "Product Category: ": "Phone Connectors ", 
+        "Standard": "1/8 in ", 
+        "Standard Pack Qty: ": "100", 
+        "_datasheet": "http://www.mouser.com/catalog/specsheets/KC-300888.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "KobiConn", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "75896039930", 
+        "_part_number": "171-3302-EX", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "Phone Connectors PHONE 3.5mm MONO ", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006787", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "colin.karpfinger", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1318540739
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 495, 
+          "y": 1005
+        }
+      ], 
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "net_id": "19d1d2127eccc21b", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "f157167ec9df7c76", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "01e848a61fdbb7b6"
+          ], 
+          "point_id": "40c25238d9035031", 
+          "x": 550, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40c25238d9035031", 
+            "5d839a50f59671b2"
+          ], 
+          "point_id": "01e848a61fdbb7b6", 
+          "x": 540, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "01e848a61fdbb7b6", 
+            "b72366cec28e1379"
+          ], 
+          "point_id": "5d839a50f59671b2", 
+          "x": 510, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5d839a50f59671b2", 
+            "31e19e1b7deaad03"
+          ], 
+          "point_id": "b72366cec28e1379", 
+          "x": 440, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b72366cec28e1379", 
+            "2f6245382e7cdccb"
+          ], 
+          "point_id": "31e19e1b7deaad03", 
+          "x": 440, 
+          "y": 1060
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "ae2d13633ff4e37d", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "31e19e1b7deaad03"
+          ], 
+          "point_id": "2f6245382e7cdccb", 
+          "x": 440, 
+          "y": 1070
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 605, 
+          "y": 860
+        }
+      ], 
+      "attributes": {
+        "name": "GND"
+      }, 
+      "net_id": "0e01d1aa5c4424db", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "f157167ec9df7c76", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "c7d4a497e0cd1067"
+          ], 
+          "point_id": "bc1a1295f32767f5", 
+          "x": 670, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bc1a1295f32767f5", 
+            "c830128769aec48e"
+          ], 
+          "point_id": "c7d4a497e0cd1067", 
+          "x": 680, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c7d4a497e0cd1067", 
+            "949d64afa806d48e"
+          ], 
+          "point_id": "c830128769aec48e", 
+          "x": 690, 
+          "y": 940
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c830128769aec48e", 
+            "80bae1703fef8903"
+          ], 
+          "point_id": "949d64afa806d48e", 
+          "x": 690, 
+          "y": 900
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "949d64afa806d48e", 
+            "eb995b24ce933d21"
+          ], 
+          "point_id": "80bae1703fef8903", 
+          "x": 690, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "80bae1703fef8903", 
+            "82a43e9eb9d57f0c"
+          ], 
+          "point_id": "eb995b24ce933d21", 
+          "x": 520, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eb995b24ce933d21", 
+            "6eb3c93c471d0129"
+          ], 
+          "point_id": "82a43e9eb9d57f0c", 
+          "x": 520, 
+          "y": 790
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "d5ff348b1b590a32", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "82a43e9eb9d57f0c"
+          ], 
+          "point_id": "6eb3c93c471d0129", 
+          "x": 520, 
+          "y": 780
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

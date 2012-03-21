@@ -33,8 +33,8 @@ class Altium:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an altium schematic """
-        f = open(filename, 'r')
-        data = f.read()
+        with open(filename, 'r') as f:
+            data = f.read()
         confidence = 0
         if 'altium' in data:
             confidence += 0.5
@@ -44,7 +44,7 @@ class Altium:
     def parse(self, filename):
         """ Parse an Altium file into a design """
         design = Design()
-        f = open(filename, "w")
-        #TODO: Read!
-        f.close()
+        with open(filename, "w") as f:
+            pass
+            #TODO: Read!
         return design

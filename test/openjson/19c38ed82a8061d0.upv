@@ -1,0 +1,501 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "7404622498389405", 
+      "library_id": "3ab59e04a2b43926", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 380, 
+          "y": 520
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "e4dd968697646191", 
+      "library_id": "3ab59e04a2b43926", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 380, 
+          "y": 320
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "3ab59e04a2b43926": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/SN74HC595N-Texas-Instruments-datasheet-152306.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "16", 
+        "_octopart_part_number": "1977125783", 
+        "_package": "DIP-16", 
+        "_part_number": "SN74HC595N", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "import_id": "fritzing_1a7828b6466fac9fd042221e931124c4", 
+        "imported_from": "fritzing", 
+        "lifecycle_status": "Active", 
+        "logic_type": "CMOS", 
+        "mounting_type": "through hole", 
+        "output_current_drive": "-1.00 mA", 
+        "part_family": "SN74HC595", 
+        "voltage_nodes": "2.00V"
+      }, 
+      "name": "74HC595", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "VCC", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q4", 
+                    "x": 7, 
+                    "y": -73
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q5", 
+                    "x": 7, 
+                    "y": -93
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q6", 
+                    "x": 7, 
+                    "y": -113
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q7", 
+                    "x": 7, 
+                    "y": -133
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -90
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "GND", 
+                    "x": 7, 
+                    "y": -153
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -110
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "Q7'", 
+                    "x": 113, 
+                    "y": -153
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -130
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "MR", 
+                    "x": 113, 
+                    "y": -133
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -150
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -150
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "SH_CP", 
+                    "x": 113, 
+                    "y": -113
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -150
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -150
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "ST_CP", 
+                    "x": 113, 
+                    "y": -93
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -130
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "OE", 
+                    "x": 113, 
+                    "y": -73
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -110
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -90
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -70
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "DS", 
+                    "x": 113, 
+                    "y": -53
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -50
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "Q0", 
+                    "x": 113, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Q3", 
+                    "x": 7, 
+                    "y": -53
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 160, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "19c38ed82a8061d0", 
+      "license": "", 
+      "name": "Pegasus VIII", 
+      "owner": "rmarko", 
+      "slug": "Pegasus-VIII", 
+      "updated_timestamp": 1330686394
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "SH_CP"
+      }, 
+      "net_id": "fde720a2c842034c", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "7404622498389405", 
+              "pin_number": "11"
+            }
+          ], 
+          "connected_points": [
+            "8312fe70b056a33e"
+          ], 
+          "point_id": "7a0d1a94d926100e", 
+          "x": 500, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7a0d1a94d926100e", 
+            "37b6d3c58c9c2666", 
+            "199c2f72f9ec8589"
+          ], 
+          "point_id": "8312fe70b056a33e", 
+          "x": 510, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "37b6d3c58c9c2666"
+          ], 
+          "point_id": "e51aa9bf5e719382", 
+          "x": 520, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8312fe70b056a33e", 
+            "e51aa9bf5e719382"
+          ], 
+          "point_id": "37b6d3c58c9c2666", 
+          "x": 510, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8312fe70b056a33e", 
+            "f0a68bdb41aae3a4"
+          ], 
+          "point_id": "199c2f72f9ec8589", 
+          "x": 510, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f0a68bdb41aae3a4"
+          ], 
+          "point_id": "0a859cc0511dce72", 
+          "x": 550, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "199c2f72f9ec8589", 
+            "0a859cc0511dce72"
+          ], 
+          "point_id": "f0a68bdb41aae3a4", 
+          "x": 550, 
+          "y": 320
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

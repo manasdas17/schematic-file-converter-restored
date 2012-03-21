@@ -45,8 +45,8 @@ class JSON:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an openjson file """
-        f = open(filename, 'r')
-        data = f.read()
+        with open(filename, 'r') as f:
+            data = f.read()
         confidence = 0
         if 'component_instances' in data:
             confidence += 0.3
@@ -57,9 +57,8 @@ class JSON:
 
     def parse(self, filename):
         """ Parse the openjson file into the core. """
-        f = open(filename)
-        read = json.loads(f.read())
-        f.close()
+        with open(filename) as f:
+            read = json.loads(f.read())
 
         self.parse_component_instances(read.get('component_instances'))
         self.parse_components(read.get('components'))

@@ -1,0 +1,563 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "173e76977d5b7051", 
+      "library_id": "23e770e350a8b1b9", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 200, 
+              "y": -105
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 540, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "Q2"
+      }, 
+      "instance_id": "40e21dab71c12439", 
+      "library_id": "1165ebac77d2a768", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 30, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 950, 
+          "y": 390
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "1165ebac77d2a768": {
+      "attributes": {
+        "Collector Current": "200mA", 
+        "Collector \u2212Base Voltage": "60VDC", 
+        "Collector \u2212Emitter Voltage": "40VDC", 
+        "Emitter \u2212Base Voltage": "5VDC", 
+        "_datasheet": "http://www.onsemi.com/pub_link/Collateral/2N3903-D.PDF", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "On Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "TO-92", 
+        "_part_number": "2N3903, 2N3904", 
+        "_prefix": "Q", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "BJT (NPN)", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "2N3903, 2N3904 NPN Silicon Transistors", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -41
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -39
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "23e770e350a8b1b9": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/NE555N-STMicroelectronics-datasheet-503160.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "8", 
+        "_package": "PDIP-8", 
+        "_part_number": "NE555N", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "imported from Octopart": "yes", 
+        "max_frequency": "0.50 MHz", 
+        "max_input_voltage_dc": "15.00 V", 
+        "max_operating_temperature": "70.00 \u00b0C", 
+        "max_output_current": "200.00 mA", 
+        "max_supply_current": "15.00 mA", 
+        "max_supply_voltage_dc": "16.00 V", 
+        "min_supply_voltage_dc": "4.50 V", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "59446783"
+      }, 
+      "name": "NE555N", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vcc", 
+                    "x": 190, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 195, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 200, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Discharge", 
+                    "x": 190, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 195, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 200, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Threshold", 
+                    "x": 190, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 195, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 200, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Control Voltage", 
+                    "x": 190, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 195, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 200, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Trigger", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Output", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Reset", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 100, 
+                  "type": "rectangle", 
+                  "width": 190, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "08bfab2823ea4de6", 
+      "license": "No License", 
+      "name": "555 timer heart", 
+      "owner": "shaemmerling", 
+      "slug": "555-timer-heart", 
+      "updated_timestamp": 1324290141
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "Vcc_Reset"
+      }, 
+      "net_id": "8550a0429a66daf0", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6ce0a363f131b644", 
+            "d391e0a766e77614"
+          ], 
+          "point_id": "6ac4698cafd6d8a0", 
+          "x": 500, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e7fad4606f50585", 
+            "6ac4698cafd6d8a0"
+          ], 
+          "point_id": "d391e0a766e77614", 
+          "x": 500, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "97c1fdf2f878b0cc", 
+            "6ce0a363f131b644"
+          ], 
+          "point_id": "d7ca028454ff9342", 
+          "x": 810, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "173e76977d5b7051", 
+              "pin_number": "8"
+            }
+          ], 
+          "connected_points": [
+            "09cdba78405d9669"
+          ], 
+          "point_id": "33582840dc5b4d4c", 
+          "x": 740, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "173e76977d5b7051", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "7ac3dc851c5b58da"
+          ], 
+          "point_id": "d654fd67db971cdb", 
+          "x": 540, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e7fad4606f50585", 
+            "d654fd67db971cdb"
+          ], 
+          "point_id": "7ac3dc851c5b58da", 
+          "x": 530, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d7ca028454ff9342", 
+            "6ac4698cafd6d8a0"
+          ], 
+          "point_id": "6ce0a363f131b644", 
+          "x": 750, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7ac3dc851c5b58da", 
+            "d391e0a766e77614", 
+            "92acc0c804d1f10b"
+          ], 
+          "point_id": "1e7fad4606f50585", 
+          "x": 520, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "33582840dc5b4d4c", 
+            "97c1fdf2f878b0cc"
+          ], 
+          "point_id": "09cdba78405d9669", 
+          "x": 750, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e7fad4606f50585", 
+            "bd8ec5c05cee2702"
+          ], 
+          "point_id": "92acc0c804d1f10b", 
+          "x": 520, 
+          "y": 250
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8c70d2a71c11c866"
+          ], 
+          "point_id": "86c8300d3b7a65f8", 
+          "x": 810, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "09cdba78405d9669", 
+            "d7ca028454ff9342"
+          ], 
+          "point_id": "97c1fdf2f878b0cc", 
+          "x": 810, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "92acc0c804d1f10b", 
+            "8c70d2a71c11c866"
+          ], 
+          "point_id": "bd8ec5c05cee2702", 
+          "x": 860, 
+          "y": 250
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bd8ec5c05cee2702", 
+            "86c8300d3b7a65f8"
+          ], 
+          "point_id": "8c70d2a71c11c866", 
+          "x": 860, 
+          "y": 380
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

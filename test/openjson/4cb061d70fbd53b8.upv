@@ -1,0 +1,230 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "10936f803674563f", 
+      "library_id": "f98423f5067bb834", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 60, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 570, 
+          "y": 450
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "b3c6a28e5b7c7fb6", 
+      "library_id": "c8169eaa2a397010", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 560, 
+          "y": 400
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "c8169eaa2a397010": {
+      "attributes": {
+        "Connect": "http://cn.mouser.com/ProductDetail/Murata/GRM155R71H103KA88J/?qs=sGAEpiMZZMvQvaS66kI3Ts1NDrBXjdywvIIo1%252bkrtgE%3d ", 
+        "Imported from": "Seeed Studio", 
+        "Package": "0402", 
+        "_capacitance": "10 nF", 
+        "_datasheet": "http://www.murata.com/products/catalog/pdf/c02e.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "Murata", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "1297652025080", 
+        "_part_number": "GRM155R71H103KA88J", 
+        "_prefix": "C", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "10 nF"
+      }, 
+      "name": "10 nF Capacitor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "f98423f5067bb834": {
+      "attributes": {
+        "_datasheet": "http://eeshop.unl.edu/sites/default/files/public/ds/LM340.pdf", 
+        "_lead_free": "No", 
+        "_manufacturer": "National Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "TO-220/TO-263/SOT-223/TO-3", 
+        "_part_number": "LM340-T5 / 7805", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "Voltage Regulator", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "LM340/LM78XX Series 3-Terminal Positive Regulators", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 40, 
+                  "x": 10, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_capacitor_counter": "1", 
+      "_integrated circuit_counter": "3"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "4cb061d70fbd53b8", 
+      "license": "", 
+      "name": "Betty VIII", 
+      "owner": "beamstar", 
+      "slug": "Betty-VIII", 
+      "updated_timestamp": 1330629698
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

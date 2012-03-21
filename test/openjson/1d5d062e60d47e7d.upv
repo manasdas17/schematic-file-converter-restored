@@ -1,0 +1,279 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R2"
+      }, 
+      "instance_id": "1605d7312adfb6e7", 
+      "library_id": "71abb1b3d61e006c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 620, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "f56918dcebac4a4a", 
+      "library_id": "71abb1b3d61e006c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 430, 
+          "y": 690
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "71abb1b3d61e006c": {
+      "attributes": {
+        "Value": "33K", 
+        "_datasheet": "http://en.wikipedia.org/wiki/Resistor", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "R", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_resistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "1d5d062e60d47e7d", 
+      "license": "", 
+      "name": "Serenity VIII", 
+      "owner": "SlightlyLoony", 
+      "slug": "Serenity-VIII", 
+      "updated_timestamp": 1329145742
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "f0d203bbe425200a", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "1605d7312adfb6e7", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "4fa6a181c364f7cc"
+          ], 
+          "point_id": "bb711ff65eac11f1", 
+          "x": 620, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bb711ff65eac11f1", 
+            "450de4faa83aba4a"
+          ], 
+          "point_id": "4fa6a181c364f7cc", 
+          "x": 610, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4fa6a181c364f7cc", 
+            "fe28bab8d9276799"
+          ], 
+          "point_id": "450de4faa83aba4a", 
+          "x": 420, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "450de4faa83aba4a", 
+            "8a9428d8181ca43e"
+          ], 
+          "point_id": "fe28bab8d9276799", 
+          "x": 420, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "f56918dcebac4a4a", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "fe28bab8d9276799"
+          ], 
+          "point_id": "8a9428d8181ca43e", 
+          "x": 420, 
+          "y": 640
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

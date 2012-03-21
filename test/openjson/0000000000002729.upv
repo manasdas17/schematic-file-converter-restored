@@ -1,0 +1,267 @@
+{
+  "component_instances": [
+    {
+      "attributes": {}, 
+      "instance_id": "61b53a23859ca0db", 
+      "library_id": "8247c009814d6ad6", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 680, 
+          "y": 460
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "8247c009814d6ad6": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/2N5415-STMicroelectronics-datasheet-6387422.pdf", 
+        "_lead_free": "yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "3", 
+        "_package": "TO-39", 
+        "_part_number": "2N5415", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "current_rating": "-1.0A", 
+        "imported from Octopart": "yes", 
+        "max_power_dissipation": "10.00 W", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "2507449437", 
+        "polarity": "PNP", 
+        "voltage_rating_dc": "-200.0V"
+      }, 
+      "name": "2N5415", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {}, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000002729", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "mcinern", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1313946208
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "732f5b356660f0e2", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "61b53a23859ca0db", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "6be97d1c524fc603"
+          ], 
+          "point_id": "93e6d97138b6db33", 
+          "x": 800, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "33a7a7e8723fe69a", 
+            "dafc4bbc2835b095"
+          ], 
+          "point_id": "23320bcb6b94c888", 
+          "x": 820, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "23320bcb6b94c888"
+          ], 
+          "point_id": "33a7a7e8723fe69a", 
+          "x": 880, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dafc4bbc2835b095", 
+            "f16edadcc7a723d5"
+          ], 
+          "point_id": "b543ae626854e9d1", 
+          "x": 820, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b543ae626854e9d1", 
+            "23320bcb6b94c888"
+          ], 
+          "point_id": "dafc4bbc2835b095", 
+          "x": 810, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f16edadcc7a723d5", 
+            "283ed6f0a01d029f"
+          ], 
+          "point_id": "d8471de2aa9b4c63", 
+          "x": 820, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d8471de2aa9b4c63", 
+            "b543ae626854e9d1"
+          ], 
+          "point_id": "f16edadcc7a723d5", 
+          "x": 810, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6be97d1c524fc603", 
+            "d53cc8c6aa1f13b7"
+          ], 
+          "point_id": "9f2efc5026f6edae", 
+          "x": 870, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9f2efc5026f6edae", 
+            "1c8b9a065310c921"
+          ], 
+          "point_id": "d53cc8c6aa1f13b7", 
+          "x": 870, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d53cc8c6aa1f13b7", 
+            "283ed6f0a01d029f"
+          ], 
+          "point_id": "1c8b9a065310c921", 
+          "x": 810, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9f2efc5026f6edae", 
+            "93e6d97138b6db33"
+          ], 
+          "point_id": "6be97d1c524fc603", 
+          "x": 810, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1c8b9a065310c921", 
+            "d8471de2aa9b4c63"
+          ], 
+          "point_id": "283ed6f0a01d029f", 
+          "x": 810, 
+          "y": 390
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

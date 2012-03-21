@@ -1,0 +1,220 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "929cfad1d9c2285a", 
+      "library_id": "e238a4803f56cfc1", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 580, 
+          "y": 370
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "e238a4803f56cfc1": {
+      "attributes": {
+        "Part # Aliases: ": "98-0003-2824-9 ", 
+        "Product Category: ": "Display Drivers & Controllers ", 
+        "_datasheet": "http://eu.mouser.com/ProductDetail/3M-Touch-Systems/SC501U", 
+        "_lead_free": "???", 
+        "_manufacturer": "3M TOUCH SYSTEMS", 
+        "_num_pins": "2", 
+        "_package": "BULK", 
+        "_part_number": "SC501U", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "INTEGRATED CIRCUITS", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004289", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "mattfromthenavy", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316020641
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 535, 
+          "y": 365
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "0995951d18df0063", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "929cfad1d9c2285a", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "116f1a46aec84b0b"
+          ], 
+          "point_id": "184bca2d8aa7f73f", 
+          "x": 580, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "184bca2d8aa7f73f", 
+            "8e0471db07ca1a21"
+          ], 
+          "point_id": "116f1a46aec84b0b", 
+          "x": 570, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "116f1a46aec84b0b", 
+            "02a5028a02dc8e3f"
+          ], 
+          "point_id": "8e0471db07ca1a21", 
+          "x": 530, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8e0471db07ca1a21", 
+            "48ca9041f196df29"
+          ], 
+          "point_id": "02a5028a02dc8e3f", 
+          "x": 540, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "02a5028a02dc8e3f", 
+            "091d350274082815"
+          ], 
+          "point_id": "48ca9041f196df29", 
+          "x": 540, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "48ca9041f196df29", 
+            "bf379a460ce76993"
+          ], 
+          "point_id": "091d350274082815", 
+          "x": 490, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "091d350274082815"
+          ], 
+          "point_id": "bf379a460ce76993", 
+          "x": 540, 
+          "y": 370
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

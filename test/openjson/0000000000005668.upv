@@ -1,0 +1,764 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "4a5200ecd741b917", 
+      "library_id": "b5661df492403f2d", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -140
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -150
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 380, 
+          "y": 580
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "556b73c723f19618", 
+      "library_id": "467209332283f2cd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 500, 
+          "y": 320
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "PWR"
+      }, 
+      "instance_id": "a97c3f5de219479f", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -7, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 320, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 1
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "467209332283f2cd": {
+      "attributes": {
+        "Actuator Type\t": "Standard", 
+        "Circuit": "SPDT", 
+        "Contact Rating @ Voltage": "0.2A @ 30VDC", 
+        "Family": "Slide", 
+        "Mounting Type\t": "Through Hole ", 
+        "Orientation": "Right Angle", 
+        "Other Names": "EG1906 / ERJ6ENFU / P040030", 
+        "Series": "EG", 
+        "Switch Function\t": "On-On", 
+        "Termination Style": "PC Pin", 
+        "_datasheet": "spec.e-switch.com/P-J/P040030B.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "E-SWITCH", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "105625808179", 
+        "_part_number": "EG1213", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH SLIDE SPDT 30V RT ANGLE", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "b5661df492403f2d": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/M22-7140642-Harwin-datasheet-504196.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "Harwin", 
+        "_num_pins": "12", 
+        "_octopart_part_number": "248123158260", 
+        "_part_number": "M22-7140642", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "color": "Black", 
+        "contact_material": "Phosphor Bronze", 
+        "contact_plating": "Gold", 
+        "contact_resistance": "20\u03a9", 
+        "current_rating": "1.00A", 
+        "flammability_rating": "UL 94 V-0", 
+        "gender": "Female", 
+        "insulation_resistance": "1000M\u03a9", 
+        "number_of_contacts": "12.00", 
+        "number_of_mating_cycles": "50.00", 
+        "size_height": "4.4mm", 
+        "size_width": "5 mm"
+      }, 
+      "name": "M22-7140642", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 7, 
+                    "y": -53
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "4", 
+                    "x": 7, 
+                    "y": -73
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "5", 
+                    "x": 7, 
+                    "y": -93
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -90
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "6", 
+                    "x": 7, 
+                    "y": -113
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -110
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "7", 
+                    "x": 113, 
+                    "y": -113
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -110
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "8", 
+                    "x": 113, 
+                    "y": -93
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -90
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "9", 
+                    "x": 113, 
+                    "y": -73
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -70
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "10", 
+                    "x": 113, 
+                    "y": -53
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -50
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "11", 
+                    "x": 113, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "12", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "12"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 120, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005668", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "nate", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316534136
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "c5685979e9a3fc17", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d5e2ed2555baa551"
+          ], 
+          "point_id": "cebfde5926948d17", 
+          "x": 550, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ac6a6e09bfdeb119", 
+            "a82134d61792c364"
+          ], 
+          "point_id": "aabab996e68bb4b6", 
+          "x": 660, 
+          "y": 720
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a82134d61792c364"
+          ], 
+          "point_id": "a8cda106ca5b3f5c", 
+          "x": 280, 
+          "y": 810
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "aabab996e68bb4b6", 
+            "d5e2ed2555baa551"
+          ], 
+          "point_id": "ac6a6e09bfdeb119", 
+          "x": 660, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ac6a6e09bfdeb119", 
+            "cebfde5926948d17"
+          ], 
+          "point_id": "d5e2ed2555baa551", 
+          "x": 550, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "aabab996e68bb4b6", 
+            "a8cda106ca5b3f5c"
+          ], 
+          "point_id": "a82134d61792c364", 
+          "x": 280, 
+          "y": 720
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

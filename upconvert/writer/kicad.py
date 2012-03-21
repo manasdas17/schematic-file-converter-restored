@@ -52,21 +52,18 @@ class KiCAD(object):
 
         self.write_library(design, library_filename)
 
-        f = open(filename, "w")
-
-        self.write_header(f, design)
-        self.write_libs(f, library_filename)
-        self.write_eelayer(f)
-        self.write_descr(f, design)
-        for ann in design.design_attributes.annotations:
-            self.write_annotation(f, ann)
-        for inst in design.component_instances:
-            self.write_instance(f, inst)
-        for net in design.nets:
-            self.write_net(f, net)
-        self.write_footer(f)
-
-        f.close()
+        with open(filename, "w") as f:
+            self.write_header(f, design)
+            self.write_libs(f, library_filename)
+            self.write_eelayer(f)
+            self.write_descr(f, design)
+            for ann in design.design_attributes.annotations:
+                self.write_annotation(f, ann)
+            for inst in design.component_instances:
+                self.write_instance(f, inst)
+            for net in design.nets:
+                self.write_net(f, net)
+            self.write_footer(f)
 
 
     def write_header(self, f, design):
@@ -169,12 +166,11 @@ $EndDescr
 
     def write_library(self, design, filename):
         """ Write out a kiCAD cache library to the given filename """
-        f = open(filename, 'w')
-        self.write_library_header(f, design)
-        for cpt in design.components.components.itervalues():
-            self.write_library_component(f, cpt)
-        self.write_library_footer(f)
-        f.close()
+        with open(filename, 'w') as f:
+            self.write_library_header(f, design)
+            for cpt in design.components.components.itervalues():
+                self.write_library_component(f, cpt)
+            self.write_library_footer(f)
 
 
     def write_library_header(self, f, design):

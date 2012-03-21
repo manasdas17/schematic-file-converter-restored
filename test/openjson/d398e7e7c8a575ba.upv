@@ -1,0 +1,561 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "33aee978cbd7172d", 
+      "library_id": "078b280b3f9659ec", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 120, 
+              "y": -80
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 420, 
+          "y": 360
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R2"
+      }, 
+      "instance_id": "55af58dad71e3ec9", 
+      "library_id": "4cc79cbeba40e009", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 350, 
+          "y": 430
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "bb18b4acbe3f544d", 
+      "library_id": "078b280b3f9659ec", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 120, 
+              "y": -80
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 760, 
+          "y": 360
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "added4013ba69104", 
+      "library_id": "4cc79cbeba40e009", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 350, 
+          "y": 500
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "078b280b3f9659ec": {
+      "attributes": {
+        "Equivalent input noise voltage at f = 1 kHz": "42 (TL06x) 18 (TL07x) 18 (TL08x)\tnV/\u221aHz", 
+        "Maximum supply voltage": "\u00b118V", 
+        "Offset voltage": "3mV", 
+        "Overshoot factor": "10 (TL061x 20 (TL07x) 20 (TL08x)%", 
+        "Rise time": "0.2 (TL06x) 0.1 (TL07x) 0.05 (TL08x)\u00b5s", 
+        "Slew rate at unity gain": "13V/\u00b5s", 
+        "Supply current (each amplifier)": "0.2 (TL06x) 1.4 (TL07x) 1.4 (TL08x)\tmA", 
+        "Unity-gain bandwidth": "3MHz", 
+        "_datasheet": "http://focus.ti.com/lit/ds/symlink/tl08a.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "8", 
+        "_octopart_part_number": "709266457233", 
+        "_package": "PDIP-8, SOIC -8", 
+        "_part_number": "TL081A", 
+        "_prefix": "U", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "pin_1_description": "offset", 
+        "pin_2_description": "inverting input", 
+        "pin_3_description": "non-inverting input", 
+        "pin_4_description": "negative supply voltage", 
+        "pin_5_description": "offset", 
+        "pin_6_description": "output", 
+        "pin_7_description": "positive supply voltage", 
+        "pin_8_description": "no connection"
+      }, 
+      "name": "TL081A", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -70
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -50
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "8"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 80, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "1", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -13
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "2", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -33
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "3", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -53
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "4", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -73
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "5", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -73
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "6", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -53
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "7", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -33
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "8", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -13
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "4cc79cbeba40e009": {
+      "attributes": {
+        "Connect": "", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.tai.com.tw/media/files/spec/RM.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "TA-I Technology", 
+        "_num_pins": "2", 
+        "_package": "0603", 
+        "_part_number": "RM06JTN100", 
+        "_prefix": "R", 
+        "_resistance": "10 \u03a9", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "resistance": "10 \u03a9"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2", 
+      "_resistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "d398e7e7c8a575ba", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "mdean", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1325058291
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "7788bbb10fc8650c", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "added4013ba69104", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "6c218fffd42c90ef"
+          ], 
+          "point_id": "732cf2c7d75cad4b", 
+          "x": 340, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "732cf2c7d75cad4b", 
+            "e4fb86f34c838b04"
+          ], 
+          "point_id": "6c218fffd42c90ef", 
+          "x": 340, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6c218fffd42c90ef", 
+            "b1e364763ee68a34"
+          ], 
+          "point_id": "e4fb86f34c838b04", 
+          "x": 340, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "55af58dad71e3ec9", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "e4fb86f34c838b04"
+          ], 
+          "point_id": "b1e364763ee68a34", 
+          "x": 340, 
+          "y": 430
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": ""
+      }, 
+      "net_id": "91f4014105e84b56", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dc56bf4d618f7fca"
+          ], 
+          "point_id": "fc2a557d81c7b3f5", 
+          "x": 470, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fc2a557d81c7b3f5"
+          ], 
+          "point_id": "dc56bf4d618f7fca", 
+          "x": 470, 
+          "y": 340
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

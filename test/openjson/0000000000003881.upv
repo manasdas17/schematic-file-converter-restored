@@ -1,0 +1,348 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "3e9b415cef601984", 
+      "library_id": "9b81bf99300e8a9a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 370, 
+          "y": 400
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "10a72f32a7612592", 
+      "library_id": "9b81bf99300e8a9a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 370, 
+          "y": 340
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U3"
+      }, 
+      "instance_id": "ee2303aaa8bfe8d9", 
+      "library_id": "9b81bf99300e8a9a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 370, 
+          "y": 270
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "9b81bf99300e8a9a": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/PPTC081LFBN-RC-Sullins-datasheet-82.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "Sullins Connector Solutions", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "27102407245", 
+        "_part_number": "PPTC081LFBN-RC", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "contact_material": "Phosphor Bronze", 
+        "housing_material": "Plastic", 
+        "max_operating_temperature": "125.00\u00b0C", 
+        "mounting_type": "Through Hole", 
+        "number_of_positions": "40", 
+        "number_of_rows": "2.00", 
+        "pin_pitch": "2.54 mm", 
+        "size_height": "7mm", 
+        "size_length": "11mm", 
+        "size_width": "2.50 mm"
+      }, 
+      "name": "PPTC081LFBN-RC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " test", 
+      "design_id": "0000000000003881", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "clemo", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1315996532
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "048e7fb61229a17c", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "10a72f32a7612592", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "8a5433d0049305fd"
+          ], 
+          "point_id": "387261c7496ec257", 
+          "x": 490, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "387261c7496ec257", 
+            "84a8df692eefa040"
+          ], 
+          "point_id": "8a5433d0049305fd", 
+          "x": 500, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8a5433d0049305fd", 
+            "0e010f3d0d85ce7e"
+          ], 
+          "point_id": "84a8df692eefa040", 
+          "x": 550, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "84a8df692eefa040", 
+            "b726848592d3fb41"
+          ], 
+          "point_id": "0e010f3d0d85ce7e", 
+          "x": 550, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0e010f3d0d85ce7e", 
+            "253a79e0f1b2a727"
+          ], 
+          "point_id": "b726848592d3fb41", 
+          "x": 500, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "3e9b415cef601984", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b726848592d3fb41"
+          ], 
+          "point_id": "253a79e0f1b2a727", 
+          "x": 490, 
+          "y": 390
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "8508359ec8b5a3e3", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "10a72f32a7612592", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "f9c9a9cbc04a8b14"
+          ], 
+          "point_id": "b73f88aff494e16a", 
+          "x": 370, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b73f88aff494e16a", 
+            "38fd9bd6a7b3c4ec"
+          ], 
+          "point_id": "f9c9a9cbc04a8b14", 
+          "x": 360, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f9c9a9cbc04a8b14", 
+            "4326a169ada5f8e1"
+          ], 
+          "point_id": "38fd9bd6a7b3c4ec", 
+          "x": 260, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "38fd9bd6a7b3c4ec", 
+            "4fb286ab992dd920"
+          ], 
+          "point_id": "4326a169ada5f8e1", 
+          "x": 260, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4326a169ada5f8e1", 
+            "a6325221b04cdeef"
+          ], 
+          "point_id": "4fb286ab992dd920", 
+          "x": 360, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "ee2303aaa8bfe8d9", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "4fb286ab992dd920"
+          ], 
+          "point_id": "a6325221b04cdeef", 
+          "x": 370, 
+          "y": 260
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

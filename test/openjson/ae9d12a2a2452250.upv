@@ -1,0 +1,911 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "1a024aa51ddb6a1e", 
+      "library_id": "3f483d42a2839b1f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 130, 
+              "y": -425
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 720, 
+          "y": 810
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "3f483d42a2839b1f": {
+      "attributes": {
+        "Clock Speed (Original Z-80)": "2MHz", 
+        "Maximum Voltage (Vcc)": "6.0V", 
+        "_datasheet": "http://www.z80.info/zip/z80.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "???", 
+        "_manufacturer": "ZILOG", 
+        "_num_pins": "40", 
+        "_octopart_part_number": "244006229981", 
+        "_package": "", 
+        "_part_number": "Z80", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "pin_10_description": "Data Line 6", 
+        "pin_11_description": "Power +5V", 
+        "pin_12_description": "Data Line 2", 
+        "pin_13_description": "Data Line 7", 
+        "pin_14_description": "Data Line 0", 
+        "pin_15_description": "Data Line 1", 
+        "pin_16_activelow": "True", 
+        "pin_16_description": "Maskable Interrupt Input (Active Low)", 
+        "pin_17_activelow": "True", 
+        "pin_17_description": "Non-Maskable Interrupt Input (Active Low)", 
+        "pin_18_activelow": "True", 
+        "pin_18_description": "Halt State Output (Active Low)", 
+        "pin_19_activelow": "True", 
+        "pin_19_descriptionp": "Memory Request Output (Active Low)", 
+        "pin_1_description": "Address Line 11 Output", 
+        "pin_20_activelow": "True", 
+        "pin_20_description": "Input/Output Request Output (Active Low)", 
+        "pin_21_activelow": "True", 
+        "pin_21_description": "Read Request Output (Active Low)", 
+        "pin_22_activelow": "True", 
+        "pin_22_description": "Write Request Output (Active Low)", 
+        "pin_23_activelow": "True", 
+        "pin_23_description": "Acknowledge Bus Request for DMA Output (Active Low)", 
+        "pin_24_activelow": "True", 
+        "pin_24_description": "Wait Request Input (Active Low)", 
+        "pin_25_activelow": "True", 
+        "pin_25_description": "Bus Request Input (Active Low)", 
+        "pin_26_activelow": "True", 
+        "pin_26_description": "Reset Input (Active Low)", 
+        "pin_27_activelow": "True", 
+        "pin_27_description": "Machine Cycle 1 Output (Active Low)", 
+        "pin_28_activelow": "True", 
+        "pin_28_description": "Dynamic Memory Refresh Output (Active Low)", 
+        "pin_29_description": "Power Ground", 
+        "pin_2_description": "Address Line 12 Output", 
+        "pin_30_descriptionp": "Address Line 1 Output", 
+        "pin_31_description": "Address Line 1 Output", 
+        "pin_32_description": "Address Line 2 Output", 
+        "pin_33_description": "Address Line 3 Output", 
+        "pin_34_description": "Address Line 4 Output", 
+        "pin_35_description": "Address Line 5 Output", 
+        "pin_36_description": "Address Line 6 Output", 
+        "pin_37_description": "Address Line 7 Output", 
+        "pin_38_description": "Address Line 8 Output", 
+        "pin_39_description": "Address Line 9 Output", 
+        "pin_3_description": "Address Line 13 Output", 
+        "pin_40_description": "Address Line 10 Output", 
+        "pin_4_description": "Address Line 14 Output", 
+        "pin_5_description": "Address Line 15 Output", 
+        "pin_6_description": "Clock Input", 
+        "pin_7_description": "Data Line 4", 
+        "pin_8_description": "Data Line 5", 
+        "pin_9_description": "Data Line 3"
+      }, 
+      "name": "Z80", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A10", 
+                    "x": 120, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -20
+                  }, 
+                  "pin_number": "40"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A9", 
+                    "x": 120, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -40
+                  }, 
+                  "pin_number": "39"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A8", 
+                    "x": 120, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -60
+                  }, 
+                  "pin_number": "38"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A7", 
+                    "x": 120, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -80
+                  }, 
+                  "pin_number": "37"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A6", 
+                    "x": 120, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -100
+                  }, 
+                  "pin_number": "36"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A5", 
+                    "x": 120, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -120
+                  }, 
+                  "pin_number": "35"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A4", 
+                    "x": 120, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -140
+                  }, 
+                  "pin_number": "34"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A3", 
+                    "x": 120, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -160
+                  }, 
+                  "pin_number": "33"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A2", 
+                    "x": 120, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -180
+                  }, 
+                  "pin_number": "32"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A1", 
+                    "x": 120, 
+                    "y": -204
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -200
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -200
+                  }, 
+                  "pin_number": "31"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A0", 
+                    "x": 120, 
+                    "y": -224
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -220
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -220
+                  }, 
+                  "pin_number": "30"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 120, 
+                    "y": -244
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -240
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -240
+                  }, 
+                  "pin_number": "29"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RFSH'", 
+                    "x": 120, 
+                    "y": -264
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -260
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -260
+                  }, 
+                  "pin_number": "28"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "M1'", 
+                    "x": 120, 
+                    "y": -284
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -280
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -280
+                  }, 
+                  "pin_number": "27"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RESET'", 
+                    "x": 120, 
+                    "y": -304
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -300
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -300
+                  }, 
+                  "pin_number": "26"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "BUSREQ'", 
+                    "x": 120, 
+                    "y": -324
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -320
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -320
+                  }, 
+                  "pin_number": "25"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "WAIT'", 
+                    "x": 120, 
+                    "y": -344
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -340
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -340
+                  }, 
+                  "pin_number": "24"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "BUSACK'", 
+                    "x": 120, 
+                    "y": -364
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -360
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -360
+                  }, 
+                  "pin_number": "23"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "WR,", 
+                    "x": 120, 
+                    "y": -384
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -380
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -380
+                  }, 
+                  "pin_number": "22"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RD'", 
+                    "x": 120, 
+                    "y": -404
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -400
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -400
+                  }, 
+                  "pin_number": "21"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A11", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A12", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A13", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A14", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A15", 
+                    "x": 9, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -100
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "CLK", 
+                    "x": 9, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -120
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D4", 
+                    "x": 9, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -140
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D5", 
+                    "x": 9, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -160
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D3", 
+                    "x": 9, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -180
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D6", 
+                    "x": 9, 
+                    "y": -204
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -200
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -200
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VCC", 
+                    "x": 9, 
+                    "y": -224
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -220
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -220
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D2", 
+                    "x": 9, 
+                    "y": -244
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -240
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -240
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D7", 
+                    "x": 9, 
+                    "y": -264
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -260
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -260
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D0", 
+                    "x": 9, 
+                    "y": -284
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -280
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -280
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D1", 
+                    "x": 9, 
+                    "y": -304
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -300
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -300
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "INT'", 
+                    "x": 9, 
+                    "y": -324
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -320
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -320
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "NMI'", 
+                    "x": 9, 
+                    "y": -344
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -340
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -340
+                  }, 
+                  "pin_number": "17"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "HALT'", 
+                    "x": 9, 
+                    "y": -364
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -360
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -360
+                  }, 
+                  "pin_number": "18"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "MREQ'", 
+                    "x": 9, 
+                    "y": -384
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -380
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -380
+                  }, 
+                  "pin_number": "19"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IORQ'", 
+                    "x": 9, 
+                    "y": -404
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -400
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -400
+                  }, 
+                  "pin_number": "20"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 420, 
+                  "type": "rectangle", 
+                  "width": 120, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "accf80bcc268fd3b", 
+      "license": "No License", 
+      "name": "Mariner VII", 
+      "owner": "Trufa", 
+      "slug": "Mariner-VII", 
+      "updated_timestamp": 1330673516
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "A10"
+      }, 
+      "net_id": "583651ea339b74c2", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "1a024aa51ddb6a1e", 
+              "pin_number": "40"
+            }
+          ], 
+          "connected_points": [
+            "fa6dcea1eb5a9887"
+          ], 
+          "point_id": "513e1bf063bd2c25", 
+          "x": 850, 
+          "y": 790
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "513e1bf063bd2c25", 
+            "7365ff6b2f23f885"
+          ], 
+          "point_id": "fa6dcea1eb5a9887", 
+          "x": 860, 
+          "y": 790
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fa6dcea1eb5a9887"
+          ], 
+          "point_id": "7365ff6b2f23f885", 
+          "x": 950, 
+          "y": 790
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

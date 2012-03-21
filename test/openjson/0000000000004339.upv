@@ -1,0 +1,259 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "bc49f058999e4525", 
+      "library_id": "ed73fe95f4dcec59", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -110
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -100
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 800, 
+          "y": 620
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "ed73fe95f4dcec59": {
+      "attributes": {
+        "EEPROM": "128 (ATtiny25) 256 (ATtiny45) 512 (ATtiny85)bytes", 
+        "Flash memory": "2K (ATtiny25) 4K (ATtiny45) 8K (ATtiny85)\tbytes", 
+        "Internal SRAM": "128 (ATtiny25) 256 (ATtiny45) 512 (ATtiny85)bytes", 
+        "Maximum clock frequency": "20MHz", 
+        "Programmable I/O lines": "6", 
+        "_datasheet": "http://www.atmel.com/dyn/resources/prod_documents/doc2586.pdf", 
+        "_lead_free": "???", 
+        "_manufacturer": "Atmel ", 
+        "_num_pins": "8", 
+        "_part_number": "ATtiny85/V", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "pin_1_activelow": "True", 
+        "pin_1_description": "reset (active low); port B", 
+        "pin_2_activelow": "True", 
+        "pin_2_description": "crystal connection; external clock input; port B", 
+        "pin_3_description": "crystal connection; clock output; port B", 
+        "pin_4_description": "ground", 
+        "pin_5_activelow": "True", 
+        "pin_5_description": "SPI master output/slave input; 2-wire data; ADC reference; port B", 
+        "pin_6_description": "SPI master input/slave output; port B", 
+        "pin_7_description": "SPI master clock; 2-wire clock; external interrupt 0; port B", 
+        "pin_8_description": "supply voltage"
+      }, 
+      "name": "ATtiny85/V", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -70
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -50
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "8"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 80, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "1", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -13
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "2", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -33
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "3", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -53
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "4", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -73
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "5", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -73
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "6", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -53
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "7", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -33
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "8", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -13
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004339", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "revcbh", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316022770
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

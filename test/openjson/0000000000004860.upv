@@ -1,0 +1,293 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "b17d118552685f85", 
+      "library_id": "14e74a3746c8e251", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -45
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 900, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "14e74a3746c8e251": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/OD331JE-Ohmite-datasheet-118938.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Ohmite", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "3834134594", 
+        "_part_number": "OD331JE", 
+        "_prefix": "R", 
+        "_resistance": "0.33 k\u03a9", 
+        "_rohs": "Yes", 
+        "_suffix": "\u03a9", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "integrated circuit", 
+        "lead_length": "0.03m", 
+        "max_operating_temperature": "70.00\u00b0C", 
+        "max_resistance_tolerance": "5.00%", 
+        "min_resistance_tolerance": "-5.00%", 
+        "mounting_type": "through hole", 
+        "power_rating": "0.25W", 
+        "resistance": "0.33 k\u03a9", 
+        "size_diameter": "2.50 mm", 
+        "size_length": "0.01m", 
+        "termination_style": "Axial Leaded", 
+        "voltage_rating_dc": "250.00V"
+      }, 
+      "name": "330 \u03a9 R", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004860", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "slugabed", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316100942
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "bc64e052a1bc9e7c", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "b17d118552685f85", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b47ba154bc0e4bd0"
+          ], 
+          "point_id": "678d4f6b32ea924e", 
+          "x": 950, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "678d4f6b32ea924e", 
+            "e1fca0edecd98996"
+          ], 
+          "point_id": "b47ba154bc0e4bd0", 
+          "x": 960, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b47ba154bc0e4bd0", 
+            "a64849afdcb06502"
+          ], 
+          "point_id": "e1fca0edecd98996", 
+          "x": 1030, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e1fca0edecd98996", 
+            "9e74265c48f6c91e"
+          ], 
+          "point_id": "a64849afdcb06502", 
+          "x": 1030, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a64849afdcb06502", 
+            "d3fef9fe142e0d08"
+          ], 
+          "point_id": "9e74265c48f6c91e", 
+          "x": 840, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9e74265c48f6c91e", 
+            "ab97f929733b93a6"
+          ], 
+          "point_id": "d3fef9fe142e0d08", 
+          "x": 840, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d3fef9fe142e0d08", 
+            "be9582043ccd45e9"
+          ], 
+          "point_id": "ab97f929733b93a6", 
+          "x": 890, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b17d118552685f85", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "ab97f929733b93a6"
+          ], 
+          "point_id": "be9582043ccd45e9", 
+          "x": 900, 
+          "y": 530
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

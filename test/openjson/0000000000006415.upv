@@ -1,0 +1,166 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "66a821f03ecd1ed4", 
+      "library_id": "c911eb65fe9b7e55", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 600, 
+          "y": 350
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "c911eb65fe9b7e55": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Battery_(electricity)", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Battery", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "12v Battery", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 16, 
+                    "y": -25
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -25
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "+", 
+                  "type": "label", 
+                  "x": 0, 
+                  "y": -10
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "-", 
+                  "type": "label", 
+                  "x": 35, 
+                  "y": -10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "5"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " Overall setup for my Quadcopter Electronics ", 
+      "design_id": "0000000000006415", 
+      "license": "", 
+      "name": "Quad Control Setup", 
+      "owner": "ericperko", 
+      "slug": "Quad-Control-Setup", 
+      "updated_timestamp": 1318188356
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

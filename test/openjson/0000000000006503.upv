@@ -1,0 +1,371 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "1ae547fa4ae60615", 
+      "library_id": "fc04185984710ed8", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 380, 
+          "y": 750
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "fc04185984710ed8": {
+      "attributes": {
+        "_lead_free": "Yes", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_part_number": "N/A", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Battery", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "9V Battery", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "+", 
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "-", 
+                    "x": 35, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 16, 
+                    "y": -25
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -25
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 410, 
+        "y": 620
+      }
+    ], 
+    "attributes": {
+      "_ann_1b106c48": "Don't try this at home!", 
+      "_ann_687aff95": "annotation", 
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " Sparks galore!", 
+      "design_id": "0000000000006503", 
+      "license": "", 
+      "name": "Short Circuit", 
+      "owner": "tgvaughan", 
+      "slug": "Short-Circuit", 
+      "updated_timestamp": 1317875908
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "+_-"
+      }, 
+      "net_id": "763526d51cedbe57", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "1ae547fa4ae60615", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "28f9e4bd4edbae74"
+          ], 
+          "point_id": "15aeb0162ad33289", 
+          "x": 380, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "28f9e4bd4edbae74"
+          ], 
+          "point_id": "c314e17bccf509a9", 
+          "x": 370, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ca251d382d3f355d", 
+            "bafc2152ebd2ce46", 
+            "4fd5f507b668d97f"
+          ], 
+          "point_id": "a9380d1be3d6e2d4", 
+          "x": 430, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1ae547fa4ae60615", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "a9380d1be3d6e2d4"
+          ], 
+          "point_id": "ca251d382d3f355d", 
+          "x": 420, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a9380d1be3d6e2d4"
+          ], 
+          "point_id": "bafc2152ebd2ce46", 
+          "x": 430, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a9380d1be3d6e2d4", 
+            "56dcf563fe149dc8"
+          ], 
+          "point_id": "4fd5f507b668d97f", 
+          "x": 500, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4fd5f507b668d97f", 
+            "45641cb0db402f52"
+          ], 
+          "point_id": "56dcf563fe149dc8", 
+          "x": 500, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "56dcf563fe149dc8", 
+            "a13c09bfd2d1f1ac"
+          ], 
+          "point_id": "45641cb0db402f52", 
+          "x": 310, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "45641cb0db402f52", 
+            "28f9e4bd4edbae74"
+          ], 
+          "point_id": "a13c09bfd2d1f1ac", 
+          "x": 310, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a13c09bfd2d1f1ac", 
+            "c314e17bccf509a9", 
+            "15aeb0162ad33289"
+          ], 
+          "point_id": "28f9e4bd4edbae74", 
+          "x": 370, 
+          "y": 730
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "+_-"
+      }, 
+      "net_id": "a89b9bcb01bc736d", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4fe0ab4c6b075425"
+          ], 
+          "point_id": "60cd9d6125e77357", 
+          "x": 280, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "60cd9d6125e77357"
+          ], 
+          "point_id": "4fe0ab4c6b075425", 
+          "x": 280, 
+          "y": 610
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "+_-"
+      }, 
+      "net_id": "2d60f29688550c20", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "69c78510ba42aadc"
+          ], 
+          "point_id": "b68d5fe3e46f7b06", 
+          "x": 280, 
+          "y": 620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b68d5fe3e46f7b06"
+          ], 
+          "point_id": "69c78510ba42aadc", 
+          "x": 280, 
+          "y": 620
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "+_-"
+      }, 
+      "net_id": "907a0a7be092e980", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "83d1cda46f8b5930"
+          ], 
+          "point_id": "12c8be41a12281f1", 
+          "x": 280, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "12c8be41a12281f1"
+          ], 
+          "point_id": "83d1cda46f8b5930", 
+          "x": 280, 
+          "y": 730
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

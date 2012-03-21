@@ -1,0 +1,904 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "19f85dfdc17f5a6b", 
+      "library_id": "587b781657ff4abb", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 130, 
+              "y": -105
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 560, 
+          "y": 830
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "4e8116bcbcc5206a", 
+      "library_id": "fc558915d9c09fc5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 320, 
+          "y": 870
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "0115b28b98ce47a1", 
+      "library_id": "31c361340485c1a5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 510, 
+          "y": 790
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R2"
+      }, 
+      "instance_id": "2ab78aa7e49c2237", 
+      "library_id": "4a422384a2304827", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 390, 
+          "y": 670
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "31c361340485c1a5": {
+      "attributes": {
+        "Connect": "http://cn.mouser.com/ProductDetail/Murata/GRM216R61C105KA88D/?qs=sGAEpiMZZMvQvaS66kI3Tl0k4Uxc5KdCPf%252bT%2fvAlZ%252bY%3d ", 
+        "Imported from": "Seeed Studio", 
+        "Package": "0805", 
+        "_capacitance": "1.00 uF", 
+        "_datasheet": "http://datasheet.octopart.com/GRM216R61C105KA88D-Murata-datasheet-10025737.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "Murata", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "922268451076", 
+        "_part_number": "GRM216R61C105KA88D", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "1.00 uF", 
+        "mounting_type": "surface mount", 
+        "voltage_rating_dc": "16.00V"
+      }, 
+      "name": "1 uF Capacitor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "4a422384a2304827": {
+      "attributes": {
+        "Connect": "", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.tai.com.tw/media/files/spec/RM.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "TA-I Technology", 
+        "_num_pins": "2", 
+        "_package": "0603", 
+        "_part_number": "RM06JTN102", 
+        "_prefix": "R", 
+        "_resistance": "1 k\u03a9", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "resistance": "1 k\u03a9"
+      }, 
+      "name": "1 k\u03a9 Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "587b781657ff4abb": {
+      "attributes": {
+        "Input offset voltage": "2mV", 
+        "Maximum supply voltage": "32 (LM158/258/358) 26 (LM2904)\tV", 
+        "Supply current": "0.5mA", 
+        "Unity-gain bandwidth": "1MHz", 
+        "_datasheet": "http://www.national.com/ds/LM/LM158.pdf", 
+        "_lead_free": "???", 
+        "_manufacturer": "National Semiconducto", 
+        "_num_pins": "8", 
+        "_package": "", 
+        "_part_number": "LM358", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "dc voltage gain": "100dB", 
+        "pin_1_description": "output 1", 
+        "pin_2_description": "inverting input 1", 
+        "pin_3_description": "non-inverting input 1", 
+        "pin_4_description": "ground", 
+        "pin_5_description": "non-inverting input 2", 
+        "pin_6_description": "inverting input 1", 
+        "pin_7_description": "output 2", 
+        "pin_8_description": "supply voltage"
+      }, 
+      "name": "LM358", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VCC", 
+                    "x": 120, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2 OUT", 
+                    "x": 120, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2 IN -", 
+                    "x": 120, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2 IN +", 
+                    "x": 120, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1 OUT", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1 IN -", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1 IN +", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 100, 
+                  "type": "rectangle", 
+                  "width": 120, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "fc558915d9c09fc5": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/RC0603FR-07100KL-Yageo-datasheet-8328172.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Yageo", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "117926158767", 
+        "_package": "0603", 
+        "_part_number": "RC0603FR-07100KL", 
+        "_prefix": "R", 
+        "_resistance": "100.00 k\u03a9", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "mounting_type": "surface mount", 
+        "power_rating": "0.10W", 
+        "resistance": "100.00 k\u03a9", 
+        "size_height": "0.45 mm", 
+        "size_length": "1.60 mm", 
+        "size_width": "0.80 mm", 
+        "voltage_rating_dc": "50.00V"
+      }, 
+      "name": "100.00 k\u03a9 R", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_capacitor_counter": "2", 
+      "_integrated circuit_counter": "1", 
+      "_resistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " http://www.SWHarden.com/blog/2009-08-14-diy-ecg-machine-on-the-cheap/", 
+      "design_id": "874586c662e3d090", 
+      "license": "No License", 
+      "name": "DIY ECG Machine On The Cheap", 
+      "owner": "snosons", 
+      "slug": "DIY-ECG-Machine-On-The-Cheap", 
+      "updated_timestamp": 1328245054
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "2_GND"
+      }, 
+      "net_id": "decce3faf3282dbe", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "2ab78aa7e49c2237", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "1a8993d10b0c29a5"
+          ], 
+          "point_id": "66e727a07feff550", 
+          "x": 440, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f1dec1a27901ae6c", 
+            "4dd9faa28d957e73"
+          ], 
+          "point_id": "863284c5077fc93c", 
+          "x": 550, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4dd9faa28d957e73", 
+            "1a8993d10b0c29a5"
+          ], 
+          "point_id": "c8ab17017fe084ac", 
+          "x": 500, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c8ab17017fe084ac", 
+            "db864438c4a908c0", 
+            "863284c5077fc93c"
+          ], 
+          "point_id": "4dd9faa28d957e73", 
+          "x": 500, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "19f85dfdc17f5a6b", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "863284c5077fc93c"
+          ], 
+          "point_id": "f1dec1a27901ae6c", 
+          "x": 560, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "66e727a07feff550", 
+            "c8ab17017fe084ac"
+          ], 
+          "point_id": "1a8993d10b0c29a5", 
+          "x": 450, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "843411805b35369c", 
+            "4dd9faa28d957e73"
+          ], 
+          "point_id": "db864438c4a908c0", 
+          "x": 500, 
+          "y": 760
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "0115b28b98ce47a1", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "db864438c4a908c0"
+          ], 
+          "point_id": "843411805b35369c", 
+          "x": 500, 
+          "y": 770
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "83dc31978617a734", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "798add5e1471ad24"
+          ], 
+          "point_id": "f8a8f52e395cce92", 
+          "x": 0, 
+          "y": 710
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f8a8f52e395cce92"
+          ], 
+          "point_id": "798add5e1471ad24", 
+          "x": 0, 
+          "y": 0
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "1 OUT_2"
+      }, 
+      "net_id": "d34d8acb85edab7f", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c5c831d634b6df4b", 
+            "07a6df7bb1974a9f"
+          ], 
+          "point_id": "16e22d837bfc3d31", 
+          "x": 550, 
+          "y": 810
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "19f85dfdc17f5a6b", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "16e22d837bfc3d31"
+          ], 
+          "point_id": "c5c831d634b6df4b", 
+          "x": 560, 
+          "y": 810
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "1 OUT_2"
+      }, 
+      "net_id": "7e53f90f5a9fdf3b", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "4e8116bcbcc5206a", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "8a9259b5dc1af1ae"
+          ], 
+          "point_id": "ce533f2e91359b17", 
+          "x": 370, 
+          "y": 860
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7e8c36c409269a9d"
+          ], 
+          "point_id": "9a30fb42d521fbbf", 
+          "x": 490, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ce533f2e91359b17", 
+            "701d4f1651762ab6"
+          ], 
+          "point_id": "8a9259b5dc1af1ae", 
+          "x": 380, 
+          "y": 860
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8a9259b5dc1af1ae", 
+            "7e8c36c409269a9d"
+          ], 
+          "point_id": "701d4f1651762ab6", 
+          "x": 430, 
+          "y": 860
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "701d4f1651762ab6", 
+            "9a30fb42d521fbbf"
+          ], 
+          "point_id": "7e8c36c409269a9d", 
+          "x": 430, 
+          "y": 890
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

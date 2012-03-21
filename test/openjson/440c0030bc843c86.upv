@@ -1,0 +1,902 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "D4"
+      }, 
+      "instance_id": "8056f6a1cc17f353", 
+      "library_id": "dbca59c2c0e06034", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 1.5, 
+          "x": 450, 
+          "y": 550
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "9928fad8408875ad", 
+      "library_id": "ae5afec4d9ff0533", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 520, 
+          "y": 600
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "1c5a4537507b95c8", 
+      "library_id": "187e3d425e48ed92", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 60, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 390, 
+          "y": 620
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "D3"
+      }, 
+      "instance_id": "1101ab367601a2c3", 
+      "library_id": "dbca59c2c0e06034", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }
+          ], 
+          "rotation": 1.0, 
+          "x": 460, 
+          "y": 630
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "187e3d425e48ed92": {
+      "attributes": {
+        "_datasheet": "http://www.national.com/ds/LM/LM117.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "???", 
+        "_manufacturer": "National Semiconductor", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "681973941490", 
+        "_package": "", 
+        "_part_number": "LM317", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Voltage Regulator", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "LM317 / LM317T", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 40, 
+                  "x": 10, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ae5afec4d9ff0533": {
+      "attributes": {
+        "Connect": "", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.tai.com.tw/media/files/spec/RM.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "TA-I Technology", 
+        "_num_pins": "2", 
+        "_package": "0603", 
+        "_part_number": "RM06JTN101", 
+        "_prefix": "R", 
+        "_resistance": "100 \u03a9", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "resistance": "100 \u03a9"
+      }, 
+      "name": "100 \u03a9 Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "dbca59c2c0e06034": {
+      "attributes": {
+        "Connect": "http://cn.mouser.com/ProductDetail/Fairchild-Semiconductor/1N4004/?qs=sGAEpiMZZMuQUXCJI7Y4lnwnhMohE%2fNv", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.fairchildsemi.com/ds/1N/1N4004.pdf", 
+        "_lead_free": "???", 
+        "_manufacturer": "YONGYUTAI", 
+        "_num_pins": "2", 
+        "_package": "DO-41", 
+        "_part_number": "1N4004", 
+        "_prefix": "D", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Diode", 
+        "_type": "diode"
+      }, 
+      "name": "1A Rectifier Diode", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_diode_counter": "4", 
+      "_integrated circuit_counter": "1", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "Goofing around with upverter.\nTrying to make the LM317 circuit from page 10 of the datasheet: http://www.national.com/ds/LM/LM117.pdf", 
+      "design_id": "440c0030bc843c86", 
+      "license": "No License", 
+      "name": "Goofing around", 
+      "owner": "RobotGrrl", 
+      "slug": "Goofing-around", 
+      "updated_timestamp": 1323798653
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "IN"
+      }, 
+      "net_id": "cefb45854f295314", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "855db5e4ee9017ee", 
+            "e7ec7d95505bb463"
+          ], 
+          "point_id": "f0124776fe0ab322", 
+          "x": 360, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "09abb711115ef438"
+          ], 
+          "point_id": "9aa1591bf3b804ab", 
+          "x": 330, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9aa1591bf3b804ab", 
+            "855db5e4ee9017ee"
+          ], 
+          "point_id": "09abb711115ef438", 
+          "x": 360, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d70c14904e27ec0c", 
+            "f0124776fe0ab322"
+          ], 
+          "point_id": "e7ec7d95505bb463", 
+          "x": 410, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1101ab367601a2c3", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "e7ec7d95505bb463"
+          ], 
+          "point_id": "d70c14904e27ec0c", 
+          "x": 420, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3bddc165aa6c90e7", 
+            "855db5e4ee9017ee"
+          ], 
+          "point_id": "245b905c482b9aa6", 
+          "x": 380, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1c5a4537507b95c8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "245b905c482b9aa6"
+          ], 
+          "point_id": "3bddc165aa6c90e7", 
+          "x": 390, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f0124776fe0ab322", 
+            "09abb711115ef438", 
+            "245b905c482b9aa6"
+          ], 
+          "point_id": "855db5e4ee9017ee", 
+          "x": 360, 
+          "y": 610
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "IN"
+      }, 
+      "net_id": "935aa2a3cfc45351", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40c0e67207143e02"
+          ], 
+          "point_id": "9c74ea02fb275d18", 
+          "x": 420, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "8056f6a1cc17f353", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "6a895f992e13ac46"
+          ], 
+          "point_id": "05dbf0c697da9509", 
+          "x": 470, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6a895f992e13ac46", 
+            "51d48220277c0a14"
+          ], 
+          "point_id": "94ba4746a7968cb7", 
+          "x": 470, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "51d48220277c0a14", 
+            "f723a7572cf109d5"
+          ], 
+          "point_id": "49a640b7b1a812b2", 
+          "x": 510, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40c0e67207143e02", 
+            "51d48220277c0a14"
+          ], 
+          "point_id": "949e2c49c8ce4599", 
+          "x": 420, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7112d02954553ef2", 
+            "49a640b7b1a812b2"
+          ], 
+          "point_id": "f723a7572cf109d5", 
+          "x": 510, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "94ba4746a7968cb7", 
+            "49a640b7b1a812b2", 
+            "949e2c49c8ce4599"
+          ], 
+          "point_id": "51d48220277c0a14", 
+          "x": 470, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9c74ea02fb275d18", 
+            "78e6b20e135f27c5", 
+            "949e2c49c8ce4599"
+          ], 
+          "point_id": "40c0e67207143e02", 
+          "x": 420, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1c5a4537507b95c8", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "40c0e67207143e02"
+          ], 
+          "point_id": "78e6b20e135f27c5", 
+          "x": 420, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "05dbf0c697da9509", 
+            "94ba4746a7968cb7"
+          ], 
+          "point_id": "6a895f992e13ac46", 
+          "x": 470, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "9928fad8408875ad", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "f723a7572cf109d5"
+          ], 
+          "point_id": "7112d02954553ef2", 
+          "x": 510, 
+          "y": 550
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "IN"
+      }, 
+      "net_id": "b262deb3d0f3ccd2", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "03734b0e5673c5c6"
+          ], 
+          "point_id": "e9ae051126ae9309", 
+          "x": 0, 
+          "y": 0
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "8056f6a1cc17f353", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "e1b8a0eb49465db4"
+          ], 
+          "point_id": "5b19c510c5d91b16", 
+          "x": 470, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9734e45f40707ca5", 
+            "557515a993469a5e", 
+            "ba68d27dc376cb49"
+          ], 
+          "point_id": "c94af1a0941883d8", 
+          "x": 510, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1c5a4537507b95c8", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "a82d922242dfb5ae"
+          ], 
+          "point_id": "c3db24f516c29f9e", 
+          "x": 450, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "96562993762fdbc1", 
+            "4cb2bd1f5615f5f7"
+          ], 
+          "point_id": "7c39339b999a9cac", 
+          "x": 500, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5b19c510c5d91b16", 
+            "4f5522f563eb4bf8"
+          ], 
+          "point_id": "e1b8a0eb49465db4", 
+          "x": 470, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4cb2bd1f5615f5f7"
+          ], 
+          "point_id": "a94b060da2f57285", 
+          "x": 580, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "db54631186b17ac7", 
+            "1ff80bae6b63c700"
+          ], 
+          "point_id": "2518a0ea7053e03a", 
+          "x": 210, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7fb99f9fd3c8fb80", 
+            "db54631186b17ac7", 
+            "e9ae051126ae9309"
+          ], 
+          "point_id": "03734b0e5673c5c6", 
+          "x": 0, 
+          "y": 0
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7c39339b999a9cac", 
+            "a94b060da2f57285", 
+            "a971b5635117756d"
+          ], 
+          "point_id": "4cb2bd1f5615f5f7", 
+          "x": 500, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "03734b0e5673c5c6", 
+            "2518a0ea7053e03a"
+          ], 
+          "point_id": "db54631186b17ac7", 
+          "x": 0, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2518a0ea7053e03a"
+          ], 
+          "point_id": "1ff80bae6b63c700", 
+          "x": 480, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "557515a993469a5e", 
+            "4cb2bd1f5615f5f7"
+          ], 
+          "point_id": "a971b5635117756d", 
+          "x": 510, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7c39339b999a9cac", 
+            "4f5522f563eb4bf8"
+          ], 
+          "point_id": "96562993762fdbc1", 
+          "x": 500, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ba68d27dc376cb49", 
+            "03734b0e5673c5c6"
+          ], 
+          "point_id": "7fb99f9fd3c8fb80", 
+          "x": 790, 
+          "y": 0
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1101ab367601a2c3", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "9734e45f40707ca5"
+          ], 
+          "point_id": "c1a23a342d5a837f", 
+          "x": 460, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "96562993762fdbc1", 
+            "e1b8a0eb49465db4", 
+            "a82d922242dfb5ae"
+          ], 
+          "point_id": "4f5522f563eb4bf8", 
+          "x": 470, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a971b5635117756d", 
+            "c94af1a0941883d8"
+          ], 
+          "point_id": "557515a993469a5e", 
+          "x": 510, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4f5522f563eb4bf8", 
+            "c3db24f516c29f9e"
+          ], 
+          "point_id": "a82d922242dfb5ae", 
+          "x": 460, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c1a23a342d5a837f", 
+            "c94af1a0941883d8"
+          ], 
+          "point_id": "9734e45f40707ca5", 
+          "x": 470, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c94af1a0941883d8", 
+            "7fb99f9fd3c8fb80"
+          ], 
+          "point_id": "ba68d27dc376cb49", 
+          "x": 790, 
+          "y": 650
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

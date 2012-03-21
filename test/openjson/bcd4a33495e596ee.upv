@@ -1,0 +1,700 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "84d976cd51d38894", 
+      "library_id": "26116b373b25815d", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 860, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "1690d990f8a9c9e2", 
+      "library_id": "f54148556274154c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 270, 
+              "y": -225
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "26116b373b25815d": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/OF471JE-Ohmite-datasheet-118938.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Ohmite", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "15001516657", 
+        "_part_number": "OF471JE", 
+        "_prefix": "R", 
+        "_resistance": "0.47 k\u03a9", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "mounting_type": "through hole", 
+        "power_rating": "0.50W", 
+        "resistance": "0.47 k\u03a9", 
+        "size_diameter": "0.00m", 
+        "size_length": "0.01m", 
+        "termination_style": "Axial Leaded", 
+        "voltage_rating_dc": "0.35 kV"
+      }, 
+      "name": "470 \u03a9 Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "f54148556274154c": {
+      "attributes": {
+        "EEPROM": "128 (ATtiny2313) 256 (ATtiny4313)bytes", 
+        "Flash memory": "2K (ATtiny2313) 4K (ATtiny4313)\tbytes", 
+        "Internal SRAM": "128 (ATtiny2313) 256 (ATtiny4313)bytes", 
+        "Maximum clock frequency": "20MHz", 
+        "Programmable I/O lines": "18\t", 
+        "_datasheet": "http://www.atmel.com/dyn/resources/prod_documents/DOC8246.PDF", 
+        "_lead_free": "???", 
+        "_manufacturer": "Atmel", 
+        "_num_pins": "20", 
+        "_package": "", 
+        "_part_number": "ATtiny2313A", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "pin_10_description": "ground", 
+        "pin_11_description": "port D", 
+        "pin_12_description": "port B", 
+        "pin_13_description": "port B", 
+        "pin_14_description": "port B", 
+        "pin_15_description": "port B", 
+        "pin_16_description": "port B ", 
+        "pin_17_description": "3-wire data input; 2-wire data; port B", 
+        "pin_18_description": "3-wire data output; port B", 
+        "pin_19_description": "3-wire clock; 2-wire clock; port B", 
+        "pin_1_activelow": "True", 
+        "pin_1_description": "reset (active low)", 
+        "pin_20_description": "supply voltage", 
+        "pin_2_description": "UART receive; port D", 
+        "pin_3_description": "UART transmit; port D", 
+        "pin_4_description": "clock oscillator pin 2; port A", 
+        "pin_5_description": "clock oscillator pin 1; port A", 
+        "pin_6_description": "external interrupt 0; clock output; port D", 
+        "pin_7_description": "external interrupt 1; port D", 
+        "pin_8_description": "port D", 
+        "pin_9_description": "port D"
+      }, 
+      "name": "ATtiny2313A", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vcc", 
+                    "x": 260, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -20
+                  }, 
+                  "pin_number": "20"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB7 (UCSK/SCL/PCINT7)", 
+                    "x": 260, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -40
+                  }, 
+                  "pin_number": "19"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB6 (MISO/DO/PCINT6)", 
+                    "x": 260, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -60
+                  }, 
+                  "pin_number": "18"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB5 (MOSI/DI/SDA/PCINT5)", 
+                    "x": 260, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -80
+                  }, 
+                  "pin_number": "17"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB4 (OC1B/PCINT4)", 
+                    "x": 260, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -100
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB3 (OC1A/PCINT3)", 
+                    "x": 260, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -120
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB2 (OC0A/PCINT2)", 
+                    "x": 260, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -140
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB1 (AIN1/PCINT1)", 
+                    "x": 260, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -160
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB0 (AIN0/PCINT0)", 
+                    "x": 260, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -180
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PD6 (ICP)", 
+                    "x": 260, 
+                    "y": -204
+                  }, 
+                  "p1": {
+                    "x": 265, 
+                    "y": -200
+                  }, 
+                  "p2": {
+                    "x": 270, 
+                    "y": -200
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(RESET'/dW) PA2", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(RXD) PD0", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(TXD) PD1", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(XTAL2) PA1", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(XTAL1) PA0", 
+                    "x": 9, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -100
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(CKOUT/XCK/INT0) PD2", 
+                    "x": 9, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -120
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(INT1) PD3", 
+                    "x": 9, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -140
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(T0) PD4", 
+                    "x": 9, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -160
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "(OC0B/T1) PD5", 
+                    "x": 9, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -180
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -204
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -200
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -200
+                  }, 
+                  "pin_number": "10"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 220, 
+                  "type": "rectangle", 
+                  "width": 260, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "bcd4a33495e596ee", 
+      "license": "No License", 
+      "name": "Termomentr", 
+      "owner": "osigida", 
+      "slug": "Termomentr", 
+      "updated_timestamp": 1330296756
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "PB1 (AIN1/PCINT1)_1"
+      }, 
+      "net_id": "25ffcbf66b4ab781", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "1690d990f8a9c9e2", 
+              "pin_number": "13"
+            }
+          ], 
+          "connected_points": [
+            "4de0952d8e2a63b8"
+          ], 
+          "point_id": "e169fb3c08af5d5f", 
+          "x": 800, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e169fb3c08af5d5f", 
+            "8adfaa36a23a33e3"
+          ], 
+          "point_id": "4de0952d8e2a63b8", 
+          "x": 810, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4de0952d8e2a63b8", 
+            "941b6bd03ccdb17b"
+          ], 
+          "point_id": "8adfaa36a23a33e3", 
+          "x": 850, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "84d976cd51d38894", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "8adfaa36a23a33e3"
+          ], 
+          "point_id": "941b6bd03ccdb17b", 
+          "x": 860, 
+          "y": 410
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

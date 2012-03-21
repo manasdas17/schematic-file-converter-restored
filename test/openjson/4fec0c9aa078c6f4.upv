@@ -1,0 +1,825 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "G2"
+      }, 
+      "instance_id": "4889a6b7b8aafa0b", 
+      "library_id": "6931d81dc014ca10", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 600, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G3"
+      }, 
+      "instance_id": "984ca1c82e205195", 
+      "library_id": "0bb582f40d0b47c0", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 760, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G1"
+      }, 
+      "instance_id": "87bce1bca65079d4", 
+      "library_id": "6931d81dc014ca10", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 600, 
+          "y": 550
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "138d46d3047f4832", 
+      "library_id": "7c350defe9426923", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 160, 
+              "y": -175
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 1030, 
+          "y": 710
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0bb582f40d0b47c0": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Negated_AND_gate", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "NAND Gate", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_symbol_0_0": "NAND", 
+        "_type": "gate"
+      }, 
+      "name": "NAND Gate", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 44, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "end_angle": 1.5, 
+                  "radius": 20, 
+                  "start_angle": 0.5, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -20
+                }, 
+                {
+                  "radius": 2, 
+                  "type": "circle", 
+                  "x": 42, 
+                  "y": -20
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "6931d81dc014ca10": {
+      "attributes": {
+        "_datasheet": "", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "AND Gate", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_symbol_0_0": "AND", 
+        "_type": "gate"
+      }, 
+      "name": "AND Gate", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "end_angle": 1.5, 
+                  "radius": 20, 
+                  "start_angle": 0.5, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -20
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "7c350defe9426923": {
+      "attributes": {
+        "_datasheet": "http://www.standardics.nxp.com/products/hef/datasheet/hef4585b.pdf", 
+        "_lead_free": "No", 
+        "_manufacturer": " NXP Semiconductor", 
+        "_num_pins": "16", 
+        "_package": "DIP-16", 
+        "_part_number": "4585", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "4-bit magnitude comparator", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VDD", 
+                    "x": 150, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -10
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A3", 
+                    "x": 150, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -30
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "B3", 
+                    "x": 150, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -50
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "QA > B", 
+                    "x": 150, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -70
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "QA < B", 
+                    "x": 150, 
+                    "y": -94
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -90
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "B0", 
+                    "x": 150, 
+                    "y": -114
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -110
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A0", 
+                    "x": 150, 
+                    "y": -134
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -130
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "B1", 
+                    "x": 150, 
+                    "y": -154
+                  }, 
+                  "p1": {
+                    "x": 155, 
+                    "y": -150
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -150
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "B2", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A2", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "QA = B", 
+                    "x": 9, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IA > B", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IA < B", 
+                    "x": 9, 
+                    "y": -94
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -90
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IA = B", 
+                    "x": 9, 
+                    "y": -114
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -110
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A1", 
+                    "x": 9, 
+                    "y": -134
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -130
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VSS", 
+                    "x": 9, 
+                    "y": -154
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -150
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -150
+                  }, 
+                  "pin_number": "8"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 170, 
+                  "type": "rectangle", 
+                  "width": 150, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_gate_counter": "3", 
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "test", 
+      "design_id": "4fec0c9aa078c6f4", 
+      "license": "No License", 
+      "name": "Vanguard II", 
+      "owner": "yprez", 
+      "slug": "Vanguard-II", 
+      "updated_timestamp": 1330768276
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "O_B"
+      }, 
+      "net_id": "6ff60358d78a4b39", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "4889a6b7b8aafa0b", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "319af5a0d8b0cee6"
+          ], 
+          "point_id": "07cc138ff8060556", 
+          "x": 650, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "07cc138ff8060556", 
+            "a9bcfa1c1c58201e"
+          ], 
+          "point_id": "319af5a0d8b0cee6", 
+          "x": 660, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "319af5a0d8b0cee6", 
+            "9ee20b077fbddd95"
+          ], 
+          "point_id": "a9bcfa1c1c58201e", 
+          "x": 720, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a9bcfa1c1c58201e", 
+            "a734d857d4243766"
+          ], 
+          "point_id": "9ee20b077fbddd95", 
+          "x": 720, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9ee20b077fbddd95", 
+            "d4b0057ba99c8f6f"
+          ], 
+          "point_id": "a734d857d4243766", 
+          "x": 750, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "984ca1c82e205195", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "a734d857d4243766"
+          ], 
+          "point_id": "d4b0057ba99c8f6f", 
+          "x": 760, 
+          "y": 480
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "O"
+      }, 
+      "net_id": "894dfa3a858a93bc", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6a76f5b46133c6a5", 
+            "d3cb01c206caf249"
+          ], 
+          "point_id": "fc5186c02bf09c4b", 
+          "x": 720, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f1e9be746a299bd5", 
+            "fc5186c02bf09c4b"
+          ], 
+          "point_id": "6a76f5b46133c6a5", 
+          "x": 720, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fc5186c02bf09c4b"
+          ], 
+          "point_id": "d3cb01c206caf249", 
+          "x": 770, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "87bce1bca65079d4", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "f1e9be746a299bd5"
+          ], 
+          "point_id": "00e55c6847c967cf", 
+          "x": 650, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f1e9be746a299bd5"
+          ], 
+          "point_id": "c689ed3f21e03c02", 
+          "x": 660, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c689ed3f21e03c02", 
+            "00e55c6847c967cf", 
+            "6a76f5b46133c6a5"
+          ], 
+          "point_id": "f1e9be746a299bd5", 
+          "x": 660, 
+          "y": 530
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

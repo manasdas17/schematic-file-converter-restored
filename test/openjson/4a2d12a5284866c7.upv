@@ -1,0 +1,343 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "be1ecafe2c2f6161", 
+      "library_id": "4a909468e74ff508", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 5, 
+              "y": -120
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 80, 
+              "y": -120
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 440, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "4a909468e74ff508": {
+      "attributes": {
+        "_datasheet": "", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Freescale", 
+        "_num_pins": "4", 
+        "_package": "", 
+        "_part_number": "MC9S12C128JACYKUNAL", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "unknown", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GND - pin 3", 
+                    "x": 90, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 95, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vaux - pin 1", 
+                    "x": 90, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 95, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PT2 - pin 50", 
+                    "x": 90, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 95, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "PB6 - pin 43", 
+                    "x": 90, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 95, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 90, 
+                  "type": "rectangle", 
+                  "width": 90, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "4a2d12a5284866c7", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "jacyclare", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1328738660
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "PB6 - pin 43"
+      }, 
+      "net_id": "b9d3d5179ce8a63a", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "045f287300fcc523"
+          ], 
+          "point_id": "7b6e1d39ffef197d", 
+          "x": 680, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7b6e1d39ffef197d", 
+            "a41b35ded247ea8b"
+          ], 
+          "point_id": "045f287300fcc523", 
+          "x": 550, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "be1ecafe2c2f6161", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "045f287300fcc523"
+          ], 
+          "point_id": "a41b35ded247ea8b", 
+          "x": 540, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": ""
+      }, 
+      "net_id": "efef7fc0d13aad32", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c2b06f78f9ec6f43"
+          ], 
+          "point_id": "1381ceedef5f0d36", 
+          "x": 670, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1381ceedef5f0d36", 
+            "b4bbe50d23b8b8e4"
+          ], 
+          "point_id": "c2b06f78f9ec6f43", 
+          "x": 670, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c2b06f78f9ec6f43", 
+            "fed2e236bc4de424"
+          ], 
+          "point_id": "b4bbe50d23b8b8e4", 
+          "x": 710, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b4bbe50d23b8b8e4", 
+            "6961d5a8a59309fc"
+          ], 
+          "point_id": "fed2e236bc4de424", 
+          "x": 750, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fed2e236bc4de424", 
+            "905340792d14e329"
+          ], 
+          "point_id": "6961d5a8a59309fc", 
+          "x": 750, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6961d5a8a59309fc", 
+            "b6faf3e101c2e2ea"
+          ], 
+          "point_id": "905340792d14e329", 
+          "x": 210, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "905340792d14e329", 
+            "bd60870a88a70663"
+          ], 
+          "point_id": "b6faf3e101c2e2ea", 
+          "x": 220, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b6faf3e101c2e2ea", 
+            "e519ae79ee0b3f21"
+          ], 
+          "point_id": "bd60870a88a70663", 
+          "x": 170, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bd60870a88a70663", 
+            "1e722aa6fe80b97e"
+          ], 
+          "point_id": "e519ae79ee0b3f21", 
+          "x": 220, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e519ae79ee0b3f21", 
+            "0174a8a3ca618efb"
+          ], 
+          "point_id": "1e722aa6fe80b97e", 
+          "x": 220, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e722aa6fe80b97e", 
+            "d62c63abb5989162"
+          ], 
+          "point_id": "0174a8a3ca618efb", 
+          "x": 310, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0174a8a3ca618efb", 
+            "ca550d1dfd64ea4b"
+          ], 
+          "point_id": "d62c63abb5989162", 
+          "x": 260, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d62c63abb5989162"
+          ], 
+          "point_id": "ca550d1dfd64ea4b", 
+          "x": 310, 
+          "y": 640
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,639 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "740f401957577e3a", 
+      "library_id": "a1db87d11883a83a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 970, 
+          "y": 430
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "d06caaf01fa968fd", 
+      "library_id": "69c9caa8aa65ffe3", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 970, 
+          "y": 480
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "37ed424d1aaa40d8", 
+      "library_id": "abbe8dbe05d8196c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 65, 
+              "y": -120
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 680, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "69c9caa8aa65ffe3": {
+      "attributes": {
+        "Connect": "http://cn.mouser.com/ProductDetail/AVX/TAJA106K016RNJ/?qs=sGAEpiMZZMtZ1n0r9vR22f0Jgorj1M1ua95o6%252b4Ah4Y%3d", 
+        "Imported from": "Seeed Studio", 
+        "Package": "AVX-A", 
+        "_capacitance": "10 uF", 
+        "_datasheet": "http://datasheet.octopart.com/TAJA106K016RNJ-AVX-datasheet-118786.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "AVX", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "117431701044", 
+        "_part_number": "TAJA106K016RNJ", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "10 uF", 
+        "dielectric_material": "Tantalum", 
+        "equivalent_series_resistance_esr": "3.00\u03a9", 
+        "mounting_type": "surface mount", 
+        "termination_style": "Surface Mount", 
+        "voltage_rating_dc": "16.00V"
+      }, 
+      "name": "10 uF Capacitor, 16 V", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "a1db87d11883a83a": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/OD331JE-Ohmite-datasheet-118938.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Ohmite", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "3834134594", 
+        "_package": "", 
+        "_part_number": "OD331JE", 
+        "_prefix": "R", 
+        "_resistance": "0.33 k\u03a9", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "lead_length": "0.03m", 
+        "max_operating_temperature": "70.00\u00b0C", 
+        "max_resistance_tolerance": "5.00%", 
+        "min_resistance_tolerance": "-5.00%", 
+        "mounting_type": "through hole", 
+        "power_rating": "0.25W", 
+        "resistance": "0.33 k\u03a9", 
+        "size_diameter": "2.50 mm", 
+        "size_length": "0.01m", 
+        "termination_style": "Axial Leaded", 
+        "voltage_rating_dc": "250.00V"
+      }, 
+      "name": "Carbon Composition Resistor 330 Ohm 0.25W Thru Hole", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "abbe8dbe05d8196c": {
+      "attributes": {
+        "_datasheet": "", 
+        "_lead_free": "???", 
+        "_manufacturer": "Philips Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "SOT82", 
+        "_part_number": "BT134-500", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "BT134-500 TRIAC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 1.5, 
+                    "text": "T2", 
+                    "x": 34, 
+                    "y": -12
+                  }, 
+                  "p1": {
+                    "x": 30, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "T1", 
+                    "x": 34, 
+                    "y": -108
+                  }, 
+                  "p1": {
+                    "x": 30, 
+                    "y": -115
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -120
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "G", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 110, 
+                  "type": "rectangle", 
+                  "width": 60, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_capacitor_counter": "1", 
+      "_integrated circuit_counter": "1", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "c3b3632f925779ec", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "bigmacd", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1321982797
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_1"
+      }, 
+      "net_id": "6d9801916cbfe8f0", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "d06caaf01fa968fd", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "375b98b46b078ddc"
+          ], 
+          "point_id": "2761d1c71697cd84", 
+          "x": 960, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2761d1c71697cd84", 
+            "27be1fa336d23583"
+          ], 
+          "point_id": "375b98b46b078ddc", 
+          "x": 960, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "375b98b46b078ddc", 
+            "4456a3621a152485"
+          ], 
+          "point_id": "27be1fa336d23583", 
+          "x": 960, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "740f401957577e3a", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "27be1fa336d23583"
+          ], 
+          "point_id": "4456a3621a152485", 
+          "x": 960, 
+          "y": 430
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "+_T2"
+      }, 
+      "net_id": "563f238a0233e8be", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "d06caaf01fa968fd", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "ed3dda0ea5b70a5a"
+          ], 
+          "point_id": "34e5234e4581660a", 
+          "x": 960, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "34e5234e4581660a", 
+            "4a1c4566b055163b"
+          ], 
+          "point_id": "ed3dda0ea5b70a5a", 
+          "x": 960, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ed3dda0ea5b70a5a", 
+            "ef6160ff52b19fac"
+          ], 
+          "point_id": "4a1c4566b055163b", 
+          "x": 960, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4a1c4566b055163b", 
+            "b4ca41f6727fe0e6"
+          ], 
+          "point_id": "ef6160ff52b19fac", 
+          "x": 710, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ef6160ff52b19fac", 
+            "97904dced42f8c17"
+          ], 
+          "point_id": "b4ca41f6727fe0e6", 
+          "x": 710, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "37ed424d1aaa40d8", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b4ca41f6727fe0e6"
+          ], 
+          "point_id": "97904dced42f8c17", 
+          "x": 710, 
+          "y": 470
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "2_T1"
+      }, 
+      "net_id": "08387d61bfdbbe19", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "740f401957577e3a", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "240302f8816c9258"
+          ], 
+          "point_id": "3768c15f4e3c9449", 
+          "x": 960, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3768c15f4e3c9449", 
+            "df969798aae1b4f0"
+          ], 
+          "point_id": "240302f8816c9258", 
+          "x": 960, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "240302f8816c9258", 
+            "94af71b26a5cd355"
+          ], 
+          "point_id": "df969798aae1b4f0", 
+          "x": 960, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "df969798aae1b4f0", 
+            "a493af2c0cd2a288"
+          ], 
+          "point_id": "94af71b26a5cd355", 
+          "x": 710, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "94af71b26a5cd355", 
+            "f84cbf095e11079c"
+          ], 
+          "point_id": "a493af2c0cd2a288", 
+          "x": 710, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "37ed424d1aaa40d8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "a493af2c0cd2a288"
+          ], 
+          "point_id": "f84cbf095e11079c", 
+          "x": 710, 
+          "y": 350
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

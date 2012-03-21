@@ -1,0 +1,326 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U4"
+      }, 
+      "instance_id": "585c35acb0a86fe3", 
+      "library_id": "b77d6b39f639b208", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 230, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW1"
+      }, 
+      "instance_id": "4549124a453f42aa", 
+      "library_id": "b6308273cc629dbd", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 640, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "b6308273cc629dbd": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Switch", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "General Switch", 
+        "_type": "switch"
+      }, 
+      "name": "Switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 13, 
+                  "y": -10
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 27, 
+                  "y": -10
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 26, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "b77d6b39f639b208": {
+      "attributes": {
+        "Controller": "PCD8544", 
+        "Size": "45x45mm", 
+        "_datasheet": "http://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf", 
+        "_lead_free": "???", 
+        "_manufacturer": "Nokia", 
+        "_num_pins": "8", 
+        "_package": "LCD-10168 / PCD8544", 
+        "_part_number": "NOKIA5110 LCD", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "NOKIA5110 LCD", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "LED", 
+                    "x": 24, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -200
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "SCLK", 
+                    "x": 44, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 40, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -200
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "DN(MOSI)", 
+                    "x": 64, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 60, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -200
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "D/C", 
+                    "x": 84, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 80, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 80, 
+                    "y": -200
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "RST", 
+                    "x": 104, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 100, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": -200
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "SCE", 
+                    "x": 124, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 120, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -200
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "GND", 
+                    "x": 144, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 140, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -200
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "VCC", 
+                    "x": 164, 
+                    "y": -188
+                  }, 
+                  "p1": {
+                    "x": 160, 
+                    "y": -195
+                  }, 
+                  "p2": {
+                    "x": 160, 
+                    "y": -200
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 190, 
+                  "type": "rectangle", 
+                  "width": 170, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -5, 
+        "y": -230
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -43
+      }
+    ], 
+    "attributes": {
+      "_integrated circuit_counter": "4", 
+      "_switch_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "02ae1727bfd37b37", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "jdp", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1320385429
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

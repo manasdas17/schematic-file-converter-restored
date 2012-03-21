@@ -205,7 +205,7 @@ class GEDA:
             symbol_dirs = []
 
         symbol_dirs += [
-            'library/geda',
+            'upconvert/library/geda',
         ]
 
         self.instance_counter = itertools.count()
@@ -222,8 +222,8 @@ class GEDA:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an geda schematic """
-        f = open(filename, 'rU')
-        data = f.read()
+        with open(filename, 'rU') as f:
+            data = f.read()
         confidence = 0
         if data[0:2] == 'v ':
             confidence += 0.51
@@ -272,17 +272,17 @@ class GEDA:
 
         ## parse frame data of first schematic to extract 
         ## page size (assumes same frame for all files) 
-        stream = self._open_file_or_zip(inputfiles[0])
-        self._check_version(stream)
+        with self._open_file_or_zip(inputfiles[0]) as stream:
+            self._check_version(stream)
 
-        for line in stream.readlines():
-            if 'title' in line and line.startswith('C'):
-                obj_type, params = self._parse_command(StringIO(line))
-                assert(obj_type == 'C')
+            for line in stream.readlines():
+                if 'title' in line and line.startswith('C'):
+                    obj_type, params = self._parse_command(StringIO(line))
+                    assert(obj_type == 'C')
 
-                params['basename'], dummy = os.path.splitext(
-                    params['basename']
-                )
+                    params['basename'], dummy = os.path.splitext(
+                        params['basename']
+                    )
 
         log.debug("using title file: %s", params['basename'])
 
@@ -397,35 +397,33 @@ class GEDA:
             self.frame_height = 34000 
             return
 
-        stream = open(filename, 'rU')
-
-        obj_type, params = self._parse_command(stream)
-
-        while obj_type is not None:
-
-            if obj_type == 'B':
-                if params['width'] > self.frame_width:
-                    self.frame_width = params['width'] 
-
-                if params['height'] > self.frame_height:
-                    self.frame_height = params['height']
-
-            ## skip commands covering multiple lines
-            elif obj_type in ['T', 'H']:
-                for dummy in range(params['num_lines']):
-                    stream.readline()
-
+        with open(filename, 'rU') as stream:
             obj_type, params = self._parse_command(stream)
 
-        ## set width to estimated max value when no box was found
-        if self.frame_width == 0:
-            self.frame_width = 46800
+            while obj_type is not None:
 
-        ## set height to estimated max value when no box was found
-        if self.frame_height == 0:
-            self.frame_height = 34000 
-        
-        stream.close()
+                if obj_type == 'B':
+                    if params['width'] > self.frame_width:
+                        self.frame_width = params['width'] 
+
+                    if params['height'] > self.frame_height:
+                        self.frame_height = params['height']
+
+                ## skip commands covering multiple lines
+                elif obj_type in ['T', 'H']:
+                    for dummy in range(params['num_lines']):
+                        stream.readline()
+
+                obj_type, params = self._parse_command(stream)
+
+            ## set width to estimated max value when no box was found
+            if self.frame_width == 0:
+                self.frame_width = 46800
+
+            ## set height to estimated max value when no box was found
+            if self.frame_height == 0:
+                self.frame_height = 34000
+
 
     def _create_ripper_segment(self, params):
         """ Creates a new segement from the busripper provided 
@@ -503,12 +501,9 @@ class GEDA:
                     return None, None
 
                 ## requires parsing of referenced symbol file
-                f_in = open(self.known_symbols[basename], "rU")
-                self._check_version(f_in)
-
-                component = self.parse_component_data(f_in, params) 
-
-                f_in.close()
+                with open(self.known_symbols[basename], "rU") as f_in:
+                    self._check_version(f_in)
+                    component = self.parse_component_data(f_in, params) 
                         
             self.design.add_component(component_name, component)
 

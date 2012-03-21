@@ -1,0 +1,481 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "5a7576d1f80451d3", 
+      "library_id": "503c957369308525", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 490, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "09ef0436fd99cd5a", 
+      "library_id": "ab56e00feccb17d6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -45
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 680, 
+          "y": 340
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "503c957369308525": {
+      "attributes": {
+        "Actuator Type": "Standard", 
+        "Catalog Drawings": "http://media.digikey.com/pdf/Catalog%20Drawings/Switches/ART-EG1218.jpg", 
+        "Category": "Switches", 
+        "Circuit": "SPDT", 
+        "Contact Rating @ Voltage": "0.2A @ 30VDC", 
+        "Family": "Slide", 
+        "Mounting Type": "Through Hole ", 
+        "Orientation": "Vertical", 
+        "Other Names": "EG1903 / P040040", 
+        "Series": "EG", 
+        "Switch Function\t": "On-On", 
+        "Termination Style\t": "PC Pin", 
+        "_datasheet": "http://spec.e-switch.com/P-J/P040040c.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "E-SWITCH", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "105620120097", 
+        "_part_number": "EG1218", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH SLIDE SPDT 30V.2A PC MNT", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ab56e00feccb17d6": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/OD103JE-Ohmite-datasheet-118938.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Ohmite", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "13302724717", 
+        "_part_number": "OD103JE", 
+        "_prefix": "R", 
+        "_resistance": "10.00 k\u03a9", 
+        "_rohs": "Yes", 
+        "_suffix": "\u03a9", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "integrated circuit", 
+        "max_operating_temperature": "70.00\u00b0C", 
+        "max_resistance_tolerance": "5.00%", 
+        "min_resistance_tolerance": "-5.00%", 
+        "mounting_type": "through hole", 
+        "power_rating": "0.25W", 
+        "resistance": "10.00 k\u03a9", 
+        "size_diameter": "2.50 mm", 
+        "size_length": "0.01m", 
+        "termination_style": "Axial Leaded", 
+        "voltage_rating_dc": "250.00V"
+      }, 
+      "name": "10.00 k\u03a9 R", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004105", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "nissarup", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316011235
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "ed56c18e50b4b5d1", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "09ef0436fd99cd5a", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "d10faabae1de2279"
+          ], 
+          "point_id": "6be09f6d701876be", 
+          "x": 680, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6be09f6d701876be", 
+            "bfb5a075d73d07c7"
+          ], 
+          "point_id": "d10faabae1de2279", 
+          "x": 670, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d10faabae1de2279", 
+            "a4ddf796b73e5514"
+          ], 
+          "point_id": "bfb5a075d73d07c7", 
+          "x": 640, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bfb5a075d73d07c7", 
+            "5bdf86784baf9671"
+          ], 
+          "point_id": "a4ddf796b73e5514", 
+          "x": 640, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a4ddf796b73e5514", 
+            "6df684f5d8a930cd"
+          ], 
+          "point_id": "5bdf86784baf9671", 
+          "x": 620, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "5a7576d1f80451d3", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "5bdf86784baf9671"
+          ], 
+          "point_id": "6df684f5d8a930cd", 
+          "x": 610, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "b37f62197940a312", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "5a7576d1f80451d3", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "206566f05e542d77"
+          ], 
+          "point_id": "67cbc7ac1029b6fe", 
+          "x": 490, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "67cbc7ac1029b6fe", 
+            "a888fb6a75612c8d"
+          ], 
+          "point_id": "206566f05e542d77", 
+          "x": 480, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "206566f05e542d77", 
+            "bf21966d48bf6038"
+          ], 
+          "point_id": "a888fb6a75612c8d", 
+          "x": 280, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a888fb6a75612c8d", 
+            "04465957ac5f42dc"
+          ], 
+          "point_id": "bf21966d48bf6038", 
+          "x": 280, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bf21966d48bf6038", 
+            "74d5a36b3579eef3"
+          ], 
+          "point_id": "04465957ac5f42dc", 
+          "x": 880, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "04465957ac5f42dc", 
+            "1da176bdeac68f04"
+          ], 
+          "point_id": "74d5a36b3579eef3", 
+          "x": 880, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "74d5a36b3579eef3", 
+            "90f18eebccdcf179"
+          ], 
+          "point_id": "1da176bdeac68f04", 
+          "x": 740, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "09ef0436fd99cd5a", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "1da176bdeac68f04"
+          ], 
+          "point_id": "90f18eebccdcf179", 
+          "x": 730, 
+          "y": 330
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

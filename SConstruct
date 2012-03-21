@@ -64,6 +64,12 @@ def build_coverage(target, source, env):
     return subprocess.call(args)
 bld_coverage = Builder(action=build_coverage)
 
+def build_regression(target, source, env):
+    args = ['test/test.py']
+    #args.extend([str(t) for t in source])
+    return subprocess.call(args)
+bld_regression = Builder(action=build_regression)
+
 
 ###################
 # Filters
@@ -90,6 +96,36 @@ def filter_test(arg, top, names):
         if test_re.match(os.path.join(top, name)):
             arg.append(File(os.path.join(top, name)))
     filter_non_python(top, names)
+
+sch_re = re.compile(r'.*\.sch$')
+def filter_sch(arg, top, names):
+    for name in names:
+        if sch_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
+
+fz_re = re.compile(r'.*\.fz$')
+def filter_fz(arg, top, names):
+    for name in names:
+        if fz_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
+
+fzz_re = re.compile(r'.*\.fzz$')
+def filter_fzz(arg, top, names):
+    for name in names:
+        if fzz_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
+
+ger_re = re.compile(r'.*\.ger$')
+def filter_ger(arg, top, names):
+    for name in names:
+        if ger_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
+
+upv_re = re.compile(r'.*\.upv$')
+def filter_upv(arg, top, names):
+    for name in names:
+        if upv_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
 
 
 ###################
@@ -132,6 +168,37 @@ all_tests.extend([str(py) for py in parser_tests])
 all_tests.extend([str(py) for py in library_tests])
 all_tests.extend([str(py) for py in writer_tests])
 
+eagle_sch_files = []
+os.path.walk('./test/eagle', filter_sch, eagle_sch_files)
+
+fritzing_fz_files = []
+os.path.walk('./test/fritzing', filter_fz, fritzing_fz_files)
+
+fritzing_fzz_files = []
+os.path.walk('./test/fritzing', filter_fzz, fritzing_fzz_files)
+
+geda_sch_files = []
+os.path.walk('./test/geda', filter_sch, geda_sch_files)
+
+gerber_ger_files = []
+os.path.walk('./test/gerber', filter_ger, gerber_ger_files)
+
+kicad_sch_files = []
+os.path.walk('./test/kicad', filter_sch, kicad_sch_files)
+
+upverter_upv_files = []
+os.path.walk('./test/openjson', filter_upv, upverter_upv_files)
+
+all_test_files = []
+all_test_files.extend([str(t) for t in eagle_sch_files])
+all_test_files.extend([str(t) for t in fritzing_fz_files])
+all_test_files.extend([str(t) for t in fritzing_fzz_files])
+all_test_files.extend([str(t) for t in geda_sch_files])
+all_test_files.extend([str(t) for t in gerber_ger_files])
+all_test_files.extend([str(t) for t in kicad_sch_files])
+all_test_files.extend([str(t) for t in upverter_upv_files])
+
+
 
 ###################
 # Environment
@@ -142,6 +209,7 @@ env = Environment(BUILDERS = {'test': bld_test,
                               'check': bld_check,
                               'pyflakes': bld_pyflakes,
                               'coverage': bld_coverage,
+                              'regression': bld_regression,
                              },
                   ENV = {'PATH' : os.environ['PATH']},
                   tools = ['default'])
@@ -151,10 +219,12 @@ check = env.check(['fake_target_to_force_check'], all_source)
 pyflakes = env.pyflakes(['fake_target_to_force_pyflakes'], all_source)
 test = env.test(['fake_target_to_force_test'], all_tests)
 coverage = env.coverage(['fake_target_to_force_coverage'], all_tests)
+regression = env.coverage(['fake_target_to_force_regression'], all_test_files)
 
 env.Alias('lint', lint)
 env.Alias('check', check)
 env.Alias('pyflakes', pyflakes)
 env.Alias('test', test)
 env.Alias('coverage', coverage)
+env.Alias('regression', regression)
 env.Alias('all', '.')

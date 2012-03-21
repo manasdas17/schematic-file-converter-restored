@@ -1,0 +1,222 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "b9250a22e5fa016a", 
+      "library_id": "2d53e69fa8237231", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 680, 
+          "y": 400
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "2d53e69fa8237231": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/LM3940IT-3.3/NOPB-National-Semiconductor-datasheet-128782.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "National Semiconductor", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "356203319436", 
+        "_part_number": "LM3940IT", 
+        "_prefix": "U", 
+        "_symbol_0_0": "Voltage Regulator", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "LM3940IT", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 40, 
+                  "x": 10, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_unknown_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " ", 
+      "design_id": "0000000000004185", 
+      "license": "", 
+      "name": "Robot", 
+      "owner": "zklapow", 
+      "slug": "Robot", 
+      "updated_timestamp": 1316015919
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 810, 
+          "y": 390
+        }
+      ], 
+      "attributes": {
+        "name": "out"
+      }, 
+      "net_id": "73338d085daf60da", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8d561ae2de67dc4c"
+          ], 
+          "point_id": "77f94ceac29600b6", 
+          "x": 880, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "77f94ceac29600b6", 
+            "28463593edc7fb33"
+          ], 
+          "point_id": "8d561ae2de67dc4c", 
+          "x": 750, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b9250a22e5fa016a", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "8d561ae2de67dc4c"
+          ], 
+          "point_id": "28463593edc7fb33", 
+          "x": 740, 
+          "y": 390
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 710, 
+          "y": 340
+        }
+      ], 
+      "attributes": {
+        "name": "gnd"
+      }, 
+      "net_id": "c5fb4a0f9f4819af", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c9e13c8ced0390e8"
+          ], 
+          "point_id": "581c0969692f90d0", 
+          "x": 710, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "581c0969692f90d0", 
+            "2ba5be4dfecb44fd"
+          ], 
+          "point_id": "c9e13c8ced0390e8", 
+          "x": 710, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b9250a22e5fa016a", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "c9e13c8ced0390e8"
+          ], 
+          "point_id": "2ba5be4dfecb44fd", 
+          "x": 710, 
+          "y": 370
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

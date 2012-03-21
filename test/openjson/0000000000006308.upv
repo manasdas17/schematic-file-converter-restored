@@ -1,0 +1,408 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "19b42c9854a585fe", 
+      "library_id": "14451706258ee7b2", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -135
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -130
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 620
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "c90f49625e4ffb0c", 
+      "library_id": "262f47a050255afc", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -80
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 690
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "14451706258ee7b2": {
+      "attributes": {
+        "CPU Speed": "5MIPS", 
+        "Data EEPROM": "256Bytes", 
+        "Program Memory": "3.5KB", 
+        "RAM": "128Bytes", 
+        "_datasheet": "http://ww1.microchip.com/downloads/en/DeviceDoc/41211D_.pdf", 
+        "_lead_free": "???", 
+        "_manufacturer": "MICROCHIP", 
+        "_num_pins": "8", 
+        "_package": "", 
+        "_part_number": "PIC12F683", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "pin_1_description": "Positive supply", 
+        "pin_2_description": "GPIO 5, Timer1 clock, Crystal/Resonator, External clock input", 
+        "pin_3_activelow": "True", 
+        "pin_3_description": "GPIO 4, A/D Channel 3 input, Timer1 gate, Crystal/Resonator, FOSC/4 output", 
+        "pin_4_activelow": "True", 
+        "pin_4_description": "GPIO 3, Master Clear, Programming voltage", 
+        "pin_5_description": "GPIO 2, A/D Channel 2 input, Timer0 clock input, External Interrupt, Comparator 1 output, Capture input/Compare output/PWM output", 
+        "pin_6_description": "GPIO 1, A/D Channel 1 input, Comparator 1 input, External Voltage Reference, Serial Programming Clock", 
+        "pin_7_description": "GPIO 0, Comparator 1 input, Serial Programming Data I/O, Ultra Low-Power Wake-up input", 
+        "pin_8_description": "Ground reference"
+      }, 
+      "name": "PIC12F683", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VSS", 
+                    "x": 300, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 305, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 310, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GP0/AN0/CIN+/ICSPDAT/ULPWU", 
+                    "x": 300, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 305, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 310, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GP1/AN1/CIN-/VREF/ICSPCLK", 
+                    "x": 300, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 305, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 310, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GP2/AN2/T0CKI/INT/COUT/CCP1", 
+                    "x": 300, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 305, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 310, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VDD", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GP5/T1CKI/OSC1/CLKIN", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GP4/AN3/T1G'/OSC2/CLKOUT", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GP3/MCLR'/VPP", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 100, 
+                  "type": "rectangle", 
+                  "width": 300, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "262f47a050255afc": {
+      "attributes": {
+        "Operating Voltage": "3 - 30VDC", 
+        "Oscillating Frequency": "2.5 \u00b1 0.5KHz", 
+        "Sound Pressure Level": "80dB min./30cm./9VDC", 
+        "_datasheet": "http://www.mouser.com/catalog/specsheets/KT-400142.pdf", 
+        "_lead_free": "No", 
+        "_manufacturer": "KOBITONE", 
+        "_num_pins": "2", 
+        "_package": "Thru-hole", 
+        "_part_number": "254-PB511", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "General Speaker", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "KT-400142 Piezoelectric Buzzer", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -35
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -35
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": -50
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 35, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": -50
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006308", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "Penguin2600", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1317245023
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

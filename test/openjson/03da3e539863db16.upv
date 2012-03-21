@@ -1,0 +1,317 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "001af5b5947278f0", 
+      "library_id": "46ae5528bd229dd5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 650, 
+          "y": 560
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U3"
+      }, 
+      "instance_id": "bf178c4ea07c5e91", 
+      "library_id": "46ae5528bd229dd5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 1030, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U4"
+      }, 
+      "instance_id": "900bff91e84ac706", 
+      "library_id": "46ae5528bd229dd5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 440, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "2a622761e8aa6f9a", 
+      "library_id": "46ae5528bd229dd5", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 900, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "46ae5528bd229dd5": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/LM317T-STMicroelectronics-datasheet-148268.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "63707435", 
+        "_package": "TO-220", 
+        "_part_number": "LM317T", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "import_id": "geda_linear-lm317-1", 
+        "imported_from": "geda", 
+        "mounting_type": "through hole", 
+        "number_of_outputs": "1.00", 
+        "output_current": "1.50A"
+      }, 
+      "name": "LM317", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Vout", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "Vin", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Adjust", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "4"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "03da3e539863db16", 
+      "license": "", 
+      "name": "Centaur III", 
+      "owner": "mrboni", 
+      "slug": "Centaur-III", 
+      "updated_timestamp": 1328899207
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "Adjust_Vout"
+      }, 
+      "net_id": "13b262d9e7557704", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "900bff91e84ac706", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "6fd12379e31f5a45"
+          ], 
+          "point_id": "b330ce8f4c6b18e9", 
+          "x": 560, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b330ce8f4c6b18e9", 
+            "d163863527288675"
+          ], 
+          "point_id": "6fd12379e31f5a45", 
+          "x": 570, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6fd12379e31f5a45", 
+            "643f8d2f3fc953b7"
+          ], 
+          "point_id": "d163863527288675", 
+          "x": 600, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d163863527288675", 
+            "061f054b383fd679"
+          ], 
+          "point_id": "643f8d2f3fc953b7", 
+          "x": 600, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "643f8d2f3fc953b7", 
+            "4daae6832d914034"
+          ], 
+          "point_id": "061f054b383fd679", 
+          "x": 640, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "001af5b5947278f0", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "061f054b383fd679"
+          ], 
+          "point_id": "4daae6832d914034", 
+          "x": 650, 
+          "y": 550
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

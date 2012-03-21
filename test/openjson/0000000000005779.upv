@@ -1,0 +1,4154 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "984c93ad4cc53187", 
+      "library_id": "1e3734282daef509", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -45
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 570, 
+          "y": 560
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R2"
+      }, 
+      "instance_id": "2b02651f41654485", 
+      "library_id": "1e3734282daef509", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -45
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 560, 
+          "y": 390
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "feb63c4f5814be18", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -7, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 740, 
+          "y": 450
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "1e3734282daef509": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/OD221JE-Ohmite-datasheet-118938.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Ohmite", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "14463662717", 
+        "_part_number": "OD221JE", 
+        "_prefix": "R", 
+        "_resistance": "220.00\u03a9", 
+        "_rohs": "Yes", 
+        "_suffix": "\u03a9", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "integrated circuit", 
+        "max_operating_temperature": "70.00\u00b0C", 
+        "max_resistance_tolerance": "5.00%", 
+        "min_resistance_tolerance": "-5.00%", 
+        "mounting_type": "through hole", 
+        "power_rating": "0.25W", 
+        "resistance": "220.00\u03a9", 
+        "size_diameter": "2.50 mm", 
+        "size_length": "0.01m", 
+        "termination_style": "Axial Leaded", 
+        "voltage_rating_dc": "250.00V"
+      }, 
+      "name": "220.00\u03a9 R", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005779", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "addies", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316558245
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 685, 
+          "y": 470
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "77bb4dcf92e00469", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "2b02651f41654485", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "e9ae4308ef62532c"
+          ], 
+          "point_id": "d8c6b36bb2d987fe", 
+          "x": 610, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d8c6b36bb2d987fe", 
+            "a86eaff3fbe51e01"
+          ], 
+          "point_id": "e9ae4308ef62532c", 
+          "x": 620, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5ee6788f21ef7ff9", 
+            "a86eaff3fbe51e01"
+          ], 
+          "point_id": "7028ee854f114d99", 
+          "x": 820, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7028ee854f114d99", 
+            "725bc49848d85e8c"
+          ], 
+          "point_id": "5ee6788f21ef7ff9", 
+          "x": 820, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5ee6788f21ef7ff9", 
+            "13110f7c4a5410de"
+          ], 
+          "point_id": "725bc49848d85e8c", 
+          "x": 750, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "725bc49848d85e8c", 
+            "ed15e17ce5125fe3"
+          ], 
+          "point_id": "13110f7c4a5410de", 
+          "x": 750, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "13110f7c4a5410de", 
+            "57e5d47e01bf7893"
+          ], 
+          "point_id": "ed15e17ce5125fe3", 
+          "x": 600, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "61100050349b07d5", 
+            "57e5d47e01bf7893"
+          ], 
+          "point_id": "d2d9c310b65a3ce1", 
+          "x": 550, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2d9c310b65a3ce1"
+          ], 
+          "point_id": "61100050349b07d5", 
+          "x": 600, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2d9c310b65a3ce1", 
+            "ed15e17ce5125fe3", 
+            "4a33725f1c5a5c74"
+          ], 
+          "point_id": "57e5d47e01bf7893", 
+          "x": 550, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "57e5d47e01bf7893", 
+            "eeb4ce3986d45dc9"
+          ], 
+          "point_id": "4a33725f1c5a5c74", 
+          "x": 550, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4a33725f1c5a5c74", 
+            "b8fe1e85461bcc5f"
+          ], 
+          "point_id": "eeb4ce3986d45dc9", 
+          "x": 690, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eeb4ce3986d45dc9", 
+            "8b430f953a4f1ca8"
+          ], 
+          "point_id": "b8fe1e85461bcc5f", 
+          "x": 690, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b8fe1e85461bcc5f", 
+            "ec5d363264685ec7"
+          ], 
+          "point_id": "8b430f953a4f1ca8", 
+          "x": 630, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "984c93ad4cc53187", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "8b430f953a4f1ca8"
+          ], 
+          "point_id": "ec5d363264685ec7", 
+          "x": 620, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7028ee854f114d99", 
+            "e9ae4308ef62532c", 
+            "07f358b2b90a30eb"
+          ], 
+          "point_id": "a86eaff3fbe51e01", 
+          "x": 810, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a86eaff3fbe51e01", 
+            "be3b82d02b09357a"
+          ], 
+          "point_id": "07f358b2b90a30eb", 
+          "x": 810, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "07f358b2b90a30eb", 
+            "9879df3710e25dfe"
+          ], 
+          "point_id": "be3b82d02b09357a", 
+          "x": 1050, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "be3b82d02b09357a", 
+            "f7d6ca026dd41c3c"
+          ], 
+          "point_id": "9879df3710e25dfe", 
+          "x": 1050, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9879df3710e25dfe", 
+            "e37fb86bc0521a0f"
+          ], 
+          "point_id": "f7d6ca026dd41c3c", 
+          "x": 130, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f7d6ca026dd41c3c", 
+            "9b2956441b31d858"
+          ], 
+          "point_id": "e37fb86bc0521a0f", 
+          "x": 820, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e37fb86bc0521a0f", 
+            "d5736d8fc810e56d"
+          ], 
+          "point_id": "9b2956441b31d858", 
+          "x": 820, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9b2956441b31d858", 
+            "c204d86f18d1d2e2"
+          ], 
+          "point_id": "d5736d8fc810e56d", 
+          "x": 790, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d5736d8fc810e56d", 
+            "07a91122ddd259f4"
+          ], 
+          "point_id": "c204d86f18d1d2e2", 
+          "x": 790, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c204d86f18d1d2e2", 
+            "62782713a06e58d6"
+          ], 
+          "point_id": "07a91122ddd259f4", 
+          "x": 790, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "07a91122ddd259f4", 
+            "605d2aca3ac094d9"
+          ], 
+          "point_id": "62782713a06e58d6", 
+          "x": 630, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "62782713a06e58d6", 
+            "726653e2cf9b6e23"
+          ], 
+          "point_id": "605d2aca3ac094d9", 
+          "x": 560, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "605d2aca3ac094d9", 
+            "1a6d76d80da8f099"
+          ], 
+          "point_id": "726653e2cf9b6e23", 
+          "x": 560, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "726653e2cf9b6e23", 
+            "2e16902a47c2edcf"
+          ], 
+          "point_id": "1a6d76d80da8f099", 
+          "x": 1560, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1a6d76d80da8f099", 
+            "cd1d721968210d3e"
+          ], 
+          "point_id": "2e16902a47c2edcf", 
+          "x": 1560, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2e16902a47c2edcf", 
+            "e0b2e3f76d33fbcb"
+          ], 
+          "point_id": "cd1d721968210d3e", 
+          "x": 1530, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cd1d721968210d3e", 
+            "6f7cb900b32a2b18"
+          ], 
+          "point_id": "e0b2e3f76d33fbcb", 
+          "x": 1530, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e0b2e3f76d33fbcb", 
+            "3cebb242356bc71a"
+          ], 
+          "point_id": "6f7cb900b32a2b18", 
+          "x": 1500, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6f7cb900b32a2b18", 
+            "8e4532c38518d39c"
+          ], 
+          "point_id": "3cebb242356bc71a", 
+          "x": 1500, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3cebb242356bc71a", 
+            "5b360ff4edfd9a26"
+          ], 
+          "point_id": "8e4532c38518d39c", 
+          "x": 1170, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8e4532c38518d39c", 
+            "fe47118a17c6d3b0"
+          ], 
+          "point_id": "5b360ff4edfd9a26", 
+          "x": 1170, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5b360ff4edfd9a26", 
+            "d25ae711f6c03dfa"
+          ], 
+          "point_id": "fe47118a17c6d3b0", 
+          "x": 1370, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fe47118a17c6d3b0", 
+            "40b89ea49b5583d3"
+          ], 
+          "point_id": "d25ae711f6c03dfa", 
+          "x": 1370, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d25ae711f6c03dfa", 
+            "164cee721326a980"
+          ], 
+          "point_id": "40b89ea49b5583d3", 
+          "x": 1370, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40b89ea49b5583d3", 
+            "91ffd6ee37066278"
+          ], 
+          "point_id": "164cee721326a980", 
+          "x": 1270, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "164cee721326a980", 
+            "587b6dc1b7ea048c"
+          ], 
+          "point_id": "91ffd6ee37066278", 
+          "x": 1270, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "91ffd6ee37066278", 
+            "36cbdafcb6effdb7"
+          ], 
+          "point_id": "587b6dc1b7ea048c", 
+          "x": 1320, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "587b6dc1b7ea048c", 
+            "8c17d4c4936afa05"
+          ], 
+          "point_id": "36cbdafcb6effdb7", 
+          "x": 1320, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "36cbdafcb6effdb7", 
+            "0e9429f3aa952c05"
+          ], 
+          "point_id": "8c17d4c4936afa05", 
+          "x": 1320, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8c17d4c4936afa05", 
+            "f0041e7e80705747"
+          ], 
+          "point_id": "0e9429f3aa952c05", 
+          "x": 220, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0e9429f3aa952c05", 
+            "bdd3b06715a496fd"
+          ], 
+          "point_id": "f0041e7e80705747", 
+          "x": 170, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f0041e7e80705747", 
+            "9760083f1c28ff73"
+          ], 
+          "point_id": "bdd3b06715a496fd", 
+          "x": 170, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bdd3b06715a496fd", 
+            "e595a673c96692f2"
+          ], 
+          "point_id": "9760083f1c28ff73", 
+          "x": 270, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9760083f1c28ff73", 
+            "d8eb170c59972b0c"
+          ], 
+          "point_id": "e595a673c96692f2", 
+          "x": 270, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e595a673c96692f2", 
+            "d92a3ae40a9f4a6f"
+          ], 
+          "point_id": "d8eb170c59972b0c", 
+          "x": 180, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d8eb170c59972b0c", 
+            "54b16d00a5cafc47"
+          ], 
+          "point_id": "d92a3ae40a9f4a6f", 
+          "x": 180, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d92a3ae40a9f4a6f", 
+            "161913e24ceb3636"
+          ], 
+          "point_id": "54b16d00a5cafc47", 
+          "x": 180, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "54b16d00a5cafc47", 
+            "5eb96d8981925dde"
+          ], 
+          "point_id": "161913e24ceb3636", 
+          "x": 360, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "161913e24ceb3636", 
+            "6da799a089dbe7e6"
+          ], 
+          "point_id": "5eb96d8981925dde", 
+          "x": 360, 
+          "y": 220
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5eb96d8981925dde", 
+            "14a835fdde843626"
+          ], 
+          "point_id": "6da799a089dbe7e6", 
+          "x": 320, 
+          "y": 220
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6da799a089dbe7e6", 
+            "5289157e0f5b22de"
+          ], 
+          "point_id": "14a835fdde843626", 
+          "x": 320, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "14a835fdde843626", 
+            "3392df250e8ce773"
+          ], 
+          "point_id": "5289157e0f5b22de", 
+          "x": 640, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5289157e0f5b22de", 
+            "188e9ed08e1a4554"
+          ], 
+          "point_id": "3392df250e8ce773", 
+          "x": 640, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3392df250e8ce773", 
+            "ea729623ae62229b"
+          ], 
+          "point_id": "188e9ed08e1a4554", 
+          "x": 820, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "188e9ed08e1a4554", 
+            "276cd8dcb61402a8"
+          ], 
+          "point_id": "ea729623ae62229b", 
+          "x": 820, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ea729623ae62229b", 
+            "64f1802ba4840815"
+          ], 
+          "point_id": "276cd8dcb61402a8", 
+          "x": 1230, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "276cd8dcb61402a8", 
+            "2ced8031cc666cff"
+          ], 
+          "point_id": "64f1802ba4840815", 
+          "x": 1230, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "64f1802ba4840815", 
+            "a1866f9617b19981"
+          ], 
+          "point_id": "2ced8031cc666cff", 
+          "x": 1230, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2ced8031cc666cff", 
+            "3e22c7835b0b4d40"
+          ], 
+          "point_id": "a1866f9617b19981", 
+          "x": 610, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a1866f9617b19981", 
+            "55156bb120f67a53"
+          ], 
+          "point_id": "3e22c7835b0b4d40", 
+          "x": 550, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3e22c7835b0b4d40", 
+            "927286576834ce5a"
+          ], 
+          "point_id": "55156bb120f67a53", 
+          "x": 550, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "55156bb120f67a53", 
+            "258b0355f6b80356"
+          ], 
+          "point_id": "927286576834ce5a", 
+          "x": 740, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "927286576834ce5a", 
+            "168f35fc8854763e"
+          ], 
+          "point_id": "258b0355f6b80356", 
+          "x": 740, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "258b0355f6b80356", 
+            "642874f25f67a174"
+          ], 
+          "point_id": "168f35fc8854763e", 
+          "x": 680, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "168f35fc8854763e", 
+            "80b4bdbe9b126efb"
+          ], 
+          "point_id": "642874f25f67a174", 
+          "x": 680, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "642874f25f67a174", 
+            "a776a1e463c089ef"
+          ], 
+          "point_id": "80b4bdbe9b126efb", 
+          "x": 860, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "80b4bdbe9b126efb", 
+            "d2bf135a18bb1ffa"
+          ], 
+          "point_id": "a776a1e463c089ef", 
+          "x": 990, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a776a1e463c089ef", 
+            "3415d5c179b6b9b8"
+          ], 
+          "point_id": "d2bf135a18bb1ffa", 
+          "x": 990, 
+          "y": 30
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2bf135a18bb1ffa", 
+            "51f0a56e82e918f4"
+          ], 
+          "point_id": "3415d5c179b6b9b8", 
+          "x": 490, 
+          "y": 30
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3415d5c179b6b9b8", 
+            "0ae05adaba7d4867"
+          ], 
+          "point_id": "51f0a56e82e918f4", 
+          "x": 490, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "51f0a56e82e918f4", 
+            "ef7e9b07d0714942"
+          ], 
+          "point_id": "0ae05adaba7d4867", 
+          "x": 270, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0ae05adaba7d4867", 
+            "b215df84274a08f5"
+          ], 
+          "point_id": "ef7e9b07d0714942", 
+          "x": 270, 
+          "y": 670
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ef7e9b07d0714942", 
+            "e838e03989d78bbf"
+          ], 
+          "point_id": "b215df84274a08f5", 
+          "x": 1420, 
+          "y": 670
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b215df84274a08f5", 
+            "6685ad2689bc7b26"
+          ], 
+          "point_id": "e838e03989d78bbf", 
+          "x": 1420, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e838e03989d78bbf", 
+            "04e403b9c0d17e64"
+          ], 
+          "point_id": "6685ad2689bc7b26", 
+          "x": 1480, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6685ad2689bc7b26", 
+            "50edaac21e0e0dd5"
+          ], 
+          "point_id": "04e403b9c0d17e64", 
+          "x": 1480, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "04e403b9c0d17e64", 
+            "601ae3d51a9dac4c"
+          ], 
+          "point_id": "50edaac21e0e0dd5", 
+          "x": 1440, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "50edaac21e0e0dd5", 
+            "a30436b7ee71aff0"
+          ], 
+          "point_id": "601ae3d51a9dac4c", 
+          "x": 1450, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "601ae3d51a9dac4c", 
+            "e9ce2dc3ca35086c"
+          ], 
+          "point_id": "a30436b7ee71aff0", 
+          "x": 1450, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a30436b7ee71aff0", 
+            "1ee2c7859848b10d"
+          ], 
+          "point_id": "e9ce2dc3ca35086c", 
+          "x": 1480, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e9ce2dc3ca35086c", 
+            "0bb7a96a949cb51b"
+          ], 
+          "point_id": "1ee2c7859848b10d", 
+          "x": 1480, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1ee2c7859848b10d", 
+            "82c7650c1d12f544"
+          ], 
+          "point_id": "0bb7a96a949cb51b", 
+          "x": 1450, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0bb7a96a949cb51b", 
+            "d5575730cede1eb7"
+          ], 
+          "point_id": "82c7650c1d12f544", 
+          "x": 1450, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "82c7650c1d12f544", 
+            "a262ec9562407472"
+          ], 
+          "point_id": "d5575730cede1eb7", 
+          "x": 1390, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d5575730cede1eb7", 
+            "f1505d7ab26b64fb"
+          ], 
+          "point_id": "a262ec9562407472", 
+          "x": 1390, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a262ec9562407472", 
+            "9e2a25641c4a0bd7"
+          ], 
+          "point_id": "f1505d7ab26b64fb", 
+          "x": 1440, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f1505d7ab26b64fb", 
+            "593bc70f69f6145a"
+          ], 
+          "point_id": "9e2a25641c4a0bd7", 
+          "x": 1440, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9e2a25641c4a0bd7", 
+            "a85fa80f12b7a1f4"
+          ], 
+          "point_id": "593bc70f69f6145a", 
+          "x": 1450, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "593bc70f69f6145a", 
+            "48470f64d5fe307d"
+          ], 
+          "point_id": "a85fa80f12b7a1f4", 
+          "x": 1450, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a85fa80f12b7a1f4", 
+            "1ecc92c8f3f994cf"
+          ], 
+          "point_id": "48470f64d5fe307d", 
+          "x": 1470, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "48470f64d5fe307d", 
+            "503480fe3d9f8b54"
+          ], 
+          "point_id": "1ecc92c8f3f994cf", 
+          "x": 1470, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1ecc92c8f3f994cf", 
+            "6f5e0f9b513b7e37"
+          ], 
+          "point_id": "503480fe3d9f8b54", 
+          "x": 1470, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "503480fe3d9f8b54", 
+            "af936236ed6371a5"
+          ], 
+          "point_id": "6f5e0f9b513b7e37", 
+          "x": 1480, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6f5e0f9b513b7e37", 
+            "451da935d39642f2"
+          ], 
+          "point_id": "af936236ed6371a5", 
+          "x": 1480, 
+          "y": 220
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "af936236ed6371a5", 
+            "1b45f3332b1ca1eb"
+          ], 
+          "point_id": "451da935d39642f2", 
+          "x": 1420, 
+          "y": 220
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "451da935d39642f2", 
+            "da3a704f4d4775f8"
+          ], 
+          "point_id": "1b45f3332b1ca1eb", 
+          "x": 1420, 
+          "y": 250
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1b45f3332b1ca1eb", 
+            "18ab3b82e313976b"
+          ], 
+          "point_id": "da3a704f4d4775f8", 
+          "x": 1370, 
+          "y": 250
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "da3a704f4d4775f8", 
+            "0318f246f2d40984"
+          ], 
+          "point_id": "18ab3b82e313976b", 
+          "x": 1370, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "18ab3b82e313976b", 
+            "c902a7ab0809235d"
+          ], 
+          "point_id": "0318f246f2d40984", 
+          "x": 1510, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0318f246f2d40984", 
+            "959ffe21c93c500b"
+          ], 
+          "point_id": "c902a7ab0809235d", 
+          "x": 1510, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c902a7ab0809235d", 
+            "a1df75bcccd55611"
+          ], 
+          "point_id": "959ffe21c93c500b", 
+          "x": 1510, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "959ffe21c93c500b", 
+            "373838922fa74e70"
+          ], 
+          "point_id": "a1df75bcccd55611", 
+          "x": 1520, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a1df75bcccd55611", 
+            "01c1f371a3a8b908"
+          ], 
+          "point_id": "373838922fa74e70", 
+          "x": 1520, 
+          "y": 60
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "373838922fa74e70", 
+            "5b3483ed5c2b5c4f"
+          ], 
+          "point_id": "01c1f371a3a8b908", 
+          "x": 1490, 
+          "y": 60
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "01c1f371a3a8b908", 
+            "db2c8c424c35d7b2"
+          ], 
+          "point_id": "5b3483ed5c2b5c4f", 
+          "x": 1490, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5b3483ed5c2b5c4f", 
+            "52993420ac9a1793"
+          ], 
+          "point_id": "db2c8c424c35d7b2", 
+          "x": 1490, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "db2c8c424c35d7b2", 
+            "d3caa6792f49192e"
+          ], 
+          "point_id": "52993420ac9a1793", 
+          "x": 1490, 
+          "y": 130
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "52993420ac9a1793", 
+            "bd7814b9cd75a3c4"
+          ], 
+          "point_id": "d3caa6792f49192e", 
+          "x": 1500, 
+          "y": 130
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d3caa6792f49192e", 
+            "307f4fe1d394ea67"
+          ], 
+          "point_id": "bd7814b9cd75a3c4", 
+          "x": 1500, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bd7814b9cd75a3c4", 
+            "75573da5f2753ce2"
+          ], 
+          "point_id": "307f4fe1d394ea67", 
+          "x": 1520, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "307f4fe1d394ea67", 
+            "ba71bc5b5cb836c8"
+          ], 
+          "point_id": "75573da5f2753ce2", 
+          "x": 1520, 
+          "y": 80
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "75573da5f2753ce2", 
+            "2758ba23ad3f1871"
+          ], 
+          "point_id": "ba71bc5b5cb836c8", 
+          "x": 1550, 
+          "y": 80
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ba71bc5b5cb836c8", 
+            "746d932fc2c532a3"
+          ], 
+          "point_id": "2758ba23ad3f1871", 
+          "x": 1550, 
+          "y": 110
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2758ba23ad3f1871", 
+            "4c18fc76583d9729"
+          ], 
+          "point_id": "746d932fc2c532a3", 
+          "x": 1520, 
+          "y": 110
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "746d932fc2c532a3", 
+            "7b2d0bdbc5ce7328"
+          ], 
+          "point_id": "4c18fc76583d9729", 
+          "x": 1520, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4c18fc76583d9729", 
+            "fa7a25028cb5c5ee"
+          ], 
+          "point_id": "7b2d0bdbc5ce7328", 
+          "x": 1520, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7b2d0bdbc5ce7328", 
+            "c662dc9a8e4059a4"
+          ], 
+          "point_id": "fa7a25028cb5c5ee", 
+          "x": 1550, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fa7a25028cb5c5ee", 
+            "39d21714b485307a"
+          ], 
+          "point_id": "c662dc9a8e4059a4", 
+          "x": 1550, 
+          "y": 170
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c662dc9a8e4059a4", 
+            "b399f6d7700ccbd2"
+          ], 
+          "point_id": "39d21714b485307a", 
+          "x": 1470, 
+          "y": 170
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "39d21714b485307a", 
+            "f7315e16792d012e"
+          ], 
+          "point_id": "b399f6d7700ccbd2", 
+          "x": 1470, 
+          "y": 50
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b399f6d7700ccbd2", 
+            "4f4115ec63ef3e05"
+          ], 
+          "point_id": "f7315e16792d012e", 
+          "x": 1380, 
+          "y": 50
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f7315e16792d012e", 
+            "98b8e38c9b1073e4"
+          ], 
+          "point_id": "4f4115ec63ef3e05", 
+          "x": 1380, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4f4115ec63ef3e05", 
+            "33781b007f4f0c19"
+          ], 
+          "point_id": "98b8e38c9b1073e4", 
+          "x": 1350, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "98b8e38c9b1073e4", 
+            "593474959d0c97a6"
+          ], 
+          "point_id": "33781b007f4f0c19", 
+          "x": 1350, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "33781b007f4f0c19", 
+            "8f753b8c008623ba"
+          ], 
+          "point_id": "593474959d0c97a6", 
+          "x": 1370, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "593474959d0c97a6", 
+            "1d701738a9cf5eed"
+          ], 
+          "point_id": "8f753b8c008623ba", 
+          "x": 1370, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8f753b8c008623ba", 
+            "7d97fff66a91fc90"
+          ], 
+          "point_id": "1d701738a9cf5eed", 
+          "x": 1410, 
+          "y": 160
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1d701738a9cf5eed", 
+            "53fe2f6129940159"
+          ], 
+          "point_id": "7d97fff66a91fc90", 
+          "x": 1410, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7d97fff66a91fc90", 
+            "39800e48a874e351"
+          ], 
+          "point_id": "53fe2f6129940159", 
+          "x": 1420, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "53fe2f6129940159", 
+            "a76475c4a82aae91"
+          ], 
+          "point_id": "39800e48a874e351", 
+          "x": 1420, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "39800e48a874e351", 
+            "0abdca2945cd92b6"
+          ], 
+          "point_id": "a76475c4a82aae91", 
+          "x": 1300, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a76475c4a82aae91", 
+            "d9e5bc9aec718e48"
+          ], 
+          "point_id": "0abdca2945cd92b6", 
+          "x": 1300, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0abdca2945cd92b6", 
+            "d3f2c11e776b1bea"
+          ], 
+          "point_id": "d9e5bc9aec718e48", 
+          "x": 1120, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d9e5bc9aec718e48", 
+            "095e83d67ba5124b"
+          ], 
+          "point_id": "d3f2c11e776b1bea", 
+          "x": 1120, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d3f2c11e776b1bea", 
+            "2977e873f3e3219b"
+          ], 
+          "point_id": "095e83d67ba5124b", 
+          "x": 1070, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "095e83d67ba5124b", 
+            "d8ea6166342d9864"
+          ], 
+          "point_id": "2977e873f3e3219b", 
+          "x": 1120, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2977e873f3e3219b", 
+            "9ddfaab4797060a2"
+          ], 
+          "point_id": "d8ea6166342d9864", 
+          "x": 920, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d8ea6166342d9864", 
+            "954833e134d05adc"
+          ], 
+          "point_id": "9ddfaab4797060a2", 
+          "x": 920, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9ddfaab4797060a2", 
+            "95e9c4d3539f8975"
+          ], 
+          "point_id": "954833e134d05adc", 
+          "x": 990, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "954833e134d05adc", 
+            "58332a14e669b2b2"
+          ], 
+          "point_id": "95e9c4d3539f8975", 
+          "x": 990, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "95e9c4d3539f8975", 
+            "70bef48f40906a3e"
+          ], 
+          "point_id": "58332a14e669b2b2", 
+          "x": 1020, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "58332a14e669b2b2", 
+            "762697deb796a974"
+          ], 
+          "point_id": "70bef48f40906a3e", 
+          "x": 1020, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "70bef48f40906a3e", 
+            "248a7507bad16786"
+          ], 
+          "point_id": "762697deb796a974", 
+          "x": 810, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "762697deb796a974", 
+            "21429b09eaf3d94d"
+          ], 
+          "point_id": "248a7507bad16786", 
+          "x": 810, 
+          "y": 40
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "248a7507bad16786", 
+            "9ac74c48ea1b46b4"
+          ], 
+          "point_id": "21429b09eaf3d94d", 
+          "x": 1140, 
+          "y": 40
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "21429b09eaf3d94d", 
+            "234791a5c1d7a0c7"
+          ], 
+          "point_id": "9ac74c48ea1b46b4", 
+          "x": 1140, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9ac74c48ea1b46b4", 
+            "1ad769a4527346b8"
+          ], 
+          "point_id": "234791a5c1d7a0c7", 
+          "x": 1140, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "234791a5c1d7a0c7", 
+            "dfde5f044eada21a"
+          ], 
+          "point_id": "1ad769a4527346b8", 
+          "x": 820, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1ad769a4527346b8", 
+            "ecba9214c67989c4"
+          ], 
+          "point_id": "dfde5f044eada21a", 
+          "x": 1180, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dfde5f044eada21a", 
+            "77a381a953599593"
+          ], 
+          "point_id": "ecba9214c67989c4", 
+          "x": 1180, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ecba9214c67989c4", 
+            "10fb1ea626e9ceda"
+          ], 
+          "point_id": "77a381a953599593", 
+          "x": 1060, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "77a381a953599593", 
+            "e3aaf83ac1476b49"
+          ], 
+          "point_id": "10fb1ea626e9ceda", 
+          "x": 1060, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "10fb1ea626e9ceda", 
+            "7626896116947b94"
+          ], 
+          "point_id": "e3aaf83ac1476b49", 
+          "x": 1370, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e3aaf83ac1476b49", 
+            "3872f7b9ba0ebcd0"
+          ], 
+          "point_id": "7626896116947b94", 
+          "x": 1370, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7626896116947b94", 
+            "7767cb72ff55f558"
+          ], 
+          "point_id": "3872f7b9ba0ebcd0", 
+          "x": 720, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3872f7b9ba0ebcd0", 
+            "ee7b704a50cf8d7f"
+          ], 
+          "point_id": "7767cb72ff55f558", 
+          "x": 720, 
+          "y": 220
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7767cb72ff55f558", 
+            "ab19894191d24a6c"
+          ], 
+          "point_id": "ee7b704a50cf8d7f", 
+          "x": 990, 
+          "y": 220
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ee7b704a50cf8d7f", 
+            "15f86337c5ae5d24"
+          ], 
+          "point_id": "ab19894191d24a6c", 
+          "x": 990, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ab19894191d24a6c", 
+            "1b66120f4efb2c6c"
+          ], 
+          "point_id": "15f86337c5ae5d24", 
+          "x": 450, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "15f86337c5ae5d24", 
+            "ba5507e186158979"
+          ], 
+          "point_id": "1b66120f4efb2c6c", 
+          "x": 450, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1b66120f4efb2c6c", 
+            "ee4b2bd2a7a6391f"
+          ], 
+          "point_id": "ba5507e186158979", 
+          "x": 660, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ba5507e186158979", 
+            "717dc271e5a1fea5"
+          ], 
+          "point_id": "ee4b2bd2a7a6391f", 
+          "x": 660, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ee4b2bd2a7a6391f", 
+            "4597b0d1d3b99400"
+          ], 
+          "point_id": "717dc271e5a1fea5", 
+          "x": 420, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "717dc271e5a1fea5", 
+            "2226e76044e139dd"
+          ], 
+          "point_id": "4597b0d1d3b99400", 
+          "x": 420, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4597b0d1d3b99400", 
+            "bab8fe2eafb4cfe1"
+          ], 
+          "point_id": "2226e76044e139dd", 
+          "x": 190, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2226e76044e139dd", 
+            "738652fa34469a46"
+          ], 
+          "point_id": "bab8fe2eafb4cfe1", 
+          "x": 190, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bab8fe2eafb4cfe1", 
+            "4d6e3043b49c28ad"
+          ], 
+          "point_id": "738652fa34469a46", 
+          "x": 180, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "738652fa34469a46", 
+            "1835cd9b12fe029c"
+          ], 
+          "point_id": "4d6e3043b49c28ad", 
+          "x": 180, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4d6e3043b49c28ad", 
+            "e7b731377b8c0c74"
+          ], 
+          "point_id": "1835cd9b12fe029c", 
+          "x": 230, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1835cd9b12fe029c", 
+            "3d3441d4b281cabc"
+          ], 
+          "point_id": "e7b731377b8c0c74", 
+          "x": 230, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e7b731377b8c0c74", 
+            "bc9594f4337af525"
+          ], 
+          "point_id": "3d3441d4b281cabc", 
+          "x": 240, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3d3441d4b281cabc", 
+            "d53bc189a91a0090"
+          ], 
+          "point_id": "bc9594f4337af525", 
+          "x": 240, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bc9594f4337af525", 
+            "c27548aefcef918a"
+          ], 
+          "point_id": "d53bc189a91a0090", 
+          "x": 260, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d53bc189a91a0090", 
+            "3fe25b5336aafb20"
+          ], 
+          "point_id": "c27548aefcef918a", 
+          "x": 260, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c27548aefcef918a", 
+            "5d530e1244b14012"
+          ], 
+          "point_id": "3fe25b5336aafb20", 
+          "x": 260, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3fe25b5336aafb20", 
+            "eb3bc0a2f0793a0e"
+          ], 
+          "point_id": "5d530e1244b14012", 
+          "x": 990, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5d530e1244b14012", 
+            "f7f6cb48f3b8d772"
+          ], 
+          "point_id": "eb3bc0a2f0793a0e", 
+          "x": 1380, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eb3bc0a2f0793a0e", 
+            "05f1bac8d1c898c3"
+          ], 
+          "point_id": "f7f6cb48f3b8d772", 
+          "x": 1380, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f7f6cb48f3b8d772", 
+            "ced7a6969fe7bf17"
+          ], 
+          "point_id": "05f1bac8d1c898c3", 
+          "x": 1380, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "05f1bac8d1c898c3", 
+            "27097028d07cceef"
+          ], 
+          "point_id": "ced7a6969fe7bf17", 
+          "x": 560, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ced7a6969fe7bf17", 
+            "8a7ff401d64b5b40"
+          ], 
+          "point_id": "27097028d07cceef", 
+          "x": 470, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "27097028d07cceef", 
+            "f7cb7aa2ae2141ca"
+          ], 
+          "point_id": "8a7ff401d64b5b40", 
+          "x": 470, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8a7ff401d64b5b40", 
+            "7a86f4521cf2c3b1"
+          ], 
+          "point_id": "f7cb7aa2ae2141ca", 
+          "x": 1180, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f7cb7aa2ae2141ca", 
+            "6b84cc786efe273d"
+          ], 
+          "point_id": "7a86f4521cf2c3b1", 
+          "x": 1180, 
+          "y": 10
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7a86f4521cf2c3b1", 
+            "4d76605b679ccf69"
+          ], 
+          "point_id": "6b84cc786efe273d", 
+          "x": 290, 
+          "y": 10
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6b84cc786efe273d", 
+            "e816653faa20f575"
+          ], 
+          "point_id": "4d76605b679ccf69", 
+          "x": 290, 
+          "y": 210
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4d76605b679ccf69", 
+            "0531c8bb6fc46ce7"
+          ], 
+          "point_id": "e816653faa20f575", 
+          "x": 1260, 
+          "y": 210
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e816653faa20f575", 
+            "f189d8bfc67e2551"
+          ], 
+          "point_id": "0531c8bb6fc46ce7", 
+          "x": 1260, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0531c8bb6fc46ce7", 
+            "a2b5c0d6add14c2e"
+          ], 
+          "point_id": "f189d8bfc67e2551", 
+          "x": 1350, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f189d8bfc67e2551", 
+            "7220a34632924404"
+          ], 
+          "point_id": "a2b5c0d6add14c2e", 
+          "x": 1350, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a2b5c0d6add14c2e", 
+            "9744dfa69672d7bc"
+          ], 
+          "point_id": "7220a34632924404", 
+          "x": 1240, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7220a34632924404", 
+            "97945005b5285478"
+          ], 
+          "point_id": "9744dfa69672d7bc", 
+          "x": 1240, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9744dfa69672d7bc", 
+            "745889ea3c6b7e1d"
+          ], 
+          "point_id": "97945005b5285478", 
+          "x": 1330, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "97945005b5285478", 
+            "757d6d881f2b8038"
+          ], 
+          "point_id": "745889ea3c6b7e1d", 
+          "x": 1330, 
+          "y": 130
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "745889ea3c6b7e1d", 
+            "96eb91b18c524d27"
+          ], 
+          "point_id": "757d6d881f2b8038", 
+          "x": 1310, 
+          "y": 130
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "757d6d881f2b8038", 
+            "2c17545ae7aa1957"
+          ], 
+          "point_id": "96eb91b18c524d27", 
+          "x": 1310, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "96eb91b18c524d27", 
+            "a5f4a28a0510d830"
+          ], 
+          "point_id": "2c17545ae7aa1957", 
+          "x": 1210, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2c17545ae7aa1957", 
+            "39d6bbb8946fec7e"
+          ], 
+          "point_id": "a5f4a28a0510d830", 
+          "x": 1210, 
+          "y": 190
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a5f4a28a0510d830", 
+            "af2681301523746e"
+          ], 
+          "point_id": "39d6bbb8946fec7e", 
+          "x": 1190, 
+          "y": 190
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "39d6bbb8946fec7e", 
+            "dd891f3642dde16b"
+          ], 
+          "point_id": "af2681301523746e", 
+          "x": 1190, 
+          "y": 50
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "af2681301523746e", 
+            "784c15fb21e1c174"
+          ], 
+          "point_id": "dd891f3642dde16b", 
+          "x": 1420, 
+          "y": 50
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dd891f3642dde16b", 
+            "05f2f45b2de4ed74"
+          ], 
+          "point_id": "784c15fb21e1c174", 
+          "x": 1420, 
+          "y": 240
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "784c15fb21e1c174", 
+            "3ed64cb1b3558204"
+          ], 
+          "point_id": "05f2f45b2de4ed74", 
+          "x": 1190, 
+          "y": 240
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "05f2f45b2de4ed74", 
+            "3b22b0a7af4a53d9"
+          ], 
+          "point_id": "3ed64cb1b3558204", 
+          "x": 1190, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3ed64cb1b3558204", 
+            "9a71c17a4c65c6ce"
+          ], 
+          "point_id": "3b22b0a7af4a53d9", 
+          "x": 720, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3b22b0a7af4a53d9", 
+            "34ee9dcaf39b38a9"
+          ], 
+          "point_id": "9a71c17a4c65c6ce", 
+          "x": 720, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9a71c17a4c65c6ce", 
+            "8aba3d971c5c6717"
+          ], 
+          "point_id": "34ee9dcaf39b38a9", 
+          "x": 870, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "34ee9dcaf39b38a9", 
+            "715380d0697580f3"
+          ], 
+          "point_id": "8aba3d971c5c6717", 
+          "x": 870, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8aba3d971c5c6717", 
+            "e3620614f40bcabb"
+          ], 
+          "point_id": "715380d0697580f3", 
+          "x": 1080, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "715380d0697580f3", 
+            "14aa0dd4de0c0527"
+          ], 
+          "point_id": "e3620614f40bcabb", 
+          "x": 1080, 
+          "y": 20
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e3620614f40bcabb", 
+            "4d62f8bcbe1b0272"
+          ], 
+          "point_id": "14aa0dd4de0c0527", 
+          "x": 630, 
+          "y": 20
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "14aa0dd4de0c0527", 
+            "ace92eaf3a0c1216"
+          ], 
+          "point_id": "4d62f8bcbe1b0272", 
+          "x": 630, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4d62f8bcbe1b0272", 
+            "ef0f788a273e33f8"
+          ], 
+          "point_id": "ace92eaf3a0c1216", 
+          "x": 760, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ace92eaf3a0c1216", 
+            "186b1884eb4a3ace"
+          ], 
+          "point_id": "ef0f788a273e33f8", 
+          "x": 760, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ef0f788a273e33f8", 
+            "80192df728615018"
+          ], 
+          "point_id": "186b1884eb4a3ace", 
+          "x": 1070, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "186b1884eb4a3ace", 
+            "cfeb308738dc7a23"
+          ], 
+          "point_id": "80192df728615018", 
+          "x": 1070, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "80192df728615018", 
+            "19e3908fc20b1f11"
+          ], 
+          "point_id": "cfeb308738dc7a23", 
+          "x": 950, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cfeb308738dc7a23", 
+            "2ab2c2240887a3ae"
+          ], 
+          "point_id": "19e3908fc20b1f11", 
+          "x": 950, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "19e3908fc20b1f11", 
+            "77b848586d7e98fb"
+          ], 
+          "point_id": "2ab2c2240887a3ae", 
+          "x": 800, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2ab2c2240887a3ae", 
+            "e32a840afda6250a"
+          ], 
+          "point_id": "77b848586d7e98fb", 
+          "x": 800, 
+          "y": 80
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "77b848586d7e98fb", 
+            "95b3588495608e65"
+          ], 
+          "point_id": "e32a840afda6250a", 
+          "x": 780, 
+          "y": 80
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e32a840afda6250a", 
+            "2946edee52ee1942"
+          ], 
+          "point_id": "95b3588495608e65", 
+          "x": 780, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "95b3588495608e65", 
+            "b07d1e9dcce7a3bf"
+          ], 
+          "point_id": "2946edee52ee1942", 
+          "x": 820, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2946edee52ee1942", 
+            "ef855dbf61bca862"
+          ], 
+          "point_id": "b07d1e9dcce7a3bf", 
+          "x": 810, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b07d1e9dcce7a3bf", 
+            "93281efb79dc98f3"
+          ], 
+          "point_id": "ef855dbf61bca862", 
+          "x": 810, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ef855dbf61bca862", 
+            "d6700dea72ccb89d"
+          ], 
+          "point_id": "93281efb79dc98f3", 
+          "x": 500, 
+          "y": 120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "93281efb79dc98f3", 
+            "e3c8a2483af0e419"
+          ], 
+          "point_id": "d6700dea72ccb89d", 
+          "x": 500, 
+          "y": 110
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d6700dea72ccb89d", 
+            "29ded9e4357ef209"
+          ], 
+          "point_id": "e3c8a2483af0e419", 
+          "x": 580, 
+          "y": 110
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e3c8a2483af0e419", 
+            "ba9c24ee81319ab3"
+          ], 
+          "point_id": "29ded9e4357ef209", 
+          "x": 580, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "29ded9e4357ef209", 
+            "ca6ad43014190e52"
+          ], 
+          "point_id": "ba9c24ee81319ab3", 
+          "x": 570, 
+          "y": 100
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ba9c24ee81319ab3", 
+            "42d690fa989caad7"
+          ], 
+          "point_id": "ca6ad43014190e52", 
+          "x": 570, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ca6ad43014190e52", 
+            "9ccaab9b8ca27a7b"
+          ], 
+          "point_id": "42d690fa989caad7", 
+          "x": 420, 
+          "y": 140
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "42d690fa989caad7", 
+            "6f6b4ee0b91e6564"
+          ], 
+          "point_id": "9ccaab9b8ca27a7b", 
+          "x": 420, 
+          "y": 110
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9ccaab9b8ca27a7b", 
+            "300de150bf4448b9"
+          ], 
+          "point_id": "6f6b4ee0b91e6564", 
+          "x": 300, 
+          "y": 110
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6f6b4ee0b91e6564", 
+            "f1682228ae7d5677"
+          ], 
+          "point_id": "300de150bf4448b9", 
+          "x": 300, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "300de150bf4448b9", 
+            "baeccd8d84527239"
+          ], 
+          "point_id": "f1682228ae7d5677", 
+          "x": 740, 
+          "y": 90
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f1682228ae7d5677", 
+            "98b7d53332fa6fe3"
+          ], 
+          "point_id": "baeccd8d84527239", 
+          "x": 740, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "baeccd8d84527239", 
+            "57a3759d9564674b"
+          ], 
+          "point_id": "98b7d53332fa6fe3", 
+          "x": 410, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "98b7d53332fa6fe3", 
+            "1b62b95b3dab8211"
+          ], 
+          "point_id": "57a3759d9564674b", 
+          "x": 410, 
+          "y": 700
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "57a3759d9564674b", 
+            "850d31b3a622f380"
+          ], 
+          "point_id": "1b62b95b3dab8211", 
+          "x": 710, 
+          "y": 700
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1b62b95b3dab8211", 
+            "eaa2f28642d60634"
+          ], 
+          "point_id": "850d31b3a622f380", 
+          "x": 710, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "850d31b3a622f380", 
+            "6af72085b2b16b88"
+          ], 
+          "point_id": "eaa2f28642d60634", 
+          "x": 710, 
+          "y": 710
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eaa2f28642d60634", 
+            "40629600b9d036ba"
+          ], 
+          "point_id": "6af72085b2b16b88", 
+          "x": 860, 
+          "y": 710
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6af72085b2b16b88", 
+            "2edf708f4ad83219"
+          ], 
+          "point_id": "40629600b9d036ba", 
+          "x": 1140, 
+          "y": 710
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40629600b9d036ba", 
+            "eaf99587292e7997"
+          ], 
+          "point_id": "2edf708f4ad83219", 
+          "x": 1140, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2edf708f4ad83219", 
+            "cd9771193a568705"
+          ], 
+          "point_id": "eaf99587292e7997", 
+          "x": 1220, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eaf99587292e7997", 
+            "904181127f4319e5"
+          ], 
+          "point_id": "cd9771193a568705", 
+          "x": 1220, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cd9771193a568705", 
+            "6d7e7ad8a001aaa1"
+          ], 
+          "point_id": "904181127f4319e5", 
+          "x": 1480, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "904181127f4319e5", 
+            "2c550feb9a3650f5"
+          ], 
+          "point_id": "6d7e7ad8a001aaa1", 
+          "x": 1480, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6d7e7ad8a001aaa1", 
+            "f44ba4c04e974d45"
+          ], 
+          "point_id": "2c550feb9a3650f5", 
+          "x": 1470, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2c550feb9a3650f5", 
+            "739180bd983c9f71"
+          ], 
+          "point_id": "f44ba4c04e974d45", 
+          "x": 1470, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f44ba4c04e974d45", 
+            "da9c481233695325"
+          ], 
+          "point_id": "739180bd983c9f71", 
+          "x": 1370, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "739180bd983c9f71", 
+            "7aafc61dd5b177b2"
+          ], 
+          "point_id": "da9c481233695325", 
+          "x": 1370, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "da9c481233695325", 
+            "bebd586c7848e341"
+          ], 
+          "point_id": "7aafc61dd5b177b2", 
+          "x": 1480, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7aafc61dd5b177b2", 
+            "9b0b84f2641c370e"
+          ], 
+          "point_id": "bebd586c7848e341", 
+          "x": 1480, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bebd586c7848e341", 
+            "176586fb2756cadc"
+          ], 
+          "point_id": "9b0b84f2641c370e", 
+          "x": 1520, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9b0b84f2641c370e", 
+            "f46de07342656f39"
+          ], 
+          "point_id": "176586fb2756cadc", 
+          "x": 1520, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "176586fb2756cadc", 
+            "9e56391b409f2e6c"
+          ], 
+          "point_id": "f46de07342656f39", 
+          "x": 1270, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f46de07342656f39", 
+            "30f21962b3c27ed2"
+          ], 
+          "point_id": "9e56391b409f2e6c", 
+          "x": 1270, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9e56391b409f2e6c", 
+            "9a194d8b72a68abf"
+          ], 
+          "point_id": "30f21962b3c27ed2", 
+          "x": 1350, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "30f21962b3c27ed2", 
+            "4ad9fa55c01d7d77"
+          ], 
+          "point_id": "9a194d8b72a68abf", 
+          "x": 1350, 
+          "y": 210
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9a194d8b72a68abf", 
+            "1551b225004e0609"
+          ], 
+          "point_id": "4ad9fa55c01d7d77", 
+          "x": 1160, 
+          "y": 210
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4ad9fa55c01d7d77", 
+            "076815742dff71fa"
+          ], 
+          "point_id": "1551b225004e0609", 
+          "x": 1160, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1551b225004e0609", 
+            "5154c928cfb5139a"
+          ], 
+          "point_id": "076815742dff71fa", 
+          "x": 870, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "076815742dff71fa", 
+            "a515d20b2342de46"
+          ], 
+          "point_id": "5154c928cfb5139a", 
+          "x": 870, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5154c928cfb5139a", 
+            "59029ebc26fe62a3"
+          ], 
+          "point_id": "a515d20b2342de46", 
+          "x": 990, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a515d20b2342de46", 
+            "debb4ada0f14985a"
+          ], 
+          "point_id": "59029ebc26fe62a3", 
+          "x": 990, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "59029ebc26fe62a3", 
+            "8812ee6b3d1e2142"
+          ], 
+          "point_id": "debb4ada0f14985a", 
+          "x": 1070, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "debb4ada0f14985a", 
+            "e07efa018d08f287"
+          ], 
+          "point_id": "8812ee6b3d1e2142", 
+          "x": 1070, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8812ee6b3d1e2142", 
+            "224cf8bb7e178dad"
+          ], 
+          "point_id": "e07efa018d08f287", 
+          "x": 1160, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e07efa018d08f287", 
+            "1ea337aa964b3754"
+          ], 
+          "point_id": "224cf8bb7e178dad", 
+          "x": 1160, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "224cf8bb7e178dad", 
+            "b56028e3334fd7a8"
+          ], 
+          "point_id": "1ea337aa964b3754", 
+          "x": 1100, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1ea337aa964b3754", 
+            "298786c9932d705c"
+          ], 
+          "point_id": "b56028e3334fd7a8", 
+          "x": 1100, 
+          "y": 670
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b56028e3334fd7a8", 
+            "f753899929dc523b"
+          ], 
+          "point_id": "298786c9932d705c", 
+          "x": 460, 
+          "y": 670
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "298786c9932d705c", 
+            "9d73b407b49e81f9"
+          ], 
+          "point_id": "f753899929dc523b", 
+          "x": 460, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f753899929dc523b", 
+            "22c20bacf1f1f452"
+          ], 
+          "point_id": "9d73b407b49e81f9", 
+          "x": 970, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9d73b407b49e81f9", 
+            "2802c11d6a4c92e1"
+          ], 
+          "point_id": "22c20bacf1f1f452", 
+          "x": 970, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "22c20bacf1f1f452", 
+            "79599a2e6bdc2c37"
+          ], 
+          "point_id": "2802c11d6a4c92e1", 
+          "x": 1240, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2802c11d6a4c92e1", 
+            "5043a463cf79c789"
+          ], 
+          "point_id": "79599a2e6bdc2c37", 
+          "x": 1240, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "79599a2e6bdc2c37", 
+            "945301158820fe5b"
+          ], 
+          "point_id": "5043a463cf79c789", 
+          "x": 1250, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5043a463cf79c789", 
+            "39e5d4b685c94aa8"
+          ], 
+          "point_id": "945301158820fe5b", 
+          "x": 1250, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "945301158820fe5b", 
+            "81d8a28069b8791b"
+          ], 
+          "point_id": "39e5d4b685c94aa8", 
+          "x": 840, 
+          "y": 150
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "39e5d4b685c94aa8", 
+            "ff07a7b3aa8aa622"
+          ], 
+          "point_id": "81d8a28069b8791b", 
+          "x": 840, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "81d8a28069b8791b", 
+            "5d91fad27a7d7515"
+          ], 
+          "point_id": "ff07a7b3aa8aa622", 
+          "x": 300, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ff07a7b3aa8aa622", 
+            "777c7fa560496d84"
+          ], 
+          "point_id": "5d91fad27a7d7515", 
+          "x": 300, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5d91fad27a7d7515", 
+            "19c9f92c7b3da782"
+          ], 
+          "point_id": "777c7fa560496d84", 
+          "x": 210, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "777c7fa560496d84", 
+            "57a0c85ccba737a0"
+          ], 
+          "point_id": "19c9f92c7b3da782", 
+          "x": 210, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "19c9f92c7b3da782", 
+            "8de6219d2a0f0254"
+          ], 
+          "point_id": "57a0c85ccba737a0", 
+          "x": 340, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "57a0c85ccba737a0", 
+            "7c11c4e05fc5e6c4"
+          ], 
+          "point_id": "8de6219d2a0f0254", 
+          "x": 340, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8de6219d2a0f0254", 
+            "96248501c2d06771"
+          ], 
+          "point_id": "7c11c4e05fc5e6c4", 
+          "x": 200, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7c11c4e05fc5e6c4", 
+            "fadf2cb8ebc843ea"
+          ], 
+          "point_id": "96248501c2d06771", 
+          "x": 200, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "96248501c2d06771", 
+            "1fd6858a5efba8ac"
+          ], 
+          "point_id": "fadf2cb8ebc843ea", 
+          "x": 200, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fadf2cb8ebc843ea", 
+            "2e0c9955082ee689"
+          ], 
+          "point_id": "1fd6858a5efba8ac", 
+          "x": 590, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1fd6858a5efba8ac", 
+            "648e6bfc132ed9c6"
+          ], 
+          "point_id": "2e0c9955082ee689", 
+          "x": 590, 
+          "y": 190
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2e0c9955082ee689", 
+            "5e78c4e148176f8e"
+          ], 
+          "point_id": "648e6bfc132ed9c6", 
+          "x": 770, 
+          "y": 190
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "648e6bfc132ed9c6", 
+            "55f5cdb29a12f36c"
+          ], 
+          "point_id": "5e78c4e148176f8e", 
+          "x": 770, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5e78c4e148176f8e", 
+            "0180958cefa41271"
+          ], 
+          "point_id": "55f5cdb29a12f36c", 
+          "x": 540, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "55f5cdb29a12f36c", 
+            "5342c25b6585c158"
+          ], 
+          "point_id": "0180958cefa41271", 
+          "x": 540, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0180958cefa41271", 
+            "9ef3fd8fe6116d45"
+          ], 
+          "point_id": "5342c25b6585c158", 
+          "x": 320, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5342c25b6585c158", 
+            "b081e8c1102d2797"
+          ], 
+          "point_id": "9ef3fd8fe6116d45", 
+          "x": 320, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9ef3fd8fe6116d45", 
+            "7032a5cc2740b52b"
+          ], 
+          "point_id": "b081e8c1102d2797", 
+          "x": 390, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b081e8c1102d2797", 
+            "5f2b3ce162d9b148"
+          ], 
+          "point_id": "7032a5cc2740b52b", 
+          "x": 390, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7032a5cc2740b52b", 
+            "9c866e3b1dbc2ca2"
+          ], 
+          "point_id": "5f2b3ce162d9b148", 
+          "x": 640, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5f2b3ce162d9b148", 
+            "26b7bcae725e73fe"
+          ], 
+          "point_id": "9c866e3b1dbc2ca2", 
+          "x": 640, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9c866e3b1dbc2ca2", 
+            "a211b8f50b7bef15"
+          ], 
+          "point_id": "26b7bcae725e73fe", 
+          "x": 890, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "26b7bcae725e73fe", 
+            "532dde4cc3c43f02"
+          ], 
+          "point_id": "a211b8f50b7bef15", 
+          "x": 890, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a211b8f50b7bef15", 
+            "fde78955fcf109da"
+          ], 
+          "point_id": "532dde4cc3c43f02", 
+          "x": 1040, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "532dde4cc3c43f02", 
+            "8edad618e5fe1f97"
+          ], 
+          "point_id": "fde78955fcf109da", 
+          "x": 1040, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fde78955fcf109da", 
+            "8123715baf1ce541"
+          ], 
+          "point_id": "8edad618e5fe1f97", 
+          "x": 1310, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8edad618e5fe1f97", 
+            "c3aeaa0e8985303d"
+          ], 
+          "point_id": "8123715baf1ce541", 
+          "x": 1310, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8123715baf1ce541", 
+            "f4174d4656bafee6"
+          ], 
+          "point_id": "c3aeaa0e8985303d", 
+          "x": 1310, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c3aeaa0e8985303d", 
+            "5ff1199dcf81bb5e"
+          ], 
+          "point_id": "f4174d4656bafee6", 
+          "x": 590, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f4174d4656bafee6", 
+            "b3e4d47053c2f275"
+          ], 
+          "point_id": "5ff1199dcf81bb5e", 
+          "x": 710, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5ff1199dcf81bb5e", 
+            "3145519f5367ac59"
+          ], 
+          "point_id": "b3e4d47053c2f275", 
+          "x": 710, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b3e4d47053c2f275", 
+            "da18f37591c8d32d"
+          ], 
+          "point_id": "3145519f5367ac59", 
+          "x": 850, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3145519f5367ac59", 
+            "3832728f532c5175"
+          ], 
+          "point_id": "da18f37591c8d32d", 
+          "x": 850, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "da18f37591c8d32d", 
+            "391efb72a301d662"
+          ], 
+          "point_id": "3832728f532c5175", 
+          "x": 1110, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3832728f532c5175", 
+            "5da6e60e537b6c55"
+          ], 
+          "point_id": "391efb72a301d662", 
+          "x": 1110, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "391efb72a301d662", 
+            "0ba19f6588f34b20"
+          ], 
+          "point_id": "5da6e60e537b6c55", 
+          "x": 1150, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5da6e60e537b6c55", 
+            "d32c843cae9194ed"
+          ], 
+          "point_id": "0ba19f6588f34b20", 
+          "x": 1150, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0ba19f6588f34b20", 
+            "a02fc1cf9b11e5f7"
+          ], 
+          "point_id": "d32c843cae9194ed", 
+          "x": 1050, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d32c843cae9194ed", 
+            "1dc38821a5a1e99d"
+          ], 
+          "point_id": "a02fc1cf9b11e5f7", 
+          "x": 1050, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a02fc1cf9b11e5f7", 
+            "8dbb118c10d75863"
+          ], 
+          "point_id": "1dc38821a5a1e99d", 
+          "x": 940, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1dc38821a5a1e99d", 
+            "5a9a57cbcded1213"
+          ], 
+          "point_id": "8dbb118c10d75863", 
+          "x": 940, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8dbb118c10d75863", 
+            "18c677fe62143bc4"
+          ], 
+          "point_id": "5a9a57cbcded1213", 
+          "x": 880, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5a9a57cbcded1213", 
+            "341817770bef8fb6"
+          ], 
+          "point_id": "18c677fe62143bc4", 
+          "x": 880, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "18c677fe62143bc4", 
+            "645a5511f5844a40"
+          ], 
+          "point_id": "341817770bef8fb6", 
+          "x": 730, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "341817770bef8fb6", 
+            "3cf00f43c04d5f53"
+          ], 
+          "point_id": "645a5511f5844a40", 
+          "x": 730, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "645a5511f5844a40", 
+            "d5148f7772eae759"
+          ], 
+          "point_id": "3cf00f43c04d5f53", 
+          "x": 430, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3cf00f43c04d5f53", 
+            "fe33e2995360eafe"
+          ], 
+          "point_id": "d5148f7772eae759", 
+          "x": 430, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d5148f7772eae759", 
+            "afea6fad833dfc21"
+          ], 
+          "point_id": "fe33e2995360eafe", 
+          "x": 520, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fe33e2995360eafe", 
+            "f49a931ced934b17"
+          ], 
+          "point_id": "afea6fad833dfc21", 
+          "x": 520, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "afea6fad833dfc21", 
+            "79724ea0d6a51d81"
+          ], 
+          "point_id": "f49a931ced934b17", 
+          "x": 960, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f49a931ced934b17", 
+            "0072581ce3e3d89c"
+          ], 
+          "point_id": "79724ea0d6a51d81", 
+          "x": 960, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "79724ea0d6a51d81", 
+            "edcb1307ed530830"
+          ], 
+          "point_id": "0072581ce3e3d89c", 
+          "x": 1030, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0072581ce3e3d89c", 
+            "6af342d731450de0"
+          ], 
+          "point_id": "edcb1307ed530830", 
+          "x": 1030, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "edcb1307ed530830", 
+            "94777eb25d7f6872"
+          ], 
+          "point_id": "6af342d731450de0", 
+          "x": 1070, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6af342d731450de0", 
+            "9ae8b51b3eb4b837"
+          ], 
+          "point_id": "94777eb25d7f6872", 
+          "x": 1070, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "94777eb25d7f6872", 
+            "f6c34be22606f4bb"
+          ], 
+          "point_id": "9ae8b51b3eb4b837", 
+          "x": 820, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9ae8b51b3eb4b837", 
+            "e1e7a5d33d357926"
+          ], 
+          "point_id": "f6c34be22606f4bb", 
+          "x": 820, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f6c34be22606f4bb", 
+            "5a881b990a77d6d4"
+          ], 
+          "point_id": "e1e7a5d33d357926", 
+          "x": 740, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e1e7a5d33d357926", 
+            "7287b6846e0f9931"
+          ], 
+          "point_id": "5a881b990a77d6d4", 
+          "x": 740, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5a881b990a77d6d4", 
+            "96683257fa9065d7"
+          ], 
+          "point_id": "7287b6846e0f9931", 
+          "x": 510, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7287b6846e0f9931", 
+            "8f5519c4e6ff2790"
+          ], 
+          "point_id": "96683257fa9065d7", 
+          "x": 510, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "96683257fa9065d7", 
+            "1fd505a924762e2e"
+          ], 
+          "point_id": "8f5519c4e6ff2790", 
+          "x": 370, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8f5519c4e6ff2790", 
+            "59714826a9356d5c"
+          ], 
+          "point_id": "1fd505a924762e2e", 
+          "x": 370, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1fd505a924762e2e", 
+            "d677994d862b4cc7"
+          ], 
+          "point_id": "59714826a9356d5c", 
+          "x": 370, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "59714826a9356d5c", 
+            "5518851a4353adb9"
+          ], 
+          "point_id": "d677994d862b4cc7", 
+          "x": 380, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d677994d862b4cc7", 
+            "4bd0aecca00817bb"
+          ], 
+          "point_id": "5518851a4353adb9", 
+          "x": 380, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5518851a4353adb9", 
+            "c182355cafc53745"
+          ], 
+          "point_id": "4bd0aecca00817bb", 
+          "x": 350, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4bd0aecca00817bb", 
+            "5926bfce4f3f17f6"
+          ], 
+          "point_id": "c182355cafc53745", 
+          "x": 350, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c182355cafc53745", 
+            "40d203e5b21ec7ed"
+          ], 
+          "point_id": "5926bfce4f3f17f6", 
+          "x": 360, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5926bfce4f3f17f6"
+          ], 
+          "point_id": "40d203e5b21ec7ed", 
+          "x": 360, 
+          "y": 600
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "b458ee5e6778dd8b", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "2b02651f41654485", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "227ff487ba2f26fb"
+          ], 
+          "point_id": "c46da51037a47282", 
+          "x": 560, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c46da51037a47282", 
+            "1d5d92f467359757"
+          ], 
+          "point_id": "227ff487ba2f26fb", 
+          "x": 550, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "227ff487ba2f26fb", 
+            "79c8e4ec8e338d7a"
+          ], 
+          "point_id": "1d5d92f467359757", 
+          "x": 500, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1d5d92f467359757", 
+            "dad4ff8d385d1c84"
+          ], 
+          "point_id": "79c8e4ec8e338d7a", 
+          "x": 500, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "79c8e4ec8e338d7a", 
+            "84f056e0474c7e83"
+          ], 
+          "point_id": "dad4ff8d385d1c84", 
+          "x": 560, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "984c93ad4cc53187", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "dad4ff8d385d1c84"
+          ], 
+          "point_id": "84f056e0474c7e83", 
+          "x": 570, 
+          "y": 550
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

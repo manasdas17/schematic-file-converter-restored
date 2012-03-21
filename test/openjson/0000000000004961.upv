@@ -1,0 +1,227 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "b8d2c368fc89a9ef", 
+      "library_id": "0dd7fb2f4d20f539", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 470, 
+          "y": 490
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "2924899577e2441a", 
+      "library_id": "0dd7fb2f4d20f539", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 440, 
+          "y": 350
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0dd7fb2f4d20f539": {
+      "attributes": {
+        "Actuator Type": "Standard", 
+        "Category": "Switches", 
+        "Circuit": "SPST-NO", 
+        "Contact Rating @ Voltage\t": "0.02A @ 15VDC", 
+        "Digi-Key Part Number\t": "P10880S-ND", 
+        "Family": "Tactile", 
+        "Illumination": "Non-Illuminated", 
+        "Mounting Type": "Through Hole ", 
+        "Operating Force\t": "100gf", 
+        "Orientation\t": "Right Angle", 
+        "Other Names\t": "EVQPF008K / P10880S", 
+        "Outline": "7.50mm x 7.10mm", 
+        "Series": "EVQPF", 
+        "Switch Function": "Off-Mom", 
+        "_datasheet": "http://industrial.panasonic.com/www-data/pdf/ATK0000/ATK0000CE32.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "PANASONIC ECG", 
+        "_num_pins": "2", 
+        "_package": "Bulk/500", 
+        "_part_number": "EVQ-PF008K", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "\tLT SWITCH RT ANGLE L8.35MM 100GF", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004961", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "tirithen", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316121673
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "3790bc3002d56a0f", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ed9d0b4bf1ccf0dd"
+          ], 
+          "point_id": "72b54a8264a3450a", 
+          "x": 450, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "72b54a8264a3450a", 
+            "40134e444eb88079"
+          ], 
+          "point_id": "ed9d0b4bf1ccf0dd", 
+          "x": 310, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ed9d0b4bf1ccf0dd", 
+            "f89818859a18f42f"
+          ], 
+          "point_id": "40134e444eb88079", 
+          "x": 310, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40134e444eb88079", 
+            "bb92f8423f6132cd"
+          ], 
+          "point_id": "f89818859a18f42f", 
+          "x": 310, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f89818859a18f42f"
+          ], 
+          "point_id": "bb92f8423f6132cd", 
+          "x": 480, 
+          "y": 480
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

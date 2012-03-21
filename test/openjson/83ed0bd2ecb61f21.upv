@@ -1,0 +1,373 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "L2"
+      }, 
+      "instance_id": "e375587742559729", 
+      "library_id": "22f32552cc41dd6c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_inductance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 1120, 
+          "y": 880
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "L1"
+      }, 
+      "instance_id": "74975f59ef92df24", 
+      "library_id": "22f32552cc41dd6c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 20, 
+              "y": -20
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "abc", 
+              "x": -81, 
+              "y": -18
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 1020, 
+          "y": 780
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "22f32552cc41dd6c": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/BLM18AG601SN1D-Murata-datasheet-41195.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Murata", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "4220749563", 
+        "_package": "0603", 
+        "_part_number": "BLM18AG601SN1D", 
+        "_prefix": "L", 
+        "_resistance": "0.38\u03a9", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Inductor", 
+        "_type": "inductor", 
+        "current_rating": "0.20A", 
+        "frequency": "100.00 MHz", 
+        "mounting_type": "surface mount", 
+        "resistance": "0.38\u03a9", 
+        "size_height": "0.80 mm", 
+        "size_length": "1.60 mm", 
+        "size_width": "0.80 mm"
+      }, 
+      "name": " Ferrite Bead", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 45, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 10, 
+                  "y": -10
+                }, 
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -10
+                }, 
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 30, 
+                  "y": -10
+                }, 
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 40, 
+                  "y": -10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "abc", 
+        "x": 1160, 
+        "y": 600
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "annotation", 
+        "x": 1170, 
+        "y": 560
+      }
+    ], 
+    "attributes": {
+      "_inductor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "83ed0bd2ecb61f21", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "ohm", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1328403014
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "91c0550fd4b48ee4", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8ba671497b2486fc", 
+            "1c3a729d2c963d3f"
+          ], 
+          "point_id": "446f2ce6c81f9bd0", 
+          "x": 1010, 
+          "y": 770
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "446f2ce6c81f9bd0", 
+            "b105697ad2b0da82"
+          ], 
+          "point_id": "1c3a729d2c963d3f", 
+          "x": 900, 
+          "y": 770
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "e375587742559729", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "6cd85231732355a7"
+          ], 
+          "point_id": "9d145e84072a45e2", 
+          "x": 1120, 
+          "y": 870
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "74975f59ef92df24", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "446f2ce6c81f9bd0"
+          ], 
+          "point_id": "8ba671497b2486fc", 
+          "x": 1020, 
+          "y": 770
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9d145e84072a45e2", 
+            "b105697ad2b0da82"
+          ], 
+          "point_id": "6cd85231732355a7", 
+          "x": 1110, 
+          "y": 870
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6cd85231732355a7", 
+            "1c3a729d2c963d3f"
+          ], 
+          "point_id": "b105697ad2b0da82", 
+          "x": 900, 
+          "y": 870
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": ""
+      }, 
+      "net_id": "8cedd43daeb76f45", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7a831df0f1e87d72", 
+            "6e5f868ec984373b"
+          ], 
+          "point_id": "e40c86d62e9125a9", 
+          "x": 1180, 
+          "y": 870
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6e5f868ec984373b", 
+            "ea2298bd7f8e96c9"
+          ], 
+          "point_id": "a3590a7dab50d01e", 
+          "x": 1240, 
+          "y": 720
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2ecec76f496c1f42", 
+            "778a6e4205b3397b"
+          ], 
+          "point_id": "146a7a04c32c30a1", 
+          "x": 1080, 
+          "y": 770
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a3590a7dab50d01e", 
+            "f69e9a065164c5d7"
+          ], 
+          "point_id": "ea2298bd7f8e96c9", 
+          "x": 1150, 
+          "y": 720
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "146a7a04c32c30a1", 
+            "f69e9a065164c5d7"
+          ], 
+          "point_id": "778a6e4205b3397b", 
+          "x": 1150, 
+          "y": 770
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e40c86d62e9125a9", 
+            "a3590a7dab50d01e"
+          ], 
+          "point_id": "6e5f868ec984373b", 
+          "x": 1240, 
+          "y": 870
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "74975f59ef92df24", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "146a7a04c32c30a1"
+          ], 
+          "point_id": "2ecec76f496c1f42", 
+          "x": 1070, 
+          "y": 770
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "e375587742559729", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "e40c86d62e9125a9"
+          ], 
+          "point_id": "7a831df0f1e87d72", 
+          "x": 1170, 
+          "y": 870
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ea2298bd7f8e96c9", 
+            "778a6e4205b3397b"
+          ], 
+          "point_id": "f69e9a065164c5d7", 
+          "x": 1150, 
+          "y": 750
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

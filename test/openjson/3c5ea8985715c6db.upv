@@ -1,0 +1,300 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "22e31d344899cfa7", 
+      "library_id": "4cc79cbeba40e009", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 350, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "4cc79cbeba40e009": {
+      "attributes": {
+        "Connect": "", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.tai.com.tw/media/files/spec/RM.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "TA-I Technology", 
+        "_num_pins": "2", 
+        "_package": "0603", 
+        "_part_number": "RM06JTN100", 
+        "_prefix": "R", 
+        "_resistance": "10 \u03a9", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "resistance": "10 \u03a9"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -45
+      }
+    ], 
+    "attributes": {
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "3c5ea8985715c6db", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "nrdiss", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1319873140
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 315, 
+          "y": 495
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "701da3c3600dae9a", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "22e31d344899cfa7", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "969ec88798af9967"
+          ], 
+          "point_id": "a23cf3c0c7513fe0", 
+          "x": 350, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a23cf3c0c7513fe0", 
+            "365467873d6c590d"
+          ], 
+          "point_id": "969ec88798af9967", 
+          "x": 340, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "969ec88798af9967", 
+            "724dd38b72542863"
+          ], 
+          "point_id": "365467873d6c590d", 
+          "x": 280, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "365467873d6c590d"
+          ], 
+          "point_id": "724dd38b72542863", 
+          "x": 280, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 500, 
+          "y": 460
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "a08aea67eab07d5a", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "22e31d344899cfa7", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "2a7a1a59fa9cac70"
+          ], 
+          "point_id": "614340990a33576a", 
+          "x": 400, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "614340990a33576a", 
+            "0892bc201646273f"
+          ], 
+          "point_id": "2a7a1a59fa9cac70", 
+          "x": 410, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2a7a1a59fa9cac70", 
+            "15ef361268dd3caa"
+          ], 
+          "point_id": "0892bc201646273f", 
+          "x": 600, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0892bc201646273f"
+          ], 
+          "point_id": "15ef361268dd3caa", 
+          "x": 600, 
+          "y": 390
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

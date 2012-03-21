@@ -1,0 +1,878 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "C2"
+      }, 
+      "instance_id": "641eadb34f8bab36", 
+      "library_id": "a75a3e1aeb9aa93f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 20, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -20, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 380, 
+          "y": 440
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_name": "VCC"
+      }, 
+      "instance_id": "cfafee2735e23344", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 440, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U4"
+      }, 
+      "instance_id": "4a9d0fec46db642d", 
+      "library_id": "a97d553307ab04bf", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refDes}}", 
+              "x": 0, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 480, 
+          "y": 440
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_name": "GND"
+      }, 
+      "instance_id": "a03058328043c3b6", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 330, 
+          "y": 390
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "a75a3e1aeb9aa93f": {
+      "attributes": {
+        "_capacitance": "0.22 mF", 
+        "_datasheet": "http://datasheet.octopart.com/EEE-1AA221XP-Panasonic-datasheet-6019.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Panasonic", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "21098945790", 
+        "_part_number": "EEE-1AA221XP", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "0.22 mF", 
+        "mounting_type": "surface mount", 
+        "size_diameter": "0.01m", 
+        "size_height": "0.01m", 
+        "voltage_rating_dc": "10.00V"
+      }, 
+      "name": "0.22 mF C", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "a97d553307ab04bf": {
+      "attributes": {
+        "_datasheet": "http://www.ti.com/lit/ds/symlink/tps79301.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "5", 
+        "_package": "SOT23-5", 
+        "_part_number": "TPS79333DBVR", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "TPS79333DBVR", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "OUT", 
+                    "x": 60, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 65, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 70, 
+                    "y": -10
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "NR", 
+                    "x": 60, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 65, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 70, 
+                    "y": -50
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IN", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "EN", 
+                    "x": 9, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 70, 
+                  "type": "rectangle", 
+                  "width": 60, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_capacitor_counter": "2", 
+      "_integrated circuit_counter": "4"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "Schematic of the Neato LDS HORIZ BOARD, part of the Neato Laser Distance Scanner module. ", 
+      "design_id": "f6534be8f0ff4659", 
+      "license": "No License", 
+      "name": "Neato LDS HORIZ BOARD", 
+      "owner": "Hash", 
+      "slug": "Neato-LDS-HORIZ-BOARD", 
+      "updated_timestamp": 1322098376
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_IN"
+      }, 
+      "net_id": "d7d60e9d95d297a0", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "86c47bac7b0dc7ce", 
+            "e23b678e5795af1a"
+          ], 
+          "point_id": "5b9c69ab9ae256f3", 
+          "x": 450, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5b9c69ab9ae256f3"
+          ], 
+          "point_id": "86c47bac7b0dc7ce", 
+          "x": 450, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5b9c69ab9ae256f3"
+          ], 
+          "point_id": "e23b678e5795af1a", 
+          "x": 450, 
+          "y": 440
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "+_1"
+      }, 
+      "net_id": "7d0de398bc448d49", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c1264271ccb186b6", 
+            "a01aef22f0f29ce8"
+          ], 
+          "point_id": "e663d19ef2385563", 
+          "x": 370, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "32d4ba1260031f91", 
+            "b475d886aee43195"
+          ], 
+          "point_id": "993f52d2723361bc", 
+          "x": 470, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "4a9d0fec46db642d", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "993f52d2723361bc"
+          ], 
+          "point_id": "32d4ba1260031f91", 
+          "x": 480, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "641eadb34f8bab36", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "e663d19ef2385563"
+          ], 
+          "point_id": "c1264271ccb186b6", 
+          "x": 380, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e663d19ef2385563", 
+            "b475d886aee43195"
+          ], 
+          "point_id": "a01aef22f0f29ce8", 
+          "x": 340, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "993f52d2723361bc", 
+            "120b6d8acd2279ce", 
+            "a01aef22f0f29ce8"
+          ], 
+          "point_id": "b475d886aee43195", 
+          "x": 340, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b475d886aee43195", 
+            "ba798b143d99c7b6"
+          ], 
+          "point_id": "120b6d8acd2279ce", 
+          "x": 340, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "a03058328043c3b6", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "120b6d8acd2279ce"
+          ], 
+          "point_id": "ba798b143d99c7b6", 
+          "x": 340, 
+          "y": 390
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_IN"
+      }, 
+      "net_id": "296df1f78fa80575", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4cbd15304ff97920"
+          ], 
+          "point_id": "c045b09f56e85e0e", 
+          "x": 450, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4fb27911e14bfbef", 
+            "c045b09f56e85e0e"
+          ], 
+          "point_id": "4cbd15304ff97920", 
+          "x": 450, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4cbd15304ff97920", 
+            "0ce59533d70cbd7d"
+          ], 
+          "point_id": "4fb27911e14bfbef", 
+          "x": 450, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4fb27911e14bfbef"
+          ], 
+          "point_id": "0ce59533d70cbd7d", 
+          "x": 450, 
+          "y": 430
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_IN"
+      }, 
+      "net_id": "27c9d81b778ea469", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8b1fbf3c3aecac12"
+          ], 
+          "point_id": "1c0940d6cb7878a3", 
+          "x": 470, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1c0940d6cb7878a3", 
+            "a73d50bc8ac14ee9"
+          ], 
+          "point_id": "8b1fbf3c3aecac12", 
+          "x": 470, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "4a9d0fec46db642d", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "a73d50bc8ac14ee9"
+          ], 
+          "point_id": "10faae92144a5e9d", 
+          "x": 480, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0c29ab116052a6d3", 
+            "10faae92144a5e9d", 
+            "8b1fbf3c3aecac12"
+          ], 
+          "point_id": "a73d50bc8ac14ee9", 
+          "x": 470, 
+          "y": 430
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_IN"
+      }, 
+      "net_id": "1d06409e968e07d2", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5e5f409edaaa97a2"
+          ], 
+          "point_id": "0181c9974e786410", 
+          "x": 410, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "641eadb34f8bab36", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "0181c9974e786410"
+          ], 
+          "point_id": "5e5f409edaaa97a2", 
+          "x": 400, 
+          "y": 430
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_IN"
+      }, 
+      "net_id": "efb1125fb023b794", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a73d50bc8ac14ee9"
+          ], 
+          "point_id": "0c29ab116052a6d3", 
+          "x": 460, 
+          "y": 430
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "-_IN"
+      }, 
+      "net_id": "69fa80b82c2614a4", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "927c14cf38bf2e67"
+          ], 
+          "point_id": "9f5c0b5f401d7f6b", 
+          "x": 450, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9f5c0b5f401d7f6b"
+          ], 
+          "point_id": "927c14cf38bf2e67", 
+          "x": 450, 
+          "y": 390
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

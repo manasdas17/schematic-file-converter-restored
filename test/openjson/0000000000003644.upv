@@ -1,0 +1,333 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "e7792caa8fd42d11", 
+      "library_id": "9b81bf99300e8a9a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 470, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "d48b185cd97cff0a", 
+      "library_id": "9b81bf99300e8a9a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 730, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "9b81bf99300e8a9a": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/PPTC081LFBN-RC-Sullins-datasheet-82.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "Sullins Connector Solutions", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "27102407245", 
+        "_part_number": "PPTC081LFBN-RC", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "contact_material": "Phosphor Bronze", 
+        "housing_material": "Plastic", 
+        "max_operating_temperature": "125.00\u00b0C", 
+        "mounting_type": "Through Hole", 
+        "number_of_positions": "40", 
+        "number_of_rows": "2.00", 
+        "pin_pitch": "2.54 mm", 
+        "size_height": "7mm", 
+        "size_length": "11mm", 
+        "size_width": "2.50 mm"
+      }, 
+      "name": "PPTC081LFBN-RC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000003644", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "dgould", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1315953402
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 650, 
+          "y": 505
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "5260bd72cb43d93a", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "e7792caa8fd42d11", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "30ed337a36bf45de"
+          ], 
+          "point_id": "64742ca2f40996ef", 
+          "x": 590, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "628862b8d0ddbe24", 
+            "30ed337a36bf45de"
+          ], 
+          "point_id": "fd27ea9c26c80181", 
+          "x": 600, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fd27ea9c26c80181", 
+            "b4f0c80969d356eb"
+          ], 
+          "point_id": "628862b8d0ddbe24", 
+          "x": 710, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "628862b8d0ddbe24"
+          ], 
+          "point_id": "b4f0c80969d356eb", 
+          "x": 710, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fd27ea9c26c80181", 
+            "64742ca2f40996ef", 
+            "dbb1d1ac52025e95"
+          ], 
+          "point_id": "30ed337a36bf45de", 
+          "x": 600, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "30ed337a36bf45de", 
+            "bce29c422073370e"
+          ], 
+          "point_id": "dbb1d1ac52025e95", 
+          "x": 600, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dbb1d1ac52025e95", 
+            "0d3cb562be57f594"
+          ], 
+          "point_id": "bce29c422073370e", 
+          "x": 700, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bce29c422073370e", 
+            "f00e091c826b1183"
+          ], 
+          "point_id": "0d3cb562be57f594", 
+          "x": 650, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0d3cb562be57f594", 
+            "b53f5844f0c266cd"
+          ], 
+          "point_id": "f00e091c826b1183", 
+          "x": 700, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f00e091c826b1183", 
+            "4ab41ab5fef9d200"
+          ], 
+          "point_id": "b53f5844f0c266cd", 
+          "x": 700, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b53f5844f0c266cd", 
+            "f5adc2aaae1db123"
+          ], 
+          "point_id": "4ab41ab5fef9d200", 
+          "x": 580, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4ab41ab5fef9d200", 
+            "07029df7c9ddffe8"
+          ], 
+          "point_id": "f5adc2aaae1db123", 
+          "x": 580, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f5adc2aaae1db123", 
+            "694b612b4307e21e"
+          ], 
+          "point_id": "07029df7c9ddffe8", 
+          "x": 720, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "d48b185cd97cff0a", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "07029df7c9ddffe8"
+          ], 
+          "point_id": "694b612b4307e21e", 
+          "x": 730, 
+          "y": 500
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

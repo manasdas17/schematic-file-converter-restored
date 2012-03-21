@@ -1,0 +1,574 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "54346d7ed03f435b", 
+      "library_id": "ffaa09826484b99f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 60, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 80, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 170, 
+          "y": 580
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "Q2"
+      }, 
+      "instance_id": "a914525f9b146428", 
+      "library_id": "ffaa09826484b99f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 80, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 60, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 170, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "GND"
+      }, 
+      "instance_id": "7abe67a2b3162d12", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": 50, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 200, 
+          "y": 520
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ffaa09826484b99f": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/2N7000G-ON-Semiconductor-datasheet-162151.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "On Semiconductor", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "4054033113", 
+        "_package": "TO-92", 
+        "_part_number": "2N7000G", 
+        "_prefix": "Q", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "N-Channel Enhanced MOSFET (No Bulk)", 
+        "_type": "integrated circuit", 
+        "breakdown_voltage_drain_to_source": "60.00V", 
+        "current_rating": "0.20A", 
+        "id_continuous_drain_current": "0.20A", 
+        "input_capacitance": "0.06 nF", 
+        "max_breakdown_voltage_gate_to_source": "20.00V", 
+        "max_power_dissipation": "0.35W", 
+        "min_breakdown_voltage_gate_to_source": "-20.00V", 
+        "mounting_type": "through hole", 
+        "polarity": "N-Channel", 
+        "rds_drain_to_source_resistance_on": "5.00\u03a9", 
+        "vds_drain_to_source_voltage": "60.00V", 
+        "voltage_rating_dc": "60.00V"
+      }, 
+      "name": "2N7000G N\u2212Channel MOSFET", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -40
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "radius": 22, 
+                  "type": "circle", 
+                  "x": 25, 
+                  "y": -20
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_transistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " nand gate", 
+      "design_id": "0000000000003862", 
+      "license": "", 
+      "name": "nand", 
+      "owner": "ohazi", 
+      "slug": "nand", 
+      "updated_timestamp": 1315994940
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 210, 
+          "y": 595
+        }
+      ], 
+      "attributes": {
+        "name": "D_G"
+      }, 
+      "net_id": "20ac3c07866184c3", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "a914525f9b146428", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "4aa616c812dbe413"
+          ], 
+          "point_id": "1d4707c124d23f5f", 
+          "x": 210, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1d4707c124d23f5f", 
+            "15ef6f2c79aa4be3"
+          ], 
+          "point_id": "4aa616c812dbe413", 
+          "x": 210, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4aa616c812dbe413", 
+            "93198da2a9e2662a"
+          ], 
+          "point_id": "15ef6f2c79aa4be3", 
+          "x": 210, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "54346d7ed03f435b", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "15ef6f2c79aa4be3"
+          ], 
+          "point_id": "93198da2a9e2662a", 
+          "x": 210, 
+          "y": 580
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 210, 
+          "y": 530
+        }
+      ], 
+      "attributes": {
+        "name": "D"
+      }, 
+      "net_id": "9d375a2d93b8683d", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "54346d7ed03f435b", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "e8e18c481b6ce4e1"
+          ], 
+          "point_id": "6339b6010ca82e89", 
+          "x": 210, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6339b6010ca82e89", 
+            "82aafffd4732224d"
+          ], 
+          "point_id": "e8e18c481b6ce4e1", 
+          "x": 210, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e8e18c481b6ce4e1"
+          ], 
+          "point_id": "82aafffd4732224d", 
+          "x": 210, 
+          "y": 520
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

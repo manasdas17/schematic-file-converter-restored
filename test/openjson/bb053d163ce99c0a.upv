@@ -1,0 +1,543 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q2"
+      }, 
+      "instance_id": "7f5676be503d6df4", 
+      "library_id": "35c7579c4be24f25", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 1.0, 
+          "x": 660, 
+          "y": 930
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "ae768fc191d394c0", 
+      "library_id": "e687ff35ef8ee852", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 140, 
+              "y": -185
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 360, 
+          "y": 870
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "35c7579c4be24f25": {
+      "attributes": {
+        "Collector-Base Voltage": "-50V", 
+        "Collector-Emitter Voltage": "\u201345V", 
+        "Emitter-Base Voltage": "-5V", 
+        "_datasheet": "http://www.datasheetcatalog.org/datasheet2/b/0fxuespadlx4ryu0ch8s4kg7shfy.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "ON Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "TO-92", 
+        "_part_number": "BC557C", 
+        "_prefix": "Q", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "BJT (PNP)", 
+        "_type": "integrated circuit", 
+        "hfe": "125-900"
+      }, 
+      "name": "BC557C PNP Silicon Transistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -22
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "e687ff35ef8ee852": {
+      "attributes": {
+        "Category": "Integrated Circuits (ICs) ", 
+        "Family": "Logic - Shift Registers", 
+        "Function": "Serial to Parallel ", 
+        "Logic Type": "Shift Register ", 
+        "Mounting Type": "Through Hole  ", 
+        "Number of Bits per Element": "8 mm Dia. x 11.5 mm L", 
+        "Number of Elements": "1", 
+        "Operating Temperature": "-40\u00b0C ~ 125\u00b0C ", 
+        "Other Names": "296-9015-5 ", 
+        "Output Type": "Standard", 
+        "Package / Case": "16-DIP (0.300\", 7.62mm)  ", 
+        "Series": "TPIC", 
+        "Supplier Device Package": "16-PDIP ", 
+        "Voltage - Supply": "4.5 V ~ 5.5 V ", 
+        "_datasheet": "http://focus.ti.com/lit/ds/symlink/tpic6c596.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "16", 
+        "_octopart_part_number": "50070123997", 
+        "_package": "SOIC-16, PDIP-16", 
+        "_part_number": "TPIC6C596N", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "IC 8 BIT SHIFT REGISTER 16-DIP", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 130, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -20
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SRCK DRAIN7", 
+                    "x": 130, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -40
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN7", 
+                    "x": 130, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -60
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN6", 
+                    "x": 130, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -80
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN5", 
+                    "x": 130, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -100
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN4", 
+                    "x": 130, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -120
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RCK", 
+                    "x": 130, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -140
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SER OUT", 
+                    "x": 130, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -160
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VCC", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "SER IN", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN0", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN1", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN2", 
+                    "x": 9, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -100
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "DRAIN3", 
+                    "x": 9, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -120
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "CLR'", 
+                    "x": 9, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -140
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "G'", 
+                    "x": 9, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -160
+                  }, 
+                  "pin_number": "8"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 180, 
+                  "type": "rectangle", 
+                  "width": 130, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3", 
+      "_transistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "bb053d163ce99c0a", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "roxlu", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1322585157
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

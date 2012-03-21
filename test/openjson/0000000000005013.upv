@@ -1,0 +1,383 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "a0edfc6155f3b006", 
+      "library_id": "467209332283f2cd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 340, 
+          "y": 500
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "467209332283f2cd": {
+      "attributes": {
+        "Actuator Type\t": "Standard", 
+        "Circuit": "SPDT", 
+        "Contact Rating @ Voltage": "0.2A @ 30VDC", 
+        "Family": "Slide", 
+        "Mounting Type\t": "Through Hole ", 
+        "Orientation": "Right Angle", 
+        "Other Names": "EG1906 / ERJ6ENFU / P040030", 
+        "Series": "EG", 
+        "Switch Function\t": "On-On", 
+        "Termination Style": "PC Pin", 
+        "_datasheet": "spec.e-switch.com/P-J/P040030B.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "E-SWITCH", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "105625808179", 
+        "_part_number": "EG1213", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH SLIDE SPDT 30V RT ANGLE", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005013", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "alokm", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316141549
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "bc60b0fe58ee1893", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0025a74b53e907ff"
+          ], 
+          "point_id": "7c26345ec70edb68", 
+          "x": 350, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7c26345ec70edb68", 
+            "f22a592128a4c6fc"
+          ], 
+          "point_id": "0025a74b53e907ff", 
+          "x": 350, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0025a74b53e907ff", 
+            "aea0db26cd94d93b"
+          ], 
+          "point_id": "f22a592128a4c6fc", 
+          "x": 350, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f22a592128a4c6fc", 
+            "afcfe664e6128533"
+          ], 
+          "point_id": "aea0db26cd94d93b", 
+          "x": 300, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "aea0db26cd94d93b", 
+            "b407ed65b62171dc"
+          ], 
+          "point_id": "afcfe664e6128533", 
+          "x": 300, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "afcfe664e6128533", 
+            "abbd403bc91f3752"
+          ], 
+          "point_id": "b407ed65b62171dc", 
+          "x": 300, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b407ed65b62171dc", 
+            "fc59f2f2fd5db34e"
+          ], 
+          "point_id": "abbd403bc91f3752", 
+          "x": 400, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "abbd403bc91f3752", 
+            "e559f3657dee6dab"
+          ], 
+          "point_id": "fc59f2f2fd5db34e", 
+          "x": 400, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fc59f2f2fd5db34e", 
+            "e034f4701d5896ce"
+          ], 
+          "point_id": "e559f3657dee6dab", 
+          "x": 400, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e559f3657dee6dab", 
+            "9df7210528b26e20"
+          ], 
+          "point_id": "e034f4701d5896ce", 
+          "x": 350, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e034f4701d5896ce", 
+            "f072c0a64de21bde"
+          ], 
+          "point_id": "9df7210528b26e20", 
+          "x": 400, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9df7210528b26e20", 
+            "05ea36d200e14984"
+          ], 
+          "point_id": "f072c0a64de21bde", 
+          "x": 510, 
+          "y": 230
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f072c0a64de21bde", 
+            "1e330e47e6020679"
+          ], 
+          "point_id": "05ea36d200e14984", 
+          "x": 510, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "05ea36d200e14984", 
+            "6cdff893f1a2c185"
+          ], 
+          "point_id": "1e330e47e6020679", 
+          "x": 460, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e330e47e6020679", 
+            "8638edb6fbba6a63"
+          ], 
+          "point_id": "6cdff893f1a2c185", 
+          "x": 510, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6cdff893f1a2c185", 
+            "39edda4c966cfcd9"
+          ], 
+          "point_id": "8638edb6fbba6a63", 
+          "x": 510, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8638edb6fbba6a63", 
+            "87c1880db5ac0b94"
+          ], 
+          "point_id": "39edda4c966cfcd9", 
+          "x": 460, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "39edda4c966cfcd9", 
+            "bd27a8fa9a060ef0"
+          ], 
+          "point_id": "87c1880db5ac0b94", 
+          "x": 510, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "87c1880db5ac0b94", 
+            "483a344ffd728962"
+          ], 
+          "point_id": "bd27a8fa9a060ef0", 
+          "x": 710, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bd27a8fa9a060ef0", 
+            "51bf842785604af2"
+          ], 
+          "point_id": "483a344ffd728962", 
+          "x": 710, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "483a344ffd728962", 
+            "567bd65954ce5d11"
+          ], 
+          "point_id": "51bf842785604af2", 
+          "x": 570, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "51bf842785604af2"
+          ], 
+          "point_id": "567bd65954ce5d11", 
+          "x": 570, 
+          "y": 470
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

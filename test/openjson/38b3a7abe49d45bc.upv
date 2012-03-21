@@ -1,0 +1,327 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "2b9c3f5e90e4c35f", 
+      "library_id": "f98423f5067bb834", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 60, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 550, 
+          "y": 450
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "0dc047819026879d", 
+      "library_id": "f98423f5067bb834", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 60, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 890, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "f98423f5067bb834": {
+      "attributes": {
+        "_datasheet": "http://eeshop.unl.edu/sites/default/files/public/ds/LM340.pdf", 
+        "_lead_free": "No", 
+        "_manufacturer": "National Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "TO-220/TO-263/SOT-223/TO-3", 
+        "_part_number": "LM340-T5 / 7805", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "Voltage Regulator", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "LM340/LM78XX Series 3-Terminal Positive Regulators", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 40, 
+                  "x": 10, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "38b3a7abe49d45bc", 
+      "license": "", 
+      "name": "Orion V", 
+      "owner": "charleseff", 
+      "slug": "Orion-V", 
+      "updated_timestamp": 1330677344
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "Output"
+      }, 
+      "net_id": "3336ea7876b38f08", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4b46e61b8c2a8e08", 
+            "962000e72e6d4367"
+          ], 
+          "point_id": "c2211bdc7fb35f89", 
+          "x": 620, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "65bcb89493492174", 
+            "756a442ec09e0fed"
+          ], 
+          "point_id": "0fae5f858cf58d23", 
+          "x": 880, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5ff2edce57e521e6", 
+            "6c8708d19981e2b3"
+          ], 
+          "point_id": "e73e58f82f2d88a3", 
+          "x": 440, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cad90c4a0af6119f", 
+            "1debb92871173885"
+          ], 
+          "point_id": "c3a420bd3f991b27", 
+          "x": 520, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "0dc047819026879d", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "c3a420bd3f991b27", 
+            "756a442ec09e0fed"
+          ], 
+          "point_id": "1debb92871173885", 
+          "x": 520, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8ad9339251e27675", 
+            "e73e58f82f2d88a3"
+          ], 
+          "point_id": "6c8708d19981e2b3", 
+          "x": 440, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "2b9c3f5e90e4c35f", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "c2211bdc7fb35f89"
+          ], 
+          "point_id": "4b46e61b8c2a8e08", 
+          "x": 610, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0233868b20d41f73", 
+            "962000e72e6d4367"
+          ], 
+          "point_id": "b2f61947795248fb", 
+          "x": 710, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6c8708d19981e2b3"
+          ], 
+          "point_id": "8ad9339251e27675", 
+          "x": 440, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b2f61947795248fb", 
+            "cad90c4a0af6119f", 
+            "5ff2edce57e521e6"
+          ], 
+          "point_id": "0233868b20d41f73", 
+          "x": 460, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1debb92871173885", 
+            "0fae5f858cf58d23"
+          ], 
+          "point_id": "756a442ec09e0fed", 
+          "x": 520, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b2f61947795248fb", 
+            "c2211bdc7fb35f89"
+          ], 
+          "point_id": "962000e72e6d4367", 
+          "x": 710, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "0dc047819026879d", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "0fae5f858cf58d23"
+          ], 
+          "point_id": "65bcb89493492174", 
+          "x": 890, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c3a420bd3f991b27", 
+            "0233868b20d41f73"
+          ], 
+          "point_id": "cad90c4a0af6119f", 
+          "x": 460, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0233868b20d41f73", 
+            "e73e58f82f2d88a3"
+          ], 
+          "point_id": "5ff2edce57e521e6", 
+          "x": 460, 
+          "y": 560
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

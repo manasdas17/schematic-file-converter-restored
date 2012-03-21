@@ -1,0 +1,237 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "fedc16389dc8eaba", 
+      "library_id": "467209332283f2cd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 640, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "467209332283f2cd": {
+      "attributes": {
+        "Actuator Type\t": "Standard", 
+        "Circuit": "SPDT", 
+        "Contact Rating @ Voltage": "0.2A @ 30VDC", 
+        "Family": "Slide", 
+        "Mounting Type\t": "Through Hole ", 
+        "Orientation": "Right Angle", 
+        "Other Names": "EG1906 / ERJ6ENFU / P040030", 
+        "Series": "EG", 
+        "Switch Function\t": "On-On", 
+        "Termination Style": "PC Pin", 
+        "_datasheet": "spec.e-switch.com/P-J/P040030B.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "E-SWITCH", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "105625808179", 
+        "_part_number": "EG1213", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH SLIDE SPDT 30V RT ANGLE", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000003586", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "hoffjul", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1315946134
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 545, 
+          "y": 460
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "604f2e490753a15b", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cb71fbd102a85d1b"
+          ], 
+          "point_id": "09abc31128a37306", 
+          "x": 530, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "09abc31128a37306", 
+            "45d7780d0253f159"
+          ], 
+          "point_id": "cb71fbd102a85d1b", 
+          "x": 450, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cb71fbd102a85d1b", 
+            "849be21dc17a75a2"
+          ], 
+          "point_id": "45d7780d0253f159", 
+          "x": 450, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "45d7780d0253f159", 
+            "403acfec51601204"
+          ], 
+          "point_id": "849be21dc17a75a2", 
+          "x": 450, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "849be21dc17a75a2", 
+            "334259b69ed067e9"
+          ], 
+          "point_id": "403acfec51601204", 
+          "x": 630, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fedc16389dc8eaba", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "403acfec51601204"
+          ], 
+          "point_id": "334259b69ed067e9", 
+          "x": 640, 
+          "y": 560
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

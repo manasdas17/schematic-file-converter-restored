@@ -1,0 +1,997 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "2ce7e16da487c1fb", 
+      "library_id": "06b1f09bda17618a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 540, 
+          "y": 450
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "eb76ed4c44b75a00", 
+      "library_id": "ab0f58e8116c540d", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -230
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -235
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 680, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "f0ce72c84db2ffad", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -10, 
+              "y": 40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 760, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "06b1f09bda17618a": {
+      "attributes": {
+        "_capacitance": "0.10 uF", 
+        "_datasheet": "http://datasheet.octopart.com/C315C104M5U5TA-Kemet-datasheet-120818.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Kemet", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "8328862813", 
+        "_part_number": "C315C104M5U5TA", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_suffix": "F", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "integrated circuit", 
+        "capacitance": "0.10 uF", 
+        "dielectric_material": "Ceramic Multilayer", 
+        "lead_length": "0.01m", 
+        "max_capacitance_tolerance": "20.00%", 
+        "max_operating_temperature": "125.00\u00b0C", 
+        "min_capacitance_tolerance": "-20.00%", 
+        "mounting_type": "through hole", 
+        "size_height": "0.01m", 
+        "size_length": "0.00m", 
+        "termination_style": "Radial Leaded", 
+        "voltage_rating_dc": "50.00V"
+      }, 
+      "name": "0.10 uF C", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ab0f58e8116c540d": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/PIC16F1827-I/P-Microchip-datasheet-8611681.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Microchip", 
+        "_num_pins": "18", 
+        "_octopart_part_number": "1218501609510", 
+        "_part_number": "PIC16F1827-I/P", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "clock_speed": "32.00 MHz"
+      }, 
+      "name": "PIC16F1827-I/P", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA1", 
+                    "x": 180, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -20
+                  }, 
+                  "pin_number": "18"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA0", 
+                    "x": 180, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -40
+                  }, 
+                  "pin_number": "17"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA7", 
+                    "x": 180, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -60
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA6", 
+                    "x": 180, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -80
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VDD", 
+                    "x": 180, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -100
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB7", 
+                    "x": 180, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -120
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB6", 
+                    "x": 180, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -140
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB5", 
+                    "x": 180, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -160
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB4", 
+                    "x": 180, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 185, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 190, 
+                    "y": -180
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA2", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA3", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA4", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA5/xMCLR/VPP", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VSS", 
+                    "x": 9, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -100
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RB0", 
+                    "x": 9, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -120
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RB1", 
+                    "x": 9, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -140
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RB2", 
+                    "x": 9, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -160
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RB3", 
+                    "x": 9, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -180
+                  }, 
+                  "pin_number": "9"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 200, 
+                  "type": "rectangle", 
+                  "width": 180, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 428, 
+        "y": 534
+      }
+    ], 
+    "attributes": {
+      "_ann_850902fb": "xyz", 
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005392", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "tstranex", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316345940
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 620, 
+          "y": 405
+        }
+      ], 
+      "attributes": {
+        "name": "2_VSS"
+      }, 
+      "net_id": "dd48e9719502b03f", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "eb76ed4c44b75a00", 
+              "pin_number": "5"
+            }
+          ], 
+          "connected_points": [
+            "38802ce7348e0fed"
+          ], 
+          "point_id": "9745cd6f85e21769", 
+          "x": 680, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9745cd6f85e21769", 
+            "c21ac6a9fa98fb5e"
+          ], 
+          "point_id": "38802ce7348e0fed", 
+          "x": 670, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "38802ce7348e0fed", 
+            "07e856d165f7f244"
+          ], 
+          "point_id": "c21ac6a9fa98fb5e", 
+          "x": 620, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c21ac6a9fa98fb5e", 
+            "0c2166badfdc5a25"
+          ], 
+          "point_id": "07e856d165f7f244", 
+          "x": 620, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "07e856d165f7f244", 
+            "7f54eacd5de6c761"
+          ], 
+          "point_id": "0c2166badfdc5a25", 
+          "x": 570, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "2ce7e16da487c1fb", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "0c2166badfdc5a25"
+          ], 
+          "point_id": "7f54eacd5de6c761", 
+          "x": 560, 
+          "y": 440
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 660, 
+          "y": 435
+        }
+      ], 
+      "attributes": {
+        "name": "1_VDD"
+      }, 
+      "net_id": "ad8eab61bb4aff65", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "eb76ed4c44b75a00", 
+              "pin_number": "14"
+            }
+          ], 
+          "connected_points": [
+            "55c9ea2130bf4a6d"
+          ], 
+          "point_id": "8356b6fd50a05dfd", 
+          "x": 870, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fdeeebde3158ce28", 
+            "939abc854cff9b1d"
+          ], 
+          "point_id": "e7489a2fc9ba2fe7", 
+          "x": 1060, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6b333c55aa53954c", 
+            "939abc854cff9b1d"
+          ], 
+          "point_id": "6fe9a0be8494d333", 
+          "x": 260, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "2ce7e16da487c1fb", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "c08c96beabc00f9c"
+          ], 
+          "point_id": "4cbc8af8b0465391", 
+          "x": 540, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6fe9a0be8494d333", 
+            "c08c96beabc00f9c"
+          ], 
+          "point_id": "6b333c55aa53954c", 
+          "x": 260, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6b333c55aa53954c", 
+            "4cbc8af8b0465391"
+          ], 
+          "point_id": "c08c96beabc00f9c", 
+          "x": 530, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e7489a2fc9ba2fe7", 
+            "55c9ea2130bf4a6d"
+          ], 
+          "point_id": "fdeeebde3158ce28", 
+          "x": 1060, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fdeeebde3158ce28", 
+            "8356b6fd50a05dfd"
+          ], 
+          "point_id": "55c9ea2130bf4a6d", 
+          "x": 880, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6fe9a0be8494d333", 
+            "e7489a2fc9ba2fe7", 
+            "5ffa1f0d9552f2d0"
+          ], 
+          "point_id": "939abc854cff9b1d", 
+          "x": 770, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "939abc854cff9b1d"
+          ], 
+          "point_id": "5ffa1f0d9552f2d0", 
+          "x": 770, 
+          "y": 560
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

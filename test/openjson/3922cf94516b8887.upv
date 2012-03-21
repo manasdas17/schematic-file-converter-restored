@@ -1,0 +1,794 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "65fc3351b8b13899", 
+      "library_id": "8a7c23daaef0efbd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 0, 
+          "y": 0
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U3"
+      }, 
+      "instance_id": "77b4cb856d17550e", 
+      "library_id": "b8767a4801de1466", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 220, 
+              "y": -305
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 470, 
+          "y": 900
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U4"
+      }, 
+      "instance_id": "1d9d6651e2af915b", 
+      "library_id": "b8767a4801de1466", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 220, 
+              "y": -305
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 0, 
+          "y": 0
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "a5e66d1f0667ad3e", 
+      "library_id": "8a7c23daaef0efbd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 40, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 300, 
+          "y": 590
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "8a7c23daaef0efbd": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/D7E-3-Omron-datasheet-81896.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "yes", 
+        "_manufacturer": "Omron", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "6209864181", 
+        "_part_number": "D7E-3", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "import_id": "fritzing_d206ca0d70364191f0b3fd30d5e53c5d", 
+        "imported_from": "fritzing", 
+        "mounting_type": "chassis", 
+        "output_current": "0.10A", 
+        "size_height": "0.02m", 
+        "size_length": "0.04m", 
+        "size_width": "0.02m", 
+        "termination_style": "Quick Connect"
+      }, 
+      "name": "Tilt Switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "Pin 1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "Pin 2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "b8767a4801de1466": {
+      "attributes": {
+        "_datasheet": "http://arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf", 
+        "_lead_free": "???", 
+        "_manufacturer": "SparkFun", 
+        "_num_pins": "28", 
+        "_package": "PCB", 
+        "_part_number": "DEV-09950", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "Arduino Uno", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "AREF", 
+                    "x": 210, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -20
+                  }, 
+                  "pin_number": "28"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 210, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -40
+                  }, 
+                  "pin_number": "27"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D13", 
+                    "x": 210, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -60
+                  }, 
+                  "pin_number": "26"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D12", 
+                    "x": 210, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -80
+                  }, 
+                  "pin_number": "25"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D11 (PWM5)", 
+                    "x": 210, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -100
+                  }, 
+                  "pin_number": "24"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D10 (PWM4)", 
+                    "x": 210, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -120
+                  }, 
+                  "pin_number": "23"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D9 (PWM3)", 
+                    "x": 210, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -140
+                  }, 
+                  "pin_number": "22"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D8", 
+                    "x": 210, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -160
+                  }, 
+                  "pin_number": "21"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D7", 
+                    "x": 210, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -180
+                  }, 
+                  "pin_number": "20"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D6 (PWM2)", 
+                    "x": 210, 
+                    "y": -204
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -200
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -200
+                  }, 
+                  "pin_number": "19"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D5 (PWM1)", 
+                    "x": 210, 
+                    "y": -224
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -220
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -220
+                  }, 
+                  "pin_number": "18"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D4", 
+                    "x": 210, 
+                    "y": -244
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -240
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -240
+                  }, 
+                  "pin_number": "17"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D3 (PWM0)", 
+                    "x": 210, 
+                    "y": -264
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -260
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -260
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "D2", 
+                    "x": 210, 
+                    "y": -284
+                  }, 
+                  "p1": {
+                    "x": 215, 
+                    "y": -280
+                  }, 
+                  "p2": {
+                    "x": 220, 
+                    "y": -280
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RESET", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "3.3V", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "5V", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -104
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -100
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -100
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Vin", 
+                    "x": 9, 
+                    "y": -124
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -120
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -120
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A0", 
+                    "x": 9, 
+                    "y": -144
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -140
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -140
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A1", 
+                    "x": 9, 
+                    "y": -164
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -160
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -160
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A2", 
+                    "x": 9, 
+                    "y": -184
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -180
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -180
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A3", 
+                    "x": 9, 
+                    "y": -204
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -200
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -200
+                  }, 
+                  "pin_number": "10"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A4", 
+                    "x": 9, 
+                    "y": -224
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -220
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -220
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "A5", 
+                    "x": 9, 
+                    "y": -244
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -240
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -240
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D0 (RX)", 
+                    "x": 9, 
+                    "y": -264
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -260
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -260
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "D1 (TX)", 
+                    "x": 9, 
+                    "y": -284
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -280
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -280
+                  }, 
+                  "pin_number": "14"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 300, 
+                  "type": "rectangle", 
+                  "width": 210, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "4"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "3922cf94516b8887", 
+      "license": "", 
+      "name": "Ryo-Ohki III", 
+      "owner": "cbonsig", 
+      "slug": "Ryo-Ohki-III", 
+      "updated_timestamp": 1329890012
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "A1"
+      }, 
+      "net_id": "42ca7be457e0e11b", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b637f61a6dea1092"
+          ], 
+          "point_id": "f64bd8d6b4dc3a0c", 
+          "x": 460, 
+          "y": 740
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "77b4cb856d17550e", 
+              "pin_number": "8"
+            }
+          ], 
+          "connected_points": [
+            "f64bd8d6b4dc3a0c"
+          ], 
+          "point_id": "b637f61a6dea1092", 
+          "x": 470, 
+          "y": 740
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,894 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "1d0f7ded6427d75f", 
+      "library_id": "cb1b412ae66b4a24", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 520, 
+          "y": 410
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "7a098dcd40c3d684", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW1"
+      }, 
+      "instance_id": "cd6b6c97e0eafef3", 
+      "library_id": "f5fb3c7875fba648", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 350, 
+          "y": 460
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "GND"
+      }, 
+      "instance_id": "554db2b1de718287", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 170
+        }
+      ], 
+      "symbol_index": 2
+    }, 
+    {
+      "attributes": {
+        "name": "FLAG"
+      }, 
+      "instance_id": "5ffaadbbe8d68d78", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 490, 
+          "y": 270
+        }
+      ], 
+      "symbol_index": 3
+    }, 
+    {
+      "attributes": {
+        "name": "FLAG"
+      }, 
+      "instance_id": "87a3ee1f9b48f429", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 180
+        }
+      ], 
+      "symbol_index": 3
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "cb1b412ae66b4a24": {
+      "attributes": {
+        "Category": "Discrete Semiconductor Products ", 
+        "Current - Collector (Ic) (Max)": "200mA ", 
+        "DC Current Gain (hFE) (Min) @ Ic, Vce": "100 @ 10mA, 1V ", 
+        "Family": "Transistors (BJT) - Single ", 
+        "Frequency - Transition": "300MHz ", 
+        "Mounting Type": "Through Hole  ", 
+        "Other Names": "2N3904FS", 
+        "Package / Case": "TO-92-3 (Standard Body), TO-226  ", 
+        "Power - Max": "625mW", 
+        "Supplier Device Package": "TO-92-3 ", 
+        "Transistor Type": "NPN", 
+        "Vce Saturation (Max) @ Ib, Ic": "300mV @ 5mA, 50mA ", 
+        "Voltage - Collector Emitter Breakdown (Max)": "40V", 
+        "_datasheet": "http://www.fairchildsemi.com/ds/MM/MMBT3904.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Fairchild Semiconductor", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "35231539816", 
+        "_package": "TO-92", 
+        "_part_number": "2N3904BU", 
+        "_prefix": "Q", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "BJT (NPN)", 
+        "_type": "transistor"
+      }, 
+      "name": "NPN General Purpose Transistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -41
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -39
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "f5fb3c7875fba648": {
+      "attributes": {
+        "Connect": "http://www.smtswitch.com/chanpin/ShowSoft.asp?SoftID=204", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.smtswitch.com/chanpin/ShowSoft.asp?SoftID=204", 
+        "_lead_free": "???", 
+        "_manufacturer": "HANYONG", 
+        "_num_pins": "4", 
+        "_package": "4P-SMD-6.0X6.0X5.0H", 
+        "_part_number": "K2-1102S", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Tact Switch", 
+        "_type": "switch"
+      }, 
+      "name": "Tactile switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 10, 
+                  "y": -13
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 10, 
+                  "y": -27
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -16
+                  }, 
+                  "p2": {
+                    "x": 2, 
+                    "y": -22
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 0, 
+        "y": 20
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 60, 
+        "y": -20
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": 60, 
+        "y": -20
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": 0, 
+        "y": -10
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 20, 
+        "y": -30
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 60, 
+        "y": -30
+      }
+    ], 
+    "attributes": {
+      "_switch_counter": "1", 
+      "_transistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "simple transistor cuircut", 
+      "design_id": "6018367e5b790b2c", 
+      "license": "Creative Commons Attribution 3.0 Unported (CC 3.0 BY)", 
+      "name": "transistor flip", 
+      "owner": "Gregimba", 
+      "slug": "transistor-flip", 
+      "updated_timestamp": 1320711533
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "net_id": "9779b8443f4965f4", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "1d0f7ded6427d75f", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "574c05cd2cd32373"
+          ], 
+          "point_id": "2e484713e77af239", 
+          "x": 540, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2e484713e77af239", 
+            "f1c00e15d5cb9700"
+          ], 
+          "point_id": "574c05cd2cd32373", 
+          "x": 540, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6692dd9a3d56c944", 
+            "f1c00e15d5cb9700"
+          ], 
+          "point_id": "92f0de4d990bc7c4", 
+          "x": 540, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "7a098dcd40c3d684", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "92f0de4d990bc7c4"
+          ], 
+          "point_id": "6692dd9a3d56c944", 
+          "x": 540, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "92f0de4d990bc7c4", 
+            "574c05cd2cd32373", 
+            "ff2a0765e05cb588"
+          ], 
+          "point_id": "f1c00e15d5cb9700", 
+          "x": 540, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f1c00e15d5cb9700", 
+            "52f92c721f2bd72c"
+          ], 
+          "point_id": "ff2a0765e05cb588", 
+          "x": 460, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ff2a0765e05cb588", 
+            "70652f3bed1fafe6"
+          ], 
+          "point_id": "52f92c721f2bd72c", 
+          "x": 460, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "52f92c721f2bd72c", 
+            "0f9af19bc4b2b6b9"
+          ], 
+          "point_id": "70652f3bed1fafe6", 
+          "x": 380, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "cd6b6c97e0eafef3", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "70652f3bed1fafe6"
+          ], 
+          "point_id": "0f9af19bc4b2b6b9", 
+          "x": 370, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "B"
+      }, 
+      "net_id": "6b3a58bf3da35a35", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fe36797c0cad3ea6"
+          ], 
+          "point_id": "833f67f6f888f7ac", 
+          "x": 390, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9f4b547d11679dc7", 
+            "fe36797c0cad3ea6"
+          ], 
+          "point_id": "069edb9309db3b7c", 
+          "x": 510, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1d0f7ded6427d75f", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "069edb9309db3b7c"
+          ], 
+          "point_id": "9f4b547d11679dc7", 
+          "x": 520, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d3843d592a4a7b82"
+          ], 
+          "point_id": "51a64e985b3e32e5", 
+          "x": 360, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "51a64e985b3e32e5", 
+            "fe36797c0cad3ea6"
+          ], 
+          "point_id": "d3843d592a4a7b82", 
+          "x": 390, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d3843d592a4a7b82", 
+            "069edb9309db3b7c", 
+            "833f67f6f888f7ac"
+          ], 
+          "point_id": "fe36797c0cad3ea6", 
+          "x": 390, 
+          "y": 380
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "E"
+      }, 
+      "net_id": "c937b15558ce6e0c", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5250f8f5a1beef2a"
+          ], 
+          "point_id": "aa933ca3a07a9240", 
+          "x": 500, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "aa933ca3a07a9240", 
+            "490bc35c0dedc183"
+          ], 
+          "point_id": "5250f8f5a1beef2a", 
+          "x": 500, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5250f8f5a1beef2a", 
+            "d2d356d25c80ca4e"
+          ], 
+          "point_id": "490bc35c0dedc183", 
+          "x": 540, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "490bc35c0dedc183", 
+            "850d208e932f8509"
+          ], 
+          "point_id": "d2d356d25c80ca4e", 
+          "x": 540, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "1d0f7ded6427d75f", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "d2d356d25c80ca4e"
+          ], 
+          "point_id": "850d208e932f8509", 
+          "x": 540, 
+          "y": 360
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

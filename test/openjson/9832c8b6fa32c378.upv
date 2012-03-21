@@ -1,0 +1,882 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "_device": "CAPACITOR", 
+        "_refdes": "C1", 
+        "_symversion": "0.1"
+      }, 
+      "instance_id": "ee28d63e346cf2b9", 
+      "library_id": "e91a4dfd30ad8b2a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0, 
+              "value": "{{_refdes}}", 
+              "x": 4730, 
+              "y": 4830
+            }, 
+            {
+              "rotation": 0, 
+              "value": "{{device}}", 
+              "x": 4730, 
+              "y": 4840
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 4730, 
+          "y": 4830
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_device": "RESISTOR", 
+        "_refdes": "R1"
+      }, 
+      "instance_id": "0b8eee019bcf08ca", 
+      "library_id": "1fea14292e894cca", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0, 
+              "value": "{{_refdes}}", 
+              "x": 4560, 
+              "y": 4640
+            }, 
+            {
+              "rotation": 0, 
+              "value": "{{device}}", 
+              "x": 4560, 
+              "y": 4650
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 4560, 
+          "y": 4640
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_refdes": "GND"
+      }, 
+      "instance_id": "ceeb9d9eb367a8da", 
+      "library_id": "c481f28a1d52be61", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0, 
+              "value": "{{device}}", 
+              "x": 4950, 
+              "y": 4440
+            }, 
+            {
+              "rotation": 0, 
+              "value": "{{_refdes}}", 
+              "x": 4950, 
+              "y": 4430
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 4950, 
+          "y": 4430
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_device": "OPAMP", 
+        "_refdes": "G1", 
+        "_symversion": "1.0", 
+        "model-name": "Op-amp"
+      }, 
+      "instance_id": "d701644d549e7e5b", 
+      "library_id": "b9e939cceb084d91", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0, 
+              "value": "{{device}}", 
+              "x": 5050, 
+              "y": 4570
+            }, 
+            {
+              "rotation": 0, 
+              "value": "{{_refdes}}", 
+              "x": 5050, 
+              "y": 4560
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 5050, 
+          "y": 4560
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "1fea14292e894cca": {
+      "attributes": {
+        "_class": "DISCRETE", 
+        "_device": "RESISTOR", 
+        "_geda_imported": "true", 
+        "_num_pins": "2", 
+        "_pins": "2", 
+        "_prefix": "R", 
+        "_suffix": "", 
+        "imported": "yes"
+      }, 
+      "name": "resistor-1", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 90, 
+                    "y": 10
+                  }, 
+                  "p1": {
+                    "x": 75, 
+                    "y": 10
+                  }, 
+                  "p2": {
+                    "x": 90, 
+                    "y": 10
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 0, 
+                    "y": 10
+                  }, 
+                  "p1": {
+                    "x": 15, 
+                    "y": 10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": 10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 60, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 60, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 70, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 70, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 75, 
+                    "y": 10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": 10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "b9e939cceb084d91": {
+      "attributes": {
+        "_author": "Kai-Martin Knaak kmk@lilalaser.de", 
+        "_comment": "Use symbol opamp_pwr.sym to connect power pins.", 
+        "_description": "operational amplifier", 
+        "_dist-license": "GPL 3, http://www.gnu.org/licenses/gpl-3.0.txt", 
+        "_documentation": "http://www.national.com/ds/TL/TL081.pdf", 
+        "_footprints": "SO8, DIP8", 
+        "_geda_imported": "true", 
+        "_num_pins": "3", 
+        "_prefix": "U", 
+        "_suffix": "", 
+        "_symversion": "1.0", 
+        "_use-license": "free, no restrictions", 
+        "footprint": "SO8", 
+        "imported": "yes", 
+        "value": "TL081"
+      }, 
+      "name": "opamp", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "-", 
+                    "x": 10, 
+                    "y": 20
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 20
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "+", 
+                    "x": 10, 
+                    "y": 60
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": 60
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "out", 
+                    "x": 110, 
+                    "y": 40
+                  }, 
+                  "p1": {
+                    "x": 100, 
+                    "y": 40
+                  }, 
+                  "p2": {
+                    "x": 110, 
+                    "y": 40
+                  }, 
+                  "pin_number": "6"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 80
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": 40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": 40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 25, 
+                    "y": 60
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": 60
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": 65
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": 55
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 25, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": 20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 80
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "c481f28a1d52be61": {
+      "attributes": {
+        "_geda_imported": "true", 
+        "_net": "GND:1", 
+        "_num_pins": "1", 
+        "imported": "yes"
+      }, 
+      "name": "ground", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 20, 
+                    "y": 30
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": 10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 25, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 5
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": 5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 10
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": 10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "e91a4dfd30ad8b2a": {
+      "attributes": {
+        "_description": "capacitor", 
+        "_device": "CAPACITOR", 
+        "_geda_imported": "true", 
+        "_num_pins": "2", 
+        "_numslots": "0", 
+        "_prefix": "C", 
+        "_suffix": "", 
+        "_symversion": "0.1", 
+        "imported": "yes"
+      }, 
+      "name": "capacitor-1", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 0, 
+                    "y": 20
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": 20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 90, 
+                    "y": 20
+                  }, 
+                  "p1": {
+                    "x": 70, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 90, 
+                    "y": 20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 40
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": 40
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 70, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": 20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0, 
+        "value": "Simple Example (upverter)", 
+        "x": 5030, 
+        "y": 4090
+      }
+    ], 
+    "attributes": {}, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "9832c8b6fa32c378", 
+      "license": "", 
+      "name": "simple_example", 
+      "owner": "elbaschid", 
+      "slug": "simple_example", 
+      "updated_timestamp": 1324513289
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0, 
+          "value": "{{_name}}", 
+          "x": 482, 
+          "y": 485
+        }
+      ], 
+      "attributes": {
+        "_name": "-_In+"
+      }, 
+      "net_id": "6e30f5be7711e2a7", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4970a4530", 
+            "4790a4580"
+          ], 
+          "point_id": "4790a4530", 
+          "x": 4790, 
+          "y": 4530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4950a4900", 
+            "5300a4600"
+          ], 
+          "point_id": "5300a4900", 
+          "x": 5300, 
+          "y": 4900
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4650a4650", 
+            "4950a4900"
+          ], 
+          "point_id": "4950a4650", 
+          "x": 4950, 
+          "y": 4650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5220a4600", 
+            "4970a4500"
+          ], 
+          "point_id": "5220a4500", 
+          "x": 5220, 
+          "y": 4500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4950a4650"
+          ], 
+          "point_id": "4650a4650", 
+          "x": 4650, 
+          "y": 4650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4970a4500", 
+            "4790a4530"
+          ], 
+          "point_id": "4970a4530", 
+          "x": 4970, 
+          "y": 4530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4790a4530", 
+            "5060a4580"
+          ], 
+          "point_id": "4790a4580", 
+          "x": 4790, 
+          "y": 4580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4790a4580"
+          ], 
+          "point_id": "5060a4580", 
+          "x": 5060, 
+          "y": 4580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5220a4850"
+          ], 
+          "point_id": "4820a4850", 
+          "x": 4820, 
+          "y": 4850
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5220a4600"
+          ], 
+          "point_id": "5160a4600", 
+          "x": 5160, 
+          "y": 4600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4950a4650", 
+            "5300a4900"
+          ], 
+          "point_id": "4950a4900", 
+          "x": 4950, 
+          "y": 4900
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5220a4500", 
+            "4970a4460", 
+            "4970a4530", 
+            "4870a4500"
+          ], 
+          "point_id": "4970a4500", 
+          "x": 4970, 
+          "y": 4500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4970a4500", 
+            "4870a4620"
+          ], 
+          "point_id": "4870a4500", 
+          "x": 4870, 
+          "y": 4500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4870a4620"
+          ], 
+          "point_id": "5060a4620", 
+          "x": 5060, 
+          "y": 4620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4970a4500"
+          ], 
+          "point_id": "4970a4460", 
+          "x": 4970, 
+          "y": 4460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5300a4900", 
+            "5220a4600"
+          ], 
+          "point_id": "5300a4600", 
+          "x": 5300, 
+          "y": 4600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4870a4500", 
+            "5060a4620"
+          ], 
+          "point_id": "4870a4620", 
+          "x": 4870, 
+          "y": 4620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5220a4600", 
+            "4820a4850"
+          ], 
+          "point_id": "5220a4850", 
+          "x": 5220, 
+          "y": 4850
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5300a4600", 
+            "5160a4600", 
+            "5220a4850", 
+            "5220a4500"
+          ], 
+          "point_id": "5220a4600", 
+          "x": 5220, 
+          "y": 4600
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0, 
+          "value": "{{_name}}", 
+          "x": 473, 
+          "y": 485
+        }
+      ], 
+      "attributes": {
+        "_name": "+_1"
+      }, 
+      "net_id": "bd769cf8907f5a82", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4350a4850"
+          ], 
+          "point_id": "4730a4850", 
+          "x": 4730, 
+          "y": 4850
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4350a4650"
+          ], 
+          "point_id": "4560a4650", 
+          "x": 4560, 
+          "y": 4650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4350a4850", 
+            "4560a4650"
+          ], 
+          "point_id": "4350a4650", 
+          "x": 4350, 
+          "y": 4650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4350a4650", 
+            "4730a4850"
+          ], 
+          "point_id": "4350a4850", 
+          "x": 4350, 
+          "y": 4850
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,570 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "_name": "VCC", 
+        "refdes": "?1"
+      }, 
+      "instance_id": "b1d636f870184757", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 320, 
+          "y": 750
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "018b6dbae0ae5ba7", 
+      "library_id": "1c05b9e7194527f8", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 1.5, 
+          "x": 320, 
+          "y": 640
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_name": "GND", 
+        "refdes": "?2"
+      }, 
+      "instance_id": "5a9d9e1eb8ebe642", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 320, 
+          "y": 620
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "1c05b9e7194527f8": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/CRCW08051K00JNEA-Vishay-datasheet-5300368.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Vishay", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "14828211775", 
+        "_package": "0805", 
+        "_part_number": "CRCW08051K00JNEA", 
+        "_prefix": "R", 
+        "_resistance": "1.00 k\u03a9", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "mounting_type": "surface mount", 
+        "power_rating": "0.12W", 
+        "resistance": "1.00 k\u03a9", 
+        "size_height": "0.45 mm", 
+        "size_length": "2.00 mm", 
+        "size_width": "1.25 mm", 
+        "termination_style": "Surface Mount", 
+        "voltage_rating_dc": "150.00V"
+      }, 
+      "name": "Resistor 1 k ohm 0805", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "a4c8ad60e46249ce", 
+      "license": "", 
+      "name": "Ryo-Ohki IV", 
+      "owner": "Chrisnichols", 
+      "slug": "Ryo-Ohki-IV", 
+      "updated_timestamp": 1330469506
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "GND"
+      }, 
+      "net_id": "846f3d6b024f56a4", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "018b6dbae0ae5ba7", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "5f09b82c215ffbc5"
+          ], 
+          "point_id": "718d06a7cd10c3c7", 
+          "x": 330, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "718d06a7cd10c3c7", 
+            "660ea314b604f482"
+          ], 
+          "point_id": "5f09b82c215ffbc5", 
+          "x": 330, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5f09b82c215ffbc5", 
+            "c7fdd9011d3c4aee"
+          ], 
+          "point_id": "660ea314b604f482", 
+          "x": 330, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "5a9d9e1eb8ebe642", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "660ea314b604f482"
+          ], 
+          "point_id": "c7fdd9011d3c4aee", 
+          "x": 330, 
+          "y": 620
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "VCC"
+      }, 
+      "net_id": "0ab3c3d28d7b2b33", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "018b6dbae0ae5ba7", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "245cea6f1fce278c"
+          ], 
+          "point_id": "b3be44d03b4c6a98", 
+          "x": 330, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b3be44d03b4c6a98", 
+            "7b649bb918660782"
+          ], 
+          "point_id": "245cea6f1fce278c", 
+          "x": 330, 
+          "y": 700
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b1d636f870184757", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "7b649bb918660782"
+          ], 
+          "point_id": "1208bb51ba044406", 
+          "x": 330, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1208bb51ba044406", 
+            "245cea6f1fce278c"
+          ], 
+          "point_id": "7b649bb918660782", 
+          "x": 330, 
+          "y": 720
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

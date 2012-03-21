@@ -31,7 +31,5 @@ class JSON:
 
     def write(self, design, filename):
         """ Recursively ask for JSON forms of components for output """
-
-        f = open(filename, "w")
-        f.write(json.dumps(design.json(), sort_keys=True, indent=4))
-        f.close()
+        with open(filename, "w") as f:
+            f.write(json.dumps(design.json(), sort_keys=True, indent=4))

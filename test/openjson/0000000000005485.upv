@@ -1,0 +1,203 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "9fb1670cd383f20e", 
+      "library_id": "8247c009814d6ad6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 310, 
+          "y": 270
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "8247c009814d6ad6": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/2N5415-STMicroelectronics-datasheet-6387422.pdf", 
+        "_lead_free": "yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "3", 
+        "_package": "TO-39", 
+        "_part_number": "2N5415", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "current_rating": "-1.0A", 
+        "imported from Octopart": "yes", 
+        "max_power_dissipation": "10.00 W", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "2507449437", 
+        "polarity": "PNP", 
+        "voltage_rating_dc": "-200.0V"
+      }, 
+      "name": "2N5415", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005485", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "florin.biziitu", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316419874
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 530, 
+          "y": 250
+        }
+      ], 
+      "attributes": {
+        "name": "3"
+      }, 
+      "net_id": "ce8134936cc76edf", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e9381e9237e976de"
+          ], 
+          "point_id": "faa450d11cad94a5", 
+          "x": 630, 
+          "y": 250
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "faa450d11cad94a5", 
+            "13ef8e922d69bca1"
+          ], 
+          "point_id": "e9381e9237e976de", 
+          "x": 440, 
+          "y": 250
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "9fb1670cd383f20e", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "e9381e9237e976de"
+          ], 
+          "point_id": "13ef8e922d69bca1", 
+          "x": 430, 
+          "y": 250
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

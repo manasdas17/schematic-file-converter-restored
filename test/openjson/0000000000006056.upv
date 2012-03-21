@@ -1,0 +1,427 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "5fe67eb89e1a10f8", 
+      "library_id": "503c957369308525", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 200, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "60760d6c103e6754", 
+      "library_id": "503c957369308525", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 200, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "503c957369308525": {
+      "attributes": {
+        "Actuator Type": "Standard", 
+        "Catalog Drawings": "http://media.digikey.com/pdf/Catalog%20Drawings/Switches/ART-EG1218.jpg", 
+        "Category": "Switches", 
+        "Circuit": "SPDT", 
+        "Contact Rating @ Voltage": "0.2A @ 30VDC", 
+        "Family": "Slide", 
+        "Mounting Type": "Through Hole ", 
+        "Orientation": "Vertical", 
+        "Other Names": "EG1903 / P040040", 
+        "Series": "EG", 
+        "Switch Function\t": "On-On", 
+        "Termination Style\t": "PC Pin", 
+        "_datasheet": "http://spec.e-switch.com/P-J/P040040c.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "E-SWITCH", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "105620120097", 
+        "_part_number": "EG1218", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH SLIDE SPDT 30V.2A PC MNT", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006056", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "James Butler", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316834780
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 385, 
+          "y": 460
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "31605207b5242e83", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1bdda94cb9c36ad7"
+          ], 
+          "point_id": "750a039d759fbbae", 
+          "x": 450, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "750a039d759fbbae", 
+            "72ceed9e67398d34"
+          ], 
+          "point_id": "1bdda94cb9c36ad7", 
+          "x": 330, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "5fe67eb89e1a10f8", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "1bdda94cb9c36ad7"
+          ], 
+          "point_id": "72ceed9e67398d34", 
+          "x": 320, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 385, 
+          "y": 410
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "5018813c2608ada4", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e5054d823dbd9cfe"
+          ], 
+          "point_id": "d69ba9f81d330ced", 
+          "x": 450, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d69ba9f81d330ced", 
+            "1844696f145c69fb"
+          ], 
+          "point_id": "e5054d823dbd9cfe", 
+          "x": 330, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "60760d6c103e6754", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "e5054d823dbd9cfe"
+          ], 
+          "point_id": "1844696f145c69fb", 
+          "x": 320, 
+          "y": 410
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 165, 
+          "y": 460
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "acf6b361f6b4a7ae", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "5fe67eb89e1a10f8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "b9636a1766108921"
+          ], 
+          "point_id": "abcb510ee8e9df05", 
+          "x": 200, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "abcb510ee8e9df05", 
+            "5441ce69baa15a5f"
+          ], 
+          "point_id": "b9636a1766108921", 
+          "x": 190, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5441ce69baa15a5f"
+          ], 
+          "point_id": "267a01498533d7be", 
+          "x": 130, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "59c74432e29bbc9b"
+          ], 
+          "point_id": "f641bbb91b548ec7", 
+          "x": 90, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f641bbb91b548ec7", 
+            "5441ce69baa15a5f"
+          ], 
+          "point_id": "59c74432e29bbc9b", 
+          "x": 130, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "59c74432e29bbc9b", 
+            "267a01498533d7be", 
+            "b9636a1766108921"
+          ], 
+          "point_id": "5441ce69baa15a5f", 
+          "x": 130, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 165, 
+          "y": 410
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "70a69d39d9a47689", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "60760d6c103e6754", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "ef375c83f42c667a"
+          ], 
+          "point_id": "326eb524e0dac5ea", 
+          "x": 200, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "326eb524e0dac5ea", 
+            "2986161db924e65a"
+          ], 
+          "point_id": "ef375c83f42c667a", 
+          "x": 190, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2986161db924e65a"
+          ], 
+          "point_id": "01f5ecca3db99563", 
+          "x": 130, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "01f5ecca3db99563", 
+            "ef375c83f42c667a", 
+            "48b2992a0d51e1dc"
+          ], 
+          "point_id": "2986161db924e65a", 
+          "x": 130, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2986161db924e65a", 
+            "6263b8a15c444f44"
+          ], 
+          "point_id": "48b2992a0d51e1dc", 
+          "x": 130, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "48b2992a0d51e1dc"
+          ], 
+          "point_id": "6263b8a15c444f44", 
+          "x": 90, 
+          "y": 430
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

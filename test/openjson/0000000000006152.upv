@@ -1,0 +1,291 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "G1"
+      }, 
+      "instance_id": "d82c164e9f14b9fc", 
+      "library_id": "cb4d8eabe438dfde", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 520, 
+          "y": 360
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G2"
+      }, 
+      "instance_id": "787f467da335f821", 
+      "library_id": "cb4d8eabe438dfde", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 520, 
+          "y": 440
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G3"
+      }, 
+      "instance_id": "f9e8e6ec281935a5", 
+      "library_id": "cb4d8eabe438dfde", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 520, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "cb4d8eabe438dfde": {
+      "attributes": {
+        "_lead_free": "???", 
+        "_manufacturer": "Generic Logic Gate", 
+        "_num_pins": "3", 
+        "_part_number": "AND Gate", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_suffix": "", 
+        "_symbol_0_0": "AND", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "AND Gate", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "end_angle": 1.5, 
+                  "radius": 20, 
+                  "start_angle": 0.5, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -20
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006152", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "bobobo1618", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1317030805
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "95336245d057267e", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "787f467da335f821", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "f19506ea28d6c0f5"
+          ], 
+          "point_id": "6400b02f3278ab9d", 
+          "x": 520, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6400b02f3278ab9d", 
+            "503bc8a4163bb08e"
+          ], 
+          "point_id": "f19506ea28d6c0f5", 
+          "x": 510, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f19506ea28d6c0f5", 
+            "fb4c0188f8a450a6"
+          ], 
+          "point_id": "503bc8a4163bb08e", 
+          "x": 460, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "503bc8a4163bb08e", 
+            "b8f24b75b034407d"
+          ], 
+          "point_id": "fb4c0188f8a450a6", 
+          "x": 460, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fb4c0188f8a450a6", 
+            "a4f2e5913a9dbb91"
+          ], 
+          "point_id": "b8f24b75b034407d", 
+          "x": 510, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "f9e8e6ec281935a5", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b8f24b75b034407d"
+          ], 
+          "point_id": "a4f2e5913a9dbb91", 
+          "x": 520, 
+          "y": 480
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "C5"
+      }, 
+      "instance_id": "2a1baab8cb276a1e", 
+      "library_id": "cd531feedae8c476", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 670, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C6"
+      }, 
+      "instance_id": "13813e2b12dd6364", 
+      "library_id": "cd531feedae8c476", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 670, 
+          "y": 590
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "cd531feedae8c476": {
+      "attributes": {
+        "Connect": "http://cn.mouser.com/ProductDetail/Murata/GQM1885C1H101GB01D/?qs=sGAEpiMZZMvQvaS66kI3Tncxew6NgO9vlorXFXnTAuA%3d ", 
+        "Imported from": "Seeed Studio", 
+        "Package": "0603", 
+        "_capacitance": "100 pF", 
+        "_datasheet": "http://www.mouser.com/catalog/specsheets/Murata%20GQM%20Series.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "Murata", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "1977751331756", 
+        "_part_number": "GQM1885C1H101GB01D", 
+        "_prefix": "C", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "100 pF"
+      }, 
+      "name": "100 pF Capacitor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_capacitor_counter": "6", 
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "9ef8d94e9bb4d7f6", 
+      "license": "No License", 
+      "name": "Synth Module Power Input", 
+      "owner": "monobass", 
+      "slug": "Synth-Module-Power-Input", 
+      "updated_timestamp": 1328288270
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

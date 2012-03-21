@@ -1,0 +1,232 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "23d4dab3b4b4b549", 
+      "library_id": "fed2a80e7a06032b", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 250, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "fed2a80e7a06032b": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/1N5231B-Fairchild-datasheet-121961.pdf", 
+        "_lead_free": "yes", 
+        "_manufacturer": "Fairchild Semiconductor", 
+        "_num_pins": "2", 
+        "_package": "DO-35", 
+        "_part_number": "1N5231B", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "breakdown_voltage": "5.10 V", 
+        "imported from Octopart": "yes", 
+        "max_operating_temperature": "200.00 \u00b0C", 
+        "max_power_dissipation": "0.50 W", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "32266920585", 
+        "termination_style": "Through Hole", 
+        "voltage_rating_dc": "5.10 V"
+      }, 
+      "name": "1N5231B", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004002", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "RafaelGCPP", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316005355
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "67dd843ddae4ca4e", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "23d4dab3b4b4b549", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "ac45a0b74ea4bac0"
+          ], 
+          "point_id": "b90f57e0a1340d77", 
+          "x": 250, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "23d4dab3b4b4b549", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "5ed1a4622cf6f808"
+          ], 
+          "point_id": "eb1efbad9bdd3139", 
+          "x": 370, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5ed1a4622cf6f808", 
+            "14e1bdda974d9011"
+          ], 
+          "point_id": "1eadd0ab1c714817", 
+          "x": 490, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1eadd0ab1c714817", 
+            "544116865c9a0f61"
+          ], 
+          "point_id": "14e1bdda974d9011", 
+          "x": 490, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "14e1bdda974d9011", 
+            "0c8415ca79cb604e"
+          ], 
+          "point_id": "544116865c9a0f61", 
+          "x": 170, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "544116865c9a0f61", 
+            "ac45a0b74ea4bac0"
+          ], 
+          "point_id": "0c8415ca79cb604e", 
+          "x": 170, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1eadd0ab1c714817", 
+            "eb1efbad9bdd3139"
+          ], 
+          "point_id": "5ed1a4622cf6f808", 
+          "x": 380, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0c8415ca79cb604e", 
+            "b90f57e0a1340d77"
+          ], 
+          "point_id": "ac45a0b74ea4bac0", 
+          "x": 240, 
+          "y": 640
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

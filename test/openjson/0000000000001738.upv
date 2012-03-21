@@ -1,0 +1,247 @@
+{
+  "component_instances": [
+    {
+      "attributes": {}, 
+      "instance_id": "f27df0b106ffc098", 
+      "library_id": "f7b3846c3fc7851a", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 360, 
+          "y": 1020
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {}, 
+      "instance_id": "cc141437af273d47", 
+      "library_id": "f7b3846c3fc7851a", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 360, 
+          "y": 900
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "f7b3846c3fc7851a": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/ZTT-8.00MT-ECS-datasheet-3720.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "ECS", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "31454340616", 
+        "_part_number": "ZTT-8.00MT", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "frequency": "8.00 MHz", 
+        "max_frequency_tolerance": "5.00 kppm", 
+        "max_operating_temperature": "80.00\u00b0C", 
+        "min_frequency_tolerance": "-5.00 kppm", 
+        "mounting_type": "through hole", 
+        "size_height": "0.01m", 
+        "size_length": "0.01m", 
+        "size_width": "0.01m", 
+        "supply_voltage_dc": "100.00V", 
+        "termination_style": "Through Hole"
+      }, 
+      "name": "8Mhz Ceramic Resonator", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {}, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000001738", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "Pranjal", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1308334926
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "2ede90131fd57ba3", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1806816f6badfac4", 
+            "280ce5937208b2f1"
+          ], 
+          "point_id": "f30d00d6323ee95c", 
+          "x": 330, 
+          "y": 1010
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f30d00d6323ee95c", 
+            "fe6458ba42594cc6"
+          ], 
+          "point_id": "1806816f6badfac4", 
+          "x": 360, 
+          "y": 1010
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "10a49a58e0cdda59", 
+            "f30d00d6323ee95c"
+          ], 
+          "point_id": "280ce5937208b2f1", 
+          "x": 330, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1806816f6badfac4"
+          ], 
+          "point_id": "fe6458ba42594cc6", 
+          "x": 360, 
+          "y": 1010
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "280ce5937208b2f1", 
+            "1041a68210babc73"
+          ], 
+          "point_id": "10a49a58e0cdda59", 
+          "x": 360, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "10a49a58e0cdda59"
+          ], 
+          "point_id": "1041a68210babc73", 
+          "x": 360, 
+          "y": 890
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "7ac70c3b3445df0d", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f83f8d4927351025", 
+            "e909f2959dd2cd40"
+          ], 
+          "point_id": "351a362847863448", 
+          "x": 490, 
+          "y": 1010
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "351a362847863448", 
+            "fd10b10eaf5b75c3"
+          ], 
+          "point_id": "f83f8d4927351025", 
+          "x": 490, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f83f8d4927351025"
+          ], 
+          "point_id": "fd10b10eaf5b75c3", 
+          "x": 480, 
+          "y": 890
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "351a362847863448"
+          ], 
+          "point_id": "e909f2959dd2cd40", 
+          "x": 480, 
+          "y": 1010
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,337 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "SW1"
+      }, 
+      "instance_id": "6c53d3f70dbefede", 
+      "library_id": "f5fb3c7875fba648", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 0, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 640, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW2"
+      }, 
+      "instance_id": "cef6775920e6aab4", 
+      "library_id": "f5fb3c7875fba648", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 0, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 730, 
+          "y": 560
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "55d1b99f6326c3db", 
+      "library_id": "27d9e1e34e9ccb3f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 710, 
+          "y": 730
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "27d9e1e34e9ccb3f": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/STN749-STMicroelectronics-datasheet-52397.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "35366060490", 
+        "_package": "SOT-223", 
+        "_part_number": "STN749", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "current_rating": "-3.00A", 
+        "import_id": "geda_analog-leddual-2", 
+        "imported_from": "geda", 
+        "mounting_type": "surface mount", 
+        "polarity": "PNP", 
+        "voltage_rating_dc": "-25.00V"
+      }, 
+      "name": "LED", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "A1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0, 
+                    "text": "A2", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0, 
+                    "text": "K", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "f5fb3c7875fba648": {
+      "attributes": {
+        "Connect": "http://www.smtswitch.com/chanpin/ShowSoft.asp?SoftID=204", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.smtswitch.com/chanpin/ShowSoft.asp?SoftID=204", 
+        "_lead_free": "???", 
+        "_manufacturer": "HANYONG", 
+        "_num_pins": "4", 
+        "_package": "4P-SMD-6.0X6.0X5.0H", 
+        "_part_number": "K2-1102S", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Tact Switch", 
+        "_type": "switch"
+      }, 
+      "name": "Tactile switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 10, 
+                  "y": -13
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 10, 
+                  "y": -27
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -16
+                  }, 
+                  "p2": {
+                    "x": 2, 
+                    "y": -22
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "Hi", 
+        "x": 232, 
+        "y": 812
+      }
+    ], 
+    "attributes": {
+      "_integrated circuit_counter": "1", 
+      "_switch_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "7433de5bb20847dc", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "jcrites", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1328238667
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

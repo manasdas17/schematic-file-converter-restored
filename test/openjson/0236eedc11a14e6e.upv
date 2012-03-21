@@ -1,0 +1,293 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "ec8a442c8cd2f6d6", 
+      "library_id": "8fe662018ffadc14", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 520, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "8fe662018ffadc14": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Resistor", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "R", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -45
+      }
+    ], 
+    "attributes": {
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0236eedc11a14e6e", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "steventrouble", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1318913885
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "e665d5a882867c69", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2ed7cacb9a671926"
+          ], 
+          "point_id": "57b8129312430c12", 
+          "x": 110, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "57b8129312430c12", 
+            "bdc5508df9a5c741"
+          ], 
+          "point_id": "2ed7cacb9a671926", 
+          "x": 60, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2ed7cacb9a671926", 
+            "ab16a1aac302df11"
+          ], 
+          "point_id": "bdc5508df9a5c741", 
+          "x": 110, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bdc5508df9a5c741", 
+            "a17953019d220153"
+          ], 
+          "point_id": "ab16a1aac302df11", 
+          "x": 60, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ab16a1aac302df11", 
+            "990068513f9251c2"
+          ], 
+          "point_id": "a17953019d220153", 
+          "x": 110, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a17953019d220153", 
+            "6aa83f7531fd0fdb"
+          ], 
+          "point_id": "990068513f9251c2", 
+          "x": 250, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "990068513f9251c2", 
+            "057fdb8e3cb8b35b"
+          ], 
+          "point_id": "6aa83f7531fd0fdb", 
+          "x": 250, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6aa83f7531fd0fdb", 
+            "ad86dabac18f9961"
+          ], 
+          "point_id": "057fdb8e3cb8b35b", 
+          "x": 210, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "057fdb8e3cb8b35b", 
+            "5f1d3332e4b15405"
+          ], 
+          "point_id": "ad86dabac18f9961", 
+          "x": 210, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ad86dabac18f9961", 
+            "b43d5fa6a229eba2"
+          ], 
+          "point_id": "5f1d3332e4b15405", 
+          "x": 520, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5f1d3332e4b15405"
+          ], 
+          "point_id": "b43d5fa6a229eba2", 
+          "x": 520, 
+          "y": 570
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

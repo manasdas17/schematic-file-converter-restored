@@ -1,0 +1,631 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "05d9d8b02ac2c625", 
+      "library_id": "d71277ad208dda12", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 5, 
+              "y": -120
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 60, 
+              "y": -120
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 100, 
+          "y": 580
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "fff1f350b3e7db7b", 
+      "library_id": "b1755d28c6f575ef", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 60, 
+              "y": -100
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 5, 
+              "y": -100
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 180, 
+          "y": 680
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U3"
+      }, 
+      "instance_id": "5c4056101336f0e5", 
+      "library_id": "a4ac966d4e4d7ac4", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 70, 
+              "y": -120
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 5, 
+              "y": -120
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 280, 
+          "y": 580
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "a4ac966d4e4d7ac4": {
+      "attributes": {
+        "Lifecycle Status": "Active", 
+        "Mounting Type": "Surface Mount", 
+        "Output Current": "64.0 mA", 
+        "Part Family": "PCA9306", 
+        "Supply Voltage": "0.00 V to 5.50 V", 
+        "_datasheet": "http://datasheet.octopart.com/PCA9306DCTR-Texas-Instruments-datasheet-151075.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "8", 
+        "_package": "SSOP-DCT", 
+        "_part_number": " PCA9306DCTR", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "Dual Bidirectional I2C Bus and SMBus Voltage-Level Translator", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "EN", 
+                    "x": 80, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 85, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 90, 
+                    "y": -10
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VREF2", 
+                    "x": 80, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 85, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 90, 
+                    "y": -30
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SCL2", 
+                    "x": 80, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 85, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 90, 
+                    "y": -50
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SDA2", 
+                    "x": 80, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 85, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 90, 
+                    "y": -70
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VREF1", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "SCL1", 
+                    "x": 9, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "SDA1", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 90, 
+                  "type": "rectangle", 
+                  "width": 80, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "b1755d28c6f575ef": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/ADS1000A0IDBVT-Texas-Instruments-datasheet-150309.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "6", 
+        "_octopart_number": "58933561386", 
+        "_package": "SOT-23", 
+        "_part_number": "ADS1000A0IDBVT", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "lifecycle_status": "Active", 
+        "mounting_type": "surface mount", 
+        "part_family": "ADS1000", 
+        "power_consumption": "0.21 mW", 
+        "power_dissipation": "0.21 mW"
+      }, 
+      "name": "Low-Power, 12-Bit Analog-To-Digital Converter with I2C Interface", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 1.5, 
+                    "text": "VIN-", 
+                    "x": 24, 
+                    "y": -12
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 1.5, 
+                    "text": "VDD", 
+                    "x": 44, 
+                    "y": -12
+                  }, 
+                  "p1": {
+                    "x": 40, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 1.5, 
+                    "text": "SDA", 
+                    "x": 64, 
+                    "y": -12
+                  }, 
+                  "p1": {
+                    "x": 60, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": 0
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "VIN+", 
+                    "x": 24, 
+                    "y": -68
+                  }, 
+                  "p1": {
+                    "x": 20, 
+                    "y": -75
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -80
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "GND", 
+                    "x": 44, 
+                    "y": -68
+                  }, 
+                  "p1": {
+                    "x": 40, 
+                    "y": -75
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -80
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "SCL", 
+                    "x": 64, 
+                    "y": -68
+                  }, 
+                  "p1": {
+                    "x": 60, 
+                    "y": -75
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -80
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 70, 
+                  "type": "rectangle", 
+                  "width": 70, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "d71277ad208dda12": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/TMP175AID-Texas-Instruments-datasheet-149512.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "8", 
+        "_octopart_number": "84897445118", 
+        "_package": "MSOP-8, SOIC -8", 
+        "_part_number": "TMP175AID", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "lifecycle_status": "Active", 
+        "output_voltage": "0.40V", 
+        "part_family": "TMP175", 
+        "quiescent_current": "0.05 mA"
+      }, 
+      "name": "Digital Temperature Sensor with Two-Wire Interface", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "V+", 
+                    "x": 70, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 75, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 80, 
+                    "y": -10
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A0", 
+                    "x": 70, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 75, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 80, 
+                    "y": -30
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A1", 
+                    "x": 70, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 75, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 80, 
+                    "y": -50
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "A2", 
+                    "x": 70, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 75, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 80, 
+                    "y": -70
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "SDA", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "SCL", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "ALERT", 
+                    "x": 9, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 90, 
+                  "type": "rectangle", 
+                  "width": 70, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "4"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "undefined ", 
+      "design_id": "1dcfcc786fb67301", 
+      "license": "No License", 
+      "name": "Pershing IX", 
+      "owner": "engelra", 
+      "slug": "Pershing-IX", 
+      "updated_timestamp": 1331687413
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

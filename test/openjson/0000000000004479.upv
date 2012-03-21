@@ -1,0 +1,308 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "e55be28fb36cfca9", 
+      "library_id": "1927bd1f730d1aa6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 360, 
+          "y": 600
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "969561f765cfdaae", 
+      "library_id": "1927bd1f730d1aa6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 580, 
+          "y": 600
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "1927bd1f730d1aa6": {
+      "attributes": {
+        "_datasheet": "http://media.digikey.com/pdf/Data%20Sheets/Judco%20PDFs/50-0015-00.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Judco Manufacturing, Inc", 
+        "_num_pins": "2", 
+        "_package": "BULK / 1000", 
+        "_part_number": "50-0015-00", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH PB SPST ALT ACT PC MOUNT", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004479", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "marcingib", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316036111
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "1ecc12d5a015658e", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "969561f765cfdaae", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "4e047cb13e57976f"
+          ], 
+          "point_id": "276d027201f9172b", 
+          "x": 580, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "276d027201f9172b", 
+            "98bd43f21cfae0bb"
+          ], 
+          "point_id": "4e047cb13e57976f", 
+          "x": 570, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4e047cb13e57976f", 
+            "1c8b8efc2f69c512"
+          ], 
+          "point_id": "98bd43f21cfae0bb", 
+          "x": 490, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "e55be28fb36cfca9", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "98bd43f21cfae0bb"
+          ], 
+          "point_id": "1c8b8efc2f69c512", 
+          "x": 480, 
+          "y": 590
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "7e7d4eda5cd6c860", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "e55be28fb36cfca9", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "b664e1f7a2e15911"
+          ], 
+          "point_id": "d22356d7430e8ad0", 
+          "x": 360, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d22356d7430e8ad0", 
+            "8cf0a2a9156c6da0"
+          ], 
+          "point_id": "b664e1f7a2e15911", 
+          "x": 350, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b664e1f7a2e15911", 
+            "4b30d28c1c1a993b"
+          ], 
+          "point_id": "8cf0a2a9156c6da0", 
+          "x": 80, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8cf0a2a9156c6da0", 
+            "1a2ad7bb4e4b90ee"
+          ], 
+          "point_id": "4b30d28c1c1a993b", 
+          "x": 80, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4b30d28c1c1a993b", 
+            "ed93d88b15144821"
+          ], 
+          "point_id": "1a2ad7bb4e4b90ee", 
+          "x": 900, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1a2ad7bb4e4b90ee", 
+            "32c7bd80a318304f"
+          ], 
+          "point_id": "ed93d88b15144821", 
+          "x": 900, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ed93d88b15144821", 
+            "deb059b756757939"
+          ], 
+          "point_id": "32c7bd80a318304f", 
+          "x": 710, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "969561f765cfdaae", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "32c7bd80a318304f"
+          ], 
+          "point_id": "deb059b756757939", 
+          "x": 700, 
+          "y": 590
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

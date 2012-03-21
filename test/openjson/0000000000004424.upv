@@ -1,0 +1,282 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "93cefe2c68280920", 
+      "library_id": "259e7032b4932d40", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -80
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": -20, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 490, 
+          "y": 430
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "259e7032b4932d40": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/2N3904BU-Fairchild-datasheet-5999.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Fairchild", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "35231539816", 
+        "_package": "TO-92", 
+        "_part_number": "2N3904BU", 
+        "_prefix": "Q", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "BJT (NPN)", 
+        "_type": "integrated circuit", 
+        "current_rating": "0.20A", 
+        "max_operating_temperature": "150.00\u00b0C", 
+        "max_power_dissipation": "0.62W", 
+        "mounting_type": "through hole", 
+        "polarity": "NPN", 
+        "voltage_rating_dc": "60.00V"
+      }, 
+      "name": "2N3904BU", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -41
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -39
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_transistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000004424", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "onokun", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316028153
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 290, 
+          "y": 420
+        }
+      ], 
+      "attributes": {
+        "name": "3"
+      }, 
+      "net_id": "bdd1991ece665500", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d682313a2fd21256", 
+            "2f3c7f4090445ec9"
+          ], 
+          "point_id": "df66967e71d75b97", 
+          "x": 290, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "df66967e71d75b97", 
+            "bc9dacdfd9726b29"
+          ], 
+          "point_id": "d682313a2fd21256", 
+          "x": 290, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bc9dacdfd9726b29"
+          ], 
+          "point_id": "9778eb1d9e6890ee", 
+          "x": 510, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d682313a2fd21256", 
+            "9778eb1d9e6890ee"
+          ], 
+          "point_id": "bc9dacdfd9726b29", 
+          "x": 510, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "df66967e71d75b97", 
+            "ce29594cd1715b39"
+          ], 
+          "point_id": "2f3c7f4090445ec9", 
+          "x": 510, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2f3c7f4090445ec9", 
+            "bec9db50653d6172"
+          ], 
+          "point_id": "ce29594cd1715b39", 
+          "x": 510, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "93cefe2c68280920", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "ce29594cd1715b39"
+          ], 
+          "point_id": "bec9db50653d6172", 
+          "x": 510, 
+          "y": 420
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

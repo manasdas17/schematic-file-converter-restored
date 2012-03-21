@@ -1,0 +1,235 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "c5e555c23003f284", 
+      "library_id": "f15d10818bd86e48", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 60, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 780, 
+          "y": 700
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "f15d10818bd86e48": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/LM7812ACT-Fairchild-datasheet-480513.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Fairchild Semiconductor", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "581778343614", 
+        "_part_number": "LM7812ACT", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Voltage Regulator", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "LM7812ACT", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 40, 
+                  "x": 10, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "f7de617b42f8f27c", 
+      "license": "No License", 
+      "name": "Testproject", 
+      "owner": "Knorfsi", 
+      "slug": "Testproject", 
+      "updated_timestamp": 1323886983
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "OUTPUT"
+      }, 
+      "net_id": "ad1be6ff6e5c6a08", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9a0a7fda8014272f"
+          ], 
+          "point_id": "be1022e4ffedc574", 
+          "x": 930, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "be1022e4ffedc574", 
+            "88fe95e3ec1e53e7"
+          ], 
+          "point_id": "9a0a7fda8014272f", 
+          "x": 930, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9a0a7fda8014272f", 
+            "6b47b9c9b8224677"
+          ], 
+          "point_id": "88fe95e3ec1e53e7", 
+          "x": 850, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "c5e555c23003f284", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "88fe95e3ec1e53e7"
+          ], 
+          "point_id": "6b47b9c9b8224677", 
+          "x": 840, 
+          "y": 690
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": ""
+      }, 
+      "net_id": "ca9e4804f569fa24", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "57df34c4f9dcb0e7"
+          ], 
+          "point_id": "425342c6f671f345", 
+          "x": 1200, 
+          "y": 1040
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "425342c6f671f345", 
+            "0f08144ed6792b7a"
+          ], 
+          "point_id": "57df34c4f9dcb0e7", 
+          "x": 1200, 
+          "y": 1480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "57df34c4f9dcb0e7", 
+            "f35bf84a3bd606ac"
+          ], 
+          "point_id": "0f08144ed6792b7a", 
+          "x": 1050, 
+          "y": 1480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0f08144ed6792b7a", 
+            "cd095419a9f4c19c"
+          ], 
+          "point_id": "f35bf84a3bd606ac", 
+          "x": 1050, 
+          "y": 1120
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f35bf84a3bd606ac"
+          ], 
+          "point_id": "cd095419a9f4c19c", 
+          "x": 880, 
+          "y": 1120
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

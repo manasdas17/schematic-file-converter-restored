@@ -1,0 +1,566 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "68daabb1a33e0535", 
+      "library_id": "3b533c0cb6481e4f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 460, 
+          "y": 620
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "b40524fa0ecf38ab", 
+      "library_id": "3b533c0cb6481e4f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 460, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "PWR"
+      }, 
+      "instance_id": "c1fd7b47ee96555f", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -7, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 650, 
+          "y": 560
+        }
+      ], 
+      "symbol_index": 1
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "3b533c0cb6481e4f": {
+      "attributes": {
+        "Contact Rating": "0.2 Amp at 30 VoltS", 
+        "Packaging": "Reel", 
+        "Part # Aliases:": "0S102011MA1QN1", 
+        "Standard Pack Qty": "500", 
+        "Switch Function:\t": "ON - ON", 
+        "_datasheet": "www.ck-components.com/14388/os_17aug.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "C&K COMPONENTS", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "731802163897", 
+        "_part_number": "OS102011MA1QN1", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "contacts_type": "SPDT", 
+        "mounting_type": "Through Hole\t", 
+        "termination_style": "PC Terminals\t"
+      }, 
+      "name": "Slide Switches SPDT On-On", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " aaaaa", 
+      "design_id": "0000000000004646", 
+      "license": "", 
+      "name": "test test", 
+      "owner": "taichi", 
+      "slug": "test-test", 
+      "updated_timestamp": 1316065678
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "96789d3966f42a62", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "68daabb1a33e0535", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "dbcef5324daf8199"
+          ], 
+          "point_id": "c8c586f6549f39f8", 
+          "x": 460, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c8c586f6549f39f8", 
+            "ae38f7bd7c6f0adf"
+          ], 
+          "point_id": "dbcef5324daf8199", 
+          "x": 450, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dbcef5324daf8199", 
+            "a87d9f32f0251efa"
+          ], 
+          "point_id": "ae38f7bd7c6f0adf", 
+          "x": 440, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ae38f7bd7c6f0adf", 
+            "4cabea3eeb8ec323"
+          ], 
+          "point_id": "a87d9f32f0251efa", 
+          "x": 440, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a87d9f32f0251efa", 
+            "f68e7d3d82265293"
+          ], 
+          "point_id": "4cabea3eeb8ec323", 
+          "x": 450, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b40524fa0ecf38ab", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "4cabea3eeb8ec323"
+          ], 
+          "point_id": "f68e7d3d82265293", 
+          "x": 460, 
+          "y": 520
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "2467576f127bc577", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "b40524fa0ecf38ab", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "77e542d960663f55"
+          ], 
+          "point_id": "2d785d785c997cc0", 
+          "x": 580, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5c8f16c1b0570c81", 
+            "2d785d785c997cc0"
+          ], 
+          "point_id": "77e542d960663f55", 
+          "x": 590, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "77e542d960663f55", 
+            "6434555882a1a416"
+          ], 
+          "point_id": "5c8f16c1b0570c81", 
+          "x": 650, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5c8f16c1b0570c81", 
+            "c09932c14937a1d2"
+          ], 
+          "point_id": "6434555882a1a416", 
+          "x": 650, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6434555882a1a416", 
+            "fd0b3c2067a38c1e"
+          ], 
+          "point_id": "c09932c14937a1d2", 
+          "x": 590, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "68daabb1a33e0535", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "c09932c14937a1d2"
+          ], 
+          "point_id": "fd0b3c2067a38c1e", 
+          "x": 580, 
+          "y": 610
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

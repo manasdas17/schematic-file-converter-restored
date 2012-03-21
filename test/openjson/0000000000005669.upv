@@ -1,0 +1,547 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "3799f165bd2957c0", 
+      "library_id": "aeec0a9caa540577", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 450, 
+          "y": 490
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "Q2"
+      }, 
+      "instance_id": "b6afe4b19acb67d4", 
+      "library_id": "aeec0a9caa540577", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 450, 
+          "y": 400
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "aeec0a9caa540577": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/BC548C-Fairchild-datasheet-7074.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "FAIRCHILD Semiconductor", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "35414112227", 
+        "_package": "TO-92", 
+        "_part_number": "BC548C", 
+        "_prefix": "Q", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "BJT (NPN)", 
+        "_type": "transistor", 
+        "current_rating": "0.10A", 
+        "max_operating_temperature": "150.00\u00b0C", 
+        "max_power_dissipation": "0.50W", 
+        "mounting_type": "through hole", 
+        "polarity": "NPN", 
+        "voltage_rating_dc": "30.00V"
+      }, 
+      "name": "BC548C", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }, 
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "1", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -13
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "2", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -33
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "3", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -23
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_transistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005669", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "leo", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316534188
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 495, 
+          "y": 380
+        }
+      ], 
+      "attributes": {
+        "name": "B"
+      }, 
+      "net_id": "b6644df55813f77d", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "b6afe4b19acb67d4", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "e936d56f6db77a3c"
+          ], 
+          "point_id": "48b4e67f80aaeea2", 
+          "x": 450, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "48b4e67f80aaeea2", 
+            "f598ec73aa3e4e06"
+          ], 
+          "point_id": "e936d56f6db77a3c", 
+          "x": 440, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e936d56f6db77a3c", 
+            "2f32c98ae3160c56"
+          ], 
+          "point_id": "f598ec73aa3e4e06", 
+          "x": 350, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f598ec73aa3e4e06", 
+            "3b85f4b33e04d364"
+          ], 
+          "point_id": "2f32c98ae3160c56", 
+          "x": 350, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2f32c98ae3160c56", 
+            "4c3dd8bfcb4d1922"
+          ], 
+          "point_id": "3b85f4b33e04d364", 
+          "x": 610, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3b85f4b33e04d364", 
+            "ad1284af4549220b"
+          ], 
+          "point_id": "4c3dd8bfcb4d1922", 
+          "x": 610, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4c3dd8bfcb4d1922", 
+            "6fbb951b389619a6"
+          ], 
+          "point_id": "ad1284af4549220b", 
+          "x": 610, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ad1284af4549220b", 
+            "d5caf56823ef5fe1"
+          ], 
+          "point_id": "6fbb951b389619a6", 
+          "x": 610, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6fbb951b389619a6", 
+            "a376452f804a0f4d"
+          ], 
+          "point_id": "d5caf56823ef5fe1", 
+          "x": 570, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d5caf56823ef5fe1", 
+            "94bac6dc6056ccd1"
+          ], 
+          "point_id": "a376452f804a0f4d", 
+          "x": 570, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a376452f804a0f4d", 
+            "9f372329461779f0"
+          ], 
+          "point_id": "94bac6dc6056ccd1", 
+          "x": 630, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "94bac6dc6056ccd1", 
+            "741e45509a7f99c2"
+          ], 
+          "point_id": "9f372329461779f0", 
+          "x": 630, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9f372329461779f0", 
+            "2c4c137055a5dc72"
+          ], 
+          "point_id": "741e45509a7f99c2", 
+          "x": 570, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "741e45509a7f99c2", 
+            "99cfd487db440d7d"
+          ], 
+          "point_id": "2c4c137055a5dc72", 
+          "x": 630, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2c4c137055a5dc72", 
+            "16dad3224e7f847a"
+          ], 
+          "point_id": "99cfd487db440d7d", 
+          "x": 570, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "99cfd487db440d7d", 
+            "06d203822bc722fc"
+          ], 
+          "point_id": "16dad3224e7f847a", 
+          "x": 630, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "16dad3224e7f847a", 
+            "8a783796662e7e2d"
+          ], 
+          "point_id": "06d203822bc722fc", 
+          "x": 570, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "06d203822bc722fc", 
+            "ab760786dc28aecf"
+          ], 
+          "point_id": "8a783796662e7e2d", 
+          "x": 590, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "56b086ee71d135b2", 
+            "ab760786dc28aecf"
+          ], 
+          "point_id": "a7fc21b6f4afadd6", 
+          "x": 560, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a7fc21b6f4afadd6", 
+            "838d586de0becb23"
+          ], 
+          "point_id": "56b086ee71d135b2", 
+          "x": 560, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "56b086ee71d135b2", 
+            "02b676d331e33d94"
+          ], 
+          "point_id": "838d586de0becb23", 
+          "x": 590, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "838d586de0becb23", 
+            "e9863a7fe463acbe"
+          ], 
+          "point_id": "02b676d331e33d94", 
+          "x": 580, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "02b676d331e33d94", 
+            "d6231a5d24e25ab4"
+          ], 
+          "point_id": "e9863a7fe463acbe", 
+          "x": 640, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e9863a7fe463acbe", 
+            "b47b5e29d718d372"
+          ], 
+          "point_id": "d6231a5d24e25ab4", 
+          "x": 580, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d6231a5d24e25ab4", 
+            "639b4b316ead5e05"
+          ], 
+          "point_id": "b47b5e29d718d372", 
+          "x": 570, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b47b5e29d718d372", 
+            "54443c7f54c6fe73"
+          ], 
+          "point_id": "639b4b316ead5e05", 
+          "x": 630, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "639b4b316ead5e05", 
+            "47b9e985c1ec9a2f"
+          ], 
+          "point_id": "54443c7f54c6fe73", 
+          "x": 570, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "54443c7f54c6fe73", 
+            "8e62c5f0cdc75ce0"
+          ], 
+          "point_id": "47b9e985c1ec9a2f", 
+          "x": 590, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0082418444c40310", 
+            "8e62c5f0cdc75ce0"
+          ], 
+          "point_id": "e309161d49d69336", 
+          "x": 590, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e309161d49d69336"
+          ], 
+          "point_id": "0082418444c40310", 
+          "x": 570, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e309161d49d69336", 
+            "47b9e985c1ec9a2f", 
+            "fa9bd26b6014ada3"
+          ], 
+          "point_id": "8e62c5f0cdc75ce0", 
+          "x": 590, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8e62c5f0cdc75ce0", 
+            "e11f7ad7e63ac048"
+          ], 
+          "point_id": "fa9bd26b6014ada3", 
+          "x": 560, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fa9bd26b6014ada3", 
+            "ab760786dc28aecf"
+          ], 
+          "point_id": "e11f7ad7e63ac048", 
+          "x": 560, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e11f7ad7e63ac048", 
+            "a7fc21b6f4afadd6", 
+            "8a783796662e7e2d"
+          ], 
+          "point_id": "ab760786dc28aecf", 
+          "x": 560, 
+          "y": 380
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

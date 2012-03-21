@@ -1,0 +1,550 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "ef9e5f7807e7de87", 
+      "library_id": "fb68770cd658f45f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 50, 
+              "y": -120
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 870, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "X1"
+      }, 
+      "instance_id": "9948bbdfd656d482", 
+      "library_id": "89941818ff596a7a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 20, 
+              "y": 10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "32.768 kHz", 
+              "x": 31, 
+              "y": -144
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 760, 
+          "y": 640
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "89941818ff596a7a": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/NC26LF-327-Fox-Electronics-datasheet-8325267.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Fox Electronics", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "15199662430", 
+        "_part_number": "NC26LF-327", 
+        "_prefix": "X", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Two Pin Resonator", 
+        "_type": "oscillator"
+      }, 
+      "name": "NC26LF-327", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 25, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 25, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 25, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -2
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -18
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -2
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -2
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -2
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -18
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -18
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -18
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "fb68770cd658f45f": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/DS1307-Dallas-Semiconductor-datasheet-78383.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Maxim", 
+        "_num_pins": "8", 
+        "_octopart_part_number": "1040841362", 
+        "_package": "DIP-8", 
+        "_part_number": "DS1307", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "max_operating_temperature": "70.00\u00b0C", 
+        "max_supply_voltage_dc": "4.50V", 
+        "memory_size": "56.00B", 
+        "mounting_type": "through hole", 
+        "pin_1_description": "32.768kHz crystal connection", 
+        "pin_2_description": "32.768kHz crystal connection", 
+        "pin_3_description": "backup supply voltage (e.g. 3V lithium coin cell)", 
+        "pin_4_description": "ground", 
+        "pin_5_description": "serial data input/output", 
+        "pin_6_description": "serial clock input", 
+        "pin_7_description": "square wave output", 
+        "pin_8_description": "primary supply voltage"
+      }, 
+      "name": "DS1307", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VCC", 
+                    "x": 120, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SQW/OUT", 
+                    "x": 120, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SCL", 
+                    "x": 120, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "SDA", 
+                    "x": 120, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "X1", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "X2", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VBAT", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 100, 
+                  "type": "rectangle", 
+                  "width": 120, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2", 
+      "_oscillator_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "64202af583c53abe", 
+      "license": "No License", 
+      "name": "Word clock", 
+      "owner": "saevarom", 
+      "slug": "Word-clock", 
+      "updated_timestamp": 1323252307
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "X1_Pin 1"
+      }, 
+      "net_id": "e1db2a6ea81b8aad", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "9948bbdfd656d482", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "16fb75d9061049a6"
+          ], 
+          "point_id": "f36ad875bcc22366", 
+          "x": 790, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "ef9e5f7807e7de87", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "f8aafd059cdffb42"
+          ], 
+          "point_id": "e5d3c4847d6f5442", 
+          "x": 870, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f36ad875bcc22366", 
+            "f8aafd059cdffb42"
+          ], 
+          "point_id": "16fb75d9061049a6", 
+          "x": 800, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e5d3c4847d6f5442", 
+            "16fb75d9061049a6"
+          ], 
+          "point_id": "f8aafd059cdffb42", 
+          "x": 860, 
+          "y": 630
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "X2_Pin 2"
+      }, 
+      "net_id": "7f2318deb883101d", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6ff18b3e026dd0b2", 
+            "3ad0892292961e68", 
+            "194ac6439a34bd11"
+          ], 
+          "point_id": "31e5487ff1e9c6b9", 
+          "x": 860, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "31e5487ff1e9c6b9", 
+            "d2017b676e3d277d"
+          ], 
+          "point_id": "194ac6439a34bd11", 
+          "x": 690, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "9948bbdfd656d482", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "50e2339a3c848929"
+          ], 
+          "point_id": "cba1b7ef381312d3", 
+          "x": 760, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2017b676e3d277d"
+          ], 
+          "point_id": "2ed285644cdb8103", 
+          "x": 690, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "31e5487ff1e9c6b9"
+          ], 
+          "point_id": "3ad0892292961e68", 
+          "x": 860, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "194ac6439a34bd11", 
+            "2ed285644cdb8103", 
+            "50e2339a3c848929"
+          ], 
+          "point_id": "d2017b676e3d277d", 
+          "x": 690, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "ef9e5f7807e7de87", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "31e5487ff1e9c6b9"
+          ], 
+          "point_id": "6ff18b3e026dd0b2", 
+          "x": 870, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cba1b7ef381312d3", 
+            "d2017b676e3d277d"
+          ], 
+          "point_id": "50e2339a3c848929", 
+          "x": 750, 
+          "y": 630
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

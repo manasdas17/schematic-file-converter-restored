@@ -1,0 +1,464 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "ff0dc1eee21900a8", 
+      "library_id": "89afccc44ef65832", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -200
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -190
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 560, 
+          "y": 730
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "89afccc44ef65832": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/LM555CN-Fairchild-datasheet-43442.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "Fairchild Semiconductor", 
+        "_num_pins": "8", 
+        "_octopart_part_number": "51669501807", 
+        "_package": "DIP-8", 
+        "_part_number": "LM555CN", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "current_rating": "15.00A", 
+        "max_input_voltage_dc": "15V", 
+        "max_operating_temperature": "70\u00b0C", 
+        "max_output_current": "20mA", 
+        "max_supply_current": "7.5mA", 
+        "max_supply_voltage_dc": "16V", 
+        "min_supply_voltage_dc": "4.5V", 
+        "mounting_type": "Through Hole"
+      }, 
+      "name": "Single Timer", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 1.5, 
+                    "text": "RST", 
+                    "x": 84, 
+                    "y": -12
+                  }, 
+                  "p1": {
+                    "x": 80, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 80, 
+                    "y": 0
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 1.5, 
+                    "text": "VCC", 
+                    "x": 144, 
+                    "y": -12
+                  }, 
+                  "p1": {
+                    "x": 140, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": 0
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "OUT", 
+                    "x": 160, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 165, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 170, 
+                    "y": -70
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "CV", 
+                    "x": 160, 
+                    "y": -134
+                  }, 
+                  "p1": {
+                    "x": 165, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 170, 
+                    "y": -130
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "GND", 
+                    "x": 104, 
+                    "y": -158
+                  }, 
+                  "p1": {
+                    "x": 100, 
+                    "y": -165
+                  }, 
+                  "p2": {
+                    "x": 100, 
+                    "y": -170
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "DIS", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "TRG", 
+                    "x": 9, 
+                    "y": -114
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -110
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "THR", 
+                    "x": 9, 
+                    "y": -134
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -130
+                  }, 
+                  "pin_number": "6"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 160, 
+                  "type": "rectangle", 
+                  "width": 160, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " ", 
+      "design_id": "0000000000006417", 
+      "license": "", 
+      "name": "test design", 
+      "owner": "mdhaene", 
+      "slug": "test-design", 
+      "updated_timestamp": 1317718202
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 765, 
+          "y": 630
+        }
+      ], 
+      "attributes": {
+        "name": "CV"
+      }, 
+      "net_id": "e9e72ed6163444a8", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "ff0dc1eee21900a8", 
+              "pin_number": "5"
+            }
+          ], 
+          "connected_points": [
+            "870600a5da3005ae"
+          ], 
+          "point_id": "032b34ef8e22d6f0", 
+          "x": 730, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "032b34ef8e22d6f0", 
+            "843002c1aabd4572"
+          ], 
+          "point_id": "870600a5da3005ae", 
+          "x": 740, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "870600a5da3005ae", 
+            "df2b1565492839c5"
+          ], 
+          "point_id": "843002c1aabd4572", 
+          "x": 800, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "843002c1aabd4572", 
+            "dffd59515a3f29ac"
+          ], 
+          "point_id": "df2b1565492839c5", 
+          "x": 800, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dffd59515a3f29ac"
+          ], 
+          "point_id": "4ab5799239545eb1", 
+          "x": 740, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "ff0dc1eee21900a8", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "41db6cde2f988da9"
+          ], 
+          "point_id": "5a6bb67ab60a7987", 
+          "x": 640, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5a6bb67ab60a7987", 
+            "60534ad310ae97b6"
+          ], 
+          "point_id": "41db6cde2f988da9", 
+          "x": 640, 
+          "y": 740
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "41db6cde2f988da9", 
+            "8a6fe29c8ec020c0"
+          ], 
+          "point_id": "60534ad310ae97b6", 
+          "x": 640, 
+          "y": 790
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "60534ad310ae97b6", 
+            "dffd59515a3f29ac"
+          ], 
+          "point_id": "8a6fe29c8ec020c0", 
+          "x": 740, 
+          "y": 790
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8a6fe29c8ec020c0", 
+            "4ab5799239545eb1", 
+            "df2b1565492839c5"
+          ], 
+          "point_id": "dffd59515a3f29ac", 
+          "x": 740, 
+          "y": 660
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 480, 
+          "y": 630
+        }
+      ], 
+      "attributes": {
+        "name": "DIS_THR"
+      }, 
+      "net_id": "38add06ea6e605b4", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "ff0dc1eee21900a8", 
+              "pin_number": "6"
+            }
+          ], 
+          "connected_points": [
+            "4c01211e72f5afb8"
+          ], 
+          "point_id": "da3e452c56661070", 
+          "x": 560, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "da3e452c56661070", 
+            "0ef9e8709f89de1c"
+          ], 
+          "point_id": "4c01211e72f5afb8", 
+          "x": 550, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4c01211e72f5afb8", 
+            "7c4fd93f6639633c"
+          ], 
+          "point_id": "0ef9e8709f89de1c", 
+          "x": 400, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0ef9e8709f89de1c", 
+            "8d82ef30a4abc00a"
+          ], 
+          "point_id": "7c4fd93f6639633c", 
+          "x": 400, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7c4fd93f6639633c", 
+            "aca375da9303bf15"
+          ], 
+          "point_id": "8d82ef30a4abc00a", 
+          "x": 400, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8d82ef30a4abc00a", 
+            "9b65eea37e92483d"
+          ], 
+          "point_id": "aca375da9303bf15", 
+          "x": 550, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "ff0dc1eee21900a8", 
+              "pin_number": "7"
+            }
+          ], 
+          "connected_points": [
+            "aca375da9303bf15"
+          ], 
+          "point_id": "9b65eea37e92483d", 
+          "x": 560, 
+          "y": 660
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

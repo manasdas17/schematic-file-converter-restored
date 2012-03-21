@@ -1,0 +1,255 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "32bdcfd1927abf6e", 
+      "library_id": "098a88c6ee86dc58", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 680, 
+          "y": 360
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "098a88c6ee86dc58": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/1776275-2-Tyco-Electronics-datasheet-596281.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "TE Connectivity", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "180738943585", 
+        "_part_number": "1776275-2", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "color": "Blue", 
+        "contact_material": "Brass", 
+        "contact_plating": "Tin", 
+        "current_rating": "7.00A", 
+        "max_wire_gauge": "26.00AWG", 
+        "min_wire_gauge": "18.00AWG", 
+        "mounting_type": "pc board", 
+        "number_of_contacts": "2.00", 
+        "pin_pitch": "3.5mm", 
+        "termination_style": "Screw", 
+        "voltage_rating_ac": "250.00V"
+      }, 
+      "name": "1776275-2", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006349", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "d4ny1", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1317390879
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "afe6132d95df321e", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "32bdcfd1927abf6e", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "718ac4d50e6fc065"
+          ], 
+          "point_id": "60b8980d3c38a55a", 
+          "x": 680, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "60b8980d3c38a55a", 
+            "b7d6c4c68b4c6c8e"
+          ], 
+          "point_id": "718ac4d50e6fc065", 
+          "x": 670, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "718ac4d50e6fc065", 
+            "2e89081820fdb7ee"
+          ], 
+          "point_id": "b7d6c4c68b4c6c8e", 
+          "x": 500, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b7d6c4c68b4c6c8e", 
+            "e7b440a03537d20f"
+          ], 
+          "point_id": "2e89081820fdb7ee", 
+          "x": 500, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2e89081820fdb7ee", 
+            "dab4953548403a38"
+          ], 
+          "point_id": "e7b440a03537d20f", 
+          "x": 500, 
+          "y": 620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e7b440a03537d20f", 
+            "097f7a978864cdfc"
+          ], 
+          "point_id": "dab4953548403a38", 
+          "x": 710, 
+          "y": 620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "dab4953548403a38", 
+            "2ac9cddef791442e"
+          ], 
+          "point_id": "097f7a978864cdfc", 
+          "x": 870, 
+          "y": 620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "097f7a978864cdfc", 
+            "8b074ee6c8a22af3"
+          ], 
+          "point_id": "2ac9cddef791442e", 
+          "x": 870, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2ac9cddef791442e", 
+            "06ce4d604b72612d"
+          ], 
+          "point_id": "8b074ee6c8a22af3", 
+          "x": 810, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "32bdcfd1927abf6e", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "8b074ee6c8a22af3"
+          ], 
+          "point_id": "06ce4d604b72612d", 
+          "x": 800, 
+          "y": 350
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

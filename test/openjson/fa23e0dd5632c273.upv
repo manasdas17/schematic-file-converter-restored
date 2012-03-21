@@ -1,0 +1,467 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "30cebf913ab045c8", 
+      "library_id": "74777eb873ea0024", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 140, 
+              "y": -105
+            }, 
+            {
+              "rotation": -1.5, 
+              "value": "{{refdes}}", 
+              "x": 120, 
+              "y": 10
+            }
+          ], 
+          "rotation": 1.5, 
+          "x": 480, 
+          "y": 340
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "4a938b08a46b2bdf", 
+      "library_id": "9fc094d25028f0ed", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 50, 
+              "y": 0
+            }
+          ], 
+          "rotation": 1.0, 
+          "x": 380, 
+          "y": 580
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "74777eb873ea0024": {
+      "attributes": {
+        "Maximum supply voltage": "36V", 
+        "Offset voltage": "3 (LM111) 7.5 (LM311)mV", 
+        "Response time": "200ns", 
+        "Supply current": "5.1mA", 
+        "_datasheet": "http://www.national.com/ds/LM/LM111.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "???", 
+        "_manufacturer": "National Semiconductor", 
+        "_num_pins": "8", 
+        "_octopart_part_number": "819517906212", 
+        "_package": "", 
+        "_part_number": "LM311", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "pin_1_description": "ground", 
+        "pin_2_description": "non-inverting input", 
+        "pin_3_description": "inverting input", 
+        "pin_4_description": "negative supply voltage", 
+        "pin_5_description": "balance", 
+        "pin_6_description": "balance/strobe", 
+        "pin_7_description": "output", 
+        "pin_8_description": "positive supply voltage"
+      }, 
+      "name": "LM311", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VCC", 
+                    "x": 130, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "OUT", 
+                    "x": 130, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "BAL/STROBE", 
+                    "x": 130, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "BAL", 
+                    "x": 130, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IN-", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "IN+", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "VSS", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 100, 
+                  "type": "rectangle", 
+                  "width": 130, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "9fc094d25028f0ed": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/IRF9540N-International-Rectifier-datasheet-31663.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "International Rectifier", 
+        "_num_pins": "3", 
+        "_octopart_number": "737128604448", 
+        "_package": "TO-220", 
+        "_part_number": "IRF9540N", 
+        "_prefix": "Q", 
+        "_rohs": "No", 
+        "_symbol_0_0": "P-Channel Enhanced MOSFET", 
+        "_type": "transistor", 
+        "breakdown_voltage_drain_to_source": "-100.00V", 
+        "current_rating": "-23.00A", 
+        "id_continuous_drain_current": "-23.00A", 
+        "mounting_type": "through hole", 
+        "polarity": "P-Channel", 
+        "power_dissipation": "140.00W", 
+        "rds_drain_to_source_resistance_on": "0.12\u03a9", 
+        "rise_time": "0.07 us", 
+        "vds_drain_to_source_voltage": "-100.00V", 
+        "voltage_rating_dc": "-100.00V"
+      }, 
+      "name": "unknown", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -34
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -26
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -24
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -16
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -14
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -6
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "radius": 22, 
+                  "type": "circle", 
+                  "x": 25, 
+                  "y": -20
+                }, 
+                {
+                  "p1": {
+                    "x": 35, 
+                    "y": -16
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 35, 
+                    "y": -24
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 35, 
+                    "y": -16
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1", 
+      "_transistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "Low current draw battery saver for 90v/1.5v Vintage Radio Battery Supply.", 
+      "design_id": "fa23e0dd5632c273", 
+      "license": "No License", 
+      "name": "Low Battery Disconnect", 
+      "owner": "mikeyancey", 
+      "slug": "Low-Battery-Disconnect", 
+      "updated_timestamp": 1329328660
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

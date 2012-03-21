@@ -1,0 +1,989 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "SW1"
+      }, 
+      "instance_id": "a2394179e5bb383b", 
+      "library_id": "b6308273cc629dbd", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.5, 
+          "x": 520, 
+          "y": 650
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_name": "100 k", 
+        "refdes": "R1"
+      }, 
+      "instance_id": "d5cd66d5d869c67f", 
+      "library_id": "8fe662018ffadc14", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.5, 
+          "x": 520, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "D1"
+      }, 
+      "instance_id": "e46d352d2de2704c", 
+      "library_id": "12143492e4f5657d", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.5, 
+          "x": 530, 
+          "y": 490
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "489dee838975d8d8", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 500, 
+          "y": 690
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "GND"
+      }, 
+      "instance_id": "977c03ab865fc9f6", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 500, 
+          "y": 430
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "12143492e4f5657d": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/551-0807F-Dialight-datasheet-2832.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Dialight", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "9849806546", 
+        "_part_number": "551-0807F", 
+        "_prefix": "D", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "LED", 
+        "_type": "diode", 
+        "color": "Blue", 
+        "forward_voltage": "3.50V", 
+        "lens_type": "Diffused", 
+        "luminous_intensity": "0.01cd", 
+        "peak_wavelength": "0.43 um", 
+        "size_diameter": "2.89 mm", 
+        "size_height": "0.01m", 
+        "size_length": "0.01m", 
+        "size_width": "0.00m", 
+        "wavelength": "0.43 um"
+      }, 
+      "name": "Blue LED", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 25, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 35, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "8fe662018ffadc14": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Resistor", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "R", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "b6308273cc629dbd": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Switch", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "General Switch", 
+        "_type": "switch"
+      }, 
+      "name": "Switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 13, 
+                  "y": -10
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 27, 
+                  "y": -10
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 26, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": -10, 
+        "y": -50
+      }, 
+      {
+        "rotation": -0.5, 
+        "value": "{{refdes}}", 
+        "x": -40, 
+        "y": 10
+      }, 
+      {
+        "rotation": -0.5, 
+        "value": "{{refdes}}", 
+        "x": -20, 
+        "y": 10
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 27, 
+        "y": -50
+      }, 
+      {
+        "rotation": -0.5, 
+        "value": "{{refdes}}", 
+        "x": -20, 
+        "y": -20
+      }
+    ], 
+    "attributes": {
+      "_diode_counter": "1", 
+      "_resistor_counter": "1", 
+      "_switch_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " asdfasdf", 
+      "design_id": "cefc8eb83b09f19d", 
+      "license": "Balloon Licence (Balloon)", 
+      "name": "test", 
+      "owner": "Sshhoorrttyy", 
+      "slug": "test", 
+      "updated_timestamp": 1320180499
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "848ec6d558c59c3f", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "a2394179e5bb383b", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "9004d8606e8f7204"
+          ], 
+          "point_id": "b8bb27c98a78d948", 
+          "x": 510, 
+          "y": 610
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b8bb27c98a78d948", 
+            "1de3a01a8b7678c1"
+          ], 
+          "point_id": "9004d8606e8f7204", 
+          "x": 510, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9004d8606e8f7204", 
+            "1621c7eaef93eabc"
+          ], 
+          "point_id": "1de3a01a8b7678c1", 
+          "x": 510, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "d5cd66d5d869c67f", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "1de3a01a8b7678c1"
+          ], 
+          "point_id": "1621c7eaef93eabc", 
+          "x": 510, 
+          "y": 570
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "4e9f173c9e0ebc92", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "e46d352d2de2704c", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "e91fcfd2d92205ab"
+          ], 
+          "point_id": "17415e100788f370", 
+          "x": 510, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "d5cd66d5d869c67f", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "047f4908273309c9"
+          ], 
+          "point_id": "6f0d9ce97fc60582", 
+          "x": 510, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "047f4908273309c9", 
+            "17415e100788f370"
+          ], 
+          "point_id": "e91fcfd2d92205ab", 
+          "x": 510, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e91fcfd2d92205ab", 
+            "6f0d9ce97fc60582"
+          ], 
+          "point_id": "047f4908273309c9", 
+          "x": 510, 
+          "y": 510
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "37217d27ad53fbaa", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "427f4029e92a3090", 
+          "x": 400, 
+          "y": 630
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 510, 
+          "y": 660
+        }
+      ], 
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "net_id": "7d3b34048bd3d8b2", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "489dee838975d8d8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "17a6d52b8abe1152"
+          ], 
+          "point_id": "e82a5f21ed9608a2", 
+          "x": 510, 
+          "y": 670
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e82a5f21ed9608a2", 
+            "95d989b135ed58b3"
+          ], 
+          "point_id": "17a6d52b8abe1152", 
+          "x": 510, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "17a6d52b8abe1152", 
+            "e1cf36f92905d08c"
+          ], 
+          "point_id": "95d989b135ed58b3", 
+          "x": 510, 
+          "y": 660
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "a2394179e5bb383b", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "95d989b135ed58b3"
+          ], 
+          "point_id": "e1cf36f92905d08c", 
+          "x": 510, 
+          "y": 650
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 510, 
+          "y": 440
+        }
+      ], 
+      "attributes": {
+        "name": "GND"
+      }, 
+      "net_id": "53e3ad71521d2a39", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "e46d352d2de2704c", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b1dbe29cb941bbc4"
+          ], 
+          "point_id": "d770fce0f2c973cd", 
+          "x": 510, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d770fce0f2c973cd", 
+            "c8d0a660301a3d0a"
+          ], 
+          "point_id": "b1dbe29cb941bbc4", 
+          "x": 510, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b1dbe29cb941bbc4", 
+            "52736129644e93bc"
+          ], 
+          "point_id": "c8d0a660301a3d0a", 
+          "x": 510, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "977c03ab865fc9f6", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "c8d0a660301a3d0a"
+          ], 
+          "point_id": "52736129644e93bc", 
+          "x": 510, 
+          "y": 430
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

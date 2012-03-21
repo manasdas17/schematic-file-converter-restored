@@ -1,0 +1,316 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "8213066fae982dc6", 
+      "library_id": "fed2a80e7a06032b", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 550, 
+          "y": 480
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "fed2a80e7a06032b": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/1N5231B-Fairchild-datasheet-121961.pdf", 
+        "_lead_free": "yes", 
+        "_manufacturer": "Fairchild Semiconductor", 
+        "_num_pins": "2", 
+        "_package": "DO-35", 
+        "_part_number": "1N5231B", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "breakdown_voltage": "5.10 V", 
+        "imported from Octopart": "yes", 
+        "max_operating_temperature": "200.00 \u00b0C", 
+        "max_power_dissipation": "0.50 W", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "32266920585", 
+        "termination_style": "Through Hole", 
+        "voltage_rating_dc": "5.10 V"
+      }, 
+      "name": "1N5231B", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005347", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "alwaysASM", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316310607
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 585, 
+          "y": 480
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "70155e108ebeebdd", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3da146284488bb81"
+          ], 
+          "point_id": "2cf51cbe92d50304", 
+          "x": 300, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2cf51cbe92d50304", 
+            "46261065ad3ad66a"
+          ], 
+          "point_id": "3da146284488bb81", 
+          "x": 380, 
+          "y": 370
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3da146284488bb81", 
+            "2fbaa1ade2e7d926"
+          ], 
+          "point_id": "46261065ad3ad66a", 
+          "x": 380, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "46261065ad3ad66a", 
+            "17534a473edddf36"
+          ], 
+          "point_id": "2fbaa1ade2e7d926", 
+          "x": 870, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2fbaa1ade2e7d926", 
+            "e17ce238d2dcc9e4"
+          ], 
+          "point_id": "17534a473edddf36", 
+          "x": 870, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "17534a473edddf36", 
+            "821385b14cf36af5"
+          ], 
+          "point_id": "e17ce238d2dcc9e4", 
+          "x": 820, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e17ce238d2dcc9e4", 
+            "2bfb3132aeba8431"
+          ], 
+          "point_id": "821385b14cf36af5", 
+          "x": 870, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "821385b14cf36af5", 
+            "6dd0f1840478b9f3"
+          ], 
+          "point_id": "2bfb3132aeba8431", 
+          "x": 840, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2bfb3132aeba8431", 
+            "c0d7acf6e280d552"
+          ], 
+          "point_id": "6dd0f1840478b9f3", 
+          "x": 840, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6dd0f1840478b9f3", 
+            "7f6bb614b4fdedba"
+          ], 
+          "point_id": "c0d7acf6e280d552", 
+          "x": 830, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c0d7acf6e280d552", 
+            "544cb348969f5b36"
+          ], 
+          "point_id": "7f6bb614b4fdedba", 
+          "x": 830, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7f6bb614b4fdedba", 
+            "744d863b3f708934"
+          ], 
+          "point_id": "544cb348969f5b36", 
+          "x": 820, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "544cb348969f5b36", 
+            "ccb63d97dcdf0967"
+          ], 
+          "point_id": "744d863b3f708934", 
+          "x": 820, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "744d863b3f708934", 
+            "721c43e410c37f72"
+          ], 
+          "point_id": "ccb63d97dcdf0967", 
+          "x": 820, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ccb63d97dcdf0967", 
+            "31e94b9b95704300"
+          ], 
+          "point_id": "721c43e410c37f72", 
+          "x": 680, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "8213066fae982dc6", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "721c43e410c37f72"
+          ], 
+          "point_id": "31e94b9b95704300", 
+          "x": 670, 
+          "y": 470
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "b201c26c6a498dac", 
+      "library_id": "3b533c0cb6481e4f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 180, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "0aee3173e902e388", 
+      "library_id": "3b533c0cb6481e4f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 540, 
+          "y": 390
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "3b533c0cb6481e4f": {
+      "attributes": {
+        "Contact Rating": "0.2 Amp at 30 VoltS", 
+        "Packaging": "Reel", 
+        "Part # Aliases:": "0S102011MA1QN1", 
+        "Standard Pack Qty": "500", 
+        "Switch Function:\t": "ON - ON", 
+        "_datasheet": "www.ck-components.com/14388/os_17aug.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "C&K COMPONENTS", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "731802163897", 
+        "_part_number": "OS102011MA1QN1", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "contacts_type": "SPDT", 
+        "mounting_type": "Through Hole\t", 
+        "termination_style": "PC Terminals\t"
+      }, 
+      "name": "Slide Switches SPDT On-On", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000003609", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "drusso", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1315948066
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "f195ad6e06534c5f", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "0aee3173e902e388", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "512d2714baf357dd"
+          ], 
+          "point_id": "048dafc530a2af44", 
+          "x": 540, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d4e94738e6a10fea", 
+            "512d2714baf357dd"
+          ], 
+          "point_id": "1a4cc6f215929e22", 
+          "x": 470, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1a4cc6f215929e22", 
+            "32358f8e998e5edb"
+          ], 
+          "point_id": "d4e94738e6a10fea", 
+          "x": 470, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b201c26c6a498dac", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "32358f8e998e5edb"
+          ], 
+          "point_id": "ffc4f443ed61372a", 
+          "x": 300, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d4e94738e6a10fea", 
+            "ffc4f443ed61372a"
+          ], 
+          "point_id": "32358f8e998e5edb", 
+          "x": 310, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1a4cc6f215929e22", 
+            "048dafc530a2af44"
+          ], 
+          "point_id": "512d2714baf357dd", 
+          "x": 530, 
+          "y": 380
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "515585f3a4e565b5", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "604a34fff75c6606", 
+          "x": 460, 
+          "y": 470
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

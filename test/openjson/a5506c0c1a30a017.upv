@@ -1,0 +1,367 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "cfc29dc8b83fd5f0", 
+      "library_id": "35c7579c4be24f25", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 40, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 540, 
+          "y": 500
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "Q2"
+      }, 
+      "instance_id": "bb85af12eb9d694c", 
+      "library_id": "35c7579c4be24f25", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 30, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 500, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "35c7579c4be24f25": {
+      "attributes": {
+        "Collector-Base Voltage": "-50V", 
+        "Collector-Emitter Voltage": "\u201345V", 
+        "Emitter-Base Voltage": "-5V", 
+        "_datasheet": "http://www.datasheetcatalog.org/datasheet2/b/0fxuespadlx4ryu0ch8s4kg7shfy.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "ON Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "TO-92", 
+        "_part_number": "BC557C", 
+        "_prefix": "Q", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "BJT (PNP)", 
+        "_type": "integrated circuit", 
+        "hfe": "125-900"
+      }, 
+      "name": "BC557C PNP Silicon Transistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -22
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": " ", 
+      "design_id": "a5506c0c1a30a017", 
+      "license": "Confidential & Proprietary", 
+      "name": "blah", 
+      "owner": "bfarago", 
+      "slug": "blah", 
+      "updated_timestamp": 1328893128
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "E"
+      }, 
+      "net_id": "895724d2df4ca275", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "099dd89c120d743d", 
+            "624a78809e921f50"
+          ], 
+          "point_id": "7ac99e989f20c5b6", 
+          "x": 530, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a3f1a05dc2bc575c", 
+            "624a78809e921f50"
+          ], 
+          "point_id": "4f46faaf109846c0", 
+          "x": 520, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "bb85af12eb9d694c", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "624a78809e921f50"
+          ], 
+          "point_id": "6404b98c258ad606", 
+          "x": 520, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a3f1a05dc2bc575c"
+          ], 
+          "point_id": "1d00d4507f7c90b2", 
+          "x": 520, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "cfc29dc8b83fd5f0", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "7ac99e989f20c5b6"
+          ], 
+          "point_id": "099dd89c120d743d", 
+          "x": 540, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1d00d4507f7c90b2", 
+            "4f46faaf109846c0"
+          ], 
+          "point_id": "a3f1a05dc2bc575c", 
+          "x": 520, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7ac99e989f20c5b6", 
+            "6404b98c258ad606", 
+            "4f46faaf109846c0"
+          ], 
+          "point_id": "624a78809e921f50", 
+          "x": 520, 
+          "y": 470
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "E"
+      }, 
+      "net_id": "a7f5bd69378db7c5", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4a123d57bfc6dda7"
+          ], 
+          "point_id": "b52ebd01c9ff25e6", 
+          "x": 490, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b52ebd01c9ff25e6", 
+            "40b20fca8f89467a"
+          ], 
+          "point_id": "4a123d57bfc6dda7", 
+          "x": 490, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4a123d57bfc6dda7", 
+            "d045c8be8d31b161"
+          ], 
+          "point_id": "40b20fca8f89467a", 
+          "x": 560, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "40b20fca8f89467a", 
+            "0c5a8d83f5578e62"
+          ], 
+          "point_id": "d045c8be8d31b161", 
+          "x": 560, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "cfc29dc8b83fd5f0", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "d045c8be8d31b161"
+          ], 
+          "point_id": "0c5a8d83f5578e62", 
+          "x": 560, 
+          "y": 490
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

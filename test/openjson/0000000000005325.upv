@@ -1,0 +1,214 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "L1"
+      }, 
+      "instance_id": "3a4c31bc259ae564", 
+      "library_id": "513e9550618f5d8b", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 20, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 550, 
+          "y": 410
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "513e9550618f5d8b": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Inductor", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "L", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Inductor", 
+        "_type": "inductor"
+      }, 
+      "name": "Inductor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 45, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 10, 
+                  "y": -10
+                }, 
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -10
+                }, 
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 30, 
+                  "y": -10
+                }, 
+                {
+                  "end_angle": 1.0, 
+                  "radius": 5, 
+                  "start_angle": 0.0, 
+                  "type": "arc", 
+                  "x": 40, 
+                  "y": -10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_inductor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005325", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "rogerbrent", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1317999814
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "a3954ff388c0c830", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4b07547e837f516c"
+          ], 
+          "point_id": "5d212c40137fee5c", 
+          "x": 430, 
+          "y": 490
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5d212c40137fee5c", 
+            "b91068a7a4f7fa04"
+          ], 
+          "point_id": "4b07547e837f516c", 
+          "x": 430, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4b07547e837f516c", 
+            "92803e78691f9bd8"
+          ], 
+          "point_id": "b91068a7a4f7fa04", 
+          "x": 680, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b91068a7a4f7fa04", 
+            "eb8786a1c5184f8a"
+          ], 
+          "point_id": "92803e78691f9bd8", 
+          "x": 680, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "92803e78691f9bd8", 
+            "cc1997092cab5f26"
+          ], 
+          "point_id": "eb8786a1c5184f8a", 
+          "x": 640, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eb8786a1c5184f8a", 
+            "397a4f7a85ff2682"
+          ], 
+          "point_id": "cc1997092cab5f26", 
+          "x": 640, 
+          "y": 650
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cc1997092cab5f26"
+          ], 
+          "point_id": "397a4f7a85ff2682", 
+          "x": 990, 
+          "y": 650
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

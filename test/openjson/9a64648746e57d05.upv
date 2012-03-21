@@ -1,0 +1,680 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "fd51294d86a69191", 
+      "library_id": "517216891e928c04", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 430, 
+          "y": 550
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "4acc9998950768dd", 
+      "library_id": "cbbd9096e5aae859", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 230, 
+          "y": 500
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "517216891e928c04": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/PIC16F690-I/P-Microchip-datasheet-873.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Microchip", 
+        "_num_pins": "20", 
+        "_octopart_part_number": "9426139549", 
+        "_package": "PDIP-20", 
+        "_part_number": "PIC16F690-I/P", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "access_time": "0.02 ms", 
+        "clock_speed": "20.00 MHz", 
+        "flash_memory_bytes": "7.17 kB", 
+        "max_operating_voltage": "5.50V", 
+        "max_supply_voltage_dc": "5.50V", 
+        "min_operating_voltage": "2.00V", 
+        "mounting_type": "through hole", 
+        "number_of_i_o_pins": "18.00", 
+        "ram_bytes": "256.00B", 
+        "supply_voltage_dc": "5.00V"
+      }, 
+      "name": "PIC16F690-I/P", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vss", 
+                    "x": 310, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -10
+                  }, 
+                  "pin_number": "20"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA0/AN0/C1IN+/ICSPDAT/ULPWU", 
+                    "x": 310, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -30
+                  }, 
+                  "pin_number": "19"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA1/AN1/C12IN0-/Vref/ICSPCLK", 
+                    "x": 310, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -50
+                  }, 
+                  "pin_number": "18"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RA2/AN2/T0CKI/INT/C1OUT", 
+                    "x": 310, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -70
+                  }, 
+                  "pin_number": "17"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RC0/AN4/C2IN+", 
+                    "x": 310, 
+                    "y": -94
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -90
+                  }, 
+                  "pin_number": "16"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RC1/AN5/C12IN1-", 
+                    "x": 310, 
+                    "y": -114
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -110
+                  }, 
+                  "pin_number": "15"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RC2/AN6/C12IN2-/P1D", 
+                    "x": 310, 
+                    "y": -134
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -130
+                  }, 
+                  "pin_number": "14"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB4/AN10/SDI/SDA", 
+                    "x": 310, 
+                    "y": -154
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -150
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -150
+                  }, 
+                  "pin_number": "13"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB5/AN11/RX/DT", 
+                    "x": 310, 
+                    "y": -174
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -170
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -170
+                  }, 
+                  "pin_number": "12"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "RB6/SCK/SCL", 
+                    "x": 310, 
+                    "y": -194
+                  }, 
+                  "p1": {
+                    "x": 315, 
+                    "y": -190
+                  }, 
+                  "p2": {
+                    "x": 320, 
+                    "y": -190
+                  }, 
+                  "pin_number": "11"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Vdd", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA5/T1CKI/CLKIN/OSC1", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA4/AN3/T1G/CLKOUT/OSC2", 
+                    "x": 9, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RA3/MCLR/Vpp", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RC5/CCP1/P1A", 
+                    "x": 9, 
+                    "y": -94
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -90
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -90
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RC4/C2OUT/P1B", 
+                    "x": 9, 
+                    "y": -114
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -110
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -110
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RC3/AN7/C12IN3-/P1C", 
+                    "x": 9, 
+                    "y": -134
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -130
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -130
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RC6/AN8/SS", 
+                    "x": 9, 
+                    "y": -154
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -150
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -150
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RC7/AN9/SDO", 
+                    "x": 9, 
+                    "y": -174
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -170
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -170
+                  }, 
+                  "pin_number": "9"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RB7/TX/CK", 
+                    "x": 9, 
+                    "y": -194
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -190
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -190
+                  }, 
+                  "pin_number": "10"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 210, 
+                  "type": "rectangle", 
+                  "width": 310, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "cbbd9096e5aae859": {
+      "attributes": {
+        "Connect": "", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.tai.com.tw/media/files/spec/RM.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "TA-I Technology", 
+        "_num_pins": "2", 
+        "_package": "0603", 
+        "_part_number": "RM02JTN100", 
+        "_prefix": "R", 
+        "_resistance": "10 \u03a9", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "resistance": "10 \u03a9"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -245
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -45
+      }
+    ], 
+    "attributes": {
+      "_integrated circuit_counter": "1", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "9a64648746e57d05", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "dmorrish", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1319677934
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 330, 
+          "y": 540
+        }
+      ], 
+      "attributes": {
+        "name": "Vdd"
+      }, 
+      "net_id": "465582a316c914c6", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "fd51294d86a69191", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "31c7d5f971bf44bc"
+          ], 
+          "point_id": "ce6aad1813e5f94f", 
+          "x": 430, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ce6aad1813e5f94f", 
+            "72c5db79d1c00392"
+          ], 
+          "point_id": "31c7d5f971bf44bc", 
+          "x": 420, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "31c7d5f971bf44bc", 
+            "cb2a87420e21304d"
+          ], 
+          "point_id": "72c5db79d1c00392", 
+          "x": 280, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "72c5db79d1c00392", 
+            "38a5a0c6cc06f5f4"
+          ], 
+          "point_id": "cb2a87420e21304d", 
+          "x": 230, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cb2a87420e21304d"
+          ], 
+          "point_id": "38a5a0c6cc06f5f4", 
+          "x": 280, 
+          "y": 540
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

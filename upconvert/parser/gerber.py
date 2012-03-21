@@ -201,8 +201,8 @@ class Gerber:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an gerber file """
-        f = open(filename, 'r')
-        data = f.read()
+        with open(filename, 'r') as f:
+            data = f.read()
         confidence = 0
         if 'D01*' in data:
             confidence += 0.2

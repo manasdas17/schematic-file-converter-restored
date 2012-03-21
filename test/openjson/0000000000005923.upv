@@ -1,0 +1,585 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "611ef5b48f5590f6", 
+      "library_id": "9170a0a527855146", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -45
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 720, 
+          "y": 370
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "525569c30a24d3d1", 
+      "library_id": "7b315d8694a44fd8", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -150
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -155
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 430, 
+          "y": 520
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U3"
+      }, 
+      "instance_id": "0c32b9a9642f0dd7", 
+      "library_id": "68f70bb04f11954f", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -5, 
+              "y": -100
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -90
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 600, 
+          "y": 640
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "68f70bb04f11954f": {
+      "attributes": {
+        "_datasheet": "", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "1", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "VCC", 
+                    "x": 54, 
+                    "y": -58
+                  }, 
+                  "p1": {
+                    "x": 50, 
+                    "y": -65
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -70
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 60, 
+                  "type": "rectangle", 
+                  "width": 80, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "7b315d8694a44fd8": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/NE555N-STMicroelectronics-datasheet-503160.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "8", 
+        "_package": "PDIP-8", 
+        "_part_number": "NE555N", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "imported from Octopart": "yes", 
+        "max_frequency": "0.50 MHz", 
+        "max_input_voltage_dc": "15.00 V", 
+        "max_operating_temperature": "70.00 \u00b0C", 
+        "max_output_current": "200.00 mA", 
+        "max_supply_current": "15.00 mA", 
+        "max_supply_voltage_dc": "16.00 V", 
+        "min_supply_voltage_dc": "4.50 V", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "59446783"
+      }, 
+      "name": "NE555N", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vcc", 
+                    "x": 170, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 175, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 180, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Discharge", 
+                    "x": 170, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 175, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 180, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Threshold", 
+                    "x": 170, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 175, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 180, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Control Voltage", 
+                    "x": 170, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 175, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 180, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Trigger", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Outout", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Reset", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 120, 
+                  "type": "rectangle", 
+                  "width": 170, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "9170a0a527855146": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/CRCW0603100KFKEA-Vishay-datasheet-5300368.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Vishay", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "14403235336", 
+        "_package": "0603", 
+        "_part_number": "CRCW0603100KFKEA", 
+        "_prefix": "R", 
+        "_resistance": "100.00 k\u03a9", 
+        "_rohs": "Yes", 
+        "_suffix": "\u03a9", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "integrated circuit", 
+        "max_operating_temperature": "150.00\u00b0C", 
+        "max_resistance_tolerance": "1.00%", 
+        "min_resistance_tolerance": "-1.00%", 
+        "mounting_type": "surface mount", 
+        "power_rating": "0.10W", 
+        "resistance": "100.00 k\u03a9", 
+        "size_height": "0.45 mm", 
+        "size_length": "1.55 mm", 
+        "size_width": "0.85 mm", 
+        "termination_style": "Surface Mount", 
+        "voltage_rating_dc": "75.00V"
+      }, 
+      "name": "100.00 k\u03a9 R", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005923", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "EngrHuma", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316668864
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "8a33a79afcb8cd10", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "af989d64f85d3d77", 
+          "x": 310, 
+          "y": 500
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 630, 
+          "y": 535
+        }
+      ], 
+      "attributes": {
+        "name": "VCC_Vcc"
+      }, 
+      "net_id": "61f636fa86b0c0e3", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "525569c30a24d3d1", 
+              "pin_number": "8"
+            }
+          ], 
+          "connected_points": [
+            "c403d8bcd71981d0"
+          ], 
+          "point_id": "06838ef3b3b7050f", 
+          "x": 610, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "06838ef3b3b7050f", 
+            "c5824c2803bc5433"
+          ], 
+          "point_id": "c403d8bcd71981d0", 
+          "x": 620, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c403d8bcd71981d0", 
+            "d8f64f4190a1f545"
+          ], 
+          "point_id": "c5824c2803bc5433", 
+          "x": 650, 
+          "y": 500
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c5824c2803bc5433", 
+            "1b504aca2304fe39"
+          ], 
+          "point_id": "d8f64f4190a1f545", 
+          "x": 650, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "0c32b9a9642f0dd7", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "d8f64f4190a1f545"
+          ], 
+          "point_id": "1b504aca2304fe39", 
+          "x": 650, 
+          "y": 570
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

@@ -1,0 +1,795 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q4"
+      }, 
+      "instance_id": "36fab2a5c480eece", 
+      "library_id": "325265cb2acb3605", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": -110, 
+              "y": -80
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -80
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 340, 
+          "y": 510
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U5"
+      }, 
+      "instance_id": "10a9862f589c9c55", 
+      "library_id": "c911eb65fe9b7e55", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 200, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW6"
+      }, 
+      "instance_id": "d45d1e1f9da5578f", 
+      "library_id": "bbfff68541392850", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -43
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 160, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "325265cb2acb3605": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Transistor", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "Q", 
+        "_rohs": "???", 
+        "_symbol_0_0": "BJT (NPN)", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "NPN Transistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -41
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -39
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "bbfff68541392850": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Switch", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "General Switch", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "Switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 13, 
+                  "y": -10
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 27, 
+                  "y": -10
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 26, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "c911eb65fe9b7e55": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Battery_(electricity)", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Battery", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "12v Battery", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 16, 
+                    "y": -25
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -25
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "+", 
+                  "type": "label", 
+                  "x": 0, 
+                  "y": -10
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "-", 
+                  "type": "label", 
+                  "x": 35, 
+                  "y": -10
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "6"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006115", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "macninja", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316954787
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "c5841c65d03587ac", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "84106102f922f793", 
+          "x": 440, 
+          "y": 510
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 315, 
+          "y": 480
+        }
+      ], 
+      "attributes": {
+        "name": "Base"
+      }, 
+      "net_id": "eaa4b79245b63106", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "36fab2a5c480eece", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "ad0dd24bbd0acf0f"
+          ], 
+          "point_id": "d0bfa06e6b053d2d", 
+          "x": 340, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d0bfa06e6b053d2d", 
+            "ca24c08b79bd4e66"
+          ], 
+          "point_id": "ad0dd24bbd0acf0f", 
+          "x": 330, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ca24c08b79bd4e66"
+          ], 
+          "point_id": "0d3ab2f9ea392f92", 
+          "x": 290, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0d3ab2f9ea392f92", 
+            "ad0dd24bbd0acf0f", 
+            "921a98ed69a17731"
+          ], 
+          "point_id": "ca24c08b79bd4e66", 
+          "x": 290, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ca24c08b79bd4e66", 
+            "c8caa51e3a38d08b"
+          ], 
+          "point_id": "921a98ed69a17731", 
+          "x": 290, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "921a98ed69a17731", 
+            "d2b63cab374e3ea4"
+          ], 
+          "point_id": "c8caa51e3a38d08b", 
+          "x": 210, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "d45d1e1f9da5578f", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "c8caa51e3a38d08b"
+          ], 
+          "point_id": "d2b63cab374e3ea4", 
+          "x": 200, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 415, 
+          "y": 535
+        }
+      ], 
+      "attributes": {
+        "name": "Collector"
+      }, 
+      "net_id": "b7f4aba89c96e6c7", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0f119b8fdbc91c89"
+          ], 
+          "point_id": "48cb40f5aad59324", 
+          "x": 410, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "296ff32cedd16ff4", 
+            "48cb40f5aad59324"
+          ], 
+          "point_id": "0f119b8fdbc91c89", 
+          "x": 410, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0f119b8fdbc91c89", 
+            "d838d70d8d975b4a"
+          ], 
+          "point_id": "296ff32cedd16ff4", 
+          "x": 360, 
+          "y": 570
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "296ff32cedd16ff4", 
+            "d9a9e7a216209d53"
+          ], 
+          "point_id": "d838d70d8d975b4a", 
+          "x": 360, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "36fab2a5c480eece", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "d838d70d8d975b4a"
+          ], 
+          "point_id": "d9a9e7a216209d53", 
+          "x": 360, 
+          "y": 500
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "Emmiter"
+      }, 
+      "net_id": "a3332fefc2e6ca8b", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "36fab2a5c480eece", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "fd52046843b3d5bd"
+          ], 
+          "point_id": "8c6e44096bc1a770", 
+          "x": 360, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8c6e44096bc1a770", 
+            "d42bbd2fcc855f77"
+          ], 
+          "point_id": "fd52046843b3d5bd", 
+          "x": 360, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fd52046843b3d5bd"
+          ], 
+          "point_id": "d42bbd2fcc855f77", 
+          "x": 360, 
+          "y": 400
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 450, 
+          "y": 400
+        }
+      ], 
+      "attributes": {
+        "name": "Emmiter"
+      }, 
+      "net_id": "9d3178b4392c41e0", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d42bbd2fcc855f77"
+          ], 
+          "point_id": "9577f266d5556750", 
+          "x": 450, 
+          "y": 400
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 130, 
+          "y": 500
+        }
+      ], 
+      "attributes": {
+        "name": "(+)_Terminal (+ or -)"
+      }, 
+      "net_id": "11b0ba20c3363ef5", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "d45d1e1f9da5578f", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "9867afdbfee55a0d"
+          ], 
+          "point_id": "320af75832a9bdfc", 
+          "x": 160, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "320af75832a9bdfc", 
+            "358572880090377c"
+          ], 
+          "point_id": "9867afdbfee55a0d", 
+          "x": 150, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "358572880090377c"
+          ], 
+          "point_id": "9e56e2a9e3db24ab", 
+          "x": 110, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9867afdbfee55a0d", 
+            "9e56e2a9e3db24ab"
+          ], 
+          "point_id": "358572880090377c", 
+          "x": 110, 
+          "y": 460
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 130, 
+          "y": 500
+        }
+      ], 
+      "attributes": {
+        "name": "(+)_Terminal (+ or -)"
+      }, 
+      "net_id": "3c40706274ec8e43", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "10a9862f589c9c55", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "01bce8189c086b49"
+          ], 
+          "point_id": "a5f826d58e44f28d", 
+          "x": 200, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fb27a1e5c87a6225", 
+            "a5f826d58e44f28d"
+          ], 
+          "point_id": "01bce8189c086b49", 
+          "x": 190, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eecf1b3ae8688ce2", 
+            "01bce8189c086b49"
+          ], 
+          "point_id": "fb27a1e5c87a6225", 
+          "x": 110, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fb27a1e5c87a6225", 
+            "56d35cfe9fd70032"
+          ], 
+          "point_id": "eecf1b3ae8688ce2", 
+          "x": 110, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eecf1b3ae8688ce2"
+          ], 
+          "point_id": "56d35cfe9fd70032", 
+          "x": 110, 
+          "y": 450
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

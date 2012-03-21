@@ -1,0 +1,1313 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U3"
+      }, 
+      "instance_id": "113c04a8c247bfd2", 
+      "library_id": "59c516b01e4dbc17", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 550, 
+          "y": 520
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U7"
+      }, 
+      "instance_id": "fa058e8579271618", 
+      "library_id": "ee4305db0b01d1f1", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 270, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "f329decaca65aa29", 
+      "library_id": "71abb1b3d61e006c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 690, 
+          "y": 480
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U8"
+      }, 
+      "instance_id": "dc1829bef6d77a70", 
+      "library_id": "39ad374ec4e8d1f7", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 45, 
+              "y": -55
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 840, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "39ad374ec4e8d1f7": {
+      "attributes": {
+        "Connect": "http://www.cngosun.com/EnProduct_show.asp?id=998", 
+        "Imported from": "Seeed Studio", 
+        "Number Of Positions": "2", 
+        "_datasheet": "http://www.cngosun.com/EnProduct_show.asp?id=998", 
+        "_lead_free": "???", 
+        "_manufacturer": "CIXI GAOSHENG", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "GS009S-5.0 2P", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "Screw Terminal Header", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 50, 
+                  "type": "rectangle", 
+                  "width": 40, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "59c516b01e4dbc17": {
+      "attributes": {
+        "Input Voltage": "7-36v", 
+        "Ouput Current (Max)": "3.0", 
+        "Output Voltage": "2.5-12.6v (Adjustable)", 
+        "_datasheet": "http://www.ti.com/litv/pdf/slts229b", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Texas Instruments", 
+        "_num_pins": "7", 
+        "_package": "EUW-7", 
+        "_part_number": "PTN78060WAH", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_-1": "Voltage Regulator", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "PTN78060WAH", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vout", 
+                    "x": 110, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Vsense", 
+                    "x": 110, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Rset", 
+                    "x": 110, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -50
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "Rset(gnd)", 
+                    "x": 110, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -70
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 1.5, 
+                    "text": "Ground", 
+                    "x": 64, 
+                    "y": -118
+                  }, 
+                  "p1": {
+                    "x": 60, 
+                    "y": -125
+                  }, 
+                  "p2": {
+                    "x": 60, 
+                    "y": -130
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Vin", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "Inhibit", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 120, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "71abb1b3d61e006c": {
+      "attributes": {
+        "Value": "33K", 
+        "_datasheet": "http://en.wikipedia.org/wiki/Resistor", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "R", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ee4305db0b01d1f1": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/54602-908LF-Areva-datasheet-8554579.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "FCI", 
+        "_num_pins": "8", 
+        "_octopart_part_number": "28345740528", 
+        "_package": "", 
+        "_part_number": "54602-908LF", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "color": "Black", 
+        "contact_material": "Phosphor Bronze", 
+        "contact_plating": "Gold", 
+        "max_operating_temperature": "90.00\u00b0C", 
+        "mounting_type": "Through Hole", 
+        "number_of_contacts": "8.00", 
+        "size_height": "10mm", 
+        "size_length": "20m", 
+        "size_width": "20mm"
+      }, 
+      "name": "CAT3 RJ45 MODULAR JACK, 8POS, 1 PORT", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "8", 
+                    "x": 120, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -10
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "7", 
+                    "x": 120, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -30
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "6", 
+                    "x": 120, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -50
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "5", 
+                    "x": 120, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 125, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 130, 
+                    "y": -70
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 9, 
+                    "y": -14
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 9, 
+                    "y": -34
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 9, 
+                    "y": -54
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -50
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -50
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "4", 
+                    "x": 9, 
+                    "y": -74
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -70
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -70
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 90, 
+                  "type": "rectangle", 
+                  "width": 120, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "8", 
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "4bc26c015d44faa6", 
+      "license": "No License", 
+      "name": "Jack Regulator", 
+      "owner": "fatboymaximus", 
+      "slug": "Jack-Regulator", 
+      "updated_timestamp": 1326318391
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "1"
+      }, 
+      "net_id": "96c003c0af0523bb", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1290ae9ffaf57a78"
+          ], 
+          "point_id": "4120b16057ffb8c5", 
+          "x": 240, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4120b16057ffb8c5"
+          ], 
+          "point_id": "1290ae9ffaf57a78", 
+          "x": 240, 
+          "y": 530
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "Rset_1"
+      }, 
+      "net_id": "252b3b2c0226950f", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "113c04a8c247bfd2", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "bb1d6f53e5b86ec5"
+          ], 
+          "point_id": "cedac898cb0440f8", 
+          "x": 670, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cedac898cb0440f8", 
+            "82d6822a43fc0803"
+          ], 
+          "point_id": "bb1d6f53e5b86ec5", 
+          "x": 680, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bb1d6f53e5b86ec5", 
+            "da90cf0fce8fb32e"
+          ], 
+          "point_id": "82d6822a43fc0803", 
+          "x": 680, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "f329decaca65aa29", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "82d6822a43fc0803"
+          ], 
+          "point_id": "da90cf0fce8fb32e", 
+          "x": 690, 
+          "y": 470
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "1"
+      }, 
+      "net_id": "7ddccf2971192fd2", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c076e29634dfdd8e", 
+            "590fdd8eb3b3d404"
+          ], 
+          "point_id": "bdafe16848a3b6dc", 
+          "x": 260, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bdafe16848a3b6dc", 
+            "a40407d4d7286d30"
+          ], 
+          "point_id": "590fdd8eb3b3d404", 
+          "x": 240, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8e1ce8f7df38e949", 
+            "42abc434b3798085", 
+            "c705af5d33fde3dd"
+          ], 
+          "point_id": "b9726a0e7d1b835f", 
+          "x": 430, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "098808d19550eb1c", 
+            "590fdd8eb3b3d404"
+          ], 
+          "point_id": "a40407d4d7286d30", 
+          "x": 240, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fd5c005067dd766f"
+          ], 
+          "point_id": "f6ab3da5dd098844", 
+          "x": 430, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c648f22097a9b261", 
+            "098808d19550eb1c", 
+            "8e1ce8f7df38e949"
+          ], 
+          "point_id": "55be8727907b838c", 
+          "x": 240, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fd5c005067dd766f", 
+            "55f4d742711b52e3", 
+            "2b1cfce0f9288de3"
+          ], 
+          "point_id": "481726d695287be3", 
+          "x": 430, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "481726d695287be3"
+          ], 
+          "point_id": "2b1cfce0f9288de3", 
+          "x": 430, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "55be8727907b838c", 
+            "8423da23e157b0d2"
+          ], 
+          "point_id": "c648f22097a9b261", 
+          "x": 260, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fa058e8579271618", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "c648f22097a9b261"
+          ], 
+          "point_id": "8423da23e157b0d2", 
+          "x": 270, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fa058e8579271618", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "bdafe16848a3b6dc"
+          ], 
+          "point_id": "c076e29634dfdd8e", 
+          "x": 270, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fa058e8579271618", 
+              "pin_number": "7"
+            }
+          ], 
+          "connected_points": [
+            "55f4d742711b52e3"
+          ], 
+          "point_id": "5121f5ebd6220e41", 
+          "x": 400, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b9726a0e7d1b835f", 
+            "55be8727907b838c"
+          ], 
+          "point_id": "8e1ce8f7df38e949", 
+          "x": 240, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a40407d4d7286d30", 
+            "55be8727907b838c"
+          ], 
+          "point_id": "098808d19550eb1c", 
+          "x": 240, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "113c04a8c247bfd2", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "c705af5d33fde3dd"
+          ], 
+          "point_id": "b56a3bd64b212789", 
+          "x": 550, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5121f5ebd6220e41", 
+            "481726d695287be3"
+          ], 
+          "point_id": "55f4d742711b52e3", 
+          "x": 410, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b9726a0e7d1b835f", 
+            "b56a3bd64b212789"
+          ], 
+          "point_id": "c705af5d33fde3dd", 
+          "x": 540, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "42abc434b3798085", 
+            "481726d695287be3", 
+            "f6ab3da5dd098844"
+          ], 
+          "point_id": "fd5c005067dd766f", 
+          "x": 430, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b9726a0e7d1b835f", 
+            "fd5c005067dd766f"
+          ], 
+          "point_id": "42abc434b3798085", 
+          "x": 430, 
+          "y": 510
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "Vout"
+      }, 
+      "net_id": "c2b86b919571d220", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "113c04a8c247bfd2", 
+              "pin_number": "6"
+            }
+          ], 
+          "connected_points": [
+            "7165b37839f8b96c"
+          ], 
+          "point_id": "ddb4fd5735459a58", 
+          "x": 670, 
+          "y": 510
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ddb4fd5735459a58"
+          ], 
+          "point_id": "7165b37839f8b96c", 
+          "x": 680, 
+          "y": 510
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "4"
+      }, 
+      "net_id": "242d7bec2798d9a6", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "794cba098fd8756d", 
+            "ba16ddc5669c21ba"
+          ], 
+          "point_id": "922b8e7ebb3ddb77", 
+          "x": 770, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "35346dc7d7a391d0", 
+            "cd8331af36841b76"
+          ], 
+          "point_id": "1deb200bfb9e1fdf", 
+          "x": 460, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e0484f822f1d11e4", 
+            "ba16ddc5669c21ba"
+          ], 
+          "point_id": "262aed6ac234a0b0", 
+          "x": 700, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "63a8e9e7abb6e140", 
+            "585db1431edd45a4"
+          ], 
+          "point_id": "149bd2219bc558ec", 
+          "x": 260, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bf252b0042a1f7a7", 
+            "585db1431edd45a4", 
+            "c480f958981d8472"
+          ], 
+          "point_id": "280b26901a04be24", 
+          "x": 210, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d46d883b7d9b22c5", 
+            "ba16ddc5669c21ba"
+          ], 
+          "point_id": "f72e21285752bb93", 
+          "x": 700, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "716d6cec179c03a1", 
+            "1deb200bfb9e1fdf"
+          ], 
+          "point_id": "35346dc7d7a391d0", 
+          "x": 410, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "922b8e7ebb3ddb77", 
+            "262aed6ac234a0b0", 
+            "f72e21285752bb93"
+          ], 
+          "point_id": "ba16ddc5669c21ba", 
+          "x": 700, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "abaeda1ee053559a", 
+            "e0484f822f1d11e4"
+          ], 
+          "point_id": "8061dd79726bf6d8", 
+          "x": 610, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "262aed6ac234a0b0", 
+            "f212bd1ab9de2276", 
+            "8061dd79726bf6d8"
+          ], 
+          "point_id": "e0484f822f1d11e4", 
+          "x": 610, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2959b7947d30d5ac", 
+            "bf252b0042a1f7a7"
+          ], 
+          "point_id": "7132e9fee0ad31a9", 
+          "x": 260, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "f329decaca65aa29", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "425affe241ba2b71"
+          ], 
+          "point_id": "c73fa9a29d048dc4", 
+          "x": 740, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "113c04a8c247bfd2", 
+              "pin_number": "7"
+            }
+          ], 
+          "connected_points": [
+            "d46d883b7d9b22c5"
+          ], 
+          "point_id": "bd1be0ef1d8c6598", 
+          "x": 670, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "425affe241ba2b71", 
+            "922b8e7ebb3ddb77"
+          ], 
+          "point_id": "794cba098fd8756d", 
+          "x": 770, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "149bd2219bc558ec", 
+            "280b26901a04be24"
+          ], 
+          "point_id": "585db1431edd45a4", 
+          "x": 210, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fa058e8579271618", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "7132e9fee0ad31a9"
+          ], 
+          "point_id": "2959b7947d30d5ac", 
+          "x": 270, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7132e9fee0ad31a9", 
+            "280b26901a04be24"
+          ], 
+          "point_id": "bf252b0042a1f7a7", 
+          "x": 210, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "113c04a8c247bfd2", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "f212bd1ab9de2276"
+          ], 
+          "point_id": "643ba0a831594eac", 
+          "x": 610, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e0484f822f1d11e4", 
+            "643ba0a831594eac"
+          ], 
+          "point_id": "f212bd1ab9de2276", 
+          "x": 610, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "abaeda1ee053559a", 
+            "c480f958981d8472"
+          ], 
+          "point_id": "44347c2ebb0295a9", 
+          "x": 440, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "44347c2ebb0295a9", 
+            "cd8331af36841b76", 
+            "8061dd79726bf6d8"
+          ], 
+          "point_id": "abaeda1ee053559a", 
+          "x": 460, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fa058e8579271618", 
+              "pin_number": "8"
+            }
+          ], 
+          "connected_points": [
+            "35346dc7d7a391d0"
+          ], 
+          "point_id": "716d6cec179c03a1", 
+          "x": 400, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1deb200bfb9e1fdf", 
+            "abaeda1ee053559a"
+          ], 
+          "point_id": "cd8331af36841b76", 
+          "x": 460, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c73fa9a29d048dc4", 
+            "794cba098fd8756d"
+          ], 
+          "point_id": "425affe241ba2b71", 
+          "x": 750, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bd1be0ef1d8c6598", 
+            "f72e21285752bb93"
+          ], 
+          "point_id": "d46d883b7d9b22c5", 
+          "x": 680, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "280b26901a04be24", 
+            "44347c2ebb0295a9"
+          ], 
+          "point_id": "c480f958981d8472", 
+          "x": 210, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "fa058e8579271618", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "149bd2219bc558ec"
+          ], 
+          "point_id": "63a8e9e7abb6e140", 
+          "x": 270, 
+          "y": 440
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

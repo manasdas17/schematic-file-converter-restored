@@ -1,0 +1,327 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "71bb27a369a5c37b", 
+      "library_id": "8247c009814d6ad6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 660
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "e2fb69315f86ef3c", 
+      "library_id": "8247c009814d6ad6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 530, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "8247c009814d6ad6": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/2N5415-STMicroelectronics-datasheet-6387422.pdf", 
+        "_lead_free": "yes", 
+        "_manufacturer": "STMicroelectronics", 
+        "_num_pins": "3", 
+        "_package": "TO-39", 
+        "_part_number": "2N5415", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "current_rating": "-1.0A", 
+        "imported from Octopart": "yes", 
+        "max_power_dissipation": "10.00 W", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "2507449437", 
+        "polarity": "PNP", 
+        "voltage_rating_dc": "-200.0V"
+      }, 
+      "name": "2N5415", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -23
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005031", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "shaun.tame@gmail.com", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316152198
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "0f7bf3cfe01c6696", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "e2fb69315f86ef3c", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "6298ea733024ec6d"
+          ], 
+          "point_id": "765e61025d50221b", 
+          "x": 530, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "765e61025d50221b", 
+            "7a956fdd400fdbe3"
+          ], 
+          "point_id": "6298ea733024ec6d", 
+          "x": 520, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6298ea733024ec6d", 
+            "1e3c5b6b8f43cc44"
+          ], 
+          "point_id": "7a956fdd400fdbe3", 
+          "x": 500, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7a956fdd400fdbe3", 
+            "deb0259ad25685f2"
+          ], 
+          "point_id": "1e3c5b6b8f43cc44", 
+          "x": 500, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e3c5b6b8f43cc44", 
+            "8fa396098b985cb9"
+          ], 
+          "point_id": "deb0259ad25685f2", 
+          "x": 520, 
+          "y": 630
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "71bb27a369a5c37b", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "deb0259ad25685f2"
+          ], 
+          "point_id": "8fa396098b985cb9", 
+          "x": 530, 
+          "y": 630
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 685, 
+          "y": 615
+        }
+      ], 
+      "attributes": {
+        "name": "3"
+      }, 
+      "net_id": "d976405c2ff63856", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "02fc9f5849900b7e"
+          ], 
+          "point_id": "612301908fc350ba", 
+          "x": 660, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "612301908fc350ba", 
+            "1098b9ee29a3f01f"
+          ], 
+          "point_id": "02fc9f5849900b7e", 
+          "x": 720, 
+          "y": 590
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "02fc9f5849900b7e", 
+            "1b1b0b2fc9101e2a"
+          ], 
+          "point_id": "1098b9ee29a3f01f", 
+          "x": 720, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1098b9ee29a3f01f", 
+            "6c42bf6e420d2c1c"
+          ], 
+          "point_id": "1b1b0b2fc9101e2a", 
+          "x": 660, 
+          "y": 640
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "71bb27a369a5c37b", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "1b1b0b2fc9101e2a"
+          ], 
+          "point_id": "6c42bf6e420d2c1c", 
+          "x": 650, 
+          "y": 640
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

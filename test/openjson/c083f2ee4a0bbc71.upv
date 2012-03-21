@@ -1,0 +1,239 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "SW1"
+      }, 
+      "instance_id": "19c4b44b486cbdaa", 
+      "library_id": "f5fb3c7875fba648", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 410, 
+          "y": 380
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW2"
+      }, 
+      "instance_id": "78a7090acb10ca09", 
+      "library_id": "f5fb3c7875fba648", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 490, 
+          "y": 380
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW3"
+      }, 
+      "instance_id": "4674c6696b08f98d", 
+      "library_id": "f5fb3c7875fba648", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 700, 
+          "y": 370
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "f5fb3c7875fba648": {
+      "attributes": {
+        "Connect": "http://www.smtswitch.com/chanpin/ShowSoft.asp?SoftID=204", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.smtswitch.com/chanpin/ShowSoft.asp?SoftID=204", 
+        "_lead_free": "???", 
+        "_manufacturer": "HANYONG", 
+        "_num_pins": "4", 
+        "_package": "4P-SMD-6.0X6.0X5.0H", 
+        "_part_number": "K2-1102S", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Tact Switch", 
+        "_type": "switch"
+      }, 
+      "name": "Tactile switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "pin_number": "4"
+                }, 
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 10, 
+                  "y": -13
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 10, 
+                  "y": -27
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -16
+                  }, 
+                  "p2": {
+                    "x": 2, 
+                    "y": -22
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -70
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -70
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -70
+      }
+    ], 
+    "attributes": {
+      "_switch_counter": "3"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "c083f2ee4a0bbc71", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "Boekel", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1319414692
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "a1e377d464080a2e", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a9aee06a86604f83"
+          ], 
+          "point_id": "279bfe8010576a70", 
+          "x": 520, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "279bfe8010576a70"
+          ], 
+          "point_id": "a9aee06a86604f83", 
+          "x": 520, 
+          "y": 350
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

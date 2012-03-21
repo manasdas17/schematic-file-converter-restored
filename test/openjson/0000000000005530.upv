@@ -1,0 +1,222 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "a8c5994e633c8b88", 
+      "library_id": "d7173a05f00abfb0", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 830, 
+          "y": 700
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "d7173a05f00abfb0": {
+      "attributes": {
+        "_lead_free": "???", 
+        "_manufacturer": " Manufacturer Part Number\t", 
+        "_num_pins": "2", 
+        "_part_number": "101-00660-68-6", 
+        "_prefix": "U", 
+        "_rohs": "???", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "101-00660-68-6", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005530", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "guyver", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316447911
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "520f90b297bf2834", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "a8c5994e633c8b88", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "79e4b3c490a65d87"
+          ], 
+          "point_id": "f8d8cbe6e230ded9", 
+          "x": 950, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f8d8cbe6e230ded9", 
+            "3bca3d6e919a9c84"
+          ], 
+          "point_id": "79e4b3c490a65d87", 
+          "x": 960, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "79e4b3c490a65d87", 
+            "5b67603dbf036199"
+          ], 
+          "point_id": "3bca3d6e919a9c84", 
+          "x": 1000, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3bca3d6e919a9c84", 
+            "62ce583990f3fe25"
+          ], 
+          "point_id": "5b67603dbf036199", 
+          "x": 1000, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5b67603dbf036199", 
+            "7865c9a24b442001"
+          ], 
+          "point_id": "62ce583990f3fe25", 
+          "x": 700, 
+          "y": 600
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "62ce583990f3fe25", 
+            "6ec8f19e2dcf4424"
+          ], 
+          "point_id": "7865c9a24b442001", 
+          "x": 700, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7865c9a24b442001", 
+            "77e902246d84a026"
+          ], 
+          "point_id": "6ec8f19e2dcf4424", 
+          "x": 820, 
+          "y": 690
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "a8c5994e633c8b88", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "6ec8f19e2dcf4424"
+          ], 
+          "point_id": "77e902246d84a026", 
+          "x": 830, 
+          "y": 690
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

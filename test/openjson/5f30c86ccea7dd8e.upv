@@ -1,0 +1,289 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "6c6e331c0a3cbc09", 
+      "library_id": "3f606a1edce9348d", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 510, 
+          "y": 760
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C2"
+      }, 
+      "instance_id": "2bc52890ff767649", 
+      "library_id": "3f606a1edce9348d", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 720, 
+          "y": 760
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "3f606a1edce9348d": {
+      "attributes": {
+        "Connect": "http://cn.mouser.com/ProductDetail/Murata/GRM155F50J104ZA01D/?qs=sGAEpiMZZMvQvaS66kI3TtkWZwCm0LeJkSC%252baGXEgh0%3d", 
+        "Imported from": "Seeed Studio", 
+        "Package": "0402", 
+        "_capacitance": "100 nF", 
+        "_datasheet": "http://datasheet.octopart.com/GRM155F50J104ZA01D-Murata-datasheet-118811.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Murata", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "19689614983", 
+        "_part_number": "GRM155F50J104ZA01D", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "100 nF", 
+        "mounting_type": "surface mount", 
+        "size_height": "0.50 mm", 
+        "size_length": "1.00 mm", 
+        "size_width": "0.50 mm", 
+        "voltage_rating_dc": "6.30V"
+      }, 
+      "name": "100 nF Capacitor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -50
+      }, 
+      {
+        "rotation": 0.0, 
+        "value": "{{refdes}}", 
+        "x": -10, 
+        "y": -50
+      }
+    ], 
+    "attributes": {
+      "_capacitor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "5f30c86ccea7dd8e", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "mharter", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1319006095
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 640, 
+          "y": 760
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "8729d75b5b70efd3", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "2bc52890ff767649", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "9fea0f3c4dc206aa"
+          ], 
+          "point_id": "0d695c1ebab91ba8", 
+          "x": 720, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0d695c1ebab91ba8", 
+            "0cde69120eea14b7"
+          ], 
+          "point_id": "9fea0f3c4dc206aa", 
+          "x": 710, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0cde69120eea14b7"
+          ], 
+          "point_id": "f6117fcd491d6998", 
+          "x": 670, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "6c6e331c0a3cbc09", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "253262200049029b"
+          ], 
+          "point_id": "b29530b959d84525", 
+          "x": 530, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b29530b959d84525", 
+            "0cde69120eea14b7"
+          ], 
+          "point_id": "253262200049029b", 
+          "x": 540, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "253262200049029b", 
+            "f6117fcd491d6998", 
+            "9fea0f3c4dc206aa"
+          ], 
+          "point_id": "0cde69120eea14b7", 
+          "x": 670, 
+          "y": 750
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 485, 
+          "y": 750
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "583a159870ef4bab", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3572c027163a348a"
+          ], 
+          "point_id": "90e308968b15f2c1", 
+          "x": 460, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "90e308968b15f2c1", 
+            "761ee0aa72d3c8c8"
+          ], 
+          "point_id": "3572c027163a348a", 
+          "x": 500, 
+          "y": 750
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "6c6e331c0a3cbc09", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "3572c027163a348a"
+          ], 
+          "point_id": "761ee0aa72d3c8c8", 
+          "x": 510, 
+          "y": 750
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

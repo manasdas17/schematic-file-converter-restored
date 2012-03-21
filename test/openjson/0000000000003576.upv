@@ -1,0 +1,314 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "36aeeea99a568600", 
+      "library_id": "31532f90f7f8f273", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 750, 
+          "y": 320
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "d89657517074c162", 
+      "library_id": "31532f90f7f8f273", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 10, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 320, 
+          "y": 610
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "31532f90f7f8f273": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/TOP221YN-Power-Integrations-datasheet-5811.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Power Integrations", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "49773862305", 
+        "_package": "TO-220", 
+        "_part_number": "TOP221YN", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "frequency": "100.00 kHz", 
+        "max_operating_temperature": "125.00\u00b0C", 
+        "max_supply_voltage_dc": "0.37 kV", 
+        "mounting_type": "through hole", 
+        "number_of_outputs": "1.00", 
+        "output_current": "0.03A", 
+        "output_voltage": "5.70V", 
+        "supply_current": "1.20 mA", 
+        "switching_frequency": "100.00 kHz"
+      }, 
+      "name": "TOP221YN", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 115, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "1", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -13
+                }, 
+                {
+                  "align": "left", 
+                  "rotation": 0.0, 
+                  "text": "2", 
+                  "type": "label", 
+                  "x": 7, 
+                  "y": -33
+                }, 
+                {
+                  "align": "right", 
+                  "rotation": 0.0, 
+                  "text": "3", 
+                  "type": "label", 
+                  "x": 113, 
+                  "y": -23
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000003576", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "huguogang", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1315945383
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 550, 
+          "y": 390
+        }
+      ], 
+      "attributes": {
+        "name": "Source"
+      }, 
+      "net_id": "35fc81509d2f33fa", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "d89657517074c162", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "6910f2b7de6ec74b"
+          ], 
+          "point_id": "5d8e6295940d667e", 
+          "x": 320, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "1e6566b0782d73ed", 
+            "7db2346b16e188ee"
+          ], 
+          "point_id": "75998ead235ee427", 
+          "x": 540, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "75998ead235ee427"
+          ], 
+          "point_id": "1e6566b0782d73ed", 
+          "x": 560, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "75998ead235ee427", 
+            "613a70bb3d195fa0", 
+            "9a4150a1e5e4047e"
+          ], 
+          "point_id": "7db2346b16e188ee", 
+          "x": 540, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "36aeeea99a568600", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b7c11ad55abc1fa4"
+          ], 
+          "point_id": "170fd80d5970476f", 
+          "x": 750, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b7c11ad55abc1fa4", 
+            "7db2346b16e188ee"
+          ], 
+          "point_id": "613a70bb3d195fa0", 
+          "x": 540, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "613a70bb3d195fa0", 
+            "170fd80d5970476f"
+          ], 
+          "point_id": "b7c11ad55abc1fa4", 
+          "x": 740, 
+          "y": 290
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6910f2b7de6ec74b", 
+            "9a4150a1e5e4047e"
+          ], 
+          "point_id": "68e7385e2212f948", 
+          "x": 190, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "68e7385e2212f948", 
+            "7db2346b16e188ee"
+          ], 
+          "point_id": "9a4150a1e5e4047e", 
+          "x": 190, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "68e7385e2212f948", 
+            "5d8e6295940d667e"
+          ], 
+          "point_id": "6910f2b7de6ec74b", 
+          "x": 310, 
+          "y": 580
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

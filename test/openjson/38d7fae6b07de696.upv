@@ -1,0 +1,385 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "d60dd5bcc51bcdff", 
+      "library_id": "56f02ac20133feb6", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_resistance}}", 
+              "x": 0, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 660, 
+          "y": 910
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "56f02ac20133feb6": {
+      "attributes": {
+        "Connect": "", 
+        "Imported from": "Seeed Studio", 
+        "_datasheet": "http://www.tai.com.tw/media/files/spec/RM.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "TA-I Technology", 
+        "_num_pins": "2", 
+        "_package": "0603", 
+        "_part_number": "RM06JTN103", 
+        "_prefix": "R", 
+        "_resistance": "10 k\u03a9", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor", 
+        "resistance": "10 k\u03a9"
+      }, 
+      "name": "10 k\u03a9 Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_resistor_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "38d7fae6b07de696", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "menezes", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1328207642
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": ""
+      }, 
+      "net_id": "edacb36fc2d37a40", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "346dba86e00c65c1"
+          ], 
+          "point_id": "0140faf2fb271832", 
+          "x": 390, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0140faf2fb271832", 
+            "24c5cc075f767816"
+          ], 
+          "point_id": "346dba86e00c65c1", 
+          "x": 390, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "346dba86e00c65c1", 
+            "e76edf1f3dfe04eb"
+          ], 
+          "point_id": "24c5cc075f767816", 
+          "x": 910, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "24c5cc075f767816", 
+            "73eeb5d091bf0256"
+          ], 
+          "point_id": "e76edf1f3dfe04eb", 
+          "x": 910, 
+          "y": 620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e76edf1f3dfe04eb", 
+            "f43e30a5760d3858"
+          ], 
+          "point_id": "73eeb5d091bf0256", 
+          "x": 1170, 
+          "y": 620
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "73eeb5d091bf0256", 
+            "a100559cf9da989c"
+          ], 
+          "point_id": "f43e30a5760d3858", 
+          "x": 1170, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f43e30a5760d3858", 
+            "ba76fbfe183ba53b"
+          ], 
+          "point_id": "a100559cf9da989c", 
+          "x": 390, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a100559cf9da989c", 
+            "6c44fbea5e766439"
+          ], 
+          "point_id": "ba76fbfe183ba53b", 
+          "x": 390, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ba76fbfe183ba53b", 
+            "60a80b130eccabaa"
+          ], 
+          "point_id": "6c44fbea5e766439", 
+          "x": 910, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6c44fbea5e766439", 
+            "65d2a5024afac217"
+          ], 
+          "point_id": "60a80b130eccabaa", 
+          "x": 910, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "60a80b130eccabaa", 
+            "5fb0a6a8996f9d2f"
+          ], 
+          "point_id": "65d2a5024afac217", 
+          "x": 390, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "65d2a5024afac217", 
+            "47e780d6ecd4405a"
+          ], 
+          "point_id": "5fb0a6a8996f9d2f", 
+          "x": 390, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "5fb0a6a8996f9d2f", 
+            "cf8d2407facbff8c"
+          ], 
+          "point_id": "47e780d6ecd4405a", 
+          "x": 910, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "47e780d6ecd4405a", 
+            "501f0b51ed2fa9f0"
+          ], 
+          "point_id": "cf8d2407facbff8c", 
+          "x": 910, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cf8d2407facbff8c", 
+            "bdf5083b5ca1e182"
+          ], 
+          "point_id": "501f0b51ed2fa9f0", 
+          "x": 590, 
+          "y": 280
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "501f0b51ed2fa9f0", 
+            "c401b60e9c7b22c1"
+          ], 
+          "point_id": "bdf5083b5ca1e182", 
+          "x": 590, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bdf5083b5ca1e182", 
+            "c16cb6df02f04006"
+          ], 
+          "point_id": "c401b60e9c7b22c1", 
+          "x": 640, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c401b60e9c7b22c1", 
+            "1bb11f545d3e559e"
+          ], 
+          "point_id": "c16cb6df02f04006", 
+          "x": 640, 
+          "y": 680
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c16cb6df02f04006"
+          ], 
+          "point_id": "1bb11f545d3e559e", 
+          "x": 820, 
+          "y": 680
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

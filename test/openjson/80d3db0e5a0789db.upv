@@ -1,0 +1,238 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "883f025efa10f82d", 
+      "library_id": "dbeb032a7a519f3a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 140, 
+              "y": -105
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -5
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 480, 
+          "y": 460
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "dbeb032a7a519f3a": {
+      "attributes": {
+        "Maximum output current (NE555)": "200mA", 
+        "Maximum supply voltage": "18V", 
+        "Power dissipation": "600mW", 
+        "_datasheet": "http://www.datasheetcatalog.org/datasheet/philips/NE_SA_SE555_C_2.pdf", 
+        "_lead_free": "No", 
+        "_manufacturer": "Philips Semiconductors", 
+        "_num_pins": "8", 
+        "_package": "DIP-8", 
+        "_part_number": "555", 
+        "_prefix": "U", 
+        "_rohs": "No", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "555", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "VCC", 
+                    "x": 130, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -20
+                  }, 
+                  "pin_number": "8"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "DISCHARGE", 
+                    "x": 130, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -40
+                  }, 
+                  "pin_number": "7"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "THRESHOLD", 
+                    "x": 130, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -60
+                  }, 
+                  "pin_number": "6"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "CTRL VOLT", 
+                    "x": 130, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 135, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 140, 
+                    "y": -80
+                  }, 
+                  "pin_number": "5"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "GND", 
+                    "x": 9, 
+                    "y": -24
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "TRIG", 
+                    "x": 9, 
+                    "y": -44
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "OUT", 
+                    "x": 9, 
+                    "y": -64
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -60
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -60
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "RES", 
+                    "x": 9, 
+                    "y": -84
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -80
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -80
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 100, 
+                  "type": "rectangle", 
+                  "width": 130, 
+                  "x": 5, 
+                  "y": -5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "80d3db0e5a0789db", 
+      "license": "No License", 
+      "name": "Test", 
+      "owner": "dgrant", 
+      "slug": "Test", 
+      "updated_timestamp": 1328227039
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

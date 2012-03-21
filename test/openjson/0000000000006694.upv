@@ -1,0 +1,300 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "4dfafd83d698e150", 
+      "library_id": "a1433719cfdb48f8", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 400, 
+          "y": 430
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "8d83a642d3cafc8d", 
+      "library_id": "a1433719cfdb48f8", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 500, 
+          "y": 350
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "a1433719cfdb48f8": {
+      "attributes": {
+        "Actuator Type\t": "Standard", 
+        "Circuit": "SPST-NO", 
+        "Digi-Key Part Number\t": "450-1650-ND", 
+        "Family": "Tactile", 
+        "Illumination": "Non-Illuminated", 
+        "Lead Free Status / RoHS Status\t": "Lead free / RoHS Complian", 
+        "Mounting Type": "Through Hole ", 
+        "Operating Force": "160gf", 
+        "Orientation\t": "Vertical", 
+        "Other Names\t": "1825910-6", 
+        "Outline": "6.00mm x 6.00mm ", 
+        "Quantity Available": "18940", 
+        "Switch Function": "Off-Mom", 
+        "_datasheet": "http://search.digikey.com/scripts/DkSearch/dksus.dll?Detail&name=450-1650-ND", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "TE CONNECTIVITY", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "254233847496", 
+        "_part_number": "FSM4JH", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH TACT 6MM BLACK 160GF", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "{{name}}", 
+        "x": 602, 
+        "y": 381
+      }
+    ], 
+    "attributes": {
+      "_ann_8d2499c2": "dcdsds", 
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006694", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "glerm", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1318292959
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 350, 
+          "y": 390
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "97bc662057722219", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "4dfafd83d698e150", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [], 
+          "point_id": "ec645e434fe4942d", 
+          "x": 400, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e3936a175df482a3", 
+            "a991077b19bd252a"
+          ], 
+          "point_id": "fc0b07f129fa07f1", 
+          "x": 370, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fc0b07f129fa07f1", 
+            "26c1d9178f6e0435"
+          ], 
+          "point_id": "a991077b19bd252a", 
+          "x": 320, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a991077b19bd252a", 
+            "84c2538132697f6d"
+          ], 
+          "point_id": "26c1d9178f6e0435", 
+          "x": 320, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "84c2538132697f6d"
+          ], 
+          "point_id": "1fe2e6fd0492980a", 
+          "x": 380, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "8d83a642d3cafc8d", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "a62fbe78a3e354fd"
+          ], 
+          "point_id": "243cf792b4dfd193", 
+          "x": 500, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "243cf792b4dfd193", 
+            "ca48d9a30acbaf8f"
+          ], 
+          "point_id": "a62fbe78a3e354fd", 
+          "x": 490, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a62fbe78a3e354fd", 
+            "84c2538132697f6d"
+          ], 
+          "point_id": "ca48d9a30acbaf8f", 
+          "x": 380, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ca48d9a30acbaf8f", 
+            "1fe2e6fd0492980a", 
+            "26c1d9178f6e0435"
+          ], 
+          "point_id": "84c2538132697f6d", 
+          "x": 380, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fc0b07f129fa07f1"
+          ], 
+          "point_id": "e3936a175df482a3", 
+          "x": 380, 
+          "y": 420
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

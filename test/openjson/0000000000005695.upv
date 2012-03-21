@@ -1,0 +1,737 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "6cf78b08a853b447", 
+      "library_id": "a1433719cfdb48f8", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 400, 
+          "y": 560
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "instance_id": "4b493fbda32128a8", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{name}}", 
+              "x": -7, 
+              "y": -50
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 280, 
+          "y": 590
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "Q2"
+      }, 
+      "instance_id": "2938ec4f43c7d8e3", 
+      "library_id": "259e7032b4932d40", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -70
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -80
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 730, 
+          "y": 580
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "259e7032b4932d40": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/2N3904BU-Fairchild-datasheet-5999.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Fairchild", 
+        "_num_pins": "3", 
+        "_octopart_part_number": "35231539816", 
+        "_package": "TO-92", 
+        "_part_number": "2N3904BU", 
+        "_prefix": "Q", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "BJT (NPN)", 
+        "_type": "integrated circuit", 
+        "current_rating": "0.20A", 
+        "max_operating_temperature": "150.00\u00b0C", 
+        "max_power_dissipation": "0.62W", 
+        "mounting_type": "through hole", 
+        "polarity": "NPN", 
+        "voltage_rating_dc": "60.00V"
+      }, 
+      "name": "2N3904BU", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -41
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -42
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -37
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -39
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "a1433719cfdb48f8": {
+      "attributes": {
+        "Actuator Type\t": "Standard", 
+        "Circuit": "SPST-NO", 
+        "Digi-Key Part Number\t": "450-1650-ND", 
+        "Family": "Tactile", 
+        "Illumination": "Non-Illuminated", 
+        "Lead Free Status / RoHS Status\t": "Lead free / RoHS Complian", 
+        "Mounting Type": "Through Hole ", 
+        "Operating Force": "160gf", 
+        "Orientation\t": "Vertical", 
+        "Other Names\t": "1825910-6", 
+        "Outline": "6.00mm x 6.00mm ", 
+        "Quantity Available": "18940", 
+        "Switch Function": "Off-Mom", 
+        "_datasheet": "http://search.digikey.com/scripts/DkSearch/dksus.dll?Detail&name=450-1650-ND", 
+        "_imported_from_octopart": "yes", 
+        "_manufacturer": "TE CONNECTIVITY", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "254233847496", 
+        "_part_number": "FSM4JH", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "SWITCH TACT 6MM BLACK 160GF", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005695", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "andyhunti", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316536459
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 345, 
+          "y": 560
+        }
+      ], 
+      "attributes": {
+        "name": "VCC"
+      }, 
+      "net_id": "3605330509c9562c", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "6cf78b08a853b447", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "abb7d563af9f735a"
+          ], 
+          "point_id": "d08b3ae15200099f", 
+          "x": 400, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "abb7d563af9f735a"
+          ], 
+          "point_id": "49935f9e7616ff5d", 
+          "x": 390, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "49935f9e7616ff5d", 
+            "d08b3ae15200099f", 
+            "d94852073bfc0a8c"
+          ], 
+          "point_id": "abb7d563af9f735a", 
+          "x": 390, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "abb7d563af9f735a", 
+            "d61488831ff93c3e"
+          ], 
+          "point_id": "d94852073bfc0a8c", 
+          "x": 290, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d94852073bfc0a8c", 
+            "cc45f9a5ecefe845"
+          ], 
+          "point_id": "d61488831ff93c3e", 
+          "x": 290, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "4b493fbda32128a8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "d61488831ff93c3e"
+          ], 
+          "point_id": "cc45f9a5ecefe845", 
+          "x": 290, 
+          "y": 570
+        }
+      ]
+    }, 
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 685, 
+          "y": 525
+        }
+      ], 
+      "attributes": {
+        "name": "2"
+      }, 
+      "net_id": "9b5ae03ddf6e6087", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0624afecc4ca5ee2"
+          ], 
+          "point_id": "64da6ca9d8f7b5df", 
+          "x": 530, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "6cf78b08a853b447", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "677b747a165a9a3a"
+          ], 
+          "point_id": "a627e2f1ae7ef2fc", 
+          "x": 520, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a627e2f1ae7ef2fc", 
+            "0624afecc4ca5ee2"
+          ], 
+          "point_id": "677b747a165a9a3a", 
+          "x": 530, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "2938ec4f43c7d8e3", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "d8419d86dfbf6113"
+          ], 
+          "point_id": "9c132d582cc487a6", 
+          "x": 730, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9c132d582cc487a6", 
+            "0624afecc4ca5ee2"
+          ], 
+          "point_id": "d8419d86dfbf6113", 
+          "x": 720, 
+          "y": 550
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d8419d86dfbf6113", 
+            "677b747a165a9a3a", 
+            "64da6ca9d8f7b5df"
+          ], 
+          "point_id": "0624afecc4ca5ee2", 
+          "x": 530, 
+          "y": 550
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "475c9bc4f12e1b5e", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "f83a59f67399c051", 
+          "x": 330, 
+          "y": 680
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

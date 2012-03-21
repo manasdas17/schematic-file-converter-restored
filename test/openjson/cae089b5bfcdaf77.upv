@@ -1,0 +1,266 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "2c687ceb5d3e5684", 
+      "library_id": "f5e4a6c3ddacb69c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 120, 
+              "y": -20
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 260, 
+          "y": 480
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "U2"
+      }, 
+      "instance_id": "51bdea732b1fbe9b", 
+      "library_id": "f5e4a6c3ddacb69c", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 120, 
+              "y": -20
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 300, 
+          "y": 260
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "f5e4a6c3ddacb69c": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/CRCW080510K0FKEA-Vishay-datasheet-5300368.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Vishay", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "14714042156", 
+        "_package": "0805", 
+        "_part_number": "CRCW080510K0FKEA", 
+        "_prefix": "U", 
+        "_resistance": "10.00 k\u03a9", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "mounting_type": "surface mount", 
+        "power_rating": "0.12W", 
+        "resistance": "10.00 k\u03a9", 
+        "size_height": "0.45 mm", 
+        "size_length": "2.00 mm", 
+        "size_width": "1.25 mm", 
+        "termination_style": "Surface Mount", 
+        "voltage_rating_dc": "150.00V"
+      }, 
+      "name": "10K\u03a9 Resistor SMD", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "ca4be7132aae36cb", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "korora", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1326316694
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": ""
+      }, 
+      "net_id": "6f18c7bceaac6027", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2f6301792e44126"
+          ], 
+          "point_id": "3bec5abb7f513895", 
+          "x": 380, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3bec5abb7f513895", 
+            "b73a476808412634"
+          ], 
+          "point_id": "d2f6301792e44126", 
+          "x": 380, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2f6301792e44126", 
+            "3d3483337b514d44"
+          ], 
+          "point_id": "b73a476808412634", 
+          "x": 410, 
+          "y": 530
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b73a476808412634", 
+            "96b1a24967630352"
+          ], 
+          "point_id": "3d3483337b514d44", 
+          "x": 410, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "3d3483337b514d44", 
+            "eaeeabdfe61a8c3d"
+          ], 
+          "point_id": "96b1a24967630352", 
+          "x": 480, 
+          "y": 480
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "96b1a24967630352", 
+            "ed881d5cbbc92555"
+          ], 
+          "point_id": "eaeeabdfe61a8c3d", 
+          "x": 480, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "eaeeabdfe61a8c3d", 
+            "8ae020041a038a64"
+          ], 
+          "point_id": "ed881d5cbbc92555", 
+          "x": 430, 
+          "y": 400
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ed881d5cbbc92555", 
+            "59f4f0f9e81a07e4"
+          ], 
+          "point_id": "8ae020041a038a64", 
+          "x": 430, 
+          "y": 440
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8ae020041a038a64"
+          ], 
+          "point_id": "59f4f0f9e81a07e4", 
+          "x": 160, 
+          "y": 440
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

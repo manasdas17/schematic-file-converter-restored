@@ -1,0 +1,314 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "b2bcb6848dab488f", 
+      "library_id": "0ee2516076ee61b9", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -60
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -70
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 280, 
+          "y": 400
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0ee2516076ee61b9": {
+      "attributes": {
+        "Category": "Connectors, Interconnects", 
+        "Connector Type": "USB - A ", 
+        "Family": "USB, IEEE-1394 (Firewire), DVI, HDMI", 
+        "Features": "Board Lock ", 
+        "Gender": "Receptacle", 
+        "Mounting Type": "Through Hole, Right Angle, Horizontal  ", 
+        "Number of Contacts": "4", 
+        "Other Names": "151-1080 690-004-621-013-ND ", 
+        "Series": "690", 
+        "Specifications": "USB 2.0 ", 
+        "_datasheet": "http://www.edac.net/file_library/series/14_690%20series%20(new).pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "EDAC Inc", 
+        "_num_pins": "4", 
+        "_octopart_part_number": "31419453807", 
+        "_part_number": "690-004-621-013", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "CONN USB JACK TYPE A HORIZON R/A", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 7, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "3", 
+                    "x": 113, 
+                    "y": -33
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -30
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "4", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "4"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 40, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000006635", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "jtrao", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1318073724
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 465, 
+          "y": 390
+        }
+      ], 
+      "attributes": {
+        "name": "4"
+      }, 
+      "net_id": "a67223875352bbea", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "253d425f1efa2adf"
+          ], 
+          "point_id": "a03376642b6f4319", 
+          "x": 530, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a03376642b6f4319", 
+            "62b8515055902077"
+          ], 
+          "point_id": "253d425f1efa2adf", 
+          "x": 410, 
+          "y": 390
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "b2bcb6848dab488f", 
+              "pin_number": "4"
+            }
+          ], 
+          "connected_points": [
+            "253d425f1efa2adf"
+          ], 
+          "point_id": "62b8515055902077", 
+          "x": 400, 
+          "y": 390
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "bf5f3de21d34bb07", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c4d7e8947713fbcc"
+          ], 
+          "point_id": "cb5639765ecf42b9", 
+          "x": 710, 
+          "y": 190
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cb5639765ecf42b9", 
+            "53e630ef022b4608"
+          ], 
+          "point_id": "c4d7e8947713fbcc", 
+          "x": 560, 
+          "y": 190
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c4d7e8947713fbcc", 
+            "88e449d759fda430"
+          ], 
+          "point_id": "53e630ef022b4608", 
+          "x": 560, 
+          "y": 180
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "53e630ef022b4608", 
+            "a2d852a998fd5ac7"
+          ], 
+          "point_id": "88e449d759fda430", 
+          "x": 550, 
+          "y": 180
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "88e449d759fda430", 
+            "bdc03ec8aab04d68"
+          ], 
+          "point_id": "a2d852a998fd5ac7", 
+          "x": 550, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a2d852a998fd5ac7", 
+            "1040778251b0f4cc"
+          ], 
+          "point_id": "bdc03ec8aab04d68", 
+          "x": 410, 
+          "y": 310
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bdc03ec8aab04d68"
+          ], 
+          "point_id": "1040778251b0f4cc", 
+          "x": 410, 
+          "y": 370
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "6ca5ffc18ee2463a", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "1bc453a2d221f992", 
+          "x": 690, 
+          "y": 270
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

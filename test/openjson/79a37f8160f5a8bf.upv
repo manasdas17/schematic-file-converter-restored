@@ -1,0 +1,674 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "G3"
+      }, 
+      "instance_id": "5aed9a1c5b482ece", 
+      "library_id": "21fdd0cbbf04238d", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 950, 
+          "y": 570
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G4"
+      }, 
+      "instance_id": "e12bfeb58c8ef765", 
+      "library_id": "0bb582f40d0b47c0", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 50, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 920, 
+          "y": 840
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G1"
+      }, 
+      "instance_id": "421cd82f33400075", 
+      "library_id": "6931d81dc014ca10", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 840, 
+          "y": 600
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "G2"
+      }, 
+      "instance_id": "0cab9e1551b13991", 
+      "library_id": "6931d81dc014ca10", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 840, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "0bb582f40d0b47c0": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Negated_AND_gate", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "NAND Gate", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_symbol_0_0": "NAND", 
+        "_type": "gate"
+      }, 
+      "name": "NAND Gate", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 44, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "end_angle": 1.5, 
+                  "radius": 20, 
+                  "start_angle": 0.5, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -20
+                }, 
+                {
+                  "radius": 2, 
+                  "type": "circle", 
+                  "x": 42, 
+                  "y": -20
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "21fdd0cbbf04238d": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/OR_gate", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "OR Gate", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_symbol_0_0": "OR", 
+        "_type": "gate"
+      }, 
+      "name": "OR Gate", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 9, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "control1": {
+                    "x": 25, 
+                    "y": 0
+                  }, 
+                  "control2": {
+                    "x": 35, 
+                    "y": -5
+                  }, 
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "type": "bezier"
+                }, 
+                {
+                  "control1": {
+                    "x": 25, 
+                    "y": -40
+                  }, 
+                  "control2": {
+                    "x": 35, 
+                    "y": -35
+                  }, 
+                  "p1": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "type": "bezier"
+                }, 
+                {
+                  "control1": {
+                    "x": 16, 
+                    "y": -12
+                  }, 
+                  "control2": {
+                    "x": 16, 
+                    "y": -28
+                  }, 
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -40
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "6931d81dc014ca10": {
+      "attributes": {
+        "_datasheet": "", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "3", 
+        "_package": "", 
+        "_part_number": "AND Gate", 
+        "_prefix": "G", 
+        "_rohs": "???", 
+        "_symbol_0_0": "AND", 
+        "_type": "gate"
+      }, 
+      "name": "AND Gate", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "2"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -20
+                  }, 
+                  "pin_number": "3"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "end_angle": 1.5, 
+                  "radius": 20, 
+                  "start_angle": 0.5, 
+                  "type": "arc", 
+                  "x": 20, 
+                  "y": -20
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [
+      {
+        "rotation": 0.0, 
+        "value": "A", 
+        "x": 821, 
+        "y": 588
+      }
+    ], 
+    "attributes": {
+      "_gate_counter": "4"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "79a37f8160f5a8bf", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "karljam", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1327943430
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "O_B"
+      }, 
+      "net_id": "6dc458323a532418", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "0cab9e1551b13991", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "cb27256996a6b0f6"
+          ], 
+          "point_id": "48b38d151f826cdc", 
+          "x": 890, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "48b38d151f826cdc", 
+            "a20465e653657ec0"
+          ], 
+          "point_id": "cb27256996a6b0f6", 
+          "x": 900, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "cb27256996a6b0f6", 
+            "8fa12e078cbe07f6"
+          ], 
+          "point_id": "a20465e653657ec0", 
+          "x": 920, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "a20465e653657ec0", 
+            "312319c34b26d92a"
+          ], 
+          "point_id": "8fa12e078cbe07f6", 
+          "x": 920, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8fa12e078cbe07f6", 
+            "5430dca88e3a06e6"
+          ], 
+          "point_id": "312319c34b26d92a", 
+          "x": 940, 
+          "y": 540
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "5aed9a1c5b482ece", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "312319c34b26d92a"
+          ], 
+          "point_id": "5430dca88e3a06e6", 
+          "x": 950, 
+          "y": 540
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "O_A"
+      }, 
+      "net_id": "1f62187a836644f8", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "421cd82f33400075", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "59065590dca9238d"
+          ], 
+          "point_id": "9874b9443b8f62e9", 
+          "x": 890, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9874b9443b8f62e9", 
+            "334268cb68c8aee8"
+          ], 
+          "point_id": "59065590dca9238d", 
+          "x": 900, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "59065590dca9238d", 
+            "59784bf6f9d7be42"
+          ], 
+          "point_id": "334268cb68c8aee8", 
+          "x": 920, 
+          "y": 580
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "334268cb68c8aee8", 
+            "5d088383482b978b"
+          ], 
+          "point_id": "59784bf6f9d7be42", 
+          "x": 920, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "59784bf6f9d7be42", 
+            "491a51ca40120cd3"
+          ], 
+          "point_id": "5d088383482b978b", 
+          "x": 940, 
+          "y": 560
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "5aed9a1c5b482ece", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "5d088383482b978b"
+          ], 
+          "point_id": "491a51ca40120cd3", 
+          "x": 950, 
+          "y": 560
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "O_A"
+      }, 
+      "net_id": "0f82e47d164bf2dd", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fcc61e31a75692da", 
+            "91667fd9df9be0f9"
+          ], 
+          "point_id": "67780024b8b108fe", 
+          "x": 890, 
+          "y": 810
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "e12bfeb58c8ef765", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "91667fd9df9be0f9"
+          ], 
+          "point_id": "0d6ef1f15a1f963e", 
+          "x": 920, 
+          "y": 810
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "0b380c475b1a6acc"
+          ], 
+          "point_id": "6da40762789d03b3", 
+          "x": 870, 
+          "y": 820
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b9afb07f8f8fdbd3", 
+            "0b380c475b1a6acc", 
+            "67780024b8b108fe"
+          ], 
+          "point_id": "fcc61e31a75692da", 
+          "x": 890, 
+          "y": 830
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fcc61e31a75692da", 
+            "6da40762789d03b3"
+          ], 
+          "point_id": "0b380c475b1a6acc", 
+          "x": 870, 
+          "y": 830
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "67780024b8b108fe", 
+            "0d6ef1f15a1f963e"
+          ], 
+          "point_id": "91667fd9df9be0f9", 
+          "x": 910, 
+          "y": 810
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fcc61e31a75692da"
+          ], 
+          "point_id": "b9afb07f8f8fdbd3", 
+          "x": 930, 
+          "y": 830
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

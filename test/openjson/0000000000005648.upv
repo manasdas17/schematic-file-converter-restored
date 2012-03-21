@@ -1,0 +1,284 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "eb73d67785a92d34", 
+      "library_id": "9b81bf99300e8a9a", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 410, 
+          "y": 310
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "9b81bf99300e8a9a": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/PPTC081LFBN-RC-Sullins-datasheet-82.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "No", 
+        "_manufacturer": "Sullins Connector Solutions", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "27102407245", 
+        "_part_number": "PPTC081LFBN-RC", 
+        "_prefix": "U", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "contact_material": "Phosphor Bronze", 
+        "housing_material": "Plastic", 
+        "max_operating_temperature": "125.00\u00b0C", 
+        "mounting_type": "Through Hole", 
+        "number_of_positions": "40", 
+        "number_of_rows": "2.00", 
+        "pin_pitch": "2.54 mm", 
+        "size_height": "7mm", 
+        "size_length": "11mm", 
+        "size_width": "2.50 mm"
+      }, 
+      "name": "PPTC081LFBN-RC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005648", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "Broand", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316522352
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 415, 
+          "y": 300
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "57506abb859fa4d3", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "eb73d67785a92d34", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "e3285428e8e61992"
+          ], 
+          "point_id": "cdf835a805bbc629", 
+          "x": 410, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "e5d46ed5752ed7c3", 
+            "e3285428e8e61992"
+          ], 
+          "point_id": "2f6298e78c60dbec", 
+          "x": 400, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2f6298e78c60dbec"
+          ], 
+          "point_id": "e5d46ed5752ed7c3", 
+          "x": 430, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2f6298e78c60dbec", 
+            "cdf835a805bbc629", 
+            "5ebb381130e51d75"
+          ], 
+          "point_id": "e3285428e8e61992", 
+          "x": 400, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "92454404b17425c0", 
+            "5ebb381130e51d75"
+          ], 
+          "point_id": "58f13c5a42ff1aaf", 
+          "x": 280, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "58f13c5a42ff1aaf"
+          ], 
+          "point_id": "92454404b17425c0", 
+          "x": 370, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "eb73d67785a92d34", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "b8f06130f3a6b0b3"
+          ], 
+          "point_id": "72276cb9148721a8", 
+          "x": 530, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "72276cb9148721a8", 
+            "58d16fa44ff26501"
+          ], 
+          "point_id": "b8f06130f3a6b0b3", 
+          "x": 540, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b8f06130f3a6b0b3", 
+            "6c3aa6f21cdb6468"
+          ], 
+          "point_id": "58d16fa44ff26501", 
+          "x": 550, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "58d16fa44ff26501", 
+            "575b531dc406899d"
+          ], 
+          "point_id": "6c3aa6f21cdb6468", 
+          "x": 550, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "6c3aa6f21cdb6468", 
+            "5ebb381130e51d75"
+          ], 
+          "point_id": "575b531dc406899d", 
+          "x": 280, 
+          "y": 380
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "575b531dc406899d", 
+            "58f13c5a42ff1aaf", 
+            "e3285428e8e61992"
+          ], 
+          "point_id": "5ebb381130e51d75", 
+          "x": 280, 
+          "y": 300
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

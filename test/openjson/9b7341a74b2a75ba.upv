@@ -1,0 +1,313 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "SW1"
+      }, 
+      "instance_id": "178ccf03ea5f711b", 
+      "library_id": "b6308273cc629dbd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -20
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 700, 
+          "y": 630
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "SW2"
+      }, 
+      "instance_id": "770e07049d1218dc", 
+      "library_id": "b6308273cc629dbd", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -20
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 590, 
+          "y": 540
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "F1"
+      }, 
+      "instance_id": "ad4902fed3a37330", 
+      "library_id": "ca679d7739220ace", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 850, 
+          "y": 460
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "F2"
+      }, 
+      "instance_id": "3c9a68a1d506f008", 
+      "library_id": "ca679d7739220ace", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 590, 
+          "y": 460
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "b6308273cc629dbd": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Switch", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "SW", 
+        "_rohs": "???", 
+        "_symbol_0_0": "General Switch", 
+        "_type": "switch"
+      }, 
+      "name": "Switch", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 13, 
+                  "y": -10
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 27, 
+                  "y": -10
+                }, 
+                {
+                  "p1": {
+                    "x": 16, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 26, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "ca679d7739220ace": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/MF-MSMF050-2-Bourns-datasheet-28511.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Bourns", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "2804717884", 
+        "_package": "1812", 
+        "_part_number": "MF-MSMF050-2", 
+        "_prefix": "F", 
+        "_resistance": "0.15\u03a9", 
+        "_rohs": "Yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Fuse", 
+        "_type": "integrated circuit", 
+        "current_rating": "0.50A", 
+        "holding_current": "0.50A", 
+        "mounting_type": "surface mount", 
+        "operating_voltage": "15.00V", 
+        "power_dissipation": "0.80W", 
+        "resistance": "0.15\u03a9", 
+        "size_height": "0.85 mm", 
+        "size_length": "0.00m", 
+        "size_width": "0.00m", 
+        "termination_style": "Axial", 
+        "tripping_current": "1.00A", 
+        "voltage_rating_dc": "15.00V"
+      }, 
+      "name": "500mA resettable Fuse", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 13, 
+                  "y": -10
+                }, 
+                {
+                  "radius": 3, 
+                  "type": "circle", 
+                  "x": 37, 
+                  "y": -10
+                }, 
+                {
+                  "control1": {
+                    "x": 23, 
+                    "y": 5
+                  }, 
+                  "control2": {
+                    "x": 27, 
+                    "y": -25
+                  }, 
+                  "p1": {
+                    "x": 16, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 34, 
+                    "y": -10
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "2", 
+      "_switch_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "9b7341a74b2a75ba", 
+      "license": "No License", 
+      "name": "\u0395\u039a\u03a3\u0397\u0395", 
+      "owner": "kallis99", 
+      "slug": "%CE%95%CE%9A%CE%A3%CE%97%CE%95", 
+      "updated_timestamp": 1322159531
+    }
+  }, 
+  "nets": [], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

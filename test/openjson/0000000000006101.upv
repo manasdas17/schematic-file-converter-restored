@@ -1,0 +1,680 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "R2"
+      }, 
+      "instance_id": "c7ef8d2a4ff8cb52", 
+      "library_id": "8fe662018ffadc14", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 20
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "1k", 
+              "x": -37, 
+              "y": -27
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 490, 
+          "y": 330
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_name": "VCC"
+      }, 
+      "instance_id": "86cc37f861446c87", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 0, 
+              "y": 10
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 470, 
+          "y": 470
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "R1"
+      }, 
+      "instance_id": "30c5a2cfe9dcf9e0", 
+      "library_id": "8fe662018ffadc14", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.5, 
+          "x": 490, 
+          "y": 410
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "_name": "GND"
+      }, 
+      "instance_id": "0597e8f1c7f5e98a", 
+      "library_id": "0000000000000001", 
+      "symbol_attributes": [
+        {
+          "annotations": [], 
+          "rotation": 0.0, 
+          "x": 470, 
+          "y": 260
+        }
+      ], 
+      "symbol_index": 2
+    }
+  ], 
+  "components": {
+    "0000000000000001": {
+      "attributes": {
+        "_num_pins": "1", 
+        "_symbol_0_0": "Flag 1", 
+        "_symbol_1_0": "Flag 2", 
+        "_symbol_2_0": "GND", 
+        "_symbol_3_0": "VCC", 
+        "_type": "integrated circuit"
+      }, 
+      "name": "VCC", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -11
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -7
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "control1": {
+                    "x": 9, 
+                    "y": -10
+                  }, 
+                  "control2": {
+                    "x": 11, 
+                    "y": -10
+                  }, 
+                  "p1": {
+                    "x": 3, 
+                    "y": -12
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -12
+                  }, 
+                  "type": "bezier"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 3, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 6, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }, 
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 0, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": 0
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "8fe662018ffadc14": {
+      "attributes": {
+        "_datasheet": "http://en.wikipedia.org/wiki/Resistor", 
+        "_lead_free": "???", 
+        "_manufacturer": "Generic", 
+        "_num_pins": "2", 
+        "_package": "", 
+        "_part_number": "Generic", 
+        "_prefix": "R", 
+        "_rohs": "???", 
+        "_symbol_0_0": "Resistor", 
+        "_type": "resistor"
+      }, 
+      "name": "Resistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 50, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 13, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 18, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 23, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 28, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 33, 
+                    "y": -5
+                  }, 
+                  "p2": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 38, 
+                    "y": -15
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -10
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "3", 
+      "_resistor_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "Guitar amplifier using vacuum tubes. ", 
+      "design_id": "0000000000006101", 
+      "license": "No License", 
+      "name": "Valvle Amp", 
+      "owner": "wkevina", 
+      "slug": "Valvle-Amp", 
+      "updated_timestamp": 1321300464
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "d629578cdff3efb8", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "30c5a2cfe9dcf9e0", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "51997b2f39cea827"
+          ], 
+          "point_id": "d065d460e249aa06", 
+          "x": 480, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "86cc37f861446c87", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "22af569706124945"
+          ], 
+          "point_id": "00264f517133f19a", 
+          "x": 480, 
+          "y": 450
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d065d460e249aa06", 
+            "22af569706124945"
+          ], 
+          "point_id": "51997b2f39cea827", 
+          "x": 480, 
+          "y": 420
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "00264f517133f19a", 
+            "51997b2f39cea827"
+          ], 
+          "point_id": "22af569706124945", 
+          "x": 480, 
+          "y": 440
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "ae2203540b2d9843", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "feb4b84164d593e2", 
+            "7598cbcbe3f782ce"
+          ], 
+          "point_id": "8f36182fe7367092", 
+          "x": 480, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "16a8f33f63062653", 
+            "8f36182fe7367092"
+          ], 
+          "point_id": "7598cbcbe3f782ce", 
+          "x": 480, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "0597e8f1c7f5e98a", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "8f36182fe7367092"
+          ], 
+          "point_id": "feb4b84164d593e2", 
+          "x": 480, 
+          "y": 260
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "c7ef8d2a4ff8cb52", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "7598cbcbe3f782ce"
+          ], 
+          "point_id": "16a8f33f63062653", 
+          "x": 480, 
+          "y": 280
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "c211938fbbe4f9d0", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "b5d5a8a3cf443e6b", 
+          "x": 520, 
+          "y": 390
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": ""
+      }, 
+      "net_id": "3379a4c568aceb2c", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [], 
+          "point_id": "416388d5e86ee862", 
+          "x": 990, 
+          "y": 580
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "a16d68d117628280", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "30c5a2cfe9dcf9e0", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "38aba02c838f493a"
+          ], 
+          "point_id": "f9c8bd7444107179", 
+          "x": 480, 
+          "y": 360
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "733c24c7243bdc12", 
+            "38aba02c838f493a"
+          ], 
+          "point_id": "850a2fed5facf7a2", 
+          "x": 480, 
+          "y": 340
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "850a2fed5facf7a2", 
+            "f9c8bd7444107179", 
+            "37486d6e9e92a89f"
+          ], 
+          "point_id": "38aba02c838f493a", 
+          "x": 480, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "38aba02c838f493a"
+          ], 
+          "point_id": "37486d6e9e92a89f", 
+          "x": 480, 
+          "y": 350
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "c7ef8d2a4ff8cb52", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "850a2fed5facf7a2"
+          ], 
+          "point_id": "733c24c7243bdc12", 
+          "x": 480, 
+          "y": 330
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

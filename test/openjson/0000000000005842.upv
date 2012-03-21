@@ -1,0 +1,216 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "U1"
+      }, 
+      "instance_id": "6a9114a5845f07ec", 
+      "library_id": "fed2a80e7a06032b", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -40
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 560, 
+          "y": 530
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "fed2a80e7a06032b": {
+      "attributes": {
+        "_datasheet": "http://datasheet.octopart.com/1N5231B-Fairchild-datasheet-121961.pdf", 
+        "_lead_free": "yes", 
+        "_manufacturer": "Fairchild Semiconductor", 
+        "_num_pins": "2", 
+        "_package": "DO-35", 
+        "_part_number": "1N5231B", 
+        "_prefix": "U", 
+        "_rohs": "yes", 
+        "_suffix": "", 
+        "_symbol_0_0": "Standard", 
+        "_type": "integrated circuit", 
+        "breakdown_voltage": "5.10 V", 
+        "imported from Octopart": "yes", 
+        "max_operating_temperature": "200.00 \u00b0C", 
+        "max_power_dissipation": "0.50 W", 
+        "mounting_type": "through hole", 
+        "octopart_part_number": "32266920585", 
+        "termination_style": "Through Hole", 
+        "voltage_rating_dc": "5.10 V"
+      }, 
+      "name": "1N5231B", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "label": {
+                    "align": "left", 
+                    "rotation": 0.0, 
+                    "text": "1", 
+                    "x": 7, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "label": {
+                    "align": "right", 
+                    "rotation": 0.0, 
+                    "text": "2", 
+                    "x": 113, 
+                    "y": -13
+                  }, 
+                  "p1": {
+                    "x": 115, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 120, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "height": 20, 
+                  "type": "rectangle", 
+                  "width": 110, 
+                  "x": 5, 
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "0000000000005842", 
+      "license": "", 
+      "name": "untitled design", 
+      "owner": "thelordray", 
+      "slug": "untitled-design", 
+      "updated_timestamp": 1316592081
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [
+        {
+          "rotation": 0.0, 
+          "value": "{{name}}", 
+          "x": 460, 
+          "y": 490
+        }
+      ], 
+      "attributes": {
+        "name": "1"
+      }, 
+      "net_id": "80ebf720cbedc2f0", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "6a9114a5845f07ec", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "7a6c7b3991aeabab"
+          ], 
+          "point_id": "884dce3dbaa71359", 
+          "x": 560, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "884dce3dbaa71359", 
+            "fda50b0a221bad31"
+          ], 
+          "point_id": "7a6c7b3991aeabab", 
+          "x": 550, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "7a6c7b3991aeabab", 
+            "8fb42ee7b6bc5957"
+          ], 
+          "point_id": "fda50b0a221bad31", 
+          "x": 410, 
+          "y": 520
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fda50b0a221bad31", 
+            "fd2415262ed2ac25"
+          ], 
+          "point_id": "8fb42ee7b6bc5957", 
+          "x": 410, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8fb42ee7b6bc5957", 
+            "fe9bfff8872dc67d"
+          ], 
+          "point_id": "fd2415262ed2ac25", 
+          "x": 360, 
+          "y": 460
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fd2415262ed2ac25"
+          ], 
+          "point_id": "fe9bfff8872dc67d", 
+          "x": 410, 
+          "y": 460
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

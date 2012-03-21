@@ -1,0 +1,508 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "Q1"
+      }, 
+      "instance_id": "3699138c7c95ec7d", 
+      "library_id": "35c7579c4be24f25", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": -10
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{_part_number}}", 
+              "x": 30, 
+              "y": -30
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 870, 
+          "y": 330
+        }
+      ], 
+      "symbol_index": 0
+    }, 
+    {
+      "attributes": {
+        "refdes": "C1"
+      }, 
+      "instance_id": "aac001626d4ea3c8", 
+      "library_id": "49d8476731c2ae45", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_capacitance}}", 
+              "x": 0, 
+              "y": -30
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": 0, 
+              "y": 0
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 720, 
+          "y": 420
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "35c7579c4be24f25": {
+      "attributes": {
+        "Collector-Base Voltage": "-50V", 
+        "Collector-Emitter Voltage": "\u201345V", 
+        "Emitter-Base Voltage": "-5V", 
+        "_datasheet": "http://www.datasheetcatalog.org/datasheet2/b/0fxuespadlx4ryu0ch8s4kg7shfy.pdf", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "ON Semiconductor", 
+        "_num_pins": "3", 
+        "_package": "TO-92", 
+        "_part_number": "BC557C", 
+        "_prefix": "Q", 
+        "_rohs": "No", 
+        "_suffix": "", 
+        "_symbol_0_0": "BJT (PNP)", 
+        "_type": "integrated circuit", 
+        "hfe": "125-900"
+      }, 
+      "name": "BC557C PNP Silicon Transistor", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -30
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "3"
+                }, 
+                {
+                  "p1": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -50
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -25
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 14, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 17, 
+                    "y": -24
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -22
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -35
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -40
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }, 
+    "49d8476731c2ae45": {
+      "attributes": {
+        "_capacitance": "3300 uF", 
+        "_datasheet": "http://datasheet.octopart.com/EEV-FK1C332M-Panasonic-datasheet-48.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Panasonic", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "21058018679", 
+        "_part_number": "EEV-FK1C332M", 
+        "_prefix": "C", 
+        "_rohs": "Yes", 
+        "_symbol_0_0": "Capacitor", 
+        "_type": "capacitor", 
+        "capacitance": "3300 uF", 
+        "mounting_type": "surface mount", 
+        "size_diameter": "0.02m", 
+        "size_height": "0.02m", 
+        "size_length": "0.02m", 
+        "size_width": "0.02m", 
+        "voltage_rating_dc": "16.00V"
+      }, 
+      "name": "3300 uF Capacitor SMD", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -10
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 20, 
+                    "y": -10
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 5, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 5, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 15, 
+                    "y": 0
+                  }, 
+                  "p2": {
+                    "x": 15, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_capacitor_counter": "1", 
+      "_integrated circuit_counter": "1"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "", 
+      "design_id": "7c3d880197b6548c", 
+      "license": "", 
+      "name": "Selene IX", 
+      "owner": "And!", 
+      "slug": "Selene-IX", 
+      "updated_timestamp": 1329582179
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "1_B"
+      }, 
+      "net_id": "507b91937daf5bf0", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "aac001626d4ea3c8", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "bca90068ade46bb5"
+          ], 
+          "point_id": "f9f29a73a5f62b55", 
+          "x": 720, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "f9f29a73a5f62b55", 
+            "055e58a8c4625eba"
+          ], 
+          "point_id": "bca90068ade46bb5", 
+          "x": 710, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bca90068ade46bb5", 
+            "c13e9c3706324fe0"
+          ], 
+          "point_id": "055e58a8c4625eba", 
+          "x": 620, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "055e58a8c4625eba", 
+            "9bbdbb3a1bba8850"
+          ], 
+          "point_id": "c13e9c3706324fe0", 
+          "x": 620, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c13e9c3706324fe0", 
+            "ffa65e2fcb1fdfcc"
+          ], 
+          "point_id": "9bbdbb3a1bba8850", 
+          "x": 890, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "9bbdbb3a1bba8850", 
+            "e942e8a8ccb19542"
+          ], 
+          "point_id": "ffa65e2fcb1fdfcc", 
+          "x": 890, 
+          "y": 270
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "3699138c7c95ec7d", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "ffa65e2fcb1fdfcc"
+          ], 
+          "point_id": "e942e8a8ccb19542", 
+          "x": 890, 
+          "y": 280
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {
+        "_name": "C_2"
+      }, 
+      "net_id": "e4084fb37e2cb391", 
+      "points": [
+        {
+          "connected_components": [
+            {
+              "instance_id": "3699138c7c95ec7d", 
+              "pin_number": "1"
+            }
+          ], 
+          "connected_points": [
+            "fefa89232106699f"
+          ], 
+          "point_id": "2d1a6e929d83e4ab", 
+          "x": 870, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b08e5fe264ba906c", 
+            "394bbe57d33127d1"
+          ], 
+          "point_id": "d92d3133b623c340", 
+          "x": 800, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c8dc11d9d97c25d7", 
+            "394bbe57d33127d1"
+          ], 
+          "point_id": "8c38f2924e0f6a10", 
+          "x": 890, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "3699138c7c95ec7d", 
+              "pin_number": "3"
+            }
+          ], 
+          "connected_points": [
+            "c8dc11d9d97c25d7"
+          ], 
+          "point_id": "4ff5b32b6b864e4b", 
+          "x": 890, 
+          "y": 320
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "4ff5b32b6b864e4b", 
+            "8c38f2924e0f6a10"
+          ], 
+          "point_id": "c8dc11d9d97c25d7", 
+          "x": 890, 
+          "y": 330
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "2d1a6e929d83e4ab", 
+            "b08e5fe264ba906c"
+          ], 
+          "point_id": "fefa89232106699f", 
+          "x": 860, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "fefa89232106699f", 
+            "d92d3133b623c340"
+          ], 
+          "point_id": "b08e5fe264ba906c", 
+          "x": 800, 
+          "y": 300
+        }, 
+        {
+          "connected_components": [
+            {
+              "instance_id": "aac001626d4ea3c8", 
+              "pin_number": "2"
+            }
+          ], 
+          "connected_points": [
+            "c37dd627aff5f372"
+          ], 
+          "point_id": "d6909064372ae4a1", 
+          "x": 740, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d6909064372ae4a1", 
+            "394bbe57d33127d1"
+          ], 
+          "point_id": "c37dd627aff5f372", 
+          "x": 750, 
+          "y": 410
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "8c38f2924e0f6a10", 
+            "c37dd627aff5f372", 
+            "d92d3133b623c340"
+          ], 
+          "point_id": "394bbe57d33127d1", 
+          "x": 800, 
+          "y": 410
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}

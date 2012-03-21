@@ -1,0 +1,297 @@
+{
+  "component_instances": [
+    {
+      "attributes": {
+        "refdes": "D1"
+      }, 
+      "instance_id": "4305c68f631e692f", 
+      "library_id": "49ce9978f31bd1d3", 
+      "symbol_attributes": [
+        {
+          "annotations": [
+            {
+              "rotation": 0.0, 
+              "value": "{{_name}}", 
+              "x": 5, 
+              "y": -50
+            }, 
+            {
+              "rotation": 0.0, 
+              "value": "{{refdes}}", 
+              "x": -10, 
+              "y": -60
+            }
+          ], 
+          "rotation": 0.0, 
+          "x": 660, 
+          "y": 450
+        }
+      ], 
+      "symbol_index": 0
+    }
+  ], 
+  "components": {
+    "49ce9978f31bd1d3": {
+      "attributes": {
+        "Maximum RMS voltage": "70V", 
+        "Maximum average forward rectified current": "3.0A", 
+        "_datasheet": "http://datasheet.octopart.com/1N5401-Vishay-datasheet-5256.pdf", 
+        "_imported_from_octopart": "yes", 
+        "_lead_free": "Yes", 
+        "_manufacturer": "Vishay", 
+        "_num_pins": "2", 
+        "_octopart_part_number": "73059153591", 
+        "_package": "DO-201", 
+        "_part_number": "1N5401", 
+        "_prefix": "D", 
+        "_suffix": "", 
+        "_symbol_0_0": "Diode", 
+        "_type": "integrated circuit", 
+        "mounting_type": "through hole"
+      }, 
+      "name": "1N5401 Diode", 
+      "symbols": [
+        {
+          "bodies": [
+            {
+              "pins": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 0, 
+                    "y": -20
+                  }, 
+                  "pin_number": "1"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "p2": {
+                    "x": 40, 
+                    "y": -20
+                  }, 
+                  "pin_number": "2"
+                }
+              ], 
+              "shapes": [
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 30, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -30
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -10
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }, 
+                {
+                  "p1": {
+                    "x": 10, 
+                    "y": -30
+                  }, 
+                  "p2": {
+                    "x": 30, 
+                    "y": -20
+                  }, 
+                  "type": "line"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "design_attributes": {
+    "annotations": [], 
+    "attributes": {
+      "_diode_counter": "1", 
+      "_integrated circuit_counter": "2"
+    }, 
+    "comments": [], 
+    "metadata": {
+      "attached_urls": [], 
+      "description": "Wiring Diagram for my motorcycle ", 
+      "design_id": "0000000000003588", 
+      "license": "", 
+      "name": "1980 XS850G Wiring Diagram", 
+      "owner": "Jonesrock", 
+      "slug": "1980-XS850G-Wiring-Diagram", 
+      "updated_timestamp": 1315947341
+    }
+  }, 
+  "nets": [
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "6b7df274deb9e0f7", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2a00642e64ea420"
+          ], 
+          "point_id": "b891c7baec5765b2", 
+          "x": 660, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "b891c7baec5765b2", 
+            "bc8fa28be457e46e"
+          ], 
+          "point_id": "d2a00642e64ea420", 
+          "x": 610, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d2a00642e64ea420", 
+            "216c04dc0f40cfc5"
+          ], 
+          "point_id": "bc8fa28be457e46e", 
+          "x": 660, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "bc8fa28be457e46e", 
+            "55ca7b2300796dc9"
+          ], 
+          "point_id": "216c04dc0f40cfc5", 
+          "x": 280, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "216c04dc0f40cfc5", 
+            "426e46edd669b99d"
+          ], 
+          "point_id": "55ca7b2300796dc9", 
+          "x": 280, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "55ca7b2300796dc9", 
+            "36d6049a9ceee7bf"
+          ], 
+          "point_id": "426e46edd669b99d", 
+          "x": 210, 
+          "y": 470
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "426e46edd669b99d", 
+            "af6964dd7de5bb03"
+          ], 
+          "point_id": "36d6049a9ceee7bf", 
+          "x": 210, 
+          "y": 730
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "36d6049a9ceee7bf"
+          ], 
+          "point_id": "af6964dd7de5bb03", 
+          "x": 140, 
+          "y": 730
+        }
+      ]
+    }, 
+    {
+      "annotations": [], 
+      "attributes": {}, 
+      "net_id": "0e1da17938ea6809", 
+      "points": [
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c9ef308d8c8a37bd"
+          ], 
+          "point_id": "ba0daa529391f608", 
+          "x": 1460, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "ba0daa529391f608", 
+            "d9f760735e098975"
+          ], 
+          "point_id": "c9ef308d8c8a37bd", 
+          "x": 1510, 
+          "y": 200
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "c9ef308d8c8a37bd", 
+            "09457a098332937b"
+          ], 
+          "point_id": "d9f760735e098975", 
+          "x": 1510, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "d9f760735e098975", 
+            "afb911b9b9d52590"
+          ], 
+          "point_id": "09457a098332937b", 
+          "x": 720, 
+          "y": 430
+        }, 
+        {
+          "connected_components": [], 
+          "connected_points": [
+            "09457a098332937b"
+          ], 
+          "point_id": "afb911b9b9d52590", 
+          "x": 690, 
+          "y": 430
+        }
+      ]
+    }
+  ], 
+  "version": {
+    "exporter": "Upverter", 
+    "file_version": "0.1.0"
+  }
+}
