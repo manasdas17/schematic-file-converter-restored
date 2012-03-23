@@ -221,7 +221,7 @@ if __name__ == "__main__":
     # Autodetect input type
     if inputtype == None:
         try:
-            inputtype = autodetect(inputfile)
+            inputtype = Upconverter.autodetect(inputfile)
         except:
             ap.print_help()
             exit(1)
@@ -241,7 +241,7 @@ if __name__ == "__main__":
     try:
         design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
     except:
-        print "ERROR: Unsupported input type:", in_format
+        print "ERROR: Unsupported input type:", inputtype
         exit(1)
 
     # we got a good result
@@ -249,7 +249,7 @@ if __name__ == "__main__":
         try:
             Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
         except:
-            print "ERROR: Unsupported input type:", in_format
+            print "ERROR: Unsupported output type:", outputtype
             exit(1)
 
     # parse returned None -> something went wrong
