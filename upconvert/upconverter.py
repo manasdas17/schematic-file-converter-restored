@@ -222,7 +222,7 @@ if __name__ == "__main__":
     if inputtype == None:
         try:
             inputtype = Upconverter.autodetect(inputfile)
-        except:
+        except Exception:
             ap.print_help()
             exit(1)
 
@@ -232,7 +232,7 @@ if __name__ == "__main__":
             fileName, fileExtension = os.path.splitext(inputfile)
             outputfile = fileName + EXTENSIONS[outputtype]
             log.info('Auto-set output file: %s', outputfile)
-        except:
+        except Exception:
             log.error('Failed to auto-set output file.')
             ap.print_help()
             exit(1)
@@ -240,7 +240,7 @@ if __name__ == "__main__":
     # parse and export the data
     try:
         design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
-    except:
+    except Exception:
         print "ERROR: Unsupported input type:", inputtype
         exit(1)
 
@@ -248,7 +248,7 @@ if __name__ == "__main__":
     if design is not None:
         try:
             Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
-        except:
+        except Exception:
             print "ERROR: Unsupported output type:", outputtype
             exit(1)
 
