@@ -96,6 +96,7 @@ def test_parse_generator(file_path, format):
         self.assertTrue(data != None)
 
         tmp_fd, tmp_path = tempfile.mkstemp()
+        os.close(tmp_fd)
         Upconverter.write(data, tmp_path, 'openjson')
         self.assertTrue(check_output(tmp_path) != '')
         os.remove(tmp_path)
@@ -109,6 +110,7 @@ def test_diff_generator(file_path, format):
         self.assertTrue(data != None)
 
         tmp_fd, tmp_path = tempfile.mkstemp()
+        os.close(tmp_fd)
         Upconverter.write(data, tmp_path, format)
         self.assertTrue(check_output(tmp_path) != '')
 
@@ -124,6 +126,7 @@ def test_write_generator(json_file_path, format):
         self.assertTrue(data != None)
 
         tmp_fd, tmp_path = tempfile.mkstemp()
+        os.close(tmp_fd)
         Upconverter.write(data, tmp_path, format)
         self.assertTrue(check_output(tmp_path) != '')
         os.remove(tmp_path)
@@ -183,13 +186,11 @@ if __name__ == "__main__":
             test = test_diff_generator(f, format)
             setattr(test_class, test_name, test)
 
-        # TODO: The below call is hacked to 100 due to too many open files
-        for f in upverter_upv_files[:100]:
+        for f in upverter_upv_files:
             base = os.path.basename(f)
 
             test_name = 'test_%s_%s_%s' % (format, base, 'write')
             test = test_write_generator(f, format)
-            # TODO: The below attr call breaks everything due to too many open files
             setattr(test_class, test_name, test)
 
 

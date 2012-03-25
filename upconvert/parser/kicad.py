@@ -134,7 +134,7 @@ class KiCAD(object):
         parts = line.split()
         x, y, rotation = int(parts[2]), int(parts[3]), int(parts[4])
         rotation = rotation / 1800.0
-        value = f.readline().decode('utf-8', errors='replace').strip()
+        value = f.readline().decode('utf-8', 'replace').strip()
         return Annotation(value, make_length(x), -make_length(y),
                           rotation, 'true')
 
@@ -163,7 +163,7 @@ class KiCAD(object):
         while line.strip() not in ("$EndComp", ''):
             if line.startswith('F '):
                 parts = line.split('"', 2)
-                value = parts[1].decode('utf-8', errors='replace')
+                value = parts[1].decode('utf-8', 'replace')
                 parts = parts[2].strip().split()
                 annotations.append(
                     Annotation(value,
