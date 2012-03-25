@@ -65,10 +65,15 @@ class Fritzing(object):
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an fritzing file """
-        with open(filename, 'r') as f:
-            data = f.read(4096)
+        try:
+            with open(filename, 'r') as f:
+                data = f.read(4096)
+        except IOError:
+            data = ''
         confidence = 0
         if 'fritzingVersion' in data:
+            confidence += 0.9
+        elif filename.endswith('.fzz'):
             confidence += 0.9
         return confidence
 

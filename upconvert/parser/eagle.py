@@ -2015,7 +2015,7 @@ class Eagle:
         with open(filename, 'r') as f:
             data = f.read(4096)
         confidence = 0
-        if 'ÄA' in data:
+        if '\xc3\x84A' in data:
             confidence += 0.9
         return confidence
 

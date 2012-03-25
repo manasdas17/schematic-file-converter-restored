@@ -49,6 +49,13 @@ class FritzingTests(TestCase):
         return parser.parse(join(TEST_DIR, basename))
 
 
+    def test_autodetect(self):
+        """ The frizting autodetection works. """
+        self.assertEqual(Fritzing.auto_detect("notfritzing"), 0.0)
+        self.assertEqual(Fritzing.auto_detect("fritzing.fzz"), 0.9)
+        self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, "components.fzz")), 0.9)
+
+
     def test_create_new_fritzing_parser(self):
         """ Test creating an empty parser. """
         parser = Fritzing()
