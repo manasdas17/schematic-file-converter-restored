@@ -78,7 +78,7 @@ class KiCAD(object):
             line = f.readline().strip()
 
             # parse the library references
-            while line != "$EndDescr":
+            while line and line != "$EndDescr":
                 if line.startswith('LIBS:'):
                     libs.extend(line.split(':', 1)[1].split(','))
                 line = f.readline().strip()

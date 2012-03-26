@@ -151,11 +151,13 @@ class Upconverter(object):
 
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.write(tmp_fd, file_content.read())
+        os.close(tmp_fd)
 
         format = Upconverter.autodetect(tmp_path)
         design = Upconverter.parse(tmp_path, format)
 
         tmp_fd2, tmp_path2 = tempfile.mkstemp()
+        os.close(tmp_fd2)
         Upconverter.write(design, tmp_path2, 'openjson')
 
         json_data = None
@@ -178,6 +180,7 @@ class Upconverter(object):
 
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.write(tmp_fd, upv_json_data)
+        os.close(tmp_fd)
 
         design = Upconverter.parse(tmp_path, 'openjson')
         Upconverter.write(design, path_w_ext, format)

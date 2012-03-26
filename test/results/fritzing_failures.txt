@@ -1,0 +1,28 @@
+E = Error, . = Pass, F = Failed
+
+Ran 488 tests in 85.735s
+FAILED (errors=1)
+
+test/test.py fritzing
+
+Testing: fritzing >>>
+...................................................................................................................................................................................................................................................................................................................................................................E....................................................................................................................................
+======================================================================
+ERROR: test_fritzing_lm335_temperature_sensor_serlcd.fz_parse (__main__.RegressionTest_fritzing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test.py", line 97, in test
+    data = Upconverter.parse(file_path, format)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/upconverter.py", line 128, in parse
+    return p.parse(in_file)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/fritzing.py", line 84, in parse
+    tree = self.make_tree(filename)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/fritzing.py", line 114, in make_tree
+    return ElementTree(file=fz_file)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/xml/etree/ElementTree.py", line 546, in __init__
+    self.parse(file)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/xml/etree/ElementTree.py", line 586, in parse
+    parser.feed(data)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/xml/etree/ElementTree.py", line 1245, in feed
+    self._parser.Parse(data, 0)
+ExpatError: not well-formed (invalid token): line 2207, column 20

@@ -1,0 +1,69 @@
+E = Error, . = Pass, F = Failed
+
+Ran 3295 tests in 152.416s
+FAILED (failures=6, errors=3258)
+
+test/test.py gerber
+
+Testing: gerber >>>
+EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.EE../test/gerber/arc_segments.ger
+F.EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.EE../test/gerber/complex.ger
+F..EE.EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE.EEEEEEEEEEEEEEEEEEEEEEEEEE.EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE../test/gerber/fills.ger
+F.../test/gerber/flash-current-pos.ger
+F..EEERROR:main:Failed to auto-detect input type for ./test/gerber/missing-delim.ger. best guess: gerber, confidence: 0.4
+EEEERROR:main:Failed to auto-detect input type for ./test/gerber/not-terminated.ger. best guess: gerber, confidence: 0.2
+EEE.EE.EE.EE.EE.EE.EE.EE.EE../test/gerber/simple.ger
+F.E../test/gerber/smear.ger
+F..EE.EE.EE
+
+======================================================================
+ERROR: test_gerber_0000000000000001.upv_write (__main__.RegressionTest_gerber)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test.py", line 132, in test
+    Upconverter.write(data, tmp_path, format)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/upconverter.py", line 143, in write
+    return w.write(dsgn, out_file)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/writer/gerber.py", line 122, in write
+    self._check_design(design)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/writer/gerber.py", line 577, in _check_design
+    raise MissingLayout
+MissingLayout
+
+======================================================================
+ERROR: test_gerber_sq-violation.ger_parse (__main__.RegressionTest_gerber)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test.py", line 97, in test
+    data = Upconverter.parse(file_path, format)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/upconverter.py", line 128, in parse
+    return p.parse(in_file)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 245, in parse
+    self._gen_layers(layer_defs, None, None)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 286, in _gen_layers
+    effect = self._move(block)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 353, in _move
+    seg = self._draw_arc(ends, ctr_offset)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 512, in _draw_arc
+    self._check_mq(start_angle, end_angle)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 879, in _check_mq
+    % (start_angle, end_angle))
+QuadrantViolation: Arc(1.75 to 0.75) > 0.5 rad/pi
+
+======================================================================
+ERROR: test_gerber_top_copper.ger_diff (__main__.RegressionTest_gerber)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "test/test.py", line 111, in test
+    data = Upconverter.parse(file_path, format)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/upconverter.py", line 128, in parse
+    return p.parse(in_file)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 245, in parse
+    self._gen_layers(layer_defs, None, None)
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 280, in _gen_layers
+    for block in self._tokenize(layer_file):
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 592, in _tokenize
+    self._check_eof(content[match.end():])
+  File "/Users/zak/Documents/projects/file_converter/upconvert/parser/gerber.py", line 899, in _check_eof
+    raise FileNotTerminated
+FileNotTerminated
