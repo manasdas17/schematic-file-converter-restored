@@ -26,6 +26,7 @@ import unittest
 import os
 import sys
 import re
+import logging
 import tempfile
 from difflib import SequenceMatcher
 from upconvert.upconverter import Upconverter
@@ -135,6 +136,9 @@ def test_write_generator(json_file_path, format):
 
 
 if __name__ == "__main__":
+    # Hide logging
+    logging.getLogger("main").setLevel(logging.ERROR)
+
     eagle_sch_files = []
     os.path.walk('./test/eagle', filter_sch, eagle_sch_files)
 
