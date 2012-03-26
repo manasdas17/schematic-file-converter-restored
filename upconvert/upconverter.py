@@ -138,7 +138,7 @@ class Upconverter(object):
             else:
                 w = WRITERS[out_format]()
         except KeyError:
-            raise Exception('ERROR: Unsupported input type: %s' % (out_format))
+            raise Exception('ERROR: Unsupported output type: %s' % (out_format))
 
         return w.write(dsgn, out_file)
 
