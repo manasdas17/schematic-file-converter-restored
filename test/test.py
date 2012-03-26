@@ -24,6 +24,7 @@
 
 import unittest
 import os
+import sys
 import re
 import tempfile
 from difflib import SequenceMatcher
@@ -166,10 +167,10 @@ if __name__ == "__main__":
          'kicad': kicad_sch_files,
          'openjson': upverter_upv_files}
 
-    test_classes = []
+    test_classes = {}
     for format, files in l.iteritems():
         test_class = type('RegressionTest_' + format, (unittest.TestCase,), {})
-        test_classes.append(test_class)
+        test_classes[format] = test_class
 
         for f in files:
             base = os.path.basename(f)
@@ -193,8 +194,8 @@ if __name__ == "__main__":
             test = test_write_generator(f, format)
             setattr(test_class, test_name, test)
 
-
-    for c in test_classes:
-        print c
-        s = unittest.TestLoader().loadTestsFromTestCase(c)
-        unittest.TextTestRunner().run(s)
+    for format, c in test_classes.iteritems():
+        if len(sys.argv) < 2 or format in sys.argv:
+            print format
+            s = unittest.TestLoader().loadTestsFromTestCase(c)
+            unittest.TextTestRunner().run(s)
