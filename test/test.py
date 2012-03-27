@@ -21,7 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+import argparse
 import unittest
 import os
 import sys
@@ -136,7 +136,14 @@ def test_write_generator(json_file_path, format):
     return test
 
 
-if __name__ == "__main__":
+def main():
+    desc = 'Run the upconverter regression tests'
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('--fail-fast', action='store_true')
+    parser.add_argument('file_types', metavar='file', action='append')
+
+    args = parser.parse_args()
+
     # Hide logging
     logging.getLogger("main").setLevel(logging.ERROR)
 
@@ -203,7 +210,11 @@ if __name__ == "__main__":
                 setattr(test_class, test_name, test)
 
     for format, c in test_classes.iteritems():
-        if len(sys.argv) < 2 or format in sys.argv:
+        if not args.file_types or format in args.file_types:
             print '=============================\n\n\nTesting: %s >>>' % format
             s = unittest.TestLoader().loadTestsFromTestCase(c)
-            unittest.TextTestRunner().run(s)
+            unittest.TextTestRunner(failfast=args.fail_fast).run(s)
+
+
+if __name__ == "__main__":
+    main()
