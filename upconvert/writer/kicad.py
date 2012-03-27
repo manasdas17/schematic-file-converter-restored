@@ -182,14 +182,15 @@ $EndDescr
 
     def write_library_component(self, f, cpt):
         """ Write a single component to a kiCAD cache library """
-        ref = cpt.attributes.get('_prefix', 'U')
+        ref = cpt.attributes.get('_prefix', 'U').encode('utf-8')
+        name = cpt.name.encode('utf-8')
         f.write('#\n')
-        f.write('# ' + cpt.name + '\n')
+        f.write('# ' + name + '\n')
         f.write('#\n')
         f.write('DEF %s %s 0 30 Y Y %d F N\n' %
-                (cpt.name, ref, len(cpt.symbols[0].bodies)))
+                (name, ref, len(cpt.symbols[0].bodies)))
         f.write('F0 "%s" 0 0 60 H V L CNN\n' % (ref,))
-        f.write('F1 "%s" 0 60 60 H V L CNN\n' % (cpt.name,))
+        f.write('F1 "%s" 0 60 60 H V L CNN\n' % (name,))
         self.write_symbols(f, cpt.symbols)
         f.write('ENDDEF\n')
 
