@@ -266,6 +266,10 @@ $EndDescr
             return ('T %d %d %d 20 0 %%(unit)d %%(convert)d %s Normal 0 %s C\n' %
                     (angle, make_length(shape.x), make_length(shape.y),
                      shape.text.replace(' ', '~'), align))
+        elif shape.type == 'bezier':
+            return ('P 2 %%(unit)d %%(convert)d 0 %s N\n' %
+                    (' '.join('%d %d' % (make_length(p.x), make_length(p.y))
+                              for p in (shape.p1, shape.p2))))
 
 
     def get_pin_line(self, pin):
