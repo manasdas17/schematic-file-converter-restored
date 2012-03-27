@@ -136,7 +136,7 @@ $EndDescr
         f.write('\t1    %d %d\n' % (make_length(inst.symbol_attributes[0].x),
                                     -make_length(inst.symbol_attributes[0].y)))
         f.write('\t%d    %d    %d    %d\n' %
-                ROTATION2MATRIX[inst.symbol_attributes[0].rotation])
+                ROTATION2MATRIX[inst.symbol_attributes[0].rotation % 2])
         f.write('$EndComp\n')
 
 
@@ -182,14 +182,15 @@ $EndDescr
 
     def write_library_component(self, f, cpt):
         """ Write a single component to a kiCAD cache library """
-        ref = cpt.attributes.get('_prefix', 'U')
+        ref = cpt.attributes.get('_prefix', 'U').encode('utf-8')
+        name = cpt.name.encode('utf-8')
         f.write('#\n')
-        f.write('# ' + cpt.name + '\n')
+        f.write('# ' + name + '\n')
         f.write('#\n')
         f.write('DEF %s %s 0 30 Y Y %d F N\n' %
-                (cpt.name, ref, len(cpt.symbols[0].bodies)))
+                (name, ref, len(cpt.symbols[0].bodies)))
         f.write('F0 "%s" 0 0 60 H V L CNN\n' % (ref,))
-        f.write('F1 "%s" 0 60 60 H V L CNN\n' % (cpt.name,))
+        f.write('F1 "%s" 0 60 60 H V L CNN\n' % (name,))
         self.write_symbols(f, cpt.symbols)
         f.write('ENDDEF\n')
 
@@ -265,6 +266,10 @@ $EndDescr
             return ('T %d %d %d 20 0 %%(unit)d %%(convert)d %s Normal 0 %s C\n' %
                     (angle, make_length(shape.x), make_length(shape.y),
                      shape.text.replace(' ', '~'), align))
+        elif shape.type == 'bezier':
+            return ('P 2 %%(unit)d %%(convert)d 0 %s N\n' %
+                    (' '.join('%d %d' % (make_length(p.x), make_length(p.y))
+                              for p in (shape.p1, shape.p2))))
 
 
     def get_pin_line(self, pin):

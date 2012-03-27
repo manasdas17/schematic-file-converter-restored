@@ -26,7 +26,7 @@ from upconvert.core.design import Design
 from upconvert.core.components import Pin
 from upconvert.core.net import Net, NetPoint
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
-from upconvert.core.shape import Label, Rectangle, Polygon, Arc
+from upconvert.core.shape import Label, Rectangle, Polygon, Arc, BezierCurve
 from upconvert.core.annotation import Annotation
 from upconvert.parser.openjson import JSON
 
@@ -235,3 +235,14 @@ $EndComp
         arc = Arc(0, 0, -0.5, 0.5, 1)
         line = writer.get_shape_line(arc)
         self.assertEqual(line, 'A 0 0 11 900 -900 %(unit)d %(convert)d 0 N\n')
+
+
+    def test_bezier_curve(self):
+        """
+        BezierCurves are output correctly.
+        """
+
+        writer = KiCAD()
+        bezier = BezierCurve((0, 0), (1, 1), (2, 2), (3, 3))
+        line = writer.get_shape_line(bezier)
+        self.assertEqual(line, 'P 2 %(unit)d %(convert)d 0 22 22 33 33 N\n')
