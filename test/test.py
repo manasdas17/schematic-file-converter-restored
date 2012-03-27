@@ -24,7 +24,6 @@
 import argparse
 import unittest
 import os
-import sys
 import re
 import logging
 import tempfile
