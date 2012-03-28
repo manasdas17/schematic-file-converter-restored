@@ -101,8 +101,9 @@ class JSON:
 
     def parse_symbol_attribute(self, symbol_attribute):
         """ Extract attributes from a symbol. """
-        x = int(symbol_attribute.get('x'))
-        y = int(symbol_attribute.get('y'))
+        x = int(symbol_attribute.get('x') or 0)
+        y = int(symbol_attribute.get('y') or 0)
+
         rotation = float(symbol_attribute.get('rotation'))
 
         # Make SymbolAttribute
