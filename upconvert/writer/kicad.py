@@ -119,7 +119,7 @@ $EndDescr
         f.write('Text Label %d %d %d 60 ~ 0\n' %
                 (make_length(ann.x), -make_length(ann.y),
                  int(ann.rotation * 1800)))
-        f.write(ann.value + '\n')
+        f.write(ann.value.encode('utf-8') + '\n')
 
     def write_instance(self, f, inst):
         """ Write a $Comp component to a kiCAD schematic """
