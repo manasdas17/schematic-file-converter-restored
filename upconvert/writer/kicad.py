@@ -146,10 +146,11 @@ $EndDescr
 
         for point in net.points.values():
             for point2_id in point.connected_points:
-                point2 = net.points[point2_id]
-                seg = [(point.x, point.y), (point2.x, point2.y)]
-                seg.sort() # canonical order
-                segments.add(tuple(seg))
+                point2 = net.points.get(point2_id)
+                if point2 is not None:
+                    seg = [(point.x, point.y), (point2.x, point2.y)]
+                    seg.sort() # canonical order
+                    segments.add(tuple(seg))
 
         for seg in sorted(segments):
             f.write('Wire Wire Line\n')
