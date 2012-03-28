@@ -226,7 +226,8 @@ $EndDescr
                 converts = (0,)
             for unit in units:
                 for convert in converts:
-                    f.write(line % dict(unit=unit, convert=convert))
+                    writeline = line % dict(unit=unit, convert=convert)
+                    f.write(writeline.encode('utf-8'))
 
         f.write('ENDDRAW\n')
 
