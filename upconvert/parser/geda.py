@@ -203,11 +203,7 @@ class GEDA:
         if symbol_dirs is None:
             symbol_dirs = []
 
-        symbol_dirs += [
-            'upconvert/library/geda',
-        ]
-
-        self.known_symbols = {}
+        symbol_dirs += ['upconvert/library/geda']
 
         self.design = None 
         self.segments = None

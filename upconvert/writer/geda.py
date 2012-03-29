@@ -90,9 +90,6 @@ class GEDAColor:
     STROKE_COLOR = 14
     LOCK_COLOR = 15
 
-    def __init__(self):
-        pass
-
 
 class GEDA:
     """ The gEDA Format Writer """
@@ -112,13 +109,11 @@ class GEDA:
             expects a list of directories. It will search for .sym files
             in all the specified directories.
         """
-        ## add flag to allow for auto inclusion
+
         if symbol_dirs is None:
             symbol_dirs = []
 
-        symbol_dirs += [
-            'library/geda',
-        ]
+        symbol_dirs += ['upconvert/library/geda']
 
         self.known_symbols = find_symbols(symbol_dirs)
 

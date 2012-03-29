@@ -246,12 +246,19 @@ class GEDATests(unittest.TestCase):
             ['Flag_1-0.sym', 'Flag_2-1.sym', 'GND-2.sym', 'VCC-3.sym']
         )
 
+
+    def test_write_component_to_file_symbol_dirs(self):
+        """ Tests writing a component to a symbol file with symbol dirs.
+        """
+        sym_dir = '/tmp/sym'
+
         if os.path.exists(sym_dir):
             shutil.rmtree(sym_dir)
 
         os.mkdir(sym_dir)
 
-        self.geda_writer = GEDA()
+        self.geda_writer = GEDA(
+            symbol_dirs=['test/geda/simple_example/symbols'])
         self.geda_writer.component_library = dict()
         self.geda_writer.project_dirs['symbol'] = sym_dir 
 
@@ -289,10 +296,7 @@ class GEDATests(unittest.TestCase):
                 (library_id, 0): 'capacitor-1.sym', 
             } 
         )
-        self.assertEquals(
-            sorted(os.listdir(sym_dir)),
-            ['opamp.sym']
-        )
+        self.assertEquals(sorted(os.listdir(sym_dir)), [])
 
 
     def test_generate_net_commands(self):

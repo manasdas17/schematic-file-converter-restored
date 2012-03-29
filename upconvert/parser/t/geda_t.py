@@ -76,7 +76,7 @@ class GEDATests(unittest.TestCase):
         )
 
         geda_parser = GEDA([
-            './test/geda/simple_example/symbols',
+            'test/geda/simple_example/symbols',
             '/invalid/dir/gEDA',
         ])
 
@@ -954,7 +954,7 @@ pintype=in
     def test_parse(self):
         """ Tests parsing valid and invalid schematic files. """
         self.geda_parser = GEDA([
-            './test/geda/simple_example/symbols',
+            'test/geda/simple_example/symbols',
         ])
 
         invalid_sch = open('/tmp/invalid.sch', 'w')
