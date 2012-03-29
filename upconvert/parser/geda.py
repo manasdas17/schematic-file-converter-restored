@@ -374,6 +374,8 @@ class GEDA:
         for cnet in calculated_nets:
             self.design.add_net(cnet)
 
+        return self.design
+
     def _parse_title_frame(self, params):
         """ Parse the frame component in *params* to extract the
             page size to be used in the design. The offset is adjusted
