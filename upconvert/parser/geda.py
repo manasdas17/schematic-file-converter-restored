@@ -203,14 +203,16 @@ class GEDA:
         if symbol_dirs is None:
             symbol_dirs = []
 
-        symbol_dirs += ['upconvert/library/geda']
+        symbol_dirs = symbol_dirs + \
+            [os.path.join(os.path.dirname(__file__), '..',
+                          'library', 'geda')]
+
+        self.known_symbols = find_symbols(symbol_dirs)
 
         self.design = None 
         self.segments = None
         self.net_points = None
         self.net_names = None
-
-        self.known_symbols = find_symbols(symbol_dirs)
         self.geda_zip = None
 
     @staticmethod
@@ -699,7 +701,7 @@ class GEDA:
             return self._parse_attribute(text_str, params['visibility'])
 
         ## text can have environemnt attached: parse & ignore
-        dummy = self._parse_environment(stream)
+        self._parse_environment(stream)
 
         return None, text_str
     

@@ -323,9 +323,7 @@ class GEDATests(unittest.TestCase):
                 env_count += 1
         self.assertEquals(env_count, 4) 
 
-        commands += [
-            'v 20110115 2\n',
-        ]
+        commands += ['v 20110115 2\n']
         geda_parser = upconvert.parser.geda.GEDA()
         new_design = geda_parser.parse_schematic(
             StringIO.StringIO('\n'.join(commands))

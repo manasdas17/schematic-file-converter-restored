@@ -58,7 +58,6 @@
 # a blueprint-style frame is present with origin at 
 # (40'000, 40'000). 
 
-
 import os
 import types
 import codecs
@@ -70,6 +69,7 @@ from upconvert.core.annotation import Annotation
 
 from upconvert.parser.geda import GEDAError
 from upconvert.parser.geda import find_symbols 
+
 
 class GEDAColor:
     """ Enumeration of gEDA colors """
@@ -113,7 +113,9 @@ class GEDA:
         if symbol_dirs is None:
             symbol_dirs = []
 
-        symbol_dirs += ['upconvert/library/geda']
+        symbol_dirs = symbol_dirs + \
+            [os.path.join(os.path.dirname(__file__), '..',
+                          'library', 'geda')]
 
         self.known_symbols = find_symbols(symbol_dirs)
 
@@ -168,7 +170,6 @@ class GEDA:
 
         with codecs.open(filename, encoding='utf-8', mode='w') as f_out:
             f_out.write(self.commands_to_string(output))
-        return
 
     def create_project_files(self, filename):
         """ Creates various files and directories based on the *filename*.
@@ -195,9 +196,6 @@ class GEDA:
                 mode='w'
             ) as f_out:
                 f_out.write('(component-library "./symbols")')
-        else:
-            print "gafrc file exists. Make sure it contains the following line:"
-            print "(component-library './symbols')"
 
         self.project_dirs['symbol'] = symbol_dir
         self.project_dirs['project'] = project_dir 
@@ -460,6 +458,11 @@ class GEDA:
             attributes = dict(net.attributes)
             for segment in segments:
                 start_id, end_id = segment
+
+                ## check for missing points
+                if start_id not in net.points or \
+                        end_id not in net.points:
+                    continue
 
                 ## prevent zero-length segements from being written
                 if net.points[start_id].x == net.points[end_id].x \
@@ -919,13 +922,15 @@ class GEDA:
             Returns True for body that can be represented as gEDA 
                 path, False otherwise.
         """
-        assert(issubclass(body.__class__, components.Body))
+        current_pt = None
 
-        current_pt = body.shapes[0].p1
         for shape_obj in body.shapes:
             if shape_obj.type not in ['line', 'bezier']:
                 return False
-            
+
+            if current_pt is None:
+                current_pt = shape_obj.p1
+
             if not (current_pt.x == shape_obj.p1.x \
                 and current_pt.y == shape_obj.p1.y):
                 return False
