@@ -1,7 +1,6 @@
 import os
 import re
 import subprocess
-import tarfile
 
 # upconvert.py - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
@@ -54,13 +53,15 @@ bld_pyflakes = Builder(action=build_pyflakes)
 
 def build_test(target, source, env):
     args = ['nosetests', '--all-modules',
-            'upconvert/core', 'upconvert/library', 'upconvert/parser', 'upconvert/writer']
+            'upconvert/core', 'upconvert/library',
+            'upconvert/parser', 'upconvert/writer']
     return subprocess.call(args)
 bld_test = Builder(action=build_test)
 
 def build_coverage(target, source, env):
     args = ['nosetests', '--with-coverage', '--all-modules',
-            'upconvert/core', 'upconvert/library', 'upconvert/parser', 'upconvert/writer']
+            'upconvert/core', 'upconvert/library',
+            'upconvert/parser', 'upconvert/writer']
     return subprocess.call(args)
 bld_coverage = Builder(action=build_coverage)
 
