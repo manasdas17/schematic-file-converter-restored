@@ -59,7 +59,6 @@ import os
 import zipfile
 import logging
 import tempfile
-import itertools
 
 from StringIO import StringIO
 
@@ -208,7 +207,6 @@ class GEDA:
             'upconvert/library/geda',
         ]
 
-        self.instance_counter = itertools.count()
         self.known_symbols = {}
 
         self.design = None 
@@ -358,7 +356,7 @@ class GEDA:
                 else:
                     self.parse_component(stream, params)
 
-            elif obj_type == 'N': ## net segement (in schematic ONLY)
+            elif obj_type == 'N': ## net segment (in schematic ONLY)
                 self._parse_segment(stream, params)
 
             elif obj_type == 'H': ## SVG-like path
