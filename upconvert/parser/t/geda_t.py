@@ -21,7 +21,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import os
 import unittest
 import StringIO
@@ -31,14 +30,6 @@ import upconvert.core.shape
 
 class GEDAEmpty(unittest.TestCase):
     """ The tests of a blank geda parser """
-
-    def setUp(self):
-        """ Setup the test case. """
-        pass
-
-    def tearDown(self):
-        """ Teardown the test case. """
-        pass
 
     def test_create_new_geda_parser(self):
         """ Test creating an empty parser. """
@@ -65,7 +56,7 @@ class GEDATests(unittest.TestCase):
         """
         ## get number of symbols in symbols directory
         symbols = set() 
-        for dummy, dummy, filenames in os.walk('library/geda'):
+        for dummy, dummy, filenames in os.walk('upconvert/library/geda'):
             for filename in filenames:
                 if filename.endswith('.sym'):
                     symbols.add(filename)
@@ -85,7 +76,7 @@ class GEDATests(unittest.TestCase):
         )
 
         geda_parser = GEDA([
-            './test/geda/simple_example/symbols',
+            'test/geda/simple_example/symbols',
             '/invalid/dir/gEDA',
         ])
 
@@ -963,7 +954,7 @@ pintype=in
     def test_parse(self):
         """ Tests parsing valid and invalid schematic files. """
         self.geda_parser = GEDA([
-            './test/geda/simple_example/symbols',
+            'test/geda/simple_example/symbols',
         ])
 
         invalid_sch = open('/tmp/invalid.sch', 'w')

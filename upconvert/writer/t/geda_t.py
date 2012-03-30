@@ -180,7 +180,10 @@ class GEDATests(unittest.TestCase):
                 self.assertEquals(spin.p1.x, cpin.p1.x)
                 self.assertEquals(spin.p2.y, cpin.p2.y)
                 self.assertEquals(spin.p2.y, cpin.p2.y)
-                self.assertEquals(spin.label.text, cpin.label.text)
+                if spin.label is None:
+                    self.assertEquals(cpin.label, None)
+                else:
+                    self.assertEquals(spin.label.text, cpin.label.text)
 
             for sshape, cshape in zip(sbody.shapes, cbody.shapes):
                 self.assertEquals(sshape.type, cshape.type)
@@ -246,12 +249,19 @@ class GEDATests(unittest.TestCase):
             ['Flag_1-0.sym', 'Flag_2-1.sym', 'GND-2.sym', 'VCC-3.sym']
         )
 
+
+    def test_write_component_to_file_symbol_dirs(self):
+        """ Tests writing a component to a symbol file with symbol dirs.
+        """
+        sym_dir = '/tmp/sym'
+
         if os.path.exists(sym_dir):
             shutil.rmtree(sym_dir)
 
         os.mkdir(sym_dir)
 
-        self.geda_writer = GEDA()
+        self.geda_writer = GEDA(
+            symbol_dirs=['test/geda/simple_example/symbols'])
         self.geda_writer.component_library = dict()
         self.geda_writer.project_dirs['symbol'] = sym_dir 
 
@@ -289,10 +299,7 @@ class GEDATests(unittest.TestCase):
                 (library_id, 0): 'capacitor-1.sym', 
             } 
         )
-        self.assertEquals(
-            sorted(os.listdir(sym_dir)),
-            ['opamp.sym']
-        )
+        self.assertEquals(sorted(os.listdir(sym_dir)), [])
 
 
     def test_generate_net_commands(self):
@@ -319,9 +326,7 @@ class GEDATests(unittest.TestCase):
                 env_count += 1
         self.assertEquals(env_count, 4) 
 
-        commands += [
-            'v 20110115 2\n',
-        ]
+        commands += ['v 20110115 2\n']
         geda_parser = upconvert.parser.geda.GEDA()
         new_design = geda_parser.parse_schematic(
             StringIO.StringIO('\n'.join(commands))
