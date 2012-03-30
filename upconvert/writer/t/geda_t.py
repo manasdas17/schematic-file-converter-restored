@@ -180,7 +180,10 @@ class GEDATests(unittest.TestCase):
                 self.assertEquals(spin.p1.x, cpin.p1.x)
                 self.assertEquals(spin.p2.y, cpin.p2.y)
                 self.assertEquals(spin.p2.y, cpin.p2.y)
-                self.assertEquals(spin.label.text, cpin.label.text)
+                if spin.label is None:
+                    self.assertEquals(cpin.label, None)
+                else:
+                    self.assertEquals(spin.label.text, cpin.label.text)
 
             for sshape, cshape in zip(sbody.shapes, cbody.shapes):
                 self.assertEquals(sshape.type, cshape.type)
