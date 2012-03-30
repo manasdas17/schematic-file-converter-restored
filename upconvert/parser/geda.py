@@ -276,7 +276,7 @@ class GEDA:
                     obj_type, params = self._parse_command(StringIO(line))
                     assert(obj_type == 'C')
 
-                    params['basename'], dummy = os.path.splitext(
+                    params['basename'], _ = os.path.splitext(
                         params['basename']
                     )
 
@@ -290,7 +290,7 @@ class GEDA:
 
             self.parse_schematic(f_in)
 
-            basename, dummy = os.path.splitext(os.path.basename(filename))
+            basename, _ = os.path.splitext(os.path.basename(filename))
             self.design.design_attributes.metadata.set_name(basename)
 
             ## modify offset for next page to be shifted to the right
@@ -361,7 +361,7 @@ class GEDA:
                 log.warn('ommiting path outside of component.')
                 ## skip description of path
                 num_lines = params['num_lines']
-                for dummy in range(num_lines):
+                for _ in range(num_lines):
                     stream.readline()
 
             elif obj_type == 'U': ## bus (only graphical feature NOT component)
@@ -409,7 +409,7 @@ class GEDA:
 
                 ## skip commands covering multiple lines
                 elif obj_type in ['T', 'H']:
-                    for dummy in range(params['num_lines']):
+                    for _ in range(params['num_lines']):
                         stream.readline()
 
                 obj_type, params = self._parse_command(stream)
@@ -473,7 +473,7 @@ class GEDA:
 
             Returns a tuple of Component and ComponentInstance objects.
         """
-        basename, dummy = os.path.splitext(params['basename'])
+        basename, _ = os.path.splitext(params['basename'])
 
         component_name = basename
         if params['mirror']:
@@ -556,7 +556,7 @@ class GEDA:
             starting with ``v``. Raises ``GEDAError`` when no version
             data can be found.
         """
-        typ, dummy = self._parse_command(stream)
+        typ, _ = self._parse_command(stream)
         if typ != 'v':
             raise GEDAError(
                 "cannot convert file, not in gEDA format"
@@ -690,7 +690,7 @@ class GEDA:
         num_lines = params['num_lines']
 
         text = []
-        for dummy in range(int(num_lines)):
+        for _ in range(int(num_lines)):
             text.append(stream.readline())
 
         text_str = ''.join(text).strip()
@@ -980,7 +980,7 @@ class GEDA:
         current_pos = initial_pos = (get_coords(command[1], mirrored))
 
         ## loop over the remaining lines of commands (after 'M')
-        for dummy in range(num_lines-1):
+        for _ in range(num_lines-1):
             command = stream.readline().strip().split(self.DELIMITER)
 
             ## draw line from current to given position
@@ -1278,12 +1278,12 @@ def find_symbols(symbol_dirs):
 
     for symbol_dir in reversed(symbol_dirs):
         if os.path.exists(symbol_dir):
-            for dirpath, dummy, filenames in os.walk(symbol_dir):
+            for dirpath, dirnames, filenames in os.walk(symbol_dir):
+                dirnames.sort()
                 for filename in filenames:
                     if filename.endswith('.sym'):
                         filepath = os.path.join(dirpath, filename)
-
-                        filename, dummy = os.path.splitext(filename)
+                        filename, _ = os.path.splitext(filename)
                         known_symbols[filename] = filepath
 
     return known_symbols
