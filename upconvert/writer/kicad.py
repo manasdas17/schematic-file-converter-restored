@@ -119,7 +119,7 @@ $EndDescr
         f.write('Text Label %d %d %d 60 ~ 0\n' %
                 (make_length(ann.x), -make_length(ann.y),
                  int(ann.rotation * 1800)))
-        f.write(ann.value + '\n')
+        f.write(ann.value.encode('utf-8') + '\n')
 
     def write_instance(self, f, inst):
         """ Write a $Comp component to a kiCAD schematic """
@@ -130,7 +130,8 @@ $EndDescr
                                -make_length(inst.symbol_attributes[0].y)))
         for i, ann in enumerate(inst.symbol_attributes[0].annotations):
             f.write('F %d "%s" %s %d %d 60  0000 C CNN\n' %
-                    (i, ann.value, 'H' if ann.rotation == 0 else 'V',
+                    (i, ann.value.encode('utf-8'),
+                     'H' if ann.rotation == 0 else 'V',
                      make_length(inst.symbol_attributes[0].x + ann.x),
                      -make_length(inst.symbol_attributes[0].y + ann.y)))
         f.write('\t1    %d %d\n' % (make_length(inst.symbol_attributes[0].x),
@@ -146,10 +147,11 @@ $EndDescr
 
         for point in net.points.values():
             for point2_id in point.connected_points:
-                point2 = net.points[point2_id]
-                seg = [(point.x, point.y), (point2.x, point2.y)]
-                seg.sort() # canonical order
-                segments.add(tuple(seg))
+                point2 = net.points.get(point2_id)
+                if point2 is not None:
+                    seg = [(point.x, point.y), (point2.x, point2.y)]
+                    seg.sort() # canonical order
+                    segments.add(tuple(seg))
 
         for seg in sorted(segments):
             f.write('Wire Wire Line\n')
@@ -225,7 +227,8 @@ $EndDescr
                 converts = (0,)
             for unit in units:
                 for convert in converts:
-                    f.write(line % dict(unit=unit, convert=convert))
+                    writeline = line % dict(unit=unit, convert=convert)
+                    f.write(writeline.encode('utf-8'))
 
         f.write('ENDDRAW\n')
 
