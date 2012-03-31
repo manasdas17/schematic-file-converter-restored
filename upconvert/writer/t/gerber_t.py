@@ -36,7 +36,7 @@ from upconvert.writer.gerber import UnitsNotSpecified, ImageContainsNoData
 
 STRIP_DIRS = path.join('upconvert', 'writer', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
-TEST_FILES = path.join('test', 'gerber')
+TEST_FILES = path.join('test', 'gerber', 'unittest')
 DIR = path.join(BASE_DIR, TEST_FILES)
 
 
