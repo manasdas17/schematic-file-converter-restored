@@ -115,8 +115,8 @@ def test_diff_generator(file_path, format):
         Upconverter.write(data, tmp_path, format)
         self.assertTrue(check_output(tmp_path) != '')
 
-        print file_path
-        self.assertTrue(file_diff(file_path, tmp_path).ratio() > 0.95)
+        self.assertTrue(file_diff(file_path, tmp_path).ratio() > 0.95,
+                        (file_path, tmp_path))
         os.remove(tmp_path)
     return test
 
