@@ -954,14 +954,25 @@ class Eagle: # pylint: disable=R0902
         rotatemask = 0x0c # in some cases 0x0f works as well
         rotates = {
                    0x00: None,
+                   0x01: "R40",
+                   0x02: "R45",
                    0x04: "R90",
+                   0x06: "R135",
                    0x08: "R180",
+                   0x0a: "R225",
                    0x0c: "R270",
-# ones below are possible for text -- don't apply the mask there
+                   0x0e: "R315",
+# ones below are possible for text & frame -- don't apply the mask there
                    0x10: "MR0",
+                   0x12: "MR45",
                    0x14: "MR90",
+                   0x16: "MR135",
                    0x18: "MR180",
+                   0x1a: "MR225",
                    0x1c: "MR270",
+                   0x1e: "MR315",
+
+                   0x40: "SR0", #...
                   }
 
         fonts = {
@@ -1047,6 +1058,7 @@ class Eagle: # pylint: disable=R0902
         template = "=2BH2iH6BI"
 
         smashed_mask = 0x01
+        smashed2_mask = 0x02
 
         constantmid = 0xffff
 
@@ -1437,6 +1449,7 @@ class Eagle: # pylint: disable=R0902
         visibles = {
                     0x00: "off",
                     0x40: "pad",
+                    0x80: "pin",
                     0xc0: None, # default
                    }
         dirmask = 0x0f
@@ -1445,12 +1458,15 @@ class Eagle: # pylint: disable=R0902
                       0x01: "in",
                       0x02: "out",
                       0x03: None, # default
+                      0x04: "oc",
                       0x05: "pwr",
                       0x06: "pas",
                       0x07: "hiz",
+                      0x08: "sup",
                      }
         lengthmask = 0x30
         lengths = {
+                   0x00: "point",
                    0x10: "short",
                    0x20: "middle",
                   }
@@ -1458,6 +1474,8 @@ class Eagle: # pylint: disable=R0902
         functions = {
                      0x00: None, # default
                      0x01: "dot",
+                     0x02: "clk",
+                     0x03: "dotclk",
                     }
  
         def __init__(self, name, x, y, visible, direction, rotate, length, # pylint: disable=R0913
@@ -1532,6 +1550,7 @@ class Eagle: # pylint: disable=R0902
                      0x00: "must",
                      0x02: None,
                      0x03: "request",
+                     0x04: "always",
                     }
 
         max_embed_len = 8
@@ -1706,20 +1725,34 @@ class Eagle: # pylint: disable=R0902
                                   )
             return _ret_val
 
-    class AttributeNam(Shape):
-        """ A struct that represents a part's NAME attribute
+    class Frame(Shape):
+        """ A struct that represents a frame
         """
-        constant = 0x34
-        template = "=4B2I2H8s"
+        constant = 0x43
+        template = "=4B4i4B"
 
-        def __init__(self, x, y, size, layer, name="NAME"): # pylint: disable=R0913
+        bleftmask = 0x08
+        btopmask = 0x04
+        brightmask = 0x02
+        bbottommask = 0x01
+
+        def __init__(self, x1, y1, x2, y2, columns, rows, # pylint: disable=R0913
+                    layer, bleft=True, btop=True, bright=True, bbottom=True): 
             """ Just a constructor
             """
-            super(Eagle.AttributeNam, self).__init__(layer)
-            self.name = name
-            self.x = x
-            self.y = y
-            self.size = size
+            super(Eagle.Frame, self).__init__(layer)
+            self.x1 = x1
+            self.y1 = y1
+            self.x2 = x2
+            self.y2 = y2
+
+            self.columns = columns
+            self.rows = rows
+
+            self.bleft = bleft
+            self.btop = btop
+            self.bright = bright
+            self.bbottom = bbottom
             return
 
         def construct(self):
@@ -1727,13 +1760,68 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
+            _borbot = ( (self.bleftmask if self.bleft else 0) +
+                        (self.btopmask if self.btop else 0) +
+                        (self.brightmask if self.bright else 0) +
+                        (self.bbottommask if self.bbottom else 0) )
+
             _ret_val = struct.pack(self.template,
                                    self.constant, 0, 0, self.layer,
+                                   self.encode_real(self.x1),
+                                   self.encode_real(self.y1),
+                                   self.encode_real(self.x2),
+                                   self.encode_real(self.y2),
+                                   self.columns,
+                                   self.rows,
+                                   _borbot,
+                                   0,
+                                  )
+            return _ret_val
+
+    class AttributeNam(Shape):
+        """ A struct that represents a part's NAME attribute
+        """
+        constant = 0x34
+        template = "=4B2i2H4B4s"
+
+        def __init__(self, x, y, size, layer, rotate, font, name="NAME"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributeNam, self).__init__(layer)
+            self.name = name
+            self.x = x
+            self.y = y
+            self.size = size
+            self.font = font
+            self.rotate = rotate
+            return
+
+        def construct(self):
+            """ Prepares a binary block
+            """
+            _ret_val = None
+
+            _font = 0
+            for _ff in Eagle.AttributeNam.fonts:
+                if Eagle.AttributeNam.fonts[_ff] == self.font:
+                    _font = _ff
+                    break
+
+            _rot = 0
+            for _rr in Eagle.AttributeNam.rotates:
+                if Eagle.AttributeNam.rotates[_rr] == self.rotate:
+                    _rot += _rr
+                    break
+
+            _ret_val = struct.pack(self.template,
+                                   self.constant, 0, _font, self.layer,
                                    self.encode_real(self.x),
                                    self.encode_real(self.y),
                                    self.encode_real(self.size /
                                        self.size_xscale),
-                                   0, ''
+                                   0, 
+                                   0, _rot, 0, 0,
+                                   ''
                                   )
             return _ret_val
 
@@ -1742,10 +1830,23 @@ class Eagle: # pylint: disable=R0902
         """
         constant = 0x35
 
-        def __init__(self, x, y, size, layer, name="VALUE"): # pylint: disable=R0913
+        def __init__(self, x, y, size, layer, rotate, font, name="VALUE"): # pylint: disable=R0913
             """ Just a constructor
             """
-            super(Eagle.AttributeVal, self).__init__(x, y, size, layer, name)
+            super(Eagle.AttributeVal, self).__init__(x, y, 
+                                        size, layer, rotate, font, name)
+            return
+
+    class AttributePrt(AttributeNam):
+        """ A struct that represents a part's PART attribute
+        """
+        constant = 0x3f
+
+        def __init__(self, x, y, size, layer, rotate, font, name="VALUE"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributePrt, self).__init__(x, y, 
+                                        size, layer, rotate, font, name)
             return
 
     class PinRef(Shape):

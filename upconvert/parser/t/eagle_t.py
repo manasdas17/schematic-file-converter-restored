@@ -618,6 +618,8 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_attrnam.x, 221.615)
         self.assertEqual(_attrnam.y, 64.77)
         self.assertEqual(_attrnam.size, 1.524)
+        self.assertEqual(_attrnam.rotate, None)
+        self.assertEqual(_attrnam.font, None)
         self.assertEqual(_attrnam.layer, 95)
         return
  
@@ -632,9 +634,27 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_attrval.x, 220.345)
         self.assertEqual(_attrval.y, 62.611)
         self.assertEqual(_attrval.size, 1.524)
+        self.assertEqual(_attrval.rotate, None)
+        self.assertEqual(_attrval.font, None)
         self.assertEqual(_attrval.layer, 96)
         return
-    
+
+    def test_attributeprt_parse(self):
+        """ Test AttributePrt block parsing """
+
+        _valid_chunk = b''.join((b"\x3f\x80\x01\x5f\x18\xf3\x3f\x00",
+                                 b"\x40\xe6\xfc\xff\xba\x22\x20\x00",
+                                 b"\x00\x10\x00\x00\x00\x00\x00\x00"))
+        _attrprt = Eagle.AttributePrt.parse(_valid_chunk)
+
+        self.assertEqual(_attrprt.x, 419.1)
+        self.assertEqual(_attrprt.y, -20.32)
+        self.assertEqual(_attrprt.size, 1.778)
+        self.assertEqual(_attrprt.rotate, 'MR0')
+        self.assertEqual(_attrprt.font, None)
+        self.assertEqual(_attrprt.layer, 95)
+        return
+
     def test_pinref_parse(self):
         """ Test PinRef block parsing """
 
@@ -646,6 +666,27 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_pinref.partno, 6)
         self.assertEqual(_pinref.gateno, 1)
         self.assertEqual(_pinref.pinno, 7)
+        return
+
+    def test_frame_parse(self):
+        """ Test Frame block parsing """
+
+        _valid_chunk = b''.join((b"\x43\x80\x00\x5e\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x30\xe3\x41\x00",
+                                 b"\x10\xa2\x2a\x00\x09\x06\x0e\x00"))
+        _frame = Eagle.Frame.parse(_valid_chunk)
+
+        self.assertEqual(_frame.x1, 0)
+        self.assertEqual(_frame.y1, 0)
+        self.assertEqual(_frame.x2, 431.8)
+        self.assertEqual(_frame.y2, 279.4)
+        self.assertEqual(_frame.columns, 9)
+        self.assertEqual(_frame.rows, 6)
+        self.assertEqual(_frame.bleft, True)
+        self.assertEqual(_frame.btop, True)
+        self.assertEqual(_frame.bright, True)
+        self.assertEqual(_frame.bbottom, False)
+        self.assertEqual(_frame.layer, 94)
         return
 
     def test_attribute_parse(self):
