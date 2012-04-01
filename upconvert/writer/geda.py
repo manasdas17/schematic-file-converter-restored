@@ -674,7 +674,7 @@ class GEDA:
             annotation.x,
             annotation.y,
             angle=annotation.rotation,
-            visibility=annotation.visible,
+            visibility=annotation.visible in (True, 'true'),
         )
 
     def _convert_arc(self, arc):
