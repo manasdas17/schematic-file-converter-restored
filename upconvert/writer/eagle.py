@@ -32,7 +32,7 @@
 import struct
 import re
 
-from upconvert.core.shape import Point, Line, Label
+from upconvert.core.shape import Point, Line, Label, Rectangle
 
 #from upconvert.parser.eagle import EagleBinConsts
 
@@ -230,7 +230,9 @@ class Eagle: # pylint: disable=R0902
                 _vis_act_link += self.linkedsignmask
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -312,7 +314,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _schematic = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.schematic):
+            if None == self.schematic:
+                _schematic = ''
+            elif self.max_embed_len >= len(self.schematic):
                 _schematic = self.schematic
             else:
                 Eagle.attr_jar_append(self.schematic)
@@ -365,7 +369,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -402,7 +408,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -439,7 +447,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -476,7 +486,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -512,7 +524,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -548,13 +562,17 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_nlen >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_nlen >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
 
             _desc = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_dlen >= len(self.desc):
+            if None == self.desc:
+                _desc = ''
+            elif self.max_embed_dlen >= len(self.desc):
                 _desc = self.desc
             else:
                 Eagle.attr_jar_append(self.desc)
@@ -593,7 +611,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -638,13 +658,17 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len1 >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len1 >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
 
             _value = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len2 >= len(self.value):
+            if None == self.value:
+                _value = ''
+            elif self.max_embed_len2 >= len(self.value):
                 _value = self.value
             else:
                 Eagle.attr_jar_append(self.value)
@@ -706,19 +730,25 @@ class Eagle: # pylint: disable=R0902
                 _signs += self.uservalue_sign_mask
 
             _prefix = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len1 >= len(self.prefix):
+            if None == self.prefix:
+                _prefix = ''
+            elif self.max_embed_len1 >= len(self.prefix):
                 _prefix = self.prefix
             else:
                 Eagle.attr_jar_append(self.prefix)
 
             _desc = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len2 >= len(self.description):
+            if None == self.description:
+                _desc = ''
+            elif self.max_embed_len2 >= len(self.description):
                 _desc = self.description
             else:
                 Eagle.attr_jar_append(self.description)
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len3 >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len3 >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -755,7 +785,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -1312,7 +1344,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -1419,7 +1453,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -1483,7 +1519,7 @@ class Eagle: # pylint: disable=R0902
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
-            self.name = name
+            self.name = str(name)
             self.x = x
             self.y = y
             self.visible = visible
@@ -1501,7 +1537,9 @@ class Eagle: # pylint: disable=R0902
             _ret_val = None
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -1579,7 +1617,9 @@ class Eagle: # pylint: disable=R0902
                     break
 
             _name = self.no_embed_str + b'\0\0\0\x09'
-            if self.max_embed_len >= len(self.name):
+            if None == self.name:
+                _name = ''
+            elif self.max_embed_len >= len(self.name):
                 _name = self.name
             else:
                 Eagle.attr_jar_append(self.name)
@@ -1608,7 +1648,7 @@ class Eagle: # pylint: disable=R0902
             """ Just a constructor
             """
             super(Eagle.Text, self).__init__(layer)
-            self.value = value
+            self.value = str(value)
             self.x = x
             self.y = y
             self.size = size
@@ -1633,7 +1673,9 @@ class Eagle: # pylint: disable=R0902
                     _rotate = _rr
                     break
 
-            if self.max_embed_len >= len(self.value):
+            if None == self.value:
+                _value = ''
+            elif self.max_embed_len >= len(self.value):
                 _value = self.value
             else:
                 _value = self.no_embed_str + b'\0\0\0\x09'
@@ -1659,7 +1701,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            if self.max_embed_len > len(self.value):
+            if None == self.value or self.max_embed_len >= len(self.value):
                 pass # was embedded
             else:
                 _ret_val = self.value + self.delimeter
@@ -2180,7 +2222,9 @@ class Eagle: # pylint: disable=R0902
 
                         for _cpp in _cbb.pins:
 
-                            _name = _cpp.label.text
+                            _name = None
+                            if None != _cpp.label:
+                                _name = _cpp.label.text
 
                             _visible = None
                             if 'visible' in _cpp.attributes:
@@ -2209,14 +2253,15 @@ class Eagle: # pylint: disable=R0902
                                     direction=_dir, rotate=_rot, length=_len,
                                     function=_func, swaplevel=_swap))
                         for _cff in _cbb.shapes:
+
+                            _layer = 94
+                            if 'label' in _cff.attributes:
+                                _layer = _cff.attributes['layer']
+
                             if isinstance(_cff, Line):
                                 _style = 'Continuous'
                                 if 'style' in _cff.attributes:
                                     _style = _cff.attributes['style']
-
-                                _layer = 94
-                                if 'label' in _cff.attributes:
-                                    _layer = _cff.attributes['layer']
 
                                 _width = 0.254
                                 if 'width' in _cff.attributes:
@@ -2226,6 +2271,24 @@ class Eagle: # pylint: disable=R0902
                                         x1=_cff.p1.x, y1=_cff.p1.y,
                                         x2=_cff.p2.x, y2=_cff.p2.y,
                                         style=_style, layer=_layer, width=_width))
+                            elif isinstance(_cff, Rectangle):
+                                _symbol.shapes.append(Eagle.Rectangle(
+                                        x1=_cff.x, y1=_cff.y,
+                                        x2=(_cff.x + _cff.width), 
+                                        y2=(_cff.y - _cff.height),
+                                        rotate=None, layer=_layer))
+                            elif isinstance(_cff, Label):
+                                _layer = 95
+                                if 'label' in _cff.attributes:
+                                    _layer = _cff.attributes['layer']
+
+                                _rot = self.Shape.rotate2strings(_cff.rotation)
+
+                                _symbol.shapes.append(Eagle.Text(
+                                        value=_cff.text,
+                                        x=_cff.x, y=_cff.y,
+                                        size=1.778, font=None, ratio=10,
+                                        rotate=_rot, layer=_layer))
                             else:
                                 raise ValueError("cannot process " + _cff.__class__.__name__)
 

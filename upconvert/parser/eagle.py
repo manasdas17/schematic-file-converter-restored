@@ -1522,7 +1522,7 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
-            self.name = name
+            self.name = str(name)
             self.x = x
             self.y = y
             self.visible = visible
@@ -1631,7 +1631,7 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Text, self).__init__(layer)
-            self.value = value
+            self.value = str(value)
             self.x = x
             self.y = y
             self.size = size
