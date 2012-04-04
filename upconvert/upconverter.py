@@ -50,6 +50,7 @@ Upverter's Open JSON Interchange Format """
 
 import logging
 import os
+import sys
 import operator
 import tempfile
 from argparse import ArgumentParser
@@ -204,8 +205,17 @@ if __name__ == "__main__":
     ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
             help="specify SYMDIRS to search for .sym files (for gEDA only)", 
             metavar="SYMDIRS", nargs="+")
+    ap.add_argument('--unsupported', action='store_true', default=False)
 
     args = ap.parse_args()
+
+    # Fail if strict and wrong python version
+    if sys.version_info[0] > 2 or sys.version_info[1] > 6:
+        print 'WARNING: RUNNING UNSUPPORTED VERSION OF PYTHON (%s.%s > 2.6)' % (sys.version_info[0],
+            sys.version_info[1])
+        if not args.unsupported:
+            sys.exit(-1)
+
     inputtype = args.inputtype
     outputtype = args.outputtype
     inputfile = args.inputfile

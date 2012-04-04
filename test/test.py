@@ -24,6 +24,7 @@
 import argparse
 import unittest
 import os
+import sys
 import re
 import logging
 import tempfile
@@ -138,10 +139,20 @@ def test_write_generator(json_file_path, format):
 def main():
     desc = 'Run the upconverter regression tests'
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument('--fail-fast', action='store_true')
+    parser.add_argument('--fail-fast', action='store_true', default=False)
+    parser.add_argument('--unsupported', action='store_true', default=False)
     parser.add_argument('file_types', metavar='file', action='append')
 
     args = parser.parse_args()
+    if 'all' in args.file_types:
+        args.file_types = None
+
+    # Fail if strict and wrong python version
+    if sys.version_info[0] > 2 or sys.version_info[1] > 6:
+        print 'WARNING: RUNNING UNSUPPORTED VERSION OF PYTHON (%s.%s > 2.6)' % (sys.version_info[0],
+            sys.version_info[1])
+        if not args.unsupported:
+            sys.exit(-1)
 
     # Hide logging
     logging.getLogger("main").setLevel(logging.ERROR)
@@ -212,7 +223,10 @@ def main():
         if not args.file_types or format in args.file_types:
             print '=============================\n\n\nTesting: %s >>>' % format
             s = unittest.TestLoader().loadTestsFromTestCase(c)
-            unittest.TextTestRunner(failfast=args.fail_fast).run(s)
+            if args.fail_fast:
+                unittest.TextTestRunner(failfast=args.fail_fast).run(s)
+            else:
+                unittest.TextTestRunner().run(s)
 
 
 if __name__ == "__main__":
