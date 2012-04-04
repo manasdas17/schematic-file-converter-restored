@@ -744,6 +744,37 @@ class EagleTests(unittest.TestCase):
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)
         return
+
+    def test_frame_construct(self):
+        """ Test Frame block creation """
+
+        _frame = Eagle.Frame(x1=0.,
+                             y1=0.,
+                             x2=431.8,
+                             y2=279.4,
+                             columns=9,
+                             rows=6,
+                             bleft=True,
+                             btop=True,
+                             bright=True,
+                             bbottom=False,
+                             layer=94,
+                            )
+
+        _chunk = _frame.construct()
+
+        _valid_chunk = b''.join((b"\x43\x00\x00\x5e\x00\x00\x00\x00",
+                                 b"\x00\x00\x00\x00\x30\xe3\x41\x00",
+                                 b"\x10\xa2\x2a\x00\x09\x06\x0e\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+
+
+
+
  
     def test_attributenam_construct(self):
         """ Test AttributeNam block creation """
@@ -751,12 +782,14 @@ class EagleTests(unittest.TestCase):
         _attrnam = Eagle.AttributeNam(x=221.615,
                                       y=64.77,
                                       size=1.524,
+                                      rotate=None,
+                                      font=None,
                                       layer=95,
                                      )
 
         _chunk = _attrnam.construct()
 
-        _valid_chunk = b''.join((b"\x34\x00\x00\x5f\xd6\xd0\x21\x00",
+        _valid_chunk = b''.join((b"\x34\x00\x01\x5f\xd6\xd0\x21\x00",
                                  b"\x14\xe2\x09\x00\xc4\x1d\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
 
@@ -770,14 +803,37 @@ class EagleTests(unittest.TestCase):
         _attrval = Eagle.AttributeVal(x=220.345,
                                       y=62.611,
                                       size=1.524,
+                                      rotate=None,
+                                      font=None,
                                       layer=96,
                                      )
 
         _chunk = _attrval.construct()
 
-        _valid_chunk = b''.join((b"\x35\x00\x00\x60\x3a\x9f\x21\x00",
+        _valid_chunk = b''.join((b"\x35\x00\x01\x60\x3a\x9f\x21\x00",
                                  b"\xbe\x8d\x09\x00\xc4\x1d\x00\x00",
                                  b"\x00\x00\x00\x00\x00\x00\x00\x00"))
+
+        self.assertNotEqual(_chunk, None)
+        self.assertEqual(_chunk, _valid_chunk)
+        return
+
+    def test_attributeprt_construct(self):
+        """ Test AttributePrt block creation """
+
+        _attrprt = Eagle.AttributePrt(x=419.1,
+                                      y=-20.32,
+                                      size=1.778,
+                                      rotate='MR0',
+                                      font=None,
+                                      layer=95,
+                                     )
+
+        _chunk = _attrprt.construct()
+
+        _valid_chunk = b''.join((b"\x3f\x00\x01\x5f\x18\xf3\x3f\x00",
+                                 b"\x40\xe6\xfc\xff\xba\x22\x00\x00",
+                                 b"\x00\x10\x00\x00\x00\x00\x00\x00"))
 
         self.assertNotEqual(_chunk, None)
         self.assertEqual(_chunk, _valid_chunk)

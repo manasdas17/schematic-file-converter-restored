@@ -1005,14 +1005,25 @@ class Eagle:
         rotatemask = 0x0c # in some cases 0x0f works as well
         rotates = {
                    0x00: None,
+                   0x01: "R40",
+                   0x02: "R45",
                    0x04: "R90",
+                   0x06: "R135",
                    0x08: "R180",
+                   0x0a: "R225",
                    0x0c: "R270",
-# ones below are possible for text -- don't apply the mask there
+                   0x0e: "R315",
+# ones below are possible for text & frame -- don't apply the mask there
                    0x10: "MR0",
+                   0x12: "MR45",
                    0x14: "MR90",
+                   0x16: "MR135",
                    0x18: "MR180",
+                   0x1a: "MR225",
                    0x1c: "MR270",
+                   0x1e: "MR315",
+
+                   0x40: "SR0", #...
                   }
 
         fonts = {
@@ -1091,7 +1102,8 @@ class Eagle:
         constant = 0x30
         template = "=2BH2iH6BI"
 
-        smashed_mask = 0x01
+        smashed_mask = 0x01 # IC, +PART
+        smashed2_mask = 0x02 #??
 
         constantmid = 0xffff
 
@@ -1121,6 +1133,9 @@ class Eagle:
                                      smashed=True 
                                         if Eagle.Instance.smashed_mask ==
                                             (Eagle.Instance.smashed_mask & 
+                                                _dta[10]) or 
+                                            Eagle.Instance.smashed2_mask ==
+                                            (Eagle.Instance.smashed2_mask &
                                                 _dta[10]) else False,
                                      rotate=Eagle.Instance.rotates[
                                          Eagle.Instance.rotatemask & _dta[9]],
@@ -1472,6 +1487,7 @@ class Eagle:
         visibles = {
                     0x00: "off",
                     0x40: "pad",
+                    0x80: "pin",
                     0xc0: None, # default
                    }
         dirmask = 0x0f
@@ -1480,19 +1496,25 @@ class Eagle:
                       0x01: "in",
                       0x02: "out",
                       0x03: None, # default
+                      0x04: "oc",
                       0x05: "pwr",
                       0x06: "pas",
                       0x07: "hiz",
+                      0x08: "sup",
                      }
         lengthmask = 0x30
         lengths = {
+                   0x00: "point",
                    0x10: "short",
                    0x20: "middle",
+                   0x30: None, # default
                   }
         funcmask = 0x0f
         functions = {
                      0x00: None, # default
                      0x01: "dot",
+                     0x02: "clk",
+                     0x03: "dotclk",
                     }
 
         def __init__(self, name, x, y, visible, direction, rotate, length, # pylint: disable=R0913
@@ -1500,7 +1522,7 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
-            self.name = name
+            self.name = str(name)
             self.x = x
             self.y = y
             self.visible = visible
@@ -1556,6 +1578,7 @@ class Eagle:
                      0x00: "must",
                      0x02: None,
                      0x03: "request",
+                     0x04: "always",
                     }
 
         max_embed_len = 8
@@ -1608,7 +1631,7 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Text, self).__init__(layer)
-            self.value = value
+            self.value = str(value)
             self.x = x
             self.y = y
             self.size = size
@@ -1681,7 +1704,7 @@ class Eagle:
             self.font = font
             self.onoff = onoff
             self.mirrored = mirrored
-            return #}}}
+            return
 
         @staticmethod
         def parse(chunk):
@@ -1711,13 +1734,65 @@ class Eagle:
                                      )
             return _ret_val
 
+    class Frame(Shape):
+        """ A struct that represents a frame
+        """
+        constant = 0x43
+        template = "=4B4i4B"
+
+        bleftmask = 0x08
+        btopmask = 0x04
+        brightmask = 0x02
+        bbottommask = 0x01
+
+        def __init__(self, x1, y1, x2, y2, columns, rows, # pylint: disable=R0913
+                    layer, bleft=True, btop=True, bright=True, bbottom=True): 
+            """ Just a constructor
+            """
+            super(Eagle.Frame, self).__init__(layer)
+            self.x1 = x1
+            self.y1 = y1
+            self.x2 = x2
+            self.y2 = y2
+
+            self.columns = columns
+            self.rows = rows
+
+            self.bleft = bleft
+            self.btop = btop
+            self.bright = bright
+            self.bbottom = bbottom
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses frame
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.Frame.template, chunk)
+
+            _ret_val = Eagle.Frame(x1=Eagle.Shape.decode_real(_dta[4]),
+                                      y1=Eagle.Shape.decode_real(_dta[5]),
+                                      x2=Eagle.Shape.decode_real(_dta[6]),
+                                      y2=Eagle.Shape.decode_real(_dta[7]),
+                                      columns=_dta[8],
+                                      rows=_dta[9],
+                                      bleft=(0 != Eagle.Frame.bleftmask & _dta[10]),
+                                      btop=(0 != Eagle.Frame.btopmask & _dta[10]),
+                                      bright=(0 != Eagle.Frame.brightmask & _dta[10]),
+                                      bbottom=(0 != Eagle.Frame.bbottommask & _dta[10]),
+                                      layer=_dta[3],
+                                  )
+            return _ret_val
+
     class AttributeNam(Shape):
         """ A struct that represents a part's NAME attribute
         """
         constant = 0x34
-        template = "=4B2I2H8s"
+        template = "=4B2i2H4B4s"
 
-        def __init__(self, x, y, size, layer, name="NAME"): # pylint: disable=R0913
+        def __init__(self, x, y, size, layer, rotate, font, name="NAME"): # pylint: disable=R0913
             """ Just a constructor
             """
             super(Eagle.AttributeNam, self).__init__(layer)
@@ -1725,6 +1800,8 @@ class Eagle:
             self.x = x
             self.y = y
             self.size = size
+            self.font = font
+            self.rotate = rotate
             return
 
         @staticmethod
@@ -1735,12 +1812,15 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.AttributeNam.template, chunk)
 
-# [2] can be font
             _ret_val = Eagle.AttributeNam(x=Eagle.Shape.decode_real(_dta[4]),
                                           y=Eagle.Shape.decode_real(_dta[5]),
                                           size=Eagle.Shape.size_xscale *
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
+                                          rotate=Eagle.AttributeNam.rotates[
+                                              Eagle.AttributeNam.rotatemask & 
+                                              _dta[9]],
+                                          font=Eagle.AttributeNam.fonts[_dta[2]],
                                          )
             return _ret_val
 
@@ -1749,10 +1829,11 @@ class Eagle:
         """
         constant = 0x35
 
-        def __init__(self, x, y, size, layer, name="VALUE"): # pylint: disable=R0913
+        def __init__(self, x, y, size, layer, rotate, font, name="VALUE"): # pylint: disable=R0913
             """ Just a constructor
             """
-            super(Eagle.AttributeVal, self).__init__(x, y, size, layer, name)
+            super(Eagle.AttributeVal, self).__init__(x, y, 
+                                        size, layer, rotate, font, name)
             return
 
         @staticmethod
@@ -1768,6 +1849,41 @@ class Eagle:
                                           size=Eagle.Shape.size_xscale *
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
+                                          rotate=Eagle.AttributeVal.rotates[
+                                              Eagle.AttributeVal.rotatemask & 
+                                              _dta[9]],
+                                          font=Eagle.AttributeVal.fonts[_dta[2]],
+                                         )
+            return _ret_val
+
+    class AttributePrt(AttributeNam):
+        """ A struct that represents a part's PART attribute
+        """
+        constant = 0x3f
+
+        def __init__(self, x, y, size, layer, rotate, font, name="PART"): # pylint: disable=R0913
+            """ Just a constructor
+            """
+            super(Eagle.AttributePrt, self).__init__(x, y, 
+                                        size, layer, rotate, font, name)
+            return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses attribute-name
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.AttributePrt.template, chunk)
+
+# [7] ?
+            _ret_val = Eagle.AttributePrt(x=Eagle.Shape.decode_real(_dta[4]),
+                                          y=Eagle.Shape.decode_real(_dta[5]),
+                                          size=Eagle.Shape.size_xscale *
+                                               Eagle.Shape.decode_real(_dta[6]),
+                                          layer=_dta[3],
+                                          rotate=Eagle.AttributePrt.rotates[_dta[9]], # no mask: like Text!
+                                          font=Eagle.AttributePrt.fonts[_dta[2]],
                                          )
             return _ret_val
 
@@ -2015,7 +2131,8 @@ class Eagle:
         with open(filename, 'r') as f:
             data = f.read(4096)
         confidence = 0
-        if '\xc3\x84A' in data:
+        if ('\x10' == data[0x00] and '\x11' == data[0x18] and 
+                '\x11' == data[0x30] and '\x12' == data[0x48]):
             confidence += 0.9
         return confidence
 
@@ -2123,8 +2240,12 @@ class Eagle:
                 _cur_segment.shapes.append(self.AttributeNam.parse(_dta))
             elif Eagle.AttributeVal.constant == _type:
                 _cur_segment.shapes.append(self.AttributeVal.parse(_dta))
+            elif Eagle.AttributePrt.constant == _type:
+                _cur_segment.shapes.append(self.AttributePrt.parse(_dta))
             elif Eagle.Text.constant == _type:
                 _cur_segment.shapes.append(self.Text.parse(_dta))
+            elif Eagle.Frame.constant == _type:
+                _cur_segment.shapes.append(self.Frame.parse(_dta))
             elif Eagle.Attribute.constant == _type:
                 self.attributes.append(self.Attribute.parse(_dta))
             else:
