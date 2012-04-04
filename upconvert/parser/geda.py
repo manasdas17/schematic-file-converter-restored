@@ -972,7 +972,7 @@ class GEDA:
             x, y = [int(value) for value in string.strip().split(',')]
 
             if mirrored:
-                x = 0-x
+                x = -x
 
             return (self.x_to_px(x), self.y_to_px(y))
 
