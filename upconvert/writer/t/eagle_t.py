@@ -536,7 +536,7 @@ class EagleTests(unittest.TestCase):
                          x2=111.76,
                          y2=60.96,
                          width=0.6096,
-                         curve=0, # <---- wrong
+                         curve=247.38,      # note: encoded number is 114.3 -- a circle center's X coord
                          cap="flat",
                          direction="counterclockwise",
                          style="ShortDash",
@@ -545,8 +545,8 @@ class EagleTests(unittest.TestCase):
 
         _chunk = _arc.construct()
 
-        _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xc0\x80\x0f\x00",
-                                 b"\x48\xd0\x05\x00\xa0\x0d\x11\x00",
+        _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xc0\x80\x0f\xd8",
+                                 b"\x48\xd0\x05\x70\xa0\x0d\x11\x11",
                                  b"\x40\x4d\x09\x00\xe8\x0b\x32\x81"))
 
         self.assertNotEqual(_chunk, None)

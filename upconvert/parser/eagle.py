@@ -24,6 +24,7 @@
 #
 
 import struct
+import math
 
 from upconvert.core.annotation import Annotation
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
@@ -1146,7 +1147,7 @@ class Eagle:
         """ A struct that represents a circle
         """
         constant = 0x25
-        template = "=4B4IH2B"
+        template = "=4B2i2IH2B"
 
         def __init__(self, x, y, radius, width, layer): # pylint: disable=R0913
             """ Just a constructor
@@ -1181,7 +1182,7 @@ class Eagle:
         """ A struct that represents a rectangle
         """
         constant = 0x26
-        template = "=4B4I4B"
+        template = "=4B4i4B"
 
         def __init__(self, x1, y1, x2, y2, layer, rotate): # pylint: disable=R0913
             """ Just a constructor
@@ -1376,7 +1377,7 @@ class Eagle:
     class Arc(Wire):
         """ A struct that represents an arc
         """
-        template = "=4B4IH2B" # unsigned int
+        template = "=4B4IH2B" # 3-bytes long coords here..
 
         capmask = 0x10
         caps = {
@@ -1385,8 +1386,8 @@ class Eagle:
                }
         directionmask = 0x20
         directions = {
-                      0x00: "clockwise",
-                      0x20: "counterclockwise",
+                      0x00: "clockwise",        # == negative curve (angle)
+                      0x20: "counterclockwise", # == positive curve (angle)
                      }
 
         def __init__(self, x1, y1, x2, y2, style, layer, width, # pylint: disable=R0913
@@ -1407,22 +1408,68 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.Arc.template, chunk)
             
-            _ret_val = Eagle.Arc(
-                          x1=Eagle.Shape.decode_real(_dta[4] & 0xffffff),
-                          y1=Eagle.Shape.decode_real(_dta[5] & 0xffffff),
-                          x2=Eagle.Shape.decode_real(_dta[6] & 0xffffff),
-                          y2=Eagle.Shape.decode_real(_dta[7]),
-                                  layer=_dta[3],
-                                  width=(Eagle.Wire.width_xscale *
-                                         Eagle.Shape.decode_real(
-                                                                _dta[8])),
+            # sign propogation by hand
+            _x1 = (Eagle.Shape.decode_real(_dta[4] & 0xffffff) 
+                    if 0 == (0x800000 & _dta[4])
+                    else -1 * (0x1000000 - 
+                        Eagle.Shape.decode_real(_dta[4] & 0xffffff)))
+            _y1 = (Eagle.Shape.decode_real(_dta[5] & 0xffffff)
+                    if 0 == (0x800000 & _dta[5])
+                    else -1 * (0x1000000 - 
+                        Eagle.Shape.decode_real(_dta[5] & 0xffffff)))
+            _x2 = (Eagle.Shape.decode_real(_dta[6] & 0xffffff)
+                    if 0 == (0x800000 & _dta[6])
+                    else -1 * (0x1000000 - 
+                        Eagle.Shape.decode_real(_dta[6] & 0xffffff)))
+            _y2 = (Eagle.Shape.decode_real(_dta[7] & 0xffffff)
+                    if 0 == (0x800000 & _dta[7])
+                    else -1 * (0x1000000 - 
+                        Eagle.Shape.decode_real(_dta[7] & 0xffffff)))
+
+# _coord is a single (either x or y) coordinate of a circle's center
+            _coord = (Eagle.Shape.decode_real(
+                      (((_dta[4] & 0xff000000) >> 24) & 0xff) +
+                      (((_dta[5] & 0xff000000) >> 16) & 0xff00) +
+                      (((_dta[6] & 0xff000000) >> 8) & 0xff0000))
+                    if 0 == (0x80000000 & _dta[6])
+                    else -1 * (0x1000000 - 
+                      Eagle.Shape.decode_real(
+                              (((_dta[4] & 0xff000000) >> 24) & 0xff) +
+                              (((_dta[5] & 0xff000000) >> 16) & 0xff00) +
+                              (((_dta[6] & 0xff000000) >> 8) & 0xff0000))))
+
+# have to determine which coord is given
+            _dx = math.pow(_coord - _y2, 2) - math.pow(_coord - _y1, 2)
+            _dy = math.pow(_coord - _x1, 2) - math.pow(_coord - _x2, 2)
+
+            if _dx > 0 and _dy > 0:
+                raise ValueError("cannot decide what coord is given in Eagle.Arc")
+            elif _dy > 0: # X is given
+                _x3 = _coord
+                _y3 = (_dy - _y2 * _y2 + _y1 * _y1) / (2 * (_y1 - _y2))
+            elif _dx > 0: # Y is given
+                _x3 = (_dx - _x1 * _x1 + _x2 * _x2) / (2 * (_x2 - x1))
+                _y3 = _coord
+            else:
+                raise ValueError("wrong coord is given in Eagle.Arc")
+
+            _curve = math.degrees(math.acos((math.pow(_x1 - _x3, 2) + math.pow(_y1 - _y3, 2) +
+                                             math.pow(_x2 - _x3, 2) + math.pow(_y2 - _y3, 2) +
+                                             - math.pow(_x1 - _x2, 2) - math.pow(_y1 - _y2, 2)) / 
+                                    (2 * math.sqrt(math.pow(_x1 - _x3, 2) + math.pow(_y1 - _y3, 2)) *
+                                         math.sqrt(math.pow(_x2 - _x3, 2) + math.pow(_y2 - _y3, 2)))))
+            if _dta[9] & Eagle.Arc.directionmask:
+                _curve = 360 - _curve
+
+            _ret_val = Eagle.Arc( # sign propogation by hand
+                          x1=_x1, y1=_y1, x2=_x2, y2=_y2,
+                          layer=_dta[3],
+                          width=(Eagle.Wire.width_xscale *
+                                 Eagle.Shape.decode_real(
+                                                        _dta[8])),
                           style=Eagle.Wire.styles[
                               Eagle.Wire.stylemask & _dta[9]],
-# TODO decode curve...
-                          curve=Eagle.Shape.decode_real(
-                                  (_dta[4] & 0xff000000 >> 24) +
-                                  (_dta[5] & 0xff000000 >> 16) +
-                                  (_dta[6] & 0xff000000 >> 8)),
+                          curve=int((_curve + 0.005) * 100) / 100., # rounding
                           cap=Eagle.Arc.caps[_dta[9] & Eagle.Arc.capmask],
                           direction=Eagle.Arc.directions[_dta[9] & 
                                                 Eagle.Arc.directionmask]

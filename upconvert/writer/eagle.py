@@ -31,8 +31,9 @@
 
 import struct
 import re
+import math
 
-from upconvert.core.shape import Point, Line, Label, Rectangle
+from upconvert.core.shape import Point, Line, Label, Rectangle, Arc, BezierCurve, Circle
 
 #from upconvert.parser.eagle import EagleBinConsts
 
@@ -912,7 +913,7 @@ class Eagle: # pylint: disable=R0902
             _attrstechs = self.no_embed_str + b'\0\0\0\x09'
             if 0 < len(self.technologies):
                 _at2 = self.delim_techs + self.delim_techs.join(self.technologies)
-                if self.max_embed_len >= len(_attrstechs):
+                if self.max_embed_len >= len(_at2):
                     _attrstechs = _at2
                 else:
                     Eagle.attr_jar_append(_at2)
@@ -923,8 +924,8 @@ class Eagle: # pylint: disable=R0902
                         self.delim_names + self.delim_names.join(
                                         [y for x, y in self.attributes]),
                         ))
-                if self.max_embed_len >= len(_attrstechs):
-                    _attrstechs = _at2
+                if self.max_embed_len >= len(_at2):
+                    _attrstechs = str(_at2)
                 else:
                     Eagle.attr_jar_append(_at2)
             else:
@@ -1135,7 +1136,7 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents a circle
         """
         constant = 0x25
-        template = "=4B4IH2B"
+        template = "=4B2i2IH2B"
 
         def __init__(self, x, y, radius, width, layer): # pylint: disable=R0913
             """ Just a constructor
@@ -1169,7 +1170,7 @@ class Eagle: # pylint: disable=R0902
         """ A struct that represents a rectangle
         """
         constant = 0x26
-        template = "=4B4I4B"
+        template = "=4B4i4B"
 
         def __init__(self, x1, y1, x2, y2, layer, rotate): # pylint: disable=R0913
             """ Just a constructor
@@ -1367,6 +1368,8 @@ class Eagle: # pylint: disable=R0902
     class Arc(Wire):
         """ A struct that represents an arc
         """
+        template = "=4B4IH2B" # 3-bytes long coords here..
+
         capmask = 0x10
         caps = {
                 0x00: None,
@@ -1374,8 +1377,8 @@ class Eagle: # pylint: disable=R0902
                }
         directionmask = 0x20
         directions = {
-                      0x00: "clockwise",
-                      0x20: "counterclockwise",
+                      0x00: "clockwise",        # == negative curve (angle)
+                      0x20: "counterclockwise", # == positive curve (angle)
                      }
 
         def __init__(self, x1, y1, x2, y2, style, layer, width, # pylint: disable=R0913
@@ -1407,17 +1410,36 @@ class Eagle: # pylint: disable=R0902
                     _signs += _ss
                     break
 
+# calculating circle's center coords
+            _dp = math.sqrt(math.pow(self.x2 - self.x1, 2) + math.pow(self.y2 - self.y1, 2)) 
+            _r = _dp / (2 * math.cos(math.radians((180 - self.curve) / 2)))
 
-            _curve = self.encode_real(self.curve)
+            _h = math.sqrt(_r * _r - math.pow(_dp / 2, 2))
+
+            if 'counterclockwise' == self.direction:
+                _x3 = self.x1 + abs(self.x2 - self.x1) / 2 + _h * abs(self.y2 - self.y1) / _dp
+                _y3 = self.y1 + abs(self.y2 - self.y1) / 2 - _h * abs(self.x2 - self.x1) / _dp
+            else:
+                _x3 = self.x1 + abs(self.x2 - self.x1) / 2 - _h * abs(self.y2 - self.y1) / _dp
+                _y3 = self.y1 + abs(self.y2 - self.y1) / 2 + _h * abs(self.x2 - self.x1) / _dp
+
+            if abs(self.x1 - self.x2) < abs(self.y1 - self.y2):
+                _curve = _x3
+            else:
+                _curve = _y3
+
+            _curve = self.encode_real(int((_curve + 0.005) * 100) / 100.) # rounding..
 
             _ret_val = struct.pack(self.template,
                                    self.constant, 
                                    0, 0, self.layer,
-# TODO add curve...
-                                   self.encode_real(self.x1),
-                                   self.encode_real(self.y1),
-                                   self.encode_real(self.x2),
-                                   self.encode_real(self.y2),
+                                   ((self.encode_real(self.x1) & 0xffffff) +
+                                       ((_curve & 0xff) << 24)),
+                                   ((self.encode_real(self.y1) & 0xffffff) +
+                                       ((_curve & 0xff00) << 16)),
+                                   ((self.encode_real(self.x2) & 0xffffff) +
+                                       ((_curve & 0xff0000) << 8)),
+                                   self.encode_real(self.y2) & 0xffffff,
                                    self.encode_real(
                                        self.width / self.width_xscale),
                                    _signs, 
@@ -2127,7 +2149,7 @@ class Eagle: # pylint: disable=R0902
     def attr_jar_append(cls, value):
         """ Puts one more string into the jar
         """
-        cls.attr_jar.append(value)
+        cls.attr_jar.append(value.encode('ascii', 'replace'))
 
     def _convert_library(self, design):
         """ Converts library part into a set of Eagle objects
@@ -2277,8 +2299,43 @@ class Eagle: # pylint: disable=R0902
                                         x2=(_cff.x + _cff.width), 
                                         y2=(_cff.y - _cff.height),
                                         rotate=None, layer=_layer))
+                            elif isinstance(_cff, Arc):
+                                _style = 'Continuous'
+                                if 'style' in _cff.attributes:
+                                    _style = _cff.attributes['style']
+
+                                _width = 0.254
+                                if 'width' in _cff.attributes:
+                                    _width = _cff.attributes['width']
+
+                                _layer = 91 # usually Nets
+
+                                _dir = ('counterclockwise' 
+                                            if _cff.start_angle < _cff.end_angle
+                                            else 'clockwise')
+                                _symbol.shapes.append(Eagle.Arc( # _cff's angles're in radians
+                                        x1=_cff.x + _cff.radius * math.cos(_cff.start_angle), # sign is ok
+                                        y1=_cff.y + _cff.radius * math.sin(_cff.start_angle),
+                                        x2=_cff.x + _cff.radius * math.cos(_cff.end_angle),
+                                        y2=_cff.y + _cff.radius * math.sin(_cff.end_angle),
+                                        style=_style, 
+                                        layer=_layer, width=_width,
+                                        curve=math.degrees(abs(_cff.start_angle - _cff.end_angle)),
+                                        cap=None, 
+                                        direction=_dir))
+                            elif isinstance(_cff, BezierCurve):
+                                raise NotImplementedError("BezierCurve isn't implemented for Eagle yet")
+                            elif isinstance(_cff, Circle):
+                                _width = 0.254
+                                if 'width' in _cff.attributes:
+                                    _width = _cff.attributes['width']
+
+                                _symbol.shapes.append(Eagle.Circle(
+                                        x=_cff.x, y=_cff.y,
+                                        radius=_cff.radius, 
+                                        width=_width, layer=_layer))
                             elif isinstance(_cff, Label):
-                                _layer = 95
+                                _layer = 95 # usually Names
                                 if 'label' in _cff.attributes:
                                     _layer = _cff.attributes['layer']
 
@@ -2385,7 +2442,7 @@ class Eagle: # pylint: disable=R0902
                             break
                     _web.shapes.append(Eagle.PinRef(
                             partno= _pno, gateno=1, 
-                            pinno=_rr.pin_number,
+                            pinno=int(_rr.pin_number),
                         ))
         return
 
