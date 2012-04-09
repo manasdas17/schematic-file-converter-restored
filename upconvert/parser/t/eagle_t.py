@@ -444,7 +444,8 @@ class EagleTests(unittest.TestCase):
         self.assertEqual(_arc.x2, 111.76)
         self.assertEqual(_arc.y2, 60.96)
         self.assertEqual(_arc.width, 0.6096)
-        self.assertEqual(_arc.curve, 116.7552) # <---- probably wrong
+        self.assertEqual(_arc.curve, 247.38) # rounded a bit
+                                             # note: encoded number is 114.3 -- a circle center's X coord
         self.assertEqual(_arc.cap, "flat")
         self.assertEqual(_arc.direction, "counterclockwise")
         self.assertEqual(_arc.style, "ShortDash")
