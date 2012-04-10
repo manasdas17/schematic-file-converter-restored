@@ -214,7 +214,7 @@ def main():
         for f in upverter_upv_files:
             base = os.path.basename(f)
 
-            if format != 'fritzing':
+            if format not in ('fritzing', 'gerber'):
                 test_name = 'test_%s_%s_%s' % (format, base, 'write')
                 test = test_write_generator(f, format)
                 setattr(test_class, test_name, test)
