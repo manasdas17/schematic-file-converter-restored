@@ -22,7 +22,7 @@
 # limitations under the License.
 
 from os import path
-import unittest
+import unittest, shutil, tempfile
 
 from nose.tools import raises
 
@@ -52,10 +52,12 @@ def in_out(infile):
             parser = Parser()
             design = parser.parse(path.join(DIR, infile))
             writer = Writer()
-            writer.write(design, path.join(DIR, outfile))
-            with open(path.join(DIR, outfile), 'r') as f:
+            tmpd = tempfile.mkdtemp()
+            writer.write(design, path.join(tmpd, outfile))
+            with open(path.join(tmpd, outfile), 'r') as f:
                 self.output = f.read()
             test_method(self)
+            shutil.rmtree(tmpd)
 
         # correctly identify the decorated method
         # (otherwise nose will not run the test)
@@ -76,11 +78,6 @@ class GerberTests(unittest.TestCase):
     def setUp(self):
         """ Setup the test case. """
         self.output = None
-
-    def tearDown(self):
-        """ Teardown the test case. """
-        pass
-
 
     # tests that pass if no errors are raised
 

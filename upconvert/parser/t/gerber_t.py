@@ -70,11 +70,6 @@ class GerberTests(unittest.TestCase):
         """ Setup the test case. """
         self.design = None
 
-    def tearDown(self):
-        """ Teardown the test case. """
-        pass
-
-
     # tests that pass if no errors are raised
 
     def test_create_new_gerber_parser(self):
