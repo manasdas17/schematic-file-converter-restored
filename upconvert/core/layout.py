@@ -265,7 +265,8 @@ class Aperture:
         else:
             equal = (self.shape.__dict__ == other.shape.__dict__ and
                      (self.hole == other.hole or
-                      self.hole.__dict__ == other.hole.__dict__))
+                      (self.hole and other.hole and
+                       self.hole.__dict__ == other.hole.__dict__)))
         return equal
 
 
