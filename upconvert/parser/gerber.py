@@ -685,12 +685,16 @@ class Gerber:
         else:
             shape = type_
             hole_defs = None
-        hole = hole_defs and (len(hole_defs) > 1 and
-                              Rectangle(-hole_defs[0]/2,
-                                        hole_defs[1]/2,
-                                        hole_defs[0],
-                                        hole_defs[1]) or
-                              Circle(0, 0, hole_defs[0]/2))
+
+        if hole_defs and (len(hole_defs) > 1):
+            hole = Rectangle(-hole_defs[0]/2,
+                              hole_defs[1]/2,
+                              hole_defs[0],
+                              hole_defs[1])
+        elif hole_defs:
+            hole = Circle(0, 0, hole_defs[0]/2)
+        else:
+            hole = None
 
         self.layer_buff.apertures.update({code:Aperture(code, shape, hole)})
 
