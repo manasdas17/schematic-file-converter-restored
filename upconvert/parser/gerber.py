@@ -148,7 +148,7 @@ TOK_SPEC = (('MACRO', r'%AM[^%]*%'),
             ('FUNCT', r'[GD][^\*]*\*'),# function codes
             ('COORD', r'[XY][^\*]*\*'),# coordinates
             ('EOF', r'M02\*'),         # end of file
-            ('SKIP', r'M0[01]\*|N[^\*]*\*|\s+'), # historic crud, whitespace
+            ('SKIP', r'M0[01]\*|N[^\*]*\*|\*?\s+'), # historic crud, whitespace
             ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
 IGNORE = ('SKIP', 'COMMENT', 'DEPRECATED')
 REG_EX = '|'.join('(?P<%s>%s)' % pair for pair in TOK_SPEC)
