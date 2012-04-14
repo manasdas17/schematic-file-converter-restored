@@ -202,8 +202,10 @@ class Gerber:
     def auto_detect(filename):
         """ Return our confidence that the given file is an gerber file """
         with open(filename, 'r') as f:
-            data = f.read()
+            data = f.read(4096)
         confidence = 0
+        if '%ADD' in data:
+            confidence += 0.2
         if 'D01*' in data:
             confidence += 0.2
         if 'D02*' in data:
@@ -211,7 +213,7 @@ class Gerber:
         if 'D03*' in data:
             confidence += 0.2
         if 'M02*' in data:
-            confidence += 0.4
+            confidence += 0.5
         return confidence
 
 
@@ -671,8 +673,12 @@ class Gerber:
             shape = Circle(0, 0, mods[0]/2)
             hole_defs = len(mods) > 1 and mods[1:]
         elif type_ == 'R':
-            shape = Rectangle(-mods[0]/2, mods[1]/2,
-                              mods[0], mods[1])
+            if len(mods) == 1:
+                shape = Rectangle(-mods[0]/2, mods[0]/2,
+                                   mods[0], mods[0])
+            else:
+                shape = Rectangle(-mods[0]/2, mods[1]/2,
+                                   mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
         elif type_ == 'O':
             shape = Obround(0, 0, mods[0], mods[1])
