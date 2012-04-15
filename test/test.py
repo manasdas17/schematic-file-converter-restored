@@ -55,6 +55,8 @@ def filter_fzz(arg, top, names):
 
 ger_re = re.compile(r'.*\.ger$')
 def filter_ger(arg, top, names):
+    if os.path.basename(top) == 'unittest':
+        return
     for name in names:
         if ger_re.match(os.path.join(top, name)):
             arg.append(os.path.join(top, name))
