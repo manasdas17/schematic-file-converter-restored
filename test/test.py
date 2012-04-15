@@ -141,9 +141,10 @@ def main():
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('--fail-fast', action='store_true', default=False)
     parser.add_argument('--unsupported', action='store_true', default=False)
-    parser.add_argument('file_types', metavar='file', action='append')
+    parser.add_argument('file_types', metavar='input-type', nargs='*')
 
     args = parser.parse_args()
+
     if 'all' in args.file_types:
         args.file_types = None
 
