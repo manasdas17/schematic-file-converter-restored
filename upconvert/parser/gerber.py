@@ -213,6 +213,8 @@ class Gerber:
         if 'D03*' in data:
             confidence += 0.2
         if 'M02*' in data:
+            confidence += 0.2
+        if filename.endswith('.ger'):
             confidence += 0.5
         return confidence
 
