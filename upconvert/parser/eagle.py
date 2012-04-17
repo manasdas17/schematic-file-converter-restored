@@ -1448,7 +1448,7 @@ class Eagle:
                 _x3 = _coord
                 _y3 = (_dy - _y2 * _y2 + _y1 * _y1) / (2 * (_y1 - _y2))
             elif _dx > 0: # Y is given
-                _x3 = (_dx - _x1 * _x1 + _x2 * _x2) / (2 * (_x2 - x1))
+                _x3 = (_dx - _x1 * _x1 + _x2 * _x2) / (2 * (_x2 - _x1))
                 _y3 = _coord
             else:
                 raise ValueError("wrong coord is given in Eagle.Arc")

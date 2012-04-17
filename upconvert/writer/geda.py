@@ -494,7 +494,10 @@ class GEDA:
         commands += self._create_component(
             self.offset.x, 
             self.offset.y, 
-            'title-B.sym'
+            design_attributes.attributes.pop(
+                '_geda_titleframe',
+                'title-B'
+            ) + '.sym'
         )
 
         if design_attributes.metadata.owner:

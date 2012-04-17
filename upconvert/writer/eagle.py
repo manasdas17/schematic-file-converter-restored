@@ -33,7 +33,8 @@ import struct
 import re
 import math
 
-from upconvert.core.shape import Point, Line, Label, Rectangle, Arc, BezierCurve, Circle
+from upconvert.core.shape import Point, Line, Label, Rectangle, Arc, \
+                                    BezierCurve, Circle, Polygon
 
 #from upconvert.parser.eagle import EagleBinConsts
 
@@ -1541,7 +1542,7 @@ class Eagle: # pylint: disable=R0902
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
-            self.name = str(name)
+            self.name = name.encode('ascii', 'replace') if None != name else ''
             self.x = x
             self.y = y
             self.visible = visible
@@ -2324,7 +2325,20 @@ class Eagle: # pylint: disable=R0902
                                         cap=None, 
                                         direction=_dir))
                             elif isinstance(_cff, BezierCurve):
-                                raise NotImplementedError("BezierCurve isn't implemented for Eagle yet")
+#                                raise NotImplementedError("BezierCurve isn't implemented for Eagle yet")
+# TODO curve approximation with arcs
+                                _style = 'Continuous'
+                                if 'style' in _cff.attributes:
+                                    _style = _cff.attributes['style']
+
+                                _width = 0.254
+                                if 'width' in _cff.attributes:
+                                    _width = _cff.attributes['width']
+
+                                _symbol.shapes.append(Eagle.Wire(
+                                        x1=_cff.p1.x, y1=_cff.p1.y,
+                                        x2=_cff.p2.x, y2=_cff.p2.y,
+                                        style=_style, layer=_layer, width=_width))
                             elif isinstance(_cff, Circle):
                                 _width = 0.254
                                 if 'width' in _cff.attributes:
@@ -2334,6 +2348,27 @@ class Eagle: # pylint: disable=R0902
                                         x=_cff.x, y=_cff.y,
                                         radius=_cff.radius, 
                                         width=_width, layer=_layer))
+                            elif isinstance(_cff, Polygon):
+                                _width = 0.254
+                                if 'width' in _cff.attributes:
+                                    _width = _cff.attributes['width']
+
+                                _style = 'Continuous'
+                                if 'style' in _cff.attributes:
+                                    _style = _cff.attributes['style']
+
+                                _symbol.shapes.append(Eagle.Polygon(
+                                    width=_width, layer=_layer,
+                                    numofshapes=len(_cff.points),
+                                    shapes=[ # lines from points
+                                        Eagle.Wire(
+                                            x1=p1.x, y1=p1.y,
+                                            x2=p2.x, y2=p2.y,
+                                            style=_style, layer=_layer, 
+                                            width=_width)
+                                        for p1, p2 in zip(_cff.points, 
+                                            _cff.points[1:]+[_cff.points[0],])
+                                        ]))
                             elif isinstance(_cff, Label):
                                 _layer = 95 # usually Names
                                 if 'label' in _cff.attributes:
@@ -2428,11 +2463,23 @@ class Eagle: # pylint: disable=R0902
                 _pt = _nn.points[_pp]
                 for _opp in _pt.connected_points:
                     if not _opp in _prpts: # not yet processed
+                        _opt = None
+                        try:
+                            _opt = _nn.points[_opp]
+                        except KeyError: # not from current net
+                            for _xxn in design.nets:
+                                if _opp in _xxn.points:
+                                    _opt = _xxn.points[_opp]
+                                    break
+                            else:
+                                raise ValueError("undefined point ID: %s" % str(_opp))
+
                         _web.shapes.append(Eagle.Wire(
                                 x1=_pt.x, y1=_pt.y,
-                                x2=_nn.points[_opp].x,
-                                y2=_nn.points[_opp].y,
+                                x2=_opt.x,
+                                y2=_opt.y,
                                 style="Continuous", layer=91, width=_width))
+
                 _prpts.add(_pp)
                 for _rr in _pt.connected_components:
                     _pno = -1
