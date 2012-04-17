@@ -615,9 +615,9 @@ class Gerber:
 
     def _parse_macro(self, tok):
         """ Define a macro, with its component shapes. """
-        parts = tok.split('*')
+        parts = [part.strip() for part in tok.split('*')]
         name = parts[0][3:]
-        prims =  [part.strip().split(',') for part in parts[1:-1]] 
+        prims =  [part.split(',') for part in parts[1:-1] if part]
         prim_defs = tuple([(PRIMITIVES[int(m[0])],) + tuple(m[1:])
                            for m in prims])
         return MacroDef(name, prim_defs)
@@ -653,7 +653,7 @@ class Gerber:
         x = CoordFmt(int(x[0]), int(x[1]))
         tok, g_max = self._pop_val('G', tok)
         tok, n_max = self._pop_val('N', tok)
-        inc_coords = (tok[1] == 'I')
+        inc_coords = ('I' in tok)
         z_omit = tok[0]
         return FormatSpec(z_omit, inc_coords, n_max, g_max,
                           x, y, d_max, m_max)
