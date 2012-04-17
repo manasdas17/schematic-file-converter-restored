@@ -1,14 +1,14 @@
 #!/usr/bin/env python2
 """ This module provides a writer class to generate valid gEDA
     file format data from a OpenJSON design. The module does
-    not generate embedded symbols but writes each symbol to 
-    its own symbol file to reduce the amount of data in the 
+    not generate embedded symbols but writes each symbol to
+    its own symbol file to reduce the amount of data in the
     schematic file. This also allows for reuse of system-wide
     gEDA symbol files.
     For gEDA to be able to find the generated symbols a project
     file *gafrc* will be placed in the same directory as the
     schematic file adding an instruction to include the local
-    symbols directory. If a *gafrc* file already exists it will 
+    symbols directory. If a *gafrc* file already exists it will
     not be overwritten but a warning will be printed to check
     for the required instruction.
 
@@ -17,7 +17,7 @@
     >>> writer.geda.GEDA(auto_include=True)
     >>> writer.geda.write(design, 'geda_test_design.sch')
 
-    To provide additional symbol directories to use for 
+    To provide additional symbol directories to use for
     symbol lookup try this:
     >>> import writer.geda
     >>> writer.geda.GEDA(symbol_dirs=[
@@ -55,8 +55,8 @@
 #
 # NOTE: The gEDA format is based on a 100x100 MILS grid where
 # 1 MILS is equal to 1/1000 of an inch. In a vanilla gEDA file
-# a blueprint-style frame is present with origin at 
-# (40'000, 40'000). 
+# a blueprint-style frame is present with origin at
+# (40'000, 40'000).
 
 import os
 import types
@@ -68,13 +68,13 @@ from upconvert.core.shape import Point
 from upconvert.core.annotation import Annotation
 
 from upconvert.parser.geda import GEDAError
-from upconvert.parser.geda import find_symbols 
+from upconvert.parser.geda import find_symbols
 
 
 class GEDAColor:
     """ Enumeration of gEDA colors """
     BACKGROUND_COLOR = 0
-    PIN_COLOR = 1 
+    PIN_COLOR = 1
     NET_ENDPOINT_COLOR = 2
     GRAPHIC_COLOR = 3
     NET_COLOR = 4
@@ -95,7 +95,7 @@ class GEDA:
     """ The gEDA Format Writer """
 
     ## gEDA grid size is 100mils
-    ## to 10px in openjson format 
+    ## to 10px in openjson format
     SCALE_FACTOR = 10
 
     ALIGNMENT = {
@@ -143,7 +143,7 @@ class GEDA:
         """ Set the offset point for the gEDA output. As OpenJSON
             positions the origin in the center of the viewport and
             gEDA usually uses (40'000, 40'000) as page origin, this
-            allows for translating from one coordinate system to 
+            allows for translating from one coordinate system to
             another. It expects a *point* object providing a *x* and
             *y* attribute.
         """
@@ -158,6 +158,12 @@ class GEDA:
         ## setup project environment
         self.create_project_files(filename)
 
+        output = []
+
+        component = design.components.components.pop('UNASSIGNED_SHAPES', None)
+        if component is not None:
+            output += self.generate_body_commands(component.symbols[0].bodies[0])
+
         ## create symbol files for components writing all symbols
         ## to local 'symbols' directory. Symbols that are available
         ## in provided directories are ignored and referenced.
@@ -165,20 +171,20 @@ class GEDA:
             self.write_component_to_file(library_id, component)
 
         ## generate commands for schematic file from design
-        ## output is a list of lines 
-        output = self.write_schematic_file(design)
+        ## output is a list of lines
+        output += self.write_schematic_file(design)
 
         with codecs.open(filename, encoding='utf-8', mode='w') as f_out:
             f_out.write(self.commands_to_string(output))
 
     def create_project_files(self, filename):
         """ Creates various files and directories based on the *filename*.
-            The directory of *filename* is assumed to be the project 
+            The directory of *filename* is assumed to be the project
             directory. The method creates a *gafrc* file adding support
             to load symbols from the local 'symbols' directory. If this
-            directory does not exist it is created. 
+            directory does not exist it is created.
             The *gafrc* is not overwritten when it exists assume that there
-            is more settings stored in it. A warning will be printed to 
+            is more settings stored in it. A warning will be printed to
             stdout to remind you to add the directory lookup.
         """
         project_dir = os.path.dirname(filename)
@@ -191,14 +197,14 @@ class GEDA:
         project_file = os.path.join(project_dir, 'gafrc')
         if not os.path.exists(project_file):
             with codecs.open(
-                os.path.join(project_dir, 'gafrc'), 
+                os.path.join(project_dir, 'gafrc'),
                 encoding='utf-8',
                 mode='w'
             ) as f_out:
                 f_out.write('(component-library "./symbols")')
 
         self.project_dirs['symbol'] = symbol_dir
-        self.project_dirs['project'] = project_dir 
+        self.project_dirs['project'] = project_dir
 
     def write_schematic_file(self, design):
         """ Creates a list of gEDA commands based on the *design*.
@@ -207,7 +213,7 @@ class GEDA:
         """
         output = []
 
-        ## create page frame & write name and owner 
+        ## create page frame & write name and owner
         output += self._create_schematic_title(design.design_attributes)
 
         ## create component instances
@@ -219,7 +225,7 @@ class GEDA:
         return output
 
     def generate_instances(self, component_instances):
-        """ Generates a list of gEDA commands from the list of 
+        """ Generates a list of gEDA commands from the list of
             *component_instances*. For each instance the referenced
             component is retrieved and an attribute environment is
             attached if attributes are present for the given
@@ -234,6 +240,9 @@ class GEDA:
             if '_MIRRORED' in instance.library_id:
                 mirrored = 1
 
+            if instance.library_id == 'UNASSIGNED_SHAPES':
+                continue
+
             ## retrieve symbol for instance
             component_symbol = self.component_library[(
                 instance.library_id.replace('_MIRRORED', ''),
@@ -243,7 +252,7 @@ class GEDA:
             component_annotations = []
 
             ## create component instance for every symbolattribute
-            attr_x, attr_y = 0, 0 
+            attr_x, attr_y = 0, 0
             for symbol_attribute in instance.symbol_attributes:
                 commands += self._create_component(
                     symbol_attribute.x,
@@ -256,11 +265,11 @@ class GEDA:
                 component_annotations += symbol_attribute.annotations
 
                 attr_x = symbol_attribute.x
-                attr_y = symbol_attribute.y 
+                attr_y = symbol_attribute.y
 
             for annotation in component_annotations:
                 commands += self._convert_annotation(annotation)
-        
+
             ## start an attribute environment
             commands.append('{')
 
@@ -269,8 +278,8 @@ class GEDA:
             refdes = instance.attributes.get('refdes', refdes)
 
             commands += self._create_attribute(
-                'refdes', 
-                refdes, 
+                'refdes',
+                refdes,
                 attr_x,
                 attr_y,
                 visibility=1,
@@ -281,7 +290,7 @@ class GEDA:
                     ## no position details available, stack attributes
                     attr_x, attr_y = attr_x+10, attr_y+10
                     commands += self._create_attribute(
-                            key, value, 
+                            key, value,
                             attr_x, attr_y
                     )
 
@@ -291,9 +300,9 @@ class GEDA:
         return commands
 
     def write_component_to_file(self, library_id, component):
-        """ Writes a *component* to a local symbol file and adds it to 
+        """ Writes a *component* to a local symbol file and adds it to
             the symbol lookup used for instantiating components. A component
-            might have a special attribute 'geda_imported' assigned when 
+            might have a special attribute 'geda_imported' assigned when
             converted with the upconverter parser. This allows for retrieving
             that a local symbol file can be referenced. If this attribute is
             not present, a new symbol file will be generated in the project
@@ -308,7 +317,7 @@ class GEDA:
         component.attributes['_refdes'] = '%s?%s' % (
             component.attributes.get('_prefix', ''),
             component.attributes.get('_suffix', '')
-        ) 
+        )
 
         symbol_filename = None
         ##NOTE: this attributed is used in the parser to mark at component
@@ -323,12 +332,12 @@ class GEDA:
             symbol_filename = "%s.sym" %  component.name.replace('EMBEDDED', '')
 
             self.component_library[(
-                library_id.replace('_MIRRORED', ''), 
+                library_id.replace('_MIRRORED', ''),
                 0
             )] = symbol_filename
 
             if component.name.replace('EMBEDDED', '') in self.known_symbols:
-                return 
+                return
 
         ## symbol files should not use offset
         saved_offset = self.offset
@@ -347,7 +356,7 @@ class GEDA:
             if not geda_imported:
                 prefix = prefix.replace(' ', '_')
                 symbol_filename = "%s-%d.sym" % (prefix, sym_idx)
-            
+
             commands = []
             for body in symbol.bodies:
                 commands += self.generate_body_commands(body)
@@ -379,7 +388,7 @@ class GEDA:
     @staticmethod
     def commands_to_string(commands):
         """ Generates a string from the *commands* list. It assumes that each
-            element in *commands* is a line, adding linebreaks accordingly. 
+            element in *commands* is a line, adding linebreaks accordingly.
             Required file headings are inserted. There resulting string is in
             valid gEDA file format and can be written to file directly.
 
@@ -397,7 +406,7 @@ class GEDA:
             Returns a list of gEDA commands without trailing linebreaks.
         """
         commands = []
-        
+
         if self.is_valid_path(body):
             commands += self._create_path(body)
         else:
@@ -417,7 +426,7 @@ class GEDA:
         return commands
 
     def generate_net_commands(self, nets):
-        """ Generates gEDA commands for list of *nets*. Net names are 
+        """ Generates gEDA commands for list of *nets*. Net names are
             retrieved from the '_name' attribute and are stored in the
             first gEDA net segment. By definition this will be populated
             in gEDA to all segments in the same net.
@@ -425,10 +434,10 @@ class GEDA:
             Returns a list of gEDA commands without linebreaks.
         """
         commands = []
-        
+
         for net in nets:
 
-            ## check if '_name' attribute carries net name 
+            ## check if '_name' attribute carries net name
             if net.attributes.has_key('_name') and net.attributes['_name']:
                 net.attributes['netname'] = net.attributes['_name']
 
@@ -446,14 +455,14 @@ class GEDA:
                     annotation.y,
                     rotation=annotation.rotation
                 )
-            
+
             ## generate list of segments from net points
             ## prevent segments from being added twice (reverse)
             segments = set()
             for start_id, start_pt in net.points.items():
                 for end_id in start_pt.connected_points:
                     if (end_id, start_id) not in segments:
-                        segments.add((start_id, end_id)) 
+                        segments.add((start_id, end_id))
 
             attributes = dict(net.attributes)
             for segment in segments:
@@ -484,16 +493,16 @@ class GEDA:
 
     def _create_schematic_title(self, design_attributes):
         """ Creates gEDA commands for the toplevel gEDA schematic
-            including the schematic frame, title and owner name. 
-            Toplevel attributes are attached as well. 
+            including the schematic frame, title and owner name.
+            Toplevel attributes are attached as well.
 
             Returns a list of gEDA commands without linebreaks.
         """
         commands = []
 
         commands += self._create_component(
-            self.offset.x, 
-            self.offset.y, 
+            self.offset.x,
+            self.offset.y,
             design_attributes.attributes.pop(
                 '_geda_titleframe',
                 'title-B'
@@ -502,35 +511,35 @@ class GEDA:
 
         if design_attributes.metadata.owner:
             commands += self._create_text(
-                design_attributes.metadata.owner, 
-                self.offset.x+1390, 
-                self.offset.y+10, 
+                design_attributes.metadata.owner,
+                self.offset.x+1390,
+                self.offset.y+10,
                 size=10
             )
 
         if design_attributes.metadata.name:
             commands += self._create_text(
-                design_attributes.metadata.name, 
-                self.offset.x+1010, 
-                self.offset.y+80, 
+                design_attributes.metadata.name,
+                self.offset.x+1010,
+                self.offset.y+80,
                 size=20
             )
 
         if design_attributes.metadata.license:
             commands += self._create_attribute(
                 '_use_license',
-                design_attributes.metadata.license, 
-                self.offset.x, 
-                self.offset.y, 
+                design_attributes.metadata.license,
+                self.offset.x,
+                self.offset.y,
             )
-         
+
 
         ## set coordinates at offset for design attributes
         attr_x, attr_y = self.offset.x, self.offset.y
         for key, value in design_attributes.attributes.items():
             commands += self._create_attribute(
-                key, value, 
-                attr_x, 
+                key, value,
+                attr_x,
                 attr_y,
             )
             attr_y = attr_y+10
@@ -541,7 +550,7 @@ class GEDA:
         """ Creates a gEDA command for a component in symbol file *basename*
             at location *x*, *y*. *angle* allows for specifying the rotation
             angle of the component and is specified in pi radians. Valid values
-            are 0.0, 0.5, 1.0, 1.5. 
+            are 0.0, 0.5, 1.0, 1.5.
 
             Returns a list of gEDA commands without linebreaks.
         """
@@ -568,7 +577,7 @@ class GEDA:
             return []
 
         ## make private attribute invisible in gEDA
-        if key.startswith('_'): 
+        if key.startswith('_'):
             key = key[1:]
             kwargs['visibility'] = 0
 
@@ -580,9 +589,9 @@ class GEDA:
 
     def _create_text(self, text, x, y, **kwargs):
         """ Creates a gEDA text command with *text* at position
-            *x*, *y*. Further valid keywords include *size*, 
+            *x*, *y*. Further valid keywords include *size*,
             *alignment*, *angle* and *visibility*.
-            
+
             Returns a list of gEDA commands without trailing linebreaks.
         """
         if isinstance(text, basestring):
@@ -605,19 +614,19 @@ class GEDA:
         return [text_line] + text
 
     def _create_pin(self, pin_seq, pin):
-        """ Creates a pin command followed by the mandatory 
+        """ Creates a pin command followed by the mandatory
             attribute environment. The numeric *pin_seq*
             is stored as gEDA attribute *pinseq*. *pinnummer*
-            attribute is taken from the pin's pin_number 
-            attribute. If the pin has a label it will a 
-            *pinlabel* gEDA attribute is attached. 
+            attribute is taken from the pin's pin_number
+            attribute. If the pin has a label it will a
+            *pinlabel* gEDA attribute is attached.
 
             Returns a list of gEDA commands without trailing linebreaks.
         """
         assert(issubclass(pin.__class__, components.Pin))
 
         connected_x, connected_y = pin.p2.x, pin.p2.y
-        
+
         command = ['P %d %d %d %d %d %d %d' % (
             self.x_to_mils(connected_x),
             self.y_to_mils(connected_y),
@@ -633,7 +642,7 @@ class GEDA:
         if pin.label is not None:
             attribute = self._create_attribute(
                 'pinlabel',
-                pin.label.text, 
+                pin.label.text,
                 pin.label.x,
                 pin.label.y,
                 alignment=pin.label.align,
@@ -642,15 +651,15 @@ class GEDA:
             command += attribute
 
         command += self._create_attribute(
-            'pinseq', 
-            pin_seq, 
+            'pinseq',
+            pin_seq,
             connected_x+10,
             connected_y+10,
             visibility=0,
         )
         command += self._create_attribute(
-            'pinnumber', 
-            pin.pin_number, 
+            'pinnumber',
+            pin.pin_number,
             connected_x+10,
             connected_y+20,
             visibility=0,
@@ -661,14 +670,14 @@ class GEDA:
 
     def _convert_annotation(self, annotation):
         """ Converts Annotation object in *annotation* into a
-            gEDA text command. If the annotation text is 
+            gEDA text command. If the annotation text is
             enclosed in '{{' '}}' it will be ignored and an
             empty list is returned.
 
             Returns a list of gEDA commands without linebreaks.
         """
         assert(issubclass(annotation.__class__, Annotation))
-    
+
         if annotation.value.startswith('{{'):
             return []
 
@@ -697,7 +706,7 @@ class GEDA:
             'A %d %d %d %d %d %d 10 0 0 -1 -1' % (
                 x, y,
                 self.to_mils(arc.radius),
-                start_angle, 
+                start_angle,
                 sweep_angle,
                 GEDAColor.GRAPHIC_COLOR,
             )
@@ -721,18 +730,18 @@ class GEDA:
 
     def _convert_rounded_rectangle(self, rect):
         """ Converts RoundedRectangle object into gEDA rectangle command.
-            
+
             Returns gEDA command (without trailing line break) as list.
         """
         return self._convert_rectangle(rect)
 
     def _convert_rectangle(self, rect):
-        """ Converts Rectangle object into gEDA rectangle command. 
-            
+        """ Converts Rectangle object into gEDA rectangle command.
+
             Returns gEDA command (without trailing line break) as list.
         """
         assert(issubclass(
-            rect.__class__, 
+            rect.__class__,
             (
                 shape.Rectangle, shape.RoundedRectangle
             )
@@ -742,15 +751,15 @@ class GEDA:
         return [
             'B %d %d %d %d 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
                 ## gEDA uses bottom-left corner as rectangle origin
-                (top_x - height),
-                top_y,
+                top_x,
+                (top_y - height),
                 width,
                 height
             )
         ]
 
     def _convert_line(self, line):
-        """ Converts Line object in *line* to gEDA command. 
+        """ Converts Line object in *line* to gEDA command.
 
             Returns gEDA command (without line break) as list.
         """
@@ -760,31 +769,31 @@ class GEDA:
         end_x, end_y = self.conv_coords(line.p2.x, line.p2.y)
         return [
             'L %d %d %d %d 3 10 0 0 -1 -1' % (
-                start_x, 
+                start_x,
                 start_y,
-                end_x, 
+                end_x,
                 end_y
             )
         ]
 
     def _convert_label(self, label):
-        """ Converts Label object in *label* to gEDA command. 
+        """ Converts Label object in *label* to gEDA command.
             Returns gEDA command (without line break) as list.
         """
         assert(issubclass(label.__class__, shape.Label))
         return self._create_text(
             label.text,
-            label.x, 
+            label.x,
             label.y,
             alignment=label.align,
             angle=label.rotation,
         )
 
     def _create_segment(self, np1, np2, attributes=None):
-        """ Creates net segment from NetPoint *np1* to 
+        """ Creates net segment from NetPoint *np1* to
             *np2*. If dictionary of *attributes* is specified
             commands for the attribute environment are generated
-            as well. 
+            as well.
 
             Returns a list of gEDA commands without trailing linebreaks.
         """
@@ -802,9 +811,9 @@ class GEDA:
             command.append('{')
             for key, value in attributes.items():
                 command += self._create_attribute(
-                    key, 
-                    value, 
-                    np1.x+10, 
+                    key,
+                    value,
+                    np1.x+10,
                     np1.y+10
                 )
             command.append('}')
@@ -830,7 +839,7 @@ class GEDA:
         return commands
 
     def _create_path(self, path):
-        """ Creates a set of gEDA commands for *path*. 
+        """ Creates a set of gEDA commands for *path*.
 
             Returns gEDA commands without trailing linebreaks as list.
         """
@@ -839,7 +848,7 @@ class GEDA:
         shapes = list(path.shapes) #create new list to be able to modify
 
         current_x, current_y = self.conv_coords(
-            shapes[0].p1.x, 
+            shapes[0].p1.x,
             shapes[0].p1.y
         )
         start_x, start_y = current_x, current_y
@@ -854,7 +863,7 @@ class GEDA:
                 close_command = ['z']
                 shapes.remove(shapes[-1])
                 num_lines += 1
-                
+
         for shape_obj in shapes:
             if shape_obj.type == 'line':
                 current_x, current_y = self.conv_coords(
@@ -865,21 +874,21 @@ class GEDA:
 
             elif shape_obj.type == 'bezier':
                 c1_x, c1_y = self.conv_coords(
-                    shape_obj.control1.x, 
+                    shape_obj.control1.x,
                     shape_obj.control1.y
                 )
                 c2_x, c2_y = self.conv_coords(
-                    shape_obj.control2.x, 
+                    shape_obj.control2.x,
                     shape_obj.control2.y
                 )
                 current_x, current_y = self.conv_coords(
-                    shape_obj.p2.x, 
+                    shape_obj.p2.x,
                     shape_obj.p2.y
                 )
 
                 command += [
                     'C %d,%d %d,%d %d,%d' % (
-                        c1_x, c1_y, 
+                        c1_x, c1_y,
                         c2_x, c2_y,
                         current_x, current_y
                     )
@@ -917,12 +926,12 @@ class GEDA:
 
     @staticmethod
     def is_valid_path(body):
-        """ Checks if *body* contains only shapes that can be 
-            represented as a gEDA path. If body contains only 
-            Line and BezierCurve shapes and all shapes are 
-            succesively connected it is a valid path. 
+        """ Checks if *body* contains only shapes that can be
+            represented as a gEDA path. If body contains only
+            Line and BezierCurve shapes and all shapes are
+            succesively connected it is a valid path.
 
-            Returns True for body that can be represented as gEDA 
+            Returns True for body that can be represented as gEDA
                 path, False otherwise.
         """
         current_pt = None
@@ -940,11 +949,11 @@ class GEDA:
 
             current_pt = shape_obj.p2
 
-        return True 
+        return True
 
     def to_mils(self, value):
         """ Converts *value* from px to mils based on the
-            scaling factor. Offset is not used. 
+            scaling factor. Offset is not used.
 
             Returns integer value in MILS.
         """
@@ -956,7 +965,7 @@ class GEDA:
 
             Returns a scaled and translated Y coordinate in MILS.
         """
-        value = (y_px - self.offset.y) * self.SCALE_FACTOR 
+        value = (y_px - self.offset.y) * self.SCALE_FACTOR
         return value
 
     def x_to_mils(self, x_px):
@@ -965,27 +974,27 @@ class GEDA:
 
             Returns a scaled and translated X coordinate in MILS.
         """
-        value = (x_px - self.offset.x) * self.SCALE_FACTOR 
+        value = (x_px - self.offset.x) * self.SCALE_FACTOR
         return value
 
     @staticmethod
     def conv_angle(angle, steps=1):
-        """ Converts *angle* in pi radians into degrees. If 
+        """ Converts *angle* in pi radians into degrees. If
             *steps* is set, it will be used to limit angles
-            to the provide steps in degrees. 
+            to the provide steps in degrees.
 
             Retuns converted and cut-off angle in degrees.
         """
         converted_angle = int(angle * 180) // int(steps)
         converted_angle *= steps
 
-        ## convert from clockwise rotation to counter-clockwise 
+        ## convert from clockwise rotation to counter-clockwise
         ## as used in gEDA schematic
         return abs(360 - converted_angle) % 360
 
     def conv_coords(self, x_px, y_px):
         """ Converts *x_px*, *y_px* from pixel to mils and translating
-            it along the X- and Y-axes, respectively, according to 
+            it along the X- and Y-axes, respectively, according to
             the offset value.
 
             Returns a scaled and translated coordinates in MILS.

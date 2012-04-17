@@ -271,6 +271,18 @@ class GEDA:
 
         self.design = Design()
 
+        component = components.Component("UNASSIGNED_SHAPES")
+        symbol = components.Symbol()
+        component.add_symbol(symbol)
+        self.unassigned_body = components.Body()
+        symbol.add_body(self.unassigned_body)
+
+        instance = ComponentInstance(component.name, component.name, 0)
+        symbol = SymbolAttribute(0, 0, 0)
+        instance.add_symbol_attribute(symbol)
+
+        self.design.add_component(component.name, component)
+        self.design.add_component_instance(instance)
 
         ## parse frame data of first schematic to extract
         ## page size (assumes same frame for all files)
@@ -327,9 +339,9 @@ class GEDA:
             if obj_type == 'T': ##Convert regular text or attribute
                 key, value = self._parse_text(stream, params)
 
-                if key is None: ## text is annotation
-                    self.design.design_attributes.add_annotation(
-                        self._create_annotation(value, params)
+                if key is None:
+                    self.unassigned_body.add_shape(
+                        self._create_label(value, params)
                     )
 
                 elif key == 'use_license':
@@ -373,6 +385,12 @@ class GEDA:
             elif obj_type == 'U': ## bus (only graphical feature NOT component)
                 self._parse_bus(params)
 
+            else:
+                self._handle_unassigned_shape(
+                    self.unassigned_body, stream,
+                    obj_type, params
+                )
+
             obj_type, params = self._parse_command(stream)
 
         ## process net segments into nets & net points and add to design
@@ -383,6 +401,48 @@ class GEDA:
             self.design.add_net(cnet)
 
         return self.design
+
+    def _handle_unassigned_shape(self, body, stream, obj_type, params):
+
+        if obj_type == 'T':
+            key, value = self._parse_text(stream, params)
+            if key is None:
+                body.add_shape(
+                    self._create_label(value, params)
+                )
+
+        elif obj_type == 'L':
+            body.add_shape(
+                self._parse_line(params)
+            )
+
+        elif obj_type == 'B':
+            body.add_shape(
+                self._parse_box(params)
+            )
+
+        elif obj_type == 'V':
+            body.add_shape(
+                self._parse_circle(params)
+            )
+
+        elif obj_type == 'A':
+            body.add_shape(
+                self._parse_arc(params)
+            )
+
+        elif obj_type == 'P':
+            body.add_pin(
+                self._parse_pin(stream, params, False, 0)
+            )
+
+        elif obj_type == 'H':
+            body.add_shape(
+                self._parse_path(stream, params)
+            )
+
+        elif obj_type == 'G':
+            log.warn("ignoring picture/font in gEDA file. Not supported!")
 
     def _parse_title_frame(self, params):
         """ Parse the frame component in *params* to extract the
@@ -530,17 +590,14 @@ class GEDA:
         if attributes is not None:
             instance = ComponentInstance(
                 attributes.get('_refdes', component.name),
-                component.name,
-                0
+                component.name, 0
             )
             for key, value in attributes.items():
                 instance.add_attribute(key, value)
 
         else:
             instance = ComponentInstance(
-                component.name,
-                component.name,
-                0
+                component.name, component.name, 0
             )
 
         ## generate a component instance using attributes
@@ -1188,8 +1245,6 @@ class GEDA:
 
         while line.startswith('#') or line == '\n':
             line = stream.readline()
-
-        line = line.strip()
 
         command_data = line.strip().split(self.DELIMITER)
 
