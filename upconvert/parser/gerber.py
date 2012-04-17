@@ -34,64 +34,49 @@ from upconvert.core.shape import Line, Arc, Point, Circle, Rectangle, Obround
 from upconvert.core.shape import Polygon, RegularPolygon, Moire, Thermal
 
 
-
 # exceptions
 
 class Unparsable(ValueError):
     """ Superclass for all parser errors. """
-    pass
 
 class ParamError(Unparsable):
     """ Superclass for parameter errors. """
-    pass
 
 class CoordError(Unparsable):
     """ Superclass for coordinate errors. """
-    pass
 
 class DelimiterMissing(ParamError):
     """ Missing paramater block delimiter (%). """
-    pass
 
 class ParamContainsBadData(ParamError):
     """ Non-paramater found within param block. """
-    pass
 
 class CoordPrecedesFormatSpec(CoordError):
     """ Coordinate data prior to format specification. """
-    pass
 
 class CoordMalformed(CoordError):
     """ Coordinate block doesn't conform to spec. """
-    pass
 
 class QuadrantViolation(CoordError):
     """ Single quadrant arc longer than 0.5 radians/pi. """
-    pass
 
 class OpenFillBoundary(CoordError):
     """ Fill boundary ends do not equate. """
-    pass
 
 class FileNotTerminated(Unparsable):
     """ M02* was not encountered. """
-    pass
 
 class DataAfterEOF(Unparsable):
     """ M02* was not the last thing in the file. """
-    pass
 
 class UnintelligibleDataBlock(Unparsable):
     """ Data block did not conform to any known pattern. """
-    pass
 
 class ImpossibleGeometry(Unparsable):
     """ Arc radius, center and endpoints don't gel. """
-    pass
 
 class IncompatibleAperture(Unparsable):
     """ Attempted to draw non-linear shape with rect. """
-    pass
 
 
 # token classes
@@ -221,11 +206,10 @@ class Gerber:
 
     def parse(self, infile='.'):
         """ Parse tokens from gerber files into a design. """
-        zip_ = infile.endswith('zip')
-        openarchive = zip_ and ZipFile or TarFile.open
+        is_zip = infile.endswith('.zip')
+        openarchive = ZipFile if is_zip else TarFile.open
         archive = batch_member = None
         try:
-
             # define multiple layers from folder
             if LAYERS_CFG in infile:
                 archive = None
@@ -235,8 +219,8 @@ class Gerber:
             # define multiple layers from archive
             else:
                 archive = openarchive(infile)
-                batch = zip_ and archive.namelist or archive.getnames
-                batch_member = zip_ and archive.open or archive.extractfile
+                batch = archive.namelist if is_zip else archive.getnames
+                batch_member = archive.open if is_zip else archive.extractfile
                 cfg_name = [n for n in batch() if LAYERS_CFG in n][0]
                 cfg = batch_member(cfg_name)
 
@@ -244,8 +228,7 @@ class Gerber:
         except ReadError:
             name, ext = path.split(infile)[1].rsplit('.', 1)
             layer_defs = [LayerDef(ext.lower() == 'ger' and name or ext,
-                                   'unknown',
-                                   infile)]
+                                   'unknown', infile)]
             self._gen_layers(layer_defs, None, None)
 
         # tidy up batch specs
