@@ -152,7 +152,8 @@ def snap(float_1, float_2):
 class Gerber:
     """ The Gerber Format Parser """
 
-    def __init__(self):
+    def __init__(self, ignore_unknown=True):
+        self.ignore_unknown = ignore_unknown
         self.layout = Layout()
         self.layer_buff = None
         self.img_buff = Image()
@@ -574,13 +575,14 @@ class Gerber:
 
                     # data blocks
                     elif typ not in IGNORE:
-                        self._check_pb(param_block, tok, False)
                         if typ == 'EOF':
                             self._check_eof(content[match.end():])
                             eof = True
+                        elif typ == 'UNKNOWN':
+                            if not self.ignore_unknown:
+                                raise UnintelligibleDataBlock(tok)
                         else:
-                            self._check_typ(typ, tok)
-
+                            self._check_pb(param_block, tok, False)
                             # explode self-referential data blocks
                             blocks = self._parse_data_block(tok)
                             for block in blocks:
@@ -835,7 +837,6 @@ class Gerber:
             ends = [isinstance(s, Arc) and list(s.ends()) or [s.p1, s.p2]
                     for s in segs]
             if len(fill) > 2:
-
                 # If first or last seg is an arc that was defined
                 # in anticlockwise mode, we need to reverse it.
                 if ends[0][0] in ends[1]:
@@ -894,12 +895,6 @@ class Gerber:
             raise FileNotTerminated
         elif (not eof) and trailing_fragment.strip():
             raise DataAfterEOF(trailing_fragment)
-
-
-    def _check_typ(self, typ, tok):
-        """ Ensure data block is understood by the parser. """
-        if typ == 'UNKNOWN':
-            raise UnintelligibleDataBlock(tok)
 
 
     def _debug_stdout(self):

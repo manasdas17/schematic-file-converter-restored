@@ -46,7 +46,7 @@ def use_file(filename):
         """ Add params to decorator function. """
         def wrap_tm(self):
             """ Perform meta operations, then method. """
-            parser = Gerber()
+            parser = Gerber(ignore_unknown=False)
             self.design = parser.parse(path.join(DIR, filename))
             test_method(self)
 
