@@ -342,8 +342,7 @@ class Gerber:
 
             # append segment to fill
             if self.status['outline_fill']:
-                self.fill_buff.append(seg)
-
+                self.fill_buff.append((ends, seg))
             else:
                 aperture = apertures[self.status['aperture']]
                 if isinstance(aperture.shape, Rectangle):
@@ -500,8 +499,8 @@ class Gerber:
         self._check_mq(start_angle, end_angle)
         clockwise = 'ANTI' not in self.status['interpolation']
         return Arc(center.x, center.y,
-                   clockwise and start_angle or end_angle,
-                   clockwise and end_angle or start_angle,
+                   start_angle if clockwise else end_angle,
+                   end_angle if clockwise else start_angle,
                    radius)
 
 
@@ -823,41 +822,29 @@ class Gerber:
                     else:
                         val = self._format_dec(num_str, 5)
                 else:
-                    val = coerce_ and (coerce_ == 'float' and
-                                      float(num_str) or
-                                      int(num_str)) or num_str
+                    if coerce_ == 'float':
+                        if '.' in num_str:
+                            val = int(float(num_str))
+                        else:
+                            val = int(num_str)
+                    elif coerce_:
+                        val = int(num_str)
+                    else:
+                        val = num_str
+
         return (tok, val)
 
 
     def _check_fill(self):
         """ Check that a fill is closed. """
-        fill = self.fill_buff
-        if len(fill) >= 2:
-            segs = (fill[0], fill[1], fill[-2], fill[-1])
-            ends = [isinstance(s, Arc) and list(s.ends()) or [s.p1, s.p2]
-                    for s in segs]
-            if len(fill) > 2:
-                # If first or last seg is an arc that was defined
-                # in anticlockwise mode, we need to reverse it.
-                if ends[0][0] in ends[1]:
-                    ends[0].reverse()
-                if ends[-1][1] in ends[-2]:
-                    ends[-1].reverse()
-
-                if not ends[-1][1] == ends[0][0]:
-                    raise OpenFillBoundary('%s != %s' %
-                                           (ends[-1][1], ends[0][0]))
-            else:
-                for end in ends[-1]:
-                    if end not in end[0]:
-                        raise OpenFillBoundary('%s != %s' %
-                                               (ends[-1][1], ends[0][0]))
-        else:
-            start, end = fill[0].ends()
-            if not start == end:
-                raise OpenFillBoundary('%s != %s' % (start, end))
+        ends = [pair[0] for pair in self.fill_buff]
+        fill = [pair[1] for pair in self.fill_buff]
         self.fill_buff = []
-        return Fill(fill)
+
+        if ends[0][0] == ends[-1][1]:
+            return Fill(fill)
+        else:
+            raise OpenFillBoundary('%s != %s' % (ends[-1][1], ends[0][0]))
 
 
     def _check_smear(self, seg, shape):
