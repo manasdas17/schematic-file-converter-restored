@@ -473,6 +473,7 @@ class Gerber:
 
         # Redefine x and y at center of the rect's left
         # side.
+
         y = sin((2 - theta) * pi) * radius
         x = cos((2 - theta) * pi) * radius
 
@@ -540,6 +541,8 @@ class Gerber:
         adj = float(point.x - arc_center.x)
         opp = point.y - arc_center.y
         hyp = arc_center.dist(point)
+        if hyp == 0.0:
+            return 0.0
         angle = acos(adj/hyp)/pi
         if opp > 0:
             angle = 2 - angle
