@@ -653,7 +653,7 @@ class Gerber:
         code = tok[1:code_end]
         type_, mods = tok[code_end:].split(',')
         if mods:
-            mods = [float(m) for m in mods.split('X')]
+            mods = [float(m) for m in mods.split('X') if m]
 
         # An aperture can use any of the 4 standard types,
         # (with or without a central hole), or a previously
