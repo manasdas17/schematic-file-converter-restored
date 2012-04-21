@@ -177,18 +177,10 @@ Text string!"""
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser._parse_command(text_stream)
         self.assertEquals(typ, 'T')
-        key, value = self.geda_parser._parse_text(text_stream, params)
+        geda_text = self.geda_parser._parse_text(text_stream, params)
 
-        self.assertEquals(key, None)
-
-        annotation = self.geda_parser._create_annotation(value, params)
-
-        self.assertEquals(annotation.value, "Text string!")
-        self.assertEquals(annotation.x, 1690)
-        self.assertEquals(annotation.y, 3580)
-        self.assertEquals(annotation.visible, 'true')
-        self.assertEquals(annotation.rotation, 0)
-
+        self.assertEquals(geda_text.attribute, None)
+        self.assertEquals(geda_text.content, "Text string!")
 
         valid_text = """T 16900 35800 3 10 1 0 0 0 4
 Text string!
@@ -198,22 +190,15 @@ text!"""
         text_stream = StringIO.StringIO(valid_text)
         typ, params =  self.geda_parser._parse_command(text_stream)
         self.assertEquals(typ, 'T')
-        key, value = self.geda_parser._parse_text(text_stream, params)
+        geda_text = self.geda_parser._parse_text(text_stream, params)
 
         text = """Text string!
 And more ...
 and more ...
 text!"""
 
-        self.assertEquals(key, None)
-
-        annotation = self.geda_parser._create_annotation(value, params)
-
-        self.assertEquals(annotation.value, text)
-        self.assertEquals(annotation.x, 1690)
-        self.assertEquals(annotation.y, 3580)
-        self.assertEquals(annotation.visible, 'true')
-        self.assertEquals(annotation.rotation, 0)
+        self.assertEquals(geda_text.attribute, None)
+        self.assertEquals(geda_text.content, text)
 
     def test_conv_angle(self):
         """ Test converting angles from degrees to pi radians. """
@@ -961,7 +946,7 @@ pintype=in
         design = self.geda_parser.parse('./test/geda/embedded_component.sch')
 
         components = design.components.components #test components dictionary
-        self.assertEquals(components.keys(), ['EMBEDDEDbattery-1', 'UNASSIGNED_SHAPES'])
+        self.assertEquals(components.keys(), ['EMBEDDEDbattery-1'])
 
         component = components['EMBEDDEDbattery-1']
         self.assertEquals(component.name, 'EMBEDDEDbattery-1')
@@ -985,7 +970,7 @@ pintype=in
         design = self.geda_parser.parse('test/geda/component.sch')
 
         components = design.components.components #test components dictionary
-        self.assertEquals(components.keys(), ['battery-1', 'UNASSIGNED_SHAPES'])
+        self.assertEquals(components.keys(), ['battery-1'])
 
         component = components['battery-1']
         self.assertEquals(component.name, 'battery-1')

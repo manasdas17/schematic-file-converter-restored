@@ -83,6 +83,55 @@ T 0 0 9 3 1 0 0 0 1
 Symbol Unknown '%s'"""
 
 
+class GedaText(object):
+    """ Class representation of text as in GEDA format. """
+
+    def __init__(self, content, attribute=None, params=None):
+        self.attribute = attribute
+        self.content = content
+        self.params = params or {}
+
+    def is_attribute(self):
+        return bool(self.attribute is not None)
+
+    def as_label(self):
+        text_x = self.params.get('x', 0)
+
+        if self.params.get('mirrored', False):
+            text_x = 0 - text_x
+
+        return shape.Label(
+            text_x,
+            self.params.get('y', 0),
+            self.content,
+            'left',
+            self.params.get('angle', 0),
+        )
+
+    @classmethod
+    def from_command(cls, stream, params):
+        num_lines = params['num_lines']
+
+        attribute = None
+        content = [stream.readline() for _ in range(int(num_lines))]
+        content = ''.join(content).strip()
+
+        ## escape special parameter sequence '\_'
+        content = content.replace("\_", '')
+
+        if num_lines == 1 and '=' in content:
+            attribute, content = content.split('=', 1)
+
+            ## prefix attributes that are marked as invisible
+            if params['visibility'] == 0:
+                attribute = "_" + attribute
+            ## these are special attributes that are treated differently
+            elif attribute in ['netname', 'pinnumber', 'pinlabel', 'refdes']:
+                attribute = "_" + attribute
+
+        return cls(content, attribute=attribute, params=params)
+
+
 class GEDAError(Exception):
     """ Exception class for gEDA parser errors """
     pass
@@ -281,9 +330,6 @@ class GEDA:
         symbol = SymbolAttribute(0, 0, 0)
         instance.add_symbol_attribute(symbol)
 
-        self.design.add_component(component.name, component)
-        self.design.add_component_instance(instance)
-
         ## parse frame data of first schematic to extract
         ## page size (assumes same frame for all files)
         with self._open_file_or_zip(inputfiles[0]) as stream:
@@ -316,6 +362,13 @@ class GEDA:
 
             f_in.close()
 
+
+        ## only add at the end when body is not empty
+        if len(component.symbols[0].bodies[0].shapes) > 0 or \
+           len(component.symbols[0].bodies[0].pins) > 0:
+            self.design.add_component(component.name, component)
+            self.design.add_component_instance(instance)
+
         return self.design
 
     def parse_schematic(self, stream):
@@ -337,17 +390,18 @@ class GEDA:
         while obj_type is not None:
 
             if obj_type == 'T': ##Convert regular text or attribute
-                key, value = self._parse_text(stream, params)
+                geda_text = self._parse_text(stream, params)
 
-                if key is None:
-                    self.unassigned_body.add_shape(
-                        self._create_label(value, params)
-                    )
+                if not geda_text.is_attribute():
+                    self.unassigned_body.add_shape(geda_text.as_label())
 
-                elif key == 'use_license':
-                    self.design.design_attributes.metadata.license = value
+                elif geda_text.attribute == 'use_license':
+                    self.design.design_attributes.metadata.license = geda_text.conent
                 else:
-                    self.design.design_attributes.add_attribute(key, value)
+                    self.design.design_attributes.add_attribute(
+                        geda_text.attribute,
+                        geda_text.content
+                    )
 
             elif obj_type == 'G' : ## picture type is not supported
                 log.warn("ignoring picture/font in gEDA file. Not supported!")
@@ -403,13 +457,11 @@ class GEDA:
         return self.design
 
     def _handle_unassigned_shape(self, body, stream, obj_type, params):
-
         if obj_type == 'T':
-            key, value = self._parse_text(stream, params)
-            if key is None:
-                body.add_shape(
-                    self._create_label(value, params)
-                )
+            print "UNSIGNED TEXT", geda_text.is_attribute()
+            geda_text = self._parse_text(stream, params)
+            if geda_text.is_attribute():
+                body.add_shape(geda_text.as_label())
 
         elif obj_type == 'L':
             body.add_shape(
@@ -682,19 +734,23 @@ class GEDA:
         while typ is not None:
 
             if typ == 'T':
-                key, value = self._parse_text(stream, params)
-                if key is None:
-                    body.add_shape(
-                        self._create_label(value, params, mirrored)
-                    )
+                geda_text = self._parse_text(stream, params)
 
-                elif key == '_refdes' and '?' in value:
-                    prefix, suffix = value.split('?')
+                if geda_text.is_attribute():
+                    body.add_shape(geda_text.as_label())
+
+                elif geda_text.attribute == '_refdes' \
+                     and '?' in geda_text.content:
+
+                    prefix, suffix = geda_text.content.split('?')
                     component.add_attribute('_prefix', prefix)
                     component.add_attribute('_suffix', suffix)
                 else:
-                    #assert(key not in ['_refdes', 'refdes'])
-                    component.add_attribute(key, value)
+                    component.add_attribute(
+                        geda_text.attribute,
+                        geda_text.content
+                    )
+
             elif typ == 'L':
                 body.add_shape(
                     self._parse_line(params, mirrored)
@@ -761,36 +817,15 @@ class GEDA:
             or an attribute.
             Returns a tuple (key, value). If text is an annotation key is None.
         """
-        num_lines = params['num_lines']
+        params['x'] = self.x_to_px(params['x'])
+        params['y'] = self.y_to_px(params['y'])
+        params['angle'] = self.conv_angle(params['angle'])
 
-        text = []
-        for _ in range(int(num_lines)):
-            text.append(stream.readline())
-
-        text_str = ''.join(text).strip()
-        ## escape special parameter sequence '\_'
-        text_str = text_str.replace("\_", '')
-
-        if num_lines == 1 and '=' in text_str:
-            return self._parse_attribute(text_str, params['visibility'])
+        geda_text = GedaText.from_command(stream, params)
 
         ## text can have environemnt attached: parse & ignore
         self._parse_environment(stream)
-
-        return None, text_str
-
-    def _create_annotation(self, text, params):
-        """ Creates an Annotation object from *text* using position,
-            rotation and visibility from *params*.
-            Returns an Annotation object.
-        """
-        return Annotation(
-            text,
-            self.x_to_px(params['x']),
-            self.y_to_px(params['y']),
-            self.conv_angle(params['angle']),
-            self.conv_bool(params['visibility']),
-        )
+        return geda_text
 
     def _create_label(self, text, params, mirrored=False):
         """ Create a ``shape.Label`` instance using the *text* string. The
@@ -798,7 +833,7 @@ class GEDA:
             coordinates in *params*. If *mirrored* is true, the bottom left
             corner of the text (anchor) is mirrored at the Y-axis.
 
-            Returns a ``shape.Label`` object
+            Returns a ``shape.Label`` object.
         """
         text_x = params['x']
 
@@ -812,23 +847,6 @@ class GEDA:
             'left',
             self.conv_angle(params['angle']),
         )
-
-    @staticmethod
-    def _parse_attribute(text, visibility):
-        """ Creates a tuple of (key, value) from the attribute text.
-            If visibility is '0' the attribute key is prefixed with '_'
-            to make it a hidden attribute.
-            Returns a tuple of key and value.
-        """
-        key, value = text.split('=', 1)
-        ## prefix attributes that are marked as invisible
-        if visibility == 0:
-            key = "_"+key
-        ## these are special attributes that are treated differently
-        elif key in ['netname', 'pinnumber', 'pinlabel', 'refdes']:
-            key = "_"+key
-
-        return key.strip(), value.strip()
 
     def skip_embedded_section(self, stream):
         """ Reads the *stream* line by line until the end of an
@@ -900,8 +918,10 @@ class GEDA:
         attributes = {}
         while typ is not None:
             if typ == 'T':
-                key, value = self._parse_text(stream, params)
-                attributes[key] = value
+                geda_text = self._parse_text(stream, params)
+
+                if geda_text.is_attribute():
+                    attributes[geda_text.attribute] = geda_text.content
 
             typ, params = self._parse_command(stream)
 
