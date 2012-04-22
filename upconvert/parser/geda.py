@@ -94,6 +94,9 @@ class GedaText(object):
     def is_attribute(self):
         return bool(self.attribute is not None)
 
+    def is_text(self):
+        return bool(self.attribute is None)
+
     def as_label(self):
         text_x = self.params.get('x', 0)
 
@@ -392,9 +395,8 @@ class GEDA:
             if obj_type == 'T': ##Convert regular text or attribute
                 geda_text = self._parse_text(stream, params)
 
-                if not geda_text.is_attribute():
+                if geda_text.is_text():
                     self.unassigned_body.add_shape(geda_text.as_label())
-
                 elif geda_text.attribute == 'use_license':
                     self.design.design_attributes.metadata.license = geda_text.conent
                 else:
@@ -458,9 +460,8 @@ class GEDA:
 
     def _handle_unassigned_shape(self, body, stream, obj_type, params):
         if obj_type == 'T':
-            print "UNSIGNED TEXT", geda_text.is_attribute()
             geda_text = self._parse_text(stream, params)
-            if geda_text.is_attribute():
+            if geda_text.is_text():
                 body.add_shape(geda_text.as_label())
 
         elif obj_type == 'L':
@@ -736,7 +737,7 @@ class GEDA:
             if typ == 'T':
                 geda_text = self._parse_text(stream, params)
 
-                if geda_text.is_attribute():
+                if geda_text.is_text():
                     body.add_shape(geda_text.as_label())
 
                 elif geda_text.attribute == '_refdes' \
