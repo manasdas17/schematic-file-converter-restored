@@ -305,13 +305,13 @@ N 55700 44400 55700 43500 4"""
         ## check nets from design
         self.assertEquals(len(design.nets), 3)
 
-        self.assertEquals(
-            sorted([net.net_id for net in design.nets]),
-            sorted(['another name', 'test', ''])
+        self.assertItemsEqual(
+            [net.net_id for net in design.nets],
+            ['another name', 'test', '']
         )
-        self.assertEquals(
-            sorted([net.attributes['_name'] for net in design.nets]),
-            sorted(['another name', 'test', ''])
+        self.assertItemsEqual(
+            [net.attributes.get('_name', None) for net in design.nets],
+            ['another name', 'test', None]
         )
 
         sorted_nets = {}
@@ -324,11 +324,9 @@ N 55700 44400 55700 43500 4"""
         points_n2 = sorted_nets[3]
         points_n3 = sorted_nets[5]
 
-        self.assertEquals(
-            sorted(points_n1.keys()),
-            sorted([
-                '5320a4510', '5320a4350'
-            ])
+        self.assertItemsEqual(
+            points_n1.keys(),
+            ['5320a4510', '5320a4350']
         )
         self.assertEquals(
             points_n1['5320a4510'].connected_points,

@@ -329,7 +329,7 @@ class GEDA:
                 component.name = component.name.replace('_MIRRORED', '')
 
             ##check if component is known sym file in OS dirs
-            symbol_filename = "%s.sym" %  component.name.replace('EMBEDDED', '')
+            symbol_filename = "%s.sym" % component.name.replace('EMBEDDED', '')
 
             self.component_library[(
                 library_id.replace('_MIRRORED', ''),
@@ -438,7 +438,7 @@ class GEDA:
         for net in nets:
 
             ## check if '_name' attribute carries net name
-            if net.attributes.has_key('_name') and net.attributes['_name']:
+            if '_name' in net.attributes and net.attributes['_name']:
                 net.attributes['netname'] = net.attributes['_name']
 
             elif len(net.annotations) > 0:
@@ -449,6 +449,8 @@ class GEDA:
 
             ## parse annotations into text commands
             for annotation in net.annotations:
+                if annotation.value == '{{_name}}':
+                    continue
                 commands += self._create_text(
                     annotation.value,
                     annotation.x,
@@ -465,6 +467,8 @@ class GEDA:
                         segments.add((start_id, end_id))
 
             attributes = dict(net.attributes)
+            net_name = attributes.get('_name', None)
+
             for segment in segments:
                 start_id, end_id = segment
 
@@ -482,7 +486,8 @@ class GEDA:
                 commands += self._create_segment(
                     net.points[start_id],
                     net.points[end_id],
-                    attributes=attributes
+                    attributes=attributes,
+                    net_name=net_name,
                 )
 
                 ## it's enough to store net name only in first element
@@ -532,7 +537,6 @@ class GEDA:
                 self.offset.x,
                 self.offset.y,
             )
-
 
         ## set coordinates at offset for design attributes
         attr_x, attr_y = self.offset.x, self.offset.y
@@ -600,7 +604,7 @@ class GEDA:
         assert(isinstance(text, types.ListType))
 
         alignment = self.ALIGNMENT[kwargs.get('alignment', 'left')]
-        text_line =  'T %d %d %d %d %d %d %d %d %d' % (
+        text_line = 'T %d %d %d %d %d %d %d %d %d' % (
             self.x_to_mils(x),
             self.y_to_mils(y),
             kwargs.get('color', GEDAColor.TEXT_COLOR),
@@ -789,7 +793,7 @@ class GEDA:
             angle=label.rotation,
         )
 
-    def _create_segment(self, np1, np2, attributes=None):
+    def _create_segment(self, np1, np2, attributes=None, net_name=None):
         """ Creates net segment from NetPoint *np1* to
             *np2*. If dictionary of *attributes* is specified
             commands for the attribute environment are generated
@@ -807,7 +811,13 @@ class GEDA:
             )
         ]
 
-        if attributes is not None:
+        if attributes is None:
+            attributes = {}
+
+        if net_name:
+            attributes['netname'] = net_name
+
+        if attributes:
             command.append('{')
             for key, value in attributes.items():
                 command += self._create_attribute(
