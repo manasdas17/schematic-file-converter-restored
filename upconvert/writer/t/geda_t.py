@@ -172,7 +172,10 @@ class GEDATests(unittest.TestCase):
             sbody = scomponent.symbols[0].bodies[0]
             cbody = ccomponent.symbols[0].bodies[0]
 
-            self.assertEquals(len(sbody.shapes), len(cbody.shapes))
+            ## skip the unassigned shapes component as it adds an additional
+            ## text from the basename when importing GEDA
+            if scomponent.name != 'UNASSIGNED_SHAPES':
+                self.assertEquals(len(sbody.shapes), len(cbody.shapes))
             self.assertEquals(len(sbody.pins), len(cbody.pins))
 
             for spin, cpin in zip(sbody.pins, cbody.pins):
@@ -328,6 +331,7 @@ class GEDATests(unittest.TestCase):
 
         commands += ['v 20110115 2\n']
         geda_parser = upconvert.parser.geda.GEDA()
+        geda_parser.unassigned_body = components.Body()
         new_design = geda_parser.parse_schematic(
             StringIO.StringIO('\n'.join(commands))
         )
@@ -478,7 +482,7 @@ class GEDATests(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B -500 0 400 500 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B 0 -500 400 500 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         rect = shape.Rectangle(100, 50, 150, 30)
@@ -486,7 +490,7 @@ class GEDATests(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B 700 500 1500 300 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B 1000 200 1500 300 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         rect = shape.RoundedRectangle(0, 0, 40, 50, 0.5)
@@ -494,7 +498,7 @@ class GEDATests(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B -500 0 400 500 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B 0 -500 400 500 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
         rect = shape.RoundedRectangle(100, 50, 150, 30, 0.1)
@@ -502,7 +506,7 @@ class GEDATests(unittest.TestCase):
 
         self.assertEquals(
             command,
-            ['B 700 500 1500 300 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
+            ['B 1000 200 1500 300 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1']
         )
 
     def test_convert_line(self):
