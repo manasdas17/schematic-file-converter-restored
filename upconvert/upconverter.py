@@ -205,9 +205,11 @@ def main():
     ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
                     help="specify SYMDIRS to search for .sym files (for gEDA only)", 
                     metavar="SYMDIRS", nargs="+")
-    ap.add_argument('--unsupported', action='store_true', default=False)
+    ap.add_argument('--unsupported', action='store_true', default=False,
+                    help="run with an unsupported python version")
     ap.add_argument('--raise-errors', dest='raise_errors',
-                    action='store_true', default=False)
+                    action='store_true', default=False,
+                    help="show tracebacks for parsing and writing errors")
 
     args = ap.parse_args()
 

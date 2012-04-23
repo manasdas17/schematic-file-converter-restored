@@ -526,6 +526,7 @@ class Moire(Shape):
     def __init__(self, x, y, outer, ring_thickness, gap, max_rings, # pylint: disable=R0913
                  hair_thickness, hair_length, rotation):
         super(Moire, self).__init__()
+        self.type = "moire"
         self.x = x
         self.y = y
         self.outer_diameter = outer
@@ -589,6 +590,7 @@ class Thermal(Shape):
     """
     def __init__(self, x, y, outer, inner, gap, rotation=0): # pylint: disable=R0913
         super(Thermal, self).__init__()
+        self.type = "thermal"
         self.x = x
         self.y = y
         self.outer_diameter = outer
@@ -653,6 +655,7 @@ class RegularPolygon(Shape):
     """
     def __init__(self, x, y, outer, vertices, rotation=0): # pylint: disable=R0913
         super(RegularPolygon, self).__init__()
+        self.type = "regular polygon"
         self.x = x
         self.y = y
         self.outer_diameter = outer

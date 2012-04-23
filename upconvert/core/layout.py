@@ -86,7 +86,6 @@ class Image:
         1. the ground plane
         2. the area(s) to be negated (as a subtractive image)
         3. the traces to be laid within the negated area(s)
-
     """
 
     def __init__(self, name='Untitled Image', is_additive=True):
@@ -172,8 +171,8 @@ class Fill:
     must be contiguous, listed in order (ie, each seg
     connects with the previous seg and the next seg)
     and not intersect each other.
-
     """
+
     def __init__(self, segments=None):
         self.segments = segments or list()
 
@@ -211,8 +210,8 @@ class ShapeInstance:
     redefined at some arbitrary point in the file.
 
     x and y attributes serve as an offset.
-
     """
+
     def __init__(self, point, aperture):
         self.x = point.x
         self.y = point.y
@@ -249,8 +248,8 @@ class Aperture:
 
     Holes never rotate, even if the shape is rotatable
     (ie, a RegularPolygon).
-
     """
+
     def __init__(self, code, shape, hole):
         self.code = code
         self.shape = shape

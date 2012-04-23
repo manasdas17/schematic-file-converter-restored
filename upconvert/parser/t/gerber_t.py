@@ -30,7 +30,7 @@ from upconvert.parser.gerber import Gerber, DelimiterMissing, ParamContainsBadDa
                             CoordPrecedesFormatSpec, CoordMalformed, \
                             FileNotTerminated, DataAfterEOF, \
                             UnintelligibleDataBlock, QuadrantViolation, \
-                            OpenFillBoundary, IncompatibleAperture
+                            OpenFillBoundary, IncompatibleAperture, Modifier
 
 STRIP_DIRS = path.join('upconvert', 'parser', 't')
 BASE_DIR = path.dirname(__file__).split(STRIP_DIRS)[0]
@@ -107,6 +107,12 @@ class GerberTests(unittest.TestCase):
         image = self.design.layout.layers[0].images[2]
         assert len(image.shape_instances) == 3
 
+    @use_file('macro1.ger')
+    def test_macros(self):
+        """ Parse simple macros. """
+        macros = self.design.layout.layers[0].macros
+        self.assertEqual(len(macros), 8)
+
     @use_file('simple.zip')
     def test_zip_batch(self):
         """ Parse a batch of gerber files in a zip file. """
@@ -122,6 +128,28 @@ class GerberTests(unittest.TestCase):
         """ Parse a batch of gerber files in a gz tarball. """
         assert self.design.layout.layers[0].name == 'top'
 
+    def test_modifier(self):
+        """ The Modifier can evaluate expressions correctly. """
+        m = Modifier('1.2')
+        self.assertEqual(m.evaluate({}), 1.2)
+        m = Modifier('$1')
+        self.assertEqual(m.evaluate({1:3.2}), 3.2)
+        m = Modifier('1+1')
+        self.assertEqual(m.evaluate({}), 2)
+        m = Modifier('3-1.5')
+        self.assertEqual(m.evaluate({}), 1.5)
+        m = Modifier('2.2X3')
+        self.assertAlmostEqual(m.evaluate({}), 6.6, 3)
+        m = Modifier('4.4/2.2')
+        self.assertAlmostEqual(m.evaluate({}), 2, 2)
+        m = Modifier('1+4.4/2.2')
+        self.assertAlmostEqual(m.evaluate({}), 3, 2)
+        m = Modifier('$1+$2')
+        self.assertAlmostEqual(m.evaluate({1:1, 2:2.2}), 3.2, 2)
+        m = Modifier('$3=$1+$2')
+        values = {1:1, 2:2}
+        self.assertEqual(m.evaluate(values), 3)
+        self.assertEqual(values, {1:1, 2:2, 3:3.0})
 
     # tests that pass if they raise expected errors
 
