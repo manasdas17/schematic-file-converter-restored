@@ -55,6 +55,8 @@ def build_test(target, source, env):
     args = ['nosetests', '--all-modules',
             'upconvert/core', 'upconvert/library',
             'upconvert/parser', 'upconvert/writer']
+    if 'UPCONVERT_TEST_STOP' in os.environ:
+        args.append('--stop')
     return subprocess.call(args)
 bld_test = Builder(action=build_test)
 
