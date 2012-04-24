@@ -458,7 +458,7 @@ class GEDA:
                 shape_ = self._parse_unassigned_shape(stream, obj_type, params)
 
                 if shape_ is not None:
-                    if shape_.type == 'pin':
+                    if issubclass(shape_.__class__, components.Pin):
                         self.unassigned_body.add_pin(shape_)
                     else:
                         self.unassigned_body.add_shape(shape_)
