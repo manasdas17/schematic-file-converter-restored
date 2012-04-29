@@ -273,12 +273,10 @@ class ViewDrawSch(ViewDrawBase):
         thisnet = Net(args)
         subdata = defaultdict(list)
         for phrase in self.stream:
-            print phrase
             cmd, _sep, args = phrase.partition(' ')
             if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
                 self.stream.push(phrase)
                 break
-            print args
             k, v = self.parsenode(cmd)(args)
             subdata[k].append(v)
         # finish building thisnet
