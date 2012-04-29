@@ -62,6 +62,8 @@ class JSON:
 
         self.parse_component_instances(read.get('component_instances'))
         self.parse_components(read.get('components'))
+        if read.get('shapes') is not None:
+            self.parse_sch_shapes(read.get('shapes'))
         self.parse_design_attributes(read.get('design_attributes'))
         self.parse_nets(read.get('nets'))
         self.parse_version(read.get('version'))
@@ -144,6 +146,12 @@ class JSON:
                 symb = self.parse_symbol(symbol)
                 comp.add_symbol(symb)
             self.design.add_component(library_id, comp)
+
+
+    def parse_sch_shapes(self, shapes):
+        """ Extract shapes drawn directly on the schematic. """
+        for sh in shapes:
+            self.design.add_shape(self.parse_shape(sh))
 
 
     def parse_symbol(self, symbol):

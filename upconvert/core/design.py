@@ -34,6 +34,7 @@ class Design:
         self.nets = list()
         self.components = Components()
         self.component_instances = list()
+        self.shapes = list()
         self.design_attributes = DesignAttributes()
         self.layout = None
         self.version = dict()
@@ -88,6 +89,9 @@ class Design:
         """ Add a net """
         self.nets.append(net)
 
+    def add_shape(self, shape):
+        """ Add a shape to the schematic sheet """
+        self.shapes.append(shape)
 
     def set_design_attributes(self, design_attributes):
         """ Add design level attributes """
@@ -112,6 +116,7 @@ class Design:
             "components" : self.components.json(),
             "component_instances" :
                 [i.json() for i in self.component_instances],
+            "shapes" : [s.json() for s in self.shapes],
             "design_attributes" : self.design_attributes.json(),
             "layout" : self.layout.json() if self.layout is not None else None
             }
