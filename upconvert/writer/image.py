@@ -18,18 +18,23 @@ class Render:
         self.draw = ImageDraw.Draw(self.img)
 
     def save(self, filename):
+        """ Write out the image to filename """
         self.img.save(filename, self.outtype)
 
     def draw_ckt(self):
+        """ Render the image into self.img """
         scale = Scale(self.scale)
+        
+        # start off with all the component instances
         for ci in self.des.component_instances:
             c = self.des.components.components[ci.library_id]
             for body, attr in zip(c.symbols[ci.symbol_index].bodies,
                                   ci.symbol_attributes):
-                #self.draw_sym(b, (a.x, a.y), a.rotation, a.flipped, self.draw)
+                # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
                 self.draw_sym(body, scale.chain(pos), attr.rotation,
                               False, scale, self.draw)
+                # draw in any annotations
                 for ann in attr.annotations:
                     if ann.visible:
                         pos = scale.chain(Point(ann.x, ann.y))
@@ -51,13 +56,14 @@ class Render:
                 pidpt = scale.chain(net.points[pid])
                 for junc in connlist:
                     juncpt = scale.chain(net.points[junc])
-                    # draw a line to each connected point
+                    # draw a line to each connected point from this junction
                     self.draw.line([(pidpt.x, pidpt.y),
                                     (juncpt.x, juncpt.y)],
                                     fill=self.fg)
                     # don't need the connected point to draw a line back
                     connects[junc].remove(pid)
                     # TODO draw the connection to the component pin
+                    #      (may actually be done)
                     # TODO draw solder dots on net connections
             for ann in net.annotations:
                 pos = scale.chain(Point(ann.x, ann.y))
@@ -70,12 +76,13 @@ class Render:
     
     def draw_sym(self, body, offset=Point(0,0), rot=0, flip=False,
                  xform=None, draw=None):
-        '''draw a symbol at the location of offset'''
-        # create a lambda function that will rotate, then shift an (x,y)
-        # pair that we can use it on all the relevent points
+        """draw a symbol at the location of offset"""
         if xform is None:
             xform = XForm()
+        # rotate the symbol, then shift. Want to rotate before it's been
+        # moved away from the global origin.
         xform = Shift(offset.x, offset.y, Rotate(rot, xform))
+        # The following is for when flipped symbols are available
         if flip:
             xform = FlipY(xform)
         draw = draw or self.draw
@@ -105,14 +112,14 @@ class Render:
         draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
 
     def draw_shape_arc(self, arc, xform, rot, draw):
+        # TODO remove reliance on rot, so that this can be called the same as
+        # the other draw_shape_* methods
+        x, y, r = arc.x, arc.y, arc.radius
         # using arc.bounds would break if arc.bounds() no longer returns bounds
         # of full circle
-        x, y, r = arc.x, arc.y, arc.radius
         minpt, maxpt = [xform.chain(Point(px, py)) for (px, py)
                         in [(x - r, y - r), (x + r, y + r)]]
-
         xs, ys = [minpt.x, maxpt.x], [minpt.y, maxpt.y]
-        # draw.arc gets confused if box[0] > box[2] or box[1] > box[3]
         box = (min(xs), min(ys), max(xs), max(ys))
 
         # 3 o'clock is angle of 0, angles increase clockwise
@@ -165,6 +172,7 @@ class Render:
         draw.point((Bx(1.), By(1.)), fill=self.fg)
 
     def draw_pin(self, pin, xform, draw):
+        # TODO special pin characteristics (inverted, clock)?
         line = [xform.chain(p) for p in (pin.p1, pin.p2)]
         draw.line([(p.x, p.y) for p in line], fill=self.fg)
 
