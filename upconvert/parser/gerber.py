@@ -72,9 +72,6 @@ class DataAfterEOF(Unparsable):
 class UnintelligibleDataBlock(Unparsable):
     """ Data block did not conform to any known pattern. """
 
-class ImpossibleGeometry(Unparsable):
-    """ Arc radius, center and endpoints don't gel. """
-
 class IncompatibleAperture(Unparsable):
     """ Attempted to draw non-linear shape with rect. """
 
@@ -141,13 +138,6 @@ TOK_SPEC = (('MACRO', r'%AM[^%]*%'),
 IGNORE = ('SKIP', 'COMMENT', 'DEPRECATED')
 REG_EX = '|'.join('(?P<%s>%s)' % pair for pair in TOK_SPEC)
 TOK_RE = re.compile(REG_EX, re.MULTILINE)
-
-
-# module global funct
-
-def snap(float_1, float_2):
-    """ Compare floats at max gerber precision (6dp). """
-    return round(float_1, 6) == round(float_2, 6)
 
 
 # parser
@@ -389,8 +379,8 @@ class Gerber:
         center, radius = self._get_ctr_and_radius(end_pts, offset)
         start_angle = self._get_angle(center, start)
         end_angle = self._get_angle(center, end)
-        self._check_mq(start_angle, end_angle)
         clockwise = 'ANTI' not in self.status['interpolation']
+        self._check_mq(start_angle, end_angle, clockwise)
         return Arc(center.x, center.y,
                    start_angle if clockwise else end_angle,
                    end_angle if clockwise else start_angle,
@@ -401,24 +391,13 @@ class Gerber:
         """ Apply gerber circular interpolation logic. """
         start, end = end_pts
         radius = sqrt(offset['i']**2 + offset['j']**2)
-        center = Point(x=start.x + offset['i'],
-                       y=start.y + offset['j'])
 
-        # In single-quadrant mode, gerber requires implicit
-        # determination of offset direction, so we find the
-        # center through trial and error.
-        if not self.status['multi_quadrant']:
-            if not snap(center.dist(end), radius):
-                center = Point(x=start.x - offset['i'],
-                               y=start.y - offset['j'])
-                if not snap(center.dist(end), radius):
-                    center = Point(x=start.x + offset['i'],
-                                   y=start.y - offset['j'])
-                    if not snap(center.dist(end), radius):
-                        center = Point(x=start.x - offset['i'],
-                                       y=start.y + offset['j'])
-                        if not snap(center.dist(end), radius):
-                            raise ImpossibleGeometry
+        centers = [Point(start.x + xsign * offset['i'],
+                         start.y + ysign * offset['j'])
+                   for xsign in (1, -1) for ysign in (1, -1)]
+
+        center = min(centers, key=lambda c: abs(c.dist(end) - radius))
+
         return (center, radius)
 
 
@@ -750,10 +729,18 @@ class Gerber:
             raise IncompatibleAperture('%s cannot draw arc %s' % (shape, seg))
 
 
-    def _check_mq(self, start_angle, end_angle):
+    def _check_mq(self, start_angle, end_angle, clockwise):
         """ Enforce single quadrant arc length restriction. """
+
         if not self.status['multi_quadrant']:
-            if abs(end_angle - start_angle) > 0.5:
+            if clockwise:
+                arc = (2.0 if end_angle == 0.0 else end_angle) - \
+                    (0.0 if start_angle == 2.0 else start_angle)
+            else:
+                arc = (2.0 if start_angle == 0.0 else start_angle) - \
+                    (0.0 if end_angle == 2.0 else end_angle)
+
+            if round(abs(arc), 4) > 0.5:
                 raise QuadrantViolation('Arc(%s to %s) > 0.5 rad/pi'
                                         % (start_angle, end_angle))
 
@@ -901,8 +888,7 @@ class InternalPrimitive(object):
         else:
             radius = start_radius
 
-        # Calc the angle of the vector with respect to
-        # the x axis.
+        # Calc the angle of the vector with respect to the x axis.
         x, y = start
         adj = end[0] - x
         opp = end[1] - y
@@ -914,15 +900,14 @@ class InternalPrimitive(object):
         # Represent vector angle as a delta.
         d_theta = 2 - theta
 
-        # Calc the angle of the start point of the
-        # flattened vector.
-        theta = acos(x/radius)/pi 
+        # Calc the angle of the start point of the flattened vector.
+
+        theta = 0.0 if radius == 0.0 else acos(x/radius)/pi 
         if y > 0:
             theta = 2 - theta
         theta += d_theta
 
-        # Redefine x and y at center of the rect's left
-        # side.
+        # Redefine x and y at center of the rect's left side.
 
         y = sin((2 - theta) * pi) * radius
         x = cos((2 - theta) * pi) * radius
