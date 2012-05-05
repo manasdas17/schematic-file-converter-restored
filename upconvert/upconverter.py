@@ -191,21 +191,23 @@ class Upconverter(object):
         return path_w_ext
 
 
-if __name__ == "__main__":
+def main():
     ap = ArgumentParser()
     ap.add_argument("-i", "--input", dest="inputfile",
-            help="read INPUT file in", metavar="INPUT")
+                    help="read INPUT file in", metavar="INPUT")
     ap.add_argument("-f", "--from", dest="inputtype",
-            help="read input file as TYPE", metavar="TYPE")
+                    help="read input file as TYPE", metavar="TYPE")
     ap.add_argument("-o", "--output", dest="outputfile",
-            help="write OUTPUT file out", metavar="OUTPUT")
+                    help="write OUTPUT file out", metavar="OUTPUT")
     ap.add_argument("-t", "--to", dest="outputtype",
-            help="write output file as TYPE", metavar="TYPE",
-            default="openjson")
+                    help="write output file as TYPE", metavar="TYPE",
+                    default="openjson")
     ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
-            help="specify SYMDIRS to search for .sym files (for gEDA only)", 
-            metavar="SYMDIRS", nargs="+")
+                    help="specify SYMDIRS to search for .sym files (for gEDA only)", 
+                    metavar="SYMDIRS", nargs="+")
     ap.add_argument('--unsupported', action='store_true', default=False)
+    ap.add_argument('--raise-errors', dest='raise_errors',
+                    action='store_true', default=False)
 
     args = ap.parse_args()
 
@@ -254,6 +256,8 @@ if __name__ == "__main__":
     try:
         design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
     except Exception:
+        if args.raise_errors:
+            raise
         print "ERROR: Unsupported input type:", inputtype
         exit(1)
 
@@ -262,6 +266,8 @@ if __name__ == "__main__":
         try:
             Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
         except Exception:
+            if args.raise_errors:
+                raise
             print "ERROR: Unsupported output type:", outputtype
             exit(1)
 
@@ -269,3 +275,7 @@ if __name__ == "__main__":
     else:
         print "Output cancelled due to previous errors."
         exit(1)
+
+
+if __name__ == "__main__":
+    main()

@@ -209,11 +209,11 @@ def main():
             test = test_parse_generator(f, format)
             setattr(test_class, test_name, test)
 
-            # TODO: There is a bug that causes diff to hang on openjson
-            if format != 'fritzing' and format != 'openjson':
-                test_name = 'test_%s_%s_%s' % (format, base, 'diff')
-                test = test_diff_generator(f, format)
-                setattr(test_class, test_name, test)
+            # # TODO: There is a bug that causes diff to hang on openjson
+            # if format not in ('fritzing', 'openjson', 'gerber'):
+            #     test_name = 'test_%s_%s_%s' % (format, base, 'diff')
+            #     test = test_diff_generator(f, format)
+            #     setattr(test_class, test_name, test)
 
         for f in upverter_upv_files:
             base = os.path.basename(f)

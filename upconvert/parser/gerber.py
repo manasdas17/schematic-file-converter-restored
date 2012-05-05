@@ -34,64 +34,49 @@ from upconvert.core.shape import Line, Arc, Point, Circle, Rectangle, Obround
 from upconvert.core.shape import Polygon, RegularPolygon, Moire, Thermal
 
 
-
 # exceptions
 
 class Unparsable(ValueError):
     """ Superclass for all parser errors. """
-    pass
 
 class ParamError(Unparsable):
     """ Superclass for parameter errors. """
-    pass
 
 class CoordError(Unparsable):
     """ Superclass for coordinate errors. """
-    pass
 
 class DelimiterMissing(ParamError):
     """ Missing paramater block delimiter (%). """
-    pass
 
 class ParamContainsBadData(ParamError):
     """ Non-paramater found within param block. """
-    pass
 
 class CoordPrecedesFormatSpec(CoordError):
     """ Coordinate data prior to format specification. """
-    pass
 
 class CoordMalformed(CoordError):
     """ Coordinate block doesn't conform to spec. """
-    pass
 
 class QuadrantViolation(CoordError):
     """ Single quadrant arc longer than 0.5 radians/pi. """
-    pass
 
 class OpenFillBoundary(CoordError):
     """ Fill boundary ends do not equate. """
-    pass
 
 class FileNotTerminated(Unparsable):
     """ M02* was not encountered. """
-    pass
 
 class DataAfterEOF(Unparsable):
     """ M02* was not the last thing in the file. """
-    pass
 
 class UnintelligibleDataBlock(Unparsable):
     """ Data block did not conform to any known pattern. """
-    pass
 
 class ImpossibleGeometry(Unparsable):
     """ Arc radius, center and endpoints don't gel. """
-    pass
 
 class IncompatibleAperture(Unparsable):
     """ Attempted to draw non-linear shape with rect. """
-    pass
 
 
 # token classes
@@ -148,7 +133,7 @@ TOK_SPEC = (('MACRO', r'%AM[^%]*%'),
             ('FUNCT', r'[GD][^\*]*\*'),# function codes
             ('COORD', r'[XY][^\*]*\*'),# coordinates
             ('EOF', r'M02\*'),         # end of file
-            ('SKIP', r'M0[01]\*|N[^\*]*\*|\*?\s+'), # historic crud, whitespace
+            ('SKIP', r'M0[01]\*|N[^\*]*\*|\**\s+'), # historic crud, whitespace
             ('UNKNOWN', r'[^\*]*\*'))  # unintelligble data block
 IGNORE = ('SKIP', 'COMMENT', 'DEPRECATED')
 REG_EX = '|'.join('(?P<%s>%s)' % pair for pair in TOK_SPEC)
@@ -167,7 +152,8 @@ def snap(float_1, float_2):
 class Gerber:
     """ The Gerber Format Parser """
 
-    def __init__(self):
+    def __init__(self, ignore_unknown=True):
+        self.ignore_unknown = ignore_unknown
         self.layout = Layout()
         self.layer_buff = None
         self.img_buff = Image()
@@ -221,11 +207,10 @@ class Gerber:
 
     def parse(self, infile='.'):
         """ Parse tokens from gerber files into a design. """
-        zip_ = infile.endswith('zip')
-        openarchive = zip_ and ZipFile or TarFile.open
+        is_zip = infile.endswith('.zip')
+        openarchive = ZipFile if is_zip else TarFile.open
         archive = batch_member = None
         try:
-
             # define multiple layers from folder
             if LAYERS_CFG in infile:
                 archive = None
@@ -235,8 +220,8 @@ class Gerber:
             # define multiple layers from archive
             else:
                 archive = openarchive(infile)
-                batch = zip_ and archive.namelist or archive.getnames
-                batch_member = zip_ and archive.open or archive.extractfile
+                batch = archive.namelist if is_zip else archive.getnames
+                batch_member = archive.open if is_zip else archive.extractfile
                 cfg_name = [n for n in batch() if LAYERS_CFG in n][0]
                 cfg = batch_member(cfg_name)
 
@@ -244,8 +229,7 @@ class Gerber:
         except ReadError:
             name, ext = path.split(infile)[1].rsplit('.', 1)
             layer_defs = [LayerDef(ext.lower() == 'ger' and name or ext,
-                                   'unknown',
-                                   infile)]
+                                   'unknown', infile)]
             self._gen_layers(layer_defs, None, None)
 
         # tidy up batch specs
@@ -358,8 +342,7 @@ class Gerber:
 
             # append segment to fill
             if self.status['outline_fill']:
-                self.fill_buff.append(seg)
-
+                self.fill_buff.append((ends, seg))
             else:
                 aperture = apertures[self.status['aperture']]
                 if isinstance(aperture.shape, Rectangle):
@@ -490,6 +473,7 @@ class Gerber:
 
         # Redefine x and y at center of the rect's left
         # side.
+
         y = sin((2 - theta) * pi) * radius
         x = cos((2 - theta) * pi) * radius
 
@@ -516,8 +500,8 @@ class Gerber:
         self._check_mq(start_angle, end_angle)
         clockwise = 'ANTI' not in self.status['interpolation']
         return Arc(center.x, center.y,
-                   clockwise and start_angle or end_angle,
-                   clockwise and end_angle or start_angle,
+                   start_angle if clockwise else end_angle,
+                   end_angle if clockwise else start_angle,
                    radius)
 
 
@@ -557,6 +541,8 @@ class Gerber:
         adj = float(point.x - arc_center.x)
         opp = point.y - arc_center.y
         hyp = arc_center.dist(point)
+        if hyp == 0.0:
+            return 0.0
         angle = acos(adj/hyp)/pi
         if opp > 0:
             angle = 2 - angle
@@ -591,13 +577,14 @@ class Gerber:
 
                     # data blocks
                     elif typ not in IGNORE:
-                        self._check_pb(param_block, tok, False)
                         if typ == 'EOF':
                             self._check_eof(content[match.end():])
                             eof = True
+                        elif typ == 'UNKNOWN':
+                            if not self.ignore_unknown:
+                                raise UnintelligibleDataBlock(tok)
                         else:
-                            self._check_typ(typ, tok)
-
+                            self._check_pb(param_block, tok, False)
                             # explode self-referential data blocks
                             blocks = self._parse_data_block(tok)
                             for block in blocks:
@@ -615,9 +602,9 @@ class Gerber:
 
     def _parse_macro(self, tok):
         """ Define a macro, with its component shapes. """
-        parts = tok.split('*')
+        parts = [part.strip() for part in tok.split('*')]
         name = parts[0][3:]
-        prims =  [part.strip().split(',') for part in parts[1:-1]] 
+        prims =  [part.split(',') for part in parts[1:-1] if part]
         prim_defs = tuple([(PRIMITIVES[int(m[0])],) + tuple(m[1:])
                            for m in prims])
         return MacroDef(name, prim_defs)
@@ -653,7 +640,7 @@ class Gerber:
         x = CoordFmt(int(x[0]), int(x[1]))
         tok, g_max = self._pop_val('G', tok)
         tok, n_max = self._pop_val('N', tok)
-        inc_coords = (tok[1] == 'I')
+        inc_coords = ('I' in tok)
         z_omit = tok[0]
         return FormatSpec(z_omit, inc_coords, n_max, g_max,
                           x, y, d_max, m_max)
@@ -666,7 +653,7 @@ class Gerber:
         code = tok[1:code_end]
         type_, mods = tok[code_end:].split(',')
         if mods:
-            mods = [float(m) for m in mods.split('X')]
+            mods = [float(m) for m in mods.split('X') if m]
 
         # An aperture can use any of the 4 standard types,
         # (with or without a central hole), or a previously
@@ -838,42 +825,29 @@ class Gerber:
                     else:
                         val = self._format_dec(num_str, 5)
                 else:
-                    val = coerce_ and (coerce_ == 'float' and
-                                      float(num_str) or
-                                      int(num_str)) or num_str
+                    if coerce_ == 'float':
+                        if '.' in num_str:
+                            val = int(float(num_str))
+                        else:
+                            val = int(num_str)
+                    elif coerce_:
+                        val = int(num_str)
+                    else:
+                        val = num_str
+
         return (tok, val)
 
 
     def _check_fill(self):
         """ Check that a fill is closed. """
-        fill = self.fill_buff
-        if len(fill) >= 2:
-            segs = (fill[0], fill[1], fill[-2], fill[-1])
-            ends = [isinstance(s, Arc) and list(s.ends()) or [s.p1, s.p2]
-                    for s in segs]
-            if len(fill) > 2:
-
-                # If first or last seg is an arc that was defined
-                # in anticlockwise mode, we need to reverse it.
-                if ends[0][0] in ends[1]:
-                    ends[0].reverse()
-                if ends[-1][1] in ends[-2]:
-                    ends[-1].reverse()
-
-                if not ends[-1][1] == ends[0][0]:
-                    raise OpenFillBoundary('%s != %s' %
-                                           (ends[-1][1], ends[0][0]))
-            else:
-                for end in ends[-1]:
-                    if end not in end[0]:
-                        raise OpenFillBoundary('%s != %s' %
-                                               (ends[-1][1], ends[0][0]))
-        else:
-            start, end = fill[0].ends()
-            if not start == end:
-                raise OpenFillBoundary('%s != %s' % (start, end))
+        ends = [pair[0] for pair in self.fill_buff]
+        fill = [pair[1] for pair in self.fill_buff]
         self.fill_buff = []
-        return Fill(fill)
+
+        if ends[0][0] == ends[-1][1]:
+            return Fill(fill)
+        else:
+            raise OpenFillBoundary('%s != %s' % (ends[-1][1], ends[0][0]))
 
 
     def _check_smear(self, seg, shape):
@@ -911,12 +885,6 @@ class Gerber:
             raise FileNotTerminated
         elif (not eof) and trailing_fragment.strip():
             raise DataAfterEOF(trailing_fragment)
-
-
-    def _check_typ(self, typ, tok):
-        """ Ensure data block is understood by the parser. """
-        if typ == 'UNKNOWN':
-            raise UnintelligibleDataBlock(tok)
 
 
     def _debug_stdout(self):
