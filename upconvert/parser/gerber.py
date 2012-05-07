@@ -30,8 +30,8 @@ from os import path
 from upconvert.core.design import Design
 from upconvert.core.layout import Layout, Layer, Image, Macro, Primitive
 from upconvert.core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
-from upconvert.core.shape import Line, Arc, Point, Circle, Rectangle, Obround
-from upconvert.core.shape import Polygon, RegularPolygon, Moire, Thermal
+from upconvert.core.shape import Line, Arc, Point, Circle, Rectangle
+from upconvert.core.shape import Obround, RegularPolygon, Polygon, Moire, Thermal
 
 
 # exceptions
@@ -72,11 +72,11 @@ class DataAfterEOF(Unparsable):
 class UnintelligibleDataBlock(Unparsable):
     """ Data block did not conform to any known pattern. """
 
-class ImpossibleGeometry(Unparsable):
-    """ Arc radius, center and endpoints don't gel. """
-
 class IncompatibleAperture(Unparsable):
     """ Attempted to draw non-linear shape with rect. """
+
+class InvalidExpression(Unparsable):
+    """ Invalid macro expression. """
 
 
 # token classes
@@ -90,18 +90,18 @@ Funct = namedtuple('Funct', 'type_ code')                           # pylint: di
 FormatSpec = namedtuple('FormatSpec', ['zero_omission',             # pylint: disable=C0103
                         'incremental_coords', 'n_max', 'g_max',
                         'x', 'y', 'd_max', 'm_max'])
+Token = namedtuple('Token', 'type value')                           # pylint: disable=C0103
 
 
 # constants
 
 DEBUG = False
 LAYERS_CFG = 'layers.cfg'
-DIGITS = '0123456789'
 PRIMITIVES = {1:'circle',
-              2:'vector',
-              20:'vector',
-              21:'line',
-              22:'rectangle',
+              2:'line-vector',
+              20:'line-vector',
+              21:'line-center',
+              22:'line-lower-left',
               4:'outline',
               5:'polygon',
               6:'moire',
@@ -140,13 +140,6 @@ REG_EX = '|'.join('(?P<%s>%s)' % pair for pair in TOK_SPEC)
 TOK_RE = re.compile(REG_EX, re.MULTILINE)
 
 
-# module global funct
-
-def snap(float_1, float_2):
-    """ Compare floats at max gerber precision (6dp). """
-    return round(float_1, 6) == round(float_2, 6)
-
-
 # parser
 
 class Gerber:
@@ -156,6 +149,7 @@ class Gerber:
         self.ignore_unknown = ignore_unknown
         self.layout = Layout()
         self.layer_buff = None
+        self.macro_buff = None
         self.img_buff = Image()
         self.fill_buff = []
 
@@ -217,7 +211,7 @@ class Gerber:
                 cfg_name = infile
                 cfg = open(cfg_name, 'r')
 
-            # define multiple layers from archive
+            # define multiple layers from archivea 
             else:
                 archive = openarchive(infile)
                 batch = archive.namelist if is_zip else archive.getnames
@@ -262,34 +256,20 @@ class Gerber:
         """ Parse gerbers into a PCB layers. """
         for layer_def in layer_defs:
             self.layer_buff = Layer(layer_def.name, layer_def.type)
+            self.macro_buff = {}
             layer_file = (archive and
                           batch_member(layer_def.filename) or
                           open(layer_def.filename, 'r'))
             for block in self._tokenize(layer_file):
                 if isinstance(block, MacroDef):
-                    effect = self._build_macro(block)
+                    self.macro_buff[block.name] = InternalMacro(block)
+                    effect = {}
                 elif isinstance(block, Funct):
                     effect = self._do_funct(block)
                 else:
                     effect = self._move(block)
                 self.status.update(effect)
             self.layout.layers.append(self.layer_buff)
-
-
-    def _build_macro(self, block):
-        """ Build a macro out of component shape defs. """
-        primitives = []
-        for p_def in block.primitive_defs:
-            type_, mods = (p_def[0], [float(i) for i in p_def[1:]])
-            is_additive = type_ in ('moire', 'thermal') or int(mods[0])
-            rotation = type_ not in ('circle', 'moire',
-                                     'thermal') and mods[-1]/180
-            shape, rotation = self._gen_shape(type_, mods, rotation)
-            primitives.append(Primitive(is_additive, rotation, shape))
-
-        # generate and stow the macro
-        self.layer_buff.macros[block.name] = Macro(block.name, primitives)
-        return {}
 
 
     def _do_funct(self, block):
@@ -389,104 +369,6 @@ class Gerber:
 
     # geometry
 
-    def _gen_shape(self, type_, mods, rotation):
-        """ Create a primitive shape component for a macro. """
-        if type_ == 'circle':
-            shape = Circle(x=mods[2],
-                           y=mods[3],
-                           radius=mods[1]/2)
-        elif type_ == 'vector':
-            shape, rotation = self._vector_to_rect(mods,
-                                                   rotation)
-        elif type_ == 'line':
-            shape = Rectangle(x=mods[3] - mods[1]/2,
-                              y=mods[4] + mods[2]/2,
-                              width=mods[1],
-                              height=mods[2])
-        elif type_ == 'rectangle':
-            shape = Rectangle(x=mods[3],
-                              y=mods[4] + mods[2],
-                              width=mods[1],
-                              height=mods[2])
-        elif type_ == 'outline':
-            points = [Point(mods[i], mods[i + 1])
-                      for i in range(2, len(mods[:-1]), 2)]
-            shape = Polygon(points)
-        elif type_ == 'polygon':
-            shape = RegularPolygon(x=mods[2],
-                                   y=mods[3],
-                                   outer=mods[4],
-                                   vertices=mods[1])
-        elif type_ == 'moire':
-            mods[8] = 2 - mods[8]/180
-            shape = Moire(*mods[0:9])
-        elif type_ == 'thermal':
-            mods[5] = 2 - mods[5]/180
-            shape = Thermal(*mods[0:6])
-        return (shape, rotation)
-
-
-    def _vector_to_rect(self, mods, rotation):
-        """
-        Convert a vector into a Rectangle.
-
-        Strategy
-        ========
-        If vect is not horizontal:
-            - rotate about the origin until horizontal
-            - define it as a normal rectangle
-            - incorporate rotated angle into explicit rotation
-
-        """
-        start, end = (mods[2:4], mods[4:6])
-        start_radius = sqrt(start[0]**2 + start[1]**2)
-        end_radius = sqrt(end[0]**2 + end[1]**2)
-
-        # Reverse the vector if its endpoint is closer
-        # to the origin than its start point (avoids
-        # mucking about with signage later).
-        if start_radius > end_radius:
-            end, start = (mods[2:4], mods[4:6])
-            radius = end_radius
-        else:
-            radius = start_radius
-
-        # Calc the angle of the vector with respect to
-        # the x axis.
-        x, y = start
-        adj = end[0] - x
-        opp = end[1] - y
-        hyp = sqrt(adj**2 + opp**2)
-        theta = acos(adj/hyp)/pi
-        if opp > 0:
-            theta = 2 - theta
-
-        # Represent vector angle as a delta.
-        d_theta = 2 - theta
-
-        # Calc the angle of the start point of the
-        # flattened vector.
-        theta = acos(x/radius)/pi 
-        if y > 0:
-            theta = 2 - theta
-        theta += d_theta
-
-        # Redefine x and y at center of the rect's left
-        # side.
-
-        y = sin((2 - theta) * pi) * radius
-        x = cos((2 - theta) * pi) * radius
-
-        # Calc the composite rotation angle.
-        rotation = (rotation + theta) % 2
-
-        return (Rectangle(x=x,
-                          y=y + mods[1]/2,
-                          width=hyp,
-                          height=mods[1]),
-                rotation)
-
-
     def _draw_arc(self, end_pts, center_offset):
         """ Convert arc path into shape. """
         start, end = end_pts
@@ -497,8 +379,8 @@ class Gerber:
         center, radius = self._get_ctr_and_radius(end_pts, offset)
         start_angle = self._get_angle(center, start)
         end_angle = self._get_angle(center, end)
-        self._check_mq(start_angle, end_angle)
         clockwise = 'ANTI' not in self.status['interpolation']
+        self._check_mq(start_angle, end_angle, clockwise)
         return Arc(center.x, center.y,
                    start_angle if clockwise else end_angle,
                    end_angle if clockwise else start_angle,
@@ -509,24 +391,13 @@ class Gerber:
         """ Apply gerber circular interpolation logic. """
         start, end = end_pts
         radius = sqrt(offset['i']**2 + offset['j']**2)
-        center = Point(x=start.x + offset['i'],
-                       y=start.y + offset['j'])
 
-        # In single-quadrant mode, gerber requires implicit
-        # determination of offset direction, so we find the
-        # center through trial and error.
-        if not self.status['multi_quadrant']:
-            if not snap(center.dist(end), radius):
-                center = Point(x=start.x - offset['i'],
-                               y=start.y - offset['j'])
-                if not snap(center.dist(end), radius):
-                    center = Point(x=start.x + offset['i'],
-                                   y=start.y - offset['j'])
-                    if not snap(center.dist(end), radius):
-                        center = Point(x=start.x - offset['i'],
-                                       y=start.y + offset['j'])
-                        if not snap(center.dist(end), radius):
-                            raise ImpossibleGeometry
+        centers = [Point(start.x + xsign * offset['i'],
+                         start.y + ysign * offset['j'])
+                   for xsign in (1, -1) for ysign in (1, -1)]
+
+        center = min(centers, key=lambda c: abs(c.dist(end) - radius))
+
         return (center, radius)
 
 
@@ -605,9 +476,8 @@ class Gerber:
         parts = [part.strip() for part in tok.split('*')]
         name = parts[0][3:]
         prims =  [part.split(',') for part in parts[1:-1] if part]
-        prim_defs = tuple([(PRIMITIVES[int(m[0])],) + tuple(m[1:])
-                           for m in prims])
-        return MacroDef(name, prim_defs)
+        return MacroDef(name, [InternalPrimitive(PRIMITIVES[int(m[0])], m[1:])
+                               for m in prims])
 
 
     # tokenizer support - params
@@ -648,20 +518,20 @@ class Gerber:
 
     def _extract_ad(self, tok):
         """ Extract aperture definition into shapes dict. """
-        tok = ',' in tok and tok or tok + ','
-        code_end = tok[3] in DIGITS and 4 or 3
+        tok = tok if ',' in tok else tok + ','
+        code_end = 4 if tok[3].isdigit() else 3
         code = tok[1:code_end]
-        type_, mods = tok[code_end:].split(',')
+        ap_type, mods = tok[code_end:].split(',')
         if mods:
             mods = [float(m) for m in mods.split('X') if m]
 
         # An aperture can use any of the 4 standard types,
         # (with or without a central hole), or a previously
         # defined macro.
-        if type_ == 'C':
+        if ap_type == 'C':
             shape = Circle(0, 0, mods[0]/2)
             hole_defs = len(mods) > 1 and mods[1:]
-        elif type_ == 'R':
+        elif ap_type == 'R':
             if len(mods) == 1:
                 shape = Rectangle(-mods[0]/2, mods[0]/2,
                                    mods[0], mods[0])
@@ -669,16 +539,19 @@ class Gerber:
                 shape = Rectangle(-mods[0]/2, mods[1]/2,
                                    mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
-        elif type_ == 'O':
+        elif ap_type == 'O':
             shape = Obround(0, 0, mods[0], mods[1])
             hole_defs = len(mods) > 2 and mods[2:]
-        elif type_ == 'P':
+        elif ap_type == 'P':
             if len(mods) < 3:
                 mods.append(0)
             shape = RegularPolygon(0, 0, mods[0], mods[1], mods[2])
             hole_defs = len(mods) > 3 and mods[3:]
-        else:
-            shape = type_
+        else: # macro
+            shape = ap_type
+            if shape in self.macro_buff:
+                macro = self.macro_buff[shape].instantiate(mods)
+                self.layer_buff.macros[macro.name] = macro
             hole_defs = None
 
         if hole_defs and (len(hole_defs) > 1):
@@ -853,14 +726,21 @@ class Gerber:
     def _check_smear(self, seg, shape):
         """ Enforce linear interpolation constraint. """
         if not isinstance(seg, Line):
-            raise IncompatibleAperture('%s cannot draw arc %s'
-                                       % (shape, seg))
+            raise IncompatibleAperture('%s cannot draw arc %s' % (shape, seg))
 
 
-    def _check_mq(self, start_angle, end_angle):
+    def _check_mq(self, start_angle, end_angle, clockwise):
         """ Enforce single quadrant arc length restriction. """
+
         if not self.status['multi_quadrant']:
-            if abs(end_angle - start_angle) > 0.5:
+            if clockwise:
+                arc = (2.0 if end_angle == 0.0 else end_angle) - \
+                    (0.0 if start_angle == 2.0 else start_angle)
+            else:
+                arc = (2.0 if start_angle == 0.0 else start_angle) - \
+                    (0.0 if end_angle == 2.0 else end_angle)
+
+            if round(abs(arc), 4) > 0.5:
                 raise QuadrantViolation('Arc(%s to %s) > 0.5 rad/pi'
                                         % (start_angle, end_angle))
 
@@ -903,3 +783,291 @@ class Gerber:
                                          'additive' or 'subtractive')
                 print image.json()
         raise Unparsable('deliberate error')
+
+
+class InternalMacro(object):
+    """
+    Complex shape built from multiple primitives.
+
+    Primitive shapes are added together in the order they appear in
+    the list. Subtractive shapes subtract only from prior shapes, not
+    subsequent shapes.
+    """
+
+    def __init__(self, block):
+        self.name = block.name
+        self.primitives = block.primitive_defs
+
+    def instantiate(self, values):
+        """ Return a core.layout.Macro given the list of values
+        provided in the aperture definition."""
+
+        values = dict(enumerate(values, 1))
+        return Macro(self.name, [p.instantiate(values) for p in self.primitives])
+
+
+class InternalPrimitive(object):
+    """ A shape with modifiers. """
+
+    def __init__(self, shape_type, modifiers):
+        self.shape_type = shape_type # string, e.g., ('line', 'rectangle', etc.)
+        self.modifiers = [Modifier(m) for m in modifiers]
+
+
+    def instantiate(self, values):
+        """ Return a core.layout.Primitive with a set of fixed shapes
+        given a dict mapping variable numbers to values. """
+
+        shape_type = self.shape_type
+
+        mods = [m.evaluate(values) for m in self.modifiers]
+
+        is_additive = True if shape_type in ('moire', 'thermal') \
+            else bool(mods[0])
+
+        rotation = 0 if shape_type in ('circle', 'moire', 'thermal') \
+            else mods[-1]/180
+
+        if shape_type == 'circle':
+            shape = Circle(x=mods[2],
+                           y=mods[3],
+                           radius=mods[1]/2)
+        elif shape_type == 'line-vector':
+            shape, rotation = self._vector_to_rect(mods, rotation)
+        elif shape_type == 'line-center':
+            shape = Rectangle(x=mods[3] - mods[1]/2,
+                              y=mods[4] + mods[2]/2,
+                              width=mods[1],
+                              height=mods[2])
+        elif shape_type == 'line-lower-left':
+            shape = Rectangle(x=mods[3],
+                              y=mods[4] + mods[2],
+                              width=mods[1],
+                              height=mods[2])
+        elif shape_type == 'outline':
+            points = [Point(mods[i], mods[i + 1])
+                      for i in range(2, len(mods[:-1]), 2)]
+            shape = Polygon(points)
+        elif shape_type == 'polygon':
+            shape = RegularPolygon(x=mods[2],
+                                   y=mods[3],
+                                   outer=mods[4],
+                                   vertices=mods[1])
+        elif shape_type == 'moire':
+            mods[8] = 2 - mods[8]/180
+            shape = Moire(*mods[0:9])
+        elif shape_type == 'thermal':
+            mods[5] = 2 - mods[5]/180
+            shape = Thermal(*mods[0:6])
+
+        return Primitive(is_additive, rotation, shape)
+
+
+    def _vector_to_rect(self, mods, rotation):
+        """
+        Convert a vector into a Rectangle.
+
+        Strategy
+        ========
+        If vect is not horizontal:
+            - rotate about the origin until horizontal
+            - define it as a normal rectangle
+            - incorporate rotated angle into explicit rotation
+
+        """
+        start, end = (mods[2:4], mods[4:6])
+        start_radius = sqrt(start[0]**2 + start[1]**2)
+        end_radius = sqrt(end[0]**2 + end[1]**2)
+
+        # Reverse the vector if its endpoint is closer
+        # to the origin than its start point (avoids
+        # mucking about with signage later).
+        if start_radius > end_radius:
+            end, start = (mods[2:4], mods[4:6])
+            radius = end_radius
+        else:
+            radius = start_radius
+
+        # Calc the angle of the vector with respect to the x axis.
+        x, y = start
+        adj = end[0] - x
+        opp = end[1] - y
+        hyp = sqrt(adj**2 + opp**2)
+        theta = acos(adj/hyp)/pi
+        if opp > 0:
+            theta = 2 - theta
+
+        # Represent vector angle as a delta.
+        d_theta = 2 - theta
+
+        # Calc the angle of the start point of the flattened vector.
+
+        theta = 0.0 if radius == 0.0 else acos(x/radius)/pi 
+        if y > 0:
+            theta = 2 - theta
+        theta += d_theta
+
+        # Redefine x and y at center of the rect's left side.
+
+        y = sin((2 - theta) * pi) * radius
+        x = cos((2 - theta) * pi) * radius
+
+        # Calc the composite rotation angle.
+        rotation = (rotation + theta) % 2
+
+        return (Rectangle(x=x,
+                          y=y + mods[1]/2,
+                          width=hyp,
+                          height=mods[1]),
+                rotation)
+
+
+class Modifier(object):
+    """ An expression in a macro primitive.
+
+    We interpret gerber expressions according to the following
+    grammar, rooted at TOP:
+
+      TOP -> number ESUB
+      TOP -> minus number ESUB
+      TOP -> variable TOPE
+      TOPE ->
+      TOPE -> equate E
+      TOPE -> op E
+      E -> variable ESUB
+      E -> number ESUB
+      E -> minus number ESUB
+      ESUB ->
+      ESUB -> op E
+
+    All numerical operations are given the same precedence and are
+    grouped right to left.
+    """
+
+    scanner = re.Scanner([
+            (r'\d*\.\d+', lambda s, tok: Token('number', float(tok))),
+            (r'\d+', lambda s, tok: Token('number', float(tok))),
+            (r'\$\d+', lambda s, tok: Token('variable', int(tok[1:]))),
+            (r'[\+xX/-]', lambda s, tok: Token('op', tok.lower())),
+            (r'=', lambda s, tok: Token('equate', None)),
+            ])
+
+    def __init__(self, expr):
+        self.tokens, remainder = self.scanner.scan(expr)
+        if remainder:
+            raise InvalidExpression(expr)
+
+
+    def evaluate(self, values):
+        """ Evaluate the expression given a values dict and return the
+        resulting value. The values dict may be modified in the
+        process (by an equate expression). """
+        stack = []
+        self._evaluate_top(list(self.tokens), stack, values)
+        return self._pop_value(stack, values)
+
+
+    def _evaluate_top(self, tokens, stack, values):
+        """ Evaluate the TOP production. """
+        token = tokens.pop(0)
+
+        if token.type == 'number':
+            stack.append(token)
+            self._evaluate_sube(tokens, stack, values)
+        elif token.type == 'variable':
+            stack.append(token)
+            self._evaluate_tope(tokens, stack, values)
+        elif token == ('op', '-'):
+            if not tokens:
+                raise InvalidExpression(token, stack, values)
+            num = tokens.pop(0)
+            if num.type != 'number':
+                raise InvalidExpression(token, num, stack, values)
+            stack.append(Token('number', -num.value))
+        else:
+            raise InvalidExpression(token, tokens)
+
+
+    def _evaluate_tope(self, tokens, stack, values):
+        """ Evaluate the TOPE production. """
+        if not tokens:
+            return
+
+        token = tokens.pop(0)
+
+        if token.type == 'equate':
+            var = stack.pop()
+            self._evaluate_e(tokens, stack, values)
+            values[var.value] = self._pop_value(stack, values)
+            stack.append(Token('number', values[var.value]))
+        elif token.type == 'op':
+            self._evaluate_e(tokens, stack, values)
+            self._evaluate_op(token, stack, values)
+        else:
+            raise InvalidExpression(token, tokens)
+
+
+    def _evaluate_e(self, tokens, stack, values):
+        """ Evaluate the E production. """
+        token = tokens.pop(0)
+
+        if token.type in ('number', 'variable'):
+            stack.append(token)
+            self._evaluate_sube(tokens, stack, values)
+        elif token == ('op', '-'):
+            if not tokens:
+                raise InvalidExpression(token, stack, values)
+            num = tokens.pop(0)
+            if num.type != 'number':
+                raise InvalidExpression(token, num, stack, values)
+            stack.append(Token('number', -num.value))
+        else:
+            raise InvalidExpression(token, tokens)
+
+
+    def _evaluate_sube(self, tokens, stack, values):
+        """ Evaluate the SUBE production. """
+        if not tokens:
+            return
+
+        token = tokens.pop(0)
+
+        if token.type == 'op':
+            self._evaluate_e(tokens, stack, values)
+            self._evaluate_op(token, stack, values)
+        else:
+            raise InvalidExpression(token, tokens)
+
+
+    def _evaluate_op(self, op, stack, values):
+        """ Evaluate the given operand and push the value onto the
+        stack. """
+        v2 = self._pop_value(stack, values)
+        v1 = self._pop_value(stack, values)
+
+        if op.value == '+':
+            val = v1 + v2
+        elif op.value == '-':
+            val = v1 - v2
+        elif op.value == 'x':
+            val = v1 * v2
+        elif op.value == '/':
+            val = v1 / v2
+        else:
+            raise InvalidExpression(op, stack)
+
+        stack.append(Token('number', val))
+
+
+    def _pop_value(self, stack, values):
+        """ Pop a value from the stack and return it,
+        replacing variables with their values. """
+
+        token = stack.pop()
+
+        if token.type == 'number':
+            return token.value
+        elif token.type == 'variable':
+            return values[token.value]
+        else:
+            raise InvalidExpression(token, stack, values)
