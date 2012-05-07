@@ -56,6 +56,7 @@
 # (40'000, 40'000).
 
 import os
+import math
 import zipfile
 import logging
 import tempfile
@@ -1399,6 +1400,7 @@ def find_symbols(symbol_dirs):
                     if filename.endswith('.sym'):
                         filepath = os.path.join(dirpath, filename)
                         filename, _ = os.path.splitext(filename)
-                        known_symbols[filename] = filepath
+                        if filename not in known_symbols:
+                            known_symbols[filename] = filepath
 
     return known_symbols
