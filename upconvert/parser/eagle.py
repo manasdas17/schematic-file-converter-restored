@@ -2335,7 +2335,7 @@ class Eagle:
 
 # parsing of external attributes beforehand helps its placing
         filehandle.seek(self.header.numofblocks * self.blocksize)
-        _noregblockheader = filehandle.read(4)
+        filehandle.read(4) # noregblockheader
         _unreg_dta = filehandle.read(struct.unpack("I", 
                         filehandle.read(4))[0]).split(self.noregdelimeter) 
         filehandle.seek(1 * self.blocksize)
@@ -2347,7 +2347,7 @@ class Eagle:
         self._parse_blocks(filehandle, -1 + self.header.numofblocks)
 
 # desc (length driven)
-        _noregblockheader = filehandle.read(4)
+        filehandle.read(4) # noregblockheader
 ## TODO remove
 #        if Eagle.noregblockconst != _noregblockheader:
 #            print("bad constant follows headers!")

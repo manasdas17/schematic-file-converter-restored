@@ -56,7 +56,6 @@
 # (40'000, 40'000).
 
 import os
-import math
 import zipfile
 import logging
 import tempfile

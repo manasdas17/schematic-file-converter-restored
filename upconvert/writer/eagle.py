@@ -33,8 +33,8 @@ import struct
 import re
 import math
 
-from upconvert.core.shape import Point, Line, Label, Rectangle, Arc, \
-                                    BezierCurve, Circle, Polygon
+from upconvert.core.shape import Line, Label, Rectangle, Arc, \
+    BezierCurve, Circle, Polygon
 
 #from upconvert.parser.eagle import EagleBinConsts
 
@@ -2186,7 +2186,6 @@ class Eagle: # pylint: disable=R0902
             for _di, _dd in enumerate(_lib.devsets[0].shapesets):
                 if _compname == _dd.name:
                     _dset = _dd
-                    _dsetnid = 1 + _di # numbered from 1 ; if i need it?..
                     break
             else:
                 _prefix = 'xC'
@@ -2426,11 +2425,9 @@ class Eagle: # pylint: disable=R0902
         """ Converts shapes (buses/nets) into a set of Eagle objects
         """
         for _nn in design.nets:
-            _isbus = False
             _web = None
             if 'type' in _nn.attributes:
                 if 'bus' == _nn.attributes['type']:
-                    _isbus = True
                     _width = 0.762
                     _web = Eagle.Bus(name=_nn.net_id)
                     self.shapeheader.buses.append(_web)
