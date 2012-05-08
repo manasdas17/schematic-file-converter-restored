@@ -151,6 +151,7 @@ class Gerber:
         self.layer_buff = None
         self.macro_buff = None
         self.img_buff = Image()
+        self.trace_buff = TraceBuffer()
         self.fill_buff = []
 
         # establish gerber defaults
@@ -311,8 +312,8 @@ class Gerber:
         end = self._target_pos(block)
         ends = (Point(start), Point(end))
         apertures = self.layer_buff.apertures
-        if self.status['draw'] == 'ON':
 
+        if self.status['draw'] == 'ON':
             # generate segment
             if self.status['interpolation'] == 'LINEAR':
                 seg = Line(start, end)
@@ -326,22 +327,20 @@ class Gerber:
             else:
                 aperture = apertures[self.status['aperture']]
                 if isinstance(aperture.shape, Rectangle):
-
                     # construct a smear
                     self._check_smear(seg, aperture.shape)
                     self.img_buff.smears.append(Smear(seg, aperture.shape))
-
                 else:
                     wid = aperture.shape.radius * 2
-                    tr_ind = self.img_buff.get_trace(wid, ends)
-                    if tr_ind is None:
-
+                    trace = self.trace_buff.get_trace(wid, seg)
+                    if trace is None:
                         # construct a trace
-                        self.img_buff.traces.append(Trace(wid, [seg]))
+                        trace = Trace(wid, [seg])
+                        self.img_buff.traces.append(trace)
                     else:
-
                         # append segment to existing trace
-                        self.img_buff.traces[tr_ind].segments.append(seg)
+                        trace.segments.append(seg)
+                    self.trace_buff.add_segment(seg, trace)
 
         elif self.status['draw'] == 'FLASH':
             aperture = apertures[self.status['aperture']]
@@ -588,6 +587,7 @@ class Gerber:
         if self.img_buff.not_empty():
             self.layer_buff.images.append(self.img_buff)
             self.img_buff = Image('', self.img_buff.is_additive)
+            self.trace_buff = TraceBuffer()
             self.status.update({'x':0,
                                 'y':0,
                                 'draw':'OFF',
@@ -1071,3 +1071,33 @@ class Modifier(object):
             return values[token.value]
         else:
             raise InvalidExpression(token, stack, values)
+
+
+class TraceBuffer(object):
+    """
+    Map precision-rounded points to traces for fast trace lookup.
+    """
+
+    precision = 6
+
+    def __init__(self):
+        self.pt2trace = {} # (width, (x, y)) -> Trace
+
+    def add_segment(self, segment, trace):
+        for point in self.get_ends(segment):
+            self.pt2trace[trace.width, point] = trace
+
+    def get_trace(self, width, segment):
+        for point in self.get_ends(segment):
+            trace = self.pt2trace.get((width, point))
+            if trace is not None:
+                return trace
+
+    def get_ends(self, segment):
+        if isinstance(segment, Arc):
+            ends = segment.ends()
+        else:
+            ends = (segment.p1, segment.p2)
+
+        return [(round(point.x, self.precision),
+                 round(point.y, self.precision)) for point in ends]
