@@ -210,6 +210,8 @@ def main():
     ap.add_argument('--raise-errors', dest='raise_errors',
                     action='store_true', default=False,
                     help="show tracebacks for parsing and writing errors")
+    ap.add_argument('--profile', action='store_true', default=False,
+                    help="collect profiling information")
 
     args = ap.parse_args()
 
@@ -254,6 +256,11 @@ def main():
             ap.print_help()
             exit(1)
 
+    if args.profile:
+        import cProfile
+        profile = cProfile.Profile()
+        profile.enable()
+
     # parse and export the data
     try:
         design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
@@ -277,6 +284,10 @@ def main():
     else:
         print "Output cancelled due to previous errors."
         exit(1)
+
+    if args.profile:
+        profile.disable()
+        profile.print_stats()
 
 
 if __name__ == "__main__":

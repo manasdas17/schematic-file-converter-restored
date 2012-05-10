@@ -109,7 +109,8 @@ class Image:
 
     def get_trace(self, width, end_pts):
         """
-        Get the list index of a connected trace.
+        Get a trace given a width and pair of points.
+        Return None if no Trace is found.
 
         Params:
             width   - float
@@ -118,8 +119,7 @@ class Image:
 
         """
         start, end = end_pts
-        for tr_index in range(len(self.traces)):
-            trace = self.traces[tr_index]
+        for trace in self.traces:
             for seg in trace.segments:
                 if trace.width == width:
                     if isinstance(seg, Arc):
@@ -127,7 +127,7 @@ class Image:
                     else:
                         seg_ends = (seg.p1, seg.p2)
                     if start in seg_ends or end in seg_ends:
-                        return tr_index
+                        return trace
         return None
 
 

@@ -56,7 +56,6 @@
 # (40'000, 40'000).
 
 import os
-import math
 import zipfile
 import logging
 import tempfile
@@ -1393,7 +1392,7 @@ def find_symbols(symbol_dirs):
     """
     known_symbols = {}
 
-    for symbol_dir in reversed(symbol_dirs):
+    for symbol_dir in symbol_dirs:
         if os.path.exists(symbol_dir):
             for dirpath, dirnames, filenames in os.walk(symbol_dir):
                 dirnames.sort()

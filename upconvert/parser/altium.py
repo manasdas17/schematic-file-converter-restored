@@ -46,10 +46,6 @@
 
 # The struct library makes it easy to read stored 4-byte integers.
 import struct
-# The sys library is used only for getting command-line arguments for main() as demo functionality
-# for this library.
-import sys
-
 
 from upconvert.core.design import Design
 
