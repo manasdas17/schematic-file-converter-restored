@@ -1411,20 +1411,20 @@ class Eagle:
             # sign propogation by hand
             _x1 = (Eagle.Shape.decode_real(_dta[4] & 0xffffff) 
                     if 0 == (0x800000 & _dta[4])
-                    else -1 * (0x1000000 - 
-                        Eagle.Shape.decode_real(_dta[4] & 0xffffff)))
+                    else (-1 * 
+                        Eagle.Shape.decode_real(0x1000000 - (_dta[4] & 0xffffff))))
             _y1 = (Eagle.Shape.decode_real(_dta[5] & 0xffffff)
                     if 0 == (0x800000 & _dta[5])
-                    else -1 * (0x1000000 - 
-                        Eagle.Shape.decode_real(_dta[5] & 0xffffff)))
+                    else (-1 * 
+                        Eagle.Shape.decode_real(0x1000000 - (_dta[5] & 0xffffff))))
             _x2 = (Eagle.Shape.decode_real(_dta[6] & 0xffffff)
                     if 0 == (0x800000 & _dta[6])
-                    else -1 * (0x1000000 - 
-                        Eagle.Shape.decode_real(_dta[6] & 0xffffff)))
+                    else (-1 * 
+                        Eagle.Shape.decode_real(0x1000000 - (_dta[6] & 0xffffff))))
             _y2 = (Eagle.Shape.decode_real(_dta[7] & 0xffffff)
                     if 0 == (0x800000 & _dta[7])
-                    else -1 * (0x1000000 - 
-                        Eagle.Shape.decode_real(_dta[7] & 0xffffff)))
+                    else (-1 * 
+                        Eagle.Shape.decode_real(0x1000000 - (_dta[7] & 0xffffff))))
 
 # _coord is a single (either x or y) coordinate of a circle's center
             _coord = (Eagle.Shape.decode_real(
@@ -1432,34 +1432,30 @@ class Eagle:
                       (((_dta[5] & 0xff000000) >> 16) & 0xff00) +
                       (((_dta[6] & 0xff000000) >> 8) & 0xff0000))
                     if 0 == (0x80000000 & _dta[6])
-                    else -1 * (0x1000000 - 
-                      Eagle.Shape.decode_real(
+                    else (-1 * 
+                      Eagle.Shape.decode_real((0x1000000 - (
                               (((_dta[4] & 0xff000000) >> 24) & 0xff) +
                               (((_dta[5] & 0xff000000) >> 16) & 0xff00) +
-                              (((_dta[6] & 0xff000000) >> 8) & 0xff0000))))
+                              (((_dta[6] & 0xff000000) >> 8) & 0xff0000))))))
 
 # have to determine which coord is given
             _dx = math.pow(_coord - _y2, 2) - math.pow(_coord - _y1, 2)
             _dy = math.pow(_coord - _x1, 2) - math.pow(_coord - _x2, 2)
 
-            if _dx > 0 and _dy > 0:
-                raise ValueError("cannot decide what coord is given in Eagle.Arc")
-            elif _dy > 0: # X is given
+            if abs(_x2 - _x1) < abs(_y2 - _y1): # X is given
                 _x3 = _coord
                 _y3 = (_dy - _y2 * _y2 + _y1 * _y1) / (2 * (_y1 - _y2))
-            elif _dx > 0: # Y is given
+            else: # Y is given
                 _x3 = (_dx - _x1 * _x1 + _x2 * _x2) / (2 * (_x2 - _x1))
                 _y3 = _coord
-            else:
-                raise ValueError("wrong coord is given in Eagle.Arc")
 
             _curve = math.degrees(math.acos((math.pow(_x1 - _x3, 2) + math.pow(_y1 - _y3, 2) +
                                              math.pow(_x2 - _x3, 2) + math.pow(_y2 - _y3, 2) +
                                              - math.pow(_x1 - _x2, 2) - math.pow(_y1 - _y2, 2)) / 
                                     (2 * math.sqrt(math.pow(_x1 - _x3, 2) + math.pow(_y1 - _y3, 2)) *
                                          math.sqrt(math.pow(_x2 - _x3, 2) + math.pow(_y2 - _y3, 2)))))
-            if _dta[9] & Eagle.Arc.directionmask:
-                _curve = 360 - _curve
+            if not (_dta[9] & Eagle.Arc.directionmask):
+                _curve *= -1
 
             _ret_val = Eagle.Arc( # sign propogation by hand
                           x1=_x1, y1=_y1, x2=_x2, y2=_y2,
@@ -2197,6 +2193,8 @@ class Eagle:
 # loop through 24 byte long blocks
         for _nn in range(numofblocks):
             _dta = filehandle.read(self.blocksize)
+
+#            print"d>",' '.join([x.encode('hex') for x in _dta])
 
             _type = struct.unpack("24B", _dta)[0]
             if Eagle.Settings.constant == _type:
