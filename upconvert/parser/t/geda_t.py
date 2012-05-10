@@ -520,7 +520,8 @@ netname=+_1
         self.assertEquals(arc_obj.start_angle, 0.0)
         self.assertEquals(arc_obj.end_angle, 1.5)
         ## mirrored arc
-        arc_obj = self.geda_parser._parse_arc(params, mirrored=True)
+        params['mirror'] = True
+        arc_obj = self.geda_parser._parse_arc(params)
         self.assertEquals(arc_obj.x, -4110)
         self.assertEquals(arc_obj.y, 4850)
         self.assertEquals(arc_obj.radius, 190)
@@ -539,7 +540,8 @@ netname=+_1
         self.assertEquals(arc_obj.start_angle, 1.8)
         self.assertEquals(arc_obj.end_angle, 0.7)
         ## mirrored arc
-        arc_obj = self.geda_parser._parse_arc(params, mirrored=True)
+        params['mirror'] = True
+        arc_obj = self.geda_parser._parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, -4430)
         self.assertEquals(arc_obj.y, 4980)
@@ -575,7 +577,8 @@ netname=+_1
             StringIO.StringIO("A 0 0 500 30 200 3 0 0 0 -1 -1")
         )
         self.assertEquals(typ, 'A')
-        arc_obj = self.geda_parser._parse_arc(params, mirrored=True)
+        params['mirror'] = True
+        arc_obj = self.geda_parser._parse_arc(params)
         self.assertEquals(arc_obj.type, 'arc')
         self.assertEquals(arc_obj.x, 0)
         self.assertEquals(arc_obj.y, 0)
@@ -621,7 +624,8 @@ netname=+_1
                 StringIO.StringIO(line_string)
             )
             self.assertEquals(typ, 'L')
-            line_obj = self.geda_parser._parse_line(params, mirrored=True)
+            params['mirror'] = True
+            line_obj = self.geda_parser._parse_line(params)
             self.assertEquals(line_obj.type, 'line')
             self.assertEquals(
                 line_obj.p1.x,
@@ -686,7 +690,8 @@ netname=+_1
             typ, params =  self.geda_parser._parse_command(
                 StringIO.StringIO(rect_string)
             )
-            rect_obj = self.geda_parser._parse_box(params, mirrored=True)
+            params['mirror'] = True
+            rect_obj = self.geda_parser._parse_box(params)
             self.assertEquals(rect_obj.type, 'rectangle')
             self.assertEquals(rect_obj.x, result_dict['x'])
             self.assertEquals(rect_obj.y, result_dict['y'])
@@ -729,7 +734,8 @@ z"""
         ##NOTE: parse mirrored path
         stream = StringIO.StringIO(simple_example)
         typ, params = self.geda_parser._parse_command(stream)
-        shapes = self.geda_parser._parse_path(stream, params, mirrored=True)
+        params['mirror'] = True
+        shapes = self.geda_parser._parse_path(stream, params)
 
         expected_results = [
             ['line', (-51, 24), (-60, 20)],
@@ -798,11 +804,12 @@ z"""
 
         ##mirrored circles
         for circle_string in test_strings:
-            typ, params =  self.geda_parser._parse_command(
+            typ, params = self.geda_parser._parse_command(
                 StringIO.StringIO(circle_string)
             )
+            params['mirror'] = True
             self.assertEquals(typ, 'V')
-            circle_obj = self.geda_parser._parse_circle(params, mirrored=True)
+            circle_obj = self.geda_parser._parse_circle(params)
             self.assertEquals(circle_obj.type, 'circle')
             self.assertEquals(
                 circle_obj.x,
@@ -847,7 +854,8 @@ pintype=in
         ##NOTE: test mirrored pin
         stream = StringIO.StringIO(pin_sample)
         typ, params =  self.geda_parser._parse_command(stream)
-        pin = self.geda_parser._parse_pin(stream, params, mirrored=True)
+        params['mirror'] = True
+        pin = self.geda_parser._parse_pin(stream, params)
 
         ## null_end
         self.assertEquals(pin.p1.x, -20)
@@ -882,7 +890,8 @@ pintype=in
         ##NOTE: test mirrored pin
         stream = StringIO.StringIO(reversed_pin_sample)
         typ, params =  self.geda_parser._parse_command(stream)
-        pin = self.geda_parser._parse_pin(stream, params, mirrored=True)
+        params['mirror'] = True
+        pin = self.geda_parser._parse_pin(stream, params)
 
         ## null_end
         self.assertEquals(pin.p1.x, -10)

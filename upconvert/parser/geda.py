@@ -121,13 +121,13 @@ class GedaText(object):
     @classmethod
     def from_command(cls, stream, params):
         """
-        Create a ``GEDAText`` instance from *stream* and previously
+        Create a ``GedaText`` instance from *stream* and previously
         parse *params*. The stream is expected to be as long as the
         ``numb_lines`` property in *params*. The same amount of lines
-        are parsed in stream to make up the *attribute*, *content* 
-        properties of the ``GEDAText`` instance.
+        are parsed in stream to make up the *attribute*, *content*
+        properties of the ``GedaText`` instance.
 
-        Returns a newly created ``GEDAText`` instance.
+        Returns a newly created ``GedaText`` instance.
         """
         num_lines = params['num_lines']
 
@@ -149,6 +149,70 @@ class GedaText(object):
                 attribute = "_" + attribute
 
         return cls(content, attribute=attribute, params=params)
+
+
+def add_objects_to_component(self, objs):
+    if not objs:
+        return
+
+    try:
+        iter(objs)
+    except TypeError:
+        objs = [objs]
+
+    for obj in objs:
+        obj_cls = obj.__class__
+        if issubclass(obj_cls, shape.Shape):
+            self.symbols[0].bodies[0].add_shape(obj)
+        elif issubclass(obj_cls, components.Pin):
+            self.symbols[0].bodies[0].add_pin(obj)
+        elif issubclass(obj_cls, GedaText):
+            if obj.is_text():
+                self.symbols[0].bodies[0].add_shape(obj.as_label())
+
+            elif obj.attribute == '_refdes' \
+                 and '?' in obj.content:
+
+                prefix, suffix = obj.content.split('?')
+                self.add_attribute('_prefix', prefix)
+                self.add_attribute('_suffix', suffix)
+            else:
+                self.add_attribute(
+                    obj.attribute,
+                    obj.content
+                )
+
+
+def add_objects_to_design(self, objs):
+    if not objs:
+        return
+
+    try:
+        iter(objs)
+    except TypeError:
+        objs = [objs]
+
+    for obj in objs:
+        obj_cls = obj.__class__
+        if issubclass(obj_cls, shape.Shape):
+            self.symbols[0].bodies[0].add_shape(obj)
+        elif issubclass(obj_cls, components.Pin):
+            self.symbols[0].bodies[0].add_pin(obj)
+        elif issubclass(obj_cls, GedaText):
+            if obj.is_text():
+                self.add_shape(obj.as_label())
+            elif obj.attribute == 'use_license':
+                metadata = self.design_attributes.metadata
+                metadata.license = obj.content
+            else:
+                self.design_attributes.add_attribute(
+                    obj.attribute,
+                    obj.content,
+                )
+
+import types
+components.Component.add_geda_objects = types.MethodType(add_objects_to_component, None, components.Component)
+Design.add_geda_objects = types.MethodType(add_objects_to_design, None, Design)
 
 
 class GEDAError(Exception):
@@ -272,6 +336,11 @@ class GEDA:
         self.frame_width = 0
         self.frame_height = 0
 
+        # initialise PIN counter
+        self.pin_counter = itertools.count(0)
+        # initialise  PATH counter
+        self.path_counter = itertools.count(0)
+
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
             symbol_dirs = []
@@ -388,6 +457,58 @@ class GEDA:
 
         return self.design
 
+    def _parse_v(self, stream, params):
+        return
+
+    def _parse_T(self, stream, params):
+        return self._parse_text(stream, params)
+
+    def _parse_G(self, stream, params):
+        log.warn("ignoring picture/font in gEDA file. Not supported!")
+        return
+
+    def _parse_C(self, stream, params):
+        ## ignore title since it only defines the blueprint frame
+        if params['basename'].startswith('title'):
+            self._parse_environment(stream)
+
+        ## busripper are virtual components that need separate
+        ## processing
+        elif 'busripper' in params['basename']:
+            self.segments.add(self._create_ripper_segment(params))
+
+            ## make sure following environments are ignored
+            self.skip_embedded_section(stream)
+            self._parse_environment(stream)
+
+        else:
+            self.parse_component(stream, params)
+        return
+
+    def _parse_N(self, stream, params): # net segment (in schematic ONLY)
+        return self._parse_segment(stream, params)
+
+    def _parse_H(self, stream, params):
+        return self._parse_path(stream, params)
+
+    def _parse_U(self, stream, params): # bus (only graphical feature NOT component)
+        return self._parse_bus(params)
+
+    def _parse_P(self, stream, params): # pin
+        return self._parse_pin(stream, params, 0)
+
+    def _parse_L(self, stream, params): # line
+        return self._parse_line(params)
+
+    def _parse_B(self, stream, params):  # box
+        return self._parse_box(params)
+
+    def _parse_V(self, stream, params):  # circle
+        return self._parse_circle(params)
+
+    def _parse_A(self, stream, params):  # arc
+        return self._parse_arc(params)
+
     def parse_schematic(self, stream):
         """ Parse a gEDA schematic provided as a *stream* object into a
             design.
@@ -406,63 +527,8 @@ class GEDA:
 
         while obj_type is not None:
 
-            if obj_type == 'T':  # Convert regular text or attribute
-                geda_text = self._parse_text(stream, params)
-
-                if geda_text.is_text():
-                    self.unassigned_body.add_shape(geda_text.as_label())
-                elif geda_text.attribute == 'use_license':
-                    metadata = self.design.design_attributes.metadata
-                    metadata.license = geda_text.conent
-                else:
-                    self.design.design_attributes.add_attribute(
-                        geda_text.attribute,
-                        geda_text.content,
-                    )
-
-            elif obj_type == 'G':  # picture type is not supported
-                log.warn("ignoring picture/font in gEDA file. Not supported!")
-            elif obj_type == 'C':  # command for component found
-                basename = params['basename']
-
-                ## ignore title since it only defines the blueprint frame
-                if basename.startswith('title'):
-                    self._parse_environment(stream)
-
-                ## busripper are virtual components that need separate
-                ## processing
-                elif 'busripper' in basename:
-                    self.segments.add(self._create_ripper_segment(params))
-
-                    ## make sure following environments are ignored
-                    self.skip_embedded_section(stream)
-                    self._parse_environment(stream)
-
-                else:
-                    self.parse_component(stream, params)
-
-            elif obj_type == 'N':  # net segment (in schematic ONLY)
-                self._parse_segment(stream, params)
-
-            elif obj_type == 'H':  # SVG-like path
-                log.warn('ommiting path outside of component.')
-                ## skip description of path
-                num_lines = params['num_lines']
-                for _ in range(num_lines):
-                    stream.readline()
-
-            elif obj_type == 'U':  # bus (only graphical feature NOT component)
-                self._parse_bus(params)
-
-            else:
-                shape_ = self._parse_unassigned_shape(stream, obj_type, params)
-
-                if shape_ is None:
-                    pass
-                elif isinstance(shape_, components.Pin):
-                    self.unassigned_body.add_pin(shape_)
-                else:
-                    self.unassigned_body.add_shape(shape_)
+            objects = getattr(self, "_parse_%s" % obj_type)(stream, params)
+            self.design.add_geda_objects(objects)
 
             obj_type, params = self._parse_command(stream)
 
@@ -474,41 +540,6 @@ class GEDA:
             self.design.add_net(cnet)
 
         return self.design
-
-    def _parse_unassigned_shape(self, stream, obj_type, params):
-        """
-        Parse a command that is not assigned to any component and 
-        create a corresponding shape. 
-
-        Returns an instance of the corresponding ``shape`` subclass.
-        """
-        if obj_type == 'T':
-            geda_text = self._parse_text(stream, params)
-            if geda_text.is_text():
-                return geda_text.as_label()
-
-        elif obj_type == 'L':
-            return self._parse_line(params)
-
-        elif obj_type == 'B':
-            return self._parse_box(params)
-
-        elif obj_type == 'V':
-            return self._parse_circle(params)
-
-        elif obj_type == 'A':
-            return self._parse_arc(params)
-
-        elif obj_type == 'P':
-            return self._parse_pin(stream, params, False, 0)
-
-        elif obj_type == 'H':
-            return self._parse_path(stream, params)
-
-        elif obj_type == 'G':
-            log.warn("ignoring picture/font in gEDA file. Not supported!")
-
-        return
 
     def _parse_title_frame(self, params):
         """ Parse the frame component in *params* to extract the
@@ -701,6 +732,9 @@ class GEDA:
             )
         return True
 
+    def _is_mirrored_command(self, params):
+        return bool(params.get('mirror', False))
+
     def parse_component_data(self, stream, params):
         """ Creates a component from the component *params* and the
             following commands in the stream. If the component data
@@ -719,8 +753,7 @@ class GEDA:
         self.offset = shape.Point(0, 0)
 
         ## retrieve if component is mirrored around Y-axis
-        mirrored = bool(params.get('mirror', False))
-        if mirrored:
+        if self._is_mirrored_command(params):
             basename += '_MIRRORED'
 
         move_to = None
@@ -742,60 +775,13 @@ class GEDA:
         ##NOTE: adding this attribute to make parsing UPV data easier
         ## when using re-exported UPV.
         component.add_attribute('_geda_imported', 'true')
-        pin_counter = itertools.count(0)
+        self.pin_counter = itertools.count(0)
 
         while typ is not None:
 
-            if typ == 'T':
-                geda_text = self._parse_text(stream, params)
-
-                if geda_text.is_text():
-                    body.add_shape(geda_text.as_label())
-
-                elif geda_text.attribute == '_refdes' \
-                     and '?' in geda_text.content:
-
-                    prefix, suffix = geda_text.content.split('?')
-                    component.add_attribute('_prefix', prefix)
-                    component.add_attribute('_suffix', suffix)
-                else:
-                    component.add_attribute(
-                        geda_text.attribute,
-                        geda_text.content
-                    )
-
-            elif typ == 'L':
-                body.add_shape(
-                    self._parse_line(params, mirrored)
-                )
-
-            elif typ == 'B':
-                body.add_shape(
-                    self._parse_box(params, mirrored)
-                )
-
-            elif typ == 'V':
-                body.add_shape(
-                    self._parse_circle(params, mirrored)
-                )
-
-            elif typ == 'A':
-                body.add_shape(
-                    self._parse_arc(params, mirrored)
-                )
-
-            elif typ == 'P':
-                body.add_pin(
-                    self._parse_pin(
-                        stream, params, mirrored, pin_counter.next()
-                    )
-                )
-            elif typ == 'H':
-                for new_shape in self._parse_path(stream, params, mirrored):
-                    body.add_shape(new_shape)
-
-            elif typ == 'G':
-                log.warn("ignoring picture/font in gEDA file. Not supported!")
+            ##FIXME: add mirrored parameter to function call!!!!
+            objects = getattr(self, "_parse_%s" % typ)(stream, params)
+            component.add_geda_objects(objects)
 
             typ, params = self._parse_command(stream, move_to)
 
@@ -839,17 +825,16 @@ class GEDA:
         self._parse_environment(stream)
         return geda_text
 
-    def _create_label(self, text, params, mirrored=False):
+    def _create_label(self, text, params):
         """ Create a ``shape.Label`` instance using the *text* string. The
             location of the Label is determined by the ``x`` and ``y``
-            coordinates in *params*. If *mirrored* is true, the bottom left
-            corner of the text (anchor) is mirrored at the Y-axis.
+            coordinates in *params*.
 
             Returns a ``shape.Label`` object.
         """
         text_x = params['x']
 
-        if mirrored:
+        if self._is_mirrored_command(params):
             text_x = 0 - text_x
 
         return shape.Label(
@@ -1009,8 +994,8 @@ class GEDA:
         """
         Open the file with *filename* and return a file
         handle for it. If the current file is a ZIP file
-        the filename will be treated as compressed file in 
-        this ZIP file. 
+        the filename will be treated as compressed file in
+        this ZIP file.
         """
         if self.geda_zip is not None:
             temp_dir = tempfile.mkdtemp()
@@ -1068,7 +1053,7 @@ class GEDA:
                 if net_name not in self.net_names.values():
                     self.net_names[pt_a.point_id] = net_name
 
-    def _parse_path(self, stream, params, mirrored=False):
+    def _parse_path(self, stream, params):
         """ Parses a SVG-like path provided path into a list
             of simple shapes. The gEDA formats allows only line
             and curve segments with absolute coordinates. Hence,
@@ -1077,7 +1062,10 @@ class GEDA:
             the number of lines in *params*.
             Returns a list of Line and BezierCurve shapes.
         """
+        ## FIXME: get path index from iterator to use in shape
+        ## attributes/style for writer reference
         num_lines = params['num_lines']
+        mirrored = self._is_mirrored_command(params)
         command = stream.readline().strip().split(self.DELIMITER)
 
         if command[0] != 'M':
@@ -1139,7 +1127,7 @@ class GEDA:
 
         return shapes
 
-    def _parse_arc(self, params, mirrored=False):
+    def _parse_arc(self, params):
         """ Creates an Arc object from the parameter in *params*. All
             style related parameters are ignored.
             Returns Arc object.
@@ -1147,7 +1135,8 @@ class GEDA:
         arc_x = params['x']
         start_angle = params['startangle']
         sweep_angle = params['sweepangle']
-        if mirrored:
+
+        if self._is_mirrored_command(params):
             arc_x = 0 - arc_x
 
             start_angle = start_angle + sweep_angle
@@ -1164,7 +1153,7 @@ class GEDA:
             self.to_px(params['radius']),
         )
 
-    def _parse_line(self, params, mirrored=None):
+    def _parse_line(self, params):
         """ Creates a Line object from the parameters in *params*. All
             style related parameters are ignored.
             Returns a Line object.
@@ -1172,7 +1161,7 @@ class GEDA:
         line_x1 = params['x1']
         line_x2 = params['x2']
 
-        if mirrored:
+        if self._is_mirrored_command(params):
             line_x1 = 0 - params['x1']
             line_x2 = 0 - params['x2']
 
@@ -1181,13 +1170,13 @@ class GEDA:
             self.conv_coords(line_x2, params['y2']),
         )
 
-    def _parse_box(self, params, mirrored=False):
+    def _parse_box(self, params):
         """ Creates rectangle from gEDA box with origin in bottom left
             corner. All style related values are ignored.
             Returns a Rectangle object.
         """
         rect_x = params['x']
-        if mirrored:
+        if self._is_mirrored_command(params):
             rect_x = 0-(rect_x+params['width'])
 
         return shape.Rectangle(
@@ -1197,13 +1186,13 @@ class GEDA:
             self.to_px(params['height'])
         )
 
-    def _parse_circle(self, params, mirrored=False):
+    def _parse_circle(self, params):
         """ Creates a Circle object from the gEDA parameters in *params. All
             style related parameters are ignored.
             Returns a Circle object.
         """
         vertex_x = params['x']
-        if mirrored:
+        if self._is_mirrored_command(params):
             vertex_x = 0-vertex_x
 
         return shape.Circle(
@@ -1212,7 +1201,7 @@ class GEDA:
             self.to_px(params['radius']),
         )
 
-    def _parse_pin(self, stream, params, mirrored=False, pinnumber=0):
+    def _parse_pin(self, stream, params, pinnumber=0):
         """ Creates a Pin object from the parameters in *param* and
             text attributes provided in the following environment. The
             environment is enclosed in ``{}`` and is required. If no
@@ -1241,7 +1230,7 @@ class GEDA:
         whichend = params['whichend']
 
         pin_x1, pin_x2 = params['x1'], params['x2']
-        if mirrored:
+        if self._is_mirrored_command(params):
             pin_x1 = 0-pin_x1
             pin_x2 = 0-pin_x2
 
