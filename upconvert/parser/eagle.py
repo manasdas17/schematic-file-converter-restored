@@ -70,8 +70,7 @@ class Eagle:
             _dta = struct.unpack(Eagle.Header.template, chunk)
 
             _ret_val = Eagle.Header(
-                                version=Eagle._do_ojs('%s.%s' % 
-                                                (str(_dta[5]),str(_dta[6]))),
+                                version=Eagle._do_ojs('%d.%d' % (_dta[5], _dta[6])),
                                 numofblocks=_dta[4], # including this one
                                       )
 # [13] -- some number / counter ; changed on each 'save as' (even with no changes)
@@ -1573,7 +1572,7 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
-            self.name = str(name)
+            self.name = name
             self.x = x
             self.y = y
             self.visible = visible
@@ -1682,7 +1681,7 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Text, self).__init__(layer)
-            self.value = str(value)
+            self.value = value
             self.x = x
             self.y = y
             self.size = size
@@ -2117,7 +2116,7 @@ class Eagle:
 
         @staticmethod
         def parse(leadint, ncconst, chunk):
-            """ Parses rectangle
+            """ Parses netclass
             """
             _ret_val = None
 
@@ -2125,10 +2124,22 @@ class Eagle:
                 _name = Eagle._do_ojs(chunk.split('\0')[0])
                 _foff = 1 + len(_name)
 
-                _dta = struct.unpack("13I", chunk[_foff:])
+# number of clearance intervals (and thus block length) depends on a format version
+                _template, _cl_block_len = None, -1
+                if 52 == len(chunk[_foff:]):
+                    _template = "13I"
+                elif 24 == len(chunk[_foff:]):
+                    _template = "6I"
+                    _cl_block_len = 1
+                else:
+                    raise ValueError("unexpected netclass block length")
+
+                _dta = struct.unpack(_template, chunk[_foff:])
+                if "13I" == _template:
+                    _cl_block_len = 1 + _dta[0]
 
                 if (Eagle.NetClass.constantmid == _dta[1] and
-                        Eagle.NetClass.constantend == _dta[12]):
+                        Eagle.NetClass.constantend == _dta[-1]):
                     if 0 < len(_name): # used netclass
                         _ret_val = Eagle.NetClass(
                                  num=_dta[0],
@@ -2140,7 +2151,7 @@ class Eagle:
                                       Eagle.NetClass.decode_real(
                                                                 _dta[4 + _nn])
                                      ) 
-                                     for _nn in range(1 + _dta[0])
+                                     for _nn in range(_cl_block_len)
                                      if 0 != _dta[4 + _nn]
                                  ],
                                  leadint=leadint
