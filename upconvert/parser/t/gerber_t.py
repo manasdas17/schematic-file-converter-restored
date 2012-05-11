@@ -111,7 +111,69 @@ class GerberTests(unittest.TestCase):
     def test_macros(self):
         """ Parse simple macros. """
         macros = self.design.layout.layers[0].macros
+
         self.assertEqual(len(macros), 8)
+        self.assertEqual(set(macros),
+                         set(['MOIRE', 'POLYGON', 'LINE2', 'LINE1',
+                              'THERMAL', 'VECTOR', 'CIRCLE', 'OUTLINE']))
+
+        self.assertEqual(macros['CIRCLE'].primitives[0].shape.type, 'circle')
+        self.assertEqual(macros['CIRCLE'].primitives[0].shape.radius, 0.25)
+
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.type, 'rectangle')
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.width, 1.25)
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.height, 0.05)
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.y, 0.025)
+
+        self.assertEqual(macros['LINE1'].primitives[0].shape.type, 'rectangle')
+        self.assertEqual(macros['LINE1'].primitives[0].shape.width, 0.3)
+        self.assertEqual(macros['LINE1'].primitives[0].shape.height, 0.05)
+        self.assertEqual(macros['LINE1'].primitives[0].shape.x, -0.15)
+        self.assertEqual(macros['LINE1'].primitives[0].shape.y, 0.025)
+
+        self.assertEqual(macros['LINE2'].primitives[0].shape.type, 'rectangle')
+        self.assertEqual(macros['LINE2'].primitives[0].shape.width, 0.8)
+        self.assertEqual(macros['LINE2'].primitives[0].shape.height, 0.5)
+        self.assertEqual(macros['LINE2'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['LINE2'].primitives[0].shape.y, 0.5)
+
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.type, 'polygon')
+        self.assertEqual(len(macros['OUTLINE'].primitives[0].shape.points), 4)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[0].x, 0.0)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[0].y, 0.0)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[1].x, 0.0)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[1].y, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[2].x, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[2].y, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[3].x, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[3].y, 0.0)
+
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.type, 'regular polygon')
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.outer_diameter, 0.5)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.vertices, 6)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.rotation, 0)
+
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.type, 'moire')
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.outer_diameter, 1.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.ring_thickness, 0.1)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.gap_thickness, 0.4)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.max_rings, 2.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.hair_thickness, 0.01)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.hair_length, 1.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.rotation, 1.777777777777777777)
+
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.type, 'thermal')
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.outer_diameter, 1.0)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.inner_diameter, 0.3)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.gap_thickness, 0.01)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.rotation, 2.0722222222222224)
 
     @use_file('simple.zip')
     def test_zip_batch(self):
