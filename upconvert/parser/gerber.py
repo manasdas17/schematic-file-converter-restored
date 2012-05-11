@@ -334,12 +334,9 @@ class Gerber:
                     wid = aperture.shape.radius * 2
                     trace = self.trace_buff.get_trace(wid, seg)
                     if trace is None:
-                        # construct a trace
-                        trace = Trace(wid, [seg])
+                        trace = Trace(wid)
                         self.img_buff.traces.append(trace)
-                    else:
-                        # append segment to existing trace
-                        trace.segments.append(seg)
+                    trace.segments.append(seg)
                     self.trace_buff.add_segment(seg, trace)
 
         elif self.status['draw'] == 'FLASH':
