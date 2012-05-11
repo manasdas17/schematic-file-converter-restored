@@ -41,6 +41,13 @@ from upconvert.core.shape import Point, Line, Label
 class Eagle: 
     """ The Eagle Format Parser """
 
+    @staticmethod
+    def _do_ojs(value):
+        """ Represents a string as required by upconvert core """
+        return value.decode('latin-1') if None != value else None
+# or maybe we need to have a unicode object in openjson?..
+#  (in that case all strings in maps have to be created as unicode ones as well)
+#        return unicode(value, 'latin-1') if None != value else None
     
     class Header:
         """ A struct that represents a header """
@@ -63,7 +70,8 @@ class Eagle:
             _dta = struct.unpack(Eagle.Header.template, chunk)
 
             _ret_val = Eagle.Header(
-                                version='%s.%s' % (str(_dta[5]),str(_dta[6])),
+                                version=Eagle._do_ojs('%s.%s' % 
+                                                (str(_dta[5]),str(_dta[6]))),
                                 numofblocks=_dta[4], # including this one
                                       )
 # [13] -- some number / counter ; changed on each 'save as' (even with no changes)
@@ -253,7 +261,7 @@ class Eagle:
 
             _name = None
             if Eagle.Layer.no_embed_str != _dta[9][0]:
-                _name = _dta[9].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[9].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -340,7 +348,7 @@ class Eagle:
 
             _schematic = None
             if Eagle.AttributeHeader.no_embed_str != _dta[10][0]:
-                _schematic = _dta[10].rstrip('\0')
+                _schematic = Eagle._do_ojs(_dta[10].rstrip('\0'))
             else: # from external string block
                 _schematic = Eagle.attr_jar_list.next().name
 
@@ -396,7 +404,7 @@ class Eagle:
 
             _name = None
             if Eagle.Library.no_embed_str != _dta[7][0]:
-                _name = _dta[7].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[7].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -435,7 +443,7 @@ class Eagle:
 
             _name = None
             if Eagle.DeviceSetHeader.no_embed_str != _dta[7][0]:
-                _name = _dta[7].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[7].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -472,7 +480,7 @@ class Eagle:
 
             _name = None
             if Eagle.SymbolHeader.no_embed_str != _dta[7][0]:
-                _name = _dta[7].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[7].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -509,7 +517,7 @@ class Eagle:
 
             _name = None
             if Eagle.PackageHeader.no_embed_str != _dta[7][0]:
-                _name = _dta[7].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[7].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -545,7 +553,7 @@ class Eagle:
 
             _name = None
             if Eagle.Symbol.no_embed_str != _dta[9][0]:
-                _name = _dta[9].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[9].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -583,13 +591,13 @@ class Eagle:
 
             _name = None
             if Eagle.Package.no_embed_str != _dta[6][0]:
-                _name = _dta[6].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[6].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
             _desc = None
             if Eagle.Package.no_embed_str != _dta[7][0]:
-                _desc = _dta[7].rstrip('\0')
+                _desc = Eagle._do_ojs(_dta[7].rstrip('\0'))
             else: # from external string block
                 _desc = Eagle.attr_jar_list.next().name
 
@@ -633,7 +641,7 @@ class Eagle:
 
             _name = None
             if Eagle.Net.no_embed_str != _dta[9][0]:
-                _name = _dta[9].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[9].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -677,13 +685,13 @@ class Eagle:
 
             _name = None
             if Eagle.Part.no_embed_str != _dta[8][0]:
-                _name = _dta[8].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[8].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
             _value = None
             if Eagle.Part.no_embed_str != _dta[9][0]:
-                _value = _dta[9].rstrip('\0')
+                _value = Eagle._do_ojs(_dta[9].rstrip('\0'))
             else: # from external string block
                 _value = Eagle.attr_jar_list.next().name
 
@@ -740,19 +748,19 @@ class Eagle:
 
             _prefix = None
             if Eagle.DeviceSet.no_embed_str != _dta[6][0]:
-                _prefix = _dta[6].rstrip('\0')
+                _prefix = Eagle._do_ojs(_dta[6].rstrip('\0'))
             else: # from external string block
                 _prefix = Eagle.attr_jar_list.next().name
 
             _desc = None
             if Eagle.DeviceSet.no_embed_str != _dta[7][0]:
-                _desc = _dta[7].rstrip('\0')
+                _desc = Eagle._do_ojs(_dta[7].rstrip('\0'))
             else: # from external string block
                 _desc = Eagle.attr_jar_list.next().name
 
             _name = None
             if Eagle.DeviceSet.no_embed_str != _dta[8][0]:
-                _name = _dta[8].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[8].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -798,7 +806,7 @@ class Eagle:
 
             _name = None
             if Eagle.Package.no_embed_str != _dta[3][0]:
-                _name = _dta[3].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[3].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -922,7 +930,7 @@ class Eagle:
             _dta = struct.unpack(Eagle.ConnectionHeader.template, chunk)
 
             if Eagle.ConnectionHeader.no_embed_str != _dta[4][0]:
-                _attrstr = _dta[4].rstrip('\0')
+                _attrstr = Eagle._do_ojs(_dta[4].rstrip('\0'))
             else: # from external string block
                 _attrstr = Eagle.attr_jar_list.next().name
 
@@ -933,20 +941,20 @@ class Eagle:
                 if Eagle.ConnectionHeader.delim_techs == _attrstr[0]:
                     for _tt in _attrstr.split(
                                 Eagle.ConnectionHeader.delim_techs)[1:]:
-                        _techs.append(_tt)
+                        _techs.append(Eagle._do_ojs(_tt))
                 elif Eagle.ConnectionHeader.delim_names == _attrstr[0]:
                     _attrparts = _attrstr.split(
                                 Eagle.ConnectionHeader.delim_namesvals)
                     if 1 < len(_attrparts): # got a correct str
                         for _nn, _vv in zip(
-                                _attrparts[0].split(
-                                        Eagle.ConnectionHeader.delim_names)[1:],
-                                _attrparts[1].split(
-                                        Eagle.ConnectionHeader.delim_vals)[1:]):
+                                (Eagle._do_ojs(x) for x in _attrparts[0].split(
+                                        Eagle.ConnectionHeader.delim_names)[1:]),
+                                (Eagle._do_ojs(x) for x in _attrparts[1].split(
+                                        Eagle.ConnectionHeader.delim_vals)[1:])):
                             _attrs.append((_nn, _vv))
 
             if Eagle.ConnectionHeader.no_embed_str != _dta[5][0]:
-                _name = _dta[5].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[5].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
             if Eagle.ConnectionHeader.constantmid_def == _name:
@@ -1359,7 +1367,7 @@ class Eagle:
 
             _name = None
             if Eagle.SMD.no_embed_str != _dta[11][0]:
-                _name = _dta[11].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[11].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -1504,7 +1512,7 @@ class Eagle:
 
             _name = None
             if Eagle.Pad.no_embed_str != _dta[10][0]:
-                _name = _dta[10].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[10].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -1587,7 +1595,7 @@ class Eagle:
 
             _name = None
             if Eagle.Pin.no_embed_str != _dta[8][0]:
-                _name = _dta[8].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[8].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -1648,7 +1656,7 @@ class Eagle:
 
             _name = None
             if Eagle.Gate.no_embed_str != _dta[9][0]:
-                _name = _dta[9].rstrip('\0')
+                _name = Eagle._do_ojs(_dta[9].rstrip('\0'))
             else: # from external string block
                 _name = Eagle.attr_jar_list.next().name
 
@@ -1693,7 +1701,7 @@ class Eagle:
 
             _value = None
             if Eagle.Text.no_embed_str != _dta[11][0]:
-                _value = _dta[11].rstrip('\0')
+                _value = Eagle._do_ojs(_dta[11].rstrip('\0'))
             else: # from external string block
                 _value = Eagle.attr_jar_list.next().name
 
@@ -1986,11 +1994,12 @@ class Eagle:
 
             _parts = string.split(Eagle.Attribute.delimeter)
 
-            _name = _parts[0]
+            _name = Eagle._do_ojs(_parts[0])
             if 2 > len(_parts):
                 pass # strange embedded attribute
             else:
-                _value = Eagle.Attribute.delimeter.join(_parts[1:])
+                _value = Eagle.Attribute.delimeter.join(
+                                        Eagle._do_ojs(x) for x in _parts[1:])
 
             return (_name, _value)
 
@@ -2056,12 +2065,12 @@ class Eagle:
             (_xreflabel, _xrefpart) = (None, None)
 
             _parts = chunk.split(Eagle.Schematic.delimeter)
-            _xreflabel = _parts[0]
+            _xreflabel = Eagle._do_ojs(_parts[0])
 
             if 2 != len(_parts):
                 pass # strange schematic string
             else:
-                _xrefpart = _parts[1]
+                _xrefpart = Eagle._do_ojs(_parts[1])
 
             _ret_val = Eagle.Schematic(xreflabel=_xreflabel,
                                           xrefpart=_xrefpart
@@ -2113,7 +2122,7 @@ class Eagle:
             _ret_val = None
 
             if Eagle.NetClass.constant == ncconst and None != chunk:
-                _name = chunk.split('\0')[0]
+                _name = Eagle._do_ojs(chunk.split('\0')[0])
                 _foff = 1 + len(_name)
 
                 _dta = struct.unpack("13I", chunk[_foff:])
