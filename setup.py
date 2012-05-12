@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='python-upconvert',
-    version='0.1',
+    version='0.2',
     description='Upconvert library',
     packages=['upconvert', 'upconvert.core', 'upconvert.library', 'upconvert.library.fritzing', 'upconvert.library.kicad', 'upconvert.parser', 'upconvert.writer'],
 )
