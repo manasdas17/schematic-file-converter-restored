@@ -219,58 +219,49 @@ class GerberTests(unittest.TestCase):
     @use_file('missing-delim.ger')
     def test_missing_delim(self):
         """ Trap param outside of gerber param block. """
-        pass
 
     @raises(CoordPrecedesFormatSpec)
     @use_file('coord-precedes-fs.ger')
     def test_coord_preceding_fs(self):
         """ Trap coord preceding gerber format spec. """
-        pass
 
     @raises(ParamContainsBadData)
     @use_file('coord-in-param-block.ger')
     def test_data_in_param(self):
         """ Trap coord inside gerber param block. """
-        pass
 
     @raises(CoordMalformed)
     @use_file('y-precedes-x.ger')
     def test_y_before_x(self):
         """ Trap coord with 'Y' before 'X' - gerber. """
-        pass
 
     @raises(DataAfterEOF)
     @use_file('data-after-eof.ger')
     def test_trailing_data(self):
         """ Trap data following M02* block - gerber. """
-        pass
 
     @raises(FileNotTerminated)
     @use_file('not-terminated.ger')
     def test_no_eof(self):
         """ Trap file with no M02* block - gerber. """
-        pass
 
     @raises(UnintelligibleDataBlock)
     @use_file('alien.ger')
     def test_alien_data(self):
         """ Trap off-spec data in gerber file. """
-        pass
 
     @raises(QuadrantViolation)
     @use_file('sq-violation.ger')
     def test_single_quadrant(self):
         """ Trap long arc in single quadrant mode. """
-        pass
 
     @raises(OpenFillBoundary)
     @use_file('open-fill.ger')
     def test_open_fill(self):
         """ Trap unsuccessful outline fill closure. """
-        pass
 
     @raises(IncompatibleAperture)
     @use_file('disallowed-smear.ger')
     def test_arc_smear(self):
         """ Trap non-linear smear - gerber. """
-        pass
+
