@@ -72,6 +72,7 @@ from upconvert.core.annotation import Annotation
 from upconvert.core.component_instance import ComponentInstance
 from upconvert.core.component_instance import SymbolAttribute
 
+from upconvert.parser import geda_commands
 
 # Logging
 logging.basicConfig(level=logging.DEBUG)
@@ -101,7 +102,7 @@ class GEDAText(object):
 
     def store_styles_in_label(self, label):
         for key, value in self.params.items():
-            if key.startswith(GEDAStyleParameter.TYPE):
+            if key.startswith(geda_commands.GEDAStyleParameter.TYPE):
                 label.styles[key] = value
         return label
 
@@ -228,32 +229,9 @@ class GEDADesign(Design):
                 self.add_geda_text(obj)
 
 
-class GEDAParameter(object):
-    TYPE = ''
-
-    def __init__(self, name, datatype=int, default=None):
-        self._name = name
-        self.datatype = datatype
-        self.default = default
-
-    @property
-    def name(self):
-        return self._name
-
-
-class GEDAStyleParameter(GEDAParameter):
-    TYPE = 'style'
-
-    @property
-    def name(self):
-        return "%s_%s" % (self.TYPE, self._name)
-
-
-
 class GEDAError(Exception):
     """ Exception class for gEDA parser errors """
     pass
-
 
 class GEDA:
     """ The GEDA Format Parser """
@@ -262,135 +240,24 @@ class GEDA:
     SCALE_FACTOR = 10.0  # maps 1000 MILS to 10 pixels
 
     OBJECT_TYPES = {
-        'v': (  # gEDA version
-            GEDAParameter('version'),
-            GEDAParameter('fileformat_version'),
-        ),
-        'L': (  # line
-            GEDAParameter('x1'),
-            GEDAParameter('y1'),
-            GEDAParameter('x2'),
-            GEDAParameter('y2'),
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('width'),
-            GEDAStyleParameter('capstyle'),
-            GEDAStyleParameter('dashstyle'),
-            GEDAStyleParameter('dashlength'),
-            GEDAStyleParameter('dashspace'),
-        ),
-        'B': (  # box
-            GEDAParameter('x'),
-            GEDAParameter('y'),
-            GEDAParameter('width'),
-            GEDAParameter('height'),
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('width'),
-            GEDAStyleParameter('capstyle'),
-            GEDAStyleParameter('dashstyle'),
-            GEDAStyleParameter('dashlength'),
-            GEDAStyleParameter('dashspace'),
-            GEDAStyleParameter('filltype'),
-            GEDAStyleParameter('fillwidth'),
-            GEDAStyleParameter('angle1'),
-            GEDAStyleParameter('pitch1'),
-            GEDAStyleParameter('angle2'),
-            GEDAStyleParameter('pitch2'),
-        ),
-        'V': (  # circle
-            GEDAParameter('x'),
-            GEDAParameter('y'),
-            GEDAParameter('radius'),
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('width'),
-            GEDAStyleParameter('capstyle'),
-            GEDAStyleParameter('dashstyle'),
-            GEDAStyleParameter('dashlength'),
-            GEDAStyleParameter('dashspace'),
-            GEDAStyleParameter('filltype'),
-            GEDAStyleParameter('fillwidth'),
-            GEDAStyleParameter('angle1'),
-            GEDAStyleParameter('pitch1'),
-            GEDAStyleParameter('angle2'),
-            GEDAStyleParameter('pitch2'),
-        ),
-        'A': (  # arc
-            GEDAParameter('x'),
-            GEDAParameter('y'),
-            GEDAParameter('radius'),
-            GEDAParameter('startangle'),
-            GEDAParameter('sweepangle'),
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('width'),
-            GEDAStyleParameter('capstyle'),
-            GEDAStyleParameter('dashstyle'),
-            GEDAStyleParameter('dashlength'),
-            GEDAStyleParameter('dashspace'),
-        ),
-        'T': (  # text or attribute (context)
-            GEDAParameter('x'),
-            GEDAParameter('y'),
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('size'),
-            GEDAParameter('visibility'),
-            GEDAParameter('show_name_value'),
-            GEDAParameter('angle'),
-            GEDAParameter('alignment'),
-            GEDAParameter('num_lines', default=1),
-        ),
-        'N': (  # net segment
-            GEDAParameter('x1'),
-            GEDAParameter('y1'),
-            GEDAParameter('x2'),
-            GEDAParameter('y2'),
-            GEDAStyleParameter('color'),
-        ),
-        'U': (  # bus (only graphical aid, not a component)
-            GEDAParameter('x1'),
-            GEDAParameter('y1'),
-            GEDAParameter('x2'),
-            GEDAParameter('y2'),
-            GEDAStyleParameter('color'),
-            GEDAParameter('ripperdir'),
-        ),
-        'P': (  # pin (in sym)
-            GEDAParameter('x1'),
-            GEDAParameter('y1'),
-            GEDAParameter('x2'),
-            GEDAParameter('y2'),
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('pintype'),
-            GEDAParameter('whichend'),
-        ),
-        'C': (  # component
-            GEDAParameter('x'),
-            GEDAParameter('y'),
-            GEDAParameter('selectable'),
-            GEDAParameter('angle'),
-            GEDAParameter('mirror'),
-            GEDAParameter('basename', datatype=str),
-        ),
-        'H': (  # SVG-like path
-            GEDAStyleParameter('color'),
-            GEDAStyleParameter('width'),
-            GEDAStyleParameter('capstyle'),
-            GEDAStyleParameter('dashstyle'),
-            GEDAStyleParameter('dashlength'),
-            GEDAStyleParameter('dashspace'),
-            GEDAStyleParameter('filltype'),
-            GEDAStyleParameter('fillwidth'),
-            GEDAStyleParameter('angle1'),
-            GEDAStyleParameter('pitch1'),
-            GEDAStyleParameter('angle2'),
-            GEDAStyleParameter('pitch2'),
-            GEDAParameter('num_lines'),
-        ),
-        ## environments
-        '{': [],
-        '}': [],  # attributes
-        '[': [],
-        ']': [],  # embedded component
+        'v': geda_commands.GEDAVersionCommand(),
+        'L': geda_commands.GEDALineCommand(),
+        'B': geda_commands.GEDABoxCommand(),
+        'V': geda_commands.GEDACircleCommand(),
+        'A': geda_commands.GEDAArcCommand(),
+        'T': geda_commands.GEDATextCommand(),
+        'N': geda_commands.GEDASegmentCommand(),
+        'U': geda_commands.GEDABusCommand(),
+        'P': geda_commands.GEDAPinCommand(),
+        'C': geda_commands.GEDAComponentCommand(),
+        'H': geda_commands.GEDAPathCommand(),
         ## valid types but are ignored
-        'G': [],  # picture
+        'G': geda_commands.GEDAPictureCommand(),
+        ## environments
+        '{': geda_commands.GEDAEmbeddedEnvironmentCommand(),
+        '}': [],  # attributes
+        '[': geda_commands.GEDAAttributeEnvironmentCommand(),
+        ']': [],  # embedded component
     }
 
     def __init__(self, symbol_dirs=None):
@@ -1043,7 +910,7 @@ class GEDA:
         )
         ## store style data for line in 'style' dict
         self._save_style_to_object(line, params)
-        return line 
+        return line
 
     def _parse_B(self, stream, params):
         """ Creates rectangle from gEDA box with origin in bottom left
@@ -1310,7 +1177,7 @@ class GEDA:
     def _save_style_to_object(self, obj, params):
         try:
             for key, value in params.items():
-                if key.startswith(GEDAStyleParameter.TYPE):
+                if key.startswith(geda_commands.GEDAStyleParameter.TYPE):
                     obj.styles[key] = value
         except AttributeError:
             log.exception(
@@ -1341,8 +1208,13 @@ class GEDA:
 
         object_type, command_data = command_data[0].strip(), command_data[1:]
 
+        if object_type not in self.OBJECT_TYPES:
+            raise GEDAError("unknown type '%s' in file" % object_type)
+
         params = {}
-        for idx, parameter in enumerate(self.OBJECT_TYPES[object_type]):
+        geda_command = self.OBJECT_TYPES[object_type]
+        print "GEDA COMMAND", object_type, geda_command  
+        for idx, parameter in enumerate(geda_command.PARAMETERS):
             if idx >= len(command_data):
                 ## prevent text commands of version 1 from breaking
                 params[parameter.name] = parameter.default
@@ -1350,7 +1222,7 @@ class GEDA:
                 datatype = parameter.datatype
                 params[parameter.name] = datatype(command_data[idx])
 
-        assert(len(params) == len(self.OBJECT_TYPES[object_type]))
+        assert(len(params) == len(geda_command.PARAMETERS))
 
         if move_to is not None:
             ## element in EMBEDDED component need to be moved
@@ -1363,9 +1235,6 @@ class GEDA:
                 params['y1'] = params['y1'] - move_to[1]
                 params['x2'] = params['x2'] - move_to[0]
                 params['y2'] = params['y2'] - move_to[1]
-
-        if object_type not in self.OBJECT_TYPES:
-            raise GEDAError("unknown type '%s' in file" % object_type)
 
         return object_type, params
 
