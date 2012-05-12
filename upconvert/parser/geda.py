@@ -99,6 +99,12 @@ class GEDAText(object):
         """ Returns True when text is regular text. """
         return bool(self.attribute is None)
 
+    def store_styles_in_label(self, label):
+        for key, value in self.params.items():
+            if key.startswith(GEDAStyleParameter.TYPE):
+                label.styles[key] = value
+        return label
+
     def as_label(self):
         """
         Generate label from text object using parsed parameters.
@@ -110,13 +116,14 @@ class GEDAText(object):
         if self.params.get('mirrored', False):
             text_x = 0 - text_x
 
-        return shape.Label(
+        label = shape.Label(
             text_x,
             self.params.get('y', 0),
             self.content,
             'left',
             self.params.get('angle', 0),
         )
+        return self.store_styles_in_label(label)
 
     @classmethod
     def from_command(cls, stream, params):
@@ -221,6 +228,28 @@ class GEDADesign(Design):
                 self.add_geda_text(obj)
 
 
+class GEDAParameter(object):
+    TYPE = ''
+
+    def __init__(self, name, datatype=int, default=None):
+        self._name = name
+        self.datatype = datatype
+        self.default = default
+
+    @property
+    def name(self):
+        return self._name
+
+
+class GEDAStyleParameter(GEDAParameter):
+    TYPE = 'style'
+
+    @property
+    def name(self):
+        return "%s_%s" % (self.TYPE, self._name)
+
+
+
 class GEDAError(Exception):
     """ Exception class for gEDA parser errors """
     pass
@@ -234,89 +263,126 @@ class GEDA:
 
     OBJECT_TYPES = {
         'v': (  # gEDA version
-            ('version', int, None),
-            ('fileformat_version', int, None),
-        ),
-        'C': (  # component
-            ('x', int, None),
-            ('y', int, None),
-            ('selectable', int, None),
-            ('angle', int, None),
-            ('mirror', int, None),
-            ('basename', str, None),
-        ),
-        'N': (  # net segment
-            ('x1', int, None),
-            ('y1', int, None),
-            ('x2', int, None),
-            ('y2', int, None),
-        ),
-        'U': (  # bus (only graphical aid, not a component)
-            ('x1', int, None),
-            ('y1', int, None),
-            ('x2', int, None),
-            ('y2', int, None),
-            ('color', int, None),
-            ('ripperdir', int, None),
-        ),
-        'T': (  # text or attribute (context)
-            ('x', int, None),
-            ('y', int, None),
-            ('color', int, None),
-            ('size', int, None),
-            ('visibility', int, None),
-            ('show_name_value', int, None),
-            ('angle', int, None),
-            ('alignment', int, None),
-            ('num_lines', int, 1),
-        ),
-        'P': (  # pin (in sym)
-            ('x1', int, None),
-            ('y1', int, None),
-            ('x2', int, None),
-            ('y2', int, None),
-            ('color', int, None),
-            ('pintype', int, None),
-            ('whichend', int, None),
+            GEDAParameter('version'),
+            GEDAParameter('fileformat_version'),
         ),
         'L': (  # line
-            ('x1', int, None),
-            ('y1', int, None),
-            ('x2', int, None),
-            ('y2', int, None),
+            GEDAParameter('x1'),
+            GEDAParameter('y1'),
+            GEDAParameter('x2'),
+            GEDAParameter('y2'),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('width'),
+            GEDAStyleParameter('capstyle'),
+            GEDAStyleParameter('dashstyle'),
+            GEDAStyleParameter('dashlength'),
+            GEDAStyleParameter('dashspace'),
         ),
         'B': (  # box
-            ('x', int, None),
-            ('y', int, None),
-            ('width', int, None),
-            ('height', int, None),
+            GEDAParameter('x'),
+            GEDAParameter('y'),
+            GEDAParameter('width'),
+            GEDAParameter('height'),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('width'),
+            GEDAStyleParameter('capstyle'),
+            GEDAStyleParameter('dashstyle'),
+            GEDAStyleParameter('dashlength'),
+            GEDAStyleParameter('dashspace'),
+            GEDAStyleParameter('filltype'),
+            GEDAStyleParameter('fillwidth'),
+            GEDAStyleParameter('angle1'),
+            GEDAStyleParameter('pitch1'),
+            GEDAStyleParameter('angle2'),
+            GEDAStyleParameter('pitch2'),
         ),
         'V': (  # circle
-            ('x', int, None),
-            ('y', int, None),
-            ('radius', int, None),
+            GEDAParameter('x'),
+            GEDAParameter('y'),
+            GEDAParameter('radius'),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('width'),
+            GEDAStyleParameter('capstyle'),
+            GEDAStyleParameter('dashstyle'),
+            GEDAStyleParameter('dashlength'),
+            GEDAStyleParameter('dashspace'),
+            GEDAStyleParameter('filltype'),
+            GEDAStyleParameter('fillwidth'),
+            GEDAStyleParameter('angle1'),
+            GEDAStyleParameter('pitch1'),
+            GEDAStyleParameter('angle2'),
+            GEDAStyleParameter('pitch2'),
         ),
         'A': (  # arc
-            ('x', int, None),
-            ('y', int, None),
-            ('radius', int, None),
-            ('startangle', int, None),
-            ('sweepangle', int, None),
+            GEDAParameter('x'),
+            GEDAParameter('y'),
+            GEDAParameter('radius'),
+            GEDAParameter('startangle'),
+            GEDAParameter('sweepangle'),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('width'),
+            GEDAStyleParameter('capstyle'),
+            GEDAStyleParameter('dashstyle'),
+            GEDAStyleParameter('dashlength'),
+            GEDAStyleParameter('dashspace'),
+        ),
+        'T': (  # text or attribute (context)
+            GEDAParameter('x'),
+            GEDAParameter('y'),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('size'),
+            GEDAParameter('visibility'),
+            GEDAParameter('show_name_value'),
+            GEDAParameter('angle'),
+            GEDAParameter('alignment'),
+            GEDAParameter('num_lines', default=1),
+        ),
+        'N': (  # net segment
+            GEDAParameter('x1'),
+            GEDAParameter('y1'),
+            GEDAParameter('x2'),
+            GEDAParameter('y2'),
+            GEDAStyleParameter('color'),
+        ),
+        'U': (  # bus (only graphical aid, not a component)
+            GEDAParameter('x1'),
+            GEDAParameter('y1'),
+            GEDAParameter('x2'),
+            GEDAParameter('y2'),
+            GEDAStyleParameter('color'),
+            GEDAParameter('ripperdir'),
+        ),
+        'P': (  # pin (in sym)
+            GEDAParameter('x1'),
+            GEDAParameter('y1'),
+            GEDAParameter('x2'),
+            GEDAParameter('y2'),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('pintype'),
+            GEDAParameter('whichend'),
+        ),
+        'C': (  # component
+            GEDAParameter('x'),
+            GEDAParameter('y'),
+            GEDAParameter('selectable'),
+            GEDAParameter('angle'),
+            GEDAParameter('mirror'),
+            GEDAParameter('basename', datatype=str),
         ),
         'H': (  # SVG-like path
-            ('color', int, None),
-            ('width', int, None),
-            ('capstyle', int, None),
-            ('dashstyle', int, None),
-            ('dashlength', int, None),
-            ('dashspace', int, None),
-            ('filltype', int, None),
-            ('fillwidth', int, None),
-            ('angle1', int, None),
-            ('pitch1', int, None),
-            ('angle2', int, None),
-            ('pitch2', int, None),
-            ('num_lines', int, None),
+            GEDAStyleParameter('color'),
+            GEDAStyleParameter('width'),
+            GEDAStyleParameter('capstyle'),
+            GEDAStyleParameter('dashstyle'),
+            GEDAStyleParameter('dashlength'),
+            GEDAStyleParameter('dashspace'),
+            GEDAStyleParameter('filltype'),
+            GEDAStyleParameter('fillwidth'),
+            GEDAStyleParameter('angle1'),
+            GEDAStyleParameter('pitch1'),
+            GEDAStyleParameter('angle2'),
+            GEDAStyleParameter('pitch2'),
+            GEDAParameter('num_lines'),
         ),
         ## environments
         '{': [],
@@ -450,24 +516,6 @@ class GEDA:
 
     def _parse_G(self, stream, params):
         log.warn("ignoring picture/font in gEDA file. Not supported!")
-        return
-
-    def _parse_C(self, stream, params):
-        ## ignore title since it only defines the blueprint frame
-        if params['basename'].startswith('title'):
-            self._parse_environment(stream)
-
-        ## busripper are virtual components that need separate
-        ## processing
-        elif 'busripper' in params['basename']:
-            self.segments.add(self._create_ripper_segment(params))
-
-            ## make sure following environments are ignored
-            self.skip_embedded_section(stream)
-            self._parse_environment(stream)
-
-        else:
-            self._parse_component(stream, params)
         return
 
     def parse_schematic(self, stream):
@@ -777,22 +825,6 @@ class GEDA:
         self.segments -= rem_segs
         self.segments |= add_segs
 
-    def _parse_T(self, stream, params):
-        """ Parses text element and determins if text is a text object
-            or an attribute.
-            Returns a tuple (key, value). If text is an annotation key is None.
-        """
-        params['x'] = self.x_to_px(params['x'])
-        params['y'] = self.y_to_px(params['y'])
-        params['angle'] = self.conv_angle(params['angle'])
-
-        geda_text = GEDAText.from_command(stream, params)
-
-        ## text can have environemnt attached: parse & ignore
-        ##TODO: store attributes in text element
-        attributes = self._parse_environment(stream)
-        return geda_text
-
     def _create_label(self, text, params):
         """ Create a ``shape.Label`` instance using the *text* string. The
             location of the Label is determined by the ``x`` and ``y``
@@ -993,6 +1025,107 @@ class GEDA:
             self.get_netpoint(pta_x, pta_y),
             self.get_netpoint(ptb_x, ptb_y)
         ))
+    def _parse_L(self, stream, params):
+        """ Creates a Line object from the parameters in *params*. All
+            style related parameters are ignored.
+            Returns a Line object.
+        """
+        line_x1 = params['x1']
+        line_x2 = params['x2']
+
+        if self._is_mirrored_command(params):
+            line_x1 = 0 - params['x1']
+            line_x2 = 0 - params['x2']
+
+        line = shape.Line(
+            self.conv_coords(line_x1, params['y1']),
+            self.conv_coords(line_x2, params['y2']),
+        )
+        ## store style data for line in 'style' dict
+        self._save_style_to_object(line, params)
+        return line 
+
+    def _parse_B(self, stream, params):
+        """ Creates rectangle from gEDA box with origin in bottom left
+            corner. All style related values are ignored.
+            Returns a Rectangle object.
+        """
+        rect_x = params['x']
+        if self._is_mirrored_command(params):
+            rect_x = 0-(rect_x+params['width'])
+
+        rect = shape.Rectangle(
+            self.x_to_px(rect_x),
+            self.y_to_px(params['y']+params['height']),
+            self.to_px(params['width']),
+            self.to_px(params['height'])
+        )
+        ## store style data for rect in 'style' dict
+        self._save_style_to_object(rect, params)
+        return rect
+
+    def _parse_V(self, stream, params):
+        """ Creates a Circle object from the gEDA parameters in *params. All
+            style related parameters are ignored.
+            Returns a Circle object.
+        """
+        vertex_x = params['x']
+        if self._is_mirrored_command(params):
+            vertex_x = 0-vertex_x
+
+        circle = shape.Circle(
+            self.x_to_px(vertex_x),
+            self.y_to_px(params['y']),
+            self.to_px(params['radius']),
+        )
+        ## store style data for arc in 'style' dict
+        self._save_style_to_object(circle, params)
+        return circle
+
+    def _parse_A(self, stream, params):
+        """ Creates an Arc object from the parameter in *params*. All
+            style related parameters are ignored.
+            Returns Arc object.
+        """
+        arc_x = params['x']
+        start_angle = params['startangle']
+        sweep_angle = params['sweepangle']
+
+        if self._is_mirrored_command(params):
+            arc_x = 0 - arc_x
+
+            start_angle = start_angle + sweep_angle
+            if start_angle <= 180:
+                start_angle = 180 - start_angle
+            else:
+                start_angle = (360 - start_angle) + 180
+
+        arc = shape.Arc(
+            self.x_to_px(arc_x),
+            self.y_to_px(params['y']),
+            self.conv_angle(start_angle),
+            self.conv_angle(start_angle+sweep_angle),
+            self.to_px(params['radius']),
+        )
+        ## store style data for arc in 'style' dict
+        self._save_style_to_object(arc, params)
+        return arc
+
+    def _parse_T(self, stream, params):
+        """ Parses text element and determins if text is a text object
+            or an attribute.
+            Returns a tuple (key, value). If text is an annotation key is None.
+        """
+        params['x'] = self.x_to_px(params['x'])
+        params['y'] = self.y_to_px(params['y'])
+        params['angle'] = self.conv_angle(params['angle'])
+
+        geda_text = GEDAText.from_command(stream, params)
+
+        ## text can have environemnt attached: parse & ignore
+        ##TODO: store attributes in text element
+        attributes = self._parse_environment(stream)
+        return geda_text
 
     def _parse_N(self, stream, params):
         """ Creates a segment from the command *params* and
@@ -1020,156 +1153,6 @@ class GEDA:
                 net_name = attributes['_netname']
                 if net_name not in self.net_names.values():
                     self.net_names[pt_a.point_id] = net_name
-
-    def _parse_H(self, stream, params):
-        """ Parses a SVG-like path provided path into a list
-            of simple shapes. The gEDA formats allows only line
-            and curve segments with absolute coordinates. Hence,
-            shapes are either Line or BezierCurve objects.
-            The method processes the stream data according to
-            the number of lines in *params*.
-            Returns a list of Line and BezierCurve shapes.
-        """
-        ## FIXME: get path index from iterator to use in shape
-        ## attributes/style for writer reference
-        num_lines = params['num_lines']
-        mirrored = self._is_mirrored_command(params)
-        command = stream.readline().strip().split(self.DELIMITER)
-
-        if command[0] != 'M':
-            raise GEDAError('found invalid path in gEDA file')
-
-        def get_coords(string, mirrored):
-            """ Get coordinates from string with comma-sparated notation."""
-            x, y = [int(value) for value in string.strip().split(',')]
-
-            if mirrored:
-                x = -x
-
-            return (self.x_to_px(x), self.y_to_px(y))
-
-        shapes = []
-        current_pos = initial_pos = (get_coords(command[1], mirrored))
-
-        ## loop over the remaining lines of commands (after 'M')
-        for _ in range(num_lines-1):
-            command = stream.readline().strip().split(self.DELIMITER)
-
-            ## draw line from current to given position
-            if command[0] == 'L':
-                assert(len(command) == 2)
-                end_pos = get_coords(command[1], mirrored)
-
-                line = shape.Line(current_pos, end_pos)
-                shapes.append(line)
-
-                current_pos = end_pos
-
-            ## draw curve from current to given position
-            elif command[0] == 'C':
-                assert(len(command) == 4)
-                control1 = get_coords(command[1], mirrored)
-                control2 = get_coords(command[2], mirrored)
-                end_pos = get_coords(command[3], mirrored)
-
-                curve = shape.BezierCurve(
-                    control1,
-                    control2,
-                    current_pos,
-                    end_pos
-                )
-                shapes.append(curve)
-
-                current_pos = end_pos
-
-            ## end of sub-path, straight line from current to initial position
-            elif command[0] in ['z', 'Z']:
-                shapes.append(
-                    shape.Line(current_pos, initial_pos)
-                )
-
-            else:
-                raise GEDAError(
-                    "invalid command type in path '%s'" % command[0]
-                )
-
-        return shapes
-
-    def _parse_A(self, stream, params):
-        """ Creates an Arc object from the parameter in *params*. All
-            style related parameters are ignored.
-            Returns Arc object.
-        """
-        arc_x = params['x']
-        start_angle = params['startangle']
-        sweep_angle = params['sweepangle']
-
-        if self._is_mirrored_command(params):
-            arc_x = 0 - arc_x
-
-            start_angle = start_angle + sweep_angle
-            if start_angle <= 180:
-                start_angle = 180 - start_angle
-            else:
-                start_angle = (360 - start_angle) + 180
-
-        return shape.Arc(
-            self.x_to_px(arc_x),
-            self.y_to_px(params['y']),
-            self.conv_angle(start_angle),
-            self.conv_angle(start_angle+sweep_angle),
-            self.to_px(params['radius']),
-        )
-
-
-    def _parse_L(self, stream, params):
-        """ Creates a Line object from the parameters in *params*. All
-            style related parameters are ignored.
-            Returns a Line object.
-        """
-        line_x1 = params['x1']
-        line_x2 = params['x2']
-
-        if self._is_mirrored_command(params):
-            line_x1 = 0 - params['x1']
-            line_x2 = 0 - params['x2']
-
-        return shape.Line(
-            self.conv_coords(line_x1, params['y1']),
-            self.conv_coords(line_x2, params['y2']),
-        )
-
-    def _parse_B(self, stream, params):
-        """ Creates rectangle from gEDA box with origin in bottom left
-            corner. All style related values are ignored.
-            Returns a Rectangle object.
-        """
-        rect_x = params['x']
-        if self._is_mirrored_command(params):
-            rect_x = 0-(rect_x+params['width'])
-
-        return shape.Rectangle(
-            self.x_to_px(rect_x),
-            self.y_to_px(params['y']+params['height']),
-            self.to_px(params['width']),
-            self.to_px(params['height'])
-        )
-
-    def _parse_V(self, stream, params):
-        """ Creates a Circle object from the gEDA parameters in *params. All
-            style related parameters are ignored.
-            Returns a Circle object.
-        """
-        vertex_x = params['x']
-        if self._is_mirrored_command(params):
-            vertex_x = 0-vertex_x
-
-        return shape.Circle(
-            self.x_to_px(vertex_x),
-            self.y_to_px(params['y']),
-            self.to_px(params['radius']),
-        )
-
 
     def _parse_P(self, stream, params, pinnumber=0):
         """ Creates a Pin object from the parameters in *param* and
@@ -1224,12 +1207,116 @@ class GEDA:
                 0.0
             )
 
-        return components.Pin(
+        pin = components.Pin(
             attributes['_pinnumber'], #pin number
             null_end,
             connect_end,
             label=label
         )
+        ## store style parameters in shape's style dict
+        self._save_style_to_object(pin, params)
+        return pin
+
+    def _parse_C(self, stream, params):
+        ## ignore title since it only defines the blueprint frame
+        if params['basename'].startswith('title'):
+            self._parse_environment(stream)
+
+        ## busripper are virtual components that need separate
+        ## processing
+        elif 'busripper' in params['basename']:
+            self.segments.add(self._create_ripper_segment(params))
+
+            ## make sure following environments are ignored
+            self.skip_embedded_section(stream)
+            self._parse_environment(stream)
+
+        else:
+            self._parse_component(stream, params)
+        return
+
+    def _parse_H(self, stream, params):
+        """ Parses a SVG-like path provided path into a list
+            of simple shapes. The gEDA formats allows only line
+            and curve segments with absolute coordinates. Hence,
+            shapes are either Line or BezierCurve objects.
+            The method processes the stream data according to
+            the number of lines in *params*.
+            Returns a list of Line and BezierCurve shapes.
+        """
+        ## FIXME: get path index from iterator to use in shape
+        ## attributes/style for writer reference
+        num_lines = params['num_lines']
+        mirrored = self._is_mirrored_command(params)
+        command = stream.readline().strip().split(self.DELIMITER)
+
+        if command[0] != 'M':
+            raise GEDAError('found invalid path in gEDA file')
+
+        def get_coords(string, mirrored):
+            """ Get coordinates from string with comma-sparated notation."""
+            x, y = [int(value) for value in string.strip().split(',')]
+
+            if mirrored:
+                x = -x
+
+            return (self.x_to_px(x), self.y_to_px(y))
+
+        shapes = []
+        current_pos = initial_pos = (get_coords(command[1], mirrored))
+
+        ## loop over the remaining lines of commands (after 'M')
+        for _ in range(num_lines-1):
+            command = stream.readline().strip().split(self.DELIMITER)
+
+            ## draw line from current to given position
+            if command[0] == 'L':
+                assert(len(command) == 2)
+                end_pos = get_coords(command[1], mirrored)
+
+                shape_ = shape.Line(current_pos, end_pos)
+                current_pos = end_pos
+
+            ## draw curve from current to given position
+            elif command[0] == 'C':
+                assert(len(command) == 4)
+                control1 = get_coords(command[1], mirrored)
+                control2 = get_coords(command[2], mirrored)
+                end_pos = get_coords(command[3], mirrored)
+
+                shape_ = shape.BezierCurve(
+                    control1,
+                    control2,
+                    current_pos,
+                    end_pos
+                )
+                current_pos = end_pos
+
+            ## end of sub-path, straight line from current to initial position
+            elif command[0] in ['z', 'Z']:
+                shape_ = shape.Line(current_pos, initial_pos)
+
+            else:
+                raise GEDAError(
+                    "invalid command type in path '%s'" % command[0]
+                )
+
+            ## store style parameters in shape's style dict
+            self._save_style_to_object(shape_, params)
+            shapes.append(shape_)
+
+        return shapes
+
+    def _save_style_to_object(self, obj, params):
+        try:
+            for key, value in params.items():
+                if key.startswith(GEDAStyleParameter.TYPE):
+                    obj.styles[key] = value
+        except AttributeError:
+            log.exception(
+                "tried saving style data to '%s' without styles dict.",
+                obj.__class__.__name__
+            )
 
     def _parse_command(self, stream, move_to=None):
         """ Parse the next command in *stream*. The object type is check
@@ -1255,12 +1342,13 @@ class GEDA:
         object_type, command_data = command_data[0].strip(), command_data[1:]
 
         params = {}
-        for idx, (name, typ, default) in enumerate(self.OBJECT_TYPES[object_type]):
+        for idx, parameter in enumerate(self.OBJECT_TYPES[object_type]):
             if idx >= len(command_data):
                 ## prevent text commands of version 1 from breaking
-                params[name] = default
+                params[parameter.name] = parameter.default
             else:
-                params[name] = typ(command_data[idx])
+                datatype = parameter.datatype
+                params[parameter.name] = datatype(command_data[idx])
 
         assert(len(params) == len(self.OBJECT_TYPES[object_type]))
 

@@ -1031,8 +1031,13 @@ class GEDAComponentParsingTests(GEDATestCase):
             'radius': 223,
             'startangle': 30,
             'sweepangle': 90,
+            'style_capstyle': None,
+            'style_color': None,
+            'style_dashlength': None,
+            'style_dashspace': None,
+            'style_dashstyle': None,
+            'style_width': None,
         })
-        self.assertEquals(len(params), 5)
 
         expected_params = {
             'x': 18600,
@@ -1090,6 +1095,50 @@ class GEDATopLevelShapeTests(GEDATestCase):
             ['line', 'line'],
             [s.type for s in design.shapes]
         )
+
+
+class GEDAStyleTests(GEDATestCase):
+
+    def test_attaching_styles_to_shape(self):
+        params = {
+            'x': 49, 'y': 34,
+            'radius': 223,
+            'startangle': 30,
+            'sweepangle': 90,
+            'style_capstyle': None,
+            'style_color': None,
+            'style_dashlength': None,
+            'style_dashspace': None,
+            'style_dashstyle': None,
+            'style_width': None,
+        }
+        shape_ = upconvert.core.shape.Arc(0, 0, 200, 200, 200)
+        self.geda_parser._save_style_to_object(shape_, params)
+        self.assertItemsEqual(shape_.styles, {
+            'style_capstyle': None,
+            'style_color': None,
+            'style_dashlength': None,
+            'style_dashspace': None,
+            'style_dashstyle': None,
+            'style_width': None,
+        })
+
+    def test_attaching_styles_to_invalid_object(self):
+        import logging
+        logging.basicConfig(level=logging.INFO)
+        import StringIO
+
+        stream = StringIO.StringIO()
+        logging.root.handlers = []
+        logger = logging.getLogger('parser.geda')
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(logging.StreamHandler(stream))
+
+        self.geda_parser._save_style_to_object(
+            object,
+            {'style_color': 1, 'style_somethingelse': 1},
+        )
+        self.assertIn('without styles dict', stream.getvalue())
 
 
 class GEDAFullConversionTests(GEDATestCase):
