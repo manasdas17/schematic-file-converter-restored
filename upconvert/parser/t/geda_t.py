@@ -917,7 +917,8 @@ class GEDACircleParsingTests(GEDATestCase):
 
 class GEDAPinParsingTests(GEDATestCase):
 
-    def get_pin_sample(self):
+    @staticmethod
+    def get_pin_sample():
         """ Get pin command. """
         return """P 100 600 200 600 1 0 0
 {
@@ -931,7 +932,8 @@ T 150 550 5 8 0 1 0 8 1
 pintype=in
 }"""
 
-    def get_reversed_pin(self):
+    @staticmethod
+    def get_reversed_pin():
         """ Get reversed pin command """
         return """P 100 600 200 600 1 0 1
 {
@@ -1067,7 +1069,30 @@ class GEDAComponentParsingTests(GEDATestCase):
         self.assertEquals(len(component.symbols[0].bodies[0].shapes), 9)
 
 
-class TestGedaFullConversion(GEDATestCase):
+class GEDATopLevelShapeTests(GEDATestCase):
+
+    def test_adding_top_level_shapes_to_design(self):
+        with open('/tmp/toplevelshapes.sch', 'w') as toplevel_sch:
+            toplevel_sch.write("\n".join([
+                "v 20001 2",
+                "L 40800 46600 45700 46600 3 0 0 0 -1 -1",
+                "L 42300 45900 42900 45500 3 0 0 0 -1 -1",
+                GEDAPinParsingTests.get_pin_sample(),
+                GEDAPinParsingTests.get_reversed_pin(),
+            ]))
+
+        design = self.geda_parser.parse('/tmp/toplevelshapes.sch')
+
+        self.assertEquals(len(design.shapes), 2)
+        self.assertEquals(len(design.pins), 2)
+
+        self.assertItemsEqual(
+            ['line', 'line'],
+            [s.type for s in design.shapes]
+        )
+
+
+class GEDAFullConversionTests(GEDATestCase):
 
     def test_parse(self):
         """ Tests parsing valid and invalid schematic files. """

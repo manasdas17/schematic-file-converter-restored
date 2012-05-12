@@ -158,11 +158,9 @@ class GEDA:
         ## setup project environment
         self.create_project_files(filename)
 
-        output = []
-
-        component = design.components.components.pop('UNASSIGNED_SHAPES', None)
-        if component is not None:
-            output += self.generate_body_commands(component.symbols[0].bodies[0])
+        ## generate GEDA commands for all top-level shapes/pins
+        ## in the current design
+        output = self.generate_body_commands(design)
 
         ## create symbol files for components writing all symbols
         ## to local 'symbols' directory. Symbols that are available
@@ -239,9 +237,6 @@ class GEDA:
             mirrored = 0
             if '_MIRRORED' in instance.library_id:
                 mirrored = 1
-
-            if instance.library_id == 'UNASSIGNED_SHAPES':
-                continue
 
             ## retrieve symbol for instance
             component_symbol = self.component_library[(

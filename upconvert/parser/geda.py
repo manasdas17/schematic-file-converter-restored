@@ -363,8 +363,6 @@ class GEDA:
         self.net_names = None
         self.geda_zip = None
 
-        self.unassigned_body = None
-
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an geda schematic """
@@ -412,7 +410,6 @@ class GEDA:
             inputfiles = [inputfile]
 
         self.design = GEDADesign()
-        self.unassigned_body = components.Body()
 
         ## parse frame data of first schematic to extract
         ## page size (assumes same frame for all files)
@@ -445,21 +442,6 @@ class GEDA:
             self.offset.x = self.offset.x - self.frame_width
 
             f_in.close()
-
-        ## if unassigned shapes have been found during parsing add a new
-        ## component to the design
-        if len(self.unassigned_body.shapes + self.unassigned_body.pins) > 0:
-            component = GEDAComponent("UNASSIGNED_SHAPES")
-            symbol = components.Symbol()
-            component.add_symbol(symbol)
-            symbol.add_body(self.unassigned_body)
-
-            instance = ComponentInstance(component.name, component.name, 0)
-            symbol = SymbolAttribute(0, 0, 0)
-            instance.add_symbol_attribute(symbol)
-
-            self.design.add_component(component.name, component)
-            self.design.add_component_instance(instance)
 
         return self.design
 

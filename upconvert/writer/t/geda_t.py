@@ -28,13 +28,15 @@ import StringIO
 import shutil
 from upconvert.core.net import NetPoint
 from upconvert.core import shape
-from upconvert.core import components 
-import upconvert.parser.geda 
+from upconvert.core import components
+from upconvert.core.design import Design
+
+import upconvert.parser.geda
 from upconvert.writer.geda import GEDA
 from upconvert.parser.openjson import JSON
 
 
-class GEDATests(unittest.TestCase):
+class GEDAWriterTestCase(unittest.TestCase):
     """ The tests of the geda writer """
     # pylint: disable=W0212
 
@@ -42,12 +44,17 @@ class GEDATests(unittest.TestCase):
         self.geda_writer = GEDA()
         self.oj_parser = JSON()
 
+
+class GEDAWriterTests(GEDAWriterTestCase):
+    """ The tests of the geda writer """
+    # pylint: disable=W0212
+
     def test_converter_methods(self):
         """ Test if converter methods are available for all known
-            shapes in the core. 
+            shapes in the core.
         """
         shape_types = [
-            'line', 
+            'line',
             'bezier',
             'label',
             'rectangle',
@@ -69,24 +76,24 @@ class GEDATests(unittest.TestCase):
         self.geda_writer.create_project_files(geda_filename)
 
         self.assertEquals(
-            self.geda_writer.project_dirs['project'], 
+            self.geda_writer.project_dirs['project'],
             '/tmp'
         )
         self.assertEquals(
-            self.geda_writer.project_dirs['symbol'], 
+            self.geda_writer.project_dirs['symbol'],
             '/tmp/symbols'
         )
         self.assertTrue(os.path.exists('/tmp/gafrc'))
-        
+
         filh = open('/tmp/gafrc', 'r')
         data = ''.join(filh.readlines())
         filh.close()
-        self.assertEquals(data, '(component-library "./symbols")') 
+        self.assertEquals(data, '(component-library "./symbols")')
 
     def test_write_schematic_file(self):
         """ Reads the gEDA *simple_example* file into a design using the
             gEDA parser, writes the result to a gEDA file and reads it into
-            a new design. Both designs are then compared regarding their 
+            a new design. Both designs are then compared regarding their
             respective components, instances and nets. """
         # pylint: disable=R0914
         # pylint: disable=R0915
@@ -129,14 +136,14 @@ class GEDATests(unittest.TestCase):
             sorted([(net.net_id, len(net.points)) for net in converted_design.nets])
         )
 
-        snets = dict([(net.net_id, net) for net in simple_design.nets]) 
-        cnets = dict([(net.net_id, net) for net in converted_design.nets]) 
+        snets = dict([(net.net_id, net) for net in simple_design.nets])
+        cnets = dict([(net.net_id, net) for net in converted_design.nets])
 
         for snet_id, snet in snets.items():
             cnet = cnets[snet_id]
 
-            spoints = dict([(pt.point_id, pt) for pt in snet.points.values()]) 
-            cpoints = dict([(pt.point_id, pt) for pt in cnet.points.values()]) 
+            spoints = dict([(pt.point_id, pt) for pt in snet.points.values()])
+            cpoints = dict([(pt.point_id, pt) for pt in cnet.points.values()])
             self.assertEqual(sorted(spoints.keys()), sorted(cpoints.keys()))
 
             for spoint_id, spoint in spoints.items():
@@ -160,13 +167,13 @@ class GEDATests(unittest.TestCase):
 
             self.assertEquals(len(scomponent.symbols), 1)
             self.assertEquals(
-                len(scomponent.symbols), 
+                len(scomponent.symbols),
                 len(ccomponent.symbols)
             )
 
             self.assertEquals(len(scomponent.symbols[0].bodies), 1)
             self.assertEquals(
-                len(scomponent.symbols[0].bodies), 
+                len(scomponent.symbols[0].bodies),
                 len(ccomponent.symbols[0].bodies)
             )
             sbody = scomponent.symbols[0].bodies[0]
@@ -198,21 +205,21 @@ class GEDATests(unittest.TestCase):
         for instance_id in scomp_instances:
             sinst = scomp_instances[instance_id]
             cinst = ccomp_instances[instance_id]
-            
+
             self.assertEquals(sinst.instance_id, cinst.instance_id)
             self.assertEquals(sinst.library_id, cinst.library_id)
             self.assertEquals(sinst.symbol_index, cinst.symbol_index)
 
             self.assertEquals(
-                sinst.symbol_attributes[0].x, 
+                sinst.symbol_attributes[0].x,
                 cinst.symbol_attributes[0].x
             )
             self.assertEquals(
-                sinst.symbol_attributes[0].y, 
+                sinst.symbol_attributes[0].y,
                 cinst.symbol_attributes[0].y
             )
             self.assertEquals(
-                sinst.symbol_attributes[0].rotation, 
+                sinst.symbol_attributes[0].rotation,
                 cinst.symbol_attributes[0].rotation
             )
 
@@ -227,7 +234,7 @@ class GEDATests(unittest.TestCase):
         self.geda_writer.set_offset(shape.Point(-500, -500))
 
         self.geda_writer.component_library = dict()
-        self.geda_writer.project_dirs['symbol'] = sym_dir 
+        self.geda_writer.project_dirs['symbol'] = sym_dir
 
         simple_design = self.oj_parser.parse('test/openjson/simple.upv')
 
@@ -241,11 +248,11 @@ class GEDATests(unittest.TestCase):
         self.assertEquals(
             component_library,
             {
-                (library_id, 0): 'Flag_1-0.sym', 
-                (library_id, 1): 'Flag_2-1.sym', 
-                (library_id, 2): 'GND-2.sym', 
+                (library_id, 0): 'Flag_1-0.sym',
+                (library_id, 1): 'Flag_2-1.sym',
+                (library_id, 2): 'GND-2.sym',
                 (library_id, 3): 'VCC-3.sym'
-            } 
+            }
         )
         self.assertEquals(
             sorted(os.listdir(sym_dir)),
@@ -266,7 +273,7 @@ class GEDATests(unittest.TestCase):
         self.geda_writer = GEDA(
             symbol_dirs=['test/geda/simple_example/symbols'])
         self.geda_writer.component_library = dict()
-        self.geda_writer.project_dirs['symbol'] = sym_dir 
+        self.geda_writer.project_dirs['symbol'] = sym_dir
 
         geda_parser = upconvert.parser.geda.GEDA(
             symbol_dirs=['test/geda/simple_example/symbols']
@@ -285,8 +292,8 @@ class GEDATests(unittest.TestCase):
         self.assertEquals(
             component_library,
             {
-                (library_id, 0): 'opamp.sym', 
-            } 
+                (library_id, 0): 'opamp.sym',
+            }
         )
         library_id = 'capacitor-1'
         component = converted_design.components.components[library_id]
@@ -298,16 +305,16 @@ class GEDATests(unittest.TestCase):
         self.assertEquals(
             component_library,
             {
-                ('opamp', 0): 'opamp.sym', 
-                (library_id, 0): 'capacitor-1.sym', 
-            } 
+                ('opamp', 0): 'opamp.sym',
+                (library_id, 0): 'capacitor-1.sym',
+            }
         )
         self.assertEquals(sorted(os.listdir(sym_dir)), [])
 
 
     def test_generate_net_commands(self):
-        """ Tests creating commands for nets that can then be 
-            written to the schematic file. 
+        """ Tests creating commands for nets that can then be
+            written to the schematic file.
         """
         design = self.oj_parser.parse('test/geda/nets_exported.upv')
 
@@ -321,13 +328,13 @@ class GEDATests(unittest.TestCase):
             if command.startswith('N '):
                 segment_count += 1
 
-        self.assertEquals(segment_count, 21) 
+        self.assertEquals(segment_count, 21)
 
         env_count = 0
         for command in commands:
             if command.startswith('{'):
                 env_count += 1
-        self.assertEquals(env_count, 4) 
+        self.assertEquals(env_count, 4)
 
         commands += ['v 20110115 2\n']
         geda_parser = upconvert.parser.geda.GEDA()
@@ -348,23 +355,23 @@ class GEDATests(unittest.TestCase):
 
     def test_create_attribute(self):
         """ Tests creating attribute commands. """
-        attribute = self.geda_writer._create_attribute('_refdes', 'U1', 0, 0) 
+        attribute = self.geda_writer._create_attribute('_refdes', 'U1', 0, 0)
         self.assertEquals(
             attribute,
             []
         )
-        attribute = self.geda_writer._create_attribute('_refdes', '', 0, 0) 
+        attribute = self.geda_writer._create_attribute('_refdes', '', 0, 0)
         self.assertEquals(
             attribute,
             []
         )
 
-        attribute = self.geda_writer._create_attribute('_private_attr', 'U1', 0, 0) 
+        attribute = self.geda_writer._create_attribute('_private_attr', 'U1', 0, 0)
         self.assertEquals(
             attribute,
             ['T 0 0 5 10 0 1 0 0 1', 'private_attr=U1']
         )
-        attribute = self.geda_writer._create_attribute('attr', 'U1', 0, 0, size=25) 
+        attribute = self.geda_writer._create_attribute('attr', 'U1', 0, 0, size=25)
         self.assertEquals(
             attribute,
             ['T 0 0 5 25 1 1 0 0 1', 'attr=U1']
@@ -380,8 +387,8 @@ class GEDATests(unittest.TestCase):
         )
 
         text = self.geda_writer._create_text(
-            "some text\nmulti line\ntext", 
-            0, 0, size=25, visibility=0, 
+            "some text\nmulti line\ntext",
+            0, 0, size=25, visibility=0,
             alignment='right',
         )
         self.assertEquals(len(text), 4)
@@ -393,12 +400,12 @@ class GEDATests(unittest.TestCase):
     def test_create_pin(self):
         """ Tests creating pin commands. """
         pin = components.Pin('E', (0, 0), (0, 30))
-        command = self.geda_writer._create_pin(1, pin) 
+        command = self.geda_writer._create_pin(1, pin)
 
         self.assertEquals(
             command,
             [
-                'P 0 300 0 0 1 0 0', 
+                'P 0 300 0 0 1 0 0',
                 '{',
                 'T 100 400 5 10 0 1 0 0 1',
                 'pinseq=1',
@@ -411,12 +418,12 @@ class GEDATests(unittest.TestCase):
         label = shape.Label(10, 0, 'p1', 'left', 0.5)
 
         pin = components.Pin('E', (0, 0), (0, 30), label=label)
-        command = self.geda_writer._create_pin(1, pin) 
+        command = self.geda_writer._create_pin(1, pin)
 
         self.assertEquals(
             command,
             [
-                'P 0 300 0 0 1 0 0', 
+                'P 0 300 0 0 1 0 0',
                 '{',
                 'T 100 0 5 10 1 1 270 0 1',
                 'pinlabel=p1',
@@ -433,26 +440,26 @@ class GEDATests(unittest.TestCase):
         """ Tests converting Arc objects to arc commands."""
         arc = shape.Arc(0, 0, 0.0, 0.7, 30)
         command = self.geda_writer._convert_arc(arc)
-        
+
         self.assertEquals(
             command,
-            ['A 0 0 300 0 235 3 10 0 0 -1 -1'] 
+            ['A 0 0 300 0 235 3 10 0 0 -1 -1']
         )
 
         arc = shape.Arc(200, 400, 1.0, 0.5, 10)
         command = self.geda_writer._convert_arc(arc)
-        
+
         self.assertEquals(
             command,
-            ['A 2000 4000 100 180 90 3 10 0 0 -1 -1'] 
+            ['A 2000 4000 100 180 90 3 10 0 0 -1 -1']
         )
 
         arc = shape.Arc(200, 400, 0.2, 0.1, 10)
         command = self.geda_writer._convert_arc(arc)
-        
+
         self.assertEquals(
             command,
-            ['A 2000 4000 100 324 18 3 10 0 0 -1 -1'] 
+            ['A 2000 4000 100 324 18 3 10 0 0 -1 -1']
         )
 
     def test_convert_circle(self):
@@ -595,7 +602,7 @@ class GEDATests(unittest.TestCase):
                 'z'
             ]
         )
-    
+
     def test_convert_bezier(self):
         """ Tests converting BezierCurve objects to path commands. """
         curve = shape.BezierCurve((9, -10), (11, -10), (3, -12), (17, -12))
@@ -617,7 +624,7 @@ class GEDATests(unittest.TestCase):
             shape.BezierCurve((80, 50), (70, 70), (80, 40), (50, 70)),
             shape.Line((50, 70), (10, 70)),
         ]
-        
+
         body = components.Body()
         body.shapes = shapes
 
@@ -656,7 +663,7 @@ class GEDATests(unittest.TestCase):
             shape.BezierCurve((80, 50), (70, 70), (80, 40), (50, 70)), #C 800,500 700,700 500,700
             shape.Line((50, 70), (10, 70)), #L 100,700
         ]
-        
+
         body = components.Body()
         body.shapes = shapes
         self.assertTrue(self.geda_writer.is_valid_path(body))
@@ -682,14 +689,30 @@ class GEDATests(unittest.TestCase):
             (0.0, 1, 0),
             (0.0, 10.0, 0),
             (0.5, 90, 270),
-            (0.8,  1, 216), 
-            (0.8,  90, 270), 
-            (1.5,  1, 90), 
+            (0.8,  1, 216),
+            (0.8,  90, 270),
+            (1.5,  1, 90),
             (1.5,  90, 90),
         ]
 
         for angle, steps, expected in angle_samples:
             self.assertEquals(
-                self.geda_writer.conv_angle(angle, steps), 
+                self.geda_writer.conv_angle(angle, steps),
                 expected
             )
+
+class GEDAWriteTopLevelShapeTests(GEDAWriterTestCase):
+
+    def test_generating_geda_commands_for_toplevel_shapes(self):
+        design = Design()
+        design.shapes = [
+            shape.Line((0, 0), (0, 50)),
+            shape.Circle(0, 0, 300),
+        ]
+        design.pins = [
+            components.Pin('E', (0, 0), (0, 30)),
+            components.Pin('E', (0, 0), (0, 30)),
+        ]
+        commands = self.geda_writer.generate_body_commands(design)
+        ## default pins require 6 commands, shapes require 1 command
+        self.assertEquals(len(commands), 2*6 + 2*1)
