@@ -33,6 +33,11 @@ import subprocess
 # Builders
 ###################
 
+def build_sdist(target, source, env):
+    args = ['python', 'setup.py', 'sdist']
+    return subprocess.call(args)
+bld_sdist = Builder(action=build_sdist)
+
 def build_lint(target, source, env):
     args = ['pylint', '--rcfile=.pylintrc']
     args.extend([str(py) for py in source])
@@ -201,6 +206,14 @@ all_test_files.extend([str(t) for t in gerber_ger_files])
 all_test_files.extend([str(t) for t in kicad_sch_files])
 all_test_files.extend([str(t) for t in upverter_upv_files])
 
+# Find the version number in the setup.py file
+version = 'unknown'
+version_re = re.compile(r"version='\([^']*\)'")
+with open('setup.py', 'r') as setup_fh:
+    for line in setup_fh:
+        m = version_re.match(line)
+        if m:
+            version = m.group(1)
 
 
 ###################
@@ -213,6 +226,7 @@ env = Environment(BUILDERS = {'test': bld_test,
                               'pyflakes': bld_pyflakes,
                               'coverage': bld_coverage,
                               'regression': bld_regression,
+                              'sdist': bld_sdist,
                              },
                   ENV = {'PATH' : os.environ['PATH']},
                   tools = ['default'])
@@ -223,6 +237,7 @@ pyflakes = env.pyflakes(['fake_target_to_force_pyflakes'], all_source)
 test = env.test(['fake_target_to_force_test'], all_tests)
 coverage = env.coverage(['fake_target_to_force_coverage'], all_tests)
 regression = env.coverage(['fake_target_to_force_regression'], [])
+sdist = env.sdist(['dist/python-upconvert-' + version + '.tar.gz'], all_source)
 
 env.Alias('lint', lint)
 env.Alias('check', check)
@@ -230,4 +245,5 @@ env.Alias('pyflakes', pyflakes)
 env.Alias('test', test)
 env.Alias('coverage', coverage)
 env.Alias('regression', regression)
+env.Alias('sdist', sdist)
 env.Alias('all', '.')
