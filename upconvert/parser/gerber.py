@@ -245,7 +245,9 @@ class Gerber:
         # compile design
         if DEBUG:
             self._debug_stdout()
+
         self.layout.units = (self.params['MO'] == 'IN' and 'inch' or 'mm')
+
         design = Design()
         design.layout = self.layout
         return design
@@ -547,6 +549,10 @@ class Gerber:
             shape = ap_type
             if shape in self.macro_buff:
                 macro = self.macro_buff[shape].instantiate(mods)
+                counter = 0 # pick a unique name for the macro
+                while mods and macro.name in self.layer_buff.macros:
+                    macro.name = shape + str(counter)
+                    counter += 1
                 self.layer_buff.macros[macro.name] = macro
             hole_defs = None
 

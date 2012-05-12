@@ -112,9 +112,9 @@ class GerberTests(unittest.TestCase):
         """ Parse simple macros. """
         macros = self.design.layout.layers[0].macros
 
-        self.assertEqual(len(macros), 8)
+        self.assertEqual(len(macros), 9)
         self.assertEqual(set(macros),
-                         set(['MOIRE', 'POLYGON', 'LINE2', 'LINE1',
+                         set(['MOIRE', 'POLYGON', 'POLYGON0', 'LINE2', 'LINE1',
                               'THERMAL', 'VECTOR', 'CIRCLE', 'OUTLINE']))
 
         self.assertEqual(macros['CIRCLE'].primitives[0].shape.type, 'circle')
@@ -153,8 +153,15 @@ class GerberTests(unittest.TestCase):
         self.assertEqual(macros['POLYGON'].primitives[0].shape.x, 0.0)
         self.assertEqual(macros['POLYGON'].primitives[0].shape.y, 0.0)
         self.assertEqual(macros['POLYGON'].primitives[0].shape.outer_diameter, 0.5)
-        self.assertEqual(macros['POLYGON'].primitives[0].shape.vertices, 6)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.vertices, 3)
         self.assertEqual(macros['POLYGON'].primitives[0].shape.rotation, 0)
+
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.type, 'regular polygon')
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.outer_diameter, 0.5)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.vertices, 6)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.rotation, 0)
 
         self.assertEqual(macros['MOIRE'].primitives[0].shape.type, 'moire')
         self.assertEqual(macros['MOIRE'].primitives[0].shape.x, 0.0)
