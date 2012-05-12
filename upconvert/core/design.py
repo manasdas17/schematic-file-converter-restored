@@ -35,6 +35,7 @@ class Design:
         self.components = Components()
         self.component_instances = list()
         self.shapes = list()
+        self.pins = list()
         self.design_attributes = DesignAttributes()
         self.layout = None
         self.version = dict()
@@ -89,6 +90,10 @@ class Design:
         """ Add a net """
         self.nets.append(net)
 
+    def add_pin(self, pin):
+        """ Add a pin to the schematic sheet """
+        self.pins.append(pin)
+
     def add_shape(self, shape):
         """ Add a shape to the schematic sheet """
         self.shapes.append(shape)
@@ -117,6 +122,7 @@ class Design:
             "component_instances" :
                 [i.json() for i in self.component_instances],
             "shapes" : [s.json() for s in self.shapes],
+            "pins" : [s.json() for s in self.pins],
             "design_attributes" : self.design_attributes.json(),
             "layout" : self.layout.json() if self.layout is not None else None
             }
