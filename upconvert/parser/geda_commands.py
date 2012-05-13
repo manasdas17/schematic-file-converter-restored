@@ -28,20 +28,27 @@ class GEDAParameter(object):
 
     @property
     def name(self):
+        if self.TYPE:
+            return "%s_%s" % (self.TYPE, self._name)
         return self._name
 
 
 class GEDAStyleParameter(GEDAParameter):
     TYPE = 'style'
 
-    @property
-    def name(self):
-        return "%s_%s" % (self.TYPE, self._name)
+
+class GEDAExtraParameter(GEDAParameter):
+    TYPE = 'extra'
 
 
 class GEDACommand(object):
     TYPE = None
     PARAMETERS = ()
+    EXTRA_PARAMETERS = ()
+
+    @classmethod
+    def parameters(cls):
+        return cls.PARAMETERS + cls.EXTRA_PARAMETERS
 
     @classmethod
     def get_style_keywords(cls):
@@ -50,7 +57,7 @@ class GEDACommand(object):
     @classmethod
     def update_default_kwargs(cls, **kwargs):
         default_kwargs = {}
-        for parameter in cls.PARAMETERS:
+        for parameter in cls.parameters():
             default_kwargs[parameter.name] = parameter.default
         default_kwargs.update(kwargs)
         return default_kwargs
@@ -209,6 +216,9 @@ class GEDAPathCommand(GEDACommand):
         GEDAStyleParameter('angle2', default=-1),
         GEDAStyleParameter('pitch2', default=-1),
         GEDAParameter('num_lines'),
+    )
+    EXTRA_PARAMERTERS = (
+        GEDAExtraParameter('id'),
     )
 
 
