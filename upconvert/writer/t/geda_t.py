@@ -632,11 +632,8 @@ class GEDAWriterTests(GEDAWriterTestCase):
             shape.Line((50, 70), (10, 70)),
         ]
 
-        body = components.Body()
-        body.shapes = shapes
-
         self.assertEquals(
-            self.geda_writer._create_path(body),
+            self.geda_writer._create_path(shapes),
             [
                 'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 5',
                 'M 100,100',
@@ -647,10 +644,10 @@ class GEDAWriterTests(GEDAWriterTestCase):
             ]
         )
 
-        body.add_shape(shape.Line((10, 70), (10, 10)))
+        shapes.append(shape.Line((10, 70), (10, 10)))
 
         self.assertEquals(
-            self.geda_writer._create_path(body),
+            self.geda_writer._create_path(shapes),
             [
                 'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 6',
                 'M 100,100',

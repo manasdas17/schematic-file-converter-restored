@@ -386,17 +386,25 @@ class GEDA:
         """
         commands = []
 
-        if self.is_valid_path(body):
-            commands += self._create_path(body)
-        else:
-            for new_shape in body.shapes:
-                method_name = '_convert_%s' % new_shape.type
-                if hasattr(self, method_name):
-                    commands += getattr(self, method_name)(new_shape)
-                else:
-                    raise GEDAError(
-                        "invalid shape '%s' in component" % new_shape.type
-                    )
+        id_param = geda_commands.GEDAExtraParameter('id')
+        ## extract paths
+        paths = {}
+        for shape_ in body.shapes:
+            path_id = shape_.styles.get(id_param.name, None)
+            paths.setdefault(path_id, []).append(shape_)
+
+        for shape_ in paths.get(None, []):
+            method_name = '_convert_%s' % shape_.type
+            if hasattr(self, method_name):
+                commands += getattr(self, method_name)(shape_)
+            else:
+                raise GEDAError(
+                    "invalid shape '%s' in component" % shape_.type
+                )
+
+        for path_id in paths:
+            if path_id is not None:
+                commands += self._create_path(paths[path_id])
 
         ## create commands for pins
         for pin_seq, pin in enumerate(body.pins):
@@ -484,12 +492,17 @@ class GEDA:
         """
         commands = []
 
+        title_frame = design_attributes.attributes.pop(
+            '_geda_titleframe',
+            None,
+        )
+
+        if title_frame is None:
+            return []
+
         commands += self._create_component(
             0, 0, # use 0, 0 as coordinates will be converted in component
-            design_attributes.attributes.pop(
-                '_geda_titleframe',
-                'title-B'
-            ) + '.sym'
+            title_frame + '.sym',
         )
 
         if design_attributes.metadata.owner:
@@ -536,7 +549,7 @@ class GEDA:
             Returns a list of gEDA commands without linebreaks.
         """
         x, y = self.conv_coords(x, y)
-        return geda_commands.GEDAComponentCommand.generate_command(
+        return geda_commands.GEDAComponentCommand().generate_command(
             x=x, y=y,
             angle=self.conv_angle(angle),
             mirror=mirrored,
@@ -586,7 +599,7 @@ class GEDA:
             'num_lines': len(text),
         })
 
-        commands = geda_commands.GEDATextCommand.generate_command(**kwargs)
+        commands = geda_commands.GEDATextCommand().generate_command(**kwargs)
         return commands + text
 
     def _create_pin(self, pin_seq, pin):
@@ -610,7 +623,7 @@ class GEDA:
         }
         kwargs.update(pin.styles)
 
-        command = geda_commands.GEDAPinCommand.generate_command(**kwargs)
+        command = geda_commands.GEDAPinCommand().generate_command(**kwargs)
 
         command.append('{')
 
@@ -655,14 +668,14 @@ class GEDA:
 
         if annotation.value.startswith('{{'):
             return []
+
         kwargs = dict(
-            annotation.value,
-            annotation.x,
-            annotation.y,
+            text=annotation.value,
+            x=annotation.x,
+            y=annotation.y,
             angle=annotation.rotation,
-            visibility=annotation.visible in (True, 'true'),
+            visibility=bool(annotation.visible in (True, 'true')),
         )
-        kwargs.update(annotation.styles)
         return self._create_text(**kwargs)
 
     def _convert_arc(self, arc):
@@ -685,7 +698,7 @@ class GEDA:
             sweepangle=sweep_angle,
         )
         kwargs.update(arc.styles)
-        return geda_commands.GEDAArcCommand.generate_command(**kwargs)
+        return geda_commands.GEDAArcCommand().generate_command(**kwargs)
 
     def _convert_circle(self, circle):
         """ Converts Circle object in *circle* to gEDA circle command.
@@ -701,7 +714,7 @@ class GEDA:
             radius=self.to_mils(circle.radius)
         )
         kwargs.update(circle.styles)
-        return geda_commands.GEDACircleCommand.generate_command(**kwargs)
+        return geda_commands.GEDACircleCommand().generate_command(**kwargs)
 
     def _convert_rounded_rectangle(self, rect):
         """ Converts RoundedRectangle object into gEDA rectangle command.
@@ -727,7 +740,7 @@ class GEDA:
             height=height
         )
         kwargs.update(rect.styles)
-        return geda_commands.GEDABoxCommand.generate_command(**kwargs)
+        return geda_commands.GEDABoxCommand().generate_command(**kwargs)
 
     def _convert_line(self, line):
         """ Converts Line object in *line* to gEDA command.
@@ -746,7 +759,7 @@ class GEDA:
             y2=end_y
         )
         kwargs.update(line.styles)
-        return geda_commands.GEDALineCommand.generate_command(**kwargs)
+        return geda_commands.GEDALineCommand().generate_command(**kwargs)
 
     def _convert_label(self, label):
         """ Converts Label object in *label* to gEDA command.
@@ -775,7 +788,7 @@ class GEDA:
         np1_x, np1_y = self.conv_coords(np1.x, np1.y)
         np2_x, np2_y = self.conv_coords(np2.x, np2.y)
 
-        command = geda_commands.GEDASegmentCommand.generate_command(
+        command = geda_commands.GEDASegmentCommand().generate_command(
             x1=np1_x, y1=np1_y,
             x2=np2_x, y2=np2_y,
         )
@@ -805,7 +818,7 @@ class GEDA:
             Returns a list of gEDA commands without trailing linebreaks.
         """
         num_lines = len(polygon.points)+1 ##add closing command to polygon
-        commands = geda_commands.GEDAPathCommand.generate_command(
+        commands = geda_commands.GEDAPathCommand().generate_command(
             num_lines=num_lines
         )
 
@@ -819,14 +832,13 @@ class GEDA:
 
         return commands
 
-    def _create_path(self, path):
+    def _create_path(self, shapes):
         """ Creates a set of gEDA commands for *path*.
 
             Returns gEDA commands without trailing linebreaks as list.
         """
         num_lines = 1
-
-        shapes = list(path.shapes) #create new list to be able to modify
+        shapes = list(shapes) #create new list to be able to modify
 
         current_x, current_y = self.conv_coords(
             shapes[0].p1.x,
@@ -886,7 +898,7 @@ class GEDA:
             'num_lines': num_lines,
         }
         kwargs.update(shape_obj.styles)
-        return geda_commands.GEDAPathCommand.generate_command(
+        return geda_commands.GEDAPathCommand().generate_command(
             **kwargs
         ) + command + close_command
 
@@ -911,7 +923,7 @@ class GEDA:
             'num_lines': len(path_commands),
         }
         kwargs.update(curve.styles)
-        return geda_commands.GEDAPathCommand.generate_command(
+        return geda_commands.GEDAPathCommand().generate_command(
             **kwargs
         ) + path_commands
 

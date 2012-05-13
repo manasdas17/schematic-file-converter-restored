@@ -24,7 +24,8 @@
 import os
 from unittest import TestCase
 import StringIO
-from upconvert.parser.geda import GEDA, GEDAError
+from upconvert.parser.geda import GEDA, GEDAError, GEDAText, \
+                                  GEDADesign
 
 import upconvert.core.design
 import upconvert.core.shape
@@ -39,6 +40,28 @@ class GEDAEmpty(TestCase):
         assert parser != None
 
 
+class GEDADesignTests(TestCase):
+
+    def test_adding_license_text(self):
+        geda_text = GEDAText('BSD', attribute='use_license')
+        design = GEDADesign()
+        design.add_geda_text(geda_text)
+
+        self.assertEquals(
+            design.design_attributes.metadata.license,
+            'BSD'
+        )
+
+    def test_adding_license_text(self):
+        geda_text = GEDAText('some text', attribute='test_attr')
+        design = GEDADesign()
+        design.add_geda_text(geda_text)
+
+        self.assertEquals(
+            design.design_attributes.attributes['test_attr'],
+            'some text'
+        )
+
 class GEDATestCase(TestCase):
     def setUp(self):
         """
@@ -50,6 +73,16 @@ class GEDATestCase(TestCase):
         ## for easier validation
         self.geda_parser.SCALE_FACTOR = 10
         self.geda_parser.set_offset(upconvert.core.shape.Point(0, 0))
+
+    def test_parsing_invalid_command(self):
+        """ Test parsing a line command into a Line object. """
+        invalid_string = "L -400 500 440 560 3 0 0 0 -1 -1",
+        stream =  StringIO.StringIO(invalid_string)
+        self.assertRaises(
+            GEDAError, 
+            self.geda_parser._parse_command,
+            stream
+        )
 
 
 class GEDALineParsingTests(GEDATestCase):
@@ -223,7 +256,8 @@ class GEDAAngleConversionTests(GEDATestCase):
             self.assertEquals(expected, converted)
 
 
-class GEDAComponentParsingTests(GEDATestCase):
+class GEDATests(GEDATestCase):
+
     def test_constructor(self):
         """
         Test constructor with different parameters to ensure
@@ -776,6 +810,35 @@ class GEDABoxParsingTests(GEDATestCase):
 
 class GEDAPathParsingTests(GEDATestCase):
 
+    def test_parsing_invalid_path(self):
+        """ Test parsing a line command into a Line object. """
+        invalid_example = """H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2
+M 510,240
+X 510,240
+z"""
+        stream =  StringIO.StringIO(invalid_example)
+        typ, params = self.geda_parser._parse_command(stream)
+        self.assertRaises(
+            GEDAError, 
+            self.geda_parser._parse_H,
+            stream,
+            params
+        )
+
+    def test_parsing_path_with_first_element_not_M(self):
+        """ Test parsing a line command into a Line object. """
+        invalid_example = """H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 2
+L 510,240
+z"""
+        stream =  StringIO.StringIO(invalid_example)
+        typ, params = self.geda_parser._parse_command(stream)
+        self.assertRaises(
+            GEDAError, 
+            self.geda_parser._parse_H,
+            stream,
+            params
+        )
+
     def test_parse_simple_path_command(self):
         """ Tests parsing path commands into lists of shapes. """
         simple_example = """H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5
@@ -1073,6 +1136,16 @@ class GEDAComponentParsingTests(GEDATestCase):
         self.assertEquals(len(component.symbols[0].bodies), 1)
         self.assertEquals(len(component.symbols[0].bodies[0].shapes), 9)
 
+    def test_parsing_unknown_component(self):
+        self.geda_parser.design = upconvert.core.design.Design()
+        stream = StringIO.StringIO('C 18600 21500 1 0 0 invalid.sym')
+        component, instance = self.geda_parser._parse_component(
+            stream,
+            {'basename': 'invalid',},
+        )
+        self.assertEquals(component, None)
+        self.assertEquals(instance, None)
+
 
 class GEDATopLevelShapeTests(GEDATestCase):
 
@@ -1113,7 +1186,7 @@ class GEDAStyleTests(GEDATestCase):
             'style_width': None,
         }
         shape_ = upconvert.core.shape.Arc(0, 0, 200, 200, 200)
-        self.geda_parser._save_style_to_object(shape_, params)
+        self.geda_parser._save_parameters_to_object(shape_, params)
         self.assertItemsEqual(shape_.styles, {
             'style_capstyle': None,
             'style_color': None,
@@ -1134,7 +1207,7 @@ class GEDAStyleTests(GEDATestCase):
         logger.setLevel(logging.DEBUG)
         logger.addHandler(logging.StreamHandler(stream))
 
-        self.geda_parser._save_style_to_object(
+        self.geda_parser._save_parameters_to_object(
             object,
             {'style_color': 1, 'style_somethingelse': 1},
         )

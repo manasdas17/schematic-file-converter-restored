@@ -101,6 +101,10 @@ class GEDAText(object):
         return bool(self.attribute is None)
 
     def store_styles_in_label(self, label):
+        """
+        Store all available style parameters in ``styles`` 
+        property of ``label``. Returns ``label``.
+        """
         for key, value in self.params.items():
             if key.startswith(geda_commands.GEDAStyleParameter.TYPE):
                 label.styles[key] = value
@@ -160,8 +164,20 @@ class GEDAText(object):
 
 
 class GEDAComponent(components.Component):
+    """
+    Subclass of ``Component`` that provides convenient classes
+    to add GEDA objects easily.
+    """
 
     def add_geda_text(self, geda_text):
+        """
+        Add the content of a ``GEDAText`` instance to the
+        component. If *geda_text* contains ``refdes``, ``prefix``
+        or ``suffix`` attributes it will be stored as special 
+        attribute in the component. *geda_text* that is not an
+        attribute will be added as ``Label`` to the components 
+        body.
+        """
         if geda_text.is_text():
             self.symbols[0].bodies[0].add_shape(geda_text.as_label())
 
@@ -178,6 +194,13 @@ class GEDAComponent(components.Component):
             )
 
     def add_geda_objects(self, objs):
+        """
+        Add a GEDA object to the component. Valid 
+        objects are subclasses of ``Shape``, ``Pin`` or
+        ``GEDAText``. *objs* is expected to be an iterable 
+        and will be added to the correct component properties 
+        according to their type.
+        """
         if not objs:
             return
 
@@ -197,8 +220,20 @@ class GEDAComponent(components.Component):
 
 
 class GEDADesign(Design):
+    """
+    Subclass of ``Design`` providing convenience functions for
+    GEDA objects to be adde to the design.
+    """
 
     def add_geda_text(self, geda_text):
+        """
+        Add the content of a ``GEDAText`` instance to the
+        design. If *geda_text* contains ``use_license`` it will
+        be added to the design's metadata ``license`` other 
+        attributes are added to ``design_attributes``.
+        *geda_text* that is not an attribute will be added as
+        ``Label`` to the components body.
+        """
         if geda_text.is_text():
             self.add_shape(geda_text.as_label())
         elif geda_text.attribute == 'use_license':
@@ -211,6 +246,13 @@ class GEDADesign(Design):
             )
 
     def add_geda_objects(self, objs):
+        """
+        Add a GEDA object to the design. Valid 
+        objects are subclasses of ``Shape``, ``Pin`` or
+        ``GEDAText``. *objs* is expected to be an iterable 
+        and will be added to the correct component properties 
+        according to their type.
+        """
         if not objs:
             return
 
@@ -361,12 +403,14 @@ class GEDA:
                     log.debug("using title file: %s", params['basename'])
 
                     self._parse_title_frame(params)
-                    self.design.design_attributes.attributes.update({
-                        '_geda_offset_x': self.offset.x,
-                        '_geda_offset_y': self.offset.y,
-                        '_geda_frame_width': self.frame_width,
-                        '_geda_frame_height': self.frame_height,
-                    })
+
+        ## store offset values in design attributes
+        self.design.design_attributes.attributes.update({
+            '_geda_offset_x': self.offset.x,
+            '_geda_offset_y': self.offset.y,
+            '_geda_frame_width': self.frame_width,
+            '_geda_frame_height': self.frame_height,
+        })
 
         for filename in inputfiles:
             f_in = self._open_file_or_zip(filename)
@@ -385,9 +429,17 @@ class GEDA:
         return self.design
 
     def _parse_v(self, stream, params):
+        """
+        Only required to be callable when 'v' command is found.
+        Returns without any processing.
+        """
         return
 
     def _parse_G(self, stream, params):
+        """
+        Parse picture command 'G'. Returns without any processing but
+        logs a warning.
+        """
         log.warn("ignoring picture/font in gEDA file. Not supported!")
         return
 
@@ -529,7 +581,7 @@ class GEDA:
         basename, _ = os.path.splitext(params['basename'])
 
         component_name = basename
-        if params['mirror']:
+        if params.get('mirror'):
             component_name += '_MIRRORED'
 
         if component_name in self.design.components.components:
@@ -697,26 +749,6 @@ class GEDA:
 
         self.segments -= rem_segs
         self.segments |= add_segs
-
-    def _create_label(self, text, params):
-        """ Create a ``shape.Label`` instance using the *text* string. The
-            location of the Label is determined by the ``x`` and ``y``
-            coordinates in *params*.
-
-            Returns a ``shape.Label`` object.
-        """
-        text_x = params['x']
-
-        if self._is_mirrored_command(params):
-            text_x = 0 - text_x
-
-        return shape.Label(
-            self.x_to_px(text_x),
-            self.y_to_px(params['y']),
-            text,
-            'left',
-            self.conv_angle(params['angle']),
-        )
 
     def skip_embedded_section(self, stream):
         """ Reads the *stream* line by line until the end of an
@@ -915,7 +947,7 @@ class GEDA:
             self.conv_coords(line_x2, params['y2']),
         )
         ## store style data for line in 'style' dict
-        self._save_style_to_object(line, params)
+        self._save_parameters_to_object(line, params)
         return line
 
     def _parse_B(self, stream, params):
@@ -934,7 +966,7 @@ class GEDA:
             self.to_px(params['height'])
         )
         ## store style data for rect in 'style' dict
-        self._save_style_to_object(rect, params)
+        self._save_parameters_to_object(rect, params)
         return rect
 
     def _parse_V(self, stream, params):
@@ -952,7 +984,7 @@ class GEDA:
             self.to_px(params['radius']),
         )
         ## store style data for arc in 'style' dict
-        self._save_style_to_object(circle, params)
+        self._save_parameters_to_object(circle, params)
         return circle
 
     def _parse_A(self, stream, params):
@@ -981,7 +1013,7 @@ class GEDA:
             self.to_px(params['radius']),
         )
         ## store style data for arc in 'style' dict
-        self._save_style_to_object(arc, params)
+        self._save_parameters_to_object(arc, params)
         return arc
 
     def _parse_T(self, stream, params):
@@ -1087,10 +1119,20 @@ class GEDA:
             label=label
         )
         ## store style parameters in shape's style dict
-        self._save_style_to_object(pin, params)
+        self._save_parameters_to_object(pin, params)
         return pin
 
     def _parse_C(self, stream, params):
+        """
+        Parse component command 'C'. *stream* is the file stream 
+        pointing to the line after the component command. *params*
+        are the parsed parameters from the component command. 
+        The method checks if component is a title and ignores it
+        if that is the case due to previous processing. If the
+        component is a busripper, it is converted into a net 
+        segment. Otherwise, the component is parsed as a regular
+        component and added to the library and design.
+        """
         ## ignore title since it only defines the blueprint frame
         if params['basename'].startswith('title'):
             self._parse_environment(stream)
@@ -1117,8 +1159,7 @@ class GEDA:
             the number of lines in *params*.
             Returns a list of Line and BezierCurve shapes.
         """
-        ## FIXME: get path index from iterator to use in shape
-        ## attributes/style for writer reference
+        params['extra_id'] = self.path_counter.next()
         num_lines = params['num_lines']
         mirrored = self._is_mirrored_command(params)
         command = stream.readline().strip().split(self.DELIMITER)
@@ -1175,15 +1216,25 @@ class GEDA:
                 )
 
             ## store style parameters in shape's style dict
-            self._save_style_to_object(shape_, params)
+            self._save_parameters_to_object(shape_, params)
             shapes.append(shape_)
 
         return shapes
 
-    def _save_style_to_object(self, obj, params):
+    def _save_parameters_to_object(self, obj, params):
+        """
+        Save all ``style`` and ``extra`` parameters to the
+        objects ``styles`` dictionary. If *obj* does not have
+        a ``styles`` property, a ``GEDAError`` is raised.
+        """
+        parameter_types = [
+            geda_commands.GEDAStyleParameter.TYPE,
+            geda_commands.GEDAExtraParameter.TYPE,
+        ]
+
         try:
             for key, value in params.items():
-                if key.startswith(geda_commands.GEDAStyleParameter.TYPE):
+                if key.split('_')[0] in parameter_types:
                     obj.styles[key] = value
         except AttributeError:
             log.exception(
@@ -1219,7 +1270,7 @@ class GEDA:
 
         params = {}
         geda_command = self.OBJECT_TYPES[object_type]
-        for idx, parameter in enumerate(geda_command.PARAMETERS):
+        for idx, parameter in enumerate(geda_command.parameters()):
             if idx >= len(command_data):
                 ## prevent text commands of version 1 from breaking
                 params[parameter.name] = parameter.default
@@ -1227,7 +1278,7 @@ class GEDA:
                 datatype = parameter.datatype
                 params[parameter.name] = datatype(command_data[idx])
 
-        assert(len(params) == len(geda_command.PARAMETERS))
+        assert(len(params) == len(geda_command.parameters()))
 
         if move_to is not None:
             ## element in EMBEDDED component need to be moved
