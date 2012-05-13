@@ -1031,12 +1031,12 @@ class GEDAComponentParsingTests(GEDATestCase):
             'radius': 223,
             'startangle': 30,
             'sweepangle': 90,
-            'style_capstyle': None,
-            'style_color': None,
-            'style_dashlength': None,
-            'style_dashspace': None,
-            'style_dashstyle': None,
-            'style_width': None,
+            'style_color': 3,
+            'style_width': 10,
+            'style_capstyle': 0,
+            'style_dashstyle': 0,
+            'style_dashlength': -1,
+            'style_dashspace': -1,
         })
 
         expected_params = {
@@ -1159,7 +1159,9 @@ class GEDAFullConversionTests(GEDATestCase):
         )
 
         ## testing EMBEDDED component
-        design = self.geda_parser.parse('./test/geda/embedded_component.sch')
+        design = self.geda_parser.parse(
+            './test/geda/embedded_component.sch'
+        )
 
         components = design.components.components #test components dictionary
         self.assertEquals(components.keys(), ['EMBEDDEDbattery-1'])

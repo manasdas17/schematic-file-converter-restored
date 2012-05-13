@@ -366,12 +366,19 @@ class GEDAWriterTests(GEDAWriterTestCase):
             []
         )
 
-        attribute = self.geda_writer._create_attribute('_private_attr', 'U1', 0, 0)
+        attribute = self.geda_writer._create_attribute(
+            '_private_attr', 'U1',
+            0, 0
+        )
         self.assertEquals(
             attribute,
             ['T 0 0 5 10 0 1 0 0 1', 'private_attr=U1']
         )
-        attribute = self.geda_writer._create_attribute('attr', 'U1', 0, 0, size=25)
+        attribute = self.geda_writer._create_attribute(
+            'attr', 'U1',
+            0, 0,
+            style_size=25
+        )
         self.assertEquals(
             attribute,
             ['T 0 0 5 25 1 1 0 0 1', 'attr=U1']
@@ -388,13 +395,13 @@ class GEDAWriterTests(GEDAWriterTestCase):
 
         text = self.geda_writer._create_text(
             "some text\nmulti line\ntext",
-            0, 0, size=25, visibility=0,
+            0, 0, style_size=25, style_color=5, visibility=0,
             alignment='right',
         )
         self.assertEquals(len(text), 4)
         self.assertEquals(
             text,
-            ['T 0 0 9 25 0 1 0 4 3', "some text", "multi line", "text"]
+            ['T 0 0 5 25 0 1 0 4 3', "some text", "multi line", "text"]
         )
 
     def test_create_pin(self):

@@ -361,6 +361,12 @@ class GEDA:
                     log.debug("using title file: %s", params['basename'])
 
                     self._parse_title_frame(params)
+                    self.design.design_attributes.attributes.update({
+                        '_geda_offset_x': self.offset.x,
+                        '_geda_offset_y': self.offset.y,
+                        '_geda_frame_width': self.frame_width,
+                        '_geda_frame_height': self.frame_height,
+                    })
 
         for filename in inputfiles:
             f_in = self._open_file_or_zip(filename)
@@ -1213,7 +1219,6 @@ class GEDA:
 
         params = {}
         geda_command = self.OBJECT_TYPES[object_type]
-        print "GEDA COMMAND", object_type, geda_command  
         for idx, parameter in enumerate(geda_command.PARAMETERS):
             if idx >= len(command_data):
                 ## prevent text commands of version 1 from breaking
