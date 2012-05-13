@@ -46,27 +46,25 @@ class GEDACommand(object):
     PARAMETERS = ()
     EXTRA_PARAMETERS = ()
 
-    @classmethod
-    def parameters(cls):
-        return cls.PARAMETERS + cls.EXTRA_PARAMETERS
+    def parameters(self):
+        return self.PARAMETERS + self.EXTRA_PARAMETERS
 
-    @classmethod
-    def get_style_keywords(cls):
-        return [p.name for p in cls.PARAMETERS]
+    def get_style_keywords(self):
+        style_type = GEDAStyleParameter.TYPE
+        return [p.name for p in self.PARAMETERS
+                        if p.name.startswith(style_type)]
 
-    @classmethod
-    def update_default_kwargs(cls, **kwargs):
+    def update_default_kwargs(self, **kwargs):
         default_kwargs = {}
-        for parameter in cls.parameters():
+        for parameter in self.parameters():
             default_kwargs[parameter.name] = parameter.default
         default_kwargs.update(kwargs)
         return default_kwargs
 
-    @classmethod
-    def generate_command(cls, **kwargs):
-        kwargs = cls.update_default_kwargs(**kwargs)
-        command = [cls.TYPE]
-        for parameter in cls.PARAMETERS:
+    def generate_command(self, **kwargs):
+        kwargs = self.update_default_kwargs(**kwargs)
+        command = [self.TYPE]
+        for parameter in self.PARAMETERS:
             command.append("%%(%s)s" % parameter.name)
         return [" ".join(command) % kwargs]
 
