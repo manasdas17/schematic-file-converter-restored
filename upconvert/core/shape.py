@@ -770,7 +770,6 @@ class Point:
         return {
             "x": self.x,
             "y": self.y,
-            "styles": self.styles,
             }
 
 
