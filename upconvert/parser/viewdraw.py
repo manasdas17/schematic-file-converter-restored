@@ -193,8 +193,7 @@ class ViewDrawBase:
         def angle(x, y):
             """ Calculate the angle from the center of the arc to (x, y). """
             # as parsed, the angle increases CCW. Here, we return an angle
-            # increasing CW, as correct_y will put us in a coordinate system
-            # with the origin at the top-left.
+            # increasing CW
             opp = y - yc
             adj = x - xc
             if abs(adj) < 0.01:
@@ -203,13 +202,16 @@ class ViewDrawBase:
                     return 3 * pi / 2
                 else:
                     return pi / 2
-            ang = atan(opp/adj) - pi/2
+
+            ang = atan(opp/adj)
+            # correct for ambiguity due to atan
             if adj < 0:
                 ang += pi
-            ang = (3 * pi / 2) - ang
-            if ang < 0:
-                ang += 2 * pi
-            return ang
+
+            # restrict angle to (0, 2pi) range
+            ang = ang % (2 * pi)
+            # upverter uses CW angles, so...
+            return 2 * pi - ang
 
         return ('shape', Arc(int(round(xc)), int(round(yc)),
                              angle(x0,y0) / pi, angle(x2,y2) / pi,
@@ -265,7 +267,6 @@ class ViewDrawSch(ViewDrawBase):
         for k, v in tree['attr']:
             ckt.design_attributes.add_attribute(k, v)
 
-        self.correct_y(ckt, tree['Dbounds'][0])
         return ckt
 
     def parse_net(self, args):
@@ -377,33 +378,6 @@ class ViewDrawSch(ViewDrawBase):
         """ Given a component name and version, returns the filename """
         return libname.lower() + '.' + num
 
-    def correct_y(self, des, (xmin, ymin, xmax, ymax)):
-        """ Flips all placed elements on this sheet about x-axis. """
-        for ann in des.design_attributes.annotations:
-            ann.y = ymax - ann.y
-        # someday, this will happen
-        #for sh in des.shapes:
-        #    for pt in sh.points:
-        #        pt.y = ymax - pt.y
-        for ci in des.component_instances:
-            for sym in ci.symbol_attributes:
-                sym.y = ymax - sym.y
-                for ann in sym.annotations:
-                    ann.y = ymax - ann.y
-        for net in des.nets:
-            for pt in net.points.values():
-                pt.y = ymax - pt.y
-                pt.point_id = str(pt.x) + 'x' + str(pt.y)
-            for pt in net.points.values():
-                # yes, this needs to be two-pass
-                # update all the point_ids, n.points still indexes them by their
-                # old point_ids
-                pt.connected_points = [net.points[p].point_id for p in
-                                       pt.connected_points]
-            net.points = dict([(pt.point_id, pt) for pt in net.points.values()])
-            for ann in net.annotations:
-                ann.y = ymax - ann.y
-
 
 class ViewDrawSym(ViewDrawBase):
     """ Parser for a library symbol file. """
@@ -433,7 +407,6 @@ class ViewDrawSym(ViewDrawBase):
         for pin in tree['pin']:
             part.symbols[0].bodies[0].add_pin(pin)
 
-        self.correct_y(part)
         return part
 
     def parse_type(self, args):
@@ -482,22 +455,6 @@ class ViewDrawSym(ViewDrawBase):
                          'left', int(rot) * 0.5))
         # I have a feeling the alignment  will break, but anchor is a
         # vertical alignment thing
-
-    def correct_y(self, comp):
-        """ Flips all elements of the part about the x-axis. """
-        for sym in comp.symbols:
-            for bod in sym.bodies:
-                for pin in bod.pins:
-                    pin.p1.y = -pin.p1.y
-                    pin.p2.y = -pin.p2.y
-                for shape in bod.shapes:
-                    if isinstance(shape, (Arc, Circle, Label, Rectangle)):
-                        shape.y = -shape.y
-                    if isinstance(shape, Rectangle):
-                        shape.height = -shape.height
-                    if isinstance(shape, Line):
-                        shape.p1.y = -shape.p1.y
-                        shape.p2.y = -shape.p2.y
 
 
 class ViewDraw:
