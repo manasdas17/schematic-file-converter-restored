@@ -434,6 +434,24 @@ class EagleTests(unittest.TestCase):
     def test_arc_parse(self):
         """ Test Arc block parsing """
 
+# fixed angle arc
+        _valid_chunk = b''.join((b"\x22\x80\x30\x15\x8c\xba\xff\xff",
+                                 b"\xce\x18\x00\x00\x78\xc4\xff\xff",
+                                 b"\xba\x22\x00\x00\xfa\x02\x00\x79"))
+        _arc = Eagle.Wire.parse(_valid_chunk)
+
+        self.assertEqual(_arc.x1, -1.778)
+        self.assertEqual(_arc.y1, 0.635)
+        self.assertEqual(_arc.x2, -1.524)
+        self.assertEqual(_arc.y2, 0.889)
+        self.assertEqual(_arc.width, 0.1524)
+        self.assertEqual(_arc.curve, -90.)
+        self.assertEqual(_arc.cap, None)
+        self.assertEqual(_arc.direction, "clockwise")
+        self.assertEqual(_arc.style, "Continuous")
+        self.assertEqual(_arc.layer, 21)
+ 
+# free angle arc
         _valid_chunk = b''.join((b"\x22\x00\x00\x5b\xc0\x80\x0f\xd8",
                                  b"\x48\xd0\x05\x70\xa0\x0d\x11\x11",
                                  b"\x40\x4d\x09\x00\xe8\x0b\x32\x81"))
