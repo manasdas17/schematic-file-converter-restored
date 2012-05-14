@@ -1234,6 +1234,11 @@ class Eagle:
                   0x03: "DashDot",
                  }
 
+        wire_sign = 0x00
+        arc_preset1 = (0x78, 0x79, ) # -90: q1, q2 
+        arc_preset2 = (0x7a, 0x7b, ) # +90: q3, q4 
+        arc_preset3 = (0x7c, 0x7e, ) # -180: q41, q12
+        arc_preset4 = (0x7d, 0x7f, ) # +180: q23, q34 
         arc_sign = 0x81
 
         def __init__(self, x1, y1, x2, y2, style, layer, width): # pylint: disable=R0913
@@ -1256,7 +1261,7 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.Wire.template, chunk)
 
-            if Eagle.Wire.arc_sign != _dta[10]:
+            if Eagle.Wire.wire_sign == _dta[10]:
                 _ret_val = Eagle.Wire(
                                       x1=Eagle.Shape.decode_real(_dta[4]),
                                       y1=Eagle.Shape.decode_real(_dta[5]),
@@ -1269,8 +1274,13 @@ class Eagle:
                                              Eagle.Shape.decode_real(
                                                                     _dta[8]))
                                          )
-            else: # Arc features "packed" coordinates...
+            elif _dta[10] in (Eagle.Wire.arc_preset1 + Eagle.Wire.arc_preset2 +
+                            Eagle.Wire.arc_preset3 + Eagle.Wire.arc_preset4):
+                _ret_val = Eagle.FixedArc.parse(chunk)
+            elif Eagle.Wire.arc_sign == _dta[10]: # Arc features "packed" coordinates...
                 _ret_val = Eagle.Arc.parse(chunk)
+            else: 
+                raise ValueError("unknown wire sign = x%x" % _dta[10])
 
             return _ret_val
 
@@ -1381,11 +1391,9 @@ class Eagle:
                                 )
             return _ret_val
 
-    class Arc(Wire):
-        """ A struct that represents an arc
+    class FixedArc(Wire):
+        """ A struct that represents a fixed angle arc
         """
-        template = "=4B4IH2B" # 3-bytes long coords here..
-
         capmask = 0x10
         caps = {
                 0x00: None,
@@ -1401,11 +1409,53 @@ class Eagle:
                         curve, cap, direction):
             """ Just a constructor
             """
-            super(Eagle.Arc, self).__init__(x1, y1, x2, y2, style, layer, width)
+            super(Eagle.FixedArc, self).__init__(x1, y1, x2, y2, style, layer, width)
             self.curve = curve
             self.cap = cap
             self.direction = direction
             return
+
+        @staticmethod
+        def parse(chunk):
+            """ Parses arc
+            """
+            _ret_val = None
+
+            _dta = struct.unpack(Eagle.FixedArc.template, chunk)
+
+            _curve = None
+            if _dta[10] in Eagle.Wire.arc_preset1:
+                _curve = -90.
+            elif _dta[10] in Eagle.Wire.arc_preset2:
+                _curve = 90.
+            elif _dta[10] in Eagle.Wire.arc_preset3:
+                _curve = -180.
+            elif _dta[10] in Eagle.Wire.arc_preset4:
+                _curve = 180.
+
+            _ret_val = Eagle.FixedArc(
+                          x1=Eagle.Shape.decode_real(_dta[4]),
+                          y1=Eagle.Shape.decode_real(_dta[5]),
+                          x2=Eagle.Shape.decode_real(_dta[6]),
+                          y2=Eagle.Shape.decode_real(_dta[7]),
+                          layer=_dta[3],
+                          width=(Eagle.Wire.width_xscale *
+                                 Eagle.Shape.decode_real(
+                                                        _dta[8])),
+                          style=Eagle.Wire.styles[
+                              Eagle.Wire.stylemask & _dta[9]],
+                          curve=_curve,
+                          cap=Eagle.Arc.caps[_dta[9] & Eagle.Arc.capmask],
+                          direction=Eagle.Arc.directions[_dta[9] & 
+                                                Eagle.Arc.directionmask]
+                                     )
+            return _ret_val
+
+
+    class Arc(FixedArc):
+        """ A struct that represents a free angle arc
+        """
+        template = "=4B4IH2B" # 3-bytes long coords here..
 
         @staticmethod
         def parse(chunk):
