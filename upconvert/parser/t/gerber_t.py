@@ -111,7 +111,76 @@ class GerberTests(unittest.TestCase):
     def test_macros(self):
         """ Parse simple macros. """
         macros = self.design.layout.layers[0].macros
-        self.assertEqual(len(macros), 8)
+
+        self.assertEqual(len(macros), 9)
+        self.assertEqual(set(macros),
+                         set(['MOIRE', 'POLYGON', 'POLYGON0', 'LINE2', 'LINE1',
+                              'THERMAL', 'VECTOR', 'CIRCLE', 'OUTLINE']))
+
+        self.assertEqual(macros['CIRCLE'].primitives[0].shape.type, 'circle')
+        self.assertEqual(macros['CIRCLE'].primitives[0].shape.radius, 0.25)
+
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.type, 'rectangle')
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.width, 1.25)
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.height, 0.05)
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['VECTOR'].primitives[0].shape.y, 0.025)
+
+        self.assertEqual(macros['LINE1'].primitives[0].shape.type, 'rectangle')
+        self.assertEqual(macros['LINE1'].primitives[0].shape.width, 0.3)
+        self.assertEqual(macros['LINE1'].primitives[0].shape.height, 0.05)
+        self.assertEqual(macros['LINE1'].primitives[0].shape.x, -0.15)
+        self.assertEqual(macros['LINE1'].primitives[0].shape.y, 0.025)
+
+        self.assertEqual(macros['LINE2'].primitives[0].shape.type, 'rectangle')
+        self.assertEqual(macros['LINE2'].primitives[0].shape.width, 0.8)
+        self.assertEqual(macros['LINE2'].primitives[0].shape.height, 0.5)
+        self.assertEqual(macros['LINE2'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['LINE2'].primitives[0].shape.y, 0.5)
+
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.type, 'polygon')
+        self.assertEqual(len(macros['OUTLINE'].primitives[0].shape.points), 4)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[0].x, 0.0)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[0].y, 0.0)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[1].x, 0.0)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[1].y, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[2].x, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[2].y, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[3].x, 0.5)
+        self.assertEqual(macros['OUTLINE'].primitives[0].shape.points[3].y, 0.0)
+
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.type, 'regular polygon')
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.outer_diameter, 0.5)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.vertices, 3)
+        self.assertEqual(macros['POLYGON'].primitives[0].shape.rotation, 0)
+
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.type, 'regular polygon')
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.outer_diameter, 0.5)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.vertices, 6)
+        self.assertEqual(macros['POLYGON0'].primitives[0].shape.rotation, 0)
+
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.type, 'moire')
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.outer_diameter, 1.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.ring_thickness, 0.1)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.gap_thickness, 0.4)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.max_rings, 2.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.hair_thickness, 0.01)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.hair_length, 1.0)
+        self.assertEqual(macros['MOIRE'].primitives[0].shape.rotation, 1.777777777777777777)
+
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.type, 'thermal')
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.x, 0.0)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.y, 0.0)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.outer_diameter, 1.0)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.inner_diameter, 0.3)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.gap_thickness, 0.01)
+        self.assertEqual(macros['THERMAL'].primitives[0].shape.rotation, 2.0722222222222224)
 
     @use_file('simple.zip')
     def test_zip_batch(self):
@@ -157,58 +226,49 @@ class GerberTests(unittest.TestCase):
     @use_file('missing-delim.ger')
     def test_missing_delim(self):
         """ Trap param outside of gerber param block. """
-        pass
 
     @raises(CoordPrecedesFormatSpec)
     @use_file('coord-precedes-fs.ger')
     def test_coord_preceding_fs(self):
         """ Trap coord preceding gerber format spec. """
-        pass
 
     @raises(ParamContainsBadData)
     @use_file('coord-in-param-block.ger')
     def test_data_in_param(self):
         """ Trap coord inside gerber param block. """
-        pass
 
     @raises(CoordMalformed)
     @use_file('y-precedes-x.ger')
     def test_y_before_x(self):
         """ Trap coord with 'Y' before 'X' - gerber. """
-        pass
 
     @raises(DataAfterEOF)
     @use_file('data-after-eof.ger')
     def test_trailing_data(self):
         """ Trap data following M02* block - gerber. """
-        pass
 
     @raises(FileNotTerminated)
     @use_file('not-terminated.ger')
     def test_no_eof(self):
         """ Trap file with no M02* block - gerber. """
-        pass
 
     @raises(UnintelligibleDataBlock)
     @use_file('alien.ger')
     def test_alien_data(self):
         """ Trap off-spec data in gerber file. """
-        pass
 
     @raises(QuadrantViolation)
     @use_file('sq-violation.ger')
     def test_single_quadrant(self):
         """ Trap long arc in single quadrant mode. """
-        pass
 
     @raises(OpenFillBoundary)
     @use_file('open-fill.ger')
     def test_open_fill(self):
         """ Trap unsuccessful outline fill closure. """
-        pass
 
     @raises(IncompatibleAperture)
     @use_file('disallowed-smear.ger')
     def test_arc_smear(self):
         """ Trap non-linear smear - gerber. """
-        pass
+

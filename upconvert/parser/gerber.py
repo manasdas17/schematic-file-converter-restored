@@ -245,7 +245,9 @@ class Gerber:
         # compile design
         if DEBUG:
             self._debug_stdout()
+
         self.layout.units = (self.params['MO'] == 'IN' and 'inch' or 'mm')
+
         design = Design()
         design.layout = self.layout
         return design
@@ -334,12 +336,9 @@ class Gerber:
                     wid = aperture.shape.radius * 2
                     trace = self.trace_buff.get_trace(wid, seg)
                     if trace is None:
-                        # construct a trace
-                        trace = Trace(wid, [seg])
+                        trace = Trace(wid)
                         self.img_buff.traces.append(trace)
-                    else:
-                        # append segment to existing trace
-                        trace.segments.append(seg)
+                    trace.segments.append(seg)
                     self.trace_buff.add_segment(seg, trace)
 
         elif self.status['draw'] == 'FLASH':
@@ -550,6 +549,10 @@ class Gerber:
             shape = ap_type
             if shape in self.macro_buff:
                 macro = self.macro_buff[shape].instantiate(mods)
+                counter = 0 # pick a unique name for the macro
+                while mods and macro.name in self.layer_buff.macros:
+                    macro.name = shape + str(counter)
+                    counter += 1
                 self.layer_buff.macros[macro.name] = macro
             hole_defs = None
 
