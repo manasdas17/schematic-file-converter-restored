@@ -1015,7 +1015,7 @@ class GEDA:
         geda_text = GEDAText.from_command(stream, params)
 
         ## text can have environemnt attached: parse & ignore
-        attributes = self._parse_environment(stream)
+        self._parse_environment(stream)
         return geda_text
 
     def _parse_N(self, stream, params):
