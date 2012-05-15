@@ -1087,20 +1087,25 @@ class TraceBuffer(object):
         self.pt2trace = {} # (width, (x, y)) -> Trace
 
     def add_segment(self, segment, trace):
+        """ Add a segment to a trace in the cache. """
         for point in self.get_ends(segment):
             self.pt2trace[trace.width, point] = trace
 
     def get_trace(self, width, segment):
+        """ Given a width and a trace segment, return the Trace
+        where that segment should go, or None if no Trace matches. """
         for point in self.get_ends(segment):
             trace = self.pt2trace.get((width, point))
             if trace is not None:
                 return trace
 
     def get_ends(self, segment):
+        """ Return the endpoints of the segment as a tuple
+        of precision-rounded (x,y) tuples. """
         if isinstance(segment, Arc):
             ends = segment.ends()
         else:
             ends = (segment.p1, segment.p2)
 
-        return [(round(point.x, self.precision),
-                 round(point.y, self.precision)) for point in ends]
+        return ((round(point.x, self.precision),
+                 round(point.y, self.precision)) for point in ends)
