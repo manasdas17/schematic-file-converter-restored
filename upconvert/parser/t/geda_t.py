@@ -24,8 +24,7 @@
 import os
 from unittest import TestCase
 import StringIO
-from upconvert.parser.geda import GEDA, GEDAError, GEDAText, \
-                                  GEDADesign
+from upconvert.parser.geda import GEDA, GEDAError, GEDAText
 
 import upconvert.core.design
 import upconvert.core.shape
@@ -40,12 +39,13 @@ class GEDAEmpty(TestCase):
         assert parser != None
 
 
-class GEDADesignTests(TestCase):
+class GEDATextTests(TestCase):
 
     def test_adding_license_text(self):
         geda_text = GEDAText('BSD', attribute='use_license')
-        design = GEDADesign()
-        design.add_geda_text(geda_text)
+        parser = GEDA()
+        design = upconvert.core.design.Design()
+        parser.add_text_to_design(design, geda_text)
 
         self.assertEquals(
             design.design_attributes.metadata.license,
@@ -54,8 +54,9 @@ class GEDADesignTests(TestCase):
 
     def test_adding_license_text(self):
         geda_text = GEDAText('some text', attribute='test_attr')
-        design = GEDADesign()
-        design.add_geda_text(geda_text)
+        parser = GEDA()
+        design = upconvert.core.design.Design()
+        parser.add_text_to_design(design, geda_text)
 
         self.assertEquals(
             design.design_attributes.attributes['test_attr'],

@@ -102,7 +102,7 @@ class GEDAText(object):
 
     def store_styles_in_label(self, label):
         """
-        Store all available style parameters in ``styles`` 
+        Store all available style parameters in ``styles``
         property of ``label``. Returns ``label``.
         """
         for key, value in self.params.items():
@@ -163,117 +163,10 @@ class GEDAText(object):
         return cls(content, attribute=attribute, params=params)
 
 
-class GEDAComponent(components.Component):
-    """
-    Subclass of ``Component`` that provides convenient classes
-    to add GEDA objects easily.
-    """
-
-    def add_geda_text(self, geda_text):
-        """
-        Add the content of a ``GEDAText`` instance to the
-        component. If *geda_text* contains ``refdes``, ``prefix``
-        or ``suffix`` attributes it will be stored as special 
-        attribute in the component. *geda_text* that is not an
-        attribute will be added as ``Label`` to the components 
-        body.
-        """
-        if geda_text.is_text():
-            self.symbols[0].bodies[0].add_shape(geda_text.as_label())
-
-        elif geda_text.attribute == '_refdes' \
-             and '?' in geda_text.content:
-
-            prefix, suffix = geda_text.content.split('?')
-            self.add_attribute('_prefix', prefix)
-            self.add_attribute('_suffix', suffix)
-        else:
-            self.add_attribute(
-                geda_text.attribute,
-                geda_text.content
-            )
-
-    def add_geda_objects(self, objs):
-        """
-        Add a GEDA object to the component. Valid 
-        objects are subclasses of ``Shape``, ``Pin`` or
-        ``GEDAText``. *objs* is expected to be an iterable 
-        and will be added to the correct component properties 
-        according to their type.
-        """
-        if not objs:
-            return
-
-        try:
-            iter(objs)
-        except TypeError:
-            objs = [objs]
-
-        for obj in objs:
-            obj_cls = obj.__class__
-            if issubclass(obj_cls, shape.Shape):
-                self.symbols[0].bodies[0].add_shape(obj)
-            elif issubclass(obj_cls, components.Pin):
-                self.symbols[0].bodies[0].add_pin(obj)
-            elif issubclass(obj_cls, GEDAText):
-                self.add_geda_text(obj)
-
-
-class GEDADesign(Design):
-    """
-    Subclass of ``Design`` providing convenience functions for
-    GEDA objects to be adde to the design.
-    """
-
-    def add_geda_text(self, geda_text):
-        """
-        Add the content of a ``GEDAText`` instance to the
-        design. If *geda_text* contains ``use_license`` it will
-        be added to the design's metadata ``license`` other 
-        attributes are added to ``design_attributes``.
-        *geda_text* that is not an attribute will be added as
-        ``Label`` to the components body.
-        """
-        if geda_text.is_text():
-            self.add_shape(geda_text.as_label())
-        elif geda_text.attribute == 'use_license':
-            metadata = self.design_attributes.metadata
-            metadata.license = geda_text.content
-        else:
-            self.design_attributes.add_attribute(
-                geda_text.attribute,
-                geda_text.content,
-            )
-
-    def add_geda_objects(self, objs):
-        """
-        Add a GEDA object to the design. Valid 
-        objects are subclasses of ``Shape``, ``Pin`` or
-        ``GEDAText``. *objs* is expected to be an iterable 
-        and will be added to the correct component properties 
-        according to their type.
-        """
-        if not objs:
-            return
-
-        try:
-            iter(objs)
-        except TypeError:
-            objs = [objs]
-
-        for obj in objs:
-            obj_cls = obj.__class__
-            if issubclass(obj_cls, shape.Shape):
-                self.add_shape(obj)
-            elif issubclass(obj_cls, components.Pin):
-                self.add_pin(obj)
-            elif issubclass(obj_cls, GEDAText):
-                self.add_geda_text(obj)
-
-
 class GEDAError(Exception):
     """ Exception class for gEDA parser errors """
     pass
+
 
 class GEDA:
     """ The GEDA Format Parser """
@@ -384,7 +277,7 @@ class GEDA:
         else:
             inputfiles = [inputfile]
 
-        self.design = GEDADesign()
+        self.design = Design()
 
         ## parse frame data of first schematic to extract
         ## page size (assumes same frame for all files)
@@ -451,7 +344,7 @@ class GEDA:
         """
         # pylint: disable=R0912
         if self.design is None:
-            self.design = GEDADesign()
+            self.design = Design()
 
         self.segments = set()
         self.net_points = dict()
@@ -463,10 +356,10 @@ class GEDA:
 
             objects = getattr(self, "_parse_%s" % obj_type)(stream, params)
 
-            ##TODO handle environment for attributes
             attributes = self._parse_environment(stream)
+            self.design.design_attributes.attributes.update(attributes or {})
 
-            self.design.add_geda_objects(objects)
+            self.add_objects_to_design(self.design, objects)
 
             obj_type, params = self._parse_command(stream)
 
@@ -703,7 +596,7 @@ class GEDA:
         if typ == '[':
             typ, params = self._parse_command(stream, move_to)
 
-        component = GEDAComponent(basename)
+        component = components.Component(basename)
         symbol = components.Symbol()
         component.add_symbol(symbol)
         body = components.Body()
@@ -718,10 +611,10 @@ class GEDA:
 
             objects = getattr(self, "_parse_%s" % typ)(stream, params)
 
-            ##TODO handle environment for attributed
             attributes = self._parse_environment(stream)
+            component.attributes.update(attributes or {})
 
-            component.add_geda_objects(objects)
+            self.add_objects_to_component(component, objects)
 
             typ, params = self._parse_command(stream, move_to)
 
@@ -910,6 +803,100 @@ class GEDA:
 
         return open(filename, mode)
 
+    def add_text_to_component(self, component, geda_text):
+        """
+        Add the content of a ``GEDAText`` instance to the
+        component. If *geda_text* contains ``refdes``, ``prefix``
+        or ``suffix`` attributes it will be stored as special
+        attribute in the component. *geda_text* that is not an
+        attribute will be added as ``Label`` to the components
+        body.
+        """
+        if geda_text.is_text():
+            component.symbols[0].bodies[0].add_shape(geda_text.as_label())
+
+        elif geda_text.attribute == '_refdes' \
+             and '?' in geda_text.content:
+
+            prefix, suffix = geda_text.content.split('?')
+            component.add_attribute('_prefix', prefix)
+            component.add_attribute('_suffix', suffix)
+        else:
+            component.add_attribute(
+                geda_text.attribute,
+                geda_text.content
+            )
+
+    def add_objects_to_component(self, component, objs):
+        """
+        Add a GEDA object to the component. Valid
+        objects are subclasses of ``Shape``, ``Pin`` or
+        ``GEDAText``. *objs* is expected to be an iterable
+        and will be added to the correct component properties
+        according to their type.
+        """
+        if not objs:
+            return
+
+        try:
+            iter(objs)
+        except TypeError:
+            objs = [objs]
+
+        for obj in objs:
+            obj_cls = obj.__class__
+            if issubclass(obj_cls, shape.Shape):
+                component.symbols[0].bodies[0].add_shape(obj)
+            elif issubclass(obj_cls, components.Pin):
+                component.symbols[0].bodies[0].add_pin(obj)
+            elif issubclass(obj_cls, GEDAText):
+                self.add_text_to_component(component, obj)
+
+    def add_text_to_design(self, design, geda_text):
+        """
+        Add the content of a ``GEDAText`` instance to the
+        design. If *geda_text* contains ``use_license`` it will
+        be added to the design's metadata ``license`` other
+        attributes are added to ``design_attributes``.
+        *geda_text* that is not an attribute will be added as
+        ``Label`` to the components body.
+        """
+        if geda_text.is_text():
+            design.add_shape(geda_text.as_label())
+        elif geda_text.attribute == 'use_license':
+            metadata = design.design_attributes.metadata
+            metadata.license = geda_text.content
+        else:
+            design.design_attributes.add_attribute(
+                geda_text.attribute,
+                geda_text.content,
+            )
+
+    def add_objects_to_design(self, design, objs):
+        """
+        Add a GEDA object to the design. Valid
+        objects are subclasses of ``Shape``, ``Pin`` or
+        ``GEDAText``. *objs* is expected to be an iterable
+        and will be added to the correct component properties
+        according to their type.
+        """
+        if not objs:
+            return
+
+        try:
+            iter(objs)
+        except TypeError:
+            objs = [objs]
+
+        for obj in objs:
+            obj_cls = obj.__class__
+            if issubclass(obj_cls, shape.Shape):
+                design.add_shape(obj)
+            elif issubclass(obj_cls, components.Pin):
+                design.add_pin(obj)
+            elif issubclass(obj_cls, GEDAText):
+                self.add_text_to_design(design, obj)
+
     def _parse_U(self, stream, params):
         """ Processing a bus instance with start end end coordinates
             at (x1, y1) and (x2, y2). *color* is ignored. *ripperdir*
@@ -1028,7 +1015,6 @@ class GEDA:
         geda_text = GEDAText.from_command(stream, params)
 
         ## text can have environemnt attached: parse & ignore
-        ##TODO: store attributes in text element
         attributes = self._parse_environment(stream)
         return geda_text
 
@@ -1124,12 +1110,12 @@ class GEDA:
 
     def _parse_C(self, stream, params):
         """
-        Parse component command 'C'. *stream* is the file stream 
+        Parse component command 'C'. *stream* is the file stream
         pointing to the line after the component command. *params*
-        are the parsed parameters from the component command. 
+        are the parsed parameters from the component command.
         The method checks if component is a title and ignores it
         if that is the case due to previous processing. If the
-        component is a busripper, it is converted into a net 
+        component is a busripper, it is converted into a net
         segment. Otherwise, the component is parsed as a regular
         component and added to the library and design.
         """
