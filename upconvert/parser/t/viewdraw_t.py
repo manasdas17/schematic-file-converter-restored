@@ -213,17 +213,13 @@ class ViewDrawBaseTests(unittest.TestCase):
                   (1.5, 0., 0.5),
                   (1., 1.25, 1.5))
         def angle2xy(theta):
-            return [int(round(sin(theta * pi) * radius + x_c)),
-                    int(round(cos(theta * pi) * radius + y_c))]
-        def reflang(theta):
-            return (theta + 0.5) % 2.0
+            return [int(round(cos(theta * pi) * radius + x_c)),
+                    int(round(sin(theta * pi) * radius + y_c))]
 
         for ang in (angles):
-            print ang
             pts = sum([angle2xy(th) for th in ang], [])
 
             k, v = self.base.parse_arc(' '.join([str(p) for p in pts]))
-            print v.json()
             self.assertEqual(k, 'shape')
             self.assertEqual(v.type, 'arc')
             # allow for points to be off by up to one unit, to account for
@@ -231,8 +227,8 @@ class ViewDrawBaseTests(unittest.TestCase):
             self.assertTrue(abs(v.x - x_c) <= 1)
             self.assertTrue(abs(v.y - y_c) <= 1)
             self.assertTrue(abs(v.radius - radius) <= 1)
-            self.assertTrue(abs(reflang(v.start_angle) - (ang[0])) < 0.01)
-            self.assertTrue(abs(reflang(v.end_angle) - (ang[2])) < 0.01)
+            self.assertTrue(abs(v.start_angle - (2 - ang[0])) < 0.01)
+            self.assertTrue(abs(v.end_angle - (2 - ang[2])) < 0.01)
 
 class ViewDrawSymTests(unittest.TestCase):
     """ Tests for ViewDraw library symbol files """
