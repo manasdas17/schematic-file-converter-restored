@@ -1,9 +1,30 @@
+#!/usr/bin/env python2
+""" A crude image output writer, inspired by ajray's render.py """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format:       upverter.com/resources/open-json-format/
+# Development:  github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from PIL import Image, ImageDraw
 from math import cos, sin, pi, sqrt
 from upconvert.core.shape import Point
 
 class Render:
-    """Image output renderer, inspired by ajray's render.py """
+    """ An image under construction. """
     def __init__(self, des, outtype='PNG',
                  bground=(255, 255, 255), fground=(0, 0, 0),
                  scale=1):
@@ -26,10 +47,10 @@ class Render:
     def draw_ckt(self):
         """ Render the image into self.img """
         # start off with all the component instances
-        for ci in self.des.component_instances:
-            c = self.des.components.components[ci.library_id]
-            for body, attr in zip(c.symbols[ci.symbol_index].bodies,
-                                  ci.symbol_attributes):
+        for inst in self.des.component_instances:
+            comp = self.des.components.components[inst.library_id]
+            for body, attr in zip(comp.symbols[inst.symbol_index].bodies,
+                                  inst.symbol_attributes):
                 # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
                 self.draw_sym(body, pos, attr.rotation,
@@ -40,13 +61,13 @@ class Render:
                         pos = self.base.chain(Point(ann.x, ann.y))
                         self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
 
-        for sh in self.des.shapes:
-            if sh.type == 'arc':
+        for shape in self.des.shapes:
+            if shape.type == 'arc':
                 # special case, it needs a rotation passed, even for 0
-                self.draw_shape_arc(sh, self.base, 0, self.draw)
+                self.draw_shape_arc(shape, self.base, 0, self.draw)
             else:
-                getattr(self, 'draw_shape_%s' % sh.type)(sh, self.base,
-                                                         self.draw)
+                getattr(self, 'draw_shape_%s' % shape.type)(shape, self.base,
+                                                            self.draw)
 
         for net in self.des.nets:
             # need a second dict so that removing nets as they are drawn does
@@ -100,20 +121,25 @@ class Render:
             self.draw_pin(pin, xform, draw)
 
     def draw_shape_circle(self, circle, xform, draw):
+        """ draw a circle """
         minpt, maxpt = [xform.chain(p) for p in circle.bounds()]
         xs, ys = [minpt.x, maxpt.x], [minpt.y, maxpt.y]
         # draw.ellipse gets confused if x1 > x0 or y1 > y0
         draw.ellipse((min(xs), min(ys), max(xs), max(ys)), outline=self.fg)
 
     def draw_shape_line(self, line, xform, draw):
+        """ draw a line segment """
         pts = [xform.chain(p) for p in (line.p1, line.p2)]
         draw.line([(p.x, p.y) for p in pts], fill=self.fg)
 
     def draw_shape_polygon(self, poly, xform, draw):
+        """ draw a multi-segment polygon """
         pts = [xform.chain(p) for p in poly.points]
         draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
 
     def draw_shape_arc(self, arc, xform, rot, draw):
+        """ draw an arc segment
+        note that rot is required, as a rotation will change the angles """
         # TODO remove reliance on rot, so that this can be called the same as
         # the other draw_shape_* methods
         x, y, r = arc.x, arc.y, arc.radius
@@ -130,6 +156,7 @@ class Render:
         draw.arc(box, start, end, fill=self.fg)
 
     def draw_shape_rectangle(self, rect, xform, draw):
+        """ draw a rectangle """
         # use polygon-style, so it'll handle rotated rectangles
         pts = [Point(p) for p in [(rect.x, rect.y),
                                   (rect.x + rect.width, rect.y),
@@ -139,23 +166,25 @@ class Render:
         draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
 
     def draw_shape_rounded_rectangle(self, rect, xform, draw):
+        """ draw a rectangle, eventually with rounded corners """
         #TODO handle this with lines and arcs
         self.draw_shape_rectangle(rect, xform, draw)
 
     def draw_shape_label(self, label, xform, draw):
+        """ draw a text label """
         #TODO deal with alignment, rotation
         pos = xform.chain(Point(label.x, label.y))
         draw.text((pos.x, pos.y), label.text, fill=self.fg)
 
     def draw_shape_bezier(self, bez, xform, draw):
+        """ draw a bezier curve """
         # hasn't really been tested properly, but seems okay
         # calculate maximum path length as straight lines between each point,
         # then double it, and use that to decide t step size
         pts = [xform.chain(p) for p in [bez.point1, bez.control1,
                                         bez.control2, bez.point2]]
-        maxpath = sum(map(lambda (p1, p2): sqrt((p2.x - p1.x)**2 +
-                                                (p2.y - p1.y)**2),
-                          zip(pts, pts[1:]))) * 2
+        maxpath = sum([sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
+                       for (p1, p2) in zip(pts, pts[1:])]) * 2
         dt = 1. / maxpath
         p0, p1, p2, p3 = pts
         # textbook Bezier interpolation
@@ -174,6 +203,7 @@ class Render:
         draw.point((Bx(1.), By(1.)), fill=self.fg)
 
     def draw_pin(self, pin, xform, draw):
+        """ draw a component's pin """
         # TODO special pin characteristics (inverted, clock)?
         line = [xform.chain(p) for p in (pin.p1, pin.p2)]
         draw.line([(p.x, p.y) for p in line], fill=self.fg)
@@ -204,15 +234,18 @@ class XForm(object):
         tail.prev = xform
 
     def copy(self):
+        """ A deep copy of the xform chain, from the first XForm to here """
         cprev = None
         if self.prev is not None:
             cprev = self.prev.copy()
         return self._copy(cprev)
 
     def _copy(self, previous):
+        """ A copy of just this transformation, appended to `previous` """
         return XForm(previous)
 
 class Shift(XForm):
+    """ Simple shift in cartesian coordinates """
     def __init__(self, dx, dy, prev=None):
         """ A transformation that shifts Points by (dx, dy). """
         XForm.__init__(self, prev)
@@ -226,6 +259,7 @@ class Shift(XForm):
         return Shift(self.dx, self.dy, previous)
 
 class Rotate(XForm):
+    """ Rotation around the origin """
     def __init__(self, theta, prev=None):
         """ A transformation that will rotate a Point theta*pi rads CW. """
         XForm.__init__(self, prev)
@@ -240,6 +274,7 @@ class Rotate(XForm):
         return Rotate(self.theta, previous)
 
 class Scale(XForm):
+    """ Linear scaling """
     def __init__(self, scale, prev=None):
         XForm.__init__(self, prev)
         self.scale = scale
@@ -251,8 +286,11 @@ class Scale(XForm):
         return Scale(self.scale, previous)
 
 class FixY(XForm):
+    """ Compensate for difference in origin between upverter and PIL """
     def __init__(self, ymax, prev=None):
-        self.ymax, self.prev = ymax, prev
+        """ Will transform Points from bottom-left origin to top-left origin """
+        XForm.__init__(self, prev)
+        self.ymax = ymax
 
     def convert(self, pt):
         return Point(pt.x, self.ymax - pt.y)
