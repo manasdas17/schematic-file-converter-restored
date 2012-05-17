@@ -214,7 +214,7 @@ class ViewDrawBase:
             return 2 * pi - ang
 
         return ('shape', Arc(int(round(xc)), int(round(yc)),
-                             angle(x0,y0) / pi, angle(x2,y2) / pi,
+                             angle(x2,y2) / pi, angle(x0,y0) / pi,
                              int(round(rad))))
 
 
@@ -257,8 +257,8 @@ class ViewDrawSch(ViewDrawBase):
         for net in ckt.nets:
             del net.ibpts
 
-        # too bad designs don't have top-level shapes (yet?)
-        #map(ckt.add_shape, tree['shape'])
+        for shape in tree['shape']:
+            ckt.add_shape(shape)
         
         for lbl in [s for s in tree['shapes'] if isinstance(s, Label)]:
             ann = Annotation(lbl.text, lbl.x, lbl.y, lbl.rotation, True)
