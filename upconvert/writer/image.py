@@ -125,8 +125,8 @@ class Render:
         box = (min(xs), min(ys), max(xs), max(ys))
 
         # 3 o'clock is angle of 0, angles increase clockwise
-        (start, end) = [int(180/pi * (theta + rot*(-pi))) for theta in
-                        [arc.end_angle, arc.start_angle]]
+        start, end = [int(180 * (theta + rot)) for theta in
+                      [arc.start_angle, arc.end_angle]]
         draw.arc(box, start, end, fill=self.fg)
 
     def draw_shape_rectangle(self, rect, xform, draw):
@@ -169,7 +169,7 @@ class Render:
                                           t**3 * p3.y)
 
         for i in xrange(0, int(1./dt)):
-            draw.point((Bx(i * dt), By(i * t)), fill=self.fg)
+            draw.point((Bx(i * dt), By(i * dt)), fill=self.fg)
         # make sure to draw in the endpoint
         draw.point((Bx(1.), By(1.)), fill=self.fg)
 
