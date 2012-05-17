@@ -36,8 +36,8 @@ class Render:
         self.img = Image.new('RGB', (int((maxpt.x - minpt.x) * self.scale),
                                      int((maxpt.y - minpt.y) * self.scale)),
                              self.bg)
-        self.base = Shift(-minpt.x * self.scale, -minpt.y * self.scale,
-                          Scale(self.scale, FixY(maxpt.y - minpt.y)))
+        self.base = Scale(self.scale, FixY(maxpt.y - minpt.y, Shift(-minpt.x,
+                                                                    -minpt.y)))
         self.draw = ImageDraw.Draw(self.img)
 
     def save(self, filename):
