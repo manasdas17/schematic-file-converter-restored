@@ -315,6 +315,14 @@ class Label(Shape):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
 
+    def min_point(self):
+        """ As a hack, return the label's position. """
+        return Point(self.x, self.y)
+
+    def max_point(self):
+        """ As a hack, return the label's position. """
+        return Point(self.x, self.y)
+
 
     def json(self):
         """ Return the label as JSON """
