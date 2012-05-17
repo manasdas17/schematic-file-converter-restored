@@ -16,7 +16,7 @@ class Render:
                                      int((maxpt.y - minpt.y) * self.scale)),
                              self.bg)
         self.base = Shift(-minpt.x * self.scale, -minpt.y * self.scale,
-                          Scale(self.scale))
+                          Scale(self.scale, FixY(maxpt.y - minpt.y)))
         self.draw = ImageDraw.Draw(self.img)
 
     def save(self, filename):
@@ -249,3 +249,13 @@ class Scale(XForm):
 
     def _copy(self, previous):
         return Scale(self.scale, previous)
+
+class FixY(XForm):
+    def __init__(self, ymax, prev=None):
+        self.ymax, self.prev = ymax, prev
+
+    def convert(self, pt):
+        return Point(pt.x, self.ymax - pt.y)
+
+    def _copy(self, previous):
+        return FixY(self.ymax, previous)
