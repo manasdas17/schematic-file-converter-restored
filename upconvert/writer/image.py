@@ -15,6 +15,8 @@ class Render:
         self.img = Image.new('RGB', (int((maxpt.x - minpt.x) * self.scale),
                                      int((maxpt.y - minpt.y) * self.scale)),
                              self.bg)
+        self.base = Shift(-minpt.x * self.scale, -minpt.y * self.scale,
+                          Scale(self.scale))
         self.draw = ImageDraw.Draw(self.img)
 
     def save(self, filename):
@@ -23,8 +25,6 @@ class Render:
 
     def draw_ckt(self):
         """ Render the image into self.img """
-        scale = Scale(self.scale)
-        
         # start off with all the component instances
         for ci in self.des.component_instances:
             c = self.des.components.components[ci.library_id]
@@ -32,20 +32,21 @@ class Render:
                                   ci.symbol_attributes):
                 # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
-                self.draw_sym(body, scale.chain(pos), attr.rotation,
-                              False, scale, self.draw)
+                self.draw_sym(body, pos, attr.rotation,
+                              self.base, self.draw)
                 # draw in any annotations
                 for ann in attr.annotations:
                     if ann.visible:
-                        pos = scale.chain(Point(ann.x, ann.y))
+                        pos = self.base.chain(Point(ann.x, ann.y))
                         self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
 
-        #for sh in self.des.shapes:
-        #    if sh.type == 'arc':
-        #        # special case, it needs a rotation passed, even for 0
-        #        self.draw_shape_arc(sh, scale, 0, self.draw)
-        #    else:
-        #        getattr(self, 'draw_shape_%s' % sh.type)(sh, scale, self.draw)
+        for sh in self.des.shapes:
+            if sh.type == 'arc':
+                # special case, it needs a rotation passed, even for 0
+                self.draw_shape_arc(sh, self.base, 0, self.draw)
+            else:
+                getattr(self, 'draw_shape_%s' % sh.type)(sh, self.base,
+                                                         self.draw)
 
         for net in self.des.nets:
             # need a second dict so that removing nets as they are drawn does
@@ -53,9 +54,9 @@ class Render:
             connects = dict([(pt.point_id, list(pt.connected_points))
                              for pt in net.points.values()])
             for pid, connlist in connects.items():
-                pidpt = scale.chain(net.points[pid])
+                pidpt = self.base.chain(net.points[pid])
                 for junc in connlist:
-                    juncpt = scale.chain(net.points[junc])
+                    juncpt = self.base.chain(net.points[junc])
                     # draw a line to each connected point from this junction
                     self.draw.line([(pidpt.x, pidpt.y),
                                     (juncpt.x, juncpt.y)],
@@ -66,25 +67,26 @@ class Render:
                     #      (may actually be done)
                     # TODO draw solder dots on net connections
             for ann in net.annotations:
-                pos = scale.chain(Point(ann.x, ann.y))
+                pos = self.base.chain(Point(ann.x, ann.y))
                 self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
 
         for ann in self.des.design_attributes.annotations:
             if ann.visible:
-                pos = scale.chain(Point(ann.x, ann.y))
+                pos = self.base.chain(Point(ann.x, ann.y))
                 self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
     
-    def draw_sym(self, body, offset=Point(0,0), rot=0, flip=False,
-                 xform=None, draw=None):
+    def draw_sym(self, body, offset=None, rot=0, xform=None, draw=None):
         """draw a symbol at the location of offset"""
         if xform is None:
             xform = XForm()
+        else:
+            xform = xform.copy()
+        if offset is None:
+            offset = Point(0, 0)
         # rotate the symbol, then shift. Want to rotate before it's been
         # moved away from the global origin.
-        xform = Shift(offset.x, offset.y, Rotate(rot, xform))
-        # The following is for when flipped symbols are available
-        if flip:
-            xform = FlipY(xform)
+        locxform = Shift(offset.x, offset.y, Rotate(rot))
+        xform.prefix(locxform)
         draw = draw or self.draw
 
         for shape in body.shapes:
@@ -194,6 +196,22 @@ class XForm(object):
         # default transformation is to do nothing
         return Point(pt)
 
+    def prefix(self, xform):
+        """ Put another transformation at the start of this chain. """
+        tail = self
+        while tail.prev != None:
+            tail = tail.prev
+        tail.prev = xform
+
+    def copy(self):
+        cprev = None
+        if self.prev is not None:
+            cprev = self.prev.copy()
+        return self._copy(cprev)
+
+    def _copy(self, previous):
+        return XForm(previous)
+
 class Shift(XForm):
     def __init__(self, dx, dy, prev=None):
         """ A transformation that shifts Points by (dx, dy). """
@@ -203,6 +221,9 @@ class Shift(XForm):
     def convert(self, pt):
         return Point(pt.x + self.dx,
                      pt.y + self.dy)
+
+    def _copy(self, previous):
+        return Shift(self.dx, self.dy, previous)
 
 class Rotate(XForm):
     def __init__(self, theta, prev=None):
@@ -215,10 +236,8 @@ class Rotate(XForm):
         return Point(int(round(cos_t * pt.x - sin_t * pt.y)),
                      int(round(sin_t * pt.x + cos_t * pt.y)))
 
-class FlipY(XForm):
-    """ A transformation to flip around the y axis. """
-    def convert(self, pt):
-        return Point(0 - pt.x, pt.y)
+    def _copy(self, previous):
+        return Rotate(self.theta, previous)
 
 class Scale(XForm):
     def __init__(self, scale, prev=None):
@@ -227,3 +246,6 @@ class Scale(XForm):
 
     def convert(self, pt):
         return Point(int(pt.x * self.scale), int(pt.y * self.scale))
+
+    def _copy(self, previous):
+        return Scale(self.scale, previous)
