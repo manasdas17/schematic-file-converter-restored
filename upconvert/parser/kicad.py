@@ -397,6 +397,10 @@ class ComponentParser(object):
                     else:
                         body.add_shape(obj)
 
+        for symbol in self.component.symbols:
+            for body in symbol.bodies:
+                body.pins.sort(key=lambda pin : pin.pin_number)
+
         return self.component
 
 
