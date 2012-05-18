@@ -261,6 +261,11 @@ class KiCAD(object):
 
             nets.append(newnet)
 
+        for net in nets:
+            net.net_id = min(net.points)
+
+        nets.sort(key=lambda net : net.net_id)
+
         return nets
 
 
