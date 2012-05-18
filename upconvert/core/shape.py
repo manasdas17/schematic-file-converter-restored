@@ -25,7 +25,7 @@ from math import sqrt, pi, sin, cos, asin, acos
 
 class Shape(object):
     """a Shape with metadata and a list of shape parts
-    Iternal representation of the shapes closely matches JSON shapes """
+    Internal representation of the shapes closely matches JSON shapes """
 
     def __init__(self):
         self.type = None
