@@ -299,7 +299,7 @@ $EndDescr
 
         return ('X %s %s %d %d %d %s 60 60 %%(unit)d %%(convert)d B\n' %
                 (name, pin.pin_number, make_length(x), make_length(y),
-                 abs(length), direction))
+                 make_length(abs(length)), direction))
 
 
     def write_library_footer(self, f):
