@@ -67,28 +67,9 @@ from upconvert.core import components
 from upconvert.core.shape import Point
 from upconvert.core.annotation import Annotation
 
+from upconvert.parser import geda_commands
 from upconvert.parser.geda import GEDAError
 from upconvert.parser.geda import find_symbols
-
-
-class GEDAColor:
-    """ Enumeration of gEDA colors """
-    BACKGROUND_COLOR = 0
-    PIN_COLOR = 1
-    NET_ENDPOINT_COLOR = 2
-    GRAPHIC_COLOR = 3
-    NET_COLOR = 4
-    ATTRIBUTE_COLOR = 5
-    LOGIC_BUBBLE_COLOR = 6
-    DOTS_GRID_COLOR = 7
-    DETACHED_ATTRIBUTE_COLOR = 8
-    TEXT_COLOR = 9
-    BUS_COLOR = 10
-    SELECT_COLOR = 11
-    BOUNDINGBOX_COLOR = 12
-    ZOOM_BOX_COLOR = 13
-    STROKE_COLOR = 14
-    LOCK_COLOR = 15
 
 
 class GEDA:
@@ -147,22 +128,23 @@ class GEDA:
             another. It expects a *point* object providing a *x* and
             *y* attribute.
         """
-        ## create an offset of 5 grid squares from origin (0,0)
-        self.offset.x = point.x - 500
-        self.offset.y = point.y - 500
+        self.offset.x = point.x
+        self.offset.y = point.y
 
     def write(self, design, filename):
         """ Write the design to the gEDA format """
         self.component_library = dict()
 
+        attrs = design.design_attributes.attributes
+        self.offset.x = attrs.get('_geda_offset_x', 0)
+        self.offset.y = attrs.get('_geda_offset_y', 0)
+
         ## setup project environment
         self.create_project_files(filename)
 
-        output = []
-
-        component = design.components.components.pop('UNASSIGNED_SHAPES', None)
-        if component is not None:
-            output += self.generate_body_commands(component.symbols[0].bodies[0])
+        ## generate GEDA commands for all top-level shapes/pins
+        ## in the current design
+        output = self.generate_body_commands(design)
 
         ## create symbol files for components writing all symbols
         ## to local 'symbols' directory. Symbols that are available
@@ -239,9 +221,6 @@ class GEDA:
             mirrored = 0
             if '_MIRRORED' in instance.library_id:
                 mirrored = 1
-
-            if instance.library_id == 'UNASSIGNED_SHAPES':
-                continue
 
             ## retrieve symbol for instance
             component_symbol = self.component_library[(
@@ -407,17 +386,25 @@ class GEDA:
         """
         commands = []
 
-        if self.is_valid_path(body):
-            commands += self._create_path(body)
-        else:
-            for new_shape in body.shapes:
-                method_name = '_convert_%s' % new_shape.type
-                if hasattr(self, method_name):
-                    commands += getattr(self, method_name)(new_shape)
-                else:
-                    raise GEDAError(
-                        "invalid shape '%s' in component" % new_shape.type
-                    )
+        id_param = geda_commands.GEDAExtraParameter('id')
+        ## extract paths
+        paths = {}
+        for shape_ in body.shapes:
+            path_id = shape_.styles.get(id_param.name, None)
+            paths.setdefault(path_id, []).append(shape_)
+
+        for shape_ in paths.get(None, []):
+            method_name = '_convert_%s' % shape_.type
+            if hasattr(self, method_name):
+                commands += getattr(self, method_name)(shape_)
+            else:
+                raise GEDAError(
+                    "invalid shape '%s' in component" % shape_.type
+                )
+
+        for path_id in paths:
+            if path_id is not None:
+                commands += self._create_path(paths[path_id])
 
         ## create commands for pins
         for pin_seq, pin in enumerate(body.pins):
@@ -505,28 +492,32 @@ class GEDA:
         """
         commands = []
 
+        title_frame = design_attributes.attributes.pop(
+            '_geda_titleframe',
+            None,
+        )
+
+        if title_frame is None:
+            return []
+
         commands += self._create_component(
-            self.offset.x,
-            self.offset.y,
-            design_attributes.attributes.pop(
-                '_geda_titleframe',
-                'title-B'
-            ) + '.sym'
+            0, 0, # use 0, 0 as coordinates will be converted in component
+            title_frame + '.sym',
         )
 
         if design_attributes.metadata.owner:
             commands += self._create_text(
                 design_attributes.metadata.owner,
-                self.offset.x+1390,
-                self.offset.y+10,
+                1390,
+                10,
                 size=10
             )
 
         if design_attributes.metadata.name:
             commands += self._create_text(
                 design_attributes.metadata.name,
-                self.offset.x+1010,
-                self.offset.y+80,
+                1010,
+                80,
                 size=20
             )
 
@@ -534,12 +525,11 @@ class GEDA:
             commands += self._create_attribute(
                 '_use_license',
                 design_attributes.metadata.license,
-                self.offset.x,
-                self.offset.y,
+                0, 0
             )
 
         ## set coordinates at offset for design attributes
-        attr_x, attr_y = self.offset.x, self.offset.y
+        attr_x, attr_y = 0, 0
         for key, value in design_attributes.attributes.items():
             commands += self._create_attribute(
                 key, value,
@@ -559,14 +549,12 @@ class GEDA:
             Returns a list of gEDA commands without linebreaks.
         """
         x, y = self.conv_coords(x, y)
-        return [
-            'C %d %d 0 %d %d %s' % (
-                x, y,
-                self.conv_angle(angle),
-                mirrored,
-                basename
-            )
-        ]
+        return geda_commands.GEDAComponentCommand().generate_command(
+            x=x, y=y,
+            angle=self.conv_angle(angle),
+            mirror=mirrored,
+            basename=basename
+        )
 
     def _create_attribute(self, key, value, x, y, **kwargs):
         """ Creates a gEDA attribute command from *key* and *value*
@@ -587,7 +575,7 @@ class GEDA:
 
         text = "%s=%s" % (unicode(key), unicode(value))
 
-        kwargs['color'] = GEDAColor.ATTRIBUTE_COLOR
+        kwargs['style_color'] = geda_commands.GEDAColor.ATTRIBUTE_COLOR
 
         return self._create_text(text, x, y, **kwargs)
 
@@ -603,19 +591,16 @@ class GEDA:
 
         assert(isinstance(text, types.ListType))
 
-        alignment = self.ALIGNMENT[kwargs.get('alignment', 'left')]
-        text_line = 'T %d %d %d %d %d %d %d %d %d' % (
-            self.x_to_mils(x),
-            self.y_to_mils(y),
-            kwargs.get('color', GEDAColor.TEXT_COLOR),
-            kwargs.get('size', 10),
-            kwargs.get('visibility', 1),
-            1, #show_name_value is always '0'
-            self.conv_angle(kwargs.get('angle', 0)),
-            alignment,
-            len(text),
-        )
-        return [text_line] + text
+        kwargs.update({
+            'x': self.x_to_mils(x),
+            'y': self.y_to_mils(y),
+            'angle': self.conv_angle(kwargs.get('angle', 0)),
+            'alignment': self.ALIGNMENT[kwargs.get('alignment', 'left')],
+            'num_lines': len(text),
+        })
+
+        commands = geda_commands.GEDATextCommand().generate_command(**kwargs)
+        return commands + text
 
     def _create_pin(self, pin_seq, pin):
         """ Creates a pin command followed by the mandatory
@@ -630,16 +615,15 @@ class GEDA:
         assert(issubclass(pin.__class__, components.Pin))
 
         connected_x, connected_y = pin.p2.x, pin.p2.y
+        kwargs = {
+            "x1": self.x_to_mils(connected_x),
+            "y1": self.y_to_mils(connected_y),
+            "x2": self.x_to_mils(pin.p1.x),
+            "y2": self.y_to_mils(pin.p1.y),
+        }
+        kwargs.update(pin.styles)
 
-        command = ['P %d %d %d %d %d %d %d' % (
-            self.x_to_mils(connected_x),
-            self.y_to_mils(connected_y),
-            self.x_to_mils(pin.p1.x),
-            self.y_to_mils(pin.p1.y),
-            GEDAColor.PIN_COLOR,
-            0, #pin type is always 0
-            0, #first point is active/connected pin
-        )]
+        command = geda_commands.GEDAPinCommand().generate_command(**kwargs)
 
         command.append('{')
 
@@ -685,13 +669,14 @@ class GEDA:
         if annotation.value.startswith('{{'):
             return []
 
-        return self._create_text(
-            annotation.value,
-            annotation.x,
-            annotation.y,
+        kwargs = dict(
+            text=annotation.value,
+            x=annotation.x,
+            y=annotation.y,
             angle=annotation.rotation,
-            visibility=annotation.visible in (True, 'true'),
+            visibility=bool(annotation.visible in (True, 'true')),
         )
+        return self._create_text(**kwargs)
 
     def _convert_arc(self, arc):
         """ Converts Arc object in *arc* into a gEDA arc command.
@@ -706,15 +691,14 @@ class GEDA:
         if sweep_angle < 0:
             sweep_angle = 360 + sweep_angle
 
-        return [
-            'A %d %d %d %d %d %d 10 0 0 -1 -1' % (
-                x, y,
-                self.to_mils(arc.radius),
-                start_angle,
-                sweep_angle,
-                GEDAColor.GRAPHIC_COLOR,
-            )
-        ]
+        kwargs = dict(
+            x=x, y=y,
+            radius=self.to_mils(arc.radius),
+            startangle=start_angle,
+            sweepangle=sweep_angle,
+        )
+        kwargs.update(arc.styles)
+        return geda_commands.GEDAArcCommand().generate_command(**kwargs)
 
     def _convert_circle(self, circle):
         """ Converts Circle object in *circle* to gEDA circle command.
@@ -724,13 +708,13 @@ class GEDA:
         assert(issubclass(circle.__class__, shape.Circle))
 
         center_x, center_y = self.conv_coords(circle.x, circle.y)
-        return [
-            'V %d %d %d 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
-                center_x,
-                center_y,
-                self.to_mils(circle.radius)
-            )
-        ]
+        kwargs = dict(
+            x=center_x,
+            y=center_y,
+            radius=self.to_mils(circle.radius)
+        )
+        kwargs.update(circle.styles)
+        return geda_commands.GEDACircleCommand().generate_command(**kwargs)
 
     def _convert_rounded_rectangle(self, rect):
         """ Converts RoundedRectangle object into gEDA rectangle command.
@@ -744,23 +728,19 @@ class GEDA:
 
             Returns gEDA command (without trailing line break) as list.
         """
-        assert(issubclass(
-            rect.__class__,
-            (
-                shape.Rectangle, shape.RoundedRectangle
-            )
-        ))
+        assert(issubclass(rect.__class__, (shape.Rectangle,
+                                           shape.RoundedRectangle)))
+
         top_x, top_y = self.conv_coords(rect.x, rect.y)
         width, height = self.to_mils(rect.width), self.to_mils(rect.height)
-        return [
-            'B %d %d %d %d 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1' % (
-                ## gEDA uses bottom-left corner as rectangle origin
-                top_x,
-                (top_y - height),
-                width,
-                height
-            )
-        ]
+        kwargs = dict(
+            x=top_x,
+            y=(top_y - height),
+            width=width,
+            height=height
+        )
+        kwargs.update(rect.styles)
+        return geda_commands.GEDABoxCommand().generate_command(**kwargs)
 
     def _convert_line(self, line):
         """ Converts Line object in *line* to gEDA command.
@@ -771,27 +751,31 @@ class GEDA:
 
         start_x, start_y = self.conv_coords(line.p1.x, line.p1.y)
         end_x, end_y = self.conv_coords(line.p2.x, line.p2.y)
-        return [
-            'L %d %d %d %d 3 10 0 0 -1 -1' % (
-                start_x,
-                start_y,
-                end_x,
-                end_y
-            )
-        ]
+
+        kwargs = dict(
+            x1=start_x,
+            y1=start_y,
+            x2=end_x,
+            y2=end_y
+        )
+        kwargs.update(line.styles)
+        return geda_commands.GEDALineCommand().generate_command(**kwargs)
 
     def _convert_label(self, label):
         """ Converts Label object in *label* to gEDA command.
             Returns gEDA command (without line break) as list.
         """
         assert(issubclass(label.__class__, shape.Label))
-        return self._create_text(
-            label.text,
-            label.x,
-            label.y,
+
+        kwargs = dict(
+            text=label.text,
+            x=label.x,
+            y=label.y,
             alignment=label.align,
             angle=label.rotation,
         )
+        kwargs.update(label.styles)
+        return self._create_text(**kwargs)
 
     def _create_segment(self, np1, np2, attributes=None, net_name=None):
         """ Creates net segment from NetPoint *np1* to
@@ -803,13 +787,11 @@ class GEDA:
         """
         np1_x, np1_y = self.conv_coords(np1.x, np1.y)
         np2_x, np2_y = self.conv_coords(np2.x, np2.y)
-        command = [
-            'N %d %d %d %d %d' % (
-                np1_x, np1_y,
-                np2_x, np2_y,
-                GEDAColor.NET_COLOR
-            )
-        ]
+
+        command = geda_commands.GEDASegmentCommand().generate_command(
+            x1=np1_x, y1=np1_y,
+            x2=np2_x, y2=np2_y,
+        )
 
         if attributes is None:
             attributes = {}
@@ -836,7 +818,9 @@ class GEDA:
             Returns a list of gEDA commands without trailing linebreaks.
         """
         num_lines = len(polygon.points)+1 ##add closing command to polygon
-        commands = ['H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 %d' % num_lines]
+        commands = geda_commands.GEDAPathCommand().generate_command(
+            num_lines=num_lines
+        )
 
         start_x, start_y = polygon.points[0].x, polygon.points[0].y
         commands.append('M %d,%d' % self.conv_coords(start_x, start_y))
@@ -848,14 +832,13 @@ class GEDA:
 
         return commands
 
-    def _create_path(self, path):
+    def _create_path(self, shapes):
         """ Creates a set of gEDA commands for *path*.
 
             Returns gEDA commands without trailing linebreaks as list.
         """
         num_lines = 1
-
-        shapes = list(path.shapes) #create new list to be able to modify
+        shapes = list(shapes) #create new list to be able to modify
 
         current_x, current_y = self.conv_coords(
             shapes[0].p1.x,
@@ -911,9 +894,13 @@ class GEDA:
 
             num_lines += 1
 
-        return [
-            'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 %d' % num_lines,
-        ] + command + close_command
+        kwargs = {
+            'num_lines': num_lines,
+        }
+        kwargs.update(shape_obj.styles)
+        return geda_commands.GEDAPathCommand().generate_command(
+            **kwargs
+        ) + command + close_command
 
     def _convert_bezier(self, curve):
         """ Converts BezierCurve object in *curve* to gEDA curve command.
@@ -926,13 +913,19 @@ class GEDA:
 
         p2_x, p2_y = self.conv_coords(curve.p2.x, curve.p2.y)
         c2_x, c2_y = self.conv_coords(curve.control2.x, curve.control2.y)
-        command = [
-            'H 3 10 0 0 -1 -1 0 -1 -1 -1 -1 -1 2',
+
+        path_commands = [
             'M %d,%d' % (p1_x, p1_y),
             'C %d,%d %d,%d %d,%d' % (c1_x, c1_y, c2_x, c2_y, p2_x, p2_y)
         ]
 
-        return command
+        kwargs = {
+            'num_lines': len(path_commands),
+        }
+        kwargs.update(curve.styles)
+        return geda_commands.GEDAPathCommand().generate_command(
+            **kwargs
+        ) + path_commands
 
     @staticmethod
     def is_valid_path(body):
@@ -975,7 +968,7 @@ class GEDA:
 
             Returns a scaled and translated Y coordinate in MILS.
         """
-        value = (y_px - self.offset.y) * self.SCALE_FACTOR
+        value = (y_px * self.SCALE_FACTOR) + self.offset.y
         return value
 
     def x_to_mils(self, x_px):
@@ -984,7 +977,7 @@ class GEDA:
 
             Returns a scaled and translated X coordinate in MILS.
         """
-        value = (x_px - self.offset.x) * self.SCALE_FACTOR
+        value = (x_px * self.SCALE_FACTOR) + self.offset.x
         return value
 
     @staticmethod

@@ -180,11 +180,11 @@ class JSON:
         pin_number = pin.get('pin_number')
         p1 = self.parse_point(pin.get('p1'))
         p2 = self.parse_point(pin.get('p2'))
+        parsed_pin = Pin(pin_number, p1, p2)
         if pin.get('label') is not None:
-            pin_label = self.parse_label(pin.get('label'))
-            return Pin(pin_number, p1, p2, pin_label)
-        return Pin(pin_number, p1, p2)
-
+            parsed_pin.label = self.parse_label(pin.get('label'))
+        parsed_pin.styles = pin.get('styles') or {}
+        return parsed_pin
 
     def parse_point(self, point):
         """ Extract a point. """
@@ -199,7 +199,9 @@ class JSON:
         text = label.get('text')
         align = label.get('align')
         rotation = float(label.get('rotation'))
-        return Label(x, y, text, align, rotation)
+        parsed_label = Label(x, y, text, align, rotation)
+        parsed_label.styles = label.get('styles') or {}
+        return parsed_label
 
     def parse_shape(self, shape):
         """ Extract a shape. """
@@ -212,49 +214,51 @@ class JSON:
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
-            return Rectangle(x, y, width, height)
+            parsed_shape = Rectangle(x, y, width, height)
         elif 'rounded_rectangle' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
             radius = int(shape.get('radius'))
-            return RoundedRectangle(x, y, width, height, radius)
+            parsed_shape = RoundedRectangle(x, y, width, height, radius)
         elif 'arc' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             start_angle = float(shape.get('start_angle'))
             end_angle = float(shape.get('end_angle'))
             radius = int(shape.get('radius'))
-            return Arc(x, y, start_angle, end_angle, radius)
+            parsed_shape = Arc(x, y, start_angle, end_angle, radius)
         elif 'circle' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             radius = int(shape.get('radius'))
-            return Circle(x, y, radius)
+            parsed_shape = Circle(x, y, radius)
         elif 'label' == typ:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             rotation = float(shape.get('rotation'))
             text = shape.get('text')
             align = shape.get('align')
-            return Label(x, y, text, align, rotation)
+            parsed_shape = Label(x, y, text, align, rotation)
         elif 'line' == typ:
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
-            return Line(p1, p2)
+            parsed_shape = Line(p1, p2)
         elif 'polygon' == typ:
-            poly = Polygon()
+            parsed_shape = Polygon()
             for point in shape.get('points'):
-                poly.add_point(self.parse_point(point))
-            return poly
+                parsed_shape.add_point(self.parse_point(point))
         elif 'bezier' == typ:
             control1 = self.parse_point(shape.get('control1'))
             control2 = self.parse_point(shape.get('control2'))
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
-            return BezierCurve(control1, control2, p1, p2)
+            parsed_shape = BezierCurve(control1, control2, p1, p2)
 
+        parsed_shape.styles = shape.get('styles') or {}
+        parsed_shape.attributes = shape.get('attributes') or {}
+        return parsed_shape
 
     def parse_design_attributes(self, design_attributes):
         """ Extract design attributes. """

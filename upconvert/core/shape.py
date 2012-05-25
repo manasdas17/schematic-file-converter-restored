@@ -30,8 +30,9 @@ class Shape(object):
     def __init__(self):
         self.type = None
         self.attributes = dict()
-    
-    
+        self.styles = dict()
+
+
     def add_attribute(self, key, value):
         """ Add attribute to a shape """
         self.attributes[key] = value
@@ -40,13 +41,13 @@ class Shape(object):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         raise NotImplementedError("Not implemented")
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         raise NotImplementedError("Not implemented")
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         raise NotImplementedError("Not implemented")
@@ -62,8 +63,8 @@ class Rectangle(Shape):
         self.y = y
         self.width = width
         self.height = height
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -73,8 +74,8 @@ class Rectangle(Shape):
         """ Return the min point of the shape """
         return Point(min(self.x, self.x + self.width),
                      min(self.y, self.y + self.height))
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         return Point(max(self.x, self.x + self.width),
@@ -97,6 +98,7 @@ class Rectangle(Shape):
             "width": self.width,
             "x": self.x,
             "y": self.y,
+            "styles": self.styles,
             }
 
 
@@ -123,8 +125,8 @@ class RoundedRectangle(Shape):
         """ Return the min point of the shape """
         return Point(min(self.x, self.x + self.width),
                      min(self.y, self.y + self.height))
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         return Point(max(self.x, self.x + self.width),
@@ -149,6 +151,7 @@ class RoundedRectangle(Shape):
             "x": self.x,
             "y": self.y,
             "radius": self.radius,
+            "styles": self.styles,
             }
 
 
@@ -164,8 +167,8 @@ class Arc(Shape):
         self.start_angle = start_angle
         self.end_angle = end_angle
         self.radius = radius
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -243,6 +246,7 @@ class Arc(Shape):
             "radius": self.radius,
             "x": self.x,
             "y": self.y,
+            "styles": self.styles,
             }
 
 
@@ -255,8 +259,8 @@ class Circle(Shape):
         self.x = x
         self.y = y
         self.radius = abs(radius)
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -267,8 +271,8 @@ class Circle(Shape):
         x = self.x - self.radius
         y = self.y - self.radius
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self.radius
@@ -283,6 +287,7 @@ class Circle(Shape):
             "type": self.type,
             "x": self.x,
             "y": self.y,
+            "styles": self.styles,
             }
 
 
@@ -309,8 +314,8 @@ class Label(Shape):
         else:
             raise ValueError("Label requires the align to be either " +
                     "\"left\", \"right\", or \"center\" ")
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -325,6 +330,7 @@ class Label(Shape):
             "text": self.text,
             "x": self.x,
             "y": self.y,
+            "styles": self.styles,
             }
 
 
@@ -336,8 +342,8 @@ class Line(Shape):
         self.type = "line"
         self.p1 = Point(p1)
         self.p2 = Point(p2)
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -352,8 +358,8 @@ class Line(Shape):
         if self.p2.y < y:
             y = self.p2.y
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.p1.x
@@ -372,6 +378,7 @@ class Line(Shape):
             "p1": self.p1.json(),
             "p2": self.p2.json(),
             "attributes" : self.attributes,
+            "styles": self.styles,
             }
 
 
@@ -383,7 +390,7 @@ class Polygon(Shape):
         self.type = "polygon"
         self.points = points or list()
 
-    
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -398,8 +405,8 @@ class Polygon(Shape):
             x = min([pt.x for pt in self.points])
             y = min([pt.y for pt in self.points])
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         if len(self.points) < 1:
@@ -421,6 +428,7 @@ class Polygon(Shape):
         return {
             "type": self.type,
             "points": [point.json() for point in self.points],
+            "styles": self.styles,
             }
 
 
@@ -435,7 +443,7 @@ class BezierCurve(Shape):
         self.p1 = Point(p1)
         self.p2 = Point(p2)
         self._memo_cache = {'min_point': {}, 'max_point': {}}
-    
+
 
     def _line(self):
         """ Convert the curve into a set of points. """
@@ -461,7 +469,7 @@ class BezierCurve(Shape):
                                                 range(int(maxpath) + 1)]]
         return points
 
-    
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -511,6 +519,7 @@ class BezierCurve(Shape):
             "control2": self.control2.json(),
             "p1": self.p1.json(),
             "p2": self.p2.json(),
+            "styles": self.styles,
             }
 
 
@@ -541,15 +550,15 @@ class Moire(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
         y = self.y - self._half_box()
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self._half_box()
@@ -576,9 +585,10 @@ class Moire(Shape):
             "max_rings": self.max_rings,
             "hair_thickness": self.hair_thickness,
             "hair_length": self.hair_length,
-            "rotation": self.rotation
+            "rotation": self.rotation,
+            "styles": self.styles,
             }
-        
+
 
 class Thermal(Shape):
     """
@@ -602,15 +612,15 @@ class Thermal(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
         y = self.y - self._half_box()
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self._half_box()
@@ -641,7 +651,8 @@ class Thermal(Shape):
             "outer_diameter": self.outer_diameter,
             "inner_diameter": self.inner_diameter,
             "gap_thickness": self.gap_thickness,
-            "rotation": self.rotation
+            "rotation": self.rotation,
+            "styles": self.styles,
             }
 
 
@@ -666,15 +677,15 @@ class RegularPolygon(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x + self._max_dist(1)
         y = self.y + self._max_dist(0.5)
         return Point(x, y)
 
-    
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self._max_dist(0)
@@ -702,7 +713,8 @@ class RegularPolygon(Shape):
             "y": self.y,
             "outer_diameter": self.outer_diameter,
             "vertices": self.vertices,
-            "rotation": self.rotation
+            "rotation": self.rotation,
+            "styles": self.styles,
             }
 
 
@@ -757,7 +769,7 @@ class Point:
         """ Return the point as JSON """
         return {
             "x": self.x,
-            "y": self.y
+            "y": self.y,
             }
 
 
@@ -771,8 +783,8 @@ class Obround(Shape):
         self.y = y
         self.width = width
         self.height = height
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -783,8 +795,8 @@ class Obround(Shape):
         x = self.x - self.width / 2.0
         y = self.y - self.height / 2.0
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self.width / 2.0
@@ -800,5 +812,6 @@ class Obround(Shape):
             "width": self.width,
             "x": self.x,
             "y": self.y,
+            "styles": self.styles,
             }
 
