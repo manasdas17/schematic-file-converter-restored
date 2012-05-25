@@ -261,6 +261,11 @@ class KiCAD(object):
 
             nets.append(newnet)
 
+        for net in nets:
+            net.net_id = min(net.points)
+
+        nets.sort(key=lambda net : net.net_id)
+
         return nets
 
 
@@ -391,6 +396,10 @@ class ComponentParser(object):
                         [body.add_shape(o) for o in obj]
                     else:
                         body.add_shape(obj)
+
+        for symbol in self.component.symbols:
+            for body in symbol.bodies:
+                body.pins.sort(key=lambda pin : pin.pin_number)
 
         return self.component
 

@@ -241,7 +241,7 @@ class KiCADTests(unittest.TestCase):
 
     def test_parse_field(self):
         """
-        Test that a bad rotation in an X line raises a ValueError.
+        A field description with an embedded quote is parsed correctly.
         """
 
         line = 'F 0 "Reference Designs ARE PROVIDED "AS IS"" H 1150 11950 120 0000 L B'
