@@ -202,14 +202,20 @@ $EndDescr
         component symbol """
         f.write('DRAW\n')
 
-        lines = {} # line template -> (symbol, set([units]), set([converts]))
+        lines = {} # line template -> (order, symbol,
+                   #                   set([units]), set([converts]))
 
         def add_line(line, symbol, unit, convert):
             """ Add a line with a given symbol, unit and convert """
             if line not in lines:
-                lines[line] = (symbol, set(), set())
-            lines[line][1].add(unit)
-            lines[line][2].add(convert)
+                order = (1 if line.startswith('X') else 0,
+                         add_line.next_index)
+                add_line.next_index += 1
+                lines[line] = (order, symbol, set(), set())
+            lines[line][2].add(unit)
+            lines[line][3].add(convert)
+
+        add_line.next_index = 0 # for sorting
 
         for convert, symbol in enumerate(symbols[:2], 1):
             for unit, body in enumerate(symbol.bodies, 1):
@@ -220,7 +226,14 @@ $EndDescr
                 for pin in body.pins:
                     add_line(self.get_pin_line(pin), symbol, unit, convert)
 
-        for line, (symbol, units, converts) in lines.items():
+        # preserve relative order of shapes and pins, shapes first
+        sorted_lines = [(order, line, symbol, units, converts)
+                        for line, (order, symbol, units, converts)
+                        in lines.items()]
+        sorted_lines.sort()
+        sorted_lines = [t[1:] for t in sorted_lines]
+
+        for line, symbol, units, converts in sorted_lines:
             if len(units) == len(symbol.bodies):
                 units = (0,)
             if len(converts) == 2:
