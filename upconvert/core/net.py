@@ -119,7 +119,7 @@ class NetPoint:
             "point_id" : self.point_id,
             "x" : self.x,
             "y" : self.y,
-            "connected_points" : self.connected_points,
+            "connected_points" : sorted(self.connected_points),
             "connected_components" :
                 [comp.json() for comp in self.connected_components]
             }
