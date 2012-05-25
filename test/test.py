@@ -114,6 +114,8 @@ def test_parse_generator(file_path, format):
     return test
 
 
+max_diff_ratios = {'kicad': 0.049}
+
 def test_diff_generator(file_path, format):
     """ Parse the file, write to both openjson and to the given
     format. Then parse the new file in the same format and write that
@@ -156,7 +158,7 @@ def test_diff_generator(file_path, format):
 
         ratio = get_file_diff_ratio(json_path_1, json_path_2)
 
-        self.assertTrue(ratio < 0.05,
+        self.assertTrue(ratio < max_diff_ratios[format],
                         (file_path, tmp_path, json_path_1, json_path_2, ratio))
 
         os.remove(json_path_1)
