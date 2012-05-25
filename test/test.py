@@ -114,7 +114,8 @@ def test_parse_generator(file_path, format):
     return test
 
 
-max_diff_ratios = {'kicad': 0.049}
+max_diff_ratios = {'kicad': 0.049,
+                   'openjson': 0.01}
 
 def test_diff_generator(file_path, format):
     """ Parse the file, write to both openjson and to the given
@@ -251,7 +252,7 @@ def main():
             test = test_parse_generator(f, format)
             setattr(test_class, test_name, test)
 
-            if format not in ('fritzing', 'gerber'):
+            if format in max_diff_ratios:
                 test_name = 'test_%s_%s_%s' % (format, base, 'diff')
                 test = test_diff_generator(f, format)
                 setattr(test_class, test_name, test)
