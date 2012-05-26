@@ -921,6 +921,7 @@ class GEDA:
             self.get_netpoint(pta_x, pta_y),
             self.get_netpoint(ptb_x, ptb_y)
         ))
+
     def _parse_L(self, stream, params):
         """ Creates a Line object from the parameters in *params*. All
             style related parameters are ignored.
@@ -1135,10 +1136,8 @@ class GEDA:
             ## make sure following environments are ignored
             self.skip_embedded_section(stream)
             self._parse_environment(stream)
-
         else:
             self._parse_component(stream, params)
-        return
 
     def _parse_H(self, stream, params):
         """ Parses a SVG-like path provided path into a list
