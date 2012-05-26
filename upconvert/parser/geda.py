@@ -220,8 +220,7 @@ class GEDA:
             symbol_dirs = []
 
         symbol_dirs = symbol_dirs + \
-            [os.path.join(os.path.dirname(__file__), '..',
-                          'library', 'geda')]
+            [os.path.join(os.path.dirname(__file__), '..', 'library', 'geda')]
 
         self.known_symbols = find_symbols(symbol_dirs)
 
@@ -365,9 +364,10 @@ class GEDA:
 
         ## process net segments into nets & net points and add to design
         self.divide_segments()
+
         calculated_nets = self.calculate_nets()
 
-        for cnet in calculated_nets:
+        for cnet in sorted(calculated_nets, key=lambda n : n.net_id):
             self.design.add_net(cnet)
 
         return self.design
@@ -729,7 +729,7 @@ class GEDA:
     def calculate_nets(self):
         """ Calculate connected nets from previously stored segments
             and netpoints. The code has been adapted from the kiCAD
-            parser since the definition of segements in the schematic
+            parser since the definition of segments in the schematic
             file are similar. The segments are checked against
             existing nets and added when they touch it. For this
             to work, it is required that intersecting segments are
@@ -770,7 +770,7 @@ class GEDA:
 
             nets.append(new_net)
 
-        ## check if names are available for calculated nets
+        # check if names are available for calculated nets
         for net_obj in nets:
             for point_id in net_obj.points:
                 ## check for stored net names based on pointIDs
@@ -786,6 +786,10 @@ class GEDA:
                     self.conv_bool(1),
                 )
                 net_obj.add_annotation(annotation)
+
+        for net_obj in nets:
+            if not net_obj.net_id:
+                net_obj.net_id = min(net_obj.points)
 
         return nets
 
