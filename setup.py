@@ -2,7 +2,8 @@
 
 from setuptools import setup, find_packages
 
-packages = find_packages('upconvert', exclude=['test', 'test*', '*.t'])
+packages = ['upconvert.' + p for p in find_packages('upconvert', exclude=['test', 'test*', '*.t'])]
+packages.append('upconvert')
 
 setup(
     name='python-upconvert',
@@ -13,5 +14,4 @@ setup(
     license='Apache 2.0',
     url='https://github.com/upverter/schematic-file-converter',
     packages=packages,
-    package_dir={'':'upconvert'},
 )

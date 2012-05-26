@@ -36,6 +36,7 @@ import time
 
 from os.path import splitext
 
+from upconvert.core.shape import Shape
 from upconvert.parser.kicad import MATRIX2ROTATION, MULT as INMULT
 
 ROTATION2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.items())
@@ -202,25 +203,30 @@ $EndDescr
         component symbol """
         f.write('DRAW\n')
 
-        lines = {} # line template -> (symbol, set([units]), set([converts]))
+        lines = {} # obj -> (order, line, symbol,
+                   #         set([units]), set([converts]))
 
-        def add_line(line, symbol, unit, convert):
+        def add_line(obj, symbol, unit, convert):
             """ Add a line with a given symbol, unit and convert """
-            if line not in lines:
-                lines[line] = (symbol, set(), set())
-            lines[line][1].add(unit)
-            lines[line][2].add(convert)
+            if obj not in lines:
+                order = (0 if isinstance(obj, Shape) else 0,
+                         add_line.next_index)
+                add_line.next_index += 1
+                lines[obj] = (order, self.get_line(obj), symbol, set(), set())
+            lines[obj][3].add(unit)
+            lines[obj][4].add(convert)
+
+        add_line.next_index = 0 # for sorting
 
         for convert, symbol in enumerate(symbols[:2], 1):
             for unit, body in enumerate(symbol.bodies, 1):
                 for shape in body.shapes:
-                    add_line(self.get_shape_line(shape),
-                             symbol, unit, convert)
+                    add_line(shape, symbol, unit, convert)
 
                 for pin in body.pins:
-                    add_line(self.get_pin_line(pin), symbol, unit, convert)
+                    add_line(pin, symbol, unit, convert)
 
-        for line, (symbol, units, converts) in lines.items():
+        for _, line, symbol, units, converts in sorted(lines.values()):
             if len(units) == len(symbol.bodies):
                 units = (0,)
             if len(converts) == 2:
@@ -232,6 +238,12 @@ $EndDescr
 
         f.write('ENDDRAW\n')
 
+    def get_line(self, obj):
+        """ Return the line for a pin or a shape. """
+        if isinstance(obj, Shape):
+            return self.get_shape_line(obj)
+        else:
+            return self.get_pin_line(obj)
 
     def get_shape_line(self, shape):
         """ Return the line for a Shape in a kiCAD cache library """
@@ -299,7 +311,7 @@ $EndDescr
 
         return ('X %s %s %d %d %d %s 60 60 %%(unit)d %%(convert)d B\n' %
                 (name, pin.pin_number, make_length(x), make_length(y),
-                 abs(length), direction))
+                 make_length(abs(length)), direction))
 
 
     def write_library_footer(self, f):
