@@ -24,8 +24,7 @@
 import os
 from unittest import TestCase
 import StringIO
-from upconvert.parser.geda import GEDA, GEDAError, GEDAText, \
-                                  GEDADesign
+from upconvert.parser.geda import GEDA, GEDAError, GEDAText
 
 import upconvert.core.design
 import upconvert.core.shape
@@ -40,22 +39,26 @@ class GEDAEmpty(TestCase):
         assert parser != None
 
 
-class GEDADesignTests(TestCase):
+class GEDATextTests(TestCase):
 
     def test_adding_license_text(self):
+        """ Test adding license text to design from GEDAText """
         geda_text = GEDAText('BSD', attribute='use_license')
-        design = GEDADesign()
-        design.add_geda_text(geda_text)
+        parser = GEDA()
+        design = upconvert.core.design.Design()
+        parser.add_text_to_design(design, geda_text)
 
         self.assertEquals(
             design.design_attributes.metadata.license,
             'BSD'
         )
 
-    def test_adding_license_text(self):
+    def test_adding_attribute_to_design(self):
+        """ Add regular attribute to design from GEDAText """
         geda_text = GEDAText('some text', attribute='test_attr')
-        design = GEDADesign()
-        design.add_geda_text(geda_text)
+        parser = GEDA()
+        design = upconvert.core.design.Design()
+        parser.add_text_to_design(design, geda_text)
 
         self.assertEquals(
             design.design_attributes.attributes['test_attr'],
@@ -221,19 +224,12 @@ sometype=in
         self.assertEquals(attributes, expected_attributes)
 
     def test_parsing_environment_with_invalid_multi_line_attribute(self):
+        """ Test parsing environemt with invalid multi-line attribute """
         no_env = "P 100 600 200 600 1 0 0"
         stream = StringIO.StringIO(no_env)
         attributes = self.geda_parser._parse_environment(stream)
         self.assertEquals(attributes, None)
         self.assertEquals(stream.tell(), 0)
-
-        valid_env = """{
-T 150 650 5 8 1 1 0 6 1
-attribute_label=this is an attribute
-but stretches over multiple lines which
-is invalid in GEDA.
-}"""
-        self.assertEquals(attributes, None)
 
 
 class GEDAAngleConversionTests(GEDATestCase):
@@ -297,7 +293,8 @@ class GEDATests(GEDATestCase):
 
 class GEDATitleParsingTest(GEDATestCase):
 
-    def test__parse_title_frame(self):
+    def test_parse_title_frame(self):
+        """ Test parsing title frame components """
         title_frames = {
             'title-E': (44000, 34000),
             'title-bordered-E': (44000, 34000),
@@ -687,6 +684,7 @@ class GEDAArcParsingTests(GEDATestCase):
         self.assertEquals(arc_obj.end_angle, 1.0)
 
     def test_parse_arc_with_sweepangle_200(self):
+        """ Test parsing arc with sweepangle 200 """
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 44300 49800 500 30 200 3 0 0 0 -1 -1")
         )
@@ -709,6 +707,7 @@ class GEDAArcParsingTests(GEDATestCase):
         self.assertEquals(arc_obj.end_angle, 1.2)
 
     def test_parse_arc_with_sweepangle_291(self):
+        """ Test parsing arc with sweepangle 291 """
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 45100 48400 700 123 291 3 0 0 0 -1 -1")
         )
@@ -722,6 +721,7 @@ class GEDAArcParsingTests(GEDATestCase):
         self.assertEquals(arc_obj.end_angle, 1.7)
 
     def test_parse_arc_with_sweepangle_larger_full_circle(self):
+        """ Test parsing arc larger then full circle """
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 45100 48400 700 123 651 3 0 0 0 -1 -1")
         )
@@ -735,6 +735,7 @@ class GEDAArcParsingTests(GEDATestCase):
         self.assertEquals(arc_obj.end_angle, 1.7)
 
     def test_parse_arc_with_large_sweepangle(self):
+        """ Test parsing arc with large sweepangle """
         typ, params =  self.geda_parser._parse_command(
             StringIO.StringIO("A 0 0 500 30 200 3 0 0 0 -1 -1")
         )
@@ -784,6 +785,7 @@ class GEDABoxParsingTests(GEDATestCase):
             )
 
     def test_parsing_boxes_from_command_with_mirror_flag(self):
+        """ Test parsing boxes from command with mirror flag """
         mirror_test_strings = [
             (
                 "B 100 300 300 500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1",
@@ -873,6 +875,7 @@ z"""
             self.assertEquals(shape.p2.y, end_y)
 
     def test_parse_simple_path_command_with_mirrored_flag(self):
+        """ Test parsing simple path command with mirror flag set """
         simple_example = """H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5
 M 510,240
 L 601,200
@@ -903,6 +906,7 @@ z"""
             self.assertEquals(shape.p2.y, end_y)
 
     def test_parse_curve_path_command(self):
+        """ Test parsing curve path command """
         curve_example = """H 3 0 0 0 -1 -1 0 2 20 100 -1 -1 6
 M 100,100
 L 500,100
@@ -953,6 +957,7 @@ class GEDACircleParsingTests(GEDATestCase):
             )
 
     def test_parse_circles_with_mirror_flag(self):
+        """ Test parsing circles with mirror flag set """
         test_strings = [
             "V 49100 48800 900 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1",
             "V 51200 49000 400 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1",
@@ -1137,6 +1142,7 @@ class GEDAComponentParsingTests(GEDATestCase):
         self.assertEquals(len(component.symbols[0].bodies[0].shapes), 9)
 
     def test_parsing_unknown_component(self):
+        """ Test parsing unknown component """
         self.geda_parser.design = upconvert.core.design.Design()
         stream = StringIO.StringIO('C 18600 21500 1 0 0 invalid.sym')
         component, instance = self.geda_parser._parse_component(
@@ -1150,6 +1156,7 @@ class GEDAComponentParsingTests(GEDATestCase):
 class GEDATopLevelShapeTests(GEDATestCase):
 
     def test_adding_top_level_shapes_to_design(self):
+        """ Test adding top-level shapes to design """
         with open('/tmp/toplevelshapes.sch', 'w') as toplevel_sch:
             toplevel_sch.write("\n".join([
                 "v 20001 2",
@@ -1173,6 +1180,7 @@ class GEDATopLevelShapeTests(GEDATestCase):
 class GEDAStyleTests(GEDATestCase):
 
     def test_attaching_styles_to_shape(self):
+        """ Test attaching style to shape """
         params = {
             'x': 49, 'y': 34,
             'radius': 223,
@@ -1197,6 +1205,7 @@ class GEDAStyleTests(GEDATestCase):
         })
 
     def test_attaching_styles_to_invalid_object(self):
+        """ Test attaching styles to invalid objects """
         import logging
         logging.basicConfig(level=logging.INFO)
         import StringIO

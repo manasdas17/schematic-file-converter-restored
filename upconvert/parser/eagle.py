@@ -31,7 +31,7 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.design import Design
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.components import Component, Symbol, Body, Pin
-from upconvert.core.shape import Point, Line, Label
+from upconvert.core.shape import Point, Line, Label, Arc
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
@@ -2430,6 +2430,56 @@ class Eagle:
         self._parse_netclasses(filehandle)
         return
 
+    @staticmethod
+    def _convert_arc(sarc):
+        """ Converts a Eagle's Arc / FixedArc objects into Arc
+        """
+        _ret_val = None
+
+# calculate radius
+        _xm, _ym = (sarc.x1 + sarc.x2) / 2, (sarc.y1 + sarc.y2) / 2
+        _dm = math.sqrt(math.pow(sarc.x1 - _xm, 2) +
+                math.pow(sarc.y1 -_ym, 2))
+        _radius = abs(_dm / math.sin(math.radians(sarc.curve / 2)))
+
+# calculate start and end angles, beginning
+        _xu = sarc.x1 if sarc.y1 > sarc.y2 else sarc.x2 # upper point's x
+        _am = (math.pi / 2 - math.acos((_xm - _xu) / _dm) + # middle
+                0 if True else (math.pi / 2))
+        if 0 > _am:
+            _am += math.pi
+
+# calculate center
+        (_x1, _y1, _x2, _y2) = ((sarc.x1, sarc.y1, sarc.x2, sarc.y2) 
+                                    if 'counterclockwise' == sarc.direction else 
+                                    (sarc.x2, sarc.y2, sarc.x1, sarc.y1))
+        _mm = _radius * math.cos(math.radians(abs(sarc.curve / 2)))
+        _xcc, _ycc = (abs(abs(_y1) - abs(_ym)) * abs(_mm / _dm), 
+                        abs(abs(_x1) - abs(_xm)) * abs(_mm / _dm)) # x <-> y, for an orthogonal vector
+
+        _xc, _yc = -1., -1.
+        if _x1 >= _xm and _y1 <= _ym: # different operations for an each quadrant
+            _xc, _yc = _xm - _xcc, _ym - _ycc
+        elif _x1 >= _xm and _y1 >= _ym:
+            _xc, _yc = _xm + _xcc, _ym - _ycc
+        elif _x1 <= _xm and _y1 >= _ym:
+            _xc, _yc = _xm + _xcc, _ym + _ycc
+        elif _x1 <= _xm and _y1 <= _ym:
+            _xc, _yc = _xm - _xcc, _ym + _ycc
+
+# calculate start and end angles, end
+        if _x1 <= _xm: # 3rd and 4th quadrants
+            _am += math.pi
+        _astart = _am - math.radians(abs(sarc.curve / 2))
+        _aend = _astart + math.radians(abs(sarc.curve))
+
+        _ret_val = Arc(x=_xc, y=_yc, 
+                    start_angle=(_astart / math.pi), 
+                    end_angle=(_aend / math.pi), 
+                    radius=_radius,
+                    )
+        return _ret_val
+
     def _convert(self):
         """ Converts a set of Eagle objects into Design
         """
@@ -2535,7 +2585,11 @@ class Eagle:
                             _pc += 1
                         else:
                             _sp = None
-                            if isinstance(_ss, Eagle.Wire):
+                            if isinstance(_ss, Eagle.FixedArc): # including Arc
+                                _sp = Eagle._convert_arc(_ss)
+                                _sp.add_attribute('style', _ss.style)
+                                _sp.add_attribute('width', _ss.width)
+                            elif isinstance(_ss, Eagle.Wire):
                                 _sp = Line(p1=Point(_ss.x1, _ss.y1),
                                            p2=Point(_ss.x2, _ss.y2))
                                 _sp.add_attribute('style', _ss.style)
@@ -2569,7 +2623,23 @@ class Eagle:
                     for _cc in _nc.clearances:
                         _net.add_attribute(u'netclearance' + str(_cc[0]), _cc[1])
                 for _ss in _sg.shapes: # wires only for buses, wires + pinrefs + junctions for nets
-                    if isinstance(_ss, Eagle.Wire):
+                    if isinstance(_ss, Eagle.FixedArc): # including Eagle.Arc
+                        _arc = Eagle._convert_arc(_ss)
+
+# now it's the same as wire, but probably some interpolation is required
+                        _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
+                        _p2name = "%s-%s" % (str(_ss.x2), str(_ss.y2))
+
+                        if not _p1name in _net.points:
+                            _net.add_point(NetPoint(_p1name, _ss.x1, _ss.y1))
+                        if not _p2name in _net.points:
+                            _net.add_point(NetPoint(_p2name, _ss.x2, _ss.y2))
+
+                        if not _p2name in _net.points[_p1name].connected_points:
+                            _net.points[_p1name].add_connected_point(_p2name)
+                        if not _p1name in _net.points[_p2name].connected_points:
+                            _net.points[_p2name].add_connected_point(_p1name)
+                    elif isinstance(_ss, Eagle.Wire):
                         _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
                         _p2name = "%s-%s" % (str(_ss.x2), str(_ss.y2))
 

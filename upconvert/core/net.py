@@ -87,7 +87,8 @@ class Net:
             "net_id":self.net_id,
             "attributes":self.attributes,
             "annotations":[ann.json() for ann in self.annotations],
-            "points":[point.json() for point in self.points.values()]
+            "points":sorted([point.json() for point in self.points.values()],
+                            key=lambda point : point.get('point_id'))
             }
 
 
@@ -118,7 +119,7 @@ class NetPoint:
             "point_id" : self.point_id,
             "x" : self.x,
             "y" : self.y,
-            "connected_points" : self.connected_points,
+            "connected_points" : sorted(self.connected_points),
             "connected_components" :
                 [comp.json() for comp in self.connected_components]
             }

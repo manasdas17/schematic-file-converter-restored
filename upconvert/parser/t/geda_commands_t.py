@@ -21,13 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 from unittest import TestCase
-import StringIO
-from upconvert.parser.geda import GEDA, GEDAError
-
-import upconvert.core.design
-import upconvert.core.shape
 
 from upconvert.parser import geda_commands
 
@@ -45,6 +39,7 @@ class GEDACommandTests(TestCase):
         self.command.EXTRA_PARAMETERS = (self.extra_param,)
 
     def test_line_command_parameters(self):
+        """ Testing line command parameters """
         parameter_names = [
             "x1",
             "y1",
@@ -66,6 +61,7 @@ class GEDACommandTests(TestCase):
         )
 
     def test_getting_parameters(self):
+        """ Test getting list of all parameters """
         self.assertItemsEqual([
                 self.param,
                 self.style_param,
@@ -75,18 +71,21 @@ class GEDACommandTests(TestCase):
         )
 
     def test_getting_style_keywords(self):
+        """ Test getting only style keywords. """
         self.assertItemsEqual(
             ['style_test'],
             self.command.get_style_keywords()
         )
 
     def test_getting_style_keywords_without_parameters(self):
+        """ Test getting style keywords with no parameters """
         self.assertItemsEqual(
             [],
             geda_commands.GEDACommand().get_style_keywords()
         )
 
     def test_updating_default_kwargs_with_empty_dict(self):
+        """ Test updating default keywords with empty dictionary """
         defaults = self.command.update_default_kwargs(**{})
         self.assertItemsEqual(
             ['test', 'style_test', 'extra_test'],
@@ -94,6 +93,7 @@ class GEDACommandTests(TestCase):
         )
 
     def test_updating_default_kwargs(self):
+        """ Test updating default keywords with valid dictionary """
         defaults = self.command.update_default_kwargs(**{
             'test': 'test_value',
         })
@@ -106,6 +106,7 @@ class GEDACommandTests(TestCase):
         self.assertEquals(defaults['extra_test'], None)
 
     def test_generated_command_with_default_parameters(self):
+        """ Test generating GEDA command with default parameters """
         command = self.command.generate_command(**{})
         self.assertEquals(len(command), 1)
         self.assertEquals(
@@ -114,6 +115,7 @@ class GEDACommandTests(TestCase):
         )
 
     def test_generated_command_with_set_parameters(self):
+        """ Test generating GEDA command with custom values for parameters """
         command = self.command.generate_command(**{
             'test': 1,
             'style_test': 5,
