@@ -114,8 +114,11 @@ def test_parse_generator(file_path, format):
     return test
 
 
-max_diff_ratios = {'kicad': 0.049,
-                   'openjson': 0.01}
+max_diff_ratios = {
+    'geda': 0.30,
+    'kicad': 0.049,
+    'openjson': 0.0
+    }
 
 def test_diff_generator(file_path, format):
     """ Parse the file, write to both openjson and to the given
@@ -159,7 +162,7 @@ def test_diff_generator(file_path, format):
 
         ratio = get_file_diff_ratio(json_path_1, json_path_2)
 
-        self.assertTrue(ratio < max_diff_ratios[format],
+        self.assertTrue(ratio <= max_diff_ratios[format],
                         (file_path, tmp_path, json_path_1, json_path_2, ratio))
 
         os.remove(json_path_1)
@@ -187,9 +190,13 @@ def main():
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('--fail-fast', action='store_true', default=False)
     parser.add_argument('--unsupported', action='store_true', default=False)
+    parser.add_argument('--test-type', dest='test_types', action='append')
     parser.add_argument('file_types', metavar='input-type', nargs='*')
 
     args = parser.parse_args()
+
+    if not args.test_types:
+        args.test_types = ['parse', 'write', 'autodetect', 'diff']
 
     if 'all' in args.file_types:
         args.file_types = None
@@ -237,6 +244,7 @@ def main():
          'openjson': upverter_upv_files}
 
     test_classes = {}
+
     for format, files in l.iteritems():
         test_class = type('RegressionTest_' + format, (unittest.TestCase,), {})
         test_classes[format] = test_class
@@ -244,15 +252,17 @@ def main():
         for f in files:
             base = os.path.basename(f)
 
-            test_name = 'test_%s_%s_%s' % (format, base, 'detect')
-            test = test_auto_detect_generator(f, format)
-            setattr(test_class, test_name, test)
+            if 'autodetect' in args.test_types:
+                test_name = 'test_%s_%s_%s' % (format, base, 'detect')
+                test = test_auto_detect_generator(f, format)
+                setattr(test_class, test_name, test)
 
-            test_name = 'test_%s_%s_%s' % (format, base, 'parse')
-            test = test_parse_generator(f, format)
-            setattr(test_class, test_name, test)
+            if 'parse' in args.test_types:
+                test_name = 'test_%s_%s_%s' % (format, base, 'parse')
+                test = test_parse_generator(f, format)
+                setattr(test_class, test_name, test)
 
-            if format in max_diff_ratios:
+            if 'diff' in args.test_types and format in max_diff_ratios:
                 test_name = 'test_%s_%s_%s' % (format, base, 'diff')
                 test = test_diff_generator(f, format)
                 setattr(test_class, test_name, test)
@@ -260,7 +270,8 @@ def main():
         for f in upverter_upv_files:
             base = os.path.basename(f)
 
-            if format not in ('fritzing', 'gerber'):
+            if 'write' in args.test_types \
+                    and format not in ('fritzing', 'gerber'):
                 test_name = 'test_%s_%s_%s' % (format, base, 'write')
                 test = test_write_generator(f, format)
                 setattr(test_class, test_name, test)
