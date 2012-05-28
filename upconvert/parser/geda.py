@@ -75,7 +75,6 @@ from upconvert.core.component_instance import SymbolAttribute
 from upconvert.parser import geda_commands
 
 # Logging
-logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('parser.geda')
 
 
