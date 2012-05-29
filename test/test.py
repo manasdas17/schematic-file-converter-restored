@@ -215,6 +215,9 @@ def main():
     eagle_sch_files = []
     os.path.walk('./test/eagle', filter_sch, eagle_sch_files)
 
+    eaglexml_sch_files = []
+    os.path.walk('./test/eaglexml', filter_sch, eaglexml_sch_files)
+
     fritzing_fz_files = []
     os.path.walk('./test/fritzing', filter_fz, fritzing_fz_files)
 
@@ -238,6 +241,7 @@ def main():
     os.path.walk('./test/openjson', filter_upv, upverter_upv_files)
 
     l = {'eagle': eagle_sch_files,
+         'eaglexml': eaglexml_sch_files,
          'fritzing': fritzing_sch_files,
          'geda': geda_sch_files,
          'gerber': gerber_ger_files,
@@ -272,7 +276,7 @@ def main():
             base = os.path.basename(f)
 
             if 'write' in args.test_types \
-                    and format not in ('fritzing', 'gerber'):
+                    and format not in ('eaglexml', 'fritzing', 'gerber'):
                 test_name = 'test_%s_%s_%s' % (format, base, 'write')
                 test = test_write_generator(f, format)
                 setattr(test_class, test_name, test)
