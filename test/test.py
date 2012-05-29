@@ -210,6 +210,7 @@ def main():
 
     # Hide logging
     logging.getLogger("main").setLevel(logging.ERROR)
+    logging.getLogger("parser.geda").setLevel(logging.ERROR)
 
     eagle_sch_files = []
     os.path.walk('./test/eagle', filter_sch, eagle_sch_files)
