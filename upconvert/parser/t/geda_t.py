@@ -450,7 +450,7 @@ N 55700 44400 55700 43500 4"""
 
         self.assertItemsEqual(
             [net.net_id for net in design.nets],
-            ['another name', 'test', '']
+            ['another name', 'test', '5320a4350']
         )
         self.assertItemsEqual(
             [net.attributes.get('_name', None) for net in design.nets],

@@ -531,6 +531,8 @@ class GEDA:
         ## set coordinates at offset for design attributes
         attr_x, attr_y = 0, 0
         for key, value in design_attributes.attributes.items():
+            if key.startswith('_geda'):
+                continue
             commands += self._create_attribute(
                 key, value,
                 attr_x,
