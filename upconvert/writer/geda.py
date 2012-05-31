@@ -136,8 +136,8 @@ class GEDA:
         self.component_library = dict()
 
         attrs = design.design_attributes.attributes
-        self.offset.x = attrs.get('_geda_offset_x', 0)
-        self.offset.y = attrs.get('_geda_offset_y', 0)
+        self.offset.x = int(attrs.get('_geda_offset_x', 0))
+        self.offset.y = int(attrs.get('_geda_offset_y', 0))
 
         ## setup project environment
         self.create_project_files(filename)
@@ -252,17 +252,17 @@ class GEDA:
             ## start an attribute environment
             commands.append('{')
 
-            refdes = instance.instance_id
-            refdes = instance.attributes.get('_name', refdes)
-            refdes = instance.attributes.get('refdes', refdes)
+            refdes = instance.attributes.get('_name', None)
+            refdes = instance.attributes.get('_refdes', refdes)
 
-            commands += self._create_attribute(
-                'refdes',
-                refdes,
-                attr_x,
-                attr_y,
-                visibility=1,
-            )
+            if refdes:
+                commands += self._create_attribute(
+                    'refdes',
+                    refdes,
+                    attr_x,
+                    attr_y,
+                    visibility=1,
+                )
 
             for key, value in instance.attributes.items():
                 if key != 'refdes':
@@ -531,6 +531,8 @@ class GEDA:
         ## set coordinates at offset for design attributes
         attr_x, attr_y = 0, 0
         for key, value in design_attributes.attributes.items():
+            if key.startswith('_geda'):
+                continue
             commands += self._create_attribute(
                 key, value,
                 attr_x,
