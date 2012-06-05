@@ -297,10 +297,10 @@ class GEDA:
 
         ## store offset values in design attributes
         self.design.design_attributes.attributes.update({
-            '_geda_offset_x': self.offset.x,
-            '_geda_offset_y': self.offset.y,
-            '_geda_frame_width': self.frame_width,
-            '_geda_frame_height': self.frame_height,
+            '_geda_offset_x': str(self.offset.x),
+            '_geda_offset_y': str(self.offset.y),
+            '_geda_frame_width': str(self.frame_width),
+            '_geda_frame_height': str(self.frame_height),
         })
 
         for filename in inputfiles:
@@ -582,7 +582,8 @@ class GEDA:
         self.offset = shape.Point(0, 0)
 
         ## retrieve if component is mirrored around Y-axis
-        if self._is_mirrored_command(params):
+        mirror = self._is_mirrored_command(params)
+        if mirror:
             basename += '_MIRRORED'
 
         move_to = None
@@ -608,6 +609,7 @@ class GEDA:
 
         while typ is not None:
 
+            params['mirror'] = mirror
             objects = getattr(self, "_parse_%s" % typ)(stream, params)
 
             attributes = self._parse_environment(stream)
