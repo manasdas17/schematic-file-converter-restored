@@ -23,6 +23,13 @@
 from upconvert.core.shape import Point
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes:
+        attrs[n] = str(v)
+    return attrs
+
+
 class Components:
     """ Container class for individual 'Component's.
     Only used for add_component and json() (export) """
@@ -74,7 +81,7 @@ class Component:
         """ Return a component as JSON """
         return {
             "symbols": [s.json() for s in self.symbols],
-            "attributes": self.attributes,
+            "attributes": stringify_attributes(self.attributes),
             "name": self.name
             }
 
@@ -173,7 +180,7 @@ class Pin:
             "pin_number":self.pin_number,
             "p1":self.p1.json(),
             "p2":self.p2.json(),
-            "attributes" : self.attributes,
+            "attributes" : stringify_attributes(self.attributes),
             "styles": self.styles,
             }
         if self.label is not None:
