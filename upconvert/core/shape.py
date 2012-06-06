@@ -25,7 +25,7 @@ from math import sqrt, pi, sin, cos, asin, acos
 
 def stringify_attributes(attributes):
     attrs = {}
-    for n, v in attributes:
+    for n, v in attributes.iteritems():
         attrs[n] = str(v)
     return attrs
 
