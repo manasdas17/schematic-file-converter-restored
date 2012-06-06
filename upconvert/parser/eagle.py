@@ -2538,7 +2538,7 @@ class Eagle:
                                                     _pp.shapes[0].rotate) + 
                                          Eagle.Shape.rotate2piradians(
                                                     _ss.rotate)) % 2),
-                                     visible=True,
+                                     visible='true',
                                     )
                     _sa.add_annotation(_an)
                 else:

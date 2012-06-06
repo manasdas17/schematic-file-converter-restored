@@ -43,9 +43,9 @@ class Annotation:
     def json(self):
         """ Return an annotation as JSON """
         return {
-            "value" : self.value, 
-            "x":self.x, 
-            "y":self.y,
-            "rotation" : self.rotation, 
-            "visible" : self.visible
+            "value": self.value, 
+            "x": self.x, 
+            "y": self.y,
+            "rotation": self.rotation, 
+            "visible": self.visible
             }
