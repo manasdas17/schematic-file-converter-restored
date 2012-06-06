@@ -1,6 +1,6 @@
 The Upverter Universal Format Converter
 =======================================
-A command line python anything-in anything-out file converter to go between the multitude of electrical circuit schematic file formats. This project was started by Alex Ray (ajray@ncsu.edu), on behalf of Upverter (http://upverter.com).
+A command line python anything-in anything-out file converter to go between the multitude of electrical circuit schematic file formats. This project was started by Upverter (http://upverter.com).
 
 
 Folder Contents
@@ -50,11 +50,17 @@ Supported Formats
 
   The converter can import and export in the following popular open and closed source formats.
 
+* Upverter OpenJSON
 * KiCad
 * gEDA
-* Eagle     (in testing)
-* Eagle XML (in testing)
-* Fritzing  (in testing)
+* Fritzing
+* RS274-X Gerber
+* Eagle
+* Eagle XML             (in testing)
+* ViewDraw / DxDesigner (in testing)
+* Altium                (in development)
+* DSN                   (in development)
+* PNG Image             (in development)
 
 
 Format Wish List
@@ -62,26 +68,12 @@ Format Wish List
 
   This is the list of formats we wish we supported, and will work on or finish someday soon. We are looking for developers to help us so please ping us if you're interested!
 
-* Altium     (in development)
-* Gerber     (in development)
-* ViewDraw   (in development)
-* DXDesigner
-* PADs
-* Alegro
 * OrCad
-* DSN
-
-
-Exports
----------------
-
-  This is the list of formats we can export too, given an import with the required info in it. These are currently all in development.
-
+* Drill Data in Excellon format
 * BOM (Bill of Materials) in CSV format
 * Netlist in CSV format
 * Netlist in Telesis format
-* Layout Data in RS274-X (Gerber) format
-* Drill Data in Excellon format
+* Existing supported formats - layout data
 
 
 The Concept
@@ -94,6 +86,19 @@ Interchange Format Documentation
 ---------------
 
   The converter is based on the Upverter Open JSON Format fully documented at http://upverter.com/resources/open-json-format/. We hope that someday all of the major providers of schematic capture software will support interoperability with open formats like this one.
+
+
+Key Contributors
+---------------
+
+  The converter has been an ongoing project since mid-2011 made up of many, many contributions by a team of distributed developers associated by little more than our desire to fix what we see as the horribly broken world of ECAD interoperability. The key contributors are as follows:
+
+* jdavisp3    -  KiCad, Fritzing, EagleXML, Stability
+* elbaschid   -  gEDA
+* iparshin    -  EagleBin
+* foobarmus   -  Gerber
+* patrickyeon -  ViewDraw
+* machinaut   -  OpenJSON, Architecture
 
 
 Licence
