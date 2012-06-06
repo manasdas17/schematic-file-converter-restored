@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*- 
 
 #
-# Generated Wed Nov  9 18:31:45 2011 by generateDS.py version 2.7a.
+# Generated Sat Jun  2 21:19:53 2012 by generateDS.py version 2.7b.
 #
 
 import sys
-import getopt
 import re as re_
 
-etree_ = None
+etree = None
 Verbose_import_ = False
 (   XMLParser_import_none, XMLParser_import_lxml,
     XMLParser_import_elementtree
@@ -17,35 +16,40 @@ Verbose_import_ = False
 XMLParser_import_library = None
 try:
     # lxml
-    from lxml import etree as etree_
+    import lxml.etree
+    etree = lxml.etree
     XMLParser_import_library = XMLParser_import_lxml
     if Verbose_import_:
         print("running with lxml.etree")
 except ImportError:
     try:
         # cElementTree from Python 2.5+
-        import xml.etree.cElementTree as etree_
+        import xml.etree.cElementTree
+        etree = xml.etree.cElementTree
         XMLParser_import_library = XMLParser_import_elementtree
         if Verbose_import_:
             print("running with cElementTree on Python 2.5+")
     except ImportError:
         try:
             # ElementTree from Python 2.5+
-            import xml.etree.ElementTree as etree_
+            import xml.etree.ElementTree
+            etree = xml.etree.ElementTree
             XMLParser_import_library = XMLParser_import_elementtree
             if Verbose_import_:
                 print("running with ElementTree on Python 2.5+")
         except ImportError:
             try:
                 # normal cElementTree install
-                import cElementTree as etree_
+                import cElementTree
+                etree = cElementTree
                 XMLParser_import_library = XMLParser_import_elementtree
                 if Verbose_import_:
                     print("running with cElementTree")
             except ImportError:
                 try:
                     # normal ElementTree install
-                    import elementtree.ElementTree as etree_
+                    import elementtree.ElementTree
+                    etree = elementtree.ElementTree
                     XMLParser_import_library = XMLParser_import_elementtree
                     if Verbose_import_:
                         print("running with ElementTree")
@@ -57,8 +61,8 @@ def parsexml_(*args, **kwargs):
         'parser' not in kwargs):
         # Use the lxml ElementTree compatible parser so that, e.g.,
         #   we ignore comments.
-        kwargs['parser'] = etree_.ETCompatXMLParser()
-    doc = etree_.parse(*args, **kwargs)
+        kwargs['parser'] = etree.ETCompatXMLParser()
+    doc = etree.parse(*args, **kwargs)
     return doc
 
 #
@@ -69,9 +73,9 @@ def parsexml_(*args, **kwargs):
 #   in a module named generatedssuper.py.
 
 try:
-    from generatedssuper import GeneratedsSuper
-except ImportError, exp:
-
+    import generatedssuper
+    GeneratedsSuper = generatedssuper.Generatedssuper
+except ImportError:
     class GeneratedsSuper(object):
         def gds_format_string(self, input_data, input_name=''):
             return input_data
@@ -87,8 +91,8 @@ except ImportError, exp:
             values = input_data.split()
             for value in values:
                 try:
-                    fvalue = float(value)
-                except (TypeError, ValueError), exp:
+                    float(value)
+                except (TypeError, ValueError):
                     raise_parse_error(node, 'Requires sequence of integers')
             return input_data
         def gds_format_float(self, input_data, input_name=''):
@@ -101,8 +105,8 @@ except ImportError, exp:
             values = input_data.split()
             for value in values:
                 try:
-                    fvalue = float(value)
-                except (TypeError, ValueError), exp:
+                    float(value)
+                except (TypeError, ValueError):
                     raise_parse_error(node, 'Requires sequence of floats')
             return input_data
         def gds_format_double(self, input_data, input_name=''):
@@ -115,8 +119,8 @@ except ImportError, exp:
             values = input_data.split()
             for value in values:
                 try:
-                    fvalue = float(value)
-                except (TypeError, ValueError), exp:
+                    float(value)
+                except (TypeError, ValueError):
                     raise_parse_error(node, 'Requires sequence of doubles')
             return input_data
         def gds_format_boolean(self, input_data, input_name=''):
@@ -182,7 +186,7 @@ except ImportError, exp:
 # Globals
 #
 
-ExternalEncoding = 'ascii'
+ExternalEncoding = 'utf-8'
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 String_cleanup_pat_ = re_.compile(r"[\n\r\s]+")
 Namespace_extract_pat_ = re_.compile(r'{(.*)}(.*)')
@@ -462,7 +466,10 @@ class compatibility(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, note=None):
-        self.note = note
+        if note is None:
+            self.note = []
+        else:
+            self.note = note
     def factory(*args_, **kwargs_):
         if compatibility.subclass:
             return compatibility.subclass(*args_, **kwargs_)
@@ -471,6 +478,8 @@ class compatibility(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_note(self): return self.note
     def set_note(self, note): self.note = note
+    def add_note(self, value): self.note.append(value)
+    def insert_note(self, index, value): self.note[index] = value
     def export(self, outfile, level, namespace_='t:', name_='compatibility', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -486,11 +495,11 @@ class compatibility(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='compatibility'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='compatibility', fromsubclass_=False):
-        if self.note is not None:
-            self.note.export(outfile, level, namespace_, name_='note', )
+        for note_ in self.note:
+            note_.export(outfile, level, namespace_, name_='note')
     def hasContent_(self):
         if (
-            self.note is not None
+            self.note
             ):
             return True
         else:
@@ -503,12 +512,18 @@ class compatibility(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.note is not None:
+        showIndent(outfile, level)
+        outfile.write('note=[\n')
+        level += 1
+        for note_ in self.note:
             showIndent(outfile, level)
-            outfile.write('note=model_.note(\n')
-            self.note.exportLiteral(outfile, level)
+            outfile.write('model_.note(\n')
+            note_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -520,7 +535,7 @@ class compatibility(GeneratedsSuper):
         if nodeName_ == 'note':
             obj_ = note.factory()
             obj_.build(child_)
-            self.set_note(obj_)
+            self.note.append(obj_)
 # end class compatibility
 
 
@@ -2287,7 +2302,10 @@ class bus(GeneratedsSuper):
     superclass = None
     def __init__(self, name=None, segment=None):
         self.name = _cast(None, name)
-        self.segment = segment
+        if segment is None:
+            self.segment = []
+        else:
+            self.segment = segment
     def factory(*args_, **kwargs_):
         if bus.subclass:
             return bus.subclass(*args_, **kwargs_)
@@ -2296,6 +2314,8 @@ class bus(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_segment(self): return self.segment
     def set_segment(self, segment): self.segment = segment
+    def add_segment(self, value): self.segment.append(value)
+    def insert_segment(self, index, value): self.segment[index] = value
     def get_name(self): return self.name
     def set_name(self, name): self.name = name
     def export(self, outfile, level, namespace_='t:', name_='bus', namespacedef_=''):
@@ -2315,11 +2335,11 @@ class bus(GeneratedsSuper):
             already_processed.append('name')
             outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='bus', fromsubclass_=False):
-        if self.segment is not None:
-            self.segment.export(outfile, level, namespace_, name_='segment', )
+        for segment_ in self.segment:
+            segment_.export(outfile, level, namespace_, name_='segment')
     def hasContent_(self):
         if (
-            self.segment is not None
+            self.segment
             ):
             return True
         else:
@@ -2335,12 +2355,18 @@ class bus(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('name = "%s",\n' % (self.name,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.segment is not None:
+        showIndent(outfile, level)
+        outfile.write('segment=[\n')
+        level += 1
+        for segment_ in self.segment:
             showIndent(outfile, level)
-            outfile.write('segment=model_.segment(\n')
-            self.segment.exportLiteral(outfile, level)
+            outfile.write('model_.segment(\n')
+            segment_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -2355,7 +2381,7 @@ class bus(GeneratedsSuper):
         if nodeName_ == 'segment':
             obj_ = segment.factory()
             obj_.build(child_)
-            self.set_segment(obj_)
+            self.segment.append(obj_)
 # end class bus
 
 
@@ -2365,7 +2391,10 @@ class net(GeneratedsSuper):
     def __init__(self, name=None, classxx=None, segment=None):
         self.name = _cast(None, name)
         self.classxx = _cast(None, classxx)
-        self.segment = segment
+        if segment is None:
+            self.segment = []
+        else:
+            self.segment = segment
     def factory(*args_, **kwargs_):
         if net.subclass:
             return net.subclass(*args_, **kwargs_)
@@ -2374,6 +2403,8 @@ class net(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_segment(self): return self.segment
     def set_segment(self, segment): self.segment = segment
+    def add_segment(self, value): self.segment.append(value)
+    def insert_segment(self, index, value): self.segment[index] = value
     def get_name(self): return self.name
     def set_name(self, name): self.name = name
     def get_class(self): return self.classxx
@@ -2398,11 +2429,11 @@ class net(GeneratedsSuper):
             already_processed.append('classxx')
             outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding), input_name='class'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='net', fromsubclass_=False):
-        if self.segment is not None:
-            self.segment.export(outfile, level, namespace_, name_='segment', )
+        for segment_ in self.segment:
+            segment_.export(outfile, level, namespace_, name_='segment')
     def hasContent_(self):
         if (
-            self.segment is not None
+            self.segment
             ):
             return True
         else:
@@ -2422,12 +2453,18 @@ class net(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('classxx = "%s",\n' % (self.classxx,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.segment is not None:
+        showIndent(outfile, level)
+        outfile.write('segment=[\n')
+        level += 1
+        for segment_ in self.segment:
             showIndent(outfile, level)
-            outfile.write('segment=model_.segment(\n')
-            self.segment.exportLiteral(outfile, level)
+            outfile.write('model_.segment(\n')
+            segment_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -2446,7 +2483,7 @@ class net(GeneratedsSuper):
         if nodeName_ == 'segment':
             obj_ = segment.factory()
             obj_.build(child_)
-            self.set_segment(obj_)
+            self.segment.append(obj_)
 # end class net
 
 
@@ -4986,7 +5023,10 @@ class polygon(GeneratedsSuper):
         self.pour = _cast(None, pour)
         self.width = _cast(None, width)
         self.rank = _cast(None, rank)
-        self.vertex = vertex
+        if vertex is None:
+            self.vertex = []
+        else:
+            self.vertex = vertex
     def factory(*args_, **kwargs_):
         if polygon.subclass:
             return polygon.subclass(*args_, **kwargs_)
@@ -4995,6 +5035,8 @@ class polygon(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_vertex(self): return self.vertex
     def set_vertex(self, vertex): self.vertex = vertex
+    def add_vertex(self, value): self.vertex.append(value)
+    def insert_vertex(self, index, value): self.vertex[index] = value
     def get_layer(self): return self.layer
     def set_layer(self, layer): self.layer = layer
     def get_thermals(self): return self.thermals
@@ -5049,11 +5091,11 @@ class polygon(GeneratedsSuper):
             already_processed.append('rank')
             outfile.write(' rank=%s' % (self.gds_format_string(quote_attrib(self.rank).encode(ExternalEncoding), input_name='rank'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='polygon', fromsubclass_=False):
-        if self.vertex is not None:
-            self.vertex.export(outfile, level, namespace_, name_='vertex', )
+        for vertex_ in self.vertex:
+            vertex_.export(outfile, level, namespace_, name_='vertex')
     def hasContent_(self):
         if (
-            self.vertex is not None
+            self.vertex
             ):
             return True
         else:
@@ -5097,12 +5139,18 @@ class polygon(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('rank = "%s",\n' % (self.rank,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.vertex is not None:
+        showIndent(outfile, level)
+        outfile.write('vertex=[\n')
+        level += 1
+        for vertex_ in self.vertex:
             showIndent(outfile, level)
-            outfile.write('vertex=model_.vertex(\n')
-            self.vertex.exportLiteral(outfile, level)
+            outfile.write('model_.vertex(\n')
+            vertex_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -5145,7 +5193,7 @@ class polygon(GeneratedsSuper):
         if nodeName_ == 'vertex':
             obj_ = vertex.factory()
             obj_.build(child_)
-            self.set_vertex(obj_)
+            self.vertex.append(obj_)
 # end class polygon
 
 
@@ -5614,7 +5662,10 @@ class instance(GeneratedsSuper):
         self.y = _cast(None, y)
         self.gate = _cast(None, gate)
         self.rot = _cast(None, rot)
-        self.attribute = attribute
+        if attribute is None:
+            self.attribute = []
+        else:
+            self.attribute = attribute
     def factory(*args_, **kwargs_):
         if instance.subclass:
             return instance.subclass(*args_, **kwargs_)
@@ -5623,6 +5674,8 @@ class instance(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_attribute(self): return self.attribute
     def set_attribute(self, attribute): self.attribute = attribute
+    def add_attribute(self, value): self.attribute.append(value)
+    def insert_attribute(self, index, value): self.attribute[index] = value
     def get_smashed(self): return self.smashed
     def set_smashed(self, smashed): self.smashed = smashed
     def get_part(self): return self.part
@@ -5667,11 +5720,11 @@ class instance(GeneratedsSuper):
             already_processed.append('rot')
             outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='instance', fromsubclass_=False):
-        if self.attribute is not None:
-            self.attribute.export(outfile, level, namespace_, name_='attribute', )
+        for attribute_ in self.attribute:
+            attribute_.export(outfile, level, namespace_, name_='attribute')
     def hasContent_(self):
         if (
-            self.attribute is not None
+            self.attribute
             ):
             return True
         else:
@@ -5707,12 +5760,18 @@ class instance(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('rot = "%s",\n' % (self.rot,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.attribute is not None:
+        showIndent(outfile, level)
+        outfile.write('attribute=[\n')
+        level += 1
+        for attribute_ in self.attribute:
             showIndent(outfile, level)
-            outfile.write('attribute=model_.attribute(\n')
-            self.attribute.exportLiteral(outfile, level)
+            outfile.write('model_.attribute(\n')
+            attribute_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -5747,7 +5806,7 @@ class instance(GeneratedsSuper):
         if nodeName_ == 'attribute':
             obj_ = attribute.factory()
             obj_.build(child_)
-            self.set_attribute(obj_)
+            self.attribute.append(obj_)
 # end class instance
 
 
@@ -6105,7 +6164,10 @@ class technology(GeneratedsSuper):
     superclass = None
     def __init__(self, name=None, attribute=None):
         self.name = _cast(None, name)
-        self.attribute = attribute
+        if attribute is None:
+            self.attribute = []
+        else:
+            self.attribute = attribute
     def factory(*args_, **kwargs_):
         if technology.subclass:
             return technology.subclass(*args_, **kwargs_)
@@ -6114,6 +6176,8 @@ class technology(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_attribute(self): return self.attribute
     def set_attribute(self, attribute): self.attribute = attribute
+    def add_attribute(self, value): self.attribute.append(value)
+    def insert_attribute(self, index, value): self.attribute[index] = value
     def get_name(self): return self.name
     def set_name(self, name): self.name = name
     def export(self, outfile, level, namespace_='t:', name_='technology', namespacedef_=''):
@@ -6133,11 +6197,11 @@ class technology(GeneratedsSuper):
             already_processed.append('name')
             outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='technology', fromsubclass_=False):
-        if self.attribute is not None:
-            self.attribute.export(outfile, level, namespace_, name_='attribute', )
+        for attribute_ in self.attribute:
+            attribute_.export(outfile, level, namespace_, name_='attribute')
     def hasContent_(self):
         if (
-            self.attribute is not None
+            self.attribute
             ):
             return True
         else:
@@ -6153,12 +6217,18 @@ class technology(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('name = "%s",\n' % (self.name,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.attribute is not None:
+        showIndent(outfile, level)
+        outfile.write('attribute=[\n')
+        level += 1
+        for attribute_ in self.attribute:
             showIndent(outfile, level)
-            outfile.write('attribute=model_.attribute(\n')
-            self.attribute.exportLiteral(outfile, level)
+            outfile.write('model_.attribute(\n')
+            attribute_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6173,7 +6243,7 @@ class technology(GeneratedsSuper):
         if nodeName_ == 'attribute':
             obj_ = attribute.factory()
             obj_.build(child_)
-            self.set_attribute(obj_)
+            self.attribute.append(obj_)
 # end class technology
 
 
@@ -6478,7 +6548,8 @@ class pinref(GeneratedsSuper):
 class contactref(GeneratedsSuper):
     subclass = None
     superclass = None
-    def __init__(self, route=None, pad=None, element=None):
+    def __init__(self, routetag=None, route=None, pad=None, element=None):
+        self.routetag = _cast(None, routetag)
         self.route = _cast(None, route)
         self.pad = _cast(None, pad)
         self.element = _cast(None, element)
@@ -6489,6 +6560,8 @@ class contactref(GeneratedsSuper):
         else:
             return contactref(*args_, **kwargs_)
     factory = staticmethod(factory)
+    def get_routetag(self): return self.routetag
+    def set_routetag(self, routetag): self.routetag = routetag
     def get_route(self): return self.route
     def set_route(self, route): self.route = route
     def get_pad(self): return self.pad
@@ -6507,6 +6580,9 @@ class contactref(GeneratedsSuper):
         else:
             outfile.write('/>\n')
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='contactref'):
+        if self.routetag is not None and 'routetag' not in already_processed:
+            already_processed.append('routetag')
+            outfile.write(' routetag=%s' % (self.gds_format_string(quote_attrib(self.routetag).encode(ExternalEncoding), input_name='routetag'), ))
         if self.route is not None and 'route' not in already_processed:
             already_processed.append('route')
             outfile.write(' route=%s' % (self.gds_format_string(quote_attrib(self.route).encode(ExternalEncoding), input_name='route'), ))
@@ -6531,6 +6607,10 @@ class contactref(GeneratedsSuper):
         if self.hasContent_():
             self.exportLiteralChildren(outfile, level, name_)
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
+        if self.routetag is not None and 'routetag' not in already_processed:
+            already_processed.append('routetag')
+            showIndent(outfile, level)
+            outfile.write('routetag = "%s",\n' % (self.routetag,))
         if self.route is not None and 'route' not in already_processed:
             already_processed.append('route')
             showIndent(outfile, level)
@@ -6551,6 +6631,10 @@ class contactref(GeneratedsSuper):
             nodeName_ = Tag_pattern_.match(child.tag).groups()[-1]
             self.buildChildren(child, node, nodeName_)
     def buildAttributes(self, node, attrs, already_processed):
+        value = find_attr_value_('routetag', node)
+        if value is not None and 'routetag' not in already_processed:
+            already_processed.append('routetag')
+            self.routetag = value
         value = find_attr_value_('route', node)
         if value is not None and 'route' not in already_processed:
             already_processed.append('route')
@@ -6572,7 +6656,10 @@ class variantdefs(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, variantdef=None):
-        self.variantdef = variantdef
+        if variantdef is None:
+            self.variantdef = []
+        else:
+            self.variantdef = variantdef
     def factory(*args_, **kwargs_):
         if variantdefs.subclass:
             return variantdefs.subclass(*args_, **kwargs_)
@@ -6581,6 +6668,8 @@ class variantdefs(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_variantdef(self): return self.variantdef
     def set_variantdef(self, variantdef): self.variantdef = variantdef
+    def add_variantdef(self, value): self.variantdef.append(value)
+    def insert_variantdef(self, index, value): self.variantdef[index] = value
     def export(self, outfile, level, namespace_='t:', name_='variantdefs', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6596,11 +6685,11 @@ class variantdefs(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='variantdefs'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='variantdefs', fromsubclass_=False):
-        if self.variantdef is not None:
-            self.variantdef.export(outfile, level, namespace_, name_='variantdef', )
+        for variantdef_ in self.variantdef:
+            variantdef_.export(outfile, level, namespace_, name_='variantdef')
     def hasContent_(self):
         if (
-            self.variantdef is not None
+            self.variantdef
             ):
             return True
         else:
@@ -6613,12 +6702,18 @@ class variantdefs(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.variantdef is not None:
+        showIndent(outfile, level)
+        outfile.write('variantdef=[\n')
+        level += 1
+        for variantdef_ in self.variantdef:
             showIndent(outfile, level)
-            outfile.write('variantdef=model_.variantdef(\n')
-            self.variantdef.exportLiteral(outfile, level)
+            outfile.write('model_.variantdef(\n')
+            variantdef_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6630,7 +6725,7 @@ class variantdefs(GeneratedsSuper):
         if nodeName_ == 'variantdef':
             obj_ = variantdef.factory()
             obj_.build(child_)
-            self.set_variantdef(obj_)
+            self.variantdef.append(obj_)
 # end class variantdefs
 
 
@@ -6638,7 +6733,10 @@ class settings(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, setting=None):
-        self.setting = setting
+        if setting is None:
+            self.setting = []
+        else:
+            self.setting = setting
     def factory(*args_, **kwargs_):
         if settings.subclass:
             return settings.subclass(*args_, **kwargs_)
@@ -6647,6 +6745,8 @@ class settings(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_setting(self): return self.setting
     def set_setting(self, setting): self.setting = setting
+    def add_setting(self, value): self.setting.append(value)
+    def insert_setting(self, index, value): self.setting[index] = value
     def export(self, outfile, level, namespace_='t:', name_='settings', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6662,11 +6762,11 @@ class settings(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='settings'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='settings', fromsubclass_=False):
-        if self.setting is not None:
-            self.setting.export(outfile, level, namespace_, name_='setting', )
+        for setting_ in self.setting:
+            setting_.export(outfile, level, namespace_, name_='setting')
     def hasContent_(self):
         if (
-            self.setting is not None
+            self.setting
             ):
             return True
         else:
@@ -6679,12 +6779,18 @@ class settings(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.setting is not None:
+        showIndent(outfile, level)
+        outfile.write('setting=[\n')
+        level += 1
+        for setting_ in self.setting:
             showIndent(outfile, level)
-            outfile.write('setting=model_.setting(\n')
-            self.setting.exportLiteral(outfile, level)
+            outfile.write('model_.setting(\n')
+            setting_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6696,7 +6802,7 @@ class settings(GeneratedsSuper):
         if nodeName_ == 'setting':
             obj_ = setting.factory()
             obj_.build(child_)
-            self.set_setting(obj_)
+            self.setting.append(obj_)
 # end class settings
 
 
@@ -6704,7 +6810,10 @@ class sheets(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, sheet=None):
-        self.sheet = sheet
+        if sheet is None:
+            self.sheet = []
+        else:
+            self.sheet = sheet
     def factory(*args_, **kwargs_):
         if sheets.subclass:
             return sheets.subclass(*args_, **kwargs_)
@@ -6713,6 +6822,8 @@ class sheets(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_sheet(self): return self.sheet
     def set_sheet(self, sheet): self.sheet = sheet
+    def add_sheet(self, value): self.sheet.append(value)
+    def insert_sheet(self, index, value): self.sheet[index] = value
     def export(self, outfile, level, namespace_='t:', name_='sheets', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6728,11 +6839,11 @@ class sheets(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='sheets'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='sheets', fromsubclass_=False):
-        if self.sheet is not None:
-            self.sheet.export(outfile, level, namespace_, name_='sheet', )
+        for sheet_ in self.sheet:
+            sheet_.export(outfile, level, namespace_, name_='sheet')
     def hasContent_(self):
         if (
-            self.sheet is not None
+            self.sheet
             ):
             return True
         else:
@@ -6745,12 +6856,18 @@ class sheets(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.sheet is not None:
+        showIndent(outfile, level)
+        outfile.write('sheet=[\n')
+        level += 1
+        for sheet_ in self.sheet:
             showIndent(outfile, level)
-            outfile.write('sheet=model_.sheet(\n')
-            self.sheet.exportLiteral(outfile, level)
+            outfile.write('model_.sheet(\n')
+            sheet_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6762,7 +6879,7 @@ class sheets(GeneratedsSuper):
         if nodeName_ == 'sheet':
             obj_ = sheet.factory()
             obj_.build(child_)
-            self.set_sheet(obj_)
+            self.sheet.append(obj_)
 # end class sheets
 
 
@@ -6770,7 +6887,10 @@ class layers(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, layer=None):
-        self.layer = layer
+        if layer is None:
+            self.layer = []
+        else:
+            self.layer = layer
     def factory(*args_, **kwargs_):
         if layers.subclass:
             return layers.subclass(*args_, **kwargs_)
@@ -6779,6 +6899,8 @@ class layers(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_layer(self): return self.layer
     def set_layer(self, layer): self.layer = layer
+    def add_layer(self, value): self.layer.append(value)
+    def insert_layer(self, index, value): self.layer[index] = value
     def export(self, outfile, level, namespace_='t:', name_='layers', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6794,11 +6916,11 @@ class layers(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='layers'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='layers', fromsubclass_=False):
-        if self.layer is not None:
-            self.layer.export(outfile, level, namespace_, name_='layer', )
+        for layer_ in self.layer:
+            layer_.export(outfile, level, namespace_, name_='layer')
     def hasContent_(self):
         if (
-            self.layer is not None
+            self.layer
             ):
             return True
         else:
@@ -6811,12 +6933,18 @@ class layers(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.layer is not None:
+        showIndent(outfile, level)
+        outfile.write('layer=[\n')
+        level += 1
+        for layer_ in self.layer:
             showIndent(outfile, level)
-            outfile.write('layer=model_.layer(\n')
-            self.layer.exportLiteral(outfile, level)
+            outfile.write('model_.layer(\n')
+            layer_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6828,7 +6956,7 @@ class layers(GeneratedsSuper):
         if nodeName_ == 'layer':
             obj_ = layer.factory()
             obj_.build(child_)
-            self.set_layer(obj_)
+            self.layer.append(obj_)
 # end class layers
 
 
@@ -6836,7 +6964,10 @@ class packages(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, package=None):
-        self.package = package
+        if package is None:
+            self.package = []
+        else:
+            self.package = package
     def factory(*args_, **kwargs_):
         if packages.subclass:
             return packages.subclass(*args_, **kwargs_)
@@ -6845,6 +6976,8 @@ class packages(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_package(self): return self.package
     def set_package(self, package): self.package = package
+    def add_package(self, value): self.package.append(value)
+    def insert_package(self, index, value): self.package[index] = value
     def export(self, outfile, level, namespace_='t:', name_='packages', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6860,11 +6993,11 @@ class packages(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='packages'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='packages', fromsubclass_=False):
-        if self.package is not None:
-            self.package.export(outfile, level, namespace_, name_='package', )
+        for package_ in self.package:
+            package_.export(outfile, level, namespace_, name_='package')
     def hasContent_(self):
         if (
-            self.package is not None
+            self.package
             ):
             return True
         else:
@@ -6877,12 +7010,18 @@ class packages(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.package is not None:
+        showIndent(outfile, level)
+        outfile.write('package=[\n')
+        level += 1
+        for package_ in self.package:
             showIndent(outfile, level)
-            outfile.write('package=model_.package(\n')
-            self.package.exportLiteral(outfile, level)
+            outfile.write('model_.package(\n')
+            package_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6894,7 +7033,7 @@ class packages(GeneratedsSuper):
         if nodeName_ == 'package':
             obj_ = package.factory()
             obj_.build(child_)
-            self.set_package(obj_)
+            self.package.append(obj_)
 # end class packages
 
 
@@ -6902,7 +7041,10 @@ class symbols(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, symbol=None):
-        self.symbol = symbol
+        if symbol is None:
+            self.symbol = []
+        else:
+            self.symbol = symbol
     def factory(*args_, **kwargs_):
         if symbols.subclass:
             return symbols.subclass(*args_, **kwargs_)
@@ -6911,6 +7053,8 @@ class symbols(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_symbol(self): return self.symbol
     def set_symbol(self, symbol): self.symbol = symbol
+    def add_symbol(self, value): self.symbol.append(value)
+    def insert_symbol(self, index, value): self.symbol[index] = value
     def export(self, outfile, level, namespace_='t:', name_='symbols', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6926,11 +7070,11 @@ class symbols(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='symbols'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='symbols', fromsubclass_=False):
-        if self.symbol is not None:
-            self.symbol.export(outfile, level, namespace_, name_='symbol', )
+        for symbol_ in self.symbol:
+            symbol_.export(outfile, level, namespace_, name_='symbol')
     def hasContent_(self):
         if (
-            self.symbol is not None
+            self.symbol
             ):
             return True
         else:
@@ -6943,12 +7087,18 @@ class symbols(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.symbol is not None:
+        showIndent(outfile, level)
+        outfile.write('symbol=[\n')
+        level += 1
+        for symbol_ in self.symbol:
             showIndent(outfile, level)
-            outfile.write('symbol=model_.symbol(\n')
-            self.symbol.exportLiteral(outfile, level)
+            outfile.write('model_.symbol(\n')
+            symbol_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -6960,7 +7110,7 @@ class symbols(GeneratedsSuper):
         if nodeName_ == 'symbol':
             obj_ = symbol.factory()
             obj_.build(child_)
-            self.set_symbol(obj_)
+            self.symbol.append(obj_)
 # end class symbols
 
 
@@ -6968,7 +7118,10 @@ class devicesets(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, deviceset=None):
-        self.deviceset = deviceset
+        if deviceset is None:
+            self.deviceset = []
+        else:
+            self.deviceset = deviceset
     def factory(*args_, **kwargs_):
         if devicesets.subclass:
             return devicesets.subclass(*args_, **kwargs_)
@@ -6977,6 +7130,8 @@ class devicesets(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_deviceset(self): return self.deviceset
     def set_deviceset(self, deviceset): self.deviceset = deviceset
+    def add_deviceset(self, value): self.deviceset.append(value)
+    def insert_deviceset(self, index, value): self.deviceset[index] = value
     def export(self, outfile, level, namespace_='t:', name_='devicesets', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6992,11 +7147,11 @@ class devicesets(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='devicesets'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='devicesets', fromsubclass_=False):
-        if self.deviceset is not None:
-            self.deviceset.export(outfile, level, namespace_, name_='deviceset', )
+        for deviceset_ in self.deviceset:
+            deviceset_.export(outfile, level, namespace_, name_='deviceset')
     def hasContent_(self):
         if (
-            self.deviceset is not None
+            self.deviceset
             ):
             return True
         else:
@@ -7009,12 +7164,18 @@ class devicesets(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.deviceset is not None:
+        showIndent(outfile, level)
+        outfile.write('deviceset=[\n')
+        level += 1
+        for deviceset_ in self.deviceset:
             showIndent(outfile, level)
-            outfile.write('deviceset=model_.deviceset(\n')
-            self.deviceset.exportLiteral(outfile, level)
+            outfile.write('model_.deviceset(\n')
+            deviceset_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7026,7 +7187,7 @@ class devicesets(GeneratedsSuper):
         if nodeName_ == 'deviceset':
             obj_ = deviceset.factory()
             obj_.build(child_)
-            self.set_deviceset(obj_)
+            self.deviceset.append(obj_)
 # end class devicesets
 
 
@@ -7034,7 +7195,10 @@ class gates(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, gate=None):
-        self.gate = gate
+        if gate is None:
+            self.gate = []
+        else:
+            self.gate = gate
     def factory(*args_, **kwargs_):
         if gates.subclass:
             return gates.subclass(*args_, **kwargs_)
@@ -7043,6 +7207,8 @@ class gates(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_gate(self): return self.gate
     def set_gate(self, gate): self.gate = gate
+    def add_gate(self, value): self.gate.append(value)
+    def insert_gate(self, index, value): self.gate[index] = value
     def export(self, outfile, level, namespace_='t:', name_='gates', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7058,11 +7224,11 @@ class gates(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='gates'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='gates', fromsubclass_=False):
-        if self.gate is not None:
-            self.gate.export(outfile, level, namespace_, name_='gate', )
+        for gate_ in self.gate:
+            gate_.export(outfile, level, namespace_, name_='gate')
     def hasContent_(self):
         if (
-            self.gate is not None
+            self.gate
             ):
             return True
         else:
@@ -7075,12 +7241,18 @@ class gates(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.gate is not None:
+        showIndent(outfile, level)
+        outfile.write('gate=[\n')
+        level += 1
+        for gate_ in self.gate:
             showIndent(outfile, level)
-            outfile.write('gate=model_.gate(\n')
-            self.gate.exportLiteral(outfile, level)
+            outfile.write('model_.gate(\n')
+            gate_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7092,7 +7264,7 @@ class gates(GeneratedsSuper):
         if nodeName_ == 'gate':
             obj_ = gate.factory()
             obj_.build(child_)
-            self.set_gate(obj_)
+            self.gate.append(obj_)
 # end class gates
 
 
@@ -7100,7 +7272,10 @@ class devices(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, device=None):
-        self.device = device
+        if device is None:
+            self.device = []
+        else:
+            self.device = device
     def factory(*args_, **kwargs_):
         if devices.subclass:
             return devices.subclass(*args_, **kwargs_)
@@ -7109,6 +7284,8 @@ class devices(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_device(self): return self.device
     def set_device(self, device): self.device = device
+    def add_device(self, value): self.device.append(value)
+    def insert_device(self, index, value): self.device[index] = value
     def export(self, outfile, level, namespace_='t:', name_='devices', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7124,11 +7301,11 @@ class devices(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='devices'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='devices', fromsubclass_=False):
-        if self.device is not None:
-            self.device.export(outfile, level, namespace_, name_='device', )
+        for device_ in self.device:
+            device_.export(outfile, level, namespace_, name_='device')
     def hasContent_(self):
         if (
-            self.device is not None
+            self.device
             ):
             return True
         else:
@@ -7141,12 +7318,18 @@ class devices(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.device is not None:
+        showIndent(outfile, level)
+        outfile.write('device=[\n')
+        level += 1
+        for device_ in self.device:
             showIndent(outfile, level)
-            outfile.write('device=model_.device(\n')
-            self.device.exportLiteral(outfile, level)
+            outfile.write('model_.device(\n')
+            device_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7158,7 +7341,7 @@ class devices(GeneratedsSuper):
         if nodeName_ == 'device':
             obj_ = device.factory()
             obj_.build(child_)
-            self.set_device(obj_)
+            self.device.append(obj_)
 # end class devices
 
 
@@ -7166,7 +7349,10 @@ class libraries(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, library=None):
-        self.library = library
+        if library is None:
+            self.library = []
+        else:
+            self.library = library
     def factory(*args_, **kwargs_):
         if libraries.subclass:
             return libraries.subclass(*args_, **kwargs_)
@@ -7175,6 +7361,8 @@ class libraries(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_library(self): return self.library
     def set_library(self, library): self.library = library
+    def add_library(self, value): self.library.append(value)
+    def insert_library(self, index, value): self.library[index] = value
     def export(self, outfile, level, namespace_='t:', name_='libraries', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7190,11 +7378,11 @@ class libraries(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='libraries'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='libraries', fromsubclass_=False):
-        if self.library is not None:
-            self.library.export(outfile, level, namespace_, name_='library', )
+        for library_ in self.library:
+            library_.export(outfile, level, namespace_, name_='library')
     def hasContent_(self):
         if (
-            self.library is not None
+            self.library
             ):
             return True
         else:
@@ -7207,12 +7395,18 @@ class libraries(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.library is not None:
+        showIndent(outfile, level)
+        outfile.write('library=[\n')
+        level += 1
+        for library_ in self.library:
             showIndent(outfile, level)
-            outfile.write('library=model_.library(\n')
-            self.library.exportLiteral(outfile, level)
+            outfile.write('model_.library(\n')
+            library_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7224,7 +7418,7 @@ class libraries(GeneratedsSuper):
         if nodeName_ == 'library':
             obj_ = library.factory()
             obj_.build(child_)
-            self.set_library(obj_)
+            self.library.append(obj_)
 # end class libraries
 
 
@@ -7232,7 +7426,10 @@ class connects(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, connect=None):
-        self.connect = connect
+        if connect is None:
+            self.connect = []
+        else:
+            self.connect = connect
     def factory(*args_, **kwargs_):
         if connects.subclass:
             return connects.subclass(*args_, **kwargs_)
@@ -7241,6 +7438,8 @@ class connects(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_connect(self): return self.connect
     def set_connect(self, connect): self.connect = connect
+    def add_connect(self, value): self.connect.append(value)
+    def insert_connect(self, index, value): self.connect[index] = value
     def export(self, outfile, level, namespace_='t:', name_='connects', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7256,11 +7455,11 @@ class connects(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='connects'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='connects', fromsubclass_=False):
-        if self.connect is not None:
-            self.connect.export(outfile, level, namespace_, name_='connect', )
+        for connect_ in self.connect:
+            connect_.export(outfile, level, namespace_, name_='connect')
     def hasContent_(self):
         if (
-            self.connect is not None
+            self.connect
             ):
             return True
         else:
@@ -7273,12 +7472,18 @@ class connects(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.connect is not None:
+        showIndent(outfile, level)
+        outfile.write('connect=[\n')
+        level += 1
+        for connect_ in self.connect:
             showIndent(outfile, level)
-            outfile.write('connect=model_.connect(\n')
-            self.connect.exportLiteral(outfile, level)
+            outfile.write('model_.connect(\n')
+            connect_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7290,7 +7495,7 @@ class connects(GeneratedsSuper):
         if nodeName_ == 'connect':
             obj_ = connect.factory()
             obj_.build(child_)
-            self.set_connect(obj_)
+            self.connect.append(obj_)
 # end class connects
 
 
@@ -7298,7 +7503,10 @@ class technologies(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, technology=None):
-        self.technology = technology
+        if technology is None:
+            self.technology = []
+        else:
+            self.technology = technology
     def factory(*args_, **kwargs_):
         if technologies.subclass:
             return technologies.subclass(*args_, **kwargs_)
@@ -7307,6 +7515,8 @@ class technologies(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_technology(self): return self.technology
     def set_technology(self, technology): self.technology = technology
+    def add_technology(self, value): self.technology.append(value)
+    def insert_technology(self, index, value): self.technology[index] = value
     def export(self, outfile, level, namespace_='t:', name_='technologies', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7322,11 +7532,11 @@ class technologies(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='technologies'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='technologies', fromsubclass_=False):
-        if self.technology is not None:
-            self.technology.export(outfile, level, namespace_, name_='technology', )
+        for technology_ in self.technology:
+            technology_.export(outfile, level, namespace_, name_='technology')
     def hasContent_(self):
         if (
-            self.technology is not None
+            self.technology
             ):
             return True
         else:
@@ -7339,12 +7549,18 @@ class technologies(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.technology is not None:
+        showIndent(outfile, level)
+        outfile.write('technology=[\n')
+        level += 1
+        for technology_ in self.technology:
             showIndent(outfile, level)
-            outfile.write('technology=model_.technology(\n')
-            self.technology.exportLiteral(outfile, level)
+            outfile.write('model_.technology(\n')
+            technology_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7356,7 +7572,7 @@ class technologies(GeneratedsSuper):
         if nodeName_ == 'technology':
             obj_ = technology.factory()
             obj_.build(child_)
-            self.set_technology(obj_)
+            self.technology.append(obj_)
 # end class technologies
 
 
@@ -7364,7 +7580,10 @@ class attributes(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, attribute=None):
-        self.attribute = attribute
+        if attribute is None:
+            self.attribute = []
+        else:
+            self.attribute = attribute
     def factory(*args_, **kwargs_):
         if attributes.subclass:
             return attributes.subclass(*args_, **kwargs_)
@@ -7373,6 +7592,8 @@ class attributes(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_attribute(self): return self.attribute
     def set_attribute(self, attribute): self.attribute = attribute
+    def add_attribute(self, value): self.attribute.append(value)
+    def insert_attribute(self, index, value): self.attribute[index] = value
     def export(self, outfile, level, namespace_='t:', name_='attributes', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7388,11 +7609,11 @@ class attributes(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='attributes'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='attributes', fromsubclass_=False):
-        if self.attribute is not None:
-            self.attribute.export(outfile, level, namespace_, name_='attribute', )
+        for attribute_ in self.attribute:
+            attribute_.export(outfile, level, namespace_, name_='attribute')
     def hasContent_(self):
         if (
-            self.attribute is not None
+            self.attribute
             ):
             return True
         else:
@@ -7405,12 +7626,18 @@ class attributes(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.attribute is not None:
+        showIndent(outfile, level)
+        outfile.write('attribute=[\n')
+        level += 1
+        for attribute_ in self.attribute:
             showIndent(outfile, level)
-            outfile.write('attribute=model_.attribute(\n')
-            self.attribute.exportLiteral(outfile, level)
+            outfile.write('model_.attribute(\n')
+            attribute_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7422,7 +7649,7 @@ class attributes(GeneratedsSuper):
         if nodeName_ == 'attribute':
             obj_ = attribute.factory()
             obj_.build(child_)
-            self.set_attribute(obj_)
+            self.attribute.append(obj_)
 # end class attributes
 
 
@@ -7430,7 +7657,10 @@ class classes(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, classxx=None):
-        self.classxx = classxx
+        if classxx is None:
+            self.classxx = []
+        else:
+            self.classxx = classxx
     def factory(*args_, **kwargs_):
         if classes.subclass:
             return classes.subclass(*args_, **kwargs_)
@@ -7439,6 +7669,8 @@ class classes(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_class(self): return self.classxx
     def set_class(self, classxx): self.classxx = classxx
+    def add_class(self, value): self.classxx.append(value)
+    def insert_class(self, index, value): self.classxx[index] = value
     def export(self, outfile, level, namespace_='t:', name_='classes', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7454,11 +7686,11 @@ class classes(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='classes'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='classes', fromsubclass_=False):
-        if self.classxx is not None:
-            self.classxx.export(outfile, level, namespace_, name_='class', )
+        for class_ in self.classxx:
+            class_.export(outfile, level, namespace_, name_='class')
     def hasContent_(self):
         if (
-            self.classxx is not None
+            self.classxx
             ):
             return True
         else:
@@ -7471,12 +7703,18 @@ class classes(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.classxx is not None:
+        showIndent(outfile, level)
+        outfile.write('classxx=[\n')
+        level += 1
+        for class_ in self.classxx:
             showIndent(outfile, level)
-            outfile.write('classxx=model_.classxx(\n')
-            self.classxx.exportLiteral(outfile, level)
+            outfile.write('model_.classxx(\n')
+            class_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7488,7 +7726,7 @@ class classes(GeneratedsSuper):
         if nodeName_ == 'class':
             obj_ = classxx.factory()
             obj_.build(child_)
-            self.set_class(obj_)
+            self.classxx.append(obj_)
 # end class classes
 
 
@@ -7496,7 +7734,10 @@ class parts(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, part=None):
-        self.part = part
+        if part is None:
+            self.part = []
+        else:
+            self.part = part
     def factory(*args_, **kwargs_):
         if parts.subclass:
             return parts.subclass(*args_, **kwargs_)
@@ -7505,6 +7746,8 @@ class parts(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_part(self): return self.part
     def set_part(self, part): self.part = part
+    def add_part(self, value): self.part.append(value)
+    def insert_part(self, index, value): self.part[index] = value
     def export(self, outfile, level, namespace_='t:', name_='parts', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7520,11 +7763,11 @@ class parts(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='parts'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='parts', fromsubclass_=False):
-        if self.part is not None:
-            self.part.export(outfile, level, namespace_, name_='part', )
+        for part_ in self.part:
+            part_.export(outfile, level, namespace_, name_='part')
     def hasContent_(self):
         if (
-            self.part is not None
+            self.part
             ):
             return True
         else:
@@ -7537,12 +7780,18 @@ class parts(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.part is not None:
+        showIndent(outfile, level)
+        outfile.write('part=[\n')
+        level += 1
+        for part_ in self.part:
             showIndent(outfile, level)
-            outfile.write('part=model_.part(\n')
-            self.part.exportLiteral(outfile, level)
+            outfile.write('model_.part(\n')
+            part_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7554,7 +7803,7 @@ class parts(GeneratedsSuper):
         if nodeName_ == 'part':
             obj_ = part.factory()
             obj_.build(child_)
-            self.set_part(obj_)
+            self.part.append(obj_)
 # end class parts
 
 
@@ -7562,7 +7811,10 @@ class instances(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, instance=None):
-        self.instance = instance
+        if instance is None:
+            self.instance = []
+        else:
+            self.instance = instance
     def factory(*args_, **kwargs_):
         if instances.subclass:
             return instances.subclass(*args_, **kwargs_)
@@ -7571,6 +7823,8 @@ class instances(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_instance(self): return self.instance
     def set_instance(self, instance): self.instance = instance
+    def add_instance(self, value): self.instance.append(value)
+    def insert_instance(self, index, value): self.instance[index] = value
     def export(self, outfile, level, namespace_='t:', name_='instances', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7586,11 +7840,11 @@ class instances(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='instances'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='instances', fromsubclass_=False):
-        if self.instance is not None:
-            self.instance.export(outfile, level, namespace_, name_='instance', )
+        for instance_ in self.instance:
+            instance_.export(outfile, level, namespace_, name_='instance')
     def hasContent_(self):
         if (
-            self.instance is not None
+            self.instance
             ):
             return True
         else:
@@ -7603,12 +7857,18 @@ class instances(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.instance is not None:
+        showIndent(outfile, level)
+        outfile.write('instance=[\n')
+        level += 1
+        for instance_ in self.instance:
             showIndent(outfile, level)
-            outfile.write('instance=model_.instance(\n')
-            self.instance.exportLiteral(outfile, level)
+            outfile.write('model_.instance(\n')
+            instance_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7620,7 +7880,7 @@ class instances(GeneratedsSuper):
         if nodeName_ == 'instance':
             obj_ = instance.factory()
             obj_.build(child_)
-            self.set_instance(obj_)
+            self.instance.append(obj_)
 # end class instances
 
 
@@ -7628,7 +7888,10 @@ class errors(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, approved=None):
-        self.approved = approved
+        if approved is None:
+            self.approved = []
+        else:
+            self.approved = approved
     def factory(*args_, **kwargs_):
         if errors.subclass:
             return errors.subclass(*args_, **kwargs_)
@@ -7637,6 +7900,8 @@ class errors(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_approved(self): return self.approved
     def set_approved(self, approved): self.approved = approved
+    def add_approved(self, value): self.approved.append(value)
+    def insert_approved(self, index, value): self.approved[index] = value
     def export(self, outfile, level, namespace_='t:', name_='errors', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7652,11 +7917,11 @@ class errors(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='errors'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='errors', fromsubclass_=False):
-        if self.approved is not None:
-            self.approved.export(outfile, level, namespace_, name_='approved', )
+        for approved_ in self.approved:
+            approved_.export(outfile, level, namespace_, name_='approved')
     def hasContent_(self):
         if (
-            self.approved is not None
+            self.approved
             ):
             return True
         else:
@@ -7669,12 +7934,18 @@ class errors(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.approved is not None:
+        showIndent(outfile, level)
+        outfile.write('approved=[\n')
+        level += 1
+        for approved_ in self.approved:
             showIndent(outfile, level)
-            outfile.write('approved=model_.approved(\n')
-            self.approved.exportLiteral(outfile, level)
+            outfile.write('model_.approved(\n')
+            approved_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -7686,7 +7957,7 @@ class errors(GeneratedsSuper):
         if nodeName_ == 'approved':
             obj_ = approved.factory()
             obj_.build(child_)
-            self.set_approved(obj_)
+            self.approved.append(obj_)
 # end class errors
 
 
@@ -8037,7 +8308,10 @@ class autorouter(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, passxx=None):
-        self.passxx = passxx
+        if passxx is None:
+            self.passxx = []
+        else:
+            self.passxx = passxx
     def factory(*args_, **kwargs_):
         if autorouter.subclass:
             return autorouter.subclass(*args_, **kwargs_)
@@ -8046,6 +8320,8 @@ class autorouter(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_pass(self): return self.passxx
     def set_pass(self, passxx): self.passxx = passxx
+    def add_pass(self, value): self.passxx.append(value)
+    def insert_pass(self, index, value): self.passxx[index] = value
     def export(self, outfile, level, namespace_='t:', name_='autorouter', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8061,11 +8337,11 @@ class autorouter(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='autorouter'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='autorouter', fromsubclass_=False):
-        if self.passxx is not None:
-            self.passxx.export(outfile, level, namespace_, name_='pass', )
+        for pass_ in self.passxx:
+            pass_.export(outfile, level, namespace_, name_='pass')
     def hasContent_(self):
         if (
-            self.passxx is not None
+            self.passxx
             ):
             return True
         else:
@@ -8078,12 +8354,18 @@ class autorouter(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.passxx is not None:
+        showIndent(outfile, level)
+        outfile.write('passxx=[\n')
+        level += 1
+        for pass_ in self.passxx:
             showIndent(outfile, level)
-            outfile.write('passxx=model_.passxx(\n')
-            self.passxx.exportLiteral(outfile, level)
+            outfile.write('model_.passxx(\n')
+            pass_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -8095,7 +8377,7 @@ class autorouter(GeneratedsSuper):
         if nodeName_ == 'pass':
             obj_ = passxx.factory()
             obj_.build(child_)
-            self.set_pass(obj_)
+            self.passxx.append(obj_)
 # end class autorouter
 
 
@@ -8103,7 +8385,10 @@ class elements(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, element=None):
-        self.element = element
+        if element is None:
+            self.element = []
+        else:
+            self.element = element
     def factory(*args_, **kwargs_):
         if elements.subclass:
             return elements.subclass(*args_, **kwargs_)
@@ -8112,6 +8397,8 @@ class elements(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_element(self): return self.element
     def set_element(self, element): self.element = element
+    def add_element(self, value): self.element.append(value)
+    def insert_element(self, index, value): self.element[index] = value
     def export(self, outfile, level, namespace_='t:', name_='elements', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8127,11 +8414,11 @@ class elements(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='elements'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='elements', fromsubclass_=False):
-        if self.element is not None:
-            self.element.export(outfile, level, namespace_, name_='element', )
+        for element_ in self.element:
+            element_.export(outfile, level, namespace_, name_='element')
     def hasContent_(self):
         if (
-            self.element is not None
+            self.element
             ):
             return True
         else:
@@ -8144,12 +8431,18 @@ class elements(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.element is not None:
+        showIndent(outfile, level)
+        outfile.write('element=[\n')
+        level += 1
+        for element_ in self.element:
             showIndent(outfile, level)
-            outfile.write('element=model_.element(\n')
-            self.element.exportLiteral(outfile, level)
+            outfile.write('model_.element(\n')
+            element_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -8161,7 +8454,7 @@ class elements(GeneratedsSuper):
         if nodeName_ == 'element':
             obj_ = element.factory()
             obj_.build(child_)
-            self.set_element(obj_)
+            self.element.append(obj_)
 # end class elements
 
 
@@ -8169,7 +8462,10 @@ class signals(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, signal=None):
-        self.signal = signal
+        if signal is None:
+            self.signal = []
+        else:
+            self.signal = signal
     def factory(*args_, **kwargs_):
         if signals.subclass:
             return signals.subclass(*args_, **kwargs_)
@@ -8178,6 +8474,8 @@ class signals(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_signal(self): return self.signal
     def set_signal(self, signal): self.signal = signal
+    def add_signal(self, value): self.signal.append(value)
+    def insert_signal(self, index, value): self.signal[index] = value
     def export(self, outfile, level, namespace_='t:', name_='signals', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8193,11 +8491,11 @@ class signals(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='signals'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='signals', fromsubclass_=False):
-        if self.signal is not None:
-            self.signal.export(outfile, level, namespace_, name_='signal', )
+        for signal_ in self.signal:
+            signal_.export(outfile, level, namespace_, name_='signal')
     def hasContent_(self):
         if (
-            self.signal is not None
+            self.signal
             ):
             return True
         else:
@@ -8210,12 +8508,18 @@ class signals(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.signal is not None:
+        showIndent(outfile, level)
+        outfile.write('signal=[\n')
+        level += 1
+        for signal_ in self.signal:
             showIndent(outfile, level)
-            outfile.write('signal=model_.signal(\n')
-            self.signal.exportLiteral(outfile, level)
+            outfile.write('model_.signal(\n')
+            signal_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -8227,7 +8531,7 @@ class signals(GeneratedsSuper):
         if nodeName_ == 'signal':
             obj_ = signal.factory()
             obj_.build(child_)
-            self.set_signal(obj_)
+            self.signal.append(obj_)
 # end class signals
 
 
@@ -8235,7 +8539,10 @@ class busses(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, bus=None):
-        self.bus = bus
+        if bus is None:
+            self.bus = []
+        else:
+            self.bus = bus
     def factory(*args_, **kwargs_):
         if busses.subclass:
             return busses.subclass(*args_, **kwargs_)
@@ -8244,6 +8551,8 @@ class busses(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_bus(self): return self.bus
     def set_bus(self, bus): self.bus = bus
+    def add_bus(self, value): self.bus.append(value)
+    def insert_bus(self, index, value): self.bus[index] = value
     def export(self, outfile, level, namespace_='t:', name_='busses', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8259,11 +8568,11 @@ class busses(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='busses'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='busses', fromsubclass_=False):
-        if self.bus is not None:
-            self.bus.export(outfile, level, namespace_, name_='bus', )
+        for bus_ in self.bus:
+            bus_.export(outfile, level, namespace_, name_='bus')
     def hasContent_(self):
         if (
-            self.bus is not None
+            self.bus
             ):
             return True
         else:
@@ -8276,12 +8585,18 @@ class busses(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.bus is not None:
+        showIndent(outfile, level)
+        outfile.write('bus=[\n')
+        level += 1
+        for bus_ in self.bus:
             showIndent(outfile, level)
-            outfile.write('bus=model_.bus(\n')
-            self.bus.exportLiteral(outfile, level)
+            outfile.write('model_.bus(\n')
+            bus_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -8293,7 +8608,7 @@ class busses(GeneratedsSuper):
         if nodeName_ == 'bus':
             obj_ = bus.factory()
             obj_.build(child_)
-            self.set_bus(obj_)
+            self.bus.append(obj_)
 # end class busses
 
 
@@ -8301,7 +8616,10 @@ class nets(GeneratedsSuper):
     subclass = None
     superclass = None
     def __init__(self, net=None):
-        self.net = net
+        if net is None:
+            self.net = []
+        else:
+            self.net = net
     def factory(*args_, **kwargs_):
         if nets.subclass:
             return nets.subclass(*args_, **kwargs_)
@@ -8310,6 +8628,8 @@ class nets(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_net(self): return self.net
     def set_net(self, net): self.net = net
+    def add_net(self, value): self.net.append(value)
+    def insert_net(self, index, value): self.net[index] = value
     def export(self, outfile, level, namespace_='t:', name_='nets', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8325,11 +8645,11 @@ class nets(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='nets'):
         pass
     def exportChildren(self, outfile, level, namespace_='t:', name_='nets', fromsubclass_=False):
-        if self.net is not None:
-            self.net.export(outfile, level, namespace_, name_='net', )
+        for net_ in self.net:
+            net_.export(outfile, level, namespace_, name_='net')
     def hasContent_(self):
         if (
-            self.net is not None
+            self.net
             ):
             return True
         else:
@@ -8342,12 +8662,18 @@ class nets(GeneratedsSuper):
     def exportLiteralAttributes(self, outfile, level, already_processed, name_):
         pass
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.net is not None:
+        showIndent(outfile, level)
+        outfile.write('net=[\n')
+        level += 1
+        for net_ in self.net:
             showIndent(outfile, level)
-            outfile.write('net=model_.net(\n')
-            self.net.exportLiteral(outfile, level)
+            outfile.write('model_.net(\n')
+            net_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -8359,7 +8685,7 @@ class nets(GeneratedsSuper):
         if nodeName_ == 'net':
             obj_ = net.factory()
             obj_.build(child_)
-            self.set_net(obj_)
+            self.net.append(obj_)
 # end class nets
 
 
@@ -8762,7 +9088,10 @@ class classxx(GeneratedsSuper):
         self.number = _cast(None, number)
         self.drill = _cast(None, drill)
         self.name = _cast(None, name)
-        self.clearance = clearance
+        if clearance is None:
+            self.clearance = []
+        else:
+            self.clearance = clearance
     def factory(*args_, **kwargs_):
         if classxx.subclass:
             return classxx.subclass(*args_, **kwargs_)
@@ -8771,6 +9100,8 @@ class classxx(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_clearance(self): return self.clearance
     def set_clearance(self, clearance): self.clearance = clearance
+    def add_clearance(self, value): self.clearance.append(value)
+    def insert_clearance(self, index, value): self.clearance[index] = value
     def get_width(self): return self.width
     def set_width(self, width): self.width = width
     def get_number(self): return self.number
@@ -8805,11 +9136,11 @@ class classxx(GeneratedsSuper):
             already_processed.append('name')
             outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='class', fromsubclass_=False):
-        if self.clearance is not None:
-            self.clearance.export(outfile, level, namespace_, name_='clearance', )
+        for clearance_ in self.clearance:
+            clearance_.export(outfile, level, namespace_, name_='clearance')
     def hasContent_(self):
         if (
-            self.clearance is not None
+            self.clearance
             ):
             return True
         else:
@@ -8837,12 +9168,18 @@ class classxx(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('name = "%s",\n' % (self.name,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.clearance is not None:
+        showIndent(outfile, level)
+        outfile.write('clearance=[\n')
+        level += 1
+        for clearance_ in self.clearance:
             showIndent(outfile, level)
-            outfile.write('clearance=model_.clearance(\n')
-            self.clearance.exportLiteral(outfile, level)
+            outfile.write('model_.clearance(\n')
+            clearance_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -8869,7 +9206,7 @@ class classxx(GeneratedsSuper):
         if nodeName_ == 'clearance':
             obj_ = clearance.factory()
             obj_.build(child_)
-            self.set_clearance(obj_)
+            self.clearance.append(obj_)
 # end class classxx
 
 
@@ -9122,7 +9459,10 @@ class passxx(GeneratedsSuper):
         self.active = _cast(None, active)
         self.name = _cast(None, name)
         self.refer = _cast(None, refer)
-        self.param = param
+        if param is None:
+            self.param = []
+        else:
+            self.param = param
     def factory(*args_, **kwargs_):
         if passxx.subclass:
             return passxx.subclass(*args_, **kwargs_)
@@ -9131,6 +9471,8 @@ class passxx(GeneratedsSuper):
     factory = staticmethod(factory)
     def get_param(self): return self.param
     def set_param(self, param): self.param = param
+    def add_param(self, value): self.param.append(value)
+    def insert_param(self, index, value): self.param[index] = value
     def get_active(self): return self.active
     def set_active(self, active): self.active = active
     def get_name(self): return self.name
@@ -9160,11 +9502,11 @@ class passxx(GeneratedsSuper):
             already_processed.append('refer')
             outfile.write(' refer=%s' % (self.gds_format_string(quote_attrib(self.refer).encode(ExternalEncoding), input_name='refer'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='pass', fromsubclass_=False):
-        if self.param is not None:
-            self.param.export(outfile, level, namespace_, name_='param', )
+        for param_ in self.param:
+            param_.export(outfile, level, namespace_, name_='param')
     def hasContent_(self):
         if (
-            self.param is not None
+            self.param
             ):
             return True
         else:
@@ -9188,12 +9530,18 @@ class passxx(GeneratedsSuper):
             showIndent(outfile, level)
             outfile.write('refer = "%s",\n' % (self.refer,))
     def exportLiteralChildren(self, outfile, level, name_):
-        if self.param is not None:
+        showIndent(outfile, level)
+        outfile.write('param=[\n')
+        level += 1
+        for param_ in self.param:
             showIndent(outfile, level)
-            outfile.write('param=model_.param(\n')
-            self.param.exportLiteral(outfile, level)
+            outfile.write('model_.param(\n')
+            param_.exportLiteral(outfile, level)
             showIndent(outfile, level)
             outfile.write('),\n')
+        level -= 1
+        showIndent(outfile, level)
+        outfile.write('],\n')
     def build(self, node):
         self.buildAttributes(node, node.attrib, [])
         for child in node:
@@ -9216,7 +9564,7 @@ class passxx(GeneratedsSuper):
         if nodeName_ == 'param':
             obj_ = param.factory()
             obj_.build(child_)
-            self.set_param(obj_)
+            self.param.append(obj_)
 # end class passxx
 
 
@@ -9311,9 +9659,10 @@ def parse(inFileName):
     rootObj.build(rootNode)
     # Enable Python to collect the space used by the DOM.
     doc = None
-    sys.stdout.write('<?xml version="1.0" ?>\n')
-    rootObj.export(sys.stdout, 0, name_=rootTag, 
-        namespacedef_='')
+##     sys.stdout.write('<?xml version="1.0" ?>\n')
+##     rootObj.export(sys.stdout, 0, name_=rootTag, 
+##         namespacedef_='')
+    del rootTag
     return rootObj
 
 
@@ -9329,9 +9678,10 @@ def parseString(inString):
     rootObj.build(rootNode)
     # Enable Python to collect the space used by the DOM.
     doc = None
-    sys.stdout.write('<?xml version="1.0" ?>\n')
-    rootObj.export(sys.stdout, 0, name_="eagle",
-        namespacedef_='')
+##     sys.stdout.write('<?xml version="1.0" ?>\n')
+##     rootObj.export(sys.stdout, 0, name_="eagle",
+##         namespacedef_='')
+    del rootTag
     return rootObj
 
 
@@ -9346,11 +9696,12 @@ def parseLiteral(inFileName):
     rootObj.build(rootNode)
     # Enable Python to collect the space used by the DOM.
     doc = None
-    sys.stdout.write('#from eagle import *\n\n')
-    sys.stdout.write('import eagle as model_\n\n')
-    sys.stdout.write('rootObj = model_.rootTag(\n')
-    rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
-    sys.stdout.write(')\n')
+##     sys.stdout.write('#from generated import *\n\n')
+##     sys.stdout.write('import generated as model_\n\n')
+##     sys.stdout.write('rootObj = model_.rootTag(\n')
+##     rootObj.exportLiteral(sys.stdout, 0, name_=rootTag)
+##     sys.stdout.write(')\n')
+    del rootTag
     return rootObj
 
 

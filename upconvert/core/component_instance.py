@@ -59,7 +59,7 @@ class ComponentInstance:
 
 class SymbolAttribute:
     """ The instance of a single body.  There should be a SymbolAttribute
-    for every body in the symbol that ComponentInstance is an instance of
+    for every body in the symbol that ComponentInstance is an instance of.
     """
 
     def __init__(self, x, y, rotation):

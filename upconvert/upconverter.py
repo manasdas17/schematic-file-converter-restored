@@ -59,8 +59,10 @@ try:
 except ImportError:
     import json
 
-from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, eagle as eagle_p, fritzing as fritzing_p, gerber as gerber_p
-from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, eagle as eagle_w, gerber as gerber_w
+from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, \
+    eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p
+from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
+    eagle as eagle_w, gerber as gerber_w
 
 
 # Logging
@@ -72,6 +74,7 @@ PARSERS = {
     'kicad': kicad_p.KiCAD,
     'geda': geda_p.GEDA,
     'eagle': eagle_p.Eagle,
+    'eaglexml': eaglexml_p.EagleXML,
     'fritzing': fritzing_p.Fritzing,
     'gerber': gerber_p.Gerber,
 }
