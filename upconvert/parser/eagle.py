@@ -2493,7 +2493,12 @@ class Eagle:
                                _pp.value)) # to avoid same name collisions
             _ci = ComponentInstance(instance_id=_pp.name,
                                     library_id=_libid,
-                                    symbol_index=_pp.symvar)    # other candidate is devsetndx:
+                                    symbol_index=0)    # There appears to only have the possibility
+                                                                # 1 symbol per component, so I will
+                                                                # hardcode this to 0 while
+                                                                # figuring out how to make get the
+                                                                # correct component symbol index
+                                    #symbol_index=_pp.symvar)    # other candidate is devsetndx:
                                                                 #  'devsets' contains all variants
                                                                 #  used in this schematic
             _sa = SymbolAttribute(x=_pp.shapes[0].x, # shapes' len is always 1 here
