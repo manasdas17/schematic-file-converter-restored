@@ -69,6 +69,11 @@ def filter_upv(arg, top, names):
         if upv_re.match(os.path.join(top, name)):
             arg.append(os.path.join(top, name))
 
+dsn_re = re.compile(r'.*\.dsn$')
+def filter_dsn(arg, top, names):
+    for name in names:
+        if dsn_re.match(os.path.join(top, name)):
+            arg.append(os.path.join(top, name))
 
 def get_file_diff_ratio(file1, file2):
     """ Return the ratio of differences to the total
@@ -240,13 +245,18 @@ def main():
     upverter_upv_files = []
     os.path.walk('./test/openjson', filter_upv, upverter_upv_files)
 
+    upverter_dsn_files = []
+    os.path.walk('./test/specctra', filter_dsn, upverter_dsn_files)
+
     l = {'eagle': eagle_sch_files,
          'eaglexml': eaglexml_sch_files,
          'fritzing': fritzing_sch_files,
          'geda': geda_sch_files,
          'gerber': gerber_ger_files,
          'kicad': kicad_sch_files,
-         'openjson': upverter_upv_files}
+         'openjson': upverter_upv_files,
+        #'specctra': upverter_dsn_files,
+    }
 
     test_classes = {}
 
