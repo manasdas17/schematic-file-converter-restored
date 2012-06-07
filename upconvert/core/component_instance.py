@@ -20,6 +20,13 @@
 # limitations under the License.
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class ComponentInstance:
     """ An instance of a component with a specific symbol """
 
@@ -53,7 +60,7 @@ class ComponentInstance:
             "library_id" : self.library_id,
             "symbol_index" : self.symbol_index,
             "symbol_attributes":[s.json() for s in self.symbol_attributes],
-            "attributes" : self.attributes
+            "attributes" : stringify_attributes(self.attributes)
             }
 
 

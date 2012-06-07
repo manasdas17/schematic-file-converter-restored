@@ -23,6 +23,13 @@
 from upconvert.core.shape import Point
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class Net:
     """ a Net with metadata and a list of points (with connections)
     Internal representation of a net, closely matches JSON net """
@@ -85,7 +92,7 @@ class Net:
         """ Return a net as JSON """
         return {
             "net_id":self.net_id,
-            "attributes":self.attributes,
+            "attributes": stringify_attributes(self.attributes),
             "annotations":[ann.json() for ann in self.annotations],
             "points":sorted([point.json() for point in self.points.values()],
                             key=lambda point : point.get('point_id'))

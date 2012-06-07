@@ -23,6 +23,13 @@
 from math import sqrt, pi, sin, cos, asin, acos
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class Shape(object):
     """a Shape with metadata and a list of shape parts
     Internal representation of the shapes closely matches JSON shapes """
@@ -98,6 +105,7 @@ class Rectangle(Shape):
             "width": self.width,
             "x": self.x,
             "y": self.y,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -151,6 +159,7 @@ class RoundedRectangle(Shape):
             "x": self.x,
             "y": self.y,
             "radius": self.radius,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -246,6 +255,7 @@ class Arc(Shape):
             "radius": self.radius,
             "x": self.x,
             "y": self.y,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -287,6 +297,7 @@ class Circle(Shape):
             "type": self.type,
             "x": self.x,
             "y": self.y,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -330,6 +341,7 @@ class Label(Shape):
             "text": self.text,
             "x": self.x,
             "y": self.y,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -377,7 +389,7 @@ class Line(Shape):
             "type": self.type,
             "p1": self.p1.json(),
             "p2": self.p2.json(),
-            "attributes" : self.attributes,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -428,6 +440,7 @@ class Polygon(Shape):
         return {
             "type": self.type,
             "points": [point.json() for point in self.points],
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -519,6 +532,7 @@ class BezierCurve(Shape):
             "control2": self.control2.json(),
             "p1": self.p1.json(),
             "p2": self.p2.json(),
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -586,6 +600,7 @@ class Moire(Shape):
             "hair_thickness": self.hair_thickness,
             "hair_length": self.hair_length,
             "rotation": self.rotation,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -652,6 +667,7 @@ class Thermal(Shape):
             "inner_diameter": self.inner_diameter,
             "gap_thickness": self.gap_thickness,
             "rotation": self.rotation,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -714,6 +730,7 @@ class RegularPolygon(Shape):
             "outer_diameter": self.outer_diameter,
             "vertices": self.vertices,
             "rotation": self.rotation,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
@@ -812,6 +829,7 @@ class Obround(Shape):
             "width": self.width,
             "x": self.x,
             "y": self.y,
+            #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
 
