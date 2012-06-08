@@ -65,16 +65,20 @@ class Fritzing(object):
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an fritzing file """
-        try:
-            with open(filename, 'r') as f:
-                data = f.read(4096)
-        except IOError:
-            data = ''
+        with open(filename, 'r') as f:
+            data = f.read(4096)
         confidence = 0
         if 'fritzingVersion' in data:
             confidence += 0.9
         elif filename.endswith('.fzz'):
             confidence += 0.9
+        if confidence == 0 and zipfile.is_zipfile(filename):
+            zf = zipfile.ZipFile(filename)
+            for name in zf.namelist():
+                if name.endswith('.fz'):
+                    confidence += 0.9
+                    break
+            zf.close()
         return confidence
 
 
@@ -105,9 +109,11 @@ class Fritzing(object):
         Return an ElementTree for the given file name.
         """
 
-        if filename.endswith('.fzz'):
+        if zipfile.is_zipfile(filename):
             self.fzz_zipfile = zipfile.ZipFile(filename)
-            fz_file = self.fzz_zipfile.open(basename(filename[:-1]))
+            fz_name = [name for name in self.fzz_zipfile.namelist()
+                       if name.endswith('.fz')][0]
+            fz_file = self.fzz_zipfile.open(fz_name)
         else:
             fz_file = filename
 
