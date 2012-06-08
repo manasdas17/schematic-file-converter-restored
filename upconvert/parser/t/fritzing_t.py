@@ -50,10 +50,11 @@ class FritzingTests(TestCase):
 
 
     def test_autodetect(self):
-        """ The frizting autodetection works. """
-        self.assertEqual(Fritzing.auto_detect("notfritzing"), 0.0)
-        self.assertEqual(Fritzing.auto_detect("fritzing.fzz"), 0.9)
-        self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, "components.fzz")), 0.9)
+        """ The fritzing autodetection works. """
+        self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, '..', 'kicad',
+                                                   'conn.sch')), 0.0)
+        self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, "Wiring.fzz")), 0.9)
+        self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, "Wiring.fz")), 0.9)
 
 
     def test_create_new_fritzing_parser(self):
