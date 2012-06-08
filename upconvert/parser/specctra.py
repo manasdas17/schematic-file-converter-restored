@@ -1,7 +1,8 @@
 #!/usr/bin/env python2
+""" The Specctra DSN Format Parser """
 
 # Specification of file format can be found here:
-# http://tech.groups.yahoo.com/group/kicad-users/files/  file "specctra.pdf"
+# http://tech.groups.yahoo.com/group/kicad-users/files/ file "specctra.pdf"
 
 from upconvert.core.design import Design
 from upconvert.core.components import Component, Symbol, Body, Pin
@@ -15,6 +16,7 @@ from os.path import exists, splitext
 from string import whitespace
 
 class Specctra(object):
+    """ The Specctra DSN Format Parser """
 
     @staticmethod
     def auto_detect(filename):
@@ -28,10 +30,18 @@ class Specctra(object):
 
     def parse(self, filename, library_filename=None):
         design = Design()
+
+        with open(filename) as f:
+            data = f.read()
+
+        tree = DsnParser().parse(data)
+
         return design
 
 
 class DsnParser:
+    """ Parser for Specctra dialect of lisp """
+
     # Specctra parser configuration: Disables parentheses as delimiters for text strings.
     string_quote = ''
     # Specctra parser configuration: By default, blank spaces are an absolute delimiter. 
@@ -39,66 +49,72 @@ class DsnParser:
 
     seperators = whitespace + '()'
 
+    def __init__(self):
+        self.pos = 0
+        self.length = 0
+        self.exp = ''
+
     def parse(self, exp):
-        self.i = 0
+        """ Parses s-expressions and returns them as Python lists """
+        self.pos = 0
         self.length = len(exp)
         self.exp = exp
         return self._parse_exp(root=True)[0]
 
-    def _maybe_eval(self, l):
+    def _maybe_eval(self, lst):
         """ File format specifies string quoting character:
         this eval configures parser so it can distinguish between
         quote character as atom and quoted string """
 
-        if len(l) > 1:
-            if l[0].lower() == 'string_quote':
-                self.string_quote = l[1]
-            elif l[0].lower() == 'space_in_quoted_tokens':
-                self.space_in_quoted_tokens = l[1].lower() == 'on'
-        return l
+        if len(lst) > 1:
+            if lst[0].lower() == 'string_quote':
+                self.string_quote = lst[1]
+            elif lst[0].lower() == 'space_in_quoted_tokens':
+                self.space_in_quoted_tokens = lst[1].lower() == 'on'
+        return lst
 
     def _parse_exp(self, root=False):
         """ Parses s-expressions and returns them as Python lists """
 
-        l = []
-        s = ''
+        lst = []
+        buf = ''
 
-        while self.i < self.length:
-            c = self.exp[self.i]
-            self.i += 1
+        while self.pos < self.length:
+            ch = self.exp[self.pos]
+            self.pos += 1
 
-            if c not in self.seperators and c != self.string_quote:
-                s += c
+            if ch not in self.seperators and ch != self.string_quote:
+                buf += ch
             else:
-                if s:
-                    l.append(s)
-                    s = ''
+                if buf:
+                    lst.append(buf)
+                    buf = ''
 
-                if c == '(':
-                    l.append(self._maybe_eval(self._parse_exp()))
-                elif c == ')':
-                    return l
-                elif c == self.string_quote:
-                    l.append(self._parse_string())
+                if ch == '(':
+                    lst.append(self._maybe_eval(self._parse_exp()))
+                elif ch == ')':
+                    return lst
+                elif ch == self.string_quote:
+                    lst.append(self._parse_string())
 
         if not root:
             raise SyntaxError('Closing ) not found')
-        return l
+        return lst
 
     def _parse_string(self):
         """ Reads string from expression according to current parser configuration """
 
-        s = ''
+        buf = ''
 
-        while self.i < self.length:
-            c = self.exp[self.i]
-            self.i += 1
+        while self.pos < self.length:
+            ch = self.exp[self.pos]
+            self.pos += 1
 
-            if c == self.string_quote:
-                return s
-            elif c in whitespace and not self.space_in_quoted_tokens:
-                return s
+            if ch == self.string_quote:
+                return buf
+            elif ch in whitespace and not self.space_in_quoted_tokens:
+                return buf
             else:
-                s += c
+                buf += ch
 
         raise SyntaxError('Closing string quote %s not found' % (self.string_quote))
