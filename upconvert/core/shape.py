@@ -164,6 +164,7 @@ class RoundedRectangle(Shape):
         self.y *= factor
         self.width *= factor
         self.height *= factor
+        self.radius *= factor
 
 
     def json(self):
@@ -266,6 +267,7 @@ class Arc(Shape):
         """ Scale the x & y coordinates in the arc. """
         self.x *= factor
         self.y *= factor
+        self.radius *= factor
 
 
     def json(self):
@@ -316,6 +318,7 @@ class Circle(Shape):
         """ Scale the x & y coordinates in the circle. """
         self.x *= factor
         self.y *= factor
+        self.radius *= factor
 
 
     def json(self):
