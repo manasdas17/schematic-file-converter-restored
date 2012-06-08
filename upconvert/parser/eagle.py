@@ -2558,21 +2558,21 @@ class Eagle:
                             _opy, _ly = _ss.y, _ss.y
                             _lrot = 0.
                             if None == _ss.rotate: # left
-                                _opx += 10/EAGLE_SCALE
+                                _opx += 20/EAGLE_SCALE
                                 _lx = (_ss.x + _opx) / 2
-                                _ly += 10/EAGLE_SCALE
+                                _ly += 20/EAGLE_SCALE
                             elif "R90" == _ss.rotate: # down
-                                _opy += 10/EAGLE_SCALE
-                                _lx += 10/EAGLE_SCALE
+                                _opy += 20/EAGLE_SCALE
+                                _lx += 20/EAGLE_SCALE
                                 _ly = (_ss.y + _opy) / 2
                                 #_lrot = 0.5 or 1.5 if label rotation is required
                             elif "R180" == _ss.rotate: # right
-                                _opx -= 10/EAGLE_SCALE
+                                _opx -= 20/EAGLE_SCALE
                                 _lx = (_ss.x + _opx) / 2
-                                _ly += 10/EAGLE_SCALE
+                                _ly += 20/EAGLE_SCALE
                             elif "R270" == _ss.rotate: # up
-                                _opy -= 10/EAGLE_SCALE
-                                _lx += 10/EAGLE_SCALE
+                                _opy -= 20/EAGLE_SCALE
+                                _lx += 20/EAGLE_SCALE
                                 _ly = (_ss.y + _opy) / 2
                                 #_lrot = 0.5 or 1.5 if label rotation is required
 
