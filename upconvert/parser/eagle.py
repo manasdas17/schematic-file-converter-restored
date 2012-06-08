@@ -2536,8 +2536,8 @@ class Eagle:
                     elif r'>VALUE' == _ss.value:
                         _val = _pp.value
                     _an = Annotation(value=_val, # value from symbol
-                                     x=(_ss.x + _pp.shapes[0].x),
-                                     y=(_ss.y + _pp.shapes[0].y),
+                                     x=(_ss.x),
+                                     y=(_ss.y),
                                      rotation=((
                                          Eagle.Shape.rotate2piradians(
                                                     _pp.shapes[0].rotate) +
@@ -2704,7 +2704,7 @@ class Eagle:
             self._parse(_if)
 
         design = self._convert()
-        design.scale(7.8)
+        design.scale(1/0.127)
 
         return design
 

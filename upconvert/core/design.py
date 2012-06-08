@@ -107,8 +107,7 @@ class Design:
         """ Scale the x & y coordinates in the core. """
         for n in self.nets:
             n.scale(factor)
-        for c in self.components:
-            c.scale(factor)
+        self.components.scale(factor)
         for i in self.component_instances:
             i.scale(factor)
         for s in self.shapes:
