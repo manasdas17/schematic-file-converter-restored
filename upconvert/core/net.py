@@ -88,6 +88,15 @@ class Net:
             self.add_point(point_b)
         self.conn_point(point_b, point_a)
 
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the net. """
+        for p in self.points:
+            p.scale(factor)
+        for a in self.annotations:
+            a.scale(factor)
+
+
     def json(self):
         """ Return a net as JSON """
         return {
@@ -118,6 +127,12 @@ class NetPoint:
     def add_connected_component(self, connected_component):
         """ Add a connected component """
         self.connected_components.append(connected_component)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the point. """
+        self.x *= factor
+        self.y *= factor
 
 
     def json(self):

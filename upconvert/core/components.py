@@ -43,6 +43,12 @@ class Components:
         self.components[library_id] = component
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the library. """
+        for c in self.components.values():
+            c.scale(factor)
+
+
     def json(self):
         """ Copy to a new dictionary to return """
         ret = dict()
@@ -77,6 +83,12 @@ class Component:
         self.symbols.append(symbol)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the component. """
+        for s in self.symbols:
+            s.scale(factor)
+
+
     def json(self):
         """ Return a component as JSON """
         return {
@@ -98,6 +110,12 @@ class Symbol:
     def add_body(self, body):
         """ Add a body to a symbol """
         self.bodies.append(body)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the symbol. """
+        for b in self.bodies:
+            b.scale(factor)
 
 
     def json(self):
@@ -136,6 +154,14 @@ class Body:
         self.shapes.append(shape)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the symbol. """
+        for s in self.shapes:
+            s.scale(factor)
+        for p in self.pins:
+            p.scale(factor)
+
+
     def json(self):
         """ Return a symbol as JSON """
         return {
@@ -172,6 +198,12 @@ class Pin:
             y_values.extend([pt.y for pt in self.label.bounds()])
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the pin. """
+        self.p1.scale(factor)
+        self.p2.scale(factor)
 
 
     def json(self):

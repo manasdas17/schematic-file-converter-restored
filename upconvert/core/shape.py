@@ -97,6 +97,14 @@ class Rectangle(Shape):
         return cls(x, y, width, height)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the rectangle. """
+        self.x *= factor
+        self.y *= factor
+        self.width *= factor
+        self.height *= factor
+
+
     def json(self):
         """ Return the rectangle as JSON """
         return {
@@ -148,6 +156,14 @@ class RoundedRectangle(Shape):
         width = x2-x
         height = y2-y
         return cls(x, y, width, height, radius)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the rounded rectangle. """
+        self.x *= factor
+        self.y *= factor
+        self.width *= factor
+        self.height *= factor
 
 
     def json(self):
@@ -246,6 +262,12 @@ class Arc(Shape):
         return (points['start'], points['end'])
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the arc. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the arc as JSON """
         return {
@@ -290,6 +312,12 @@ class Circle(Shape):
         return Point(x, y)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the circle. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the circle as JSON """
         return {
@@ -330,6 +358,12 @@ class Label(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the label. """
+        self.x *= factor
+        self.y *= factor
 
 
     def json(self):
@@ -383,6 +417,12 @@ class Line(Shape):
         return Point(x, y)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the line. """
+        self.p1.scale(factor)
+        self.p2.scale(factor)
+
+
     def json(self):
         """ Return the line as JSON """
         return {
@@ -433,6 +473,12 @@ class Polygon(Shape):
     def add_point(self, x, y=None):
         """ Add a point to the polygon """
         self.points.append(Point(x, y))
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the polygon. """
+        for p in self.points:
+            p.scale(factor)
 
 
     def json(self):
@@ -524,6 +570,14 @@ class BezierCurve(Shape):
         self.p2 = {"x":p2x, "y":p2y}
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the curve. """
+        self.control1.scale(factor)
+        self.control2.scale(factor)
+        self.p1.scale(factor)
+        self.p2.scale(factor)
+
+
     def json(self):
         """ Return the bezier curve as JSON """
         return {
@@ -586,6 +640,12 @@ class Moire(Shape):
         opp = abs(sin(self.rotation * pi) * rad)
         adj = abs(cos(self.rotation * pi) * rad)
         return max(opp, adj, rad)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the moire. """
+        self.x *= factor
+        self.y *= factor
 
 
     def json(self):
@@ -658,6 +718,12 @@ class Thermal(Shape):
         return hwid
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the thermal. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the thermal as JSON """
         return {
@@ -722,6 +788,14 @@ class RegularPolygon(Shape):
         return max(this_v, next_v)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the polygon. """
+        self.x *= factor
+        self.y *= factor
+        for v in self.vertices:
+            v.scale(factor)
+
+
     def json(self):
         """ Return the regular polygon as JSON """
         return {
@@ -782,6 +856,12 @@ class Point:
         return sqrt(delta_x**2 + delta_y**2)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the point. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the point as JSON """
         return {
@@ -821,8 +901,16 @@ class Obround(Shape):
         return Point(x, y)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the oval. """
+        self.x *= factor
+        self.y *= factor
+        self.width *= factor
+        self.height *= factor
+
+
     def json(self):
-        """ Return the rectangle as JSON """
+        """ Return the oval as JSON """
         return {
             "height": self.height,
             "type": self.type,

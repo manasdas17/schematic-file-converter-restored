@@ -103,6 +103,20 @@ class Design:
         self.design_attributes = design_attributes
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the core. """
+        for n in self.nets:
+            n.scale(factor)
+        for c in self.components:
+            c.scale(factor)
+        for i in self.component_instances:
+            i.scale(factor)
+        for s in self.shapes:
+            s.scale(factor)
+        for p in self.pins:
+            p.scale(factor)
+
+
     def generate_netlist(self):
         """ The netlist as generated from the schematic. """
         pass

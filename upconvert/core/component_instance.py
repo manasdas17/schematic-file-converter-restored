@@ -53,6 +53,12 @@ class ComponentInstance:
         return self.instance_id
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the instance. """
+        for a in self.symbol_attributes:
+            a.scale(factor)
+
+
     def json(self):
         """ Return a component as JSON """
         return {
@@ -79,6 +85,14 @@ class SymbolAttribute:
     def add_annotation(self, annotation):
         """ Add annotations to the body """
         self.annotations.append(annotation)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+        for a in self.annotations:
+            a.scale(factor)
 
 
     def json(self):

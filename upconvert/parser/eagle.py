@@ -2704,6 +2704,7 @@ class Eagle:
             self._parse(_if)
 
         design = self._convert()
+        design.scale(10)
 
         return design
 
