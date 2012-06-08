@@ -91,7 +91,7 @@ class Net:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the net. """
-        for p in self.points:
+        for p in self.points.values():
             p.scale(factor)
         for a in self.annotations:
             a.scale(factor)
