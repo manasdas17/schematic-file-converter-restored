@@ -202,6 +202,7 @@ class Pin:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the pin. """
+        self.label.scale(factor)
         self.p1.scale(factor)
         self.p2.scale(factor)
 
