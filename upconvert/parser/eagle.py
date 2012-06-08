@@ -38,6 +38,10 @@ from upconvert.core.shape import Point, Line, Label, Arc
 #    """
 #    pass# pylint: disable=R0902
 
+
+EAGLE_SCALE = 1/0.127
+
+
 class Eagle:
     """ The Eagle Format Parser """
 
@@ -2554,21 +2558,21 @@ class Eagle:
                             _opy, _ly = _ss.y, _ss.y
                             _lrot = 0.
                             if None == _ss.rotate: # left
-                                _opx += 10
+                                _opx += 10/EAGLE_SCALE
                                 _lx = (_ss.x + _opx) / 2
-                                _ly += 10
+                                _ly += 10/EAGLE_SCALE
                             elif "R90" == _ss.rotate: # down
-                                _opy += 10
-                                _lx += 10
+                                _opy += 10/EAGLE_SCALE
+                                _lx += 10/EAGLE_SCALE
                                 _ly = (_ss.y + _opy) / 2
                                 #_lrot = 0.5 or 1.5 if label rotation is required
                             elif "R180" == _ss.rotate: # right
-                                _opx -= 10
+                                _opx -= 10/EAGLE_SCALE
                                 _lx = (_ss.x + _opx) / 2
-                                _ly += 10
+                                _ly += 10/EAGLE_SCALE
                             elif "R270" == _ss.rotate: # up
-                                _opy -= 10
-                                _lx += 10
+                                _opy -= 10/EAGLE_SCALE
+                                _lx += 10/EAGLE_SCALE
                                 _ly = (_ss.y + _opy) / 2
                                 #_lrot = 0.5 or 1.5 if label rotation is required
 
@@ -2704,7 +2708,7 @@ class Eagle:
             self._parse(_if)
 
         design = self._convert()
-        design.scale(1/0.127)
+        design.scale(EAGLE_SCALE)
 
         return design
 
