@@ -90,15 +90,8 @@ class ViewDrawBase:
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
         # FIXME use rotation
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('Q'):
-                self.stream.push(phrase)
-                break
-            # Q cmd is ignored for now anyway, but need to get it out of the way
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        self.sub_nodes(['Q'])
+        # Q cmd is ignored for now anyway, but need to get it out of the way
         display = True
         if viz == '1':
             value = val
@@ -217,6 +210,20 @@ class ViewDrawBase:
                              angle(x2,y2) / pi, angle(x0,y0) / pi,
                              int(round(rad))))
 
+    def sub_nodes(self, sub_cmds):
+        """ Parse and return any commands that the parent needs.
+
+        Returns a dict in the same style as parse() that the parent node can
+        use. Any use of this sub-tree is left up to the caller. """
+        subdata = defaultdict(list)
+        for phrase in self.stream:
+            cmd, _sep, args = phrase.partition(' ')
+            if cmd not in sub_cmds:
+                self.stream.push(phrase)
+                break
+            k, v = self.parsenode(cmd)(args)
+            subdata[k].append(v)
+        return subdata
 
 class ViewDrawSch(ViewDrawBase):
     """ Parser for a single schematic file. """
@@ -272,14 +279,7 @@ class ViewDrawSch(ViewDrawBase):
     def parse_net(self, args):
         """ Assembles a net from a list of junctions, segments, and labels. """
         thisnet = Net(args)
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
-                self.stream.push(phrase)
-                break
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        subdata = self.sub_nodes('J S A L Q B'.split())
         # finish building thisnet
         for netpt in subdata['netpoint'][:]:
             # using a copy so that we can modify subdata['netpoint'] inside loop
@@ -335,14 +335,7 @@ class ViewDrawSch(ViewDrawBase):
 
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
                                                       float(rot) / 2))
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('|R', 'A', 'C'):
-                self.stream.push(phrase)
-                break
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        subdata = self.sub_nodes('|R A C'.split())
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)
             if '=' in annot.value:
@@ -431,14 +424,7 @@ class ViewDrawSym(ViewDrawBase):
         # Pin declaration, seems to only be done once per pin
         pid, xe, ye, xb, yb, rot, side, inv = [int(a) for a in args.split()]
         thispin = Pin(pid, (xb, yb), (xe, ye))
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('L'):
-                self.stream.push(phrase)
-                break
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        subdata = self.sub_nodes(['L'])
         if len(subdata['label']) > 0:
             # I suppose if there's more than one label, just go with the first
             thispin.label = subdata['label'][0]
