@@ -44,6 +44,33 @@ class ViewDrawBase:
     sheetsizes = ('ASIZE', 'BSIZE', 'CSIZE', 'DSIZE', 'ESIZE', 'A4', 'A3',
                   'A2', 'A1', 'A0', 'CUSTOM')
 
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is a viewdraw file """
+        confidence = 0.
+        with open(filename) as f:
+            # as far as I've seen, the first two non-comment lines in a
+            # viewdraw file are the version, and the mysterious K line
+            version = f.readline().strip()
+            while version.startswith('|'):
+                version = f.readline().strip()
+            kline = f.readline().strip()
+            while kline.startswith('|'):
+                kline = f.readline().strip()
+
+            if version.startswith('V '):
+                confidence += 0.2
+                if version.split(' ')[1] in ('50', '51', '52', '53'):
+                    # the only version numbers I've seen that match this format
+                    confidence += 0.5
+            if kline.startswith('K '):
+                confidence += 0.2
+
+        # result is that confidence is 0.9 if it's precisely what I expected,
+        # and likely 0.4 if it's just in a related format (eg later versions
+        # will report 'V 5.4' or similar)
+        return confidence
+
     def __init__(self, filename):
         self.filename = filename
         self.stream = None
@@ -459,6 +486,8 @@ class ViewDraw:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an viewdraw file """
+        # I'm not sure what you'd throw this at right now, there is no "project
+        # file" you could check. Maybe if/when viewdraw.ini parsing happens?
         return 0
 
 
