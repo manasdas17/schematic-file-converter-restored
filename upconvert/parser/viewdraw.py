@@ -106,10 +106,11 @@ class ViewDrawBase:
 
     def parse_label(self, args):
         """ Returns a parsed label. """
-        x, y, _font_size, _rot, _c, _d, _e, _f, text = args.split(' ', 8)
+        args = args.split(' ', 8)
+        x, y, _font_size, _rot, _anchor, _scope, _vis, _sense, text = args
         # treat them as annotations for now, I guess.
-        # suspect that c, e are anchor and vis, as in parse_annot
-        # According to other research, d is scope (0=local, 1=global) and f
+        # suspect that anchor and vis are as in parse_annot
+        # According to other research, _scope is (0=local, 1=global) and _sense
         # might be logic sense (for overbars, 0=normal, 1=inverted)
         # FIXME use rot and vis
         return ('annot', Annotation(text, int(x), int(y), 0, True))
@@ -168,17 +169,18 @@ class ViewDrawBase:
         # drawn perpendicular to and bisecting these chords will intersect at
         # the circle's centre.
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
-        # can't allow for infinite slopes (ma and mb), and can't allow ma to be
-        # a zero slope.
+        # can't allow for infinite slopes (m_a and m_b), and can't allow m_a
+        # to be a zero slope.
         while abs(x0 - x1) < 0.1 or abs(x1 - x2) < 0.1 or abs(y0 - y1) < 0.1:
             x0, y0, x1, y1, x2, y2 = x1, y1, x2, y2, x0, y0
         # slopes of the chords
-        ma, mb = (y1-y0) / (x1-x0), (y2-y1) / (x2-x1)
+        m_a, m_b = (y1-y0) / (x1-x0), (y2-y1) / (x2-x1)
         # find the centre
-        xc = (ma * mb * (y0-y2) + mb * (x0+x1) - ma * (x1+x2)) / (2 * (mb-ma))
-        yc = (-1/ma) * (xc - (x0+x1) / 2) + (y0+y1) / 2
+        xcenter = ((m_a * m_b * (y0 - y2) + m_b * (x0 + x1) - m_a * (x1 + x2))
+                   / (2 * (m_b - m_a)))
+        ycenter = (-1/m_a) * (xcenter - (x0+x1) / 2) + (y0+y1) / 2
         # radius is the distance from the centre to any of the three points
-        rad = sqrt((xc-x0)**2 + (yc-y0)**2)
+        rad = sqrt((xcenter-x0)**2 + (ycenter-y0)**2)
 
         # re-init xs,ys so that start and end points don't get confused.
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
@@ -187,8 +189,8 @@ class ViewDrawBase:
             """ Calculate the angle from the center of the arc to (x, y). """
             # as parsed, the angle increases CCW. Here, we return an angle
             # increasing CW
-            opp = y - yc
-            adj = x - xc
+            opp = y - ycenter
+            adj = x - xcenter
             if abs(adj) < 0.01:
                 # vertical line to x,y
                 if opp > 0:
@@ -206,7 +208,7 @@ class ViewDrawBase:
             # upverter uses CW angles, so...
             return 2 * pi - ang
 
-        return ('shape', Arc(int(round(xc)), int(round(yc)),
+        return ('shape', Arc(int(round(xcenter)), int(round(ycenter)),
                              angle(x2,y2) / pi, angle(x0,y0) / pi,
                              int(round(rad))))
 
@@ -266,10 +268,10 @@ class ViewDrawSch(ViewDrawBase):
 
         for shape in tree['shape']:
             ckt.add_shape(shape)
-        
-        for lbl in [s for s in tree['shapes'] if isinstance(s, Label)]:
-            ann = Annotation(lbl.text, lbl.x, lbl.y, lbl.rotation, True)
-            ckt.design_attributes.add_annotation(ann)
+            if isinstance(shape, Label):
+                ann = Annotation(shape.text, shape.x, shape.y,
+                                 shape.rotation, True)
+                ckt.design_attributes.add_annotation(ann)
         
         for k, v in tree['attr']:
             ckt.design_attributes.add_attribute(k, v)
@@ -324,7 +326,7 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_inst(self, args):
         """ Returns a parsed component instance. """
-        inst, libname, libnum, x, y, rot, _scale, _b = args.split()
+        inst, libname, libnum, x, y, rot, _scale, _unknown = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
         if int(rot) > 3:
@@ -348,8 +350,8 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_conn(self, args):
         """ Returns a parsed connection between component and net. """
-        netid, segpin, pin, _a = args.split()
-        # as far as has been observed, a is always 0
+        netid, segpin, pin, _unknown = args.split()
+        # as far as has been observed, _unknown is always 0
         # segpin is the netpoint on the net
         # TODO I have no faith in pin variable here
         return ('conn', (netid, int(segpin), pin))
@@ -361,8 +363,8 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
-        x, y, _font_size, _rot, _anchor, viz, kv = args.split(' ', 6)
-        k, _sep, v = kv.partition('=')
+        x, y, _font_size, _rot, _anchor, viz, keyval = args.split(' ', 6)
+        k, _sep, v = keyval.partition('=')
         # TODO want to do anything with the rest of the info?
         # TODO at least add in the label
         return ('attr', (k, v))
@@ -393,8 +395,8 @@ class ViewDrawSym(ViewDrawBase):
         part.symbols[0].add_body(Body())
         
         tree = ViewDrawBase.parse(self)
-        for attr in tree['attr']:
-            part.add_attribute(*attr)
+        for k, v in tree['attr']:
+            part.add_attribute(k, v)
         for shape in tree['shape'] + sum(tree['lines'], []):
             part.symbols[0].bodies[0].add_shape(shape)
         for pin in tree['pin']:
@@ -422,8 +424,10 @@ class ViewDrawSym(ViewDrawBase):
     def parse_pin(self, args):
         """ Returns a parsed pin. """
         # Pin declaration, seems to only be done once per pin
-        pid, xe, ye, xb, yb, rot, side, inv = [int(a) for a in args.split()]
-        thispin = Pin(pid, (xb, yb), (xe, ye))
+        pid, x1, y1, x0, y0, _rot, _side, _inv = [int(a) for a in args.split()]
+        # _rot and _side are not needed, because the x-y data tells us what we
+        # need to know. _inv is used to draw the little inverted signal cirles.
+        thispin = Pin(pid, (x0, y0), (x1, y1))
         subdata = self.sub_nodes(['L'])
         if len(subdata['label']) > 0:
             # I suppose if there's more than one label, just go with the first
