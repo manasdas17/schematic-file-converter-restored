@@ -20,6 +20,13 @@
 # limitations under the License.
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class ComponentInstance:
     """ An instance of a component with a specific symbol """
 
@@ -46,6 +53,12 @@ class ComponentInstance:
         return self.instance_id
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the instance. """
+        for a in self.symbol_attributes:
+            a.scale(factor)
+
+
     def json(self):
         """ Return a component as JSON """
         return {
@@ -53,13 +66,13 @@ class ComponentInstance:
             "library_id" : self.library_id,
             "symbol_index" : self.symbol_index,
             "symbol_attributes":[s.json() for s in self.symbol_attributes],
-            "attributes" : self.attributes
+            "attributes" : stringify_attributes(self.attributes)
             }
 
 
 class SymbolAttribute:
     """ The instance of a single body.  There should be a SymbolAttribute
-    for every body in the symbol that ComponentInstance is an instance of
+    for every body in the symbol that ComponentInstance is an instance of.
     """
 
     def __init__(self, x, y, rotation):
@@ -72,6 +85,14 @@ class SymbolAttribute:
     def add_annotation(self, annotation):
         """ Add annotations to the body """
         self.annotations.append(annotation)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+        for a in self.annotations:
+            a.scale(factor)
 
 
     def json(self):

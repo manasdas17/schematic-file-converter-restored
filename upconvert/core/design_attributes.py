@@ -23,6 +23,13 @@
 import time
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class DesignAttributes:
     """ The DesignAttributes class corresponds to the design_attributes
     object in the Open JSON format """
@@ -51,7 +58,7 @@ class DesignAttributes:
         return {
             "annotations" : [a.json() for a in self.annotations],
             "metadata" : self.metadata.json(),
-            "attributes" : self.attributes,
+            "attributes" : stringify_attributes(self.attributes),
             }
 
 

@@ -23,6 +23,13 @@
 from upconvert.core.shape import Point
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class Net:
     """ a Net with metadata and a list of points (with connections)
     Internal representation of a net, closely matches JSON net """
@@ -81,13 +88,23 @@ class Net:
             self.add_point(point_b)
         self.conn_point(point_b, point_a)
 
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the net. """
+        for p in self.points.values():
+            p.scale(factor)
+        for a in self.annotations:
+            a.scale(factor)
+
+
     def json(self):
         """ Return a net as JSON """
         return {
             "net_id":self.net_id,
-            "attributes":self.attributes,
+            "attributes": stringify_attributes(self.attributes),
             "annotations":[ann.json() for ann in self.annotations],
-            "points":[point.json() for point in self.points.values()]
+            "points":sorted([point.json() for point in self.points.values()],
+                            key=lambda point : point.get('point_id'))
             }
 
 
@@ -112,13 +129,19 @@ class NetPoint:
         self.connected_components.append(connected_component)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the point. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return a netpoint as JSON """
         return {
             "point_id" : self.point_id,
             "x" : self.x,
             "y" : self.y,
-            "connected_points" : self.connected_points,
+            "connected_points" : sorted(self.connected_points),
             "connected_components" :
                 [comp.json() for comp in self.connected_components]
             }

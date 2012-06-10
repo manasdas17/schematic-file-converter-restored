@@ -1,7 +1,5 @@
-#!/usr/bin/python
-# encoding: utf-8
-#pylint: disable=R0904
-""" The eaglexml parser test class """
+#!/usr/bin/env python2
+""" The Altium Format Writer """
 
 # upconvert.py - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
@@ -22,22 +20,11 @@
 # limitations under the License.
 
 
-from upconvert.parser.eaglexml import EagleXML
-import unittest
+class Altium(object):
+    """ The Altium Format Writer """
 
+    def write(self, design, filename):
+        """ Write the design to the Altium format """
 
-class EagleXMLTests(unittest.TestCase):
-    """ The tests of the eagle-xml parser """
-
-    def setUp(self):
-        """ Setup the test case. """
-        pass
-
-    def tearDown(self):
-        """ Teardown the test case. """
-        pass
-
-    def test_create_new_eaglexml_parser(self):
-        """ Test creating an empty parser. """
-        parser = EagleXML()
-        self.assertTrue(parser != None)
+        with open(filename, "w") as f:
+            f.write('Altium export is currently unsupported')

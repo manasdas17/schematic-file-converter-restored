@@ -27,8 +27,9 @@ import os
 import sys
 import re
 import logging
+import subprocess
 import tempfile
-from difflib import SequenceMatcher
+
 from upconvert.upconverter import Upconverter
 
 
@@ -69,21 +70,27 @@ def filter_upv(arg, top, names):
             arg.append(os.path.join(top, name))
 
 
-def file_diff(file1, file2):
-    text1 = ''
+def get_file_diff_ratio(file1, file2):
+    """ Return the ratio of differences to the total
+    number of lines in file1 and file2. """
     with open(file1) as f:
-        text1 = f.read()
-    text2 = ''
+        num_lines1 = sum(1 for _ in f)
     with open(file2) as f:
-        text2 = f.read()
-    return SequenceMatcher(None, text1, text2)
+        num_lines2 = sum(1 for _ in f)
+
+    p = subprocess.Popen(('diff', '--speed-large-files', file1, file2),
+                         stdout=subprocess.PIPE)
+
+    num_diffs = sum(1 for line in p.stdout if line and line[0] in '<>')
+
+    p.wait()
+
+    return float(num_diffs) / (num_lines1 + num_lines2)
 
 
-def check_output(tmp_path):
-    output = None
+def get_file_contents(tmp_path):
     with open(tmp_path, 'r') as final:
-        output = final.read()
-    return output
+        return final.read()
 
 
 def test_auto_detect_generator(file_path, format):
@@ -102,25 +109,64 @@ def test_parse_generator(file_path, format):
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.close(tmp_fd)
         Upconverter.write(data, tmp_path, 'openjson')
-        self.assertTrue(check_output(tmp_path) != '')
+        self.assertTrue(get_file_contents(tmp_path) != '')
         os.remove(tmp_path)
     return test
 
 
+max_diff_ratios = {
+    'geda': 0.30,
+    'kicad': 0.049,
+    'openjson': 0.0
+    }
+
 def test_diff_generator(file_path, format):
-    """ Test the damage to a file from an in-out. """
+    """ Parse the file, write to both openjson and to the given
+    format. Then parse the new file in the same format and write that
+    to openjson. Test the differences between the two openjson files
+    and fail if they differ by more than 5 percent.
+
+    This tests that the parser and writer together preserve as much
+    information as the parser by itself.
+
+    Given a file F in format X, written as F.X, do the following
+    conversions:
+
+      F.X --> F1.upv --> F2.X --> F3.upv
+
+    Then compare F1 and F3 using the 'diff' program and compute the
+    ratio of the number of differences to the total number of lines in
+    both files. Assert the ratio is below a given threshold.
+    """
     def test(self):
         data = Upconverter.parse(file_path, format)
-        self.assertTrue(data != None)
+        self.assertNotEqual(data, None)
 
-        tmp_fd, tmp_path = tempfile.mkstemp()
+        tmp_fd, json_path_1 = tempfile.mkstemp(prefix='test.1.', suffix='.upv')
+        os.close(tmp_fd)
+        Upconverter.write(data, json_path_1, 'openjson')
+        self.assertNotEqual(get_file_contents(json_path_1), '')
+
+        tmp_fd, tmp_path = tempfile.mkstemp(suffix='.' + format)
         os.close(tmp_fd)
         Upconverter.write(data, tmp_path, format)
-        self.assertTrue(check_output(tmp_path) != '')
+        self.assertNotEqual(get_file_contents(tmp_path), '')
 
-        ratio = file_diff(file_path, tmp_path).ratio()
-        self.assertTrue(ratio > 0.95,
-                        (file_path, tmp_path, ratio))
+        data = Upconverter.parse(tmp_path, format)
+        self.assertNotEqual(data, None)
+
+        tmp_fd, json_path_2 = tempfile.mkstemp(prefix='test.2.', suffix='.upv')
+        os.close(tmp_fd)
+        Upconverter.write(data, json_path_2, 'openjson')
+        self.assertNotEqual(get_file_contents(json_path_2), '')
+
+        ratio = get_file_diff_ratio(json_path_1, json_path_2)
+
+        self.assertTrue(ratio <= max_diff_ratios[format],
+                        (file_path, tmp_path, json_path_1, json_path_2, ratio))
+
+        os.remove(json_path_1)
+        os.remove(json_path_2)
         os.remove(tmp_path)
     return test
 
@@ -134,7 +180,7 @@ def test_write_generator(json_file_path, format):
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.close(tmp_fd)
         Upconverter.write(data, tmp_path, format)
-        self.assertTrue(check_output(tmp_path) != '')
+        self.assertTrue(get_file_contents(tmp_path) != '')
         os.remove(tmp_path)
     return test
 
@@ -144,9 +190,13 @@ def main():
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument('--fail-fast', action='store_true', default=False)
     parser.add_argument('--unsupported', action='store_true', default=False)
+    parser.add_argument('--test-type', dest='test_types', action='append')
     parser.add_argument('file_types', metavar='input-type', nargs='*')
 
     args = parser.parse_args()
+
+    if not args.test_types:
+        args.test_types = ['parse', 'write', 'autodetect', 'diff']
 
     if 'all' in args.file_types:
         args.file_types = None
@@ -160,9 +210,13 @@ def main():
 
     # Hide logging
     logging.getLogger("main").setLevel(logging.ERROR)
+    logging.getLogger("parser.geda").setLevel(logging.ERROR)
 
     eagle_sch_files = []
     os.path.walk('./test/eagle', filter_sch, eagle_sch_files)
+
+    eaglexml_sch_files = []
+    os.path.walk('./test/eaglexml', filter_sch, eaglexml_sch_files)
 
     fritzing_fz_files = []
     os.path.walk('./test/fritzing', filter_fz, fritzing_fz_files)
@@ -187,6 +241,7 @@ def main():
     os.path.walk('./test/openjson', filter_upv, upverter_upv_files)
 
     l = {'eagle': eagle_sch_files,
+         'eaglexml': eaglexml_sch_files,
          'fritzing': fritzing_sch_files,
          'geda': geda_sch_files,
          'gerber': gerber_ger_files,
@@ -194,6 +249,7 @@ def main():
          'openjson': upverter_upv_files}
 
     test_classes = {}
+
     for format, files in l.iteritems():
         test_class = type('RegressionTest_' + format, (unittest.TestCase,), {})
         test_classes[format] = test_class
@@ -201,24 +257,26 @@ def main():
         for f in files:
             base = os.path.basename(f)
 
-            test_name = 'test_%s_%s_%s' % (format, base, 'detect')
-            test = test_auto_detect_generator(f, format)
-            setattr(test_class, test_name, test)
+            if 'autodetect' in args.test_types:
+                test_name = 'test_%s_%s_%s' % (format, base, 'detect')
+                test = test_auto_detect_generator(f, format)
+                setattr(test_class, test_name, test)
 
-            test_name = 'test_%s_%s_%s' % (format, base, 'parse')
-            test = test_parse_generator(f, format)
-            setattr(test_class, test_name, test)
+            if 'parse' in args.test_types:
+                test_name = 'test_%s_%s_%s' % (format, base, 'parse')
+                test = test_parse_generator(f, format)
+                setattr(test_class, test_name, test)
 
-            # # TODO: There is a bug that causes diff to hang on openjson
-            # if format not in ('fritzing', 'openjson', 'gerber'):
-            #     test_name = 'test_%s_%s_%s' % (format, base, 'diff')
-            #     test = test_diff_generator(f, format)
-            #     setattr(test_class, test_name, test)
+            if 'diff' in args.test_types and format in max_diff_ratios:
+                test_name = 'test_%s_%s_%s' % (format, base, 'diff')
+                test = test_diff_generator(f, format)
+                setattr(test_class, test_name, test)
 
         for f in upverter_upv_files:
             base = os.path.basename(f)
 
-            if format not in ('fritzing', 'gerber'):
+            if 'write' in args.test_types \
+                    and format not in ('eaglexml', 'fritzing', 'gerber'):
                 test_name = 'test_%s_%s_%s' % (format, base, 'write')
                 test = test_write_generator(f, format)
                 setattr(test_class, test_name, test)
