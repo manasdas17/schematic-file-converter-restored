@@ -15,29 +15,45 @@ from collections import defaultdict
 from os.path import exists, splitext
 from string import whitespace
 
+import dsn
+
 class Specctra(object):
     """ The Specctra DSN Format Parser """
+    def __init__(self):
+        self.design = None
 
     @staticmethod
     def auto_detect(filename):
         with open(filename, 'r') as f:
             data = f.read(4096)
         confidence = 0
-        if '(DSN' in data.upper():
+        if '(pcb' in data:
             confidence += 0.75
         return confidence
 
 
     def parse(self, filename, library_filename=None):
-        design = Design()
+        self.design = Design()
 
         with open(filename) as f:
             data = f.read()
 
         tree = DsnParser().parse(data)
 
-        return design
+        print self.walk(tree)
 
+        return self.design
+
+    def walk(self, elem):
+        if isinstance(elem, list) and len(elem) > 0:
+            elemx = [self.walk(x) for x in elem]
+            func = dsn.all_functions.get(elemx[0], None)
+            if func:
+                return func(elemx[1:])
+            else:
+                return elemx
+        else:
+            return elem
 
 class DsnParser:
     """ Parser for Specctra dialect of lisp """
@@ -67,9 +83,9 @@ class DsnParser:
         quote character as atom and quoted string """
 
         if len(lst) > 1:
-            if lst[0].lower() == 'string_quote':
+            if lst[0] == 'string_quote':
                 self.string_quote = lst[1]
-            elif lst[0].lower() == 'space_in_quoted_tokens':
+            elif lst[0] == 'space_in_quoted_tokens':
                 self.space_in_quoted_tokens = lst[1].lower() == 'on'
         return lst
 
