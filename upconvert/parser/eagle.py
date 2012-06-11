@@ -31,7 +31,7 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.design import Design
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.components import Component, Symbol, Body, Pin
-from upconvert.core.shape import Point, Line, Label, Arc
+from upconvert.core.shape import Point, Line, Label, Arc, Circle, Rectangle
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
@@ -1199,9 +1199,9 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Rectangle, self).__init__(layer)
-            self.x1 = x1
+            self.x1 = x1 # bottom left corner
             self.y1 = y1
-            self.x2 = x2
+            self.x2 = x2 # upper right corner
             self.y2 = y2
             self.rotate = rotate
             return
@@ -2301,6 +2301,7 @@ class Eagle:
                 _prev_segment = None
             elif Eagle.ShapeHeader.constant == _type:
                 self.shapeheader = self.ShapeHeader.parse(_dta)
+                _cur_segment = self.shapeheader
             elif Eagle.Bus.constant == _type:
                 _cur_web = self.Bus.parse(_dta)
                 self.shapeheader.buses.append(_cur_web)
@@ -2603,6 +2604,24 @@ class Eagle:
                                            p2=Point(_ss.x2, _ss.y2))
                                 _sp.add_attribute('style', _ss.style)
                                 _sp.add_attribute('width', _ss.width)
+                            elif isinstance(_ss, Eagle.Circle):
+                                _sp = Circle(x=_ss.x, y=_ss.y, 
+                                                radius=_ss.radius)
+                                _sp.add_attribute('width', _ss.width)
+                            elif isinstance(_ss, Eagle.Rectangle):
+                                _w = abs(_ss.x2 - _ss.x1)
+                                _h = abs(_ss.y2 - _ss.y1)
+                                if None == _ss.rotate or "R180" == _ss.rotate: # normal position
+                                    _x = _ss.x1
+                                    _y = _ss.y1 + _h # bottom left vs upper left
+                                elif "R90" == _ss.rotate or "R270" == _ss.rotate: # pi/2 rotation
+                                    _w, _h = _h, _w
+                                    _x = (_ss.x1 + _ss.x2 - _w) / 2 
+                                    _y = (_ss.y1 + _xx.y2 + _h) / 2
+                                _sp = Rectangle(x=_x, y=_y, width=_w, height=_h)
+                            else:
+# TODO remove
+                                print("unexpected block %s in shapeset" % _ss.__class__.__name__)
 
                             if None != _sp: # i.e. label (!= text), hole, ..
                                 _sp.add_attribute('layer', _ss.layer)
