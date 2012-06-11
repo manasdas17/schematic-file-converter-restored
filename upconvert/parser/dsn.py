@@ -1,15 +1,53 @@
 from inspect import isclass
 
-
 def pop_type(args, t):
+    ''' Reads argument of type from args '''
     if len(args) > 0 and isinstance(args[0], t):
         return args.pop(0)
     return None
+
+def pop_types(args, t):
+    ''' Reads list of types from args '''
+    lst = []
+    while True:
+        arg = pop_type(args, t)
+        if arg is None: break
+        lst.append(arg)
+    return lst
+
+def pop_string(args):
+    return pop_type(args, basestring)
+
+def pop_vertex(args):
+    x, y = pop_string(args), pop_string(args)
+    if x is None or y is None:
+        return None
+    return (float(x), float(y))
+
+def pop_vertexes(args):
+    lst = []
+    while True:
+        arg = pop_vertex(args)
+        if arg is None: break
+        lst.append(arg)
+    return lst
 
 class DsnClass:
     function = None
     def __repr__(self):
         return '\n%s%s\n' % (self.__class__.__name__, repr(self.__dict__))
+
+class ShapeBase(DsnClass):
+    pass
+
+class Shape(DsnClass):
+    """ shape """
+    function = 'shape'
+
+    def __init__(self, args):
+        assert len(args) >= 0
+        self.shape = pop_type(args, ShapeBase)
+        assert len(args) == 0
 
 class Ancestor(DsnClass):
     """ ancestor_file_descriptor """
@@ -125,7 +163,7 @@ class CheckingTrim(DsnClass):
 
         checking_trim_by_pin = args[0]
 
-class Circle(DsnClass):
+class Circle(ShapeBase):
     """ circle_descriptor """
     function = 'circle'
 
@@ -229,11 +267,44 @@ class Library(DsnClass):
     function = 'library'
 
     def __init__(self, args):
-        self.image = []
-        while True:
-            img = pop_type(args, Image)
-            if img is None: break
-            self.image.append(img)
+        self.image = pop_types(args, Image)
+        self.padstack = pop_types(args, Padstack)
+        assert len(args) == 0
+
+
+class Padstack(DsnClass):
+    """ padstack_descriptor """
+    function = 'padstack'
+    
+    def __init__(self, args):
+        assert len(args) >= 1
+        self.padstack_id = pop_string(args)
+        self.shape = pop_types(args, Shape)
+        self.attach = pop_type(args, Attach)
+        assert len(args) == 0
+
+class Pin(DsnClass):
+    """ pin """
+    function = 'pin'
+
+    def __init__(self, args):
+        assert len(args) >= 1
+
+        self.padstack_id = pop_string(args)
+        self.rotation = pop_type(args, Rotate)
+        self.pin_id = pop_string(args)
+        self.vertex = pop_vertex(args)
+        #self.array = pop_type(args, Array)
+        #self.property = pop_type(args, Property)
+
+class Rotate(DsnClass):
+    """ rotate """
+    function = 'rotate'
+
+    def __init__(self, args):
+        assert len(args) == 1
+        self.rotation = pop_string(args)
+        assert len(args) == 0
 
 class Image(DsnClass):
     """ image_descriptor """
@@ -241,22 +312,11 @@ class Image(DsnClass):
 
     def __init__(self, args):
         assert len(args) >= 1
-
-        self.image_id = args[0]
-        pos, length = 1, len(args)
-
-        if pos < length and isinstance(args[pos], Side):
-            self.side = args[pos]
-            pos += 1
-        else:
-            self.side = None
-
-        if pos < length and isinstance(args[pos], Outline):
-            self.outline = args[pos]
-            pos += 1
-        else:
-            self.outline = None
-
+        self.image_id = pop_string(args)
+        self.side = pop_type(args, Side)
+        self.outline = pop_types(args, Outline)
+        self.pin = pop_types(args, Pin)
+        assert len(args) == 0
 
 class Side(DsnClass):
     """ side """
@@ -276,7 +336,18 @@ class Outline(DsnClass):
         assert len(args) == 1
         self.shape = args[0]
 
-class Path(DsnClass):
+class Rectange(ShapeBase):
+    """ rectangle_descriptor """
+    function = 'rect'
+
+    def __init__(self, args):
+        assert len(args) == 5
+        self.layer_id = pop_string(args)
+        self.vertex1 = pop_vertex(args)
+        self.vertex2 = pop_vertex(args)
+        assert len(args) == 0
+
+class Path(ShapeBase):
     """ path_descriptor """
     function = 'path'
 
