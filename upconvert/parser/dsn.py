@@ -189,9 +189,9 @@ class Placement(DsnClass):
     function = 'placement'
 
     def __init__(self, args):
-
-        self.components = []
-
+        assert len(args) >= 1
+        self.component = pop_types(args, Component)
+        assert len(args) == 0
 
 class Component(DsnClass):
     """ component_instance """
@@ -199,8 +199,9 @@ class Component(DsnClass):
 
     def __init__(self, args):
         assert len(args) >= 2
-        self.image_id = args[0]
-        self.placement = args[1:]
+        self.image_id = pop_string(args)
+        self.place = pop_types(args, Place)
+        assert len(args) == 0
 
 class Place(DsnClass):
     """ placement_reference """
@@ -208,30 +209,20 @@ class Place(DsnClass):
 
     def __init__(self, args):
         assert len(args) >= 1
-        self.component_id = args[0]
-
-        pos = 1
-        if isinstance(args[1], basestring):
-            self.vertex = (int(args[1]), int(args[2]))
-            self.side = args[3]
-            self.rotation = int(args[4])
-            pos += 4
-        else:
-            self.vertex = ()
-            self.side = None
-            self.rotation = None
-
-        self.part_number = None
-        for arg in args[pos:]:
-            if isinstance(arg, PartNumber):
-                self.part_number = arg
+        self.component_id = pop_string(args)
+        self.vertex = pop_vertex(args)
+        self.side = pop_string(args)
+        self.rotation = int(pop_string(args))
+        self.part_number = pop_type(args, PartNumber)
+        assert len(args) == 0
 
 class PartNumber(DsnClass):
     """ part_number """
     function = 'PN'
     def __init__(self, args):
         assert len(args) == 1
-        self.part_number = args[0]
+        self.part_number = pop_string(args)
+        assert len(args) == 0
 
 class Net(DsnClass):
     """ net_descriptor """
@@ -239,12 +230,9 @@ class Net(DsnClass):
 
     def __init__(self, args):
         assert len(args) >= 1
-        self.net_id = pop_type(args, basestring)
-
-        self.pins = []
-        for arg in args:
-            if isinstance(arg, Pins):
-                self.pins.append(arg)
+        self.net_id = pop_string(args)
+        self.pins = pop_types(args, Pins)
+        assert len(args) == 0
 
 class Network(DsnClass):
     """ network_descriptor """
@@ -252,7 +240,9 @@ class Network(DsnClass):
 
     def __init__(self, args):
         assert len(args) > 0
-        self.nets = args[:]
+        self.net = pop_types(args, Net)
+        print args
+        assert len(args) == 0
 
 class Pins(DsnClass):
     """ pins """
