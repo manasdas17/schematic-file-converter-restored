@@ -242,7 +242,7 @@ class Network(DsnClass):
         assert len(args) > 0
         self.net = pop_types(args, Net)
         print args
-        assert len(args) == 0
+        #assert len(args) == 0
 
 class Pins(DsnClass):
     """ pins """
@@ -365,6 +365,16 @@ class ApertureType(DsnClass):
         assert args[0] in ('round', 'square')
 
         self.aperture_type = args[0]
+
+class Pcb(DsnClass):
+    """ pcb """
+    function = 'pcb'
+
+    def __init__(self, args):
+        assert len(args) >= 1
+        self.pcb_id = pop_string(args)
+        #self.placement = pop_type(args, Placement)
+        self.placement = [x for x in args if isinstance(x, Placement)][0]
 
 ##############################################################
 
