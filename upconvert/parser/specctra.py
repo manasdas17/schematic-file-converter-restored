@@ -40,9 +40,24 @@ class Specctra(object):
 
         tree = DsnParser().parse(data)
 
-        print self.walk(tree)
+        struct = self.walk(tree)
+        print struct
+        self.convert(struct)
 
         return self.design
+
+    def convert(self, struct):
+        for component in struct.placement.component:
+            library_id = component.image_id
+            for place in component.place:
+                # Outside OCB boundary
+                if not place.vertex: continue
+
+                inst = ComponentInstance(place.component_id, library_id, 0)
+                symbattr = SymbolAttribute(place.vertex[0], place.vertex[1], place.rotation)
+                inst.add_symbol_attribute(symbattr) 
+                self.design.add_component_instance(inst)
+        
 
     def walk(self, elem):
         if isinstance(elem, list) and len(elem) > 0:
