@@ -300,8 +300,9 @@ class ViewDrawSch(ViewDrawBase):
                                  shape.rotation, True)
                 ckt.design_attributes.add_annotation(ann)
         
-        for k, v in tree['attr']:
+        for k, v, annot in tree['attr']:
             ckt.design_attributes.add_attribute(k, v)
+            ckt.design_attributes.add_annotation(annot)
 
         return ckt
 
@@ -390,11 +391,12 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
-        x, y, _font_size, _rot, _anchor, viz, keyval = args.split(' ', 6)
+        keyval = args.split(' ', 6)[-1]
+        # need to keep the attribute key/val pair, as it may be clobbered while
+        # creating the annotation.
         k, _sep, v = keyval.partition('=')
-        # TODO want to do anything with the rest of the info?
-        # TODO at least add in the label
-        return ('attr', (k, v))
+        # make an annotation out of it too, so that it displays on the design
+        return ('attr', (k, v, self.parse_annot(args)[1]))
 
     def lookup(self, libname, num):
         """ Given a component name and version, returns the filename """
