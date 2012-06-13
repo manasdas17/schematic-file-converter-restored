@@ -31,10 +31,10 @@ class Netlist(object):
             endpoints = []
             for p in n.points:
                 for c in p.connected_components:
-                    endpoints.append('%s.%s' % (c.instance_id, c.pin_number)
+                    endpoints.append('%s.%s' % (c.instance_id, c.pin_number))
 
             if n.net_id in nets:
-                nets[n.net_id]['enpoints'].extend(endpoints)
+                nets[n.net_id]['endpoints'].extend(endpoints)
             else:
                 nets[n.net_id] = {'name': n.net_id,
                                   'endpoints': endpoints}
@@ -43,4 +43,4 @@ class Netlist(object):
             f.write('Name,Connections')
             for n in nets.values():
                 if len(n['enpoints']) > 0:
-                    f.write('%s:%s' % (n['name'], ','.join(n['endpoints']))
+                    f.write('%s:%s' % (n['name'], ','.join(n['endpoints'])))

@@ -33,7 +33,7 @@ class BOM(object):
             else:
                 bom[c.library_id] = {'part': c.library_id,
                                      'name': '',
-                                     'refs': [c.instance_id]})
+                                     'refs': [c.instance_id]}
 
         with open(filename, "w") as f:
             f.write('Part,Name,Reference,Qty')
