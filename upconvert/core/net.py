@@ -67,6 +67,7 @@ class Net:
         """ Add a point p to the net """
         self.points[point.point_id] = point
 
+
     def conn_point(self, point_a, point_b):
         """ connect point b to point a """
         self.points[point_a.point_id].connected_points.append(point_b.point_id)
