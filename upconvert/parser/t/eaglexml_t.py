@@ -65,15 +65,56 @@ class EagleXMLTests(unittest.TestCase):
         """ Test creating an empty parser. """
         self.assertNotEqual(EagleXML(), None)
 
+
     @use_file('E1AA60D5.sch')
     def test_library_components(self):
         """ The right components are created. """
-        self.assertTrue('atmel:TINY15L' in self.design.components.components)
+        self.assertTrue('atmel:TINY15L:P' in self.design.components.components)
+
 
     @use_file('E1AA60D5.sch')
     def test_component_symbols(self):
         """ The right component symbols are created. """
-        self.assertEqual(len(self.get_component('atmel:TINY15L').symbols), 1)
+        self.assertEqual(len(self.get_component('atmel:TINY15L:P').symbols), 1)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_body_lines(self):
+        """ The right component Lines are created on Body objects. """
+        cpt = self.get_component('atmel:TINY15L:P')
+        lines = [s for s in cpt.symbols[0].bodies[0].shapes
+                 if s.type == 'line']
+        self.assertEqual(len(lines), 4)
+        self.assertEqual(lines[0].p1.x, 45)
+        self.assertEqual(lines[0].p1.y, -36)
+        self.assertEqual(lines[0].p2.x, -45)
+        self.assertEqual(lines[0].p2.y, -36)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_body_rectangles(self):
+        """ The right component Rectangles are created on Body objects. """
+        cpt = self.get_component('resistor:CPOL-EU:E2.5-6')
+        rects = [s for s in cpt.symbols[0].bodies[0].shapes
+                 if s.type == 'rectangle']
+        self.assertEqual(len(rects), 1)
+        self.assertEqual(rects[0].x, -6)
+        self.assertEqual(rects[0].y, -9)
+        self.assertEqual(rects[0].width, 12)
+        self.assertEqual(rects[0].height, 3)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_body_pins(self):
+        """ The right component Pins are created on Body objects. """
+        cpt = self.get_component('atmel:TINY15L:P')
+        pins = cpt.symbols[0].bodies[0].pins
+        self.assertEqual(len(pins), 8)
+        self.assertEqual(pins[0].p1.x, 45)
+        self.assertEqual(pins[0].p1.y, 9)
+        self.assertEqual(pins[0].p2.x, 63)
+        self.assertEqual(pins[0].p2.y, 9)
+
 
     @use_file('E1AA60D5.sch')
     def test_component_instances(self):
@@ -84,17 +125,36 @@ class EagleXMLTests(unittest.TestCase):
                  'GND2', 'GND1', 'GND7', 'GND6', 'GND5', 'GND4','C1', 'P+2',
                  'P+3', 'P+1', 'P+6', 'P+4','P+5', 'D2', 'D1')))
 
+
     @use_file('E1AA60D5.sch')
     def test_component_instance_rotation(self):
         """ Component instance rotation is correct. """
         inst = self.get_instance('GND3')
         self.assertEqual(inst.symbol_attributes[0].rotation, 0)
         inst = self.get_instance('R2')
-        self.assertEqual(inst.symbol_attributes[0].rotation, .5)
+        self.assertEqual(inst.symbol_attributes[0].rotation, 1.5)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_instance_position(self):
+        """ Component instance position is correct. """
+        inst = self.get_instance('GND3')
+        self.assertEqual(inst.symbol_attributes[0].x, 414)
+        self.assertEqual(inst.symbol_attributes[0].y, 198)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_nets(self):
+        """ The right nets are created. """
+        self.assertEqual(set(n.net_id for n in self.design.nets),
+                         set(['VCC', 'GND', 'N$1', 'N$2', 'N$3',
+                              'N$4', 'N$5', 'N$6', 'N$7']))
+
 
     def get_component(self, library_id):
         """ Return the component given its id. """
         return self.design.components.components[library_id]
+
 
     def get_instance(self, instance_id):
         """ Return the instance given its id. """
