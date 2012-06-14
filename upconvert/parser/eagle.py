@@ -31,7 +31,7 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.design import Design
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.components import Component, Symbol, Body, Pin
-from upconvert.core.shape import Point, Line, Label, Arc, Circle, Rectangle
+from upconvert.core.shape import Point, Line, Label, Arc, Circle, Rectangle, Polygon
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
@@ -48,7 +48,7 @@ class Eagle:
     @staticmethod
     def _do_ojs(value):
         """ Represents a string as required by upconvert core """
-        return value.decode('latin-1') if None != value else None
+        return value.decode('latin-1').encode('utf-8') if None != value else None
 # or maybe we need to have a unicode object in openjson?..
 #  (in that case all strings in maps have to be created as unicode ones as well)
 #        return unicode(value, 'latin-1') if None != value else None
@@ -1015,6 +1015,7 @@ class Eagle:
         ratio_sscale = 2
 
         rotatemask = 0x0c # in some cases 0x0f works as well
+        rotatemask2 = 0x0f # R40 is possible in text...
         rotates = {
                    0x00: None,
                    0x01: "R40",
@@ -1026,17 +1027,26 @@ class Eagle:
                    0x0c: "R270",
                    0x0e: "R315",
 # ones below are possible for text & frame -- don't apply the mask there
-                   0x10: "MR0",
-                   0x12: "MR45",
-                   0x14: "MR90",
-                   0x16: "MR135",
-                   0x18: "MR180",
-                   0x1a: "MR225",
-                   0x1c: "MR270",
-                   0x1e: "MR315",
+#                   0x10: "MR0",
+#                   0x12: "MR45",
+#                   0x14: "MR90",
+#                   0x16: "MR135",
+#                   0x18: "MR180",
+#                   0x1a: "MR225",
+#                   0x1c: "MR270",
+#                   0x1e: "MR315",
 
-                   0x40: "SR0", #...
+#                   0x40: "SR0", #...
                   }
+
+        rotate_r0 = "R0" # used in SR0, MR0 cases
+
+        rotateprefixmask = 0x70
+        rotate_prefixes = {
+                   0x00: '',
+                   0x10: 'M',
+                   0x40: 'S',
+                }
 
         fonts = {
                   0x00: "vector",
@@ -1076,6 +1086,24 @@ class Eagle:
                 _ret_val = 1.
             elif 'R270' == rotate:
                 _ret_val = 1.5
+            return _ret_val
+
+        @staticmethod
+        def _ext_rotate(rotate_octet):
+            """ Constructs extanded rotate mark
+            """
+            _rotate = (
+                    Eagle.Text.rotate_prefixes[
+                                Eagle.Text.rotateprefixmask & rotate_octet],
+                    Eagle.Text.rotates[Eagle.Text.rotatemask2 & rotate_octet],
+                    )
+            if None == _rotate[1]: # SR0, MR0, None (R0) cases
+                if 0 < len(_rotate[0]): # SR0, MR0
+                    _ret_val = _rotate[0] + Eagle.Text.rotate_r0
+                else: # None
+                    _ret_val = None
+            else: # R > 0
+                _ret_val = _rotate[0] + _rotate[1]
             return _ret_val
 
     class Polygon(ShapeSet, Shape):
@@ -1764,7 +1792,7 @@ class Eagle:
                                      size=Eagle.Text.size_xscale *
                                           Eagle.Shape.decode_real(_dta[6]),
                                      layer=_dta[3],
-                                     rotate=Eagle.Text.rotates[_dta[10]],
+                                     rotate=Eagle.Text._ext_rotate(_dta[10]),
                                      font=Eagle.Text.fonts[_dta[2]],
                                      ratio=_dta[7] >> Eagle.Text.ratio_sscale,
                                     )
@@ -1986,7 +2014,7 @@ class Eagle:
                                           size=Eagle.Shape.size_xscale *
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
-                                          rotate=Eagle.AttributePrt.rotates[_dta[9]], # no mask: like Text!
+                                          rotate=Eagle.AttributePrt._ext_rotate(_dta[9]), # no mask: like Text!
                                           font=Eagle.AttributePrt.fonts[_dta[2]],
                                          )
             return _ret_val
@@ -2617,8 +2645,19 @@ class Eagle:
                                 elif "R90" == _ss.rotate or "R270" == _ss.rotate: # pi/2 rotation
                                     _w, _h = _h, _w
                                     _x = (_ss.x1 + _ss.x2 - _w) / 2 
-                                    _y = (_ss.y1 + _xx.y2 + _h) / 2
+                                    _y = (_ss.y1 + _ss.y2 + _h) / 2
                                 _sp = Rectangle(x=_x, y=_y, width=_w, height=_h)
+                            elif isinstance(_ss, Eagle.Polygon):
+# second point for an every Eagle.Wire can be skipped since it'll be the first one
+#  for the next Wire
+# some Eagle.Wires are actually Eagle.FixedArcs, but processed as Wires, i.e. with no
+#  curve
+# also it can include Eagle.Text. It's just skipped
+                                _pts = [Point(s.x1, s.y1) for s in _ss.shapes
+                                        if isinstance(_ss, Eagle.Wire)]
+                                _sp = Polygon(points=_pts)
+                            elif isinstance(_ss, Eagle.Frame):
+                                pass # a kind of a box around a schematic
                             else:
 # TODO remove
                                 print("unexpected block %s in shapeset" % _ss.__class__.__name__)
