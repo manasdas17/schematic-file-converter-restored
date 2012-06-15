@@ -22,10 +22,11 @@
 from collections import defaultdict
 
 from upconvert.core.design import Design
+from upconvert.core.annotation import Annotation
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint
-from upconvert.core.shape import Line, Rectangle
+from upconvert.core.shape import Label, Line, Rectangle
 
 from upconvert.parser.eaglexml.generated import parse
 
@@ -53,6 +54,13 @@ class EagleXML(object):
 
         # map components to gate names to symbol indices
         self.cpt2gate2symbol_index = defaultdict(dict)
+
+        # map components to gate names to annotation maps, dicts from
+        # strings (name|value) to Annotations. These represent the
+        # >NAME and >VALUE texts on eagle components, which must be
+        # converted into component instance annotations since their
+        # contents depend on the component instance name and value.
+        self.cpt2gate2ann_map = defaultdict(dict)
 
 
     @staticmethod
@@ -104,7 +112,9 @@ class EagleXML(object):
                 symbol = Symbol()
                 cpt.add_symbol(symbol)
                 self.cpt2gate2symbol_index[cpt][gate.name] = len(cpt.symbols) - 1
-                symbol.add_body(self.make_body_from_symbol(lib, gate.symbol, pinmap))
+                body, ann_map = self.make_body_from_symbol(lib, gate.symbol, pinmap)
+                symbol.add_body(body)
+                self.cpt2gate2ann_map[cpt][gate.name] = ann_map
 
             yield cpt
 
@@ -128,7 +138,7 @@ class EagleXML(object):
             y = self.make_length(rect.y1)
             width = self.make_length(rect.x2) - x
             height = self.make_length(rect.y2) - y
-            body.add_shape(Rectangle(x, y, width, height))
+            body.add_shape(Rectangle(x, y + height, width, height))
 
         for pin in symbol.pin:
             connect_point = (self.make_length(pin.x), self.make_length(pin.y))
@@ -138,7 +148,21 @@ class EagleXML(object):
             body.add_pin(Pin(pinmap.get(pin.name, pin.name),
                              null_point, connect_point))
 
-        return body
+        ann_map = {}
+
+        for text in symbol.text:
+            x = self.make_length(text.x)
+            y = self.make_length(text.y)
+            content = '' if text.valueOf_ is None else text.valueOf_
+            rotation = self.make_angle('0' if text.rot is None else text.rot)
+            if content == '>NAME':
+                ann_map['name'] = Annotation(content, x, y, rotation, True)
+            elif content == '>VALUE':
+                ann_map['value'] = Annotation(content, x, y, rotation, True)
+            else:
+                body.add_shape(Label(x, y, content, 'left', rotation))
+
+        return body, ann_map
 
 
     def get_pin_null_point(self, (x, y), length, rotation):
@@ -213,19 +237,17 @@ class EagleXML(object):
             """ Return a new or existing NetPoint for an (x,y) point """
             point = (self.make_length(x), self.make_length(y))
             if point not in points:
-                points[x,y] = NetPoint('%da%d' % (x, y), x, y)
+                points[point] = NetPoint('%da%d' % point, point[0], point[1])
             return points[point]
 
-        net = Net(net.name)
+        onet = Net(net.name)
 
         for segment in get_subattr(net, 'segment', ()):
             for wire in get_subattr(segment, 'wire', ()):
-                net.connect((self.make_length(wire.x1),
-                             self.make_length(wire.y1)),
-                            (self.make_length(wire.x2),
-                             self.make_length(wire.y2)))
+                onet.connect((get_point(wire.x1, wire.y1),
+                              get_point(wire.x2, wire.y2)))
 
-        return net
+        return onet
 
 
     def make_length(self, value):

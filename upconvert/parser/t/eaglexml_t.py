@@ -99,9 +99,22 @@ class EagleXMLTests(unittest.TestCase):
                  if s.type == 'rectangle']
         self.assertEqual(len(rects), 1)
         self.assertEqual(rects[0].x, -6)
-        self.assertEqual(rects[0].y, -9)
+        self.assertEqual(rects[0].y, -6)
         self.assertEqual(rects[0].width, 12)
         self.assertEqual(rects[0].height, 3)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_body_labels(self):
+        """ The right component Labels are created on Body objects. """
+        cpt = self.get_component('con-berg:PN87520:')
+        labels = [s for s in cpt.symbols[0].bodies[0].shapes
+                  if s.type == 'label']
+        self.assertEqual(len(labels), 1)
+        self.assertEqual(labels[0].x, 18)
+        self.assertEqual(labels[0].y, -9)
+        self.assertEqual(labels[0].text, 'USB')
+        self.assertEqual(labels[0].rotation, 1.5)
 
 
     @use_file('E1AA60D5.sch')
@@ -149,6 +162,16 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(set(n.net_id for n in self.design.nets),
                          set(['VCC', 'GND', 'N$1', 'N$2', 'N$3',
                               'N$4', 'N$5', 'N$6', 'N$7']))
+
+
+    @use_file('E1AA60D5.sch')
+    def test_net_points(self):
+        """ The right net points are created. """
+        net = [n for n in self.design.nets if n.net_id == 'GND'][0]
+        self.assertEqual(set(net.points),
+                         set(('423a90', '423a81', '414a216', '414a207',
+                              '135a225', '432a90', '432a216', '135a216',
+                              '144a225')))
 
 
     def get_component(self, library_id):
