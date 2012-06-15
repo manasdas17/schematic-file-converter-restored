@@ -54,9 +54,27 @@ class Specctra(object):
                 if not place.vertex: continue
 
                 inst = ComponentInstance(place.component_id, library_id, 0)
-                symbattr = SymbolAttribute(place.vertex[0], place.vertex[1], place.rotation)
+                v = self.convert_vertex(struct, place.vertex)
+                symbattr = SymbolAttribute(v[0], v[1], place.rotation)
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
+
+        for image in struct.library.image:
+            component = Component(image.image_id)
+            self.design.add_component(image.image_id, component)
+            sym = Symbol()
+            body = Body()
+            component.add_symbol(sym)
+            sym.add_body(body)
+            for pin in image.pin:
+                body.add_pin(Pin(pin.pin_id, self.convert_vertex(struct, pin.vertex), self.convert_vertex(struct, pin.vertex)))
+
+    def convert_vertex(self, struct, vertex):
+        v1 = struct.structure.boundary.rectangle.vertex1
+        v2 = struct.structure.boundary.rectangle.vertex2
+        x0 = min(v1[0], v2[0])
+        y0 = min(v1[1], v2[1])
+        return (vertex[0] + x0 * -1, vertex[1] + y0 * -1)
         
 
     def walk(self, elem):
