@@ -100,21 +100,7 @@ class Boundary(DsnClass):
     function = 'boundary'
 
     def __init__(self, args):
-        self.path = []
-        self.rectangle = None
-        self.rule = None
-        for arg in args:
-            pass
-            '''
-            if isinstance(arg, Path):
-                self.path.append(arg)
-            elif isinstance(arg, Rectangle):
-                self.rectangle = arg
-            elif isinstance(arg, Rule):
-                self.rule = arg
-            else:
-                assert not 'Unexpected type'
-            '''
+        self.rectangle = pop_type(args, Rectangle)
 
 class Bundle(DsnClass):
     """ bundle_descriptor """
@@ -326,7 +312,7 @@ class Outline(DsnClass):
         assert len(args) == 1
         self.shape = args[0]
 
-class Rectange(ShapeBase):
+class Rectangle(ShapeBase):
     """ rectangle_descriptor """
     function = 'rect'
 
@@ -374,7 +360,16 @@ class Pcb(DsnClass):
         assert len(args) >= 1
         self.pcb_id = pop_string(args)
         #self.placement = pop_type(args, Placement)
+        self.structure = [x for x in args if isinstance(x, Structure)][0]
         self.placement = [x for x in args if isinstance(x, Placement)][0]
+        self.library = [x for x in args if isinstance(x, Library)][0]
+
+class Structure(DsnClass):
+    """ structure_descriptor """
+    function = 'structure'
+
+    def __init__(self, args):
+        self.boundary = [x for x in args if isinstance(x, Boundary)][0]
 
 ##############################################################
 
