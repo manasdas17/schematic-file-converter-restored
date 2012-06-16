@@ -26,7 +26,7 @@ from upconvert.core.design import Design
 from upconvert.core.components import Components, Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.shape import Circle, Line, Rectangle, Label, Arc
-from os import listdir
+from os import listdir, sep as dirsep
 from math import pi, sqrt, atan
 from collections import defaultdict
 
@@ -484,6 +484,37 @@ class ViewDraw:
         # ^-that could be parsed out of a viewdraw.ini some day
         self.schdir, self.symdirs = schdir, symdirs
 
+    @staticmethod
+    def inifile(projdir, inidirsep='\\'):
+        """ Attempt to get project info from a viewdraw.ini file
+
+        No guarantees, but it should return a (schdir, symdirs) tuple that
+        would work fine if passed to the ViewDraw constructor """
+
+        with open(projdir + 'viewdraw.ini') as f:
+            dirlines = [li.strip() for li in f.readlines() if
+                        li.strip().startswith('DIR ')]
+            schdir, symdirs = projdir + 'sym' + dirsep, {}
+            for line in dirlines:
+                # DIR [p] .\directory\to\lib (lib_name)
+                _cmd, mode, vals = line.split(' ', 2)
+                # libname might not exist, but if it does it's <= 32 chars, and
+                # enclosed by parens
+                libname = None
+                if vals.endswith(')') and len(vals.rsplit('(', 1)[1]) <= 33:
+                    dirname, libname = vals.rsplit('(', 1)
+                    dirname, libname = dirname[:-1], libname[:-1]
+                else:
+                    dirname = vals
+                # dirname can be quoted
+                if dirname[0] == '"' and dirname[-1] == '"':
+                    dirname = dirname[1:-1]
+                dirname = dirname.replace(inidirsep, dirsep) + dirsep
+                if 'p' in mode:
+                    schdir = projdir + dirname + 'sch' + dirsep
+                if libname is not None:
+                    symdirs[libname] = projdir + dirname + 'sym' + dirsep
+            return (schdir, symdirs)
 
     @staticmethod
     def auto_detect(filename):
