@@ -256,7 +256,7 @@ class ViewDrawBase:
 
 class ViewDrawSch(ViewDrawBase):
     """ Parser for a single schematic file. """
-    
+
     def __init__(self, lib, filename):
         ViewDrawBase.__init__(self, filename)
         self.parsers.update({'N': 'parse_net',
@@ -279,7 +279,7 @@ class ViewDrawSch(ViewDrawBase):
         ckt = Design()
         # TODO little weak here, a copy instead?
         ckt.components = self.lib
-        
+
         for net in tree['net']:
             ckt.add_net(net)
         for inst in tree['inst']:
@@ -299,7 +299,7 @@ class ViewDrawSch(ViewDrawBase):
                 ann = Annotation(shape.text, shape.x, shape.y,
                                  shape.rotation, True)
                 ckt.design_attributes.add_annotation(ann)
-        
+
         for k, v, annot in tree['attr']:
             ckt.design_attributes.add_attribute(k, v)
             ckt.design_attributes.add_annotation(annot)
@@ -383,7 +383,7 @@ class ViewDrawSch(ViewDrawBase):
         # segpin is the netpoint on the net
         # TODO I have no faith in pin variable here
         return ('conn', (netid, int(segpin), pin))
-    
+
     def parse_bounds(self, args):
         """ Parses the bounds of this schematic sheet. """
         # Not sure if this is quite valid.
@@ -422,7 +422,7 @@ class ViewDrawSym(ViewDrawBase):
         part = Component(self.filename)
         part.add_symbol(Symbol())
         part.symbols[0].add_body(Body())
-        
+
         tree = ViewDrawBase.parse(self)
         for k, v in tree['attr']:
             part.add_attribute(k, v)
@@ -501,7 +501,7 @@ class ViewDraw:
         for libname, libdir in self.symdirs.items():
             files = [f for f in listdir(libdir)
                      if f.rpartition('.')[-1].isdigit()]
-     
+
             for f in files:
                 lib.add_component((libname + ':' + f).lower(),
                                   ViewDrawSym(libdir, f).parse())
@@ -523,14 +523,14 @@ class FileStack:
     # 1) Line continuations are signaled at the beginning of the continuing
     #   line. This means you can't know if line n is the entirety of a statement
     #   until you've checked line n+1
-    # 2) Some commands are affected by proceeding commands, so need to check if
+    # 2) Some commands are affected by preceeding commands, so need to check if
     #   the next command is of concern. If not, need to be able to send it back.
 
     def __init__(self, filename):
         self.f = open(filename)
         self.fstack = []
         self.line = 0
-    
+
     def __iter__(self):
         return self
 
