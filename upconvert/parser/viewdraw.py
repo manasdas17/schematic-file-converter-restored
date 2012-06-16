@@ -104,7 +104,7 @@ class ViewDrawBase:
         parser = self.parsers.get(cmd, 'parse_null')
         return getattr(self, parser)
 
-    def parse_null(self, args):
+    def parse_null(self, args): # pylint: disable=W0613
         '''A do-nothing parser for commands to be ignored'''
         # override/decorate this if you have a method you want to have called
         # for every unhandled command.
@@ -523,7 +523,7 @@ class ViewDraw:
             return (schdir, symdirs)
 
     @staticmethod
-    def auto_detect(filename):
+    def auto_detect(filename): # pylint: disable=W0613
         """ Return our confidence that the given file is an viewdraw file """
         # I'm not sure what you'd throw this at right now, there is no "project
         # file" you could check. Maybe if/when viewdraw.ini parsing happens?
