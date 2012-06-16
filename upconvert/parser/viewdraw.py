@@ -150,8 +150,11 @@ class ViewDrawBase:
     def parse_size(self, args):
         """ Returns the sheet size. """
         size = int(args.split()[0])
-        return ('sheetsize', (size < len(self.sheetsizes) and
-                              self.sheetsizes[size] or 'unknown'))
+        if size < len(self.sheetsizes):
+            sheet = self.sheetsizes[size]
+        else:
+            sheet = 'unknown'
+        return ('sheetsize', sheet)
 
     def parse_circle(self, args):
         """ Returns a parsed circle. """
@@ -435,8 +438,11 @@ class ViewDrawSym(ViewDrawBase):
 
     def parse_type(self, args):
         """ Returns a parsed symbol type. """
-        return ('attr', ('symtype', (int(args) < len(self.symtypes) and
-                                     self.symtypes[int(args)] or 'unknown')))
+        if int(args) < len(self.symtypes):
+            symtype = self.symtypes[int(args)]
+        else:
+            symtype = 'unknown'
+        return ('attr', ('symtype', symtype))
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
@@ -468,11 +474,11 @@ class ViewDrawSym(ViewDrawBase):
         # So far, only seen it for labelling pins, in the symmbol files
         # at least.
         x, y, _pts, rot, _anchor, _scope, _vis, inv, text = args.split()
-        return ('label', Label(int(x), int(y),
-                         # cheap-o overbar
-                         (inv == '1' and '/' or '') + text,
-                         'left', int(rot) * 0.5))
-        # I have a feeling the alignment  will break, but anchor is a
+        if inv == '1':
+            # cheap-o overbar
+            text = '/' + text
+        return ('label', Label(int(x), int(y), text, 'left', int(rot) * 0.5))
+        # I have a feeling the alignment will break, but anchor is a
         # vertical alignment thing
 
 
