@@ -47,7 +47,7 @@ class Shape(DsnClass):
     def __init__(self, args):
         assert len(args) >= 0
         self.shape = pop_type(args, ShapeBase)
-        assert len(args) == 0
+        #assert len(args) == 0
 
 class Ancestor(DsnClass):
     """ ancestor_file_descriptor """
@@ -158,9 +158,9 @@ class Circle(ShapeBase):
         self.layer_id = args[0]
         self.diameter = float(args[1])
         if len(args) == 4:
-            self.vertex = (int(args[2]), int(args[3]))
+            self.vertex = (float(args[2]), float(args[3]))
         else:
-            self.vertex = ()
+            self.vertex = (0, 0)
 
 class Circuit(DsnClass):
     """ circuit_descriptor """
@@ -177,7 +177,8 @@ class Placement(DsnClass):
     def __init__(self, args):
         assert len(args) >= 1
         self.component = pop_types(args, Component)
-        assert len(args) == 0
+        #FIXME
+        #assert len(args) == 0
 
 class Component(DsnClass):
     """ component_instance """
@@ -200,7 +201,8 @@ class Place(DsnClass):
         self.side = pop_string(args)
         self.rotation = int(pop_string(args))
         self.part_number = pop_type(args, PartNumber)
-        assert len(args) == 0
+        #  FIXME
+        #assert len(args) == 0
 
 class PartNumber(DsnClass):
     """ part_number """
@@ -218,7 +220,7 @@ class Net(DsnClass):
         assert len(args) >= 1
         self.net_id = pop_string(args)
         self.pins = pop_types(args, Pins)
-        assert len(args) == 0
+#assert len(args) == 0
 
 class Network(DsnClass):
     """ network_descriptor """
@@ -227,7 +229,6 @@ class Network(DsnClass):
     def __init__(self, args):
         assert len(args) > 0
         self.net = pop_types(args, Net)
-        print args
         #assert len(args) == 0
 
 class Pins(DsnClass):
@@ -235,7 +236,7 @@ class Pins(DsnClass):
     function = 'pins'
 
     def __init__(self, args):
-        assert len(args) > 0
+        assert len(args) >= 0
         self.pin_reference = args[:]
 
 class Library(DsnClass):
@@ -257,7 +258,7 @@ class Padstack(DsnClass):
         self.padstack_id = pop_string(args)
         self.shape = pop_types(args, Shape)
         self.attach = pop_type(args, Attach)
-        assert len(args) == 0
+#assert len(args) == 0
 
 class Pin(DsnClass):
     """ pin """
@@ -292,7 +293,7 @@ class Image(DsnClass):
         self.side = pop_type(args, Side)
         self.outline = pop_types(args, Outline)
         self.pin = pop_types(args, Pin)
-        assert len(args) == 0
+        #assert len(args) == 0
 
 class Side(DsnClass):
     """ side """
@@ -364,6 +365,10 @@ class Pcb(DsnClass):
         self.placement = [x for x in args if isinstance(x, Placement)][0]
         self.library = [x for x in args if isinstance(x, Library)][0]
 
+class PCB(Pcb):
+    """ pcb """
+    function = 'PCB'
+
 class Structure(DsnClass):
     """ structure_descriptor """
     function = 'structure'
@@ -371,6 +376,10 @@ class Structure(DsnClass):
     def __init__(self, args):
         self.boundary = [x for x in args if isinstance(x, Boundary)][0]
 
+'''
+  (placement
+    (place_control (flip_style rotate_first))
+'''
 ##############################################################
 
 all_functions = dict([(s.function, s) for s in globals().values() if isclass(s) and issubclass(s, DsnClass)])
