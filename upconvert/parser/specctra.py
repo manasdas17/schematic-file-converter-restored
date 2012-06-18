@@ -27,7 +27,7 @@ class Specctra(object):
         with open(filename, 'r') as f:
             data = f.read(4096)
         confidence = 0
-        if '(pcb' in data:
+        if '(pcb ' in data or '(PCB ' in data:
             confidence += 0.75
         return confidence
 
@@ -41,12 +41,16 @@ class Specctra(object):
         tree = DsnParser().parse(data)
 
         struct = self.walk(tree)
-        print struct
         self.convert(struct)
 
         return self.design
 
     def convert(self, struct):
+        x1, y1 = self.to_pixels(struct.structure.boundary.rectangle.vertex1)
+        x2, y2 = self.to_pixels(struct.structure.boundary.rectangle.vertex2)
+        x0 = abs(min(x1, x2))
+        y0 = abs(min(y1, y2))
+
         for component in struct.placement.component:
             library_id = component.image_id
             for place in component.place:
@@ -54,8 +58,7 @@ class Specctra(object):
                 if not place.vertex: continue
 
                 inst = ComponentInstance(place.component_id, library_id, 0)
-                v = self.convert_vertex(struct, place.vertex)
-                symbattr = SymbolAttribute(v[0], v[1], place.rotation)
+                symbattr = SymbolAttribute(x0 + place.vertex[0], y0 + place.vertex[1], place.rotation)
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
 
@@ -67,15 +70,55 @@ class Specctra(object):
             component.add_symbol(sym)
             sym.add_body(body)
             for pin in image.pin:
-                body.add_pin(Pin(pin.pin_id, self.convert_vertex(struct, pin.vertex), self.convert_vertex(struct, pin.vertex)))
+                body.add_pin(Pin(pin.pin_id, self.to_pixels(pin.vertex), self.to_pixels(pin.vertex)))
+                for padstack in struct.library.padstack:
+                    if padstack.padstack_id == pin.padstack_id:
+                        shapes = [shape.shape for shape in padstack.shape]
+                        for shape in self.convert_shapes(shapes, self.to_pixels(pin.vertex)):
+                            body.add_shape(shape)
+                        break
+                            
+            for outline in image.outline:
+                for shape in self.convert_shapes([outline.shape]):
+                    body.add_shape(shape)
 
-    def convert_vertex(self, struct, vertex):
-        v1 = struct.structure.boundary.rectangle.vertex1
-        v2 = struct.structure.boundary.rectangle.vertex2
-        x0 = min(v1[0], v2[0])
-        y0 = min(v1[1], v2[1])
-        return (vertex[0] + x0 * -1, vertex[1] + y0 * -1)
-        
+    def convert_shapes(self, shapes, center = (0, 0)):
+        result = []
+
+        for shape in shapes:
+            if isinstance(shape, dsn.Path):
+                prev = self.to_pixels(shape.vertex[0])
+                prev = (prev[0] + center[0], prev[1] + center[1])
+                first = prev
+                for point in shape.vertex[1:]:
+                    point = self.to_pixels(point)
+                    point = (point[0] + center[0], point[1] + center[1])
+                    result.append(Line(prev, point))
+                    prev = point
+                result.append(Line(point, first))
+
+            elif isinstance(shape, dsn.Rectangle):
+                x1, y1 = self.to_pixels(shape.vertex1)
+                x2, y2 = self.to_pixels(shape.vertex2)
+                width, height = abs(x1 - x2), abs(y1 - y2)
+                x1 = min(x1, x2) + center[0]
+                y1 = max(y1, y2) + center[1]
+
+                result.append(Rectangle(x1, y1, width, height))
+            elif isinstance(shape, dsn.Circle):
+                x, y = self.to_pixels(shape.vertex)
+                x += center[0]
+                y += center[1]
+                result.append(Circle(x, y, self.to_pixels(shape.diameter / 2.0)))
+        return result
+
+    def to_pixels(self, vertex):
+        #MULT = 90.0 / 1000.0 # mils to 90 dpi
+        # (resolution mil 10)
+        MULT = 90.0 / 100.0 # mils to 90 dpi
+        if isinstance(vertex, tuple):
+            return (int(round(float(vertex[0]) * MULT)), int(round(float(vertex[1]) * MULT)))
+        return int(round(float(vertex) * MULT))
 
     def walk(self, elem):
         if isinstance(elem, list) and len(elem) > 0:
