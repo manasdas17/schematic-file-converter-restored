@@ -8,7 +8,7 @@ from upconvert.core.design import Design
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
-from upconvert.core.shape import Arc, Circle, Line, Rectangle, Label
+from upconvert.core.shape import Arc, Circle, Line, Rectangle, Label, Polygon, Point
 from upconvert.core.annotation import Annotation
 
 from collections import defaultdict
@@ -41,9 +41,24 @@ class Specctra(object):
         tree = DsnParser().parse(data)
 
         struct = self.walk(tree)
+        self.set_mult(struct.resolution)
         self.convert(struct)
 
         return self.design
+
+    def set_mult(self, res):
+        # unit desc!
+        DPI = 90.0
+        if res.unit == 'inch':
+            self.px_mult = 1.0 * DPI
+        elif res.unit == 'mil':
+            self.px_mult = 1.0 / 1000.0 * DPI
+        elif res.unit == 'cm':
+            self.px_mult = 1.0 * DPI / 2.54
+        elif res.unit == 'mm':
+            self.px_mult = 1.0 / 10.0 * DPI / 2.54
+        elif res.unit == 'um':
+            self.px_mult = 1.0 / 1000.0 * DPI / 2.54
 
     def convert(self, struct):
         x1, y1 = self.to_pixels(struct.structure.boundary.rectangle.vertex1)
@@ -58,7 +73,8 @@ class Specctra(object):
                 if not place.vertex: continue
 
                 inst = ComponentInstance(place.component_id, library_id, 0)
-                symbattr = SymbolAttribute(x0 + place.vertex[0], y0 + place.vertex[1], place.rotation)
+                v = self.to_pixels(place.vertex)
+                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], place.rotation)
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
 
@@ -97,6 +113,11 @@ class Specctra(object):
                     prev = point
                 result.append(Line(point, first))
 
+            elif isinstance(shape, dsn.Polygon):
+                points = [self.to_pixels(point) for point in shape.vertex]
+                points = [Point(point[0] + center[0], point[1] + center[1]) for point in points]
+                result.append(Polygon(points))
+
             elif isinstance(shape, dsn.Rectangle):
                 x1, y1 = self.to_pixels(shape.vertex1)
                 x2, y2 = self.to_pixels(shape.vertex2)
@@ -113,12 +134,10 @@ class Specctra(object):
         return result
 
     def to_pixels(self, vertex):
-        #MULT = 90.0 / 1000.0 # mils to 90 dpi
-        # (resolution mil 10)
-        MULT = 90.0 / 100.0 # mils to 90 dpi
+        self.px_mult
         if isinstance(vertex, tuple):
-            return (int(round(float(vertex[0]) * MULT)), int(round(float(vertex[1]) * MULT)))
-        return int(round(float(vertex) * MULT))
+            return (int(round(float(vertex[0]) * self.px_mult)), int(round(float(vertex[1]) * self.px_mult)))
+        return int(round(float(vertex) * self.px_mult))
 
     def walk(self, elem):
         if isinstance(elem, list) and len(elem) > 0:

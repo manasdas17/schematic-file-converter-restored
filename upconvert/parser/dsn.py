@@ -162,11 +162,41 @@ class Circle(ShapeBase):
         else:
             self.vertex = (0, 0)
 
+class Polygon(ShapeBase):
+    """ polygon_descriptor """
+    function = 'polygon'
+
+    def __init__(self, args):
+        assert len(args) > 3
+        self.layer_id = pop_string(args)
+        self.aperture_width = pop_type(args, basestring)
+        self.vertex = pop_vertexes(args)
+        assert len(args) == 0 
+
 class Circuit(DsnClass):
     """ circuit_descriptor """
     
     def __init__(self, args):
         self.circuit = args
+
+class PlaceControl(DsnClass):
+    """ place_control_descriptor """
+    function = 'place_control'
+
+    def __init__(self, args):
+        assert len(args) == 1
+        self.flip_style = pop_type(args, FlipStyle)
+        assert len(args) == 0
+
+class FlipStyle(DsnClass):
+    """ flip_style_descriptor """
+    function = 'flip_style'
+
+    def __init__(self, args):
+        assert len(args) == 1
+        self.first = pop_string(args)
+        assert len(args) == 0
+
 ##############################################################
 
 
@@ -176,9 +206,9 @@ class Placement(DsnClass):
 
     def __init__(self, args):
         assert len(args) >= 1
+        self.place_control = pop_type(args, PlaceControl)
         self.component = pop_types(args, Component)
-        #FIXME
-        #assert len(args) == 0
+        assert len(args) == 0
 
 class Component(DsnClass):
     """ component_instance """
@@ -361,6 +391,8 @@ class Pcb(DsnClass):
         assert len(args) >= 1
         self.pcb_id = pop_string(args)
         #self.placement = pop_type(args, Placement)
+        self.parser = pop_type(args, Parser)
+        self.resolution = pop_type(args, Resolution)
         self.structure = [x for x in args if isinstance(x, Structure)][0]
         self.placement = [x for x in args if isinstance(x, Placement)][0]
         self.library = [x for x in args if isinstance(x, Library)][0]
@@ -369,6 +401,13 @@ class PCB(Pcb):
     """ pcb """
     function = 'PCB'
 
+class Parser(DsnClass):
+    """ parser_descriptor """
+    function = 'parser'
+
+    def __init__(self, args):
+        pass
+
 class Structure(DsnClass):
     """ structure_descriptor """
     function = 'structure'
@@ -376,10 +415,17 @@ class Structure(DsnClass):
     def __init__(self, args):
         self.boundary = [x for x in args if isinstance(x, Boundary)][0]
 
-'''
-  (placement
-    (place_control (flip_style rotate_first))
-'''
+class Resolution(DsnClass):
+    """ resolution_descriptor """
+    function = 'resolution'
+
+    def __init__(self, args):
+        assert len(args) == 2
+        self.unit = pop_string(args)
+        assert self.unit in ('inch', 'mil', 'cm', 'mm', 'um')
+        self.resolution = int(pop_string(args))
+        assert len(args) == 0
+
 ##############################################################
 
 all_functions = dict([(s.function, s) for s in globals().values() if isclass(s) and issubclass(s, DsnClass)])
