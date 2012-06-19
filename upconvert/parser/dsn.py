@@ -1,3 +1,7 @@
+
+# Specification of file format can be found here:
+# http://tech.groups.yahoo.com/group/kicad-users/files/ file "specctra.pdf"
+
 from inspect import isclass
 
 def pop_type(args, t):
@@ -36,6 +40,9 @@ class DsnClass:
     function = None
     def __repr__(self):
         return '\n%s%s\n' % (self.__class__.__name__, repr(self.__dict__))
+
+    def dsn(self):
+        return ''
 
 class ShapeBase(DsnClass):
     pass
@@ -199,7 +206,6 @@ class FlipStyle(DsnClass):
 
 ##############################################################
 
-
 class Placement(DsnClass):
     """ placement_descriptor """    
     function = 'placement'
@@ -249,7 +255,7 @@ class Net(DsnClass):
     def __init__(self, args):
         assert len(args) >= 1
         self.net_id = pop_string(args)
-        self.pins = pop_types(args, Pins)
+        self.pins = pop_type(args, Pins)
 #assert len(args) == 0
 
 class Network(DsnClass):
@@ -396,6 +402,7 @@ class Pcb(DsnClass):
         self.structure = [x for x in args if isinstance(x, Structure)][0]
         self.placement = [x for x in args if isinstance(x, Placement)][0]
         self.library = [x for x in args if isinstance(x, Library)][0]
+        self.network = [x for x in args if isinstance(x, Network)][0]
 
 class PCB(Pcb):
     """ pcb """

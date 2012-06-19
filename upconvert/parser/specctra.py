@@ -1,9 +1,6 @@
 #!/usr/bin/env python2
 """ The Specctra DSN Format Parser """
 
-# Specification of file format can be found here:
-# http://tech.groups.yahoo.com/group/kicad-users/files/ file "specctra.pdf"
-
 from upconvert.core.design import Design
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
@@ -48,17 +45,17 @@ class Specctra(object):
 
     def set_mult(self, res):
         # unit desc!
-        DPI = 90.0
+        DPI = 96.0
         if res.unit == 'inch':
-            self.px_mult = 1.0 * DPI
+            self.px_mult = DPI / 1.0
         elif res.unit == 'mil':
-            self.px_mult = 1.0 / 1000.0 * DPI
+            self.px_mult = DPI / 1000.0
         elif res.unit == 'cm':
-            self.px_mult = 1.0 * DPI / 2.54
+            self.px_mult = DPI / 2.54
         elif res.unit == 'mm':
-            self.px_mult = 1.0 / 10.0 * DPI / 2.54
+            self.px_mult =  DPI / 2.54 / 10.0
         elif res.unit == 'um':
-            self.px_mult = 1.0 / 1000.0 * DPI / 2.54
+            self.px_mult =  DPI / 2.54 / 1000.0
 
     def convert(self, struct):
         x1, y1 = self.to_pixels(struct.structure.boundary.rectangle.vertex1)
@@ -97,6 +94,11 @@ class Specctra(object):
             for outline in image.outline:
                 for shape in self.convert_shapes([outline.shape]):
                     body.add_shape(shape)
+
+        for net in struct.network.net:
+            if net.pins is not None:
+                for pin_ref in net.pins.pin_reference:
+                    component_id, pin_id = pin_ref.split('-')
 
     def convert_shapes(self, shapes, center = (0, 0)):
         result = []
