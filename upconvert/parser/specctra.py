@@ -12,6 +12,7 @@ from collections import defaultdict
 from os.path import exists, splitext
 from string import whitespace
 
+import math
 import dsn
 
 class Specctra(object):
@@ -91,7 +92,7 @@ class Specctra(object):
 
                 inst = ComponentInstance(place.component_id, library_id, 0)
                 v = self.to_pixels(place.vertex)
-                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], place.rotation)
+                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], to_piradians(place.rotation))
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
  
@@ -121,7 +122,8 @@ class Specctra(object):
                 component = self.design.components.components[component_instance.library_id]
                 for pin in component.symbols[0].bodies[0].pins:
                     if pin.pin_number == pin_id:
-                        return (symbattr.x + pin.p1.x, symbattr.y + pin.p1.y)
+                        x, y = rotate((pin.p1.x, pin.p1.y), symbattr.rotation)
+                        return (symbattr.x + x, symbattr.y + y)
 
     def convert_shapes(self, shapes, center = (0, 0)):
         result = []
@@ -174,6 +176,17 @@ class Specctra(object):
                 return elemx
         else:
             return elem
+
+def to_piradians(degrees):
+    # looks like specctra and upverter rotate in different directions
+    return 2.0 - (float(degrees) / 180.0) % 2.0
+
+def rotate(point, piradians):
+    x, y = float(point[0]), float(point[1])
+    radians = float(2.0 - piradians) * math.pi
+    rx = int(round(x * math.cos(radians) - y * math.sin(radians)))
+    ry = int(round(x * math.sin(radians) + y * math.cos(radians)))
+    return (rx, ry)
 
 class DsnParser:
     """ Parser for Specctra dialect of lisp """
