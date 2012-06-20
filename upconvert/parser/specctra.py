@@ -63,18 +63,6 @@ class Specctra(object):
         x0 = abs(min(x1, x2))
         y0 = abs(min(y1, y2))
 
-        for component in struct.placement.component:
-            library_id = component.image_id
-            for place in component.place:
-                # Outside OCB boundary
-                if not place.vertex: continue
-
-                inst = ComponentInstance(place.component_id, library_id, 0)
-                v = self.to_pixels(place.vertex)
-                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], place.rotation)
-                inst.add_symbol_attribute(symbattr) 
-                self.design.add_component_instance(inst)
-
         for image in struct.library.image:
             component = Component(image.image_id)
             self.design.add_component(image.image_id, component)
@@ -95,10 +83,45 @@ class Specctra(object):
                 for shape in self.convert_shapes([outline.shape]):
                     body.add_shape(shape)
 
+        for component in struct.placement.component:
+            library_id = component.image_id
+            for place in component.place:
+                # Outside OCB boundary
+                if not place.vertex: continue
+
+                inst = ComponentInstance(place.component_id, library_id, 0)
+                v = self.to_pixels(place.vertex)
+                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], place.rotation)
+                inst.add_symbol_attribute(symbattr) 
+                self.design.add_component_instance(inst)
+ 
         for net in struct.network.net:
+            n = Net(net.net_id)
             if net.pins is not None:
+                prev_point = None
                 for pin_ref in net.pins.pin_reference:
                     component_id, pin_id = pin_ref.split('-')
+                    cc = ConnectedComponent(component_id, pin_id)
+                    point = self.get_component_pin(component_id, pin_id)
+                    np = NetPoint(pin_ref, point[0], point[1])
+                    np.add_connected_component(cc)
+                    n.add_point(np)
+
+                    if prev_point is not None:
+                        prev_point.add_connected_point(np.point_id)
+                        np.add_connected_point(prev_point.point_id)
+                    prev_point = np
+
+            self.design.add_net(n)
+
+    def get_component_pin(self, component_id, pin_id):
+        for component_instance in self.design.component_instances:
+            symbattr = component_instance.symbol_attributes[0]
+            if component_instance.instance_id == component_id: 
+                component = self.design.components.components[component_instance.library_id]
+                for pin in component.symbols[0].bodies[0].pins:
+                    if pin.pin_number == pin_id:
+                        return (symbattr.x + pin.p1.x, symbattr.y + pin.p1.y)
 
     def convert_shapes(self, shapes, center = (0, 0)):
         result = []
