@@ -1,34 +1,57 @@
+#!/usr/bin/env python2
+""" Specctra DSN objects """
+
+# upconvert.py - A universal hardware design file format converter using
+# Format: upverter.com/resources/open-json-format/
+# Development: github.com/upverter/schematic-file-converter
+#
+# Copyright 2011 Upverter, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Specification of file format can be found here:
 # http://tech.groups.yahoo.com/group/kicad-users/files/ file "specctra.pdf"
 
 from inspect import isclass
 
-def pop_type(args, t):
-    ''' Reads argument of type from args '''
-    if len(args) > 0 and isinstance(args[0], t):
+def pop_type(args, ptype):
+    """ Reads argument of type from args """
+    if len(args) > 0 and isinstance(args[0], ptype):
         return args.pop(0)
     return None
 
-def pop_types(args, t):
-    ''' Reads list of types from args '''
+def pop_types(args, ptype):
+    """ Reads list of types from args """
     lst = []
     while True:
-        arg = pop_type(args, t)
+        arg = pop_type(args, ptype)
         if arg is None: break
         lst.append(arg)
     return lst
 
 def pop_string(args):
+    """ Reads string from args """
     return pop_type(args, basestring)
 
 def pop_vertex(args):
+    """ Reads vertex (2 ints) from args """
     x, y = pop_string(args), pop_string(args)
     if x is None or y is None:
         return None
     return (float(x), float(y))
 
 def pop_vertexes(args):
+    """ Reads array of vertexes from args """
     lst = []
     while True:
         arg = pop_vertex(args)
@@ -36,18 +59,12 @@ def pop_vertexes(args):
         lst.append(arg)
     return lst
 
-class DsnClass:
-    function = None
-    def __repr__(self):
-        return '\n%s%s\n' % (self.__class__.__name__, repr(self.__dict__))
+class ShapeBase(object):
+    """ Base class for all shapes so we can pop a shape from args """
+    def __init__(self):
+        pass
 
-    def dsn(self):
-        return ''
-
-class ShapeBase(DsnClass):
-    pass
-
-class Shape(DsnClass):
+class Shape:
     """ shape """
     function = 'shape'
 
@@ -56,7 +73,7 @@ class Shape(DsnClass):
         self.shape = pop_type(args, ShapeBase)
         #assert len(args) == 0
 
-class Ancestor(DsnClass):
+class Ancestor:
     """ ancestor_file_descriptor """
     function = 'ancestor'
 
@@ -73,7 +90,7 @@ class Ancestor(DsnClass):
         else:
             self.comment = None
 
-class Attach(DsnClass):
+class Attach:
     """ attach_descriptor """
     function = 'attach'
 
@@ -88,7 +105,7 @@ class Attach(DsnClass):
         else:
             self.use_via = None
 
-class Bond(DsnClass):
+class Bond:
     """ bond_shape_descriptor """
     function = 'bond'
 
@@ -102,18 +119,18 @@ class Bond(DsnClass):
         self.front_back = args[4]
         self.bond_shape_rotation = args[5]
 
-class Boundary(DsnClass):
+class Boundary:
     """ boundary_descriptor """
     function = 'boundary'
 
     def __init__(self, args):
         self.rectangle = pop_type(args, Rectangle)
 
-class Bundle(DsnClass):
+class Bundle:
     """ bundle_descriptor """
     function = 'bundle'
 
-    class Gap(DsnClass):
+    class Gap:
         function = 'gap'
         def __init__(self, args):
             assert len(args) >= 1
@@ -135,7 +152,7 @@ class Bundle(DsnClass):
             assert arg[0] == 'gap'
             self.gap.append(Bundle.Gap(arg[1:]))
 
-class CapacitanceResolution(DsnClass):
+class CapacitanceResolution:
     """ capacitance_resolution_descriptor """
     function = 'capacitance_resolution'
 
@@ -146,21 +163,22 @@ class CapacitanceResolution(DsnClass):
         self.farad = args[0]
         self.value = int(args[1])
 
-class CheckingTrim(DsnClass):
+class CheckingTrim:
     """ checking_trim_descriptor """
     function = 'checking_trim_by_pin'
 
     def __init__(self, args):
         assert len(args) == 1
-        assert args[0] in ('on', 'off')
-
-        checking_trim_by_pin = args[0]
+        self.checking_trim_by_pin = pop_string(args)
+        assert self.checking_trim_by_pin in ('on', 'off')
+        assert len(args) == 0
 
 class Circle(ShapeBase):
     """ circle_descriptor """
     function = 'circle'
 
     def __init__(self, args):
+        super(Circle, self).__init__()
         assert len(args) in (2, 4)
         self.layer_id = args[0]
         self.diameter = float(args[1])
@@ -174,19 +192,20 @@ class Polygon(ShapeBase):
     function = 'polygon'
 
     def __init__(self, args):
+        super(Polygon, self).__init__()
         assert len(args) > 3
         self.layer_id = pop_string(args)
         self.aperture_width = pop_type(args, basestring)
         self.vertex = pop_vertexes(args)
         assert len(args) == 0 
 
-class Circuit(DsnClass):
+class Circuit:
     """ circuit_descriptor """
     
     def __init__(self, args):
         self.circuit = args
 
-class PlaceControl(DsnClass):
+class PlaceControl:
     """ place_control_descriptor """
     function = 'place_control'
 
@@ -195,7 +214,7 @@ class PlaceControl(DsnClass):
         self.flip_style = pop_type(args, FlipStyle)
         assert len(args) == 0
 
-class FlipStyle(DsnClass):
+class FlipStyle:
     """ flip_style_descriptor """
     function = 'flip_style'
 
@@ -206,7 +225,7 @@ class FlipStyle(DsnClass):
 
 ##############################################################
 
-class Placement(DsnClass):
+class Placement:
     """ placement_descriptor """    
     function = 'placement'
 
@@ -216,7 +235,7 @@ class Placement(DsnClass):
         self.component = pop_types(args, Component)
         assert len(args) == 0
 
-class Component(DsnClass):
+class Component:
     """ component_instance """
     function = 'component'
 
@@ -226,7 +245,7 @@ class Component(DsnClass):
         self.place = pop_types(args, Place)
         assert len(args) == 0
 
-class Place(DsnClass):
+class Place:
     """ placement_reference """
     function = 'place'
 
@@ -240,7 +259,7 @@ class Place(DsnClass):
         #  FIXME
         #assert len(args) == 0
 
-class PartNumber(DsnClass):
+class PartNumber:
     """ part_number """
     function = 'PN'
     def __init__(self, args):
@@ -248,7 +267,7 @@ class PartNumber(DsnClass):
         self.part_number = pop_string(args)
         assert len(args) == 0
 
-class Net(DsnClass):
+class Net:
     """ net_descriptor """
     function = 'net'
 
@@ -259,7 +278,7 @@ class Net(DsnClass):
         self.pins = pop_type(args, Pins)
         assert len(args) == 0
 
-class Network(DsnClass):
+class Network:
     """ network_descriptor """
     function = 'network'
 
@@ -268,7 +287,7 @@ class Network(DsnClass):
         self.net = pop_types(args, Net)
         #assert len(args) == 0
 
-class Pins(DsnClass):
+class Pins:
     """ pins """
     function = 'pins'
 
@@ -276,7 +295,7 @@ class Pins(DsnClass):
         assert len(args) >= 0
         self.pin_reference = args[:]
 
-class Library(DsnClass):
+class Library:
     """ library_descriptor """
     function = 'library'
 
@@ -286,7 +305,7 @@ class Library(DsnClass):
         assert len(args) == 0
 
 
-class Padstack(DsnClass):
+class Padstack:
     """ padstack_descriptor """
     function = 'padstack'
     
@@ -297,7 +316,7 @@ class Padstack(DsnClass):
         self.attach = pop_type(args, Attach)
 #assert len(args) == 0
 
-class Pin(DsnClass):
+class Pin:
     """ pin """
     function = 'pin'
 
@@ -311,7 +330,7 @@ class Pin(DsnClass):
         #self.array = pop_type(args, Array)
         #self.property = pop_type(args, Property)
 
-class Rotate(DsnClass):
+class Rotate:
     """ rotate """
     function = 'rotate'
 
@@ -320,7 +339,7 @@ class Rotate(DsnClass):
         self.rotation = pop_string(args)
         assert len(args) == 0
 
-class Image(DsnClass):
+class Image:
     """ image_descriptor """
     function = 'image'
 
@@ -332,7 +351,7 @@ class Image(DsnClass):
         self.pin = pop_types(args, Pin)
         #assert len(args) == 0
 
-class Side(DsnClass):
+class Side:
     """ side """
     function = 'side'
 
@@ -342,7 +361,7 @@ class Side(DsnClass):
 
         self.side = pop_type(args, basestring)
 
-class Outline(DsnClass):
+class Outline:
     """ outline_descriptor """
     function = 'outline'
 
@@ -355,6 +374,7 @@ class Rectangle(ShapeBase):
     function = 'rect'
 
     def __init__(self, args):
+        super(Rectangle, self).__init__()
         assert len(args) == 5
         self.layer_id = pop_string(args)
         self.vertex1 = pop_vertex(args)
@@ -366,6 +386,7 @@ class Path(ShapeBase):
     function = 'path'
 
     def __init__(self, args):
+        super(Path, self).__init__()
         assert len(args) >= 2
 
         self.layer_id = pop_type(args, basestring)
@@ -380,7 +401,7 @@ class Path(ShapeBase):
         self.aperture_type = pop_type(args, ApertureType)
         assert len(args) == 0
 
-class ApertureType(DsnClass):
+class ApertureType:
     """ aperture_type """
     function = 'aperture_type'
 
@@ -390,7 +411,7 @@ class ApertureType(DsnClass):
 
         self.aperture_type = args[0]
 
-class Pcb(DsnClass):
+class Pcb:
     """ pcb """
     function = 'pcb'
 
@@ -409,21 +430,21 @@ class PCB(Pcb):
     """ pcb """
     function = 'PCB'
 
-class Parser(DsnClass):
+class Parser:
     """ parser_descriptor """
     function = 'parser'
 
     def __init__(self, args):
         pass
 
-class Structure(DsnClass):
+class Structure:
     """ structure_descriptor """
     function = 'structure'
 
     def __init__(self, args):
         self.boundary = [x for x in args if isinstance(x, Boundary)][0]
 
-class Resolution(DsnClass):
+class Resolution:
     """ resolution_descriptor """
     function = 'resolution'
 
@@ -436,4 +457,8 @@ class Resolution(DsnClass):
 
 ##############################################################
 
-all_functions = dict([(s.function, s) for s in globals().values() if isclass(s) and issubclass(s, DsnClass)])
+ALL_FUNCTIONS = dict([(s.function, s) for s in globals().values() if isclass(s) and getattr(s, 'function', None)])
+
+def lookup(funcname):
+    """ Return class for given function name """
+    return ALL_FUNCTIONS.get(funcname, None)
