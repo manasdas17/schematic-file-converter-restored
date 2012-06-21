@@ -71,5 +71,30 @@ class DsnParserTests(unittest.TestCase):
  
         self.assertEqual(correct, got)
 
+    def testQuotedStringPart(self):
+        parser = DsnParser()
+        got = parser.parse('''
+(pcb test.dsn
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(2011-06-28)")
+  )
+  (pins A1-"-")
+)''')
+        correct = ['pcb', 'test.dsn',
+                    ['parser',
+                        ['string_quote', '"'],
+                        ['space_in_quoted_tokens', 'on'],
+                        ['host_cad', "Kicad's PCBNEW"],
+                        ['host_version', '(2011-06-28)']
+                    ],
+                    ['pins', 'A1--'],
+                ]
+ 
+        self.assertEqual(correct, got)
+
+
 if __name__ == '__main__':
     unittest.main()
