@@ -46,7 +46,7 @@ class Specctra(object):
 
     def set_mult(self, res):
         # unit desc!
-        DPI = 96.0
+        DPI = 96.0 * 2.0
         if res.unit == 'inch':
             self.px_mult = DPI / 1.0
         elif res.unit == 'mil':
@@ -99,12 +99,18 @@ class Specctra(object):
         for net in struct.network.net:
             n = Net(net.net_id)
             if net.pins is not None:
+                pin_reference = net.pins.pin_reference
+                
                 prev_point = None
-                for pin_ref in net.pins.pin_reference:
-                    component_id, pin_id = pin_ref.split('-')
-                    cc = ConnectedComponent(component_id, pin_id)
+                for pin_ref in pin_reference:
+                    # pin_ref like A1-"-" is valid (parsed to A1--)
+                    component_id, pin_id = pin_ref[:pin_ref.index('-')], pin_ref[pin_ref.index('-') + 1:]  
                     point = self.get_component_pin(component_id, pin_id)
-                    np = NetPoint(pin_ref, point[0], point[1])
+                    if point is None:
+                        print 'Could not find net %s pin ref %s' % (n.net_id, pin_ref)
+                        continue
+                    cc = ConnectedComponent(component_id, pin_id)
+                    np = NetPoint('%s-%s' % (n.net_id, pin_ref), point[0], point[1])
                     np.add_connected_component(cc)
                     n.add_point(np)
 
@@ -179,11 +185,12 @@ class Specctra(object):
 
 def to_piradians(degrees):
     # looks like specctra and upverter rotate in different directions
-    return 2.0 - (float(degrees) / 180.0) % 2.0
+#return 2.0 - (float(degrees) / 180.0) % 2.0
+    return float(-degrees) / 180.0
 
 def rotate(point, piradians):
     x, y = float(point[0]), float(point[1])
-    radians = float(2.0 - piradians) * math.pi
+    radians = float(-1.0 * piradians) * math.pi
     rx = int(round(x * math.cos(radians) - y * math.sin(radians)))
     ry = int(round(x * math.sin(radians) + y * math.cos(radians)))
     return (rx, ry)
@@ -235,7 +242,7 @@ class DsnParser:
             if ch not in self.seperators and ch != self.string_quote:
                 buf += ch
             else:
-                if buf:
+                if buf and ch != self.string_quote:
                     lst.append(buf)
                     buf = ''
 
@@ -244,7 +251,7 @@ class DsnParser:
                 elif ch == ')':
                     return lst
                 elif ch == self.string_quote:
-                    lst.append(self._parse_string())
+                    buf += self._parse_string()
 
         if not root:
             raise SyntaxError('Closing ) not found')
@@ -262,6 +269,7 @@ class DsnParser:
             if ch == self.string_quote:
                 return buf
             elif ch in whitespace and not self.space_in_quoted_tokens:
+                self.pos -= 1
                 return buf
             else:
                 buf += ch

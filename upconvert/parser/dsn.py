@@ -255,8 +255,9 @@ class Net(DsnClass):
     def __init__(self, args):
         assert len(args) >= 1
         self.net_id = pop_string(args)
+        self.no_idea_what = pop_string(args)
         self.pins = pop_type(args, Pins)
-#assert len(args) == 0
+        assert len(args) == 0
 
 class Network(DsnClass):
     """ network_descriptor """
