@@ -171,7 +171,27 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(set(net.points),
                          set(('423a90', '423a81', '414a216', '414a207',
                               '135a225', '432a90', '432a216', '135a216',
-                              '144a225')))
+                              '144a225', '319a765', '1499a287', '1531a319',
+                              '1339a255', '510a797', '1754a351', '1467a733',
+                              '1148a255', '1531a765', '478a765')))
+
+
+    @use_file('E1AA60D5.sch')
+    def test_net_points_connected(self):
+        """ The right net points are connected. """
+        net = [n for n in self.design.nets if n.net_id == 'GND'][0]
+        pt = net.points['135a225']
+        self.assertEqual(sorted(pt.connected_points), ["135a216", "144a225"])
+
+
+    @use_file('E1AA60D5.sch')
+    def test_net_points_connected_components(self):
+        """ The right net points are connected to the right components. """
+        net = [n for n in self.design.nets if n.net_id == 'GND'][0]
+        pt = net.points['1467a733']
+        self.assertEqual(len(pt.connected_components), 1)
+        self.assertEqual(pt.connected_components[0].instance_id, 'GND3')
+        self.assertEqual(pt.connected_components[0].pin_number, 'GND')
 
 
     def get_component(self, library_id):
