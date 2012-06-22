@@ -101,11 +101,11 @@ class Net:
     def json(self):
         """ Return a net as JSON """
         return {
-            "net_id":self.net_id,
+            "net_id": self.net_id,
             "attributes": stringify_attributes(self.attributes),
-            "annotations":[ann.json() for ann in self.annotations],
-            "points":sorted([point.json() for point in self.points.values()],
-                            key=lambda point : point.get('point_id'))
+            "annotations": [ann.json() for ann in self.annotations],
+            "points": sorted([point.json() for point in self.points.values()],
+                             key=lambda point : point.get('point_id'))
             }
 
 
@@ -139,12 +139,11 @@ class NetPoint:
     def json(self):
         """ Return a netpoint as JSON """
         return {
-            "point_id" : self.point_id,
-            "x" : self.x,
-            "y" : self.y,
-            "connected_points" : sorted(self.connected_points),
-            "connected_components" :
-                [comp.json() for comp in self.connected_components]
+            "point_id": self.point_id,
+            "x": int(self.x),
+            "y": int(self.y),
+            "connected_points": sorted(self.connected_points),
+            "connected_components": [comp.json() for comp in self.connected_components]
             }
 
 
@@ -159,6 +158,6 @@ class ConnectedComponent:
     def json(self):
         """ Return a connected component as JSON """
         return {
-            "instance_id" : self.instance_id,
-            "pin_number" : self.pin_number
+            "instance_id": self.instance_id,
+            "pin_number": self.pin_number
             }

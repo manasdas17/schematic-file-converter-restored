@@ -210,10 +210,10 @@ class Pin:
     def json(self):
         """ Return a pin as JSON """
         ret = {
-            "pin_number":self.pin_number,
-            "p1":self.p1.json(),
-            "p2":self.p2.json(),
-            "attributes" : stringify_attributes(self.attributes),
+            "pin_number": self.pin_number,
+            "p1": self.p1.json(),
+            "p2": self.p2.json(),
+            "attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
         if self.label is not None:

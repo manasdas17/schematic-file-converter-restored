@@ -50,8 +50,8 @@ class Annotation:
         """ Return an annotation as JSON """
         return {
             "value": self.value,
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "rotation": self.rotation,
             "visible": self.visible
             }
