@@ -207,8 +207,8 @@ def main():
         args.file_types = None
 
     # Fail if strict and wrong python version
-    if sys.version_info[0] > 2 or sys.version_info[1] > 6:
-        print 'WARNING: RUNNING UNSUPPORTED VERSION OF PYTHON (%s.%s > 2.6)' % (sys.version_info[0],
+    if sys.version_info[0] > 2 or sys.version_info[1] > 7:
+        print 'WARNING: RUNNING UNSUPPORTED VERSION OF PYTHON (%s.%s > 2.7)' % (sys.version_info[0],
             sys.version_info[1])
         if not args.unsupported:
             sys.exit(-1)
