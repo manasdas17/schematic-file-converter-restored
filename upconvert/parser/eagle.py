@@ -2691,7 +2691,7 @@ class Eagle:
                         _net.add_attribute(u'netclearance' + str(_cc[0]), _cc[1])
                 for _ss in _sg.shapes: # wires only for buses, wires + pinrefs + junctions for nets
                     if isinstance(_ss, Eagle.FixedArc): # including Eagle.Arc
-                        _arc = Eagle._convert_arc(_ss)
+                        Eagle._convert_arc(_ss)
 
 # now it's the same as wire, but probably some interpolation is required
                         _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
