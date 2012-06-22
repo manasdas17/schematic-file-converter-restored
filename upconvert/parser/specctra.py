@@ -65,7 +65,7 @@ class Specctra(object):
 
     def _set_mult(self, res):
         """ Set multiplier for converting file units to internal units """
-        dpi = 96.0 * 2.0
+        dpi = 96.0 # * 2.0
         if res.unit == 'inch':
             self.px_mult = dpi / 1.0
         elif res.unit == 'mil':
