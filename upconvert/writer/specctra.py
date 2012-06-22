@@ -1,9 +1,10 @@
 #!/usr/bin/env python2
-""" The DSN Format Writer """
+
+""" The Specctra DSN Format Writer """
 
 # upconvert.py - A universal hardware design file format converter using
-# Format:       upverter.com/resources/open-json-format/
-# Development:  github.com/upverter/schematic-file-converter
+# Format: upverter.com/resources/open-json-format/
+# Development: github.com/upverter/schematic-file-converter
 #
 # Copyright 2011 Upverter, Inc.
 #
@@ -11,7 +12,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#   http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,12 +20,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+class Specctra(object):
 
-class DSN(object):
-    """ The DSN Format Writer """
-
-    def write(self, design, filename):
-        """ Write the design to the DSN format """
-
+    def write(self, design, filename, library_filename=None):
         with open(filename, "w") as f:
-            f.write('DSN export is currently unsupported')
+            pass

@@ -60,9 +60,10 @@ except ImportError:
     import json
 
 from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, \
-    eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p
+    eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
+    specctra as specctra_p
 from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
-    eagle as eagle_w, gerber as gerber_w
+    eagle as eagle_w, gerber as gerber_w, specctra as specctra_w
 
 
 # Logging
@@ -77,6 +78,7 @@ PARSERS = {
     'eaglexml': eaglexml_p.EagleXML,
     'fritzing': fritzing_p.Fritzing,
     'gerber': gerber_p.Gerber,
+    'specctra': specctra_p.Specctra,
 }
 
 WRITERS = {
@@ -85,6 +87,7 @@ WRITERS = {
     'geda': geda_w.GEDA,
     'eagle': eagle_w.Eagle,
     'gerber': gerber_w.Gerber,
+    'specctra': specctra_w.Specctra,
 }
 
 EXTENSIONS = {
@@ -94,6 +97,7 @@ EXTENSIONS = {
     'eagle': '.sch',
     'fritzing': '.fz',
     'gerber': '.grb',
+    'specctra': '.dsn',
 }
 
 
