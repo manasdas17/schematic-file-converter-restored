@@ -158,6 +158,16 @@ class Specctra(object):
                         x, y = rotate((pin.p1.x, pin.p1.y), symbattr.rotation)
                         return (symbattr.x + x, symbattr.y + y)
 
+    def _convert_path(self, aperture, points):
+        result = []
+        prev = None
+        # Path has connected start and end points
+        for point in points + points[:1]:
+            if prev:
+                result.append(Line(prev, point))
+            prev = point
+        return result
+
     def _convert_shapes(self, shapes, center = (0, 0)):
         result = []
 
@@ -166,13 +176,8 @@ class Specctra(object):
 
         for shape in shapes:
             if isinstance(shape, specctraobj.Path):
-                prev = from_center(self.to_pixels(shape.vertex[0]))
-                first = prev
-                for point in shape.vertex[1:]:
-                    point = from_center(self.to_pixels(point))
-                    result.append(Line(prev, point))
-                    prev = point
-                result.append(Line(point, first))
+                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
+                result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points))
 
             elif isinstance(shape, specctraobj.Polygon):
                 points = [from_center(self.to_pixels(point)) for point in shape.vertex]
