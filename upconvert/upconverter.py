@@ -214,11 +214,12 @@ def main():
 
     if args.version:
         try:
-            subprocess.call([".git/hooks/post-commit"])
+            if os.path.exists(".git/hooks/post-commit"):
+                subprocess.call([".git/hooks/post-commit"])
             with open('version', 'r') as f:
                 version = f.read().strip()
         except:
-            version = '?'
+            version = '???'
         print "upconverter %s in python %s.%s" % (version, sys.version_info[0], sys.version_info[1])
         print "Copyright (C) 2007 Upverter, Inc."
         print "This is free software; see the source for copying conditions.  There is NO warranty; not even for",
