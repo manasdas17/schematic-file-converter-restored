@@ -22,7 +22,7 @@ Upverter's Open JSON Interchange Format """
 #
 #
 # Development:
-#   Active: As of Jan, 2012
+#   Active: As of June, 2012
 #   See: github.com/upverter/schematic-file-converter
 #
 # Authors:
@@ -52,6 +52,7 @@ import logging
 import os
 import sys
 import operator
+import subprocess
 import tempfile
 from argparse import ArgumentParser
 try:
@@ -206,8 +207,23 @@ def main():
                     help="show tracebacks for parsing and writing errors")
     ap.add_argument('--profile', action='store_true', default=False,
                     help="collect profiling information")
+    ap.add_argument('-v', '--version', action='store_true', default=False,
+                    help="print version information and quit")
 
     args = ap.parse_args()
+
+    if args.version:
+        try:
+            subprocess.call([".git/hooks/post-commit"])
+            with open('version', 'r') as f:
+                version = f.read().strip()
+        except:
+            version = '?'
+        print "upconverter %s in python %s.%s" % (version, sys.version_info[0], sys.version_info[1])
+        print "Copyright (C) 2007 Upverter, Inc."
+        print "This is free software; see the source for copying conditions.  There is NO warranty; not even for",
+        print "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+        sys.exit(0)
 
     # Fail if strict and wrong python version
     if sys.version_info[0] > 2 or sys.version_info[1] > 6:
