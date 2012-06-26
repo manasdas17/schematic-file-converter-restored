@@ -22,15 +22,23 @@ usage: upconvert.py [-h] [-i INPUT] [-f TYPE] [-o OUTPUT] [-s SYMDIRS [SYMDIRS .
 
 optional arguments:
   -h, --help            show this help message and exit
+
   -i INPUT, --input INPUT
                         read INPUT file in
   -f TYPE, --from TYPE  read input file as TYPE
+
   -o OUTPUT, --output OUTPUT
                         write OUTPUT file out
+  -t TYPE, --to TYPE    write output file as TYPE
+
   -s SYMDIRS [SYMDIRS ...], --sym-dirs SYMDIRS [SYMDIRS ...]
                         specify SYMDIRS to search for .sym files (for gEDA
                         only)
-  -t TYPE, --to TYPE    write output file as TYPE
+
+  --unsupported         run with an unsupported python version
+  --raise-errors        show tracebacks for parsing and writing errors
+  --profile             collect profiling information
+  -v, --version         print version information and quit
 ```
 
 
