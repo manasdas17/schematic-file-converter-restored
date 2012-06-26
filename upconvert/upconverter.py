@@ -214,8 +214,8 @@ def main():
 
     if args.version:
         try:
-            if os.path.exists(".git/hooks/post-commit"):
-                subprocess.call([".git/hooks/post-commit"])
+            if os.path.exists(".git/hooks/post-commit.version"):
+                subprocess.call([".git/hooks/post-commit.version"])
             with open('version', 'r') as f:
                 version = f.read().strip()
         except:

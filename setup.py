@@ -9,7 +9,7 @@ setup(
     name='python-upconvert',
     maintainer='Upverter Inc.',
     maintainer_email='opensource@upverter.com',
-    version='0.5',
+    version='0.6',
     description='Upconvert library',
     license='Apache 2.0',
     url='https://github.com/upverter/schematic-file-converter',
