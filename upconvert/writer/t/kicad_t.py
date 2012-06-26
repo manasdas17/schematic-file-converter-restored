@@ -55,6 +55,7 @@ class KiCADTests(unittest.TestCase):
         os.remove(filename)
         writer.write(design, filename)
         self.assertTrue(os.path.exists(filename))
+        os.remove(filename)
 
     def test_write_header(self):
         """
