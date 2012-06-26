@@ -227,8 +227,8 @@ class ViewDrawBaseTests(unittest.TestCase):
             self.assertAlmostEqual(v.x, x_c, delta=1)
             self.assertAlmostEqual(v.y, y_c, delta=1)
             self.assertAlmostEqual(v.radius, radius, delta=1)
-            self.assertAlmostEqual(v.start_angle, (2 - ang[0]), places=2)
-            self.assertAlmostEqual(v.end_angle, (2 - ang[2]), places=2)
+            self.assertAlmostEqual(v.end_angle, (2 - ang[0]), delta=0.01)
+            self.assertAlmostEqual(v.start_angle, (2 - ang[2]), delta=0.01)
 
 class ViewDrawSymTests(unittest.TestCase):
     """ Tests for ViewDraw library symbol files """
