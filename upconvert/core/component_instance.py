@@ -23,7 +23,7 @@
 def stringify_attributes(attributes):
     attrs = {}
     for n, v in attributes.iteritems():
-        attrs[n] = str(v)
+        attrs[n] = v if isinstance(v, basestring) else str(v)
     return attrs
 
 
