@@ -98,8 +98,8 @@ class SymbolAttribute:
     def json(self):
         """ Return the body as JSON """
         return {
-            "x" : self.x,
-            "y": self.y,
-            "rotation":self.rotation,
-            "annotations" : [a.json() for a in self.annotations]
+            "x": int(self.x),
+            "y": int(self.y),
+            "rotation": self.rotation,
+            "annotations": [a.json() for a in self.annotations]
             }

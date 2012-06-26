@@ -119,12 +119,12 @@ class Metadata:
     def json(self):
         """ Return the metadata as JSON """
         return {
-            "name":self.name,
-            "license":self.license,
-            "owner":self.owner,
+            "name": self.name,
+            "license": self.license,
+            "owner": self.owner,
             "updated_timestamp": self.updated_timestamp,
             "design_id": self.design_id,
             "description": self.description,
             "slug": self.slug,
-            "attached_urls":[]
+            "attached_urls": []
             }

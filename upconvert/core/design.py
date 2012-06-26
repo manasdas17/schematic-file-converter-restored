@@ -129,13 +129,12 @@ class Design:
     def json(self):
         """ Return a design as JSON """
         return {
-            "version" : self.version,
-            "nets" : [n.json() for n in self.nets],
-            "components" : self.components.json(),
-            "component_instances" :
-                [i.json() for i in self.component_instances],
-            "shapes" : [s.json() for s in self.shapes],
-            "pins" : [s.json() for s in self.pins],
-            "design_attributes" : self.design_attributes.json(),
-            "layout" : self.layout.json() if self.layout is not None else None
+            "version": self.version,
+            "nets": [n.json() for n in self.nets],
+            "components": self.components.json(),
+            "component_instances": [i.json() for i in self.component_instances],
+            "shapes": [s.json() for s in self.shapes],
+            "pins": [s.json() for s in self.pins],
+            "design_attributes": self.design_attributes.json(),
+            "layout": self.layout.json() if self.layout is not None else None
             }

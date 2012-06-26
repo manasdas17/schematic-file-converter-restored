@@ -61,6 +61,9 @@ Supported Formats
 * Altium                (in development)
 * DSN                   (in development)
 * PNG Image             (in development)
+* Bill of Materials     (in development)
+* CSV Netlist           (in development)
+* Telesis Netlist       (in development)
 
 
 Format Wish List
@@ -70,9 +73,6 @@ Format Wish List
 
 * OrCad
 * Drill Data in Excellon format
-* BOM (Bill of Materials) in CSV format
-* Netlist in CSV format
-* Netlist in Telesis format
 * Existing supported formats - layout data
 
 

@@ -60,9 +60,10 @@ except ImportError:
     import json
 
 from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, \
-    eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p
+    eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
+    specctra as specctra_p
 from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
-    eagle as eagle_w, gerber as gerber_w
+    eagle as eagle_w, gerber as gerber_w, specctra as specctra_w
 
 
 # Logging
@@ -77,6 +78,7 @@ PARSERS = {
     'eaglexml': eaglexml_p.EagleXML,
     'fritzing': fritzing_p.Fritzing,
     'gerber': gerber_p.Gerber,
+    'specctra': specctra_p.Specctra,
 }
 
 WRITERS = {
@@ -85,6 +87,7 @@ WRITERS = {
     'geda': geda_w.GEDA,
     'eagle': eagle_w.Eagle,
     'gerber': gerber_w.Gerber,
+    'specctra': specctra_w.Specctra,
 }
 
 EXTENSIONS = {
@@ -94,6 +97,7 @@ EXTENSIONS = {
     'eagle': '.sch',
     'fritzing': '.fz',
     'gerber': '.grb',
+    'specctra': '.dsn',
 }
 
 
@@ -150,7 +154,6 @@ class Upconverter(object):
     @staticmethod
     def file_to_upv(file_content):
         """ convert file_content into upv data pre-jsonification """
-        
         log.info('Starting to convert content into upv')
 
         tmp_fd, tmp_path = tempfile.mkstemp()
@@ -159,36 +162,23 @@ class Upconverter(object):
 
         format = Upconverter.autodetect(tmp_path)
         design = Upconverter.parse(tmp_path, format)
-
-        tmp_fd2, tmp_path2 = tempfile.mkstemp()
-        os.close(tmp_fd2)
-        Upconverter.write(design, tmp_path2, 'openjson')
-
-        json_data = None
-        with open(tmp_path2, 'r') as final_file:
-            json_data = final_file.read()
-
         os.remove(tmp_path)
-        os.remove(tmp_path2)
 
-        return json.loads(json_data)
+        return json.loads(json.dumps(design.json(), sort_keys=True, indent=4))
 
 
     @staticmethod
     def json_to_format(upv_json_data, format, path):
         """ convert upv_json_data into format as a file @ path """
-        
         log.info('Converting upv data into %s at %s', format, path)
 
         path_w_ext = path + EXTENSIONS[format]
-
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.write(tmp_fd, upv_json_data)
         os.close(tmp_fd)
 
         design = Upconverter.parse(tmp_path, 'openjson')
         Upconverter.write(design, path_w_ext, format)
-
         os.remove(tmp_path)
 
         return path_w_ext

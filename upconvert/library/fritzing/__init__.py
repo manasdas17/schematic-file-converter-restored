@@ -19,7 +19,7 @@ def lookup_part(path, fritzing_version):
 
     cur_version = chunk_version(fritzing_version)
 
-    candidates = [name for (v, name) in ALL_VERSIONS if v >= cur_version]
+    candidates = [name for (v, name) in ALL_VERSIONS if v[:2] >= cur_version[:2]]
 
     if not candidates:
         candidates = ALL_VERSIONS[-1][1]

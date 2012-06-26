@@ -22,9 +22,11 @@
 from collections import defaultdict
 
 from upconvert.core.design import Design
-from upconvert.core.components import Component, Symbol, Body
+from upconvert.core.annotation import Annotation
+from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
-from upconvert.core.shape import Line
+from upconvert.core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.shape import Label, Line, Rectangle
 
 from upconvert.parser.eaglexml.generated import parse
 
@@ -53,6 +55,26 @@ class EagleXML(object):
         # map components to gate names to symbol indices
         self.cpt2gate2symbol_index = defaultdict(dict)
 
+        # map components to gate names to annotation maps, dicts from
+        # strings (name|value) to Annotations. These represent the
+        # >NAME and >VALUE texts on eagle components, which must be
+        # converted into component instance annotations since their
+        # contents depend on the component instance name and value.
+        self.cpt2gate2ann_map = defaultdict(dict)
+
+        # map components to gate names to pin maps, dicts from strings
+        # (pin names) to Pins. These are used during pinref processing
+        # in segments.
+        self.cpt2gate2pin_map = defaultdict(dict)
+
+        # map part names to component instances. These are used during
+        # pinref processing in segments.
+        self.part2inst = defaultdict(dict)
+
+        # map part names to gate names to symbol attributes. These
+        # are used during pinref processing in segments.
+        self.part2gate2symattr = defaultdict(dict)
+
 
     @staticmethod
     def auto_detect(filename):
@@ -74,34 +96,45 @@ class EagleXML(object):
 
         self.make_components(root)
         self.make_component_instances(root)
+        self.make_nets(root)
 
         return self.design
 
 
     def make_components(self, root):
-        """ Construct openjson components for an eagle model. """
+        """ Construct openjson components from an eagle model. """
 
         for lib in get_subattr(root, 'drawing.schematic.libraries.library', ()):
             for deviceset in get_subattr(lib, 'devicesets.deviceset', ()):
-                cpt = self.make_component(lib, deviceset)
-                self.design.components.add_component(cpt.name, cpt)
+                for cpt in self.make_deviceset_components(lib, deviceset):
+                    self.design.components.add_component(cpt.name, cpt)
 
 
-    def make_component(self, lib, deviceset):
-        """ Construct an openjson component for a deviceset in a library. """
+    def make_deviceset_components(self, lib, deviceset):
+        """ Construct a set of openjson components for a deviceset in a library. """
 
-        cpt = Component(lib.name + ':' + deviceset.name)
+        for device in get_subattr(deviceset, 'devices.device'):
+            # map pin names to pin numbers for this device
+            pinname2num = {}
+            for connect in get_subattr(device, 'connects.connect', ()):
+                pinname2num[connect.pin] = connect.pad
 
-        for gate in get_subattr(deviceset, 'gates.gate'):
-            symbol = Symbol()
-            cpt.add_symbol(symbol)
-            self.cpt2gate2symbol_index[cpt][gate.name] = len(cpt.symbols) - 1
-            symbol.add_body(self.make_body_from_symbol(lib, gate.symbol))
+            cpt = Component(lib.name + ':' + deviceset.name + ':' + device.name)
 
-        return cpt
+            for gate in get_subattr(deviceset, 'gates.gate'):
+                symbol = Symbol()
+                cpt.add_symbol(symbol)
+                self.cpt2gate2symbol_index[cpt][gate.name] = len(cpt.symbols) - 1
+                body, pin_map, ann_map = \
+                    self.make_body_from_symbol(lib, gate.symbol, pinname2num)
+                symbol.add_body(body)
+                self.cpt2gate2ann_map[cpt][gate.name] = ann_map
+                self.cpt2gate2pin_map[cpt][gate.name] = pin_map
+
+            yield cpt
 
 
-    def make_body_from_symbol(self, lib, symbol_name):
+    def make_body_from_symbol(self, lib, symbol_name, pinname2num):
         """ Contruct an openjson Body from an eagle symbol in a library. """
 
         body = Body()
@@ -115,40 +148,174 @@ class EagleXML(object):
                                 (self.make_length(wire.x2),
                                  self.make_length(wire.y2))))
 
-        return body
+        for rect in symbol.rectangle:
+            x = self.make_length(rect.x1)
+            y = self.make_length(rect.y1)
+            width = self.make_length(rect.x2) - x
+            height = self.make_length(rect.y2) - y
+            body.add_shape(Rectangle(x, y + height, width, height))
+
+        pin_map = {}
+
+        for pin in symbol.pin:
+            connect_point = (self.make_length(pin.x), self.make_length(pin.y))
+            null_point = self.get_pin_null_point(connect_point,
+                                                 pin.length, pin.rot)
+            # TODO: pin labels
+            pin_map[pin.name] = Pin(pinname2num.get(pin.name, pin.name),
+                                    null_point, connect_point)
+            body.add_pin(pin_map[pin.name])
+
+        ann_map = {}
+
+        for text in symbol.text:
+            x = self.make_length(text.x)
+            y = self.make_length(text.y)
+            content = '' if text.valueOf_ is None else text.valueOf_
+            rotation = self.make_angle('0' if text.rot is None else text.rot)
+            if content == '>NAME':
+                ann_map['name'] = Annotation(content, x, y, rotation, True)
+            elif content == '>VALUE':
+                ann_map['value'] = Annotation(content, x, y, rotation, True)
+            else:
+                body.add_shape(Label(x, y, content, 'left', rotation))
+
+        return body, pin_map, ann_map
+
+
+    def get_pin_null_point(self, (x, y), length, rotation):
+        """ Return the null point of a pin given its connect point, length, and rotation. """
+
+        if length == 'long':
+            distance = 27 #
+        elif length == 'middle':
+            distance = 18 # .2 inches
+        elif length == 'short':
+            distance = 9  # .1 inches
+        else: # point
+            distance = 0
+
+        if rotation == 'R90':
+            return (x, y + distance)
+        elif rotation == 'R180':
+            return (x - distance, y)
+        elif rotation == 'R270':
+            return (x, y - distance)
+        else:
+            return (x + distance, y)
 
 
     def make_component_instances(self, root):
-        """ Construct openjson component instances for an eagle model. """
+        """ Construct openjson component instances from an eagle model. """
 
         parts = dict((p.name, p) for p
                      in get_subattr(root, 'drawing.schematic.parts.part', ()))
 
         for sheet in get_subattr(root, 'drawing.schematic.sheets.sheet', ()):
             for instance in get_subattr(sheet, 'instances.instance', ()):
-                inst = self.make_component_instance(parts, instance)
-                self.design.add_component_instance(inst)
+                inst = self.ensure_component_instance(parts, instance)
+                inst.add_symbol_attribute(self.make_symbol_attribute(instance))
 
 
-    def make_component_instance(self, parts, instance):
-        """ Construct an openjson component instance for an eagle instance. """
+    def ensure_component_instance(self, parts, instance):
+        """ Ensure there is a component instance for an eagle instance. """
 
         part = parts[instance.part]
 
-        library_id = part.library + ':' + part.deviceset
+        if part.name in self.part2inst:
+            return self.part2inst[part.name]
 
-        # TODO pick correct symbol index
-        inst = ComponentInstance(instance.part, library_id, 0)
+        library_id = part.library + ':' + part.deviceset + ':' + part.device
 
-        # TODO handle mirror
-        # TODO handle smashed?
+        cpt = self.design.components.components[library_id]
+
+        self.part2inst[part.name] = \
+            ComponentInstance(instance.part, library_id,
+                              self.cpt2gate2symbol_index[cpt][instance.gate])
+
+        self.design.add_component_instance(self.part2inst[part.name])
+
+        return self.part2inst[part.name]
+
+
+    def make_symbol_attribute(self, instance):
+        """ Construct an openjson symbol attribute from an eagle instance. """
+
+        # TODO: handle mirror
+        # TODO: handle smashed?
         attr = SymbolAttribute(self.make_length(instance.x),
                                self.make_length(instance.y),
                                self.make_angle(instance.rot or '0'))
 
-        inst.add_symbol_attribute(attr)
+        self.part2gate2symattr[instance.part][instance.gate] = attr
 
-        return inst
+        self.part2inst[instance.part].add_symbol_attribute(attr)
+
+        return attr
+
+
+    def make_nets(self, root):
+        """ Construct openjson nets from an eagle model. """
+
+        for sheet in get_subattr(root, 'drawing.schematic.sheets.sheet', ()):
+            for net in get_subattr(sheet, 'nets.net', ()):
+                self.design.add_net(self.make_net(net))
+
+
+    def make_net(self, net):
+        """ Construct an openjson net from an eagle net. """
+
+        points = {} # (x, y) -> NetPoint
+
+        def get_point(x, y):
+            """ Return a new or existing NetPoint for an (x,y) point """
+            point = (self.make_length(x), self.make_length(y))
+            if point not in points:
+                points[point] = NetPoint('%da%d' % point, point[0], point[1])
+                out_net.add_point(points[point])
+            return points[point]
+
+        out_net = Net(net.name)
+
+        for segment in get_subattr(net, 'segment', ()):
+            for wire in get_subattr(segment, 'wire', ()):
+                out_net.connect((get_point(wire.x1, wire.y1),
+                                 get_point(wire.x2, wire.y2)))
+
+            for pinref in get_subattr(segment, 'pinref', ()):
+                self.connect_pinref(pinref,
+                                    get_point(*self.get_pinref_point(pinref)))
+
+        return out_net
+
+
+    def get_pinref_point(self, pinref):
+        """ Return the (x, y) point of a pinref. """
+
+        symattr = self.part2gate2symattr[pinref.part][pinref.gate]
+        inst = self.part2inst[pinref.part]
+        cpt = self.design.components.components[inst.library_id]
+        pin = self.cpt2gate2pin_map[cpt][pinref.gate][pinref.pin]
+
+        if symattr.rotation == 0.0:
+            return (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
+        elif symattr.rotation == 0.5:
+            return (symattr.x + pin.p2.y, symattr.y - pin.p2.x)
+        elif symattr.rotation == 1.0:
+            return (symattr.x - pin.p2.x, symattr.y + pin.p2.y)
+        elif symattr.rotation == 1.5:
+            return (symattr.x - pin.p2.y, symattr.y + pin.p2.x)
+
+
+    def connect_pinref(self, pinref, point):
+        """ Add a connected component to a NetPoint given an eagle pinref. """
+
+        inst = self.part2inst[pinref.part]
+        cpt = self.design.components.components[inst.library_id]
+        pin = self.cpt2gate2pin_map[cpt][pinref.gate][pinref.pin]
+
+        point.add_connected_component(
+            ConnectedComponent(inst.instance_id, pin.pin_number))
 
 
     def make_length(self, value):
@@ -160,7 +327,9 @@ class EagleXML(object):
     def make_angle(self, value):
         """ Make an openjson angle measurement from an eagle angle. """
 
-        return float(value.lstrip('MSR')) / 180
+        angle = float(value.lstrip('MSR')) / 180
+
+        return angle if angle == 0.0 else 2.0 - angle
 
 
 def get_subattr(obj, name, default=None):

@@ -108,11 +108,11 @@ class Rectangle(Shape):
     def json(self):
         """ Return the rectangle as JSON """
         return {
-            "height": self.height,
+            "height": int(self.height),
             "type": self.type,
-            "width": self.width,
-            "x": self.x,
-            "y": self.y,
+            "width": int(self.width),
+            "x": int(self.x),
+            "y": int(self.y),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
@@ -170,12 +170,12 @@ class RoundedRectangle(Shape):
     def json(self):
         """ Return the rounded rectangle as JSON """
         return {
-            "height": self.height,
+            "height": int(self.height),
             "type": self.type,
-            "width": self.width,
-            "x": self.x,
-            "y": self.y,
-            "radius": self.radius,
+            "width": int(self.width),
+            "x": int(self.x),
+            "y": int(self.y),
+            "radius": int(self.radius),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
@@ -276,9 +276,9 @@ class Arc(Shape):
             "start_angle": self.start_angle,
             "end_angle": self.end_angle,
             "type": self.type,
-            "radius": self.radius,
-            "x": self.x,
-            "y": self.y,
+            "radius": int(self.radius),
+            "x": int(self.x),
+            "y": int(self.y),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
@@ -324,10 +324,10 @@ class Circle(Shape):
     def json(self):
         """ Return the circle as JSON """
         return {
-            "radius": self.radius,
+            "radius": int(self.radius),
             "type": self.type,
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
@@ -376,8 +376,8 @@ class Label(Shape):
             "align": self.align,
             "rotation": self.rotation,
             "text": self.text,
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
@@ -654,8 +654,8 @@ class Moire(Shape):
     def json(self):
         """ Return the moire as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "outer_diameter": self.outer_diameter,
             "ring_thickness": self.ring_thickness,
             "gap_thickness": self.gap_thickness,
@@ -730,8 +730,8 @@ class Thermal(Shape):
     def json(self):
         """ Return the thermal as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "outer_diameter": self.outer_diameter,
             "inner_diameter": self.inner_diameter,
             "gap_thickness": self.gap_thickness,
@@ -802,8 +802,8 @@ class RegularPolygon(Shape):
     def json(self):
         """ Return the regular polygon as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "outer_diameter": self.outer_diameter,
             "vertices": self.vertices,
             "rotation": self.rotation,
@@ -868,8 +868,8 @@ class Point:
     def json(self):
         """ Return the point as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             }
 
 
@@ -915,12 +915,11 @@ class Obround(Shape):
     def json(self):
         """ Return the oval as JSON """
         return {
-            "height": self.height,
+            "height": int(self.height),
             "type": self.type,
-            "width": self.width,
-            "x": self.x,
-            "y": self.y,
+            "width": int(self.width),
+            "x": int(self.x),
+            "y": int(self.y),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
-
