@@ -52,13 +52,14 @@ import logging
 import os
 import sys
 import operator
-import subprocess
 import tempfile
 from argparse import ArgumentParser
 try:
     import simplejson as json
 except ImportError:
     import json
+
+from upconvert import version
 
 from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, \
     eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
@@ -213,14 +214,7 @@ def main():
     args = ap.parse_args()
 
     if args.version:
-        try:
-            if os.path.exists(".git/hooks/post-commit.version"):
-                subprocess.call([".git/hooks/post-commit.version"])
-            with open('version', 'r') as f:
-                version = f.read().strip()
-        except:
-            version = '???'
-        print "upconverter %s in python %s.%s" % (version, sys.version_info[0], sys.version_info[1])
+        print "upconverter %s in python %s.%s" % (version(), sys.version_info[0], sys.version_info[1])
         print "Copyright (C) 2007 Upverter, Inc."
         print "This is free software; see the source for copying conditions.  There is NO warranty; not even for",
         print "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
