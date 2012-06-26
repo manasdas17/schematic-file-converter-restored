@@ -102,7 +102,7 @@ class ViewDrawBaseTests(unittest.TestCase):
         # `#` args are unhandled, but may be in the future
         k, v = self.base.parse_label(args)
         self.assertEqual(k, 'annot')
-        self.assertTrue(isinstance(v, Annotation))
+        self.assertIsInstance(v, Annotation)
         self.assertEqual(v.x, 2)
         self.assertEqual(v.y, 3)
         self.assertEqual(v.value, 'this is a text label')
@@ -224,11 +224,11 @@ class ViewDrawBaseTests(unittest.TestCase):
             self.assertEqual(v.type, 'arc')
             # allow for points to be off by up to one unit, to account for
             # rounding error in calculating center point, radius.
-            self.assertTrue(abs(v.x - x_c) <= 1)
-            self.assertTrue(abs(v.y - y_c) <= 1)
-            self.assertTrue(abs(v.radius - radius) <= 1)
-            self.assertTrue(abs(v.start_angle - (2 - ang[0])) < 0.01)
-            self.assertTrue(abs(v.end_angle - (2 - ang[2])) < 0.01)
+            self.assertAlmostEqual(v.x, x_c, delta=1)
+            self.assertAlmostEqual(v.y, y_c, delta=1)
+            self.assertAlmostEqual(v.radius, radius, delta=1)
+            self.assertAlmostEqual(v.end_angle, (2 - ang[0]), delta=0.01)
+            self.assertAlmostEqual(v.start_angle, (2 - ang[2]), delta=0.01)
 
 class ViewDrawSymTests(unittest.TestCase):
     """ Tests for ViewDraw library symbol files """
@@ -284,7 +284,7 @@ class ViewDrawSymTests(unittest.TestCase):
     def test_pin(self):
         """ Test parsing a simple pin """
         v = self.subtest_pin()
-        self.assertTrue(v.label == None)
+        self.assertIsNone(v.label)
 
     def test_pin_with_label(self):
         """ Test parsing a pin with an attached label """
@@ -369,13 +369,13 @@ class ViewDrawSchTests(unittest.TestCase):
         self.assertEqual(len(net.points), len(pts_dict))
         for pt in net.points.values():
             # make sure pt is one of the ones we created
-            self.assertTrue((pt.x, pt.y) in pts_dict)
+            self.assertIn((pt.x, pt.y), pts_dict)
             # make sure it's connected to the other point
             self.assertEqual(len(pt.connected_points),
                              len(pts_dict[(pt.x, pt.y)]))
             for ptid in pt.connected_points:
                 otherpt = net.points[ptid]
-                self.assertTrue((otherpt.x, otherpt.y) in pts_dict[(pt.x, pt.y)])
+                self.assertIn((otherpt.x, otherpt.y), pts_dict[(pt.x, pt.y)])
                 self.assertEqual(len(pt.connected_components), 0)
 
     def test_net_two_points(self):

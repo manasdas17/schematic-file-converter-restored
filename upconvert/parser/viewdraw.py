@@ -26,7 +26,7 @@ from upconvert.core.design import Design
 from upconvert.core.components import Components, Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.shape import Circle, Line, Rectangle, Label, Arc
-from os import listdir
+from os import listdir, sep as dirsep
 from math import pi, sqrt, atan
 from collections import defaultdict
 
@@ -43,6 +43,33 @@ class ViewDrawBase:
 
     sheetsizes = ('ASIZE', 'BSIZE', 'CSIZE', 'DSIZE', 'ESIZE', 'A4', 'A3',
                   'A2', 'A1', 'A0', 'CUSTOM')
+
+    @staticmethod
+    def auto_detect(filename):
+        """ Return our confidence that the given file is a viewdraw file """
+        confidence = 0.
+        with open(filename) as f:
+            # as far as I've seen, the first two non-comment lines in a
+            # viewdraw file are the version, and the mysterious K line
+            version = f.readline().strip()
+            while version.startswith('|'):
+                version = f.readline().strip()
+            kline = f.readline().strip()
+            while kline.startswith('|'):
+                kline = f.readline().strip()
+
+            if version.startswith('V '):
+                confidence += 0.2
+                if version.split(' ')[1] in ('50', '51', '52', '53'):
+                    # the only version numbers I've seen that match this format
+                    confidence += 0.5
+            if kline.startswith('K '):
+                confidence += 0.2
+
+        # result is that confidence is 0.9 if it's precisely what I expected,
+        # and likely 0.4 if it's just in a related format (eg later versions
+        # will report 'V 5.4' or similar)
+        return confidence
 
     def __init__(self, filename):
         self.filename = filename
@@ -77,7 +104,7 @@ class ViewDrawBase:
         parser = self.parsers.get(cmd, 'parse_null')
         return getattr(self, parser)
 
-    def parse_null(self, args):
+    def parse_null(self, args): # pylint: disable=W0613
         '''A do-nothing parser for commands to be ignored'''
         # override/decorate this if you have a method you want to have called
         # for every unhandled command.
@@ -90,15 +117,8 @@ class ViewDrawBase:
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
         # FIXME use rotation
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('Q'):
-                self.stream.push(phrase)
-                break
-            # Q cmd is ignored for now anyway, but need to get it out of the way
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        self.sub_nodes(['Q'])
+        # Q cmd is ignored for now anyway, but need to get it out of the way
         display = True
         if viz == '1':
             value = val
@@ -113,10 +133,11 @@ class ViewDrawBase:
 
     def parse_label(self, args):
         """ Returns a parsed label. """
-        x, y, _font_size, _rot, _c, _d, _e, _f, text = args.split(' ', 8)
+        args = args.split(' ', 8)
+        x, y, _font_size, _rot, _anchor, _scope, _vis, _sense, text = args
         # treat them as annotations for now, I guess.
-        # suspect that c, e are anchor and vis, as in parse_annot
-        # According to other research, d is scope (0=local, 1=global) and f
+        # suspect that anchor and vis are as in parse_annot
+        # According to other research, _scope is (0=local, 1=global) and _sense
         # might be logic sense (for overbars, 0=normal, 1=inverted)
         # FIXME use rot and vis
         return ('annot', Annotation(text, int(x), int(y), 0, True))
@@ -129,8 +150,11 @@ class ViewDrawBase:
     def parse_size(self, args):
         """ Returns the sheet size. """
         size = int(args.split()[0])
-        return ('sheetsize', (size < len(self.sheetsizes) and
-                              self.sheetsizes[size] or 'unknown'))
+        if size < len(self.sheetsizes):
+            sheet = self.sheetsizes[size]
+        else:
+            sheet = 'unknown'
+        return ('sheetsize', sheet)
 
     def parse_circle(self, args):
         """ Returns a parsed circle. """
@@ -175,17 +199,18 @@ class ViewDrawBase:
         # drawn perpendicular to and bisecting these chords will intersect at
         # the circle's centre.
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
-        # can't allow for infinite slopes (ma and mb), and can't allow ma to be
-        # a zero slope.
+        # can't allow for infinite slopes (m_a and m_b), and can't allow m_a
+        # to be a zero slope.
         while abs(x0 - x1) < 0.1 or abs(x1 - x2) < 0.1 or abs(y0 - y1) < 0.1:
             x0, y0, x1, y1, x2, y2 = x1, y1, x2, y2, x0, y0
         # slopes of the chords
-        ma, mb = (y1-y0) / (x1-x0), (y2-y1) / (x2-x1)
+        m_a, m_b = (y1-y0) / (x1-x0), (y2-y1) / (x2-x1)
         # find the centre
-        xc = (ma * mb * (y0-y2) + mb * (x0+x1) - ma * (x1+x2)) / (2 * (mb-ma))
-        yc = (-1/ma) * (xc - (x0+x1) / 2) + (y0+y1) / 2
+        xcenter = ((m_a * m_b * (y0 - y2) + m_b * (x0 + x1) - m_a * (x1 + x2))
+                   / (2 * (m_b - m_a)))
+        ycenter = (-1/m_a) * (xcenter - (x0+x1) / 2) + (y0+y1) / 2
         # radius is the distance from the centre to any of the three points
-        rad = sqrt((xc-x0)**2 + (yc-y0)**2)
+        rad = sqrt((xcenter-x0)**2 + (ycenter-y0)**2)
 
         # re-init xs,ys so that start and end points don't get confused.
         x0, y0, x1, y1, x2, y2 = [float(pt) for pt in args.split()]
@@ -194,8 +219,8 @@ class ViewDrawBase:
             """ Calculate the angle from the center of the arc to (x, y). """
             # as parsed, the angle increases CCW. Here, we return an angle
             # increasing CW
-            opp = y - yc
-            adj = x - xc
+            opp = y - ycenter
+            adj = x - xcenter
             if abs(adj) < 0.01:
                 # vertical line to x,y
                 if opp > 0:
@@ -213,14 +238,28 @@ class ViewDrawBase:
             # upverter uses CW angles, so...
             return 2 * pi - ang
 
-        return ('shape', Arc(int(round(xc)), int(round(yc)),
-                             angle(x0,y0) / pi, angle(x2,y2) / pi,
+        return ('shape', Arc(int(round(xcenter)), int(round(ycenter)),
+                             angle(x2,y2) / pi, angle(x0,y0) / pi,
                              int(round(rad))))
 
+    def sub_nodes(self, sub_cmds):
+        """ Parse and return any commands that the parent needs.
+
+        Returns a dict in the same style as parse() that the parent node can
+        use. Any use of this sub-tree is left up to the caller. """
+        subdata = defaultdict(list)
+        for phrase in self.stream:
+            cmd, _sep, args = phrase.partition(' ')
+            if cmd not in sub_cmds:
+                self.stream.push(phrase)
+                break
+            k, v = self.parsenode(cmd)(args)
+            subdata[k].append(v)
+        return subdata
 
 class ViewDrawSch(ViewDrawBase):
     """ Parser for a single schematic file. """
-    
+
     def __init__(self, lib, filename):
         ViewDrawBase.__init__(self, filename)
         self.parsers.update({'N': 'parse_net',
@@ -243,7 +282,7 @@ class ViewDrawSch(ViewDrawBase):
         ckt = Design()
         # TODO little weak here, a copy instead?
         ckt.components = self.lib
-        
+
         for net in tree['net']:
             ckt.add_net(net)
         for inst in tree['inst']:
@@ -257,29 +296,23 @@ class ViewDrawSch(ViewDrawBase):
         for net in ckt.nets:
             del net.ibpts
 
-        # too bad designs don't have top-level shapes (yet?)
-        #map(ckt.add_shape, tree['shape'])
-        
-        for lbl in [s for s in tree['shapes'] if isinstance(s, Label)]:
-            ann = Annotation(lbl.text, lbl.x, lbl.y, lbl.rotation, True)
-            ckt.design_attributes.add_annotation(ann)
-        
-        for k, v in tree['attr']:
+        for shape in tree['shape']:
+            ckt.add_shape(shape)
+            if isinstance(shape, Label):
+                ann = Annotation(shape.text, shape.x, shape.y,
+                                 shape.rotation, True)
+                ckt.design_attributes.add_annotation(ann)
+
+        for k, v, annot in tree['attr']:
             ckt.design_attributes.add_attribute(k, v)
+            ckt.design_attributes.add_annotation(annot)
 
         return ckt
 
     def parse_net(self, args):
         """ Assembles a net from a list of junctions, segments, and labels. """
         thisnet = Net(args)
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('J', 'S', 'A', 'L', 'Q', 'B'):
-                self.stream.push(phrase)
-                break
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        subdata = self.sub_nodes('J S A L Q B'.split())
         # finish building thisnet
         for netpt in subdata['netpoint'][:]:
             # using a copy so that we can modify subdata['netpoint'] inside loop
@@ -324,7 +357,7 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_inst(self, args):
         """ Returns a parsed component instance. """
-        inst, libname, libnum, x, y, rot, _scale, _b = args.split()
+        inst, libname, libnum, x, y, rot, _scale, _unknown = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
         if int(rot) > 3:
@@ -335,14 +368,7 @@ class ViewDrawSch(ViewDrawBase):
 
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
                                                       float(rot) / 2))
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('|R', 'A', 'C'):
-                self.stream.push(phrase)
-                break
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        subdata = self.sub_nodes('|R A C'.split())
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)
             if '=' in annot.value:
@@ -355,12 +381,12 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_conn(self, args):
         """ Returns a parsed connection between component and net. """
-        netid, segpin, pin, _a = args.split()
-        # as far as has been observed, a is always 0
+        netid, segpin, pin, _unknown = args.split()
+        # as far as has been observed, _unknown is always 0
         # segpin is the netpoint on the net
         # TODO I have no faith in pin variable here
         return ('conn', (netid, int(segpin), pin))
-    
+
     def parse_bounds(self, args):
         """ Parses the bounds of this schematic sheet. """
         # Not sure if this is quite valid.
@@ -368,11 +394,12 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
-        x, y, _font_size, _rot, _anchor, viz, kv = args.split(' ', 6)
-        k, _sep, v = kv.partition('=')
-        # TODO want to do anything with the rest of the info?
-        # TODO at least add in the label
-        return ('attr', (k, v))
+        keyval = args.split(' ', 6)[-1]
+        # need to keep the attribute key/val pair, as it may be clobbered while
+        # creating the annotation.
+        k, _sep, v = keyval.partition('=')
+        # make an annotation out of it too, so that it displays on the design
+        return ('attr', (k, v, self.parse_annot(args)[1]))
 
     def lookup(self, libname, num):
         """ Given a component name and version, returns the filename """
@@ -398,10 +425,10 @@ class ViewDrawSym(ViewDrawBase):
         part = Component(self.filename)
         part.add_symbol(Symbol())
         part.symbols[0].add_body(Body())
-        
+
         tree = ViewDrawBase.parse(self)
-        for attr in tree['attr']:
-            part.add_attribute(*attr)
+        for k, v in tree['attr']:
+            part.add_attribute(k, v)
         for shape in tree['shape'] + sum(tree['lines'], []):
             part.symbols[0].bodies[0].add_shape(shape)
         for pin in tree['pin']:
@@ -411,8 +438,11 @@ class ViewDrawSym(ViewDrawBase):
 
     def parse_type(self, args):
         """ Returns a parsed symbol type. """
-        return ('attr', ('symtype', (int(args) < len(self.symtypes) and
-                                     self.symtypes[int(args)] or 'unknown')))
+        if int(args) < len(self.symtypes):
+            symtype = self.symtypes[int(args)]
+        else:
+            symtype = 'unknown'
+        return ('attr', ('symtype', symtype))
 
     def parse_attr(self, args):
         """ Returns a parsed attribute. """
@@ -429,16 +459,11 @@ class ViewDrawSym(ViewDrawBase):
     def parse_pin(self, args):
         """ Returns a parsed pin. """
         # Pin declaration, seems to only be done once per pin
-        pid, xe, ye, xb, yb, rot, side, inv = [int(a) for a in args.split()]
-        thispin = Pin(pid, (xb, yb), (xe, ye))
-        subdata = defaultdict(list)
-        for phrase in self.stream:
-            cmd, _sep, args = phrase.partition(' ')
-            if cmd not in ('L'):
-                self.stream.push(phrase)
-                break
-            k, v = self.parsenode(cmd)(args)
-            subdata[k].append(v)
+        pid, x1, y1, x0, y0, _rot, _side, _inv = [int(a) for a in args.split()]
+        # _rot and _side are not needed, because the x-y data tells us what we
+        # need to know. _inv is used to draw the little inverted signal cirles.
+        thispin = Pin(pid, (x0, y0), (x1, y1))
+        subdata = self.sub_nodes(['L'])
         if len(subdata['label']) > 0:
             # I suppose if there's more than one label, just go with the first
             thispin.label = subdata['label'][0]
@@ -449,11 +474,11 @@ class ViewDrawSym(ViewDrawBase):
         # So far, only seen it for labelling pins, in the symmbol files
         # at least.
         x, y, _pts, rot, _anchor, _scope, _vis, inv, text = args.split()
-        return ('label', Label(int(x), int(y),
-                         # cheap-o overbar
-                         (inv == '1' and '/' or '') + text,
-                         'left', int(rot) * 0.5))
-        # I have a feeling the alignment  will break, but anchor is a
+        if inv == '1':
+            # cheap-o overbar
+            text = '/' + text
+        return ('label', Label(int(x), int(y), text, 'left', int(rot) * 0.5))
+        # I have a feeling the alignment will break, but anchor is a
         # vertical alignment thing
 
 
@@ -465,10 +490,43 @@ class ViewDraw:
         # ^-that could be parsed out of a viewdraw.ini some day
         self.schdir, self.symdirs = schdir, symdirs
 
+    @staticmethod
+    def inifile(projdir, inidirsep='\\'):
+        """ Attempt to get project info from a viewdraw.ini file
+
+        No guarantees, but it should return a (schdir, symdirs) tuple that
+        would work fine if passed to the ViewDraw constructor """
+
+        with open(projdir + 'viewdraw.ini') as f:
+            dirlines = [li.strip() for li in f.readlines() if
+                        li.strip().startswith('DIR ')]
+            schdir, symdirs = projdir + 'sym' + dirsep, {}
+            for line in dirlines:
+                # DIR [p] .\directory\to\lib (lib_name)
+                _cmd, mode, vals = line.split(' ', 2)
+                # libname might not exist, but if it does it's <= 32 chars, and
+                # enclosed by parens
+                libname = None
+                if vals.endswith(')') and len(vals.rsplit('(', 1)[1]) <= 33:
+                    dirname, libname = vals.rsplit('(', 1)
+                    dirname, libname = dirname[:-1], libname[:-1]
+                else:
+                    dirname = vals
+                # dirname can be quoted
+                if dirname[0] == '"' and dirname[-1] == '"':
+                    dirname = dirname[1:-1]
+                dirname = dirname.replace(inidirsep, dirsep) + dirsep
+                if 'p' in mode:
+                    schdir = projdir + dirname + 'sch' + dirsep
+                if libname is not None:
+                    symdirs[libname] = projdir + dirname + 'sym' + dirsep
+            return (schdir, symdirs)
 
     @staticmethod
-    def auto_detect(filename):
+    def auto_detect(filename): # pylint: disable=W0613
         """ Return our confidence that the given file is an viewdraw file """
+        # I'm not sure what you'd throw this at right now, there is no "project
+        # file" you could check. Maybe if/when viewdraw.ini parsing happens?
         return 0
 
 
@@ -480,7 +538,7 @@ class ViewDraw:
         for libname, libdir in self.symdirs.items():
             files = [f for f in listdir(libdir)
                      if f.rpartition('.')[-1].isdigit()]
-     
+
             for f in files:
                 lib.add_component((libname + ':' + f).lower(),
                                   ViewDrawSym(libdir, f).parse())
@@ -502,14 +560,14 @@ class FileStack:
     # 1) Line continuations are signaled at the beginning of the continuing
     #   line. This means you can't know if line n is the entirety of a statement
     #   until you've checked line n+1
-    # 2) Some commands are affected by proceeding commands, so need to check if
+    # 2) Some commands are affected by preceeding commands, so need to check if
     #   the next command is of concern. If not, need to be able to send it back.
 
     def __init__(self, filename):
         self.f = open(filename)
         self.fstack = []
         self.line = 0
-    
+
     def __iter__(self):
         return self
 
