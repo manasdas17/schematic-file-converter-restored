@@ -63,7 +63,7 @@ from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as g
     eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
     specctra as specctra_p
 from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
-    eagle as eagle_w, gerber as gerber_w, specctra as specctra_w
+    eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w
 
 
 # Logging
@@ -86,6 +86,7 @@ WRITERS = {
     'kicad': kicad_w.KiCAD,
     'geda': geda_w.GEDA,
     'eagle': eagle_w.Eagle,
+    'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
     'specctra': specctra_w.Specctra,
 }
