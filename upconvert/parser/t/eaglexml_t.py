@@ -127,6 +127,14 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].p1.y, 9)
         self.assertEqual(pins[0].p2.x, 63)
         self.assertEqual(pins[0].p2.y, 9)
+        self.assertEqual(pins[0].label.text, '(ADC3)PB4')
+        self.assertEqual(pins[0].label.x, 0)
+        self.assertEqual(pins[0].label.y, 9)
+        self.assertEqual(pins[0].label.rotation, 0.0)
+
+        cpt = self.get_component('diode:ZENER-DIODE:DO35Z10')
+        pins = cpt.symbols[0].bodies[0].pins
+        self.assertEqual(pins[0].label, None)
 
 
     @use_file('E1AA60D5.sch')
@@ -152,8 +160,30 @@ class EagleXMLTests(unittest.TestCase):
     def test_component_instance_position(self):
         """ Component instance position is correct. """
         inst = self.get_instance('GND3')
+        self.assertEqual(len(inst.symbol_attributes), 1)
         self.assertEqual(inst.symbol_attributes[0].x, 414)
         self.assertEqual(inst.symbol_attributes[0].y, 198)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_instance_value(self):
+        """ Component instance value is correct. """
+        inst = self.get_instance('R2')
+        self.assertEqual(inst.attributes['value'], '68')
+
+
+    @use_file('E1AA60D5.sch')
+    def test_component_instance_annotations(self):
+        """ Component instance annotations are correct. """
+        inst = self.get_instance('R2')
+        anns = inst.symbol_attributes[0].annotations
+        self.assertEqual(len(anns), 2)
+        self.assertEqual(anns[0].value, 'R2')
+        self.assertEqual(anns[0].x, -14)
+        self.assertEqual(anns[0].y, 5)
+        self.assertEqual(anns[1].value, '68')
+        self.assertEqual(anns[1].x, -14)
+        self.assertEqual(anns[1].y, -12)
 
 
     @use_file('E1AA60D5.sch')

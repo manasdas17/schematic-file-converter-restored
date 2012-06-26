@@ -52,20 +52,20 @@ class EagleXML(object):
     def __init__(self):
         self.design = Design()
 
-        # map components to gate names to symbol indices
-        self.cpt2gate2symbol_index = defaultdict(dict)
+        # map (component, gate name) to symbol indices
+        self.cptgate2symbol_index = {}
 
-        # map components to gate names to annotation maps, dicts from
+        # map (component, gate names) to annotation maps, dicts from
         # strings (name|value) to Annotations. These represent the
         # >NAME and >VALUE texts on eagle components, which must be
         # converted into component instance annotations since their
         # contents depend on the component instance name and value.
-        self.cpt2gate2ann_map = defaultdict(dict)
+        self.cptgate2ann_map = defaultdict(dict)
 
-        # map components to gate names to pin maps, dicts from strings
+        # map (component, gate name) to pin maps, dicts from strings
         # (pin names) to Pins. These are used during pinref processing
         # in segments.
-        self.cpt2gate2pin_map = defaultdict(dict)
+        self.cptgate2pin_map = defaultdict(dict)
 
         # map part names to component instances. These are used during
         # pinref processing in segments.
@@ -124,12 +124,12 @@ class EagleXML(object):
             for gate in get_subattr(deviceset, 'gates.gate'):
                 symbol = Symbol()
                 cpt.add_symbol(symbol)
-                self.cpt2gate2symbol_index[cpt][gate.name] = len(cpt.symbols) - 1
+                self.cptgate2symbol_index[cpt, gate.name] = len(cpt.symbols) - 1
                 body, pin_map, ann_map = \
                     self.make_body_from_symbol(lib, gate.symbol, pinname2num)
                 symbol.add_body(body)
-                self.cpt2gate2ann_map[cpt][gate.name] = ann_map
-                self.cpt2gate2pin_map[cpt][gate.name] = pin_map
+                self.cptgate2ann_map[cpt, gate.name] = ann_map
+                self.cptgate2pin_map[cpt, gate.name] = pin_map
 
             yield cpt
 
@@ -161,9 +161,9 @@ class EagleXML(object):
             connect_point = (self.make_length(pin.x), self.make_length(pin.y))
             null_point = self.get_pin_null_point(connect_point,
                                                  pin.length, pin.rot)
-            # TODO: pin labels
+            label = self.get_pin_label(pin, null_point)
             pin_map[pin.name] = Pin(pinname2num.get(pin.name, pin.name),
-                                    null_point, connect_point)
+                                    null_point, connect_point, label)
             body.add_pin(pin_map[pin.name])
 
         ann_map = {}
@@ -174,9 +174,9 @@ class EagleXML(object):
             content = '' if text.valueOf_ is None else text.valueOf_
             rotation = self.make_angle('0' if text.rot is None else text.rot)
             if content == '>NAME':
-                ann_map['name'] = Annotation(content, x, y, rotation, True)
+                ann_map['name'] = Annotation(content, x, y, rotation, 'true')
             elif content == '>VALUE':
-                ann_map['value'] = Annotation(content, x, y, rotation, True)
+                ann_map['value'] = Annotation(content, x, y, rotation, 'true')
             else:
                 body.add_shape(Label(x, y, content, 'left', rotation))
 
@@ -184,7 +184,8 @@ class EagleXML(object):
 
 
     def get_pin_null_point(self, (x, y), length, rotation):
-        """ Return the null point of a pin given its connect point, length, and rotation. """
+        """ Return the null point of a pin given its connect point,
+        length, and rotation. """
 
         if length == 'long':
             distance = 27 #
@@ -205,6 +206,31 @@ class EagleXML(object):
             return (x + distance, y)
 
 
+    def get_pin_label(self, pin, (null_x, null_y)):
+        """ Return the Label for an eagle pin given the pin and the
+        null point. """
+
+        if not pin.name or pin.visible not in ('pin', 'both', None):
+            return None
+
+        distance = (len(pin.name) * 10) / 2
+
+        if pin.rot == 'R90':
+            x, y = (null_x, null_y + distance)
+            rotation = 1.5
+        elif pin.rot == 'R180':
+            x, y = (null_x - distance, null_y)
+            rotation = 0.0
+        elif pin.rot == 'R270':
+            x, y = (null_x, null_y - distance)
+            rotation = 0.5
+        else:
+            x, y = (null_x + distance, null_y)
+            rotation = 0.0
+
+        return Label(x, y, pin.name, 'center', rotation)
+
+
     def make_component_instances(self, root):
         """ Construct openjson component instances from an eagle model. """
 
@@ -214,7 +240,8 @@ class EagleXML(object):
         for sheet in get_subattr(root, 'drawing.schematic.sheets.sheet', ()):
             for instance in get_subattr(sheet, 'instances.instance', ()):
                 inst = self.ensure_component_instance(parts, instance)
-                inst.add_symbol_attribute(self.make_symbol_attribute(instance))
+                inst.add_symbol_attribute(
+                    self.make_symbol_attribute(instance, inst))
 
 
     def ensure_component_instance(self, parts, instance):
@@ -231,15 +258,19 @@ class EagleXML(object):
 
         self.part2inst[part.name] = \
             ComponentInstance(instance.part, library_id,
-                              self.cpt2gate2symbol_index[cpt][instance.gate])
+                              self.cptgate2symbol_index[cpt, instance.gate])
+
+        if part.value:
+            self.part2inst[part.name].add_attribute('value', part.value)
 
         self.design.add_component_instance(self.part2inst[part.name])
 
         return self.part2inst[part.name]
 
 
-    def make_symbol_attribute(self, instance):
-        """ Construct an openjson symbol attribute from an eagle instance. """
+    def make_symbol_attribute(self, instance, openjson_inst):
+        """ Construct an openjson symbol attribute from an eagle instance
+        and an openjson instance. """
 
         # TODO: handle mirror
         # TODO: handle smashed?
@@ -247,9 +278,19 @@ class EagleXML(object):
                                self.make_length(instance.y),
                                self.make_angle(instance.rot or '0'))
 
-        self.part2gate2symattr[instance.part][instance.gate] = attr
+        cpt = self.design.components.components[openjson_inst.library_id]
 
-        self.part2inst[instance.part].add_symbol_attribute(attr)
+        for name, ann in sorted(
+            self.cptgate2ann_map.get((cpt, instance.gate)).items()):
+            ann = Annotation('', ann.x, ann.y, ann.rotation, ann.visible)
+            if name == 'name':
+                ann.value = openjson_inst.instance_id
+                attr.add_annotation(ann)
+            elif name == 'value' and 'value' in openjson_inst.attributes:
+                ann.value = openjson_inst.attributes['value']
+                attr.add_annotation(ann)
+
+        self.part2gate2symattr[instance.part][instance.gate] = attr
 
         return attr
 
@@ -295,7 +336,7 @@ class EagleXML(object):
         symattr = self.part2gate2symattr[pinref.part][pinref.gate]
         inst = self.part2inst[pinref.part]
         cpt = self.design.components.components[inst.library_id]
-        pin = self.cpt2gate2pin_map[cpt][pinref.gate][pinref.pin]
+        pin = self.cptgate2pin_map[cpt, pinref.gate][pinref.pin]
 
         if symattr.rotation == 0.0:
             return (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
@@ -312,7 +353,7 @@ class EagleXML(object):
 
         inst = self.part2inst[pinref.part]
         cpt = self.design.components.components[inst.library_id]
-        pin = self.cpt2gate2pin_map[cpt][pinref.gate][pinref.pin]
+        pin = self.cptgate2pin_map[cpt, pinref.gate][pinref.pin]
 
         point.add_connected_component(
             ConnectedComponent(inst.instance_id, pin.pin_number))
