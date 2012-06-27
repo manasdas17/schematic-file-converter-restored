@@ -139,6 +139,8 @@ class Specctra(object):
 
         pcb.network.net.append(pcbnet)
 
+        return
+        # wiring polyline_paths are still a mystery
         for path in paths:
             wire = specctraobj.Wire()
             wire.net = specctraobj.Net() 

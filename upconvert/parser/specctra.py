@@ -110,10 +110,11 @@ class Specctra(object):
                 if not place.vertex:
                     continue
 
+                mirror = {90:270, 270:90}
                 if place.side == 'back':
-                    rotation = (place.rotation + 180) % 360
-                else:
                     rotation = place.rotation
+                else:
+                    rotation = mirror.get(int(place.rotation), place.rotation)
                 inst = ComponentInstance(place.component_id, library_id, 0)
                 v = self.to_pixels(place.vertex)
                 symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], to_piradians(rotation))
@@ -141,7 +142,7 @@ class Specctra(object):
 
         return np
  
-    def _convert_nets(self, struct):
+    def _convert_wires(self, struct):
         x0, y0 = self._get_xxx(struct)
 
         if struct.wiring:
@@ -155,6 +156,10 @@ class Specctra(object):
                         np1.add_connected_point(np2.point_id)
                         np2.add_connected_point(np1.point_id)
                     except: pass
+
+    def _convert_nets(self, struct):
+        # FIXME polyline_path is not documented and no success with reverse engineering yet
+        #self._convert_wires(struct)
 
         if struct.network:
             for net in struct.network.net:
@@ -196,7 +201,7 @@ class Specctra(object):
         result = []
         prev = None
         # Path has connected start and end points
-        for point in points + points[:1]:
+        for point in points:
             if prev:
                 result.append(Line(prev, point))
             prev = point
@@ -209,9 +214,12 @@ class Specctra(object):
             return (point[0] + center[0], point[1] + center[1])
 
         for shape in shapes:
-            if isinstance(shape, specctraobj.Path):
+            if isinstance(shape, specctraobj.PolylinePath):
                 points = [from_center(self.to_pixels(point)) for point in shape.vertex]
                 result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points))
+            elif isinstance(shape, specctraobj.Path):
+                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
+                result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points + points[:1]))
 
             elif isinstance(shape, specctraobj.PolylinePath):
                 points = [from_center(self.to_pixels(point)) for point in shape.vertex]
@@ -262,7 +270,8 @@ def to_piradians(degrees):
 def rotate(point, piradians):
     """ Rotate point around (0, 0) """
     x, y = float(point[0]), float(point[1])
-    radians = float(piradians) * math.pi
+    # Somehow this must rotate in opposite direction than shape, why?
+    radians = float(-piradians) * math.pi
     new_x = int(round(x * math.cos(radians) - y * math.sin(radians)))
     new_y = int(round(x * math.sin(radians) + y * math.cos(radians)))
     return (new_x, new_y)
