@@ -92,17 +92,7 @@ class Specctra(object):
                 for shape in self._convert_shapes([outline.shape]):
                     body.add_shape(shape)
 
-    def _get_xxx(self, struct):
-        x1, y1 = self.to_pixels(struct.structure.boundary[0].rectangle.vertex1)
-        x2, y2 = self.to_pixels(struct.structure.boundary[0].rectangle.vertex2)
-        x0 = -(min(x1, x2))
-        y0 = -(min(y1, y2))
-
-        return (x0, y0)
-
     def _convert_components(self, struct):
-        x0, y0 = self._get_xxx(struct)
-
         for component in struct.placement.component:
             library_id = component.image_id
             for place in component.place:
@@ -117,7 +107,7 @@ class Specctra(object):
                     rotation = mirror.get(int(place.rotation), place.rotation)
                 inst = ComponentInstance(place.component_id, library_id, 0)
                 v = self.to_pixels(place.vertex)
-                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], to_piradians(rotation))
+                symbattr = SymbolAttribute(v[0], v[1], to_piradians(rotation))
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
 
@@ -143,11 +133,9 @@ class Specctra(object):
         return np
  
     def _convert_wires(self, struct):
-        x0, y0 = self._get_xxx(struct)
-
         if struct.wiring:
             for wire in struct.wiring.wire:
-                lines = self._convert_shapes([wire.shape], (x0, y0))
+                lines = self._convert_shapes([wire.shape])
                 for line in lines:
                     try:
                         np1 = self._get_point(wire.net.net_id, None, line.p1.x, line.p1.y)
@@ -159,7 +147,7 @@ class Specctra(object):
 
     def _convert_nets(self, struct):
         # FIXME polyline_path is not documented and no success with reverse engineering yet
-        #self._convert_wires(struct)
+        self._convert_wires(struct)
 
         if struct.network:
             for net in struct.network.net:
