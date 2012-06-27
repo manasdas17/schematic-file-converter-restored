@@ -35,7 +35,10 @@ class Specctra(object):
     """ The Specctra DSN Format Parser """
     def __init__(self):
         self.design = None
-        self.px_mult = None
+        self.resolution = None
+        self.nets = {}
+        self.net_points = {}
+        self._id = 10
 
     @staticmethod
     def auto_detect(filename):
@@ -58,24 +61,10 @@ class Specctra(object):
         tree = DsnParser().parse(data)
 
         struct = self.walk(tree)
-        self._set_mult(struct.resolution)
+        self.resolution = struct.resolution
         self._convert(struct)
 
         return self.design
-
-    def _set_mult(self, res):
-        """ Set multiplier for converting file units to internal units """
-        dpi = 96.0 # * 2.0
-        if res.unit == 'inch':
-            self.px_mult = dpi / 1.0
-        elif res.unit == 'mil':
-            self.px_mult = dpi / 1000.0
-        elif res.unit == 'cm':
-            self.px_mult = dpi / 2.54
-        elif res.unit == 'mm':
-            self.px_mult =  dpi / 2.54 / 10.0
-        elif res.unit == 'um':
-            self.px_mult =  dpi / 2.54 / 1000.0
 
     def _convert(self, struct):
         self._convert_library(struct)
@@ -103,50 +92,95 @@ class Specctra(object):
                 for shape in self._convert_shapes([outline.shape]):
                     body.add_shape(shape)
 
+    def _get_xxx(self, struct):
+        x1, y1 = self.to_pixels(struct.structure.boundary[0].rectangle.vertex1)
+        x2, y2 = self.to_pixels(struct.structure.boundary[0].rectangle.vertex2)
+        x0 = -(min(x1, x2))
+        y0 = -(min(y1, y2))
+
+        return (x0, y0)
+
     def _convert_components(self, struct):
-        x1, y1 = self.to_pixels(struct.structure.boundary.rectangle.vertex1)
-        x2, y2 = self.to_pixels(struct.structure.boundary.rectangle.vertex2)
-        x0 = abs(min(x1, x2))
-        y0 = abs(min(y1, y2))
+        x0, y0 = self._get_xxx(struct)
 
         for component in struct.placement.component:
             library_id = component.image_id
             for place in component.place:
-                # Outside OCB boundary
+                # Outside PCB boundary
                 if not place.vertex:
                     continue
 
+                if place.side == 'back':
+                    rotation = (place.rotation + 180) % 360
+                else:
+                    rotation = place.rotation
                 inst = ComponentInstance(place.component_id, library_id, 0)
                 v = self.to_pixels(place.vertex)
-                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], to_piradians(place.rotation))
+                symbattr = SymbolAttribute(x0 + v[0], y0 + v[1], to_piradians(rotation))
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
+
+    def _get_point(self, net_id, point_id, x, y):
+        if net_id not in self.nets:
+            n = Net(net_id)
+            self.design.add_net(n)
+            self.nets[n.net_id] = n
+        else:
+            n = self.nets[net_id]
+
+        key = (x, y)
+        if key not in self.net_points:
+            if not point_id:
+                point_id = str(self._id)
+                self._id += 1
+            np = NetPoint(net_id + '-' + point_id, x, y)
+            n.add_point(np)
+            self.net_points[key] = np
+        else:
+            np = self.net_points[key]
+
+        return np
  
     def _convert_nets(self, struct):
-        for net in struct.network.net:
-            n = Net(net.net_id)
-            if net.pins is not None:
-                pin_reference = net.pins.pin_reference
-                
+        x0, y0 = self._get_xxx(struct)
+
+        if struct.wiring:
+            for wire in struct.wiring.wire:
+                lines = self._convert_shapes([wire.shape], (x0, y0))
+                for line in lines:
+                    try:
+                        np1 = self._get_point(wire.net.net_id, None, line.p1.x, line.p1.y)
+                        np2 = self._get_point(wire.net.net_id, None, line.p2.x, line.p2.y)
+
+                        np1.add_connected_point(np2.point_id)
+                        np2.add_connected_point(np1.point_id)
+                    except: pass
+
+        if struct.network:
+            for net in struct.network.net:
+                if net.pins is None:
+                    continue
+
                 prev_point = None
-                for pin_ref in pin_reference:
+                for pin_ref in net.pins.pin_reference:
                     # pin_ref like A1-"-" is valid (parsed to A1--)
                     component_id, pin_id = pin_ref[:pin_ref.index('-')], pin_ref[pin_ref.index('-') + 1:]  
                     point = self.get_component_pin(component_id, pin_id)
                     if point is None:
-                        print 'Could not find net %s pin ref %s' % (n.net_id, pin_ref)
+                        print 'Could not find net %s pin ref %s' % (net.net_id, pin_ref)
                         continue
                     cc = ConnectedComponent(component_id, pin_id)
-                    np = NetPoint('%s-%s' % (n.net_id, pin_ref), point[0], point[1])
+                    np = self._get_point(net.net_id, pin_ref, point[0], point[1])
                     np.add_connected_component(cc)
-                    n.add_point(np)
 
                     if prev_point is not None:
-                        prev_point.add_connected_point(np.point_id)
-                        np.add_connected_point(prev_point.point_id)
-                    prev_point = np
+                        # XXX if point is already connected assume wiring had routed network, don't do it here
+                        if len(prev_point.connected_points) == 0:
+                            prev_point.add_connected_point(np.point_id)
+                        if len(np.connected_points) == 0:
+                            np.add_connected_point(prev_point.point_id)
 
-            self.design.add_net(n)
+                    prev_point = np
 
     def get_component_pin(self, component_id, pin_id):
         for component_instance in self.design.component_instances:
@@ -179,6 +213,14 @@ class Specctra(object):
                 points = [from_center(self.to_pixels(point)) for point in shape.vertex]
                 result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points))
 
+            elif isinstance(shape, specctraobj.PolylinePath):
+                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
+                prev = None
+                for point in points:
+                    if prev:
+                        result.append(Line(prev, point))
+                    prev = point
+
             elif isinstance(shape, specctraobj.Polygon):
                 points = [from_center(self.to_pixels(point)) for point in shape.vertex]
                 points = [Point(point[0], point[1]) for point in points]
@@ -197,29 +239,30 @@ class Specctra(object):
         return result
 
     def to_pixels(self, vertex):
-        if isinstance(vertex, tuple):
-            return (int(round(float(vertex[0]) * self.px_mult)), int(round(float(vertex[1]) * self.px_mult)))
-        return int(round(float(vertex) * self.px_mult))
+        return self.resolution.to_pixels(vertex)
 
     def walk(self, elem):
         if isinstance(elem, list) and len(elem) > 0:
             elemx = [self.walk(x) for x in elem]
             func = specctraobj.lookup(elemx[0])
             if func:
-                return func(elemx[1:])
+                f = func()
+                f.parse(elemx[1:])
+                return f
             else:
+#print 'Unhandled element', elemx[0]
                 return elemx
         else:
             return elem
 
 def to_piradians(degrees):
     # looks like specctra and upverter rotate in different directions
-    return float(-degrees) / 180.0
+    return float(degrees) / 180.0
 
 def rotate(point, piradians):
     """ Rotate point around (0, 0) """
     x, y = float(point[0]), float(point[1])
-    radians = float(-piradians) * math.pi
+    radians = float(piradians) * math.pi
     new_x = int(round(x * math.cos(radians) - y * math.sin(radians)))
     new_y = int(round(x * math.sin(radians) + y * math.cos(radians)))
     return (new_x, new_y)
