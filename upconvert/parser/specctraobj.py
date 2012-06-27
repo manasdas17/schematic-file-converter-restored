@@ -874,7 +874,7 @@ class Resolution:
         elif self.unit == 'um':
             mult =  self.dpi / 2.54 / 1000.0
 
-        mult *= 3
+        #mult *= 3
         if isinstance(point, tuple):
             return (int(round(float(point[0]) * mult)), int(round(float(point[1]) * mult)))
         return int(round(float(point) * mult))
@@ -894,7 +894,6 @@ class Resolution:
         if isinstance(point, tuple):
             return (float(point[0]) * mult, float(point[1]) * mult)
         return float(point) * mult
-
 
 
 class HostCad:
