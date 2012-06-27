@@ -177,10 +177,10 @@ class Specctra(object):
             path.vertex.append(self._from_pixels((shape.p2.x, shape.p2.y)))
             return path
         elif shape.type == 'polygon':
-            path = specctraobj.Path()
+            polygon = specctraobj.Polygon()
             for point in shape.points:
-                path.vertex.append(self._from_pixels((point.x, point.y)))
-            return path
+                polygon.vertex.append(self._from_pixels((point.x, point.y)))
+            return polygon
         elif shape.type == 'rectangle':
             rect = specctraobj.Rectangle()
             rect.vertex1 = self._from_pixels((shape.x, shape.y))

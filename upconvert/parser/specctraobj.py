@@ -257,6 +257,11 @@ class Polygon(ShapeBase):
     """ polygon_descriptor """
     function = 'polygon'
 
+    def __init__(self):
+        self.layer_id = 'signal'
+        self.aperture_width = 0
+        self.vertex = []
+
     def parse(self, args):
         super(Polygon, self).parse()
         assert len(args) > 3
@@ -264,6 +269,16 @@ class Polygon(ShapeBase):
         self.aperture_width = pop_type(args, basestring)
         self.vertex = pop_vertexes(args)
         assert_empty(self, args) 
+
+    def compose(self):
+        result = [
+            self.function,
+            self.layer_id,
+            self.aperture_width,
+            ]
+        for v in self.vertex:
+            result.extend(v)
+        return result
 
 class Circuit:
     """ circuit_descriptor """
@@ -859,6 +874,7 @@ class Resolution:
         elif self.unit == 'um':
             mult =  self.dpi / 2.54 / 1000.0
 
+        mult *= 3
         if isinstance(point, tuple):
             return (int(round(float(point[0]) * mult)), int(round(float(point[1]) * mult)))
         return int(round(float(point) * mult))
