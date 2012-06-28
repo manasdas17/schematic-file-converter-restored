@@ -69,19 +69,19 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_library_components(self):
         """ The right components are created. """
-        self.assertTrue('atmel:TINY15L:P' in self.design.components.components)
+        self.assertTrue('atmel:TINY15L' in self.design.components.components)
 
 
     @use_file('E1AA60D5.sch')
     def test_component_symbols(self):
         """ The right component symbols are created. """
-        self.assertEqual(len(self.get_component('atmel:TINY15L:P').symbols), 1)
+        self.assertEqual(len(self.get_component('atmel:TINY15L').symbols), 2)
 
 
     @use_file('E1AA60D5.sch')
     def test_component_body_lines(self):
         """ The right component Lines are created on Body objects. """
-        cpt = self.get_component('atmel:TINY15L:P')
+        cpt = self.get_component('atmel:TINY15L')
         lines = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'line']
         self.assertEqual(len(lines), 4)
@@ -94,7 +94,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_component_body_rectangles(self):
         """ The right component Rectangles are created on Body objects. """
-        cpt = self.get_component('resistor:CPOL-EU:E2.5-6')
+        cpt = self.get_component('resistor:CPOL-EU')
         rects = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'rectangle']
         self.assertEqual(len(rects), 1)
@@ -107,7 +107,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_component_body_labels(self):
         """ The right component Labels are created on Body objects. """
-        cpt = self.get_component('con-berg:PN87520:')
+        cpt = self.get_component('con-berg:PN87520')
         labels = [s for s in cpt.symbols[0].bodies[0].shapes
                   if s.type == 'label']
         self.assertEqual(len(labels), 1)
@@ -120,7 +120,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_component_body_pins(self):
         """ The right component Pins are created on Body objects. """
-        cpt = self.get_component('atmel:TINY15L:P')
+        cpt = self.get_component('atmel:TINY15L')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(len(pins), 8)
         self.assertEqual(pins[0].p1.x, 45)
@@ -132,7 +132,7 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].label.y, 9)
         self.assertEqual(pins[0].label.rotation, 0.0)
 
-        cpt = self.get_component('diode:ZENER-DIODE:DO35Z10')
+        cpt = self.get_component('diode:ZENER-DIODE')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(pins[0].label, None)
 
@@ -222,6 +222,22 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(len(pt.connected_components), 1)
         self.assertEqual(pt.connected_components[0].instance_id, 'GND3')
         self.assertEqual(pt.connected_components[0].pin_number, 'GND')
+
+
+    @use_file('D9CD1423.sch')
+    def test_smashed_annotations(self):
+        """ The right annotations are created for smashed components. """
+        inst = self.get_instance('U1')
+        symattr = inst.symbol_attributes[0]
+        self.assertEqual(len(symattr.annotations), 2)
+        self.assertEqual(symattr.annotations[0].value, 'U1')
+        self.assertEqual(symattr.annotations[0].x, 81)
+        self.assertEqual(symattr.annotations[0].y, 185)
+        self.assertEqual(symattr.annotations[0].rotation, 0.0)
+        self.assertEqual(symattr.annotations[1].value, 'ATMEGA328AU')
+        self.assertEqual(symattr.annotations[1].x, 81)
+        self.assertEqual(symattr.annotations[1].y, 153)
+        self.assertEqual(symattr.annotations[1].rotation, 0.0)
 
 
     def get_component(self, library_id):
