@@ -231,6 +231,17 @@ class Specctra(object):
             points.append(make_point(angle))
         return points
 
+    def _points_to_paths(self, points):
+        prev = points[0]
+        result = []
+        for point in points[1:]:
+            path = specctraobj.Path()
+            path.vertex.append(prev)
+            path.vertex.append(point)
+            result.append(path)
+            prev = point
+        return result
+
     def _convert_shape(self, shape):
         if shape.type == 'circle':
             circle = specctraobj.Circle()
@@ -263,25 +274,17 @@ class Specctra(object):
             return result
             '''
             points = [self._from_pixels(point) for point in self._get_arc_points(shape)]
+            return self._points_to_paths(points)
+           
+        elif shape.type == 'bezier':
+            points = [self._from_pixels((point.x, point.y)) for point in shape._line()]
+            return self._points_to_paths(points)
 
-            prev = points[0]
-            result = []
-            for point in points[1:]:
-                path = specctraobj.Path()
-                path.vertex.append(prev)
-                path.vertex.append(point)
-                result.append(path)
-                prev = point
-            return result
-            
         elif shape.type == 'rectangle':
             rect = specctraobj.Rectangle()
             rect.vertex1 = self._from_pixels((shape.x, shape.y))
             rect.vertex2 = self._from_pixels((shape.x + shape.width, shape.y - shape.height))
             return [rect]
-        else:
-            print 'Unsupported shape', shape.type
-            return []
 
     def _convert_pin(self, pin):
         point = self._from_pixels((pin.p1.x - pin.p2.x, pin.p1.y - pin.p2.y))
