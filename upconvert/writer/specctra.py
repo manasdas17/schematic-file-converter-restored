@@ -206,7 +206,8 @@ class Specctra(object):
         return points
 
     def _get_arc_points(self, arc):
-        """ Specctra does not have arcs so convert them to qarcs """
+        """ Specctra does not have arcs so convert them to lines
+        """
         
         min_angle = min(arc.start_angle, arc.end_angle)
         max_angle = max(arc.start_angle, arc.end_angle)
