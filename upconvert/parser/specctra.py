@@ -27,6 +27,7 @@ from upconvert.core.shape import Circle, Line, Rectangle, Label, Polygon, Point
 from upconvert.core.annotation import Annotation
 
 from string import whitespace
+from sys import maxint
 
 from upconvert.parser import specctraobj 
 import math
@@ -39,6 +40,10 @@ class Specctra(object):
         self.nets = {}
         self.net_points = {}
         self._id = 10
+        self.min_x = maxint
+        self.max_x = -(maxint - 1)
+        self.min_y = maxint
+        self.max_y = -(maxint - 1)
 
     @staticmethod
     def auto_detect(filename):
@@ -67,6 +72,15 @@ class Specctra(object):
         return self.design
 
     def _convert(self, struct):
+        for bound in struct.structure.boundary:
+            if bound.rectangle.layer_id == 'pcb':
+                v1, v2 = bound.rectangle.vertex1, bound.rectangle.vertex2
+                self.min_x = self.to_pixels(min(v1[0], v2[0]))
+                self.max_x = self.to_pixels(max(v1[0], v2[0]))
+                self.min_y = self.to_pixels(min(v1[1], v2[1]))
+                self.max_y = self.to_pixels(max(v1[1], v2[1]))
+                break
+
         self._convert_library(struct)
         self._convert_components(struct)
         self._convert_nets(struct)
@@ -135,7 +149,7 @@ class Specctra(object):
     def _convert_wires(self, struct):
         if struct.wiring:
             for wire in struct.wiring.wire:
-                lines = self._convert_shapes([wire.shape])
+                lines = self._convert_shapes([wire.shape], absolute=True)
                 for line in lines:
                     try:
                         np1 = self._get_point(wire.net.net_id, None, line.p1.x, line.p1.y)
@@ -172,7 +186,6 @@ class Specctra(object):
                             prev_point.add_connected_point(np.point_id)
                         if len(np.connected_points) == 0:
                             np.add_connected_point(prev_point.point_id)
-
                     prev_point = np
 
     def get_component_pin(self, component_id, pin_id):
@@ -187,38 +200,43 @@ class Specctra(object):
 
     def _convert_path(self, aperture, points):
         result = []
-        prev = None
-        # Path has connected start and end points
-        for point in points:
-            if prev:
-                result.append(Line(prev, point))
+        prev = points[0]
+        for point in points[1:]:
+            result.append(Line(prev, point))
             prev = point
         return result
 
-    def _convert_shapes(self, shapes, center = (0, 0)):
+    def _convert_shapes(self, shapes, center = (0, 0), absolute=False):
         result = []
 
-        def from_center(point):
-            return (point[0] + center[0], point[1] + center[1])
+        def fix_point(point):
+            x, y = (point[0] + center[0], point[1] + center[1])
+            if absolute:
+                # freerouter often creates points outside boundary, fix it
+                if x > self.max_x:
+                    x = self.min_x + x - self.max_x
+                elif x < self.min_x:
+                    x = self.max_x - x - self.min_x
+                if y > self.max_y:
+                    y = self.min_y + y - self.max_y
+                elif y < self.min_y:
+                    y = self.max_y - y - self.min_y
+
+            return (x, y)
+
 
         for shape in shapes:
             if isinstance(shape, specctraobj.PolylinePath):
-                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
+                points = [fix_point(self.to_pixels(point)) for point in shape.vertex]
                 result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points))
+
             elif isinstance(shape, specctraobj.Path):
-                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
+                points = [fix_point(self.to_pixels(point)) for point in shape.vertex]
+                # Path has connected start and end points
                 result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points + points[:1]))
 
-            elif isinstance(shape, specctraobj.PolylinePath):
-                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
-                prev = None
-                for point in points:
-                    if prev:
-                        result.append(Line(prev, point))
-                    prev = point
-
             elif isinstance(shape, specctraobj.Polygon):
-                points = [from_center(self.to_pixels(point)) for point in shape.vertex]
+                points = [fix_point(self.to_pixels(point)) for point in shape.vertex]
                 points = [Point(point[0], point[1]) for point in points]
                 result.append(Polygon(points))
 
@@ -226,11 +244,11 @@ class Specctra(object):
                 x1, y1 = self.to_pixels(shape.vertex1)
                 x2, y2 = self.to_pixels(shape.vertex2)
                 width, height = abs(x1 - x2), abs(y1 - y2)
-                x1, y1 = from_center((min(x1, x2), max(y1, y2)))
+                x1, y1 = fix_point((min(x1, x2), max(y1, y2)))
 
                 result.append(Rectangle(x1, y1, width, height))
             elif isinstance(shape, specctraobj.Circle):
-                point = from_center(self.to_pixels(shape.vertex))
+                point = fix_point(self.to_pixels(shape.vertex))
                 result.append(Circle(point[0], point[1], self.to_pixels(shape.diameter / 2.0)))
         return result
 

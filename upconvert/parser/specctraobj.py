@@ -253,6 +253,36 @@ class Circle(ShapeBase):
             self.vertex[0], self.vertex[1]
         ]
 
+class QArc(ShapeBase):
+    """ quarc_descriptor """
+    function = 'qarc'
+
+    def __init__(self):
+        self.layer_id = 'signal'
+        self.aperture_width = 0
+        self.vertex1 = (0, 0)
+        self.vertex2 = (0, 0)
+        self.vertex3 = (0, 0)
+
+    def parse(self, args):
+        assert len(args) == 5
+        self.layer_id = pop_string(args)
+        self.aperture_width = pop_string(args)
+        self.vertex1 = pop_vertex(args)
+        self.vertex2 = pop_vertex(args)
+        self.vertex3 = pop_vertex(args)
+        assert_empty(self, args)
+
+    def compose(self):
+        return [
+            self.function,
+            self.layer_id,
+            self.aperture_width,
+            self.vertex1[0], self.vertex1[1],
+            self.vertex2[0], self.vertex2[1],
+            self.vertex3[0], self.vertex3[1],
+        ]
+
 class Polygon(ShapeBase):
     """ polygon_descriptor """
     function = 'polygon'
