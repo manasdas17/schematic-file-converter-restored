@@ -21,31 +21,27 @@
 # limitations under the License.
 
 
-from upconvert.parser.eaglexml import EagleXML as EagleXML_p
+from upconvert.parser.t.eaglexml_t import use_file
 from upconvert.writer.eaglexml import EagleXML
 
 import os
 import unittest
 import tempfile
 
-from os.path import dirname, join
-
-TEST_DIR = join(dirname(__file__), '..', '..', '..', 'test', 'eaglexml')
-
 
 class EagleXMLTests(unittest.TestCase):
     """ The tests of the eaglexml writer """
 
+    @use_file('E1AA60D5.sch')
     def test_write(self):
         """
         We can write out a complete design file.
         """
 
-        design = EagleXML_p().parse(join(TEST_DIR, 'E1AA60D5.sch'))
         writer = EagleXML()
         filedesc, filename = tempfile.mkstemp()
         os.close(filedesc)
         os.remove(filename)
-        writer.write(design, filename)
+        writer.write(self.design, filename)
         self.assertTrue(os.path.exists(filename))
         os.remove(filename)
