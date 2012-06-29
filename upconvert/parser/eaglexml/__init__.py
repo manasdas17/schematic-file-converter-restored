@@ -19,6 +19,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Eagle components are stored in libraries, which contain devicesets,
+# symbols, and packages. Symbols are logical schematic representations
+# while packages are the physical representations. A deviceset
+# contains gates and devices. A deviceset represents a family of
+# different physical devices, all of which implement the same set of
+# logical devices. The set of gates is the set of logical devices and
+# each gate references the symbol which represents it. Each device
+# references a single package and contains a set of connects, the
+# relations between the logical pins on the gates and the physical
+# pins on the device.
+#
+# Eagle components are mapped to OpenJSON components as follows:
+#
+#   + Each eaglexml deviceset becomes a single openjson component
+#     named LIBNAME:DEVICESETNAME:logical which represents the
+#     logical aspect of the device (the symbols and gates).
+#
+#   + There is one openjson Symbol in the logical component.
+#
+#   + The openjson Symbols for logical components have one openjson
+#     Body for each eaglemxl gate, in the order listed in the eaglexml
+#     file.
+#
+# TODO: handle physical component representation
+
 from collections import defaultdict
 
 from upconvert.core.design import Design
@@ -47,13 +72,19 @@ class EagleXML(object):
            --silence --external-encoding=utf-8 -o generated.py
      """
 
-    MULT = 90 / 25.4 # mm to 90 dpi
+    SCALE = 2.0
+    MULT =  90 / 25.4 # mm to 90 dpi
 
     def __init__(self):
         self.design = Design()
 
-        # map (component, gate name) to symbol indices
-        self.cptgate2symbol_index = {}
+        # map (component, gate name) to body indices
+        self.cptgate2body_index = {}
+
+        # map (component, gate name) to pin maps, dicts from strings
+        # (pin names) to Pins. These are used during pinref processing
+        # in segments.
+        self.cptgate2pin_map = defaultdict(dict)
 
         # map (component, gate names) to annotation maps, dicts from
         # strings (name|value) to Annotations. These represent the
@@ -62,14 +93,13 @@ class EagleXML(object):
         # contents depend on the component instance name and value.
         self.cptgate2ann_map = defaultdict(dict)
 
-        # map (component, gate name) to pin maps, dicts from strings
-        # (pin names) to Pins. These are used during pinref processing
-        # in segments.
-        self.cptgate2pin_map = defaultdict(dict)
+        # map part names to device names. These are used during
+        # pinref processing in segments.
+        self.part2dvc = {}
 
         # map part names to component instances. These are used during
         # pinref processing in segments.
-        self.part2inst = defaultdict(dict)
+        self.part2inst = {}
 
         # map part names to gate names to symbol attributes. These
         # are used during pinref processing in segments.
@@ -106,36 +136,34 @@ class EagleXML(object):
 
         for lib in get_subattr(root, 'drawing.schematic.libraries.library', ()):
             for deviceset in get_subattr(lib, 'devicesets.deviceset', ()):
-                for cpt in self.make_deviceset_components(lib, deviceset):
-                    self.design.components.add_component(cpt.name, cpt)
+                cpt = self.make_deviceset_component(lib, deviceset)
+                self.design.components.add_component(cpt.name, cpt)
 
 
-    def make_deviceset_components(self, lib, deviceset):
-        """ Construct a set of openjson components for a deviceset in a library. """
+    def make_deviceset_component(self, lib, deviceset):
+        """ Construct an openjson component for an eaglexml deviceset
+        in a library."""
 
-        for device in get_subattr(deviceset, 'devices.device'):
-            # map pin names to pin numbers for this device
-            pinname2num = {}
-            for connect in get_subattr(device, 'connects.connect', ()):
-                pinname2num[connect.pin] = connect.pad
+        cpt = Component(lib.name + ':' + deviceset.name + ':logical')
 
-            cpt = Component(lib.name + ':' + deviceset.name + ':' + device.name)
+        cpt.add_attribute('eaglexml_library', lib.name)
+        cpt.add_attribute('eaglexml_deviceset', deviceset.name)
 
-            for gate in get_subattr(deviceset, 'gates.gate'):
-                symbol = Symbol()
-                cpt.add_symbol(symbol)
-                self.cptgate2symbol_index[cpt, gate.name] = len(cpt.symbols) - 1
-                body, pin_map, ann_map = \
-                    self.make_body_from_symbol(lib, gate.symbol, pinname2num)
-                symbol.add_body(body)
-                self.cptgate2ann_map[cpt, gate.name] = ann_map
-                self.cptgate2pin_map[cpt, gate.name] = pin_map
+        symbol = Symbol()
+        cpt.add_symbol(symbol)
 
-            yield cpt
+        for gate in get_subattr(deviceset, 'gates.gate'):
+            body, pin_map, ann_map = self.make_body_from_symbol(lib, gate.symbol)
+            symbol.add_body(body)
+            self.cptgate2body_index[cpt, gate.name] = len(symbol.bodies) - 1
+            self.cptgate2pin_map[cpt, gate.name] = pin_map
+            self.cptgate2ann_map[cpt, gate.name] = ann_map
+
+        return cpt
 
 
-    def make_body_from_symbol(self, lib, symbol_name, pinname2num):
-        """ Contruct an openjson Body from an eagle symbol in a library. """
+    def make_body_from_symbol(self, lib, symbol_name):
+        """ Construct an openjson Body from an eagle symbol in a library. """
 
         body = Body()
 
@@ -162,8 +190,7 @@ class EagleXML(object):
             null_point = self.get_pin_null_point(connect_point,
                                                  pin.length, pin.rot)
             label = self.get_pin_label(pin, null_point)
-            pin_map[pin.name] = Pin(pinname2num.get(pin.name, pin.name),
-                                    null_point, connect_point, label)
+            pin_map[pin.name] = Pin(pin.name, null_point, connect_point, label)
             body.add_pin(pin_map[pin.name])
 
         ann_map = {}
@@ -188,11 +215,11 @@ class EagleXML(object):
         length, and rotation. """
 
         if length == 'long':
-            distance = 27 #
+            distance = int(27 * self.SCALE) # .3 inches
         elif length == 'middle':
-            distance = 18 # .2 inches
+            distance = int(18 * self.SCALE) # .2 inches
         elif length == 'short':
-            distance = 9  # .1 inches
+            distance = int(9 * self.SCALE) # .1 inches
         else: # point
             distance = 0
 
@@ -213,7 +240,7 @@ class EagleXML(object):
         if not pin.name or pin.visible not in ('pin', 'both', None):
             return None
 
-        distance = (len(pin.name) * 10) / 2
+        distance = int(self.SCALE * (len(pin.name) * 10) / 2)
 
         if pin.rot == 'R90':
             x, y = (null_x, null_y + distance)
@@ -240,8 +267,7 @@ class EagleXML(object):
         for sheet in get_subattr(root, 'drawing.schematic.sheets.sheet', ()):
             for instance in get_subattr(sheet, 'instances.instance', ()):
                 inst = self.ensure_component_instance(parts, instance)
-                inst.add_symbol_attribute(
-                    self.make_symbol_attribute(instance, inst))
+                self.set_symbol_attribute(instance, inst)
 
 
     def ensure_component_instance(self, parts, instance):
@@ -252,36 +278,49 @@ class EagleXML(object):
         if part.name in self.part2inst:
             return self.part2inst[part.name]
 
-        library_id = part.library + ':' + part.deviceset + ':' + part.device
+        library_id = part.library + ':' + part.deviceset + ':logical'
 
         cpt = self.design.components.components[library_id]
 
-        self.part2inst[part.name] = \
-            ComponentInstance(instance.part, library_id,
-                              self.cptgate2symbol_index[cpt, instance.gate])
+        self.part2inst[part.name] = ComponentInstance(instance.part,
+                                                      library_id, 0)
+
+        # pre-create symbol attributes, to be filled in during
+        # instance processing
+        for _ in cpt.symbols[0].bodies:
+            self.part2inst[part.name].add_symbol_attribute(
+                SymbolAttribute(0, 0, 0.0))
 
         if part.value:
             self.part2inst[part.name].add_attribute('value', part.value)
 
         self.design.add_component_instance(self.part2inst[part.name])
 
+        self.part2dvc[part.name] = part.device
+
         return self.part2inst[part.name]
 
 
-    def make_symbol_attribute(self, instance, openjson_inst):
-        """ Construct an openjson symbol attribute from an eagle instance
+    def set_symbol_attribute(self, instance, openjson_inst):
+        """ Fill out an openjson symbol attribute from an eagle instance
         and an openjson instance. """
 
         # TODO: handle mirror
-        # TODO: handle smashed?
-        attr = SymbolAttribute(self.make_length(instance.x),
-                               self.make_length(instance.y),
-                               self.make_angle(instance.rot or '0'))
 
         cpt = self.design.components.components[openjson_inst.library_id]
 
-        for name, ann in sorted(
-            self.cptgate2ann_map.get((cpt, instance.gate)).items()):
+        attr = openjson_inst.symbol_attributes[self.cptgate2body_index[cpt, instance.gate]]
+
+        attr.x = self.make_length(instance.x)
+        attr.y = self.make_length(instance.y)
+        attr.rotation = self.make_angle(instance.rot or '0')
+
+        if instance.smashed == 'yes':
+            annotations = self.iter_instance_annotations(instance)
+        else:
+            annotations = sorted(self.cptgate2ann_map.get((cpt, instance.gate)).items())
+
+        for name, ann in annotations:
             ann = Annotation('', ann.x, ann.y, ann.rotation, ann.visible)
             if name == 'name':
                 ann.value = openjson_inst.instance_id
@@ -292,7 +331,18 @@ class EagleXML(object):
 
         self.part2gate2symattr[instance.part][instance.gate] = attr
 
-        return attr
+
+    def iter_instance_annotations(self, instance):
+        """ Return an iterator over (name, Annotation) for the annotations
+        in an eagle instance. """
+
+        for ob in instance.attribute:
+            name = ob.name.lower()
+            x = self.make_length(ob.x)
+            y = self.make_length(ob.y)
+            rotation = self.make_angle('0' if ob.rot is None else ob.rot)
+            ann = Annotation(ob.name, x, y, rotation, 'true')
+            yield (name, ann)
 
 
     def make_nets(self, root):
@@ -310,18 +360,19 @@ class EagleXML(object):
 
         def get_point(x, y):
             """ Return a new or existing NetPoint for an (x,y) point """
-            point = (self.make_length(x), self.make_length(y))
-            if point not in points:
-                points[point] = NetPoint('%da%d' % point, point[0], point[1])
-                out_net.add_point(points[point])
-            return points[point]
+            if (x, y) not in points:
+                points[x, y] = NetPoint('%da%d' % (x, y), x, y)
+                out_net.add_point(points[x, y])
+            return points[x, y]
 
         out_net = Net(net.name)
 
         for segment in get_subattr(net, 'segment', ()):
             for wire in get_subattr(segment, 'wire', ()):
-                out_net.connect((get_point(wire.x1, wire.y1),
-                                 get_point(wire.x2, wire.y2)))
+                out_net.connect((get_point(self.make_length(wire.x1),
+                                           self.make_length(wire.y1)),
+                                 get_point(self.make_length(wire.x2),
+                                           self.make_length(wire.y2))))
 
             for pinref in get_subattr(segment, 'pinref', ()):
                 self.connect_pinref(pinref,
@@ -362,7 +413,7 @@ class EagleXML(object):
     def make_length(self, value):
         """ Make an openjson length measurement from an eagle length. """
 
-        return int(round(float(value) * self.MULT))
+        return int(round(float(value) * self.MULT * self.SCALE))
 
 
     def make_angle(self, value):

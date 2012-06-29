@@ -132,7 +132,7 @@ class Body:
 
 
     def bounds(self):
-        """ Return the in and max points of the bounding box around a body """
+        """ Return the min and max points of the bounding box around a body """
         points = sum([s.bounds() for s in self.shapes + self.pins], [])
         x_values = [pt.x for pt in points]
         y_values = [pt.y for pt in points]
