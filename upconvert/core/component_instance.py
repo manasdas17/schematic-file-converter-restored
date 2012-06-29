@@ -75,10 +75,11 @@ class SymbolAttribute:
     for every body in the symbol that ComponentInstance is an instance of.
     """
 
-    def __init__(self, x, y, rotation):
+    def __init__(self, x, y, rotation, flip=False):
         self.x = x
         self.y = y
         self.rotation = rotation
+        self.flip = flip
         self.annotations = []
 
 
@@ -101,5 +102,6 @@ class SymbolAttribute:
             "x": int(self.x),
             "y": int(self.y),
             "rotation": self.rotation,
+            "flip": self.flip,
             "annotations": [a.json() for a in self.annotations]
             }
