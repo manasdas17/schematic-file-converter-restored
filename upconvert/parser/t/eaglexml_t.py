@@ -35,8 +35,7 @@ _cache = {} # filename -> Design
 
 def get_design(filename):
     if filename not in _cache:
-        parser = EagleXML()
-        _cache[filename] = parser.parse(join(TEST_DIR, filename))
+        _cache[filename] = EagleXML().parse(join(TEST_DIR, filename))
     return _cache[filename]
 
 
@@ -61,9 +60,20 @@ def use_file(filename):
 class EagleXMLTests(unittest.TestCase):
     """ The tests of the eagle-xml parser """
 
+    def setUp(self):
+        self.parser = EagleXML()
+
+
     def test_create_new_eaglexml_parser(self):
         """ Test creating an empty parser. """
-        self.assertNotEqual(EagleXML(), None)
+        self.assertNotEqual(self.parser, None)
+
+
+    def test_make_length(self):
+        """ Lengths are converted correctly. """
+        parser = EagleXML()
+        self.assertEqual(parser.make_length("0"), 0)
+        self.assertEqual(parser.make_length("254"), int(900 * 2.0))
 
 
     @use_file('E1AA60D5.sch')
@@ -94,10 +104,10 @@ class EagleXMLTests(unittest.TestCase):
         lines = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'line']
         self.assertEqual(len(lines), 4)
-        self.assertEqual(lines[0].p1.x, 45)
-        self.assertEqual(lines[0].p1.y, -36)
-        self.assertEqual(lines[0].p2.x, -45)
-        self.assertEqual(lines[0].p2.y, -36)
+        self.assertEqual(lines[0].p1.x, self.make_length("12.7"))
+        self.assertEqual(lines[0].p1.y, self.make_length("-10.16"))
+        self.assertEqual(lines[0].p2.x, self.make_length("-12.7"))
+        self.assertEqual(lines[0].p2.y, self.make_length("-10.16"))
 
 
     @use_file('E1AA60D5.sch')
@@ -107,10 +117,12 @@ class EagleXMLTests(unittest.TestCase):
         rects = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'rectangle']
         self.assertEqual(len(rects), 1)
-        self.assertEqual(rects[0].x, -6)
-        self.assertEqual(rects[0].y, -6)
-        self.assertEqual(rects[0].width, 12)
-        self.assertEqual(rects[0].height, 3)
+        self.assertEqual(rects[0].x, self.make_length("-1.651"))
+        self.assertEqual(rects[0].y, self.make_length("-1.651"))
+        self.assertEqual(rects[0].width,
+                         self.make_length("1.651") - self.make_length("-1.651"))
+        self.assertEqual(rects[0].height,
+                         self.make_length("-1.651") - self.make_length("-2.54"))
 
 
     @use_file('E1AA60D5.sch')
@@ -120,8 +132,8 @@ class EagleXMLTests(unittest.TestCase):
         labels = [s for s in cpt.symbols[0].bodies[0].shapes
                   if s.type == 'label']
         self.assertEqual(len(labels), 1)
-        self.assertEqual(labels[0].x, 18)
-        self.assertEqual(labels[0].y, -9)
+        self.assertEqual(labels[0].x, self.make_length("5.08"))
+        self.assertEqual(labels[0].y, self.make_length("-2.54"))
         self.assertEqual(labels[0].text, 'USB')
         self.assertEqual(labels[0].rotation, 1.5)
 
@@ -132,13 +144,13 @@ class EagleXMLTests(unittest.TestCase):
         cpt = self.get_component('atmel:TINY15L:logical')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(len(pins), 8)
-        self.assertEqual(pins[0].p1.x, 45)
-        self.assertEqual(pins[0].p1.y, 9)
-        self.assertEqual(pins[0].p2.x, 63)
-        self.assertEqual(pins[0].p2.y, 9)
+        self.assertEqual(pins[0].p1.x, 90)
+        self.assertEqual(pins[0].p1.y, 18)
+        self.assertEqual(pins[0].p2.x, self.make_length("17.78"))
+        self.assertEqual(pins[0].p2.y, self.make_length("2.54"))
         self.assertEqual(pins[0].label.text, '(ADC3)PB4')
         self.assertEqual(pins[0].label.x, 0)
-        self.assertEqual(pins[0].label.y, 9)
+        self.assertEqual(pins[0].label.y, 18)
         self.assertEqual(pins[0].label.rotation, 0.0)
 
         cpt = self.get_component('diode:ZENER-DIODE:logical')
@@ -170,8 +182,8 @@ class EagleXMLTests(unittest.TestCase):
         """ Component instance position is correct. """
         inst = self.get_instance('GND3')
         self.assertEqual(len(inst.symbol_attributes), 1)
-        self.assertEqual(inst.symbol_attributes[0].x, 414)
-        self.assertEqual(inst.symbol_attributes[0].y, 198)
+        self.assertEqual(inst.symbol_attributes[0].x, self.make_length("116.84"))
+        self.assertEqual(inst.symbol_attributes[0].y, self.make_length("55.88"))
 
 
     @use_file('E1AA60D5.sch')
@@ -188,11 +200,11 @@ class EagleXMLTests(unittest.TestCase):
         anns = inst.symbol_attributes[0].annotations
         self.assertEqual(len(anns), 2)
         self.assertEqual(anns[0].value, 'R2')
-        self.assertEqual(anns[0].x, -14)
-        self.assertEqual(anns[0].y, 5)
+        self.assertEqual(anns[0].x, -27)
+        self.assertEqual(anns[0].y, 11)
         self.assertEqual(anns[1].value, '68')
-        self.assertEqual(anns[1].x, -14)
-        self.assertEqual(anns[1].y, -12)
+        self.assertEqual(anns[1].x, -27)
+        self.assertEqual(anns[1].y, -23)
 
 
     @use_file('E1AA60D5.sch')
@@ -207,30 +219,28 @@ class EagleXMLTests(unittest.TestCase):
     def test_net_points(self):
         """ The right net points are created. """
         net = [n for n in self.design.nets if n.net_id == 'GND'][0]
-        self.assertEqual(set(net.points),
-                         set(('423a90', '423a81', '414a216', '414a207',
-                              '135a225', '432a90', '432a216', '135a216',
-                              '144a225', '319a765', '1499a287', '1531a319',
-                              '1339a255', '510a797', '1754a351', '1467a733',
-                              '1148a255', '1531a765', '478a765')))
+        self.assertEqual(len(net.points), 13)
+        self.assertTrue(self.make_point_name("40.64", "63.5") in net.points)
 
 
     @use_file('E1AA60D5.sch')
     def test_net_points_connected(self):
         """ The right net points are connected. """
-        net = [n for n in self.design.nets if n.net_id == 'GND'][0]
-        pt = net.points['135a225']
-        self.assertEqual(sorted(pt.connected_points), ["135a216", "144a225"])
+        net = [n for n in self.design.nets if n.net_id == 'N$7'][0]
+        pt = net.points[self.make_point_name("83.82", "68.58")]
+        self.assertEqual(sorted(pt.connected_points),
+                         [self.make_point_name("76.2", "68.58"),
+                          self.make_point_name("83.82", "48.26")])
 
 
     @use_file('E1AA60D5.sch')
     def test_net_points_connected_components(self):
         """ The right net points are connected to the right components. """
-        net = [n for n in self.design.nets if n.net_id == 'GND'][0]
-        pt = net.points['1467a733']
+        net = [n for n in self.design.nets if n.net_id == 'N$7'][0]
+        pt = net.points[self.make_point_name("76.2", "68.58")]
         self.assertEqual(len(pt.connected_components), 1)
-        self.assertEqual(pt.connected_components[0].instance_id, 'GND3')
-        self.assertEqual(pt.connected_components[0].pin_number, 'GND')
+        self.assertEqual(pt.connected_components[0].instance_id, 'IC1')
+        self.assertEqual(pt.connected_components[0].pin_number, '(ADC1)PB2')
 
 
     @use_file('D9CD1423.sch')
@@ -240,12 +250,12 @@ class EagleXMLTests(unittest.TestCase):
         symattr = inst.symbol_attributes[0]
         self.assertEqual(len(symattr.annotations), 2)
         self.assertEqual(symattr.annotations[0].value, 'U1')
-        self.assertEqual(symattr.annotations[0].x, 81)
-        self.assertEqual(symattr.annotations[0].y, 185)
+        self.assertEqual(symattr.annotations[0].x, self.parser.make_length("22.86"))
+        self.assertEqual(symattr.annotations[0].y, self.parser.make_length("52.07"))
         self.assertEqual(symattr.annotations[0].rotation, 0.0)
         self.assertEqual(symattr.annotations[1].value, 'ATMEGA328AU')
-        self.assertEqual(symattr.annotations[1].x, 81)
-        self.assertEqual(symattr.annotations[1].y, 153)
+        self.assertEqual(symattr.annotations[1].x, self.parser.make_length("22.86"))
+        self.assertEqual(symattr.annotations[1].y, self.parser.make_length("43.18"))
         self.assertEqual(symattr.annotations[1].rotation, 0.0)
 
 
@@ -258,3 +268,13 @@ class EagleXMLTests(unittest.TestCase):
         """ Return the instance given its id. """
         return [ci for ci in self.design.component_instances
                 if ci.instance_id == instance_id][0]
+
+
+    def make_length(self, length):
+        """ Return a length from the parser. """
+        return self.parser.make_length(length)
+
+
+    def make_point_name(self, x, y):
+        """ Return a point name given an eaglexml point. """
+        return '%sa%s' % (self.make_length(x), self.make_length(y))

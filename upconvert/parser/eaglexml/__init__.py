@@ -72,7 +72,8 @@ class EagleXML(object):
            --silence --external-encoding=utf-8 -o generated.py
      """
 
-    MULT = 90 / 25.4 # mm to 90 dpi
+    SCALE = 2.0
+    MULT =  90 / 25.4 # mm to 90 dpi
 
     def __init__(self):
         self.design = Design()
@@ -214,11 +215,11 @@ class EagleXML(object):
         length, and rotation. """
 
         if length == 'long':
-            distance = 27 #
+            distance = int(27 * self.SCALE) # .3 inches
         elif length == 'middle':
-            distance = 18 # .2 inches
+            distance = int(18 * self.SCALE) # .2 inches
         elif length == 'short':
-            distance = 9  # .1 inches
+            distance = int(9 * self.SCALE) # .1 inches
         else: # point
             distance = 0
 
@@ -239,7 +240,7 @@ class EagleXML(object):
         if not pin.name or pin.visible not in ('pin', 'both', None):
             return None
 
-        distance = (len(pin.name) * 10) / 2
+        distance = int(self.SCALE * (len(pin.name) * 10) / 2)
 
         if pin.rot == 'R90':
             x, y = (null_x, null_y + distance)
@@ -359,18 +360,19 @@ class EagleXML(object):
 
         def get_point(x, y):
             """ Return a new or existing NetPoint for an (x,y) point """
-            point = (self.make_length(x), self.make_length(y))
-            if point not in points:
-                points[point] = NetPoint('%da%d' % point, point[0], point[1])
-                out_net.add_point(points[point])
-            return points[point]
+            if (x, y) not in points:
+                points[x, y] = NetPoint('%da%d' % (x, y), x, y)
+                out_net.add_point(points[x, y])
+            return points[x, y]
 
         out_net = Net(net.name)
 
         for segment in get_subattr(net, 'segment', ()):
             for wire in get_subattr(segment, 'wire', ()):
-                out_net.connect((get_point(wire.x1, wire.y1),
-                                 get_point(wire.x2, wire.y2)))
+                out_net.connect((get_point(self.make_length(wire.x1),
+                                           self.make_length(wire.y1)),
+                                 get_point(self.make_length(wire.x2),
+                                           self.make_length(wire.y2))))
 
             for pinref in get_subattr(segment, 'pinref', ()):
                 self.connect_pinref(pinref,
@@ -411,7 +413,7 @@ class EagleXML(object):
     def make_length(self, value):
         """ Make an openjson length measurement from an eagle length. """
 
-        return int(round(float(value) * self.MULT))
+        return int(round(float(value) * self.MULT * self.SCALE))
 
 
     def make_angle(self, value):
