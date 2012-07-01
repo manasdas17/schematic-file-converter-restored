@@ -19,6 +19,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# Pins can have different shapes in DSN format (padstack), JSON format
+# supports only lines. So make all pin shapes part of the component
+# both in DSN->UPV and UPV->DSN directions.
+#
+
 from upconvert.core.design import Design
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
