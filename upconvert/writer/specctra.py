@@ -182,10 +182,12 @@ class Specctra(object):
         return outline
 
     def _convert_component(self, library_id, cpt):
-        for symbol in cpt.symbols:
-            for idx, body in enumerate(symbol.bodies):
-                image = specctraobj.Image()
-                image.image_id = library_id + '-' + str(idx)
+        for idx, symbol in enumerate(cpt.symbols):
+            image = specctraobj.Image()
+            image.image_id = library_id + '-' + str(idx)
+            self.pcb.library.image.append(image)
+
+            for body in symbol.bodies:
                 for shape in body.shapes:
                     for pcbshape in self._convert_shape(shape):
                         outline = specctraobj.Outline()
@@ -195,8 +197,6 @@ class Specctra(object):
                 for pin in body.pins:
                     image.pin.append(self._convert_pin(pin))
                     image.outline.append(self._convert_pin_to_outline(pin))
-
-        self.pcb.library.image.append(image)
 
     def _get_arc_qarcs(self, arc):
         """ Specctra does not have arcs so convert them to qarcs """
