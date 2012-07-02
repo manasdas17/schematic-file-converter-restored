@@ -23,6 +23,13 @@
 from upconvert.core.shape import Point
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class Net:
     """ a Net with metadata and a list of points (with connections)
     Internal representation of a net, closely matches JSON net """
@@ -60,6 +67,7 @@ class Net:
         """ Add a point p to the net """
         self.points[point.point_id] = point
 
+
     def conn_point(self, point_a, point_b):
         """ connect point b to point a """
         self.points[point_a.point_id].connected_points.append(point_b.point_id)
@@ -81,13 +89,23 @@ class Net:
             self.add_point(point_b)
         self.conn_point(point_b, point_a)
 
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the net. """
+        for p in self.points.values():
+            p.scale(factor)
+        for a in self.annotations:
+            a.scale(factor)
+
+
     def json(self):
         """ Return a net as JSON """
         return {
-            "net_id":self.net_id,
-            "attributes":self.attributes,
-            "annotations":[ann.json() for ann in self.annotations],
-            "points":[point.json() for point in self.points.values()]
+            "net_id": self.net_id,
+            "attributes": stringify_attributes(self.attributes),
+            "annotations": [ann.json() for ann in self.annotations],
+            "points": sorted([point.json() for point in self.points.values()],
+                             key=lambda point : point.get('point_id'))
             }
 
 
@@ -112,15 +130,20 @@ class NetPoint:
         self.connected_components.append(connected_component)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the point. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return a netpoint as JSON """
         return {
-            "point_id" : self.point_id,
-            "x" : self.x,
-            "y" : self.y,
-            "connected_points" : self.connected_points,
-            "connected_components" :
-                [comp.json() for comp in self.connected_components]
+            "point_id": self.point_id,
+            "x": int(self.x),
+            "y": int(self.y),
+            "connected_points": sorted(self.connected_points),
+            "connected_components": [comp.json() for comp in self.connected_components]
             }
 
 
@@ -135,6 +158,6 @@ class ConnectedComponent:
     def json(self):
         """ Return a connected component as JSON """
         return {
-            "instance_id" : self.instance_id,
-            "pin_number" : self.pin_number
+            "instance_id": self.instance_id,
+            "pin_number": self.pin_number
             }

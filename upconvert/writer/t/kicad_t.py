@@ -55,6 +55,7 @@ class KiCADTests(unittest.TestCase):
         os.remove(filename)
         writer.write(design, filename)
         self.assertTrue(os.path.exists(filename))
+        os.remove(filename)
 
     def test_write_header(self):
         """
@@ -166,28 +167,28 @@ $EndComp
         pin = Pin('1', (-300, 100), (-600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 -6667 1111 300 R 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 -6667 1111 3333 R 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('1', (300, 100), (600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 6667 1111 300 L 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 6667 1111 3333 L 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, -1300), (0, -1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 -16667 200 U 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 -16667 2222 U 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 16667 200 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 16667 2222 D 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500),
                   Label(0, 0, 'name', 'center', 0))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X name 2 0 16667 200 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X name 2 0 16667 2222 D 60 60 %(unit)d %(convert)d B\n')
 
     def test_write_library_footer(self):
         """

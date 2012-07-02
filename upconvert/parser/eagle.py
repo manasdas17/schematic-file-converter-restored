@@ -31,24 +31,28 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.design import Design
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.components import Component, Symbol, Body, Pin
-from upconvert.core.shape import Point, Line, Label
+from upconvert.core.shape import Point, Line, Label, Arc, Circle, Rectangle, Polygon
 
 #class EagleBinConsts:
 #    """ Just a set of constants to be used by both parser and writer
 #    """
 #    pass# pylint: disable=R0902
 
-class Eagle: 
+
+EAGLE_SCALE = 1/0.127
+
+
+class Eagle:
     """ The Eagle Format Parser """
 
     @staticmethod
     def _do_ojs(value):
         """ Represents a string as required by upconvert core """
-        return value.decode('latin-1') if None != value else None
+        return value.decode('latin-1').encode('utf-8') if None != value else None
 # or maybe we need to have a unicode object in openjson?..
 #  (in that case all strings in maps have to be created as unicode ones as well)
 #        return unicode(value, 'latin-1') if None != value else None
-    
+
     class Header:
         """ A struct that represents a header """
         constant = 0x10
@@ -141,7 +145,7 @@ class Eagle:
                }
 
         def __init__(self, distance=0.1, unitdist="inch", unit="inch",  # pylint: disable=R0913
-                style="lines", multiple=1, display=False, altdistance=0.01, 
+                style="lines", multiple=1, display=False, altdistance=0.01,
                 altunitdist="inch", altunit="inch"):
             """ Just a constructor
             """
@@ -170,7 +174,7 @@ class Eagle:
                 _unit = "n/a"
 
             try:
-                _altunit = Eagle.Grid.units[Eagle.Grid.unitmask & 
+                _altunit = Eagle.Grid.units[Eagle.Grid.unitmask &
                                                (_dta[3] >> 4)]
             except KeyError: # unknown grid alt measure units
                 _altunit = "n/a"
@@ -254,7 +258,7 @@ class Eagle:
             else:
                 pass # unknown layer visibility sign
 
-            if (Eagle.Layer.linkedsignmask == 
+            if (Eagle.Layer.linkedsignmask ==
                     Eagle.Layer.linkedsignmask & _dta[2]):
                 _linked = True
 
@@ -267,7 +271,7 @@ class Eagle:
             _ret_val = Eagle.Layer(number=_dta[3],
                                    name=_name,
                                    color=_dta[6],
-                                   fill=_dta[5], 
+                                   fill=_dta[5],
                                    visible=_visible,
                                    active=_active,
                                    linkednumber=_dta[4],
@@ -304,7 +308,7 @@ class Eagle:
             It's needed to uniform parsing and counting of members
         """
 
-        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+        def __init__(self, name, numofblocks=0, numofshapesets=0,
                      shapesets=None):
             """ Just a constructor
             """
@@ -424,11 +428,11 @@ class Eagle:
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+        def __init__(self, name, numofblocks=0, numofshapesets=0,
                      shapesets=None):
             """ Just a constructor
             """
-            super(Eagle.DeviceSetHeader, self).__init__(name, numofblocks, 
+            super(Eagle.DeviceSetHeader, self).__init__(name, numofblocks,
                         numofshapesets, shapesets)
             return
 
@@ -461,11 +465,11 @@ class Eagle:
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+        def __init__(self, name, numofblocks=0, numofshapesets=0,
                      shapesets=None):
             """ Just a constructor
             """
-            super(Eagle.SymbolHeader, self).__init__(name, numofblocks, 
+            super(Eagle.SymbolHeader, self).__init__(name, numofblocks,
                         numofshapesets, shapesets)
             return
 
@@ -498,11 +502,11 @@ class Eagle:
         max_embed_len = 8
         no_embed_str = b'\x7f'
 
-        def __init__(self, name, numofblocks=0, numofshapesets=0, 
+        def __init__(self, name, numofblocks=0, numofshapesets=0,
                      shapesets=None):
             """ Just a constructor
             """
-            super(Eagle.PackageHeader, self).__init__(name, numofblocks, 
+            super(Eagle.PackageHeader, self).__init__(name, numofblocks,
                         numofshapesets, shapesets)
             return
 
@@ -634,7 +638,7 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.Net.template, chunk)
 
-            if (Eagle.Net.constantmid1 != _dta[3] or 
+            if (Eagle.Net.constantmid1 != _dta[3] or
                     Eagle.Net.constantmid2 != _dta[4]):
                 pass # strange mid-constants in net
 
@@ -654,7 +658,7 @@ class Eagle:
         """ A struct that represents a part
         """
         constant = 0x38
-        template = "=2B3H3B5s8s" 
+        template = "=2B3H3B5s8s"
 
         max_embed_len1 = 5
         max_embed_len2 = 8
@@ -699,8 +703,8 @@ class Eagle:
                                  devsetndx=_dta[4],
                                  symvar=_dta[5],
                                  techno=_dta[6],
-#                                 valpresence = 
-#                                    True if _dta[7] & Eagle.Part.val_sign_mask 
+#                                 valpresence =
+#                                    True if _dta[7] & Eagle.Part.val_sign_mask
 #                                            else False,
                                  value=_value,
                                  numofshapes=_dta[2],
@@ -711,7 +715,7 @@ class Eagle:
         """ A struct that represents a deviceset
         """
         constant = 0x37
-        template = "=2B2H2B5s5s6s" 
+        template = "=2B2H2B5s5s6s"
 
         max_embed_len1 = 5
         max_embed_len2 = 5
@@ -768,11 +772,11 @@ class Eagle:
             _ret_val = Eagle.DeviceSet(name=_name,
                                        prefix=_prefix,
                                        description=_desc,
-#                                 prefpresence = 
-#                                    False if _dta[4] & Eagle.DeviceSet.nopref_sign_mask 
+#                                 prefpresence =
+#                                    False if _dta[4] & Eagle.DeviceSet.nopref_sign_mask
 #                                            else True,
-                                        uservalue = 
-                                           True if _dta[4] & 
+                                        uservalue =
+                                           True if _dta[4] &
                                                     Eagle.DeviceSet.uservalue_sign_mask
                                                 else False,
                                         numofshapes=_dta[2],
@@ -784,7 +788,7 @@ class Eagle:
         """ A struct that represents a bus
         """
         constant = 0x3a
-        template = "=2BH20s" 
+        template = "=2BH20s"
 
         max_embed_len = 20
         no_embed_str = b'\x7f'
@@ -907,7 +911,7 @@ class Eagle:
                      numofshapes=0, shapes=None):
             """ Just a constructor
             """
-            super(Eagle.ConnectionHeader, self).__init__(name, numofshapes, 
+            super(Eagle.ConnectionHeader, self).__init__(name, numofshapes,
                                                                         shapes)
             self.sindex = sindex
 
@@ -991,14 +995,14 @@ class Eagle:
 
             _dta = struct.unpack(Eagle.Connections.template, chunk)
 
-            _ret_val = Eagle.Connections(connections=[x for x in _dta[2:] 
+            _ret_val = Eagle.Connections(connections=[x for x in _dta[2:]
                                                                 if 0 != x],
                                         )
             return _ret_val
 
     class Shape(object):
         """ A base struct for shapes, provides common codecs
-             Although it provides two scaling methods, #2 has 
+             Although it provides two scaling methods, #2 has
              to be used all the time
         """
 
@@ -1011,6 +1015,7 @@ class Eagle:
         ratio_sscale = 2
 
         rotatemask = 0x0c # in some cases 0x0f works as well
+        rotatemask2 = 0x0f # R40 is possible in text...
         rotates = {
                    0x00: None,
                    0x01: "R40",
@@ -1022,17 +1027,26 @@ class Eagle:
                    0x0c: "R270",
                    0x0e: "R315",
 # ones below are possible for text & frame -- don't apply the mask there
-                   0x10: "MR0",
-                   0x12: "MR45",
-                   0x14: "MR90",
-                   0x16: "MR135",
-                   0x18: "MR180",
-                   0x1a: "MR225",
-                   0x1c: "MR270",
-                   0x1e: "MR315",
+#                   0x10: "MR0",
+#                   0x12: "MR45",
+#                   0x14: "MR90",
+#                   0x16: "MR135",
+#                   0x18: "MR180",
+#                   0x1a: "MR225",
+#                   0x1c: "MR270",
+#                   0x1e: "MR315",
 
-                   0x40: "SR0", #...
+#                   0x40: "SR0", #...
                   }
+
+        rotate_r0 = "R0" # used in SR0, MR0 cases
+
+        rotateprefixmask = 0x70
+        rotate_prefixes = {
+                   0x00: '',
+                   0x10: 'M',
+                   0x40: 'S',
+                }
 
         fonts = {
                   0x00: "vector",
@@ -1044,7 +1058,7 @@ class Eagle:
             """ Just a constructor
             """
             self.layer = layer
-            return 
+            return
 
         @staticmethod
         def decode_real(number, algo=2):
@@ -1052,7 +1066,7 @@ class Eagle:
             """
             _ret_val = 0
             if 1 == algo:
-                _ret_val = ((number << Eagle.Shape.scale1b) / 
+                _ret_val = ((number << Eagle.Shape.scale1b) /
                                                 Eagle.Shape.scale1a)
             elif 2 == algo:
                 _ret_val = number / Eagle.Shape.scale2
@@ -1061,7 +1075,7 @@ class Eagle:
         @staticmethod
         def rotate2piradians(rotate):
             """ Converts 'rotates' string into pi radians.
-                It could be implemented as a map, but a special handling for 
+                It could be implemented as a map, but a special handling for
                  None as 0. would be needed..
             """
             _ret_val = 0.
@@ -1072,7 +1086,25 @@ class Eagle:
                 _ret_val = 1.
             elif 'R270' == rotate:
                 _ret_val = 1.5
-            return _ret_val 
+            return _ret_val
+
+        @staticmethod
+        def _ext_rotate(rotate_octet):
+            """ Constructs extanded rotate mark
+            """
+            _rotate = (
+                    Eagle.Text.rotate_prefixes[
+                                Eagle.Text.rotateprefixmask & rotate_octet],
+                    Eagle.Text.rotates[Eagle.Text.rotatemask2 & rotate_octet],
+                    )
+            if None == _rotate[1]: # SR0, MR0, None (R0) cases
+                if 0 < len(_rotate[0]): # SR0, MR0
+                    _ret_val = _rotate[0] + Eagle.Text.rotate_r0
+                else: # None
+                    _ret_val = None
+            else: # R > 0
+                _ret_val = _rotate[0] + _rotate[1]
+            return _ret_val
 
     class Polygon(ShapeSet, Shape):
         """ A struct that represents a polygon
@@ -1138,10 +1170,10 @@ class Eagle:
             _ret_val = Eagle.Instance(numofshapes=_dta[2],
                                      x=Eagle.Instance.decode_real(_dta[3]),
                                      y=Eagle.Instance.decode_real(_dta[4]),
-                                     smashed=True 
+                                     smashed=True
                                         if Eagle.Instance.smashed_mask ==
-                                            (Eagle.Instance.smashed_mask & 
-                                                _dta[10]) or 
+                                            (Eagle.Instance.smashed_mask &
+                                                _dta[10]) or
                                             Eagle.Instance.smashed2_mask ==
                                             (Eagle.Instance.smashed2_mask &
                                                 _dta[10]) else False,
@@ -1195,9 +1227,9 @@ class Eagle:
             """ Just a constructor
             """
             super(Eagle.Rectangle, self).__init__(layer)
-            self.x1 = x1
+            self.x1 = x1 # bottom left corner
             self.y1 = y1
-            self.x2 = x2
+            self.x2 = x2 # upper right corner
             self.y2 = y2
             self.rotate = rotate
             return
@@ -1235,10 +1267,10 @@ class Eagle:
                  }
 
         wire_sign = 0x00
-        arc_preset1 = (0x78, 0x79, ) # -90: q1, q2 
-        arc_preset2 = (0x7a, 0x7b, ) # +90: q3, q4 
+        arc_preset1 = (0x78, 0x79, ) # -90: q1, q2
+        arc_preset2 = (0x7a, 0x7b, ) # +90: q3, q4
         arc_preset3 = (0x7c, 0x7e, ) # -180: q41, q12
-        arc_preset4 = (0x7d, 0x7f, ) # +180: q23, q34 
+        arc_preset4 = (0x7d, 0x7f, ) # +180: q23, q34
         arc_sign = 0x81
 
         def __init__(self, x1, y1, x2, y2, style, layer, width): # pylint: disable=R0913
@@ -1279,7 +1311,7 @@ class Eagle:
                 _ret_val = Eagle.FixedArc.parse(chunk)
             elif Eagle.Wire.arc_sign == _dta[10]: # Arc features "packed" coordinates...
                 _ret_val = Eagle.Arc.parse(chunk)
-            else: 
+            else:
                 raise ValueError("unknown wire sign = x%x" % _dta[10])
 
             return _ret_val
@@ -1446,7 +1478,7 @@ class Eagle:
                               Eagle.Wire.stylemask & _dta[9]],
                           curve=_curve,
                           cap=Eagle.Arc.caps[_dta[9] & Eagle.Arc.capmask],
-                          direction=Eagle.Arc.directions[_dta[9] & 
+                          direction=Eagle.Arc.directions[_dta[9] &
                                                 Eagle.Arc.directionmask]
                                      )
             return _ret_val
@@ -1464,23 +1496,23 @@ class Eagle:
             _ret_val = None
 
             _dta = struct.unpack(Eagle.Arc.template, chunk)
-            
+
             # sign propogation by hand
-            _x1 = (Eagle.Shape.decode_real(_dta[4] & 0xffffff) 
+            _x1 = (Eagle.Shape.decode_real(_dta[4] & 0xffffff)
                     if 0 == (0x800000 & _dta[4])
-                    else (-1 * 
+                    else (-1 *
                         Eagle.Shape.decode_real(0x1000000 - (_dta[4] & 0xffffff))))
             _y1 = (Eagle.Shape.decode_real(_dta[5] & 0xffffff)
                     if 0 == (0x800000 & _dta[5])
-                    else (-1 * 
+                    else (-1 *
                         Eagle.Shape.decode_real(0x1000000 - (_dta[5] & 0xffffff))))
             _x2 = (Eagle.Shape.decode_real(_dta[6] & 0xffffff)
                     if 0 == (0x800000 & _dta[6])
-                    else (-1 * 
+                    else (-1 *
                         Eagle.Shape.decode_real(0x1000000 - (_dta[6] & 0xffffff))))
             _y2 = (Eagle.Shape.decode_real(_dta[7] & 0xffffff)
                     if 0 == (0x800000 & _dta[7])
-                    else (-1 * 
+                    else (-1 *
                         Eagle.Shape.decode_real(0x1000000 - (_dta[7] & 0xffffff))))
 
 # _coord is a single (either x or y) coordinate of a circle's center
@@ -1489,7 +1521,7 @@ class Eagle:
                       (((_dta[5] & 0xff000000) >> 16) & 0xff00) +
                       (((_dta[6] & 0xff000000) >> 8) & 0xff0000))
                     if 0 == (0x80000000 & _dta[6])
-                    else (-1 * 
+                    else (-1 *
                       Eagle.Shape.decode_real((0x1000000 - (
                               (((_dta[4] & 0xff000000) >> 24) & 0xff) +
                               (((_dta[5] & 0xff000000) >> 16) & 0xff00) +
@@ -1508,7 +1540,7 @@ class Eagle:
 
             _curve = math.degrees(math.acos((math.pow(_x1 - _x3, 2) + math.pow(_y1 - _y3, 2) +
                                              math.pow(_x2 - _x3, 2) + math.pow(_y2 - _y3, 2) +
-                                             - math.pow(_x1 - _x2, 2) - math.pow(_y1 - _y2, 2)) / 
+                                             - math.pow(_x1 - _x2, 2) - math.pow(_y1 - _y2, 2)) /
                                     (2 * math.sqrt(math.pow(_x1 - _x3, 2) + math.pow(_y1 - _y3, 2)) *
                                          math.sqrt(math.pow(_x2 - _x3, 2) + math.pow(_y2 - _y3, 2)))))
             if not (_dta[9] & Eagle.Arc.directionmask):
@@ -1524,7 +1556,7 @@ class Eagle:
                               Eagle.Wire.stylemask & _dta[9]],
                           curve=int((_curve + 0.005) * 100) / 100., # rounding
                           cap=Eagle.Arc.caps[_dta[9] & Eagle.Arc.capmask],
-                          direction=Eagle.Arc.directions[_dta[9] & 
+                          direction=Eagle.Arc.directions[_dta[9] &
                                                 Eagle.Arc.directionmask]
                                      )
             return _ret_val
@@ -1618,7 +1650,7 @@ class Eagle:
                     }
 
         def __init__(self, name, x, y, visible, direction, rotate, length, # pylint: disable=R0913
-                     function=None, swaplevel=0): 
+                     function=None, swaplevel=0):
             """ Just a constructor
             """
             super(Eagle.Pin, self).__init__(layer=-1)
@@ -1651,16 +1683,16 @@ class Eagle:
             _ret_val = Eagle.Pin(name=_name,
                                  x=Eagle.Shape.decode_real(_dta[4]),
                                  y=Eagle.Shape.decode_real(_dta[5]),
-                                 visible=Eagle.Pin.visibles[_dta[2] & 
+                                 visible=Eagle.Pin.visibles[_dta[2] &
                                                 Eagle.Pin.visiblemask],
-                                 direction=Eagle.Pin.directions[_dta[6] & 
+                                 direction=Eagle.Pin.directions[_dta[6] &
                                                 Eagle.Pin.dirmask],
                                  rotate=Eagle.Pin.rotates[
-                                              ((Eagle.Pin.rotatemask << 4) & 
+                                              ((Eagle.Pin.rotatemask << 4) &
                                               _dta[6]) >> 4],
                                  length=Eagle.Pin.lengths[_dta[6] &
                                                 Eagle.Pin.lengthmask],
-                                 function=Eagle.Pin.functions[_dta[2] & 
+                                 function=Eagle.Pin.functions[_dta[2] &
                                                 Eagle.Pin.funcmask],
                                  swaplevel=_dta[7],
                                 )
@@ -1760,7 +1792,7 @@ class Eagle:
                                      size=Eagle.Text.size_xscale *
                                           Eagle.Shape.decode_real(_dta[6]),
                                      layer=_dta[3],
-                                     rotate=Eagle.Text.rotates[_dta[10]],
+                                     rotate=Eagle.Text._ext_rotate(_dta[10]),
                                      font=Eagle.Text.fonts[_dta[2]],
                                      ratio=_dta[7] >> Eagle.Text.ratio_sscale,
                                     )
@@ -1821,14 +1853,14 @@ class Eagle:
                                       layer=_dta[3],
 #                                      xref=0,
                                       rotate=Eagle.Label.rotates[
-                                              Eagle.Label.rotatemask & 
+                                              Eagle.Label.rotatemask &
                                               _dta[9]],
                                       ratio=_dta[7] >> Eagle.Text.ratio_sscale,
                                       font=Eagle.Label.fonts[_dta[2]],
-                                      onoff=(True if 0 != 
+                                      onoff=(True if 0 !=
                                              _dta[10] & Eagle.Label.onoffmask
                                              else False),
-                                      mirrored=(True if 0 != 
+                                      mirrored=(True if 0 !=
                                                 _dta[9] & Eagle.Label.mirroredmask
                                                 else False),
                                      )
@@ -1846,7 +1878,7 @@ class Eagle:
         bbottommask = 0x01
 
         def __init__(self, x1, y1, x2, y2, columns, rows, # pylint: disable=R0913
-                    layer, bleft=True, btop=True, bright=True, bbottom=True): 
+                    layer, bleft=True, btop=True, bright=True, bbottom=True):
             """ Just a constructor
             """
             super(Eagle.Frame, self).__init__(layer)
@@ -1918,7 +1950,7 @@ class Eagle:
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
                                           rotate=Eagle.AttributeNam.rotates[
-                                              Eagle.AttributeNam.rotatemask & 
+                                              Eagle.AttributeNam.rotatemask &
                                               _dta[9]],
                                           font=Eagle.AttributeNam.fonts[_dta[2]],
                                          )
@@ -1932,7 +1964,7 @@ class Eagle:
         def __init__(self, x, y, size, layer, rotate, font, name="VALUE"): # pylint: disable=R0913
             """ Just a constructor
             """
-            super(Eagle.AttributeVal, self).__init__(x, y, 
+            super(Eagle.AttributeVal, self).__init__(x, y,
                                         size, layer, rotate, font, name)
             return
 
@@ -1950,7 +1982,7 @@ class Eagle:
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
                                           rotate=Eagle.AttributeVal.rotates[
-                                              Eagle.AttributeVal.rotatemask & 
+                                              Eagle.AttributeVal.rotatemask &
                                               _dta[9]],
                                           font=Eagle.AttributeVal.fonts[_dta[2]],
                                          )
@@ -1964,7 +1996,7 @@ class Eagle:
         def __init__(self, x, y, size, layer, rotate, font, name="PART"): # pylint: disable=R0913
             """ Just a constructor
             """
-            super(Eagle.AttributePrt, self).__init__(x, y, 
+            super(Eagle.AttributePrt, self).__init__(x, y,
                                         size, layer, rotate, font, name)
             return
 
@@ -1982,7 +2014,7 @@ class Eagle:
                                           size=Eagle.Shape.size_xscale *
                                                Eagle.Shape.decode_real(_dta[6]),
                                           layer=_dta[3],
-                                          rotate=Eagle.AttributePrt.rotates[_dta[9]], # no mask: like Text!
+                                          rotate=Eagle.AttributePrt._ext_rotate(_dta[9]), # no mask: like Text!
                                           font=Eagle.AttributePrt.fonts[_dta[2]],
                                          )
             return _ret_val
@@ -2138,13 +2170,13 @@ class Eagle:
         constant = 0x20000425
         constantmid = 0x87654321
         constantend = 0x89abcdef
-        
+
         endmarker = 0x99999999
 
         def __init__(self, num, name='', width=0, drill=0, clearances=None, # pylint: disable=R0913
                      leadint=0):
             """ Just a constructor
-            """ 
+            """
             self.num = num
             self.name = name
             self.width = width
@@ -2152,7 +2184,7 @@ class Eagle:
             if None == clearances:
                 clearances = []
             self.clearances = clearances
-            
+
             self.leadint = leadint # TODO decypher it..
             return
 
@@ -2193,21 +2225,21 @@ class Eagle:
                     if 0 < len(_name): # used netclass
                         _ret_val = Eagle.NetClass(
                                  num=_dta[0],
-                                 name=_name, 
+                                 name=_name,
                                  width=Eagle.NetClass.decode_real(_dta[2]),
                                  drill=Eagle.NetClass.decode_real(_dta[3]),
                                  clearances = [
-                                     (_nn, 
+                                     (_nn,
                                       Eagle.NetClass.decode_real(
                                                                 _dta[4 + _nn])
-                                     ) 
+                                     )
                                      for _nn in range(_cl_block_len)
                                      if 0 != _dta[4 + _nn]
                                  ],
                                  leadint=leadint
                                                     )
                     else: # unused netclass
-                        _ret_val = Eagle.NetClass(num=_dta[0], 
+                        _ret_val = Eagle.NetClass(num=_dta[0],
                                                      leadint=leadint)
                 else:
                     pass # bad constants or/and data in netclasses
@@ -2244,7 +2276,7 @@ class Eagle:
         with open(filename, 'r') as f:
             data = f.read(4096)
         confidence = 0
-        if ('\x10' == data[0x00] and '\x11' == data[0x18] and 
+        if ('\x10' == data[0x00] and '\x11' == data[0x18] and
                 '\x11' == data[0x30] and '\x12' == data[0x48]):
             confidence += 0.9
         return confidence
@@ -2297,6 +2329,7 @@ class Eagle:
                 _prev_segment = None
             elif Eagle.ShapeHeader.constant == _type:
                 self.shapeheader = self.ShapeHeader.parse(_dta)
+                _cur_segment = self.shapeheader
             elif Eagle.Bus.constant == _type:
                 _cur_web = self.Bus.parse(_dta)
                 self.shapeheader.buses.append(_cur_web)
@@ -2375,14 +2408,14 @@ class Eagle:
 
         while True: # netclasses ## 0..7
             (_some_int, _ncconst, _nclen) = struct.unpack(
-                    self.NetClass.template0, 
+                    self.NetClass.template0,
                     filehandle.read(struct.calcsize(self.NetClass.template0)))
             _ncdta = None
             if 0 < _nclen:
                 _ncdta = filehandle.read(_nclen)
             else:
                 break # should leadnum of a final 3I block be saved?..
-            self.netclasses.append(self.NetClass.parse(_some_int, 
+            self.netclasses.append(self.NetClass.parse(_some_int,
                                                        _ncconst, _ncdta))
         return
 
@@ -2394,7 +2427,7 @@ class Eagle:
         """
         for _aa in cls.attr_jar:
             yield _aa
- 
+
     def _parse(self, filehandle):
         """ Parse an Eagle file into a set of Eagle objects
         """
@@ -2404,8 +2437,8 @@ class Eagle:
 # parsing of external attributes beforehand helps its placing
         filehandle.seek(self.header.numofblocks * self.blocksize)
         filehandle.read(4) # noregblockheader
-        _unreg_dta = filehandle.read(struct.unpack("I", 
-                        filehandle.read(4))[0]).split(self.noregdelimeter) 
+        _unreg_dta = filehandle.read(struct.unpack("I",
+                        filehandle.read(4))[0]).split(self.noregdelimeter)
         filehandle.seek(1 * self.blocksize)
         for _aa in _unreg_dta:
             if 0 < len(_aa):
@@ -2422,13 +2455,63 @@ class Eagle:
 
         # read len in bytes, then read corrsponding number of bytes
         #  -- just to skip since external attributes were parsed earlier
-        _unreg_dta = filehandle.read(struct.unpack("I", 
-                            filehandle.read(4))[0]).split(self.noregdelimeter) 
+        _unreg_dta = filehandle.read(struct.unpack("I",
+                            filehandle.read(4))[0]).split(self.noregdelimeter)
 
 # just to note: the list above ends with two zero bytes
 
         self._parse_netclasses(filehandle)
         return
+
+    @staticmethod
+    def _convert_arc(sarc):
+        """ Converts a Eagle's Arc / FixedArc objects into Arc
+        """
+        _ret_val = None
+
+# calculate radius
+        _xm, _ym = (sarc.x1 + sarc.x2) / 2, (sarc.y1 + sarc.y2) / 2
+        _dm = math.sqrt(math.pow(sarc.x1 - _xm, 2) +
+                math.pow(sarc.y1 -_ym, 2))
+        _radius = abs(_dm / math.sin(math.radians(sarc.curve / 2)))
+
+# calculate start and end angles, beginning
+        _xu = sarc.x1 if sarc.y1 > sarc.y2 else sarc.x2 # upper point's x
+        _am = (math.pi / 2 - math.acos((_xm - _xu) / _dm) + # middle
+                0 if True else (math.pi / 2))
+        if 0 > _am:
+            _am += math.pi
+
+# calculate center
+        (_x1, _y1, _x2, _y2) = ((sarc.x1, sarc.y1, sarc.x2, sarc.y2)
+                                    if 'counterclockwise' == sarc.direction else
+                                    (sarc.x2, sarc.y2, sarc.x1, sarc.y1))
+        _mm = _radius * math.cos(math.radians(abs(sarc.curve / 2)))
+        _xcc, _ycc = (abs(abs(_y1) - abs(_ym)) * abs(_mm / _dm),
+                        abs(abs(_x1) - abs(_xm)) * abs(_mm / _dm)) # x <-> y, for an orthogonal vector
+
+        _xc, _yc = -1., -1.
+        if _x1 >= _xm and _y1 <= _ym: # different operations for an each quadrant
+            _xc, _yc = _xm - _xcc, _ym - _ycc
+        elif _x1 >= _xm and _y1 >= _ym:
+            _xc, _yc = _xm + _xcc, _ym - _ycc
+        elif _x1 <= _xm and _y1 >= _ym:
+            _xc, _yc = _xm + _xcc, _ym + _ycc
+        elif _x1 <= _xm and _y1 <= _ym:
+            _xc, _yc = _xm - _xcc, _ym + _ycc
+
+# calculate start and end angles, end
+        if _x1 <= _xm: # 3rd and 4th quadrants
+            _am += math.pi
+        _astart = _am - math.radians(abs(sarc.curve / 2))
+        _aend = _astart + math.radians(abs(sarc.curve))
+
+        _ret_val = Arc(x=_xc, y=_yc,
+                    start_angle=(_astart / math.pi),
+                    end_angle=(_aend / math.pi),
+                    radius=_radius,
+                    )
+        return _ret_val
 
     def _convert(self):
         """ Converts a set of Eagle objects into Design
@@ -2441,9 +2524,14 @@ class Eagle:
         for _pp in self.shapeheader.parts:
             _libid = ':'.join((self.libraries[-1 + _pp.libid].name,
                                _pp.value)) # to avoid same name collisions
-            _ci = ComponentInstance(instance_id=_pp.name, 
+            _ci = ComponentInstance(instance_id=_pp.name,
                                     library_id=_libid,
-                                    symbol_index=_pp.symvar)    # other candidate is devsetndx:
+                                    symbol_index=0)    # There appears to only have the possibility
+                                                                # 1 symbol per component, so I will
+                                                                # hardcode this to 0 while
+                                                                # figuring out how to make get the
+                                                                # correct component symbol index
+                                    #symbol_index=_pp.symvar)    # other candidate is devsetndx:
                                                                 #  'devsets' contains all variants
                                                                 #  used in this schematic
             _sa = SymbolAttribute(x=_pp.shapes[0].x, # shapes' len is always 1 here
@@ -2481,14 +2569,14 @@ class Eagle:
                     elif r'>VALUE' == _ss.value:
                         _val = _pp.value
                     _an = Annotation(value=_val, # value from symbol
-                                     x=(_ss.x + _pp.shapes[0].x),
-                                     y=(_ss.y + _pp.shapes[0].y),
+                                     x=(_ss.x),
+                                     y=(_ss.y),
                                      rotation=((
                                          Eagle.Shape.rotate2piradians(
-                                                    _pp.shapes[0].rotate) + 
+                                                    _pp.shapes[0].rotate) +
                                          Eagle.Shape.rotate2piradians(
                                                     _ss.rotate)) % 2),
-                                     visible=True,
+                                     visible='true',
                                     )
                     _sa.add_annotation(_an)
                 else:
@@ -2499,26 +2587,26 @@ class Eagle:
                             _opy, _ly = _ss.y, _ss.y
                             _lrot = 0.
                             if None == _ss.rotate: # left
-                                _opx += 10
+                                _opx += 20/EAGLE_SCALE
                                 _lx = (_ss.x + _opx) / 2
-                                _ly += 10
+                                _ly += 20/EAGLE_SCALE
                             elif "R90" == _ss.rotate: # down
-                                _opy += 10
-                                _lx += 10
+                                _opy += 20/EAGLE_SCALE
+                                _lx += 20/EAGLE_SCALE
                                 _ly = (_ss.y + _opy) / 2
                                 #_lrot = 0.5 or 1.5 if label rotation is required
                             elif "R180" == _ss.rotate: # right
-                                _opx -= 10
+                                _opx -= 20/EAGLE_SCALE
                                 _lx = (_ss.x + _opx) / 2
-                                _ly += 10
+                                _ly += 20/EAGLE_SCALE
                             elif "R270" == _ss.rotate: # up
-                                _opy -= 10
-                                _lx += 10
+                                _opy -= 20/EAGLE_SCALE
+                                _lx += 20/EAGLE_SCALE
                                 _ly = (_ss.y + _opy) / 2
                                 #_lrot = 0.5 or 1.5 if label rotation is required
 
-                            _label = Label (x=_lx, y=_ly, 
-                                            text=_ss.name, 
+                            _label = Label (x=_lx, y=_ly,
+                                            text=_ss.name,
                                             align='center', rotation=_lrot)
                             _pn = Pin(label=_label,
                                       p1=Point(_opx, _opy), # just 10pix in an opposite direction
@@ -2530,16 +2618,49 @@ class Eagle:
                             _pn.add_attribute('length', _ss.length) # not a number
                             _pn.add_attribute('function', _ss.function)
                             _pn.add_attribute('swaplevel', _ss.swaplevel)
- 
+
                             _bd.add_pin(_pn)
                             _pc += 1
                         else:
                             _sp = None
-                            if isinstance(_ss, Eagle.Wire):
+                            if isinstance(_ss, Eagle.FixedArc): # including Arc
+                                _sp = Eagle._convert_arc(_ss)
+                                _sp.add_attribute('style', _ss.style)
+                                _sp.add_attribute('width', _ss.width)
+                            elif isinstance(_ss, Eagle.Wire):
                                 _sp = Line(p1=Point(_ss.x1, _ss.y1),
                                            p2=Point(_ss.x2, _ss.y2))
                                 _sp.add_attribute('style', _ss.style)
                                 _sp.add_attribute('width', _ss.width)
+                            elif isinstance(_ss, Eagle.Circle):
+                                _sp = Circle(x=_ss.x, y=_ss.y, 
+                                                radius=_ss.radius)
+                                _sp.add_attribute('width', _ss.width)
+                            elif isinstance(_ss, Eagle.Rectangle):
+                                _w = abs(_ss.x2 - _ss.x1)
+                                _h = abs(_ss.y2 - _ss.y1)
+                                if None == _ss.rotate or "R180" == _ss.rotate: # normal position
+                                    _x = _ss.x1
+                                    _y = _ss.y1 + _h # bottom left vs upper left
+                                elif "R90" == _ss.rotate or "R270" == _ss.rotate: # pi/2 rotation
+                                    _w, _h = _h, _w
+                                    _x = (_ss.x1 + _ss.x2 - _w) / 2 
+                                    _y = (_ss.y1 + _ss.y2 + _h) / 2
+                                _sp = Rectangle(x=_x, y=_y, width=_w, height=_h)
+                            elif isinstance(_ss, Eagle.Polygon):
+# second point for an every Eagle.Wire can be skipped since it'll be the first one
+#  for the next Wire
+# some Eagle.Wires are actually Eagle.FixedArcs, but processed as Wires, i.e. with no
+#  curve
+# also it can include Eagle.Text. It's just skipped
+                                _pts = [Point(s.x1, s.y1) for s in _ss.shapes
+                                        if isinstance(_ss, Eagle.Wire)]
+                                _sp = Polygon(points=_pts)
+                            elif isinstance(_ss, Eagle.Frame):
+                                pass # a kind of a box around a schematic
+                            else:
+# TODO remove
+                                print("unexpected block %s in shapeset" % _ss.__class__.__name__)
 
                             if None != _sp: # i.e. label (!= text), hole, ..
                                 _sp.add_attribute('layer', _ss.layer)
@@ -2569,7 +2690,23 @@ class Eagle:
                     for _cc in _nc.clearances:
                         _net.add_attribute(u'netclearance' + str(_cc[0]), _cc[1])
                 for _ss in _sg.shapes: # wires only for buses, wires + pinrefs + junctions for nets
-                    if isinstance(_ss, Eagle.Wire):
+                    if isinstance(_ss, Eagle.FixedArc): # including Eagle.Arc
+                        Eagle._convert_arc(_ss)
+
+# now it's the same as wire, but probably some interpolation is required
+                        _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
+                        _p2name = "%s-%s" % (str(_ss.x2), str(_ss.y2))
+
+                        if not _p1name in _net.points:
+                            _net.add_point(NetPoint(_p1name, _ss.x1, _ss.y1))
+                        if not _p2name in _net.points:
+                            _net.add_point(NetPoint(_p2name, _ss.x2, _ss.y2))
+
+                        if not _p2name in _net.points[_p1name].connected_points:
+                            _net.points[_p1name].add_connected_point(_p2name)
+                        if not _p1name in _net.points[_p2name].connected_points:
+                            _net.points[_p2name].add_connected_point(_p1name)
+                    elif isinstance(_ss, Eagle.Wire):
                         _p1name = "%s-%s" % (str(_ss.x1), str(_ss.y1))
                         _p2name = "%s-%s" % (str(_ss.x2), str(_ss.y2))
 
@@ -2595,14 +2732,14 @@ class Eagle:
                                     _pname = "%s-%s" % (str(_prt.shapes[0].x + _yy.x),
                                                 str(_prt.shapes[0].y + _yy.y))
                                     if not _pname in _net.points:
-                                        _net.add_point(NetPoint(_pname, 
-                                                        _prt.shapes[0].x + _yy.x, 
+                                        _net.add_point(NetPoint(_pname,
+                                                        _prt.shapes[0].x + _yy.x,
                                                         _prt.shapes[0].y + _yy.y))
                                     _net.points[_pname].add_connected_component(
                                             ConnectedComponent(_prt.name, _ss.pinno))
                                 _prno += 1
                     elif isinstance(_ss, Eagle.Junction):
-                        pass # has to be skipped: junction points are implemented as 
+                        pass # has to be skipped: junction points are implemented as
                              #  connected_points arrays in OJSON
                     elif isinstance(_ss, Eagle.Label):
                         pass # has to be skipped: no use here
@@ -2617,7 +2754,7 @@ class Eagle:
 #                _co = Component(_ss.name)
 #                pass
 #                design.add_component(str(_ss.libid) + 'xx', _co)
-            
+
 
         return design
 
@@ -2629,6 +2766,7 @@ class Eagle:
             self._parse(_if)
 
         design = self._convert()
+        design.scale(EAGLE_SCALE)
 
         return design
 

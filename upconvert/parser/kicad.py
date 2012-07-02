@@ -138,6 +138,19 @@ class KiCAD(object):
         return Annotation(value, make_length(x), -make_length(y),
                           rotation, 'true')
 
+
+    def parse_field(self, compx, compy, line):
+        """ Parse a field (F) line in a component block """
+        parts = line.rsplit('"', 1)
+        value = parts[0].split('"', 1)[1].decode('utf-8', 'replace')
+        parts = parts[1].strip().split()
+
+        return Annotation(value,
+                          make_length(int(parts[1]) - compx),
+                          -make_length(int(parts[2]) - compy),
+                          0 if parts[0] == 'H' else 1, 'true')
+
+
     def parse_component_instance(self, f):
         """ Parse a component instance from a $Comp block """
         # pylint: disable=R0914
@@ -162,14 +175,7 @@ class KiCAD(object):
 
         while line.strip() not in ("$EndComp", ''):
             if line.startswith('F '):
-                parts = line.split('"', 2)
-                value = parts[1].decode('utf-8', 'replace')
-                parts = parts[2].strip().split()
-                annotations.append(
-                    Annotation(value,
-                               make_length(int(parts[1]) - compx),
-                               -make_length(int(parts[2]) - compy),
-                               0 if parts[0] == 'H' else 1, 'true'))
+                annotations.append(self.parse_field(compx, compy, line))
             elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
@@ -254,6 +260,11 @@ class KiCAD(object):
                     segments.remove(seg)
 
             nets.append(newnet)
+
+        for net in nets:
+            net.net_id = min(net.points)
+
+        nets.sort(key=lambda net : net.net_id)
 
         return nets
 
@@ -385,6 +396,10 @@ class ComponentParser(object):
                         [body.add_shape(o) for o in obj]
                     else:
                         body.add_shape(obj)
+
+        for symbol in self.component.symbols:
+            for body in symbol.bodies:
+                body.pins.sort(key=lambda pin : pin.pin_number)
 
         return self.component
 

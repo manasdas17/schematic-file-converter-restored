@@ -21,6 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from functools import wraps
 from os import path
 import unittest
 
@@ -38,29 +39,23 @@ TEST_FILES = path.join('test', 'gerber', 'unittest')
 DIR = path.join(BASE_DIR, TEST_FILES)
 
 
-# decorator for tests that use input files
-
 def use_file(filename):
-    """ Parse a gerber file. """
-    def wrap_wrap_tm(test_method):
+    """ Return a decorator which will parse a gerber file
+    before running the test. """
+
+    def decorator(test_method):
         """ Add params to decorator function. """
-        def wrap_tm(self):
-            """ Perform meta operations, then method. """
+
+        @wraps(test_method)
+        def wrapper(self):
+            """ Parse file then run test. """
             parser = Gerber(ignore_unknown=False)
             self.design = parser.parse(path.join(DIR, filename))
             test_method(self)
 
-        # correctly identify the decorated method
-        # (otherwise nose will not run the test)
-        wrap_tm.__name__ = test_method.__name__
-        wrap_tm.__doc__ = test_method.__doc__
-        wrap_tm.__dict__.update(test_method.__dict__)
-        wrap_wrap_tm.__name__ = wrap_tm.__name__
-        wrap_wrap_tm.__doc__ = wrap_tm.__doc__
-        wrap_wrap_tm.__dict__.update(wrap_tm.__dict__)
+        return wrapper
 
-        return wrap_tm
-    return wrap_wrap_tm
+    return decorator
 
 
 class GerberTests(unittest.TestCase):
@@ -112,10 +107,11 @@ class GerberTests(unittest.TestCase):
         """ Parse simple macros. """
         macros = self.design.layout.layers[0].macros
 
-        self.assertEqual(len(macros), 9)
+        self.assertEqual(len(macros), 10)
         self.assertEqual(set(macros),
                          set(['MOIRE', 'POLYGON', 'POLYGON0', 'LINE2', 'LINE1',
-                              'THERMAL', 'VECTOR', 'CIRCLE', 'OUTLINE']))
+                              'THERMAL', 'VECTOR', 'CIRCLE', 'OUTLINE',
+                              'COMPOUND']))
 
         self.assertEqual(macros['CIRCLE'].primitives[0].shape.type, 'circle')
         self.assertEqual(macros['CIRCLE'].primitives[0].shape.radius, 0.25)
@@ -181,6 +177,12 @@ class GerberTests(unittest.TestCase):
         self.assertEqual(macros['THERMAL'].primitives[0].shape.inner_diameter, 0.3)
         self.assertEqual(macros['THERMAL'].primitives[0].shape.gap_thickness, 0.01)
         self.assertEqual(macros['THERMAL'].primitives[0].shape.rotation, 2.0722222222222224)
+
+        self.assertEqual(len(macros['COMPOUND'].primitives), 2)
+        self.assertEqual(macros['COMPOUND'].primitives[0].shape.type, 'circle')
+        self.assertEqual(macros['COMPOUND'].primitives[0].shape.radius, .75)
+        self.assertEqual(macros['COMPOUND'].primitives[1].shape.type, 'circle')
+        self.assertEqual(macros['COMPOUND'].primitives[1].shape.radius, 2.0)
 
     @use_file('simple.zip')
     def test_zip_batch(self):

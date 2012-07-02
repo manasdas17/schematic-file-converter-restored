@@ -22,7 +22,7 @@ Upverter's Open JSON Interchange Format """
 #
 #
 # Development:
-#   Active: As of Jan, 2012
+#   Active: As of June, 2012
 #   See: github.com/upverter/schematic-file-converter
 #
 # Authors:
@@ -59,8 +59,13 @@ try:
 except ImportError:
     import json
 
-from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, eagle as eagle_p, fritzing as fritzing_p, gerber as gerber_p
-from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, eagle as eagle_w, gerber as gerber_w
+from upconvert import version as ver
+
+from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as geda_p, \
+    eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
+    specctra as specctra_p
+from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
+    eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w
 
 
 # Logging
@@ -72,8 +77,10 @@ PARSERS = {
     'kicad': kicad_p.KiCAD,
     'geda': geda_p.GEDA,
     'eagle': eagle_p.Eagle,
+    'eaglexml': eaglexml_p.EagleXML,
     'fritzing': fritzing_p.Fritzing,
     'gerber': gerber_p.Gerber,
+    'specctra': specctra_p.Specctra,
 }
 
 WRITERS = {
@@ -81,7 +88,9 @@ WRITERS = {
     'kicad': kicad_w.KiCAD,
     'geda': geda_w.GEDA,
     'eagle': eagle_w.Eagle,
+    'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
+    'specctra': specctra_w.Specctra,
 }
 
 EXTENSIONS = {
@@ -91,6 +100,7 @@ EXTENSIONS = {
     'eagle': '.sch',
     'fritzing': '.fz',
     'gerber': '.grb',
+    'specctra': '.dsn',
 }
 
 
@@ -147,7 +157,6 @@ class Upconverter(object):
     @staticmethod
     def file_to_upv(file_content):
         """ convert file_content into upv data pre-jsonification """
-        
         log.info('Starting to convert content into upv')
 
         tmp_fd, tmp_path = tempfile.mkstemp()
@@ -156,36 +165,23 @@ class Upconverter(object):
 
         format = Upconverter.autodetect(tmp_path)
         design = Upconverter.parse(tmp_path, format)
-
-        tmp_fd2, tmp_path2 = tempfile.mkstemp()
-        os.close(tmp_fd2)
-        Upconverter.write(design, tmp_path2, 'openjson')
-
-        json_data = None
-        with open(tmp_path2, 'r') as final_file:
-            json_data = final_file.read()
-
         os.remove(tmp_path)
-        os.remove(tmp_path2)
 
-        return json.loads(json_data)
+        return json.loads(json.dumps(design.json(), sort_keys=True, indent=4))
 
 
     @staticmethod
     def json_to_format(upv_json_data, format, path):
         """ convert upv_json_data into format as a file @ path """
-        
         log.info('Converting upv data into %s at %s', format, path)
 
         path_w_ext = path + EXTENSIONS[format]
-
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.write(tmp_fd, upv_json_data)
         os.close(tmp_fd)
 
         design = Upconverter.parse(tmp_path, 'openjson')
         Upconverter.write(design, path_w_ext, format)
-
         os.remove(tmp_path)
 
         return path_w_ext
@@ -212,8 +208,17 @@ def main():
                     help="show tracebacks for parsing and writing errors")
     ap.add_argument('--profile', action='store_true', default=False,
                     help="collect profiling information")
+    ap.add_argument('-v', '--version', action='store_true', default=False,
+                    help="print version information and quit")
 
     args = ap.parse_args()
+
+    if args.version:
+        print "upconverter %s in python %s.%s" % (ver.version(), sys.version_info[0], sys.version_info[1])
+        print "Copyright (C) 2007 Upverter, Inc."
+        print "This is free software; see the source for copying conditions.  There is NO warranty; not even for",
+        print "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+        sys.exit(0)
 
     # Fail if strict and wrong python version
     if sys.version_info[0] > 2 or sys.version_info[1] > 6:

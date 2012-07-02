@@ -190,6 +190,7 @@ class KiCADTests(unittest.TestCase):
         line = 'X GND 7 -200 -200 0 E 40 40 0 0 W N'
         self.assertRaises(ValueError, parser.parse_x_line, line.split())
 
+
     def assert_annotations_equal(self, test_anns, good_anns):
         """
         Assert that two sets of annotations are equal.
@@ -236,3 +237,16 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(shape.type, 'label')
         self.assertEqual(shape.text, 'Common')
         self.assertEqual(shape.align, 'left')
+
+
+    def test_parse_field(self):
+        """
+        A field description with an embedded quote is parsed correctly.
+        """
+
+        line = 'F 0 "Reference Designs ARE PROVIDED "AS IS"" H 1150 11950 120 0000 L B'
+        ann = KiCAD().parse_field(0, 0, line)
+        self.assertEqual(ann.value, 'Reference Designs ARE PROVIDED "AS IS"')
+        self.assertEqual(ann.x, 104)
+        self.assertEqual(ann.y, -1076)
+        self.assertEqual(ann.rotation, 0)

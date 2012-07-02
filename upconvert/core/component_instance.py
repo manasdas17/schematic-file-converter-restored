@@ -20,6 +20,13 @@
 # limitations under the License.
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = v if isinstance(v, basestring) else str(v)
+    return attrs
+
+
 class ComponentInstance:
     """ An instance of a component with a specific symbol """
 
@@ -46,6 +53,12 @@ class ComponentInstance:
         return self.instance_id
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the instance. """
+        for a in self.symbol_attributes:
+            a.scale(factor)
+
+
     def json(self):
         """ Return a component as JSON """
         return {
@@ -53,19 +66,20 @@ class ComponentInstance:
             "library_id" : self.library_id,
             "symbol_index" : self.symbol_index,
             "symbol_attributes":[s.json() for s in self.symbol_attributes],
-            "attributes" : self.attributes
+            "attributes" : stringify_attributes(self.attributes)
             }
 
 
 class SymbolAttribute:
     """ The instance of a single body.  There should be a SymbolAttribute
-    for every body in the symbol that ComponentInstance is an instance of
+    for every body in the symbol that ComponentInstance is an instance of.
     """
 
-    def __init__(self, x, y, rotation):
+    def __init__(self, x, y, rotation, flip=False):
         self.x = x
         self.y = y
         self.rotation = rotation
+        self.flip = flip
         self.annotations = []
 
 
@@ -74,11 +88,20 @@ class SymbolAttribute:
         self.annotations.append(annotation)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+        for a in self.annotations:
+            a.scale(factor)
+
+
     def json(self):
         """ Return the body as JSON """
         return {
-            "x" : self.x,
-            "y": self.y,
-            "rotation":self.rotation,
-            "annotations" : [a.json() for a in self.annotations]
+            "x": int(self.x),
+            "y": int(self.y),
+            "rotation": self.rotation,
+            "flip": self.flip,
+            "annotations": [a.json() for a in self.annotations]
             }

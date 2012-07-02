@@ -23,15 +23,23 @@
 from math import sqrt, pi, sin, cos, asin, acos
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class Shape(object):
     """a Shape with metadata and a list of shape parts
-    Iternal representation of the shapes closely matches JSON shapes """
+    Internal representation of the shapes closely matches JSON shapes """
 
     def __init__(self):
         self.type = None
         self.attributes = dict()
-    
-    
+        self.styles = dict()
+
+
     def add_attribute(self, key, value):
         """ Add attribute to a shape """
         self.attributes[key] = value
@@ -40,13 +48,13 @@ class Shape(object):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         raise NotImplementedError("Not implemented")
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         raise NotImplementedError("Not implemented")
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         raise NotImplementedError("Not implemented")
@@ -62,8 +70,8 @@ class Rectangle(Shape):
         self.y = y
         self.width = width
         self.height = height
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -73,8 +81,8 @@ class Rectangle(Shape):
         """ Return the min point of the shape """
         return Point(min(self.x, self.x + self.width),
                      min(self.y, self.y + self.height))
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         return Point(max(self.x, self.x + self.width),
@@ -89,14 +97,24 @@ class Rectangle(Shape):
         return cls(x, y, width, height)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the rectangle. """
+        self.x *= factor
+        self.y *= factor
+        self.width *= factor
+        self.height *= factor
+
+
     def json(self):
         """ Return the rectangle as JSON """
         return {
-            "height": self.height,
+            "height": int(self.height),
             "type": self.type,
-            "width": self.width,
-            "x": self.x,
-            "y": self.y,
+            "width": int(self.width),
+            "x": int(self.x),
+            "y": int(self.y),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -123,8 +141,8 @@ class RoundedRectangle(Shape):
         """ Return the min point of the shape """
         return Point(min(self.x, self.x + self.width),
                      min(self.y, self.y + self.height))
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         return Point(max(self.x, self.x + self.width),
@@ -140,15 +158,26 @@ class RoundedRectangle(Shape):
         return cls(x, y, width, height, radius)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the rounded rectangle. """
+        self.x *= factor
+        self.y *= factor
+        self.width *= factor
+        self.height *= factor
+        self.radius *= factor
+
+
     def json(self):
         """ Return the rounded rectangle as JSON """
         return {
-            "height": self.height,
+            "height": int(self.height),
             "type": self.type,
-            "width": self.width,
-            "x": self.x,
-            "y": self.y,
-            "radius": self.radius,
+            "width": int(self.width),
+            "x": int(self.x),
+            "y": int(self.y),
+            "radius": int(self.radius),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -164,8 +193,8 @@ class Arc(Shape):
         self.start_angle = start_angle
         self.end_angle = end_angle
         self.radius = radius
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -234,15 +263,24 @@ class Arc(Shape):
         return (points['start'], points['end'])
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the arc. """
+        self.x *= factor
+        self.y *= factor
+        self.radius *= factor
+
+
     def json(self):
         """ Return the arc as JSON """
         return {
             "start_angle": self.start_angle,
             "end_angle": self.end_angle,
             "type": self.type,
-            "radius": self.radius,
-            "x": self.x,
-            "y": self.y,
+            "radius": int(self.radius),
+            "x": int(self.x),
+            "y": int(self.y),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -255,8 +293,8 @@ class Circle(Shape):
         self.x = x
         self.y = y
         self.radius = abs(radius)
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -267,8 +305,8 @@ class Circle(Shape):
         x = self.x - self.radius
         y = self.y - self.radius
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self.radius
@@ -276,13 +314,22 @@ class Circle(Shape):
         return Point(x, y)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the circle. """
+        self.x *= factor
+        self.y *= factor
+        self.radius *= factor
+
+
     def json(self):
         """ Return the circle as JSON """
         return {
-            "radius": self.radius,
+            "radius": int(self.radius),
             "type": self.type,
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -309,8 +356,8 @@ class Label(Shape):
         else:
             raise ValueError("Label requires the align to be either " +
                     "\"left\", \"right\", or \"center\" ")
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -324,6 +371,12 @@ class Label(Shape):
         return Point(self.x, self.y)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the label. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the label as JSON """
         return {
@@ -331,8 +384,10 @@ class Label(Shape):
             "align": self.align,
             "rotation": self.rotation,
             "text": self.text,
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -344,8 +399,8 @@ class Line(Shape):
         self.type = "line"
         self.p1 = Point(p1)
         self.p2 = Point(p2)
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -360,8 +415,8 @@ class Line(Shape):
         if self.p2.y < y:
             y = self.p2.y
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.p1.x
@@ -373,13 +428,20 @@ class Line(Shape):
         return Point(x, y)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the line. """
+        self.p1.scale(factor)
+        self.p2.scale(factor)
+
+
     def json(self):
         """ Return the line as JSON """
         return {
             "type": self.type,
             "p1": self.p1.json(),
             "p2": self.p2.json(),
-            "attributes" : self.attributes,
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -391,7 +453,7 @@ class Polygon(Shape):
         self.type = "polygon"
         self.points = points or list()
 
-    
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -406,8 +468,8 @@ class Polygon(Shape):
             x = min([pt.x for pt in self.points])
             y = min([pt.y for pt in self.points])
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         if len(self.points) < 1:
@@ -424,11 +486,19 @@ class Polygon(Shape):
         self.points.append(Point(x, y))
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the polygon. """
+        for p in self.points:
+            p.scale(factor)
+
+
     def json(self):
         """ Return the polygon as JSON """
         return {
             "type": self.type,
             "points": [point.json() for point in self.points],
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -443,7 +513,7 @@ class BezierCurve(Shape):
         self.p1 = Point(p1)
         self.p2 = Point(p2)
         self._memo_cache = {'min_point': {}, 'max_point': {}}
-    
+
 
     def _line(self):
         """ Convert the curve into a set of points. """
@@ -469,7 +539,7 @@ class BezierCurve(Shape):
                                                 range(int(maxpath) + 1)]]
         return points
 
-    
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -511,6 +581,14 @@ class BezierCurve(Shape):
         self.p2 = {"x":p2x, "y":p2y}
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the curve. """
+        self.control1.scale(factor)
+        self.control2.scale(factor)
+        self.p1.scale(factor)
+        self.p2.scale(factor)
+
+
     def json(self):
         """ Return the bezier curve as JSON """
         return {
@@ -519,6 +597,8 @@ class BezierCurve(Shape):
             "control2": self.control2.json(),
             "p1": self.p1.json(),
             "p2": self.p2.json(),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -549,15 +629,15 @@ class Moire(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
         y = self.y - self._half_box()
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self._half_box()
@@ -573,20 +653,28 @@ class Moire(Shape):
         return max(opp, adj, rad)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the moire. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the moire as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "outer_diameter": self.outer_diameter,
             "ring_thickness": self.ring_thickness,
             "gap_thickness": self.gap_thickness,
             "max_rings": self.max_rings,
             "hair_thickness": self.hair_thickness,
             "hair_length": self.hair_length,
-            "rotation": self.rotation
+            "rotation": self.rotation,
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
-        
+
 
 class Thermal(Shape):
     """
@@ -610,15 +698,15 @@ class Thermal(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
         y = self.y - self._half_box()
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self._half_box()
@@ -641,15 +729,23 @@ class Thermal(Shape):
         return hwid
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the thermal. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the thermal as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "outer_diameter": self.outer_diameter,
             "inner_diameter": self.inner_diameter,
             "gap_thickness": self.gap_thickness,
-            "rotation": self.rotation
+            "rotation": self.rotation,
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -674,15 +770,15 @@ class RegularPolygon(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
-    
-    
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x + self._max_dist(1)
         y = self.y + self._max_dist(0.5)
         return Point(x, y)
 
-    
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self._max_dist(0)
@@ -703,14 +799,24 @@ class RegularPolygon(Shape):
         return max(this_v, next_v)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the polygon. """
+        self.x *= factor
+        self.y *= factor
+        for v in self.vertices:
+            v.scale(factor)
+
+
     def json(self):
         """ Return the regular polygon as JSON """
         return {
-            "x": self.x,
-            "y": self.y,
+            "x": int(self.x),
+            "y": int(self.y),
             "outer_diameter": self.outer_diameter,
             "vertices": self.vertices,
-            "rotation": self.rotation
+            "rotation": self.rotation,
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
 
 
@@ -761,11 +867,17 @@ class Point:
         return sqrt(delta_x**2 + delta_y**2)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the point. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return the point as JSON """
         return {
-            "x": self.x,
-            "y": self.y
+            "x": int(self.x),
+            "y": int(self.y),
             }
 
 
@@ -779,8 +891,8 @@ class Obround(Shape):
         self.y = y
         self.width = width
         self.height = height
-    
-    
+
+
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
@@ -791,8 +903,8 @@ class Obround(Shape):
         x = self.x - self.width / 2.0
         y = self.y - self.height / 2.0
         return Point(x, y)
-    
-    
+
+
     def max_point(self):
         """ Return the max point of the shape """
         x = self.x + self.width / 2.0
@@ -800,13 +912,22 @@ class Obround(Shape):
         return Point(x, y)
 
 
-    def json(self):
-        """ Return the rectangle as JSON """
-        return {
-            "height": self.height,
-            "type": self.type,
-            "width": self.width,
-            "x": self.x,
-            "y": self.y,
-            }
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the oval. """
+        self.x *= factor
+        self.y *= factor
+        self.width *= factor
+        self.height *= factor
 
+
+    def json(self):
+        """ Return the oval as JSON """
+        return {
+            "height": int(self.height),
+            "type": self.type,
+            "width": int(self.width),
+            "x": int(self.x),
+            "y": int(self.y),
+            #"attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
+            }

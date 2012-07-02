@@ -40,12 +40,18 @@ class Annotation:
                 Point(self.x + 10, self.y + 10)]
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+
+
     def json(self):
         """ Return an annotation as JSON """
         return {
-            "value" : self.value, 
-            "x":self.x, 
-            "y":self.y,
-            "rotation" : self.rotation, 
-            "visible" : self.visible
+            "value": self.value,
+            "x": int(self.x),
+            "y": int(self.y),
+            "rotation": self.rotation,
+            "visible": self.visible
             }

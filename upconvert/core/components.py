@@ -23,6 +23,13 @@
 from upconvert.core.shape import Point
 
 
+def stringify_attributes(attributes):
+    attrs = {}
+    for n, v in attributes.iteritems():
+        attrs[n] = str(v)
+    return attrs
+
+
 class Components:
     """ Container class for individual 'Component's.
     Only used for add_component and json() (export) """
@@ -34,6 +41,12 @@ class Components:
     def add_component(self, library_id, component):
         """ Add a component to the library """
         self.components[library_id] = component
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the library. """
+        for c in self.components.values():
+            c.scale(factor)
 
 
     def json(self):
@@ -70,11 +83,17 @@ class Component:
         self.symbols.append(symbol)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the component. """
+        for s in self.symbols:
+            s.scale(factor)
+
+
     def json(self):
         """ Return a component as JSON """
         return {
             "symbols": [s.json() for s in self.symbols],
-            "attributes": self.attributes,
+            "attributes": stringify_attributes(self.attributes),
             "name": self.name
             }
 
@@ -93,6 +112,12 @@ class Symbol:
         self.bodies.append(body)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the symbol. """
+        for b in self.bodies:
+            b.scale(factor)
+
+
     def json(self):
         """ Return a symbol as JSON """
         return {"bodies":[b.json() for b in self.bodies]}
@@ -107,7 +132,7 @@ class Body:
 
 
     def bounds(self):
-        """ Return the in and max points of the bounding box around a body """
+        """ Return the min and max points of the bounding box around a body """
         points = sum([s.bounds() for s in self.shapes + self.pins], [])
         x_values = [pt.x for pt in points]
         y_values = [pt.y for pt in points]
@@ -129,6 +154,14 @@ class Body:
         self.shapes.append(shape)
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the symbol. """
+        for s in self.shapes:
+            s.scale(factor)
+        for p in self.pins:
+            p.scale(factor)
+
+
     def json(self):
         """ Return a symbol as JSON """
         return {
@@ -148,6 +181,7 @@ class Pin:
         self.p2 = Point(p2) # connect end
         self.pin_number = pin_number
         self.attributes = dict()
+        self.styles = dict()
 
 
     def add_attribute(self, key, value):
@@ -166,13 +200,21 @@ class Pin:
                 Point(max(x_values), max(y_values))]
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the pin. """
+        self.label.scale(factor)
+        self.p1.scale(factor)
+        self.p2.scale(factor)
+
+
     def json(self):
         """ Return a pin as JSON """
         ret = {
-            "pin_number":self.pin_number,
-            "p1":self.p1.json(),
-            "p2":self.p2.json(),
-            "attributes" : self.attributes,
+            "pin_number": self.pin_number,
+            "p1": self.p1.json(),
+            "p2": self.p2.json(),
+            "attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
             }
         if self.label is not None:
             ret["label"] = self.label.json()

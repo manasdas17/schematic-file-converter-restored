@@ -474,8 +474,19 @@ class Gerber:
         parts = [part.strip() for part in tok.split('*')]
         name = parts[0][3:]
         prims =  [part.split(',') for part in parts[1:-1] if part]
-        return MacroDef(name, [InternalPrimitive(PRIMITIVES[int(m[0])], m[1:])
-                               for m in prims])
+        int_prims = []
+
+        for prim in prims:
+            if prim[0].startswith('$'):
+                shape_type = 'ignore'
+                mods = prim
+            else:
+                shape_type = PRIMITIVES[int(prim[0])]
+                mods = prim[1:]
+
+            int_prims.append(InternalPrimitive(shape_type, mods))
+
+        return MacroDef(name, int_prims)
 
 
     # tokenizer support - params
@@ -806,7 +817,8 @@ class InternalMacro(object):
         provided in the aperture definition."""
 
         values = dict(enumerate(values, 1))
-        return Macro(self.name, [p.instantiate(values) for p in self.primitives])
+        return Macro(self.name, filter(None, [p.instantiate(values)
+                                              for p in self.primitives]))
 
 
 class InternalPrimitive(object):
@@ -819,11 +831,15 @@ class InternalPrimitive(object):
 
     def instantiate(self, values):
         """ Return a core.layout.Primitive with a set of fixed shapes
-        given a dict mapping variable numbers to values. """
+        given a dict mapping variable numbers to values, or None if there
+        is no corresponding shape. """
 
         shape_type = self.shape_type
 
         mods = [m.evaluate(values) for m in self.modifiers]
+
+        if shape_type == 'ignore':
+            return None
 
         is_additive = True if shape_type in ('moire', 'thermal') \
             else bool(mods[0])
@@ -1087,20 +1103,25 @@ class TraceBuffer(object):
         self.pt2trace = {} # (width, (x, y)) -> Trace
 
     def add_segment(self, segment, trace):
+        """ Add a segment to a trace in the cache. """
         for point in self.get_ends(segment):
             self.pt2trace[trace.width, point] = trace
 
     def get_trace(self, width, segment):
+        """ Given a width and a trace segment, return the Trace
+        where that segment should go, or None if no Trace matches. """
         for point in self.get_ends(segment):
             trace = self.pt2trace.get((width, point))
             if trace is not None:
                 return trace
 
     def get_ends(self, segment):
+        """ Return the endpoints of the segment as a tuple
+        of precision-rounded (x,y) tuples. """
         if isinstance(segment, Arc):
             ends = segment.ends()
         else:
             ends = (segment.p1, segment.p2)
 
-        return [(round(point.x, self.precision),
-                 round(point.y, self.precision)) for point in ends]
+        return ((round(point.x, self.precision),
+                 round(point.y, self.precision)) for point in ends)

@@ -35,6 +35,7 @@ class Design:
         self.components = Components()
         self.component_instances = list()
         self.shapes = list()
+        self.pins = list()
         self.design_attributes = DesignAttributes()
         self.layout = None
         self.version = dict()
@@ -89,6 +90,10 @@ class Design:
         """ Add a net """
         self.nets.append(net)
 
+    def add_pin(self, pin):
+        """ Add a pin to the schematic sheet """
+        self.pins.append(pin)
+
     def add_shape(self, shape):
         """ Add a shape to the schematic sheet """
         self.shapes.append(shape)
@@ -96,6 +101,19 @@ class Design:
     def set_design_attributes(self, design_attributes):
         """ Add design level attributes """
         self.design_attributes = design_attributes
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the core. """
+        for n in self.nets:
+            n.scale(factor)
+        self.components.scale(factor)
+        for i in self.component_instances:
+            i.scale(factor)
+        for s in self.shapes:
+            s.scale(factor)
+        for p in self.pins:
+            p.scale(factor)
 
 
     def generate_netlist(self):
@@ -111,12 +129,12 @@ class Design:
     def json(self):
         """ Return a design as JSON """
         return {
-            "version" : self.version,
-            "nets" : [n.json() for n in self.nets],
-            "components" : self.components.json(),
-            "component_instances" :
-                [i.json() for i in self.component_instances],
-            "shapes" : [s.json() for s in self.shapes],
-            "design_attributes" : self.design_attributes.json(),
-            "layout" : self.layout.json() if self.layout is not None else None
+            "version": self.version,
+            "nets": [n.json() for n in self.nets],
+            "components": self.components.json(),
+            "component_instances": [i.json() for i in self.component_instances],
+            "shapes": [s.json() for s in self.shapes],
+            "pins": [s.json() for s in self.pins],
+            "design_attributes": self.design_attributes.json(),
+            "layout": self.layout.json() if self.layout is not None else None
             }
