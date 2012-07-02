@@ -101,50 +101,51 @@ class Render:
 
     def draw_net(self, net):
         """ draw out a net """
+        for this in net.points.values():
+            if len(this.connected_points) < 3:
+                # definitely not a solder dot, so don't try harder
+                continue
+            lines = defaultdict(list)
+            for pt in this.connected_points:
+                that = net.points[pt]
+                if this.x == that.x:
+                    if this.y == that.y:
+                        # no idea why a pt would be connected to itself, but
+                        # we can safely ignore it here
+                        continue
+                    else:
+                        # infinite slope
+                        lines[None].append(that)
+                else:
+                    slope = float(that.y - this.y) / (that.x - this.x)
+                    lines[slope].append(that)
+            spokes = 0
+            for slope, pts in lines.items():
+                if slope is None:
+                    # actually, we mean infinite
+                    pts.sort(key=lambda p: p.y)
+                    if pts[0].y < this.y:
+                        spokes += 1
+                    if pts[-1].y > this.y:
+                        spokes += 1
+                else:
+                    pts.sort(key=lambda p: p.x)
+                    if pts[0].x < this.x:
+                        spokes += 1
+                    if pts[-1].x > this.x:
+                        spokes += 1
+            if spokes > 2:                           
+                pidpt = self.base.chain(this)
+                # draw the actual solder dot
+                scale = self.scale * 2
+                self.draw.ellipse((pidpt.x - scale, pidpt.y - scale,
+                                   pidpt.x + scale, pidpt.y + scale),
+                                  outline=self.fg, fill=self.fg)
+
         # need a second dict so that removing nets as they are drawn does
         # not affect the actual design object.
         connects = dict([(pt.point_id, list(pt.connected_points))
                          for pt in net.points.values()])
-        for pid, connlist in connects.items():
-            this = net.points[pid]
-            if len(connlist) > 2:
-                # potential solder dot
-                lines = defaultdict(list)
-                for pt in connlist:
-                    that = net.points[pt]
-                    if this.x == that.x:
-                        if this.y == that.y:
-                            # no idea why a pt would be connected to itself, but
-                            # wecan safely ignore it here
-                            continue
-                        else:
-                            # infinite slope
-                            lines[None].append(that)
-                    else:
-                        slope = float(that.y - this.y) / (that.x - this.x)
-                        lines[slope].append(that)
-                spokes = 0
-                for slope, pts in lines.items():
-                    if slope is None:
-                        # actually, we mean infinite
-                        pts.sort(key=lambda p: p.y)
-                        if pts[0].y < this.y:
-                            spokes += 1
-                        if pts[-1].y > this.y:
-                            spokes += 1
-                    else:
-                        pts.sort(key=lambda p: p.x)
-                        if pts[0].x < this.x:
-                            spokes += 1
-                        if pts[-1].x > this.x:
-                            spokes += 1
-                if spokes > 2:                           
-                    pidpt = self.base.chain(this)
-                    # draw solder dots on net connections
-                    self.draw.ellipse((pidpt.x - 2, pidpt.y - 2,
-                                       pidpt.x + 2, pidpt.y + 2),
-                                      outline=(255,0,0))
-
         for pid, connlist in connects.items():
             pidpt = self.base.chain(net.points[pid])
             for junc in connlist:
