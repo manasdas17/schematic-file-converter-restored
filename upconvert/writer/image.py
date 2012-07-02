@@ -53,8 +53,7 @@ class Render:
                                   inst.symbol_attributes):
                 # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
-                self.draw_sym(body, pos, attr.rotation,
-                              self.base, self.draw)
+                self.draw_sym(body, pos, attr.rotation, self.base)
                 # draw in any annotations
                 for ann in attr.annotations:
                     if ann.visible:
@@ -64,10 +63,9 @@ class Render:
         for shape in self.des.shapes:
             if shape.type == 'arc':
                 # special case, it needs a rotation passed, even for 0
-                self.draw_shape_arc(shape, self.base, 0, self.draw)
+                self.draw_shape_arc(shape, self.base, 0)
             else:
-                getattr(self, 'draw_shape_%s' % shape.type)(shape, self.base,
-                                                            self.draw)
+                getattr(self, 'draw_shape_%s' % shape.type)(shape, self.base)
 
         for net in self.des.nets:
             # need a second dict so that removing nets as they are drawn does
@@ -96,7 +94,7 @@ class Render:
                 pos = self.base.chain(Point(ann.x, ann.y))
                 self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
     
-    def draw_sym(self, body, offset=None, rot=0, xform=None, draw=None):
+    def draw_sym(self, body, offset=None, rot=0, xform=None):
         """draw a symbol at the location of offset"""
         if xform is None:
             xform = XForm()
@@ -108,36 +106,35 @@ class Render:
         # moved away from the global origin.
         locxform = Shift(offset.x, offset.y, Rotate(rot))
         xform.prefix(locxform)
-        draw = draw or self.draw
 
         for shape in body.shapes:
             if shape.type == 'arc':
                 # special case, to pass along rotation
-                self.draw_shape_arc(shape, xform, rot, draw)
+                self.draw_shape_arc(shape, xform, rot)
             else:
-                getattr(self, 'draw_shape_%s' % shape.type)(shape, xform, draw)
+                getattr(self, 'draw_shape_%s' % shape.type)(shape, xform)
 
         for pin in body.pins:
-            self.draw_pin(pin, xform, draw)
+            self.draw_pin(pin, xform)
 
-    def draw_shape_circle(self, circle, xform, draw):
+    def draw_shape_circle(self, circle, xform):
         """ draw a circle """
         minpt, maxpt = [xform.chain(p) for p in circle.bounds()]
         xs, ys = [minpt.x, maxpt.x], [minpt.y, maxpt.y]
         # draw.ellipse gets confused if x1 > x0 or y1 > y0
-        draw.ellipse((min(xs), min(ys), max(xs), max(ys)), outline=self.fg)
+        self.draw.ellipse((min(xs), min(ys), max(xs), max(ys)), outline=self.fg)
 
-    def draw_shape_line(self, line, xform, draw):
+    def draw_shape_line(self, line, xform):
         """ draw a line segment """
         pts = [xform.chain(p) for p in (line.p1, line.p2)]
-        draw.line([(p.x, p.y) for p in pts], fill=self.fg)
+        self.draw.line([(p.x, p.y) for p in pts], fill=self.fg)
 
-    def draw_shape_polygon(self, poly, xform, draw):
+    def draw_shape_polygon(self, poly, xform):
         """ draw a multi-segment polygon """
         pts = [xform.chain(p) for p in poly.points]
-        draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
+        self.draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
 
-    def draw_shape_arc(self, arc, xform, rot, draw):
+    def draw_shape_arc(self, arc, xform, rot):
         """ draw an arc segment
         note that rot is required, as a rotation will change the angles """
         # TODO remove reliance on rot, so that this can be called the same as
@@ -153,9 +150,9 @@ class Render:
         # 3 o'clock is angle of 0, angles increase clockwise
         start, end = [int(180 * (theta + rot)) for theta in
                       [arc.start_angle, arc.end_angle]]
-        draw.arc(box, start, end, fill=self.fg)
+        self.draw.arc(box, start, end, fill=self.fg)
 
-    def draw_shape_rectangle(self, rect, xform, draw):
+    def draw_shape_rectangle(self, rect, xform):
         """ draw a rectangle """
         # use polygon-style, so it'll handle rotated rectangles
         pts = [Point(p) for p in [(rect.x, rect.y),
@@ -163,20 +160,20 @@ class Render:
                                   (rect.x + rect.width, rect.y + rect.height),
                                   (rect.x, rect.y + rect.height)]]
         pts = [xform.chain(p) for p in pts]
-        draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
+        self.draw.polygon([(p.x, p.y) for p in pts], outline=self.fg)
 
-    def draw_shape_rounded_rectangle(self, rect, xform, draw):
+    def draw_shape_rounded_rectangle(self, rect, xform):
         """ draw a rectangle, eventually with rounded corners """
         #TODO handle this with lines and arcs
-        self.draw_shape_rectangle(rect, xform, draw)
+        self.draw_shape_rectangle(rect, xform)
 
-    def draw_shape_label(self, label, xform, draw):
+    def draw_shape_label(self, label, xform):
         """ draw a text label """
         #TODO deal with alignment, rotation
         pos = xform.chain(Point(label.x, label.y))
-        draw.text((pos.x, pos.y), label.text, fill=self.fg)
+        self.draw.text((pos.x, pos.y), label.text, fill=self.fg)
 
-    def draw_shape_bezier(self, bez, xform, draw):
+    def draw_shape_bezier(self, bez, xform):
         """ draw a bezier curve """
         # hasn't really been tested properly, but seems okay
         # calculate maximum path length as straight lines between each point,
@@ -198,15 +195,15 @@ class Render:
                                           t**3 * p3.y)
 
         for i in xrange(0, int(1./dt)):
-            draw.point((Bx(i * dt), By(i * dt)), fill=self.fg)
+            self.draw.point((Bx(i * dt), By(i * dt)), fill=self.fg)
         # make sure to draw in the endpoint
-        draw.point((Bx(1.), By(1.)), fill=self.fg)
+        self.draw.point((Bx(1.), By(1.)), fill=self.fg)
 
-    def draw_pin(self, pin, xform, draw):
+    def draw_pin(self, pin, xform):
         """ draw a component's pin """
         # TODO special pin characteristics (inverted, clock)?
         line = [xform.chain(p) for p in (pin.p1, pin.p2)]
-        draw.line([(p.x, p.y) for p in line], fill=self.fg)
+        self.draw.line([(p.x, p.y) for p in line], fill=self.fg)
 
 class XForm(object):
     """ Transformations operate on a Point, can also be chained. """
