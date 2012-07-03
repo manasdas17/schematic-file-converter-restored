@@ -21,6 +21,7 @@
 
 from PIL import Image, ImageDraw
 from math import cos, sin, pi, sqrt
+from collections import defaultdict
 from upconvert.core.shape import Point
 
 class Render:
@@ -68,26 +69,7 @@ class Render:
                 getattr(self, 'draw_shape_%s' % shape.type)(shape, self.base)
 
         for net in self.des.nets:
-            # need a second dict so that removing nets as they are drawn does
-            # not affect the actual design object.
-            connects = dict([(pt.point_id, list(pt.connected_points))
-                             for pt in net.points.values()])
-            for pid, connlist in connects.items():
-                pidpt = self.base.chain(net.points[pid])
-                for junc in connlist:
-                    juncpt = self.base.chain(net.points[junc])
-                    # draw a line to each connected point from this junction
-                    self.draw.line([(pidpt.x, pidpt.y),
-                                    (juncpt.x, juncpt.y)],
-                                    fill=self.fg)
-                    # don't need the connected point to draw a line back
-                    connects[junc].remove(pid)
-                    # TODO draw the connection to the component pin
-                    #      (may actually be done)
-                    # TODO draw solder dots on net connections
-            for ann in net.annotations:
-                pos = self.base.chain(Point(ann.x, ann.y))
-                self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
+            self.draw_net(net)
 
         for ann in self.des.design_attributes.annotations:
             if ann.visible:
@@ -116,6 +98,70 @@ class Render:
 
         for pin in body.pins:
             self.draw_pin(pin, xform)
+
+    def draw_net(self, net):
+        """ draw out a net """
+        # need a second dict so that removing nets as they are drawn does
+        # not affect the actual design object.
+        connects = dict([(pt.point_id, list(pt.connected_points))
+                         for pt in net.points.values()])
+        for pid, connlist in connects.items():
+            pidpt = self.base.chain(net.points[pid])
+            for junc in connlist:
+                juncpt = self.base.chain(net.points[junc])
+                # draw a line to each connected point from this junction
+                self.draw.line([(pidpt.x, pidpt.y),
+                                (juncpt.x, juncpt.y)],
+                                fill=self.fg)
+                # don't need the connected point to draw a line back
+                connects[junc].remove(pid)
+                # TODO draw the connection to the component pin
+                #      (may actually be done)
+
+        for pt in net.points.values():
+            if len(pt.connected_points) < 3:
+                # definitely not a solder dot, so don't try harder
+                continue
+            lines = defaultdict(list)
+            for pid in pt.connected_points:
+                connpt = net.points[pid]
+                if pt.x == connpt.x:
+                    if pt.y == connpt.y:
+                        # no idea why a pt would be connected to itself, but
+                        # we can safely ignore it here
+                        continue
+                    else:
+                        # infinite slope
+                        lines[None].append(connpt)
+                else:
+                    slope = float(connpt.y - pt.y) / (connpt.x - pt.x)
+                    lines[slope].append(connpt)
+            spokes = 0
+            for slope, pts in lines.items():
+                if slope is None:
+                    # actually, we mean infinite
+                    pts.sort(key=lambda p: p.y)
+                    if pts[0].y < pt.y:
+                        spokes += 1
+                    if pts[-1].y > pt.y:
+                        spokes += 1
+                else:
+                    pts.sort(key=lambda p: p.x)
+                    if pts[0].x < pt.x:
+                        spokes += 1
+                    if pts[-1].x > pt.x:
+                        spokes += 1
+            if spokes > 2:                           
+                drawpt = self.base.chain(pt)
+                # draw the actual solder dot
+                scale = self.scale * 2
+                self.draw.ellipse((drawpt.x - scale, drawpt.y - scale,
+                                   drawpt.x + scale, drawpt.y + scale),
+                                  outline=self.fg, fill=self.fg)
+
+        for ann in net.annotations:
+            pos = self.base.chain(Point(ann.x, ann.y))
+            self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
 
     def draw_shape_circle(self, circle, xform):
         """ draw a circle """
