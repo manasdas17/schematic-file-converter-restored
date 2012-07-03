@@ -43,6 +43,8 @@
 #     file.
 #
 # TODO: handle physical component representation
+# TODO: handle polygons
+# TODO: net connected component points
 
 from collections import defaultdict
 
@@ -93,10 +95,6 @@ class EagleXML(object):
         # contents depend on the component instance name and value.
         self.cptgate2ann_map = defaultdict(dict)
 
-        # map part names to device names. These are used during
-        # pinref processing in segments.
-        self.part2dvc = {}
-
         # map part names to component instances. These are used during
         # pinref processing in segments.
         self.part2inst = {}
@@ -146,6 +144,7 @@ class EagleXML(object):
 
         cpt = Component(lib.name + ':' + deviceset.name + ':logical')
 
+        cpt.add_attribute('eaglexml_type', 'logical')
         cpt.add_attribute('eaglexml_library', lib.name)
         cpt.add_attribute('eaglexml_deviceset', deviceset.name)
 
@@ -155,6 +154,8 @@ class EagleXML(object):
         for gate in get_subattr(deviceset, 'gates.gate'):
             body, pin_map, ann_map = self.make_body_from_symbol(lib, gate.symbol)
             symbol.add_body(body)
+            cpt.add_attribute('eaglexml_symbol_%d' % (len(symbol.bodies) - 1),
+                              gate.symbol)
             self.cptgate2body_index[cpt, gate.name] = len(symbol.bodies) - 1
             self.cptgate2pin_map[cpt, gate.name] = pin_map
             self.cptgate2ann_map[cpt, gate.name] = ann_map
@@ -296,7 +297,7 @@ class EagleXML(object):
 
         self.design.add_component_instance(self.part2inst[part.name])
 
-        self.part2dvc[part.name] = part.device
+        self.part2inst[part.name].add_attribute('eaglexml_device', part.device)
 
         return self.part2inst[part.name]
 

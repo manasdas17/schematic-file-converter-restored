@@ -25,10 +25,22 @@ import upconvert.parser.eaglexml.generated as G
 class EagleXML(object):
     """ The Eagle XML Format Writer """
 
+    SCALE = 0.5
+    MULT =  25.4 / 90 # 90dpi to mm
+
     def __init__(self):
-        self.libcache = {} # name -> library dom object
+        # map library names to eaglexml library dom objects
+        self.libcache = {}
+
+        # map (lib, name) to deviceset dom objects where lib
+        # is a library dom object and name is a deviceset name
         self.dscache = {} # (lib, name) -> deviceset dom object
 
+        # map openjson Body objects to eaglexml gate dom objects
+        self.body2gate = {}
+
+        # map openjson components ids to (lib, deviceset)
+        self.cpt2libds = {} # component id -> (lib, deviceset)
 
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
@@ -47,8 +59,19 @@ class EagleXML(object):
         eagle = G.eagle()
         eagle.drawing = G.drawing()
         eagle.drawing.schematic = G.schematic()
+        eagle.drawing.schematic.libraries = G.libraries()
+        eagle.drawing.schematic.parts = G.parts()
+        eagle.drawing.schematic.sheets = G.sheets()
+        eagle.drawing.schematic.sheets.sheet.append(G.sheet())
 
-        self.add_libraries(eagle.drawing.schematic, design)
+        sheet = eagle.drawing.schematic.sheets.sheet[0]
+        sheet.instances = G.instances()
+        sheet.nets = G.nets()
+
+        self.add_libraries(eagle.drawing.schematic.libraries, design)
+        self.add_parts(eagle.drawing.schematic.parts, design)
+        self.add_instances(sheet.instances, design)
+        self.add_nets(sheet.nets, design)
 
         return eagle
 
@@ -56,12 +79,25 @@ class EagleXML(object):
     def add_libraries(self, dom, design):
         """ Add the libraries to a dom object. """
 
-        dom.libraries = G.libraries()
-
         for cpt in design.components.components.itervalues():
-            lib = self.ensure_lib_for_cpt(dom.libraries, cpt)
+            lib = self.ensure_lib_for_cpt(dom, cpt)
             deviceset = self.ensure_deviceset_for_cpt(lib, cpt)
             self.add_component_to_deviceset(cpt, lib, deviceset)
+
+
+    def add_parts(self, dom, design):
+        """ Add the parts to a dom object. """
+
+        for ci in design.component_instances:
+            dom.part.append(self.make_part(ci))
+
+
+    def add_instances(self, dom, design):
+        """ Add the instances to a dom object. """
+
+
+    def add_nets(self, dom, design):
+        """ Add the nets to a dom object. """
 
 
     def ensure_lib_for_cpt(self, libraries, cpt):
@@ -88,7 +124,7 @@ class EagleXML(object):
         """Ensure there is an eaglexml deviceset for the given
         openjson component. """
 
-        dsname = cpt.attributes.get('eaglexml_deviceset', 'openjson')
+        dsname = cpt.attributes.get('eaglexml_deviceset', cpt.name)
 
         if (lib, dsname) in self.dscache:
             return self.dscache[lib, dsname]
@@ -105,3 +141,71 @@ class EagleXML(object):
 
     def add_component_to_deviceset(self, cpt, lib, deviceset):
         """ Add the openjson component to the eagle library and deviceset objects. """
+
+        if cpt.attributes.get('eaglexml_type', 'logical') == 'physical':
+            self.add_physical_component_to_deviceset(cpt, lib, deviceset)
+        else:
+            self.add_logical_component_to_deviceset(cpt, lib, deviceset)
+
+        self.cpt2libds[cpt.name] = (lib, deviceset)
+
+
+    def add_logical_component_to_deviceset(self, cpt, lib, deviceset):
+        """ Add the openjson component to the eagle library and deviceset objects
+        as a logical device with gates. """
+
+        symbol_names = set() # set of names used for eaglexml symbols
+
+        for symindex, symbol in enumerate(cpt.symbols):
+            for bodyindex, body in enumerate(symbol.bodies):
+                index = (symindex * len(symbol.bodies)) + bodyindex
+                symname = cpt.attributes.get('eaglexml_symbol_%d' % index,
+                                             'symbol_%d' % index)
+                if symname not in symbol_names:
+                    lib.symbols.symbol.append(
+                        self.make_eagle_symbol_for_openjson_body(symname, body))
+                    symbol_names.add(symname)
+
+
+    def make_eagle_symbol_for_openjson_body(self, name, body):
+        """ Make an eaglexml symbol from an opensjon body. """
+
+        symbol = G.symbol(name=name)
+
+        for shape in body.shapes:
+            if shape.type == 'line':
+                wire = G.wire(x1=self.make_length(shape.p1.x),
+                              y1=self.make_length(shape.p1.y),
+                              x2=self.make_length(shape.p2.x),
+                              y2=self.make_length(shape.p2.y))
+                symbol.wire.append(wire)
+            elif shape.type == 'rectangle':
+                rect = G.rectangle(x1=self.make_length(shape.x),
+                                   y1=self.make_length(shape.y)
+                                   - self.make_length(shape.height),
+                                   x2=self.make_length(shape.x)
+                                   + self.make_length(shape.width),
+                                   y2=self.make_length(shape.y))
+                symbol.rectangle.append(rect)
+
+        return symbol
+
+
+    def add_physical_component_to_deviceset(self, cpt, lib, deviceset):
+        """ Add the openjson component to the eagle library and deviceset objects
+        as a physical device with a package. """
+
+
+    def make_part(self, cpt_inst):
+        """ Make an eaglexml part for an openjson component instance. """
+
+        part = G.part()
+        part.name = cpt_inst.instance_id
+        part.library = self.cpt2libds[cpt_inst.library_id][0].name
+        part.deviceset = self.cpt2libds[cpt_inst.library_id][1].name
+        return part
+
+    def make_length(self, value):
+        """ Make an eagle length measurement from an openjson length. """
+
+        return round(float(value) * self.MULT * self.SCALE, 3)
