@@ -50,7 +50,7 @@ class SpecctraTests(unittest.TestCase):
     def test_write_instance(self):
         """ Convert component instance """
         inst = ComponentInstance('id', 'libid', 1)
-        inst.add_symbol_attribute(SymbolAttribute(3, 4, 0.5))
+        inst.add_symbol_attribute(SymbolAttribute(3, 4, 0.5, False))
         writer = Specctra()
         obj = writer._convert_component_instance(inst)
         self.assertEqual(

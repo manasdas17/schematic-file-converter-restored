@@ -110,7 +110,7 @@ class DesignTests(unittest.TestCase):
         self.des.add_component('foo', libcomp)
         for (x, y) in ((1, 3), (3, 2), (5, 3), (3, 7)):
             compinst = ComponentInstance(str((x, y)), 'foo', 0)
-            compinst.add_symbol_attribute(SymbolAttribute(x, y, 0))
+            compinst.add_symbol_attribute(SymbolAttribute(x, y, 0, False))
             self.des.add_component_instance(compinst)
 
         top_left, btm_right = self.des.bounds()
@@ -148,7 +148,7 @@ class DesignTests(unittest.TestCase):
         self.des.add_component('foo', libcomp)
 
         compinst = ComponentInstance('bar', 'foo', 0)
-        compinst.add_symbol_attribute(SymbolAttribute(3, 0, 0))
+        compinst.add_symbol_attribute(SymbolAttribute(3, 0, 0, False))
         self.des.add_component_instance(compinst)
 
         top_left, btm_right = self.des.bounds()

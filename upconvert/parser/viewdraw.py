@@ -367,7 +367,7 @@ class ViewDrawSch(ViewDrawBase):
             # flip = True
 
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
-                                                      float(rot) / 2))
+                                                      float(rot) / 2), False)
         subdata = self.sub_nodes('|R A C'.split())
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)

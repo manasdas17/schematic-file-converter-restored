@@ -2538,6 +2538,7 @@ class Eagle:
                                   y=_pp.shapes[0].y,
                                   rotation=Eagle.Shape.rotate2piradians(
                                         _pp.shapes[0].rotate),
+                                  flip=False
                                  )
 
             _dd = self.libraries[-1 + _pp.libid].devsets[0].shapesets[-1 + _pp.devsetndx]

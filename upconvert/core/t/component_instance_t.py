@@ -61,7 +61,7 @@ class SymbolAttributeTests(unittest.TestCase):
 
     def test_create_new_attribute(self):
         """ Test the creation of a new empty symbol. """
-        attr = SymbolAttribute(0, 1, 2)
+        attr = SymbolAttribute(0, 1, 2, False)
         assert attr.x == 0
         assert attr.y == 1
         assert attr.rotation == 2

@@ -108,7 +108,7 @@ class KiCADTests(unittest.TestCase):
         """
 
         inst = ComponentInstance('id', 'libid', 1)
-        inst.add_symbol_attribute(SymbolAttribute(3, 4, 0.5))
+        inst.add_symbol_attribute(SymbolAttribute(3, 4, 0.5, False))
         writer = KiCAD()
         buf = StringIO()
         writer.write_instance(buf, inst)

@@ -289,7 +289,7 @@ class EagleXML(object):
         # instance processing
         for _ in cpt.symbols[0].bodies:
             self.part2inst[part.name].add_symbol_attribute(
-                SymbolAttribute(0, 0, 0.0))
+                SymbolAttribute(0, 0, 0.0, False))
 
         if part.value:
             self.part2inst[part.name].add_attribute('value', part.value)

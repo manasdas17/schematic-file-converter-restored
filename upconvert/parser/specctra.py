@@ -121,7 +121,7 @@ class Specctra(object):
                     rotation = mirror.get(int(place.rotation), place.rotation)
                 inst = ComponentInstance(place.component_id, library_id, 0)
                 v = self.to_pixels(place.vertex)
-                symbattr = SymbolAttribute(v[0], v[1], to_piradians(rotation))
+                symbattr = SymbolAttribute(v[0], v[1], to_piradians(rotation), False)
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
 

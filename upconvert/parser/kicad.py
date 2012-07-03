@@ -185,7 +185,7 @@ class KiCAD(object):
 
         inst = ComponentInstance(reference, name, convert - 1)
         symbattr = SymbolAttribute(make_length(compx), -make_length(compy),
-                                   rotation)
+                                   rotation, False)
         for ann in annotations:
             symbattr.add_annotation(ann)
         inst.add_symbol_attribute(symbattr)

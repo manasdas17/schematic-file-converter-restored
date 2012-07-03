@@ -265,7 +265,7 @@ class Fritzing(object):
         compinst = ComponentInstance(title, idref, 0)
 
         compinst.add_symbol_attribute(
-            SymbolAttribute(make_x(x), make_y(y), rotation))
+            SymbolAttribute(make_x(x), make_y(y), rotation, False))
 
         self.component_instances[index] = compinst
 

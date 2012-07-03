@@ -98,10 +98,16 @@ class SymbolAttribute:
 
     def json(self):
         """ Return the body as JSON """
+
+        if self.flip:
+            flip = "true"
+        else:
+            flip = "false"
+
         return {
             "x": int(self.x),
             "y": int(self.y),
             "rotation": self.rotation,
-            "flip": self.flip,
+            "flip": flip,
             "annotations": [a.json() for a in self.annotations]
             }
