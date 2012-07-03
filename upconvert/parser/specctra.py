@@ -29,7 +29,7 @@ from upconvert.core.design import Design
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
-from upconvert.core.shape import Circle, Line, Rectangle, Label, Polygon, Point
+from upconvert.core.shape import Circle, Line, Rectangle, Label, Polygon, Point, Arc
 from upconvert.core.annotation import Annotation
 
 from string import whitespace
@@ -204,11 +204,49 @@ class Specctra(object):
                         x, y = rotate((pin.p1.x, pin.p1.y), symbattr.rotation)
                         return (symbattr.x + x, symbattr.y + y)
 
+    def _make_line(self, p1, p2, aperture):
+        x1, y1 = float(p1[0]), float(p1[1])
+        x2, y2 = float(p2[0]), float(p2[1])
+        aperture = float(aperture)
+
+        dx = x2 - x1
+        dy = y2 - y1
+        length = math.sqrt(dx * dx + dy * dy)
+
+        if length == 0.0:
+            return []
+        result = []
+
+        line1 = Line(
+                (x1 - aperture * (y2 - y1) / length,
+                y1 - aperture * (x1 - x2) / length),
+                (x2 - aperture * (y2 - y1) / length,
+                y2 - aperture * (x1 - x2) / length)
+            )
+        line2 = Line(
+                (x1 + aperture * (y2 - y1) / length,
+                y1 + aperture * (x1 - x2) / length),
+                (x2 + aperture * (y2 - y1) / length,
+                y2 + aperture * (x1 - x2) / length)
+            )
+        result.append(line1)
+        result.append(line2)
+
+        def make_arc(p1, p2, p0):
+            start_angle = math.atan2(p1.y - p0.y, p1.x - p0.x) / math.pi
+            end_angle = math.atan2(p2.y - p0.y, p2.x - p0.x) / math.pi
+            return Arc(p0.x, p0.y, start_angle, end_angle, aperture)
+
+        result.append(make_arc(line1.p1, line2.p1, Point(p1)))
+        result.append(make_arc(line2.p2, line1.p2, Point(p2)))
+        return result
+   
     def _convert_path(self, aperture, points):
         result = []
         prev = points[0]
         for point in points[1:]:
-            result.append(Line(prev, point))
+            line = self._make_line(prev, point, float(aperture) / 2.0)
+            result.extend(line)
             prev = point
         return result
 
@@ -239,7 +277,9 @@ class Specctra(object):
             elif isinstance(shape, specctraobj.Path):
                 points = [fix_point(self.to_pixels(point)) for point in shape.vertex]
                 # Path has connected start and end points
-                result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points + points[:1]))
+                if points[0] != points[-1] and len(points) != 2:
+                    points.append(points[0])
+                result.extend(self._convert_path(self.to_pixels(shape.aperture_width), points))
 
             elif isinstance(shape, specctraobj.Polygon):
                 points = [fix_point(self.to_pixels(point)) for point in shape.vertex]

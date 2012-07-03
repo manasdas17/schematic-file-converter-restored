@@ -22,7 +22,7 @@
 # Specification of file format can be found here:
 # http://tech.groups.yahoo.com/group/kicad-users/files/ file "specctra.pdf"
 
-# For writing dsn() method always assumes parser configuration:
+# For writing compose() method always assumes parser configuration:
 # (parser
 #    (string_quote ")
 #    (space_in_quoted_tokens on)
@@ -99,8 +99,6 @@ def assert_empty(obj, args):
 
 class ShapeBase(object):
     """ Base class for all shapes so we can pop a shape from args """
-    def parse(self):
-        pass
 
 class Shape:
     """ shape """
@@ -236,7 +234,6 @@ class Circle(ShapeBase):
         self.vertex = (0, 0)
 
     def parse(self, args):
-        super(Circle, self).parse()
         assert len(args) in (2, 4)
         self.layer_id = args[0]
         self.diameter = float(args[1])
@@ -293,7 +290,6 @@ class Polygon(ShapeBase):
         self.vertex = []
 
     def parse(self, args):
-        super(Polygon, self).parse()
         assert len(args) > 3
         self.layer_id = pop_string(args)
         self.aperture_width = pop_type(args, basestring)
@@ -677,7 +673,6 @@ class Rectangle(ShapeBase):
     function = 'rect'
 
     def __init__(self):
-        super(Rectangle, self).__init__()
         self.layer_id = 'signal'
         self.vertex1 = (None, None)
         self.vertex2 = (None, None)
@@ -702,7 +697,6 @@ class Path(ShapeBase):
     function = 'path'
 
     def __init__(self):
-        super(Path, self).__init__()
         self.layer_id = 'signal'
         self.aperture_width = 0
         self.vertex = []

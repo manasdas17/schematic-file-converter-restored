@@ -30,10 +30,8 @@ from upconvert.core.shape import Label, Rectangle, Polygon, Arc, BezierCurve, Ci
 from upconvert.core.annotation import Annotation
 from upconvert.parser.openjson import JSON
 
-import os
 import sys
 import unittest
-import tempfile
 import math
 
 def to_string(writer, obj):

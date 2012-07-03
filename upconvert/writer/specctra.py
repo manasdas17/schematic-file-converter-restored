@@ -233,7 +233,7 @@ class Specctra(object):
 
         angle = min_angle
         angles = []
-        for i in xrange(count):
+        for _ in xrange(count):
             angles.append(angle)
             angle += step
         angles.append(max_angle)
@@ -307,6 +307,8 @@ class Specctra(object):
             rect.vertex1 = self._from_pixels((shape.x, shape.y))
             rect.vertex2 = self._from_pixels((shape.x + shape.width, shape.y - shape.height))
             return [rect]
+        else:
+            assert shape.type is None # Not reached
 
     def _make_pin(self, padstack_id):
         shape = specctraobj.Path()
@@ -338,7 +340,7 @@ class Specctra(object):
             elif isinstance(elem, float):
                 result.append('%.6f' % elem)
             elif isinstance(elem, basestring):
-                for char in '() ':
+                for char in ('(', ')', ' '):
                     if char in elem:
                         result.append('"%s"' % elem)
                         break
