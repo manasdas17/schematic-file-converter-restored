@@ -101,47 +101,6 @@ class Render:
 
     def draw_net(self, net):
         """ draw out a net """
-        for this in net.points.values():
-            if len(this.connected_points) < 3:
-                # definitely not a solder dot, so don't try harder
-                continue
-            lines = defaultdict(list)
-            for pt in this.connected_points:
-                that = net.points[pt]
-                if this.x == that.x:
-                    if this.y == that.y:
-                        # no idea why a pt would be connected to itself, but
-                        # we can safely ignore it here
-                        continue
-                    else:
-                        # infinite slope
-                        lines[None].append(that)
-                else:
-                    slope = float(that.y - this.y) / (that.x - this.x)
-                    lines[slope].append(that)
-            spokes = 0
-            for slope, pts in lines.items():
-                if slope is None:
-                    # actually, we mean infinite
-                    pts.sort(key=lambda p: p.y)
-                    if pts[0].y < this.y:
-                        spokes += 1
-                    if pts[-1].y > this.y:
-                        spokes += 1
-                else:
-                    pts.sort(key=lambda p: p.x)
-                    if pts[0].x < this.x:
-                        spokes += 1
-                    if pts[-1].x > this.x:
-                        spokes += 1
-            if spokes > 2:                           
-                pidpt = self.base.chain(this)
-                # draw the actual solder dot
-                scale = self.scale * 2
-                self.draw.ellipse((pidpt.x - scale, pidpt.y - scale,
-                                   pidpt.x + scale, pidpt.y + scale),
-                                  outline=self.fg, fill=self.fg)
-
         # need a second dict so that removing nets as they are drawn does
         # not affect the actual design object.
         connects = dict([(pt.point_id, list(pt.connected_points))
@@ -158,6 +117,48 @@ class Render:
                 connects[junc].remove(pid)
                 # TODO draw the connection to the component pin
                 #      (may actually be done)
+
+        for pt in net.points.values():
+            if len(pt.connected_points) < 3:
+                # definitely not a solder dot, so don't try harder
+                continue
+            lines = defaultdict(list)
+            for pid in pt.connected_points:
+                connpt = net.points[pid]
+                if pt.x == connpt.x:
+                    if pt.y == connpt.y:
+                        # no idea why a pt would be connected to itself, but
+                        # we can safely ignore it here
+                        continue
+                    else:
+                        # infinite slope
+                        lines[None].append(connpt)
+                else:
+                    slope = float(connpt.y - pt.y) / (connpt.x - pt.x)
+                    lines[slope].append(connpt)
+            spokes = 0
+            for slope, pts in lines.items():
+                if slope is None:
+                    # actually, we mean infinite
+                    pts.sort(key=lambda p: p.y)
+                    if pts[0].y < pt.y:
+                        spokes += 1
+                    if pts[-1].y > pt.y:
+                        spokes += 1
+                else:
+                    pts.sort(key=lambda p: p.x)
+                    if pts[0].x < pt.x:
+                        spokes += 1
+                    if pts[-1].x > pt.x:
+                        spokes += 1
+            if spokes > 2:                           
+                drawpt = self.base.chain(pt)
+                # draw the actual solder dot
+                scale = self.scale * 2
+                self.draw.ellipse((drawpt.x - scale, drawpt.y - scale,
+                                   drawpt.x + scale, drawpt.y + scale),
+                                  outline=self.fg, fill=self.fg)
+
         for ann in net.annotations:
             pos = self.base.chain(Point(ann.x, ann.y))
             self.draw.text((pos.x, pos.y), ann.value, fill=self.fg)
