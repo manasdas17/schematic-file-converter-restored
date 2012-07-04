@@ -151,11 +151,11 @@ class EagleXML(object):
         symbol = Symbol()
         cpt.add_symbol(symbol)
 
-        for gate in get_subattr(deviceset, 'gates.gate'):
+        for i, gate in enumerate(get_subattr(deviceset, 'gates.gate')):
             body, pin_map, ann_map = self.make_body_from_symbol(lib, gate.symbol)
             symbol.add_body(body)
-            cpt.add_attribute('eaglexml_symbol_%d' % (len(symbol.bodies) - 1),
-                              gate.symbol)
+            cpt.add_attribute('eaglexml_symbol_%d' % i, gate.symbol)
+            cpt.add_attribute('eaglexml_gate_%d' % i, gate.name)
             self.cptgate2body_index[cpt, gate.name] = len(symbol.bodies) - 1
             self.cptgate2pin_map[cpt, gate.name] = pin_map
             self.cptgate2ann_map[cpt, gate.name] = ann_map

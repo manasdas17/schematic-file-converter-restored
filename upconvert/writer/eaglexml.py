@@ -39,8 +39,15 @@ class EagleXML(object):
         # map openjson Body objects to eaglexml gate dom objects
         self.body2gate = {}
 
-        # map openjson components ids to (lib, deviceset)
-        self.cpt2libds = {} # component id -> (lib, deviceset)
+        # map openjson components ids to eaglexml libraries
+        self.cpt2lib = {} # component id -> library
+
+        # map openjson components ids to eaglexml devicesets
+        self.cpt2deviceset = {} # component id -> deviceset
+
+        # map (component id, device name) to eaglexml devices
+        self.cptdname2dev = {} # (component id, device name) -> device
+
 
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
@@ -95,6 +102,10 @@ class EagleXML(object):
     def add_instances(self, dom, design):
         """ Add the instances to a dom object. """
 
+        for ci in design.component_instances:
+            for symattr in ci.symbol_attributes:
+                dom.instance.append(self.make_instance(ci, symattr))
+
 
     def add_nets(self, dom, design):
         """ Add the nets to a dom object. """
@@ -147,7 +158,8 @@ class EagleXML(object):
         else:
             self.add_logical_component_to_deviceset(cpt, lib, deviceset)
 
-        self.cpt2libds[cpt.name] = (lib, deviceset)
+        self.cpt2lib[cpt.name] = lib
+        self.cpt2deviceset[cpt.name] = deviceset
 
 
     def add_logical_component_to_deviceset(self, cpt, lib, deviceset):
@@ -155,6 +167,7 @@ class EagleXML(object):
         as a logical device with gates. """
 
         symbol_names = set() # set of names used for eaglexml symbols
+        gate_names = set() # set of names used for eaglemxl gates
 
         for symindex, symbol in enumerate(cpt.symbols):
             for bodyindex, body in enumerate(symbol.bodies):
@@ -165,6 +178,15 @@ class EagleXML(object):
                     lib.symbols.symbol.append(
                         self.make_eagle_symbol_for_openjson_body(symname, body))
                     symbol_names.add(symname)
+
+                gatename = cpt.attributes.get('eaglexml_gate_%d' % bodyindex,
+                                              'G$%d' % symindex)
+                if gatename not in gate_names:
+                    deviceset.gates.gate.append(
+                        G.gate(name=gatename, symbol=symname, x="0", y="0"))
+                    gate_names.add(gatename)
+
+                self.body2gate[body] = gatename
 
 
     def make_eagle_symbol_for_openjson_body(self, name, body):
@@ -201,9 +223,33 @@ class EagleXML(object):
 
         part = G.part()
         part.name = cpt_inst.instance_id
-        part.library = self.cpt2libds[cpt_inst.library_id][0].name
-        part.deviceset = self.cpt2libds[cpt_inst.library_id][1].name
+        part.library = self.cpt2lib[cpt_inst.library_id].name
+        part.deviceset = self.cpt2deviceset[cpt_inst.library_id].name
+        part.device = self.ensure_device_for_component_instance(cpt_inst).name
         return part
+
+
+    def make_instance(self, cpt_inst, symattr):
+        """ Make an eaglexml part for an openjson component instance
+        and symbol attribute. """
+
+        inst = G.instance()
+        return inst
+
+
+    def ensure_device_for_component_instance(self, cpt_inst):
+        name = cpt_inst.attributes.get('eaglexml_device', '')
+
+        if (cpt_inst.library_id, name) in self.cptdname2dev:
+            return self.cptdname2dev[cpt_inst.library_id, name]
+
+        device = G.device(name=name)
+
+        self.cptdname2dev[cpt_inst.library_id, name] = device
+        self.cpt2deviceset[cpt_inst.library_id].devices.device.append(device)
+
+        return device
+
 
     def make_length(self, value):
         """ Make an eagle length measurement from an openjson length. """
