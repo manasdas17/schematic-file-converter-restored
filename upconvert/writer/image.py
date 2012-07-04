@@ -61,7 +61,7 @@ class Render:
                                   inst.symbol_attributes):
                 # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
-                self.draw_sym(body, pos, attr.rotation, self.base)
+                self.draw_sym(body, pos, attr.rotation, attr.flip, self.base)
                 # draw in any annotations
                 for ann in attr.annotations:
                     if ann.visible:
@@ -86,7 +86,7 @@ class Render:
                 self.draw.text((pos.x, pos.y), ann.value,
                                fill=self.style['annot'])
     
-    def draw_sym(self, body, offset=None, rot=0, xform=None):
+    def draw_sym(self, body, offset=None, rot=0, flip=False, xform=None):
         """draw a symbol at the location of offset"""
         if xform is None:
             xform = XForm()
@@ -94,9 +94,14 @@ class Render:
             xform = xform.copy()
         if offset is None:
             offset = Point(0, 0)
-        # rotate the symbol, then shift. Want to rotate before it's been
-        # moved away from the global origin.
-        locxform = Shift(offset.x, offset.y, Rotate(rot))
+        # flip if necessary, then rotate the symbol, then shift.
+        # Want to rotate before it's been moved away from the global origin.
+        if flip:
+            flipper = FlipY()
+        else:
+            flipper = XForm()
+
+        locxform = Shift(offset.x, offset.y, Rotate(rot, flipper))
         xform.prefix(locxform)
 
         for shape in body.shapes:
@@ -352,3 +357,11 @@ class FixY(XForm):
 
     def _copy(self, previous):
         return FixY(self.ymax, previous)
+
+class FlipY(XForm):
+    """ Flips a point around the y-axis """
+    def convert(self, pt):
+        return Point(-pt.x, pt.y)
+    
+    def _copy(self, previous):
+        return FlipY(previous)
