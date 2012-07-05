@@ -18,13 +18,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-def stringify_attributes(attributes):
-    attrs = {}
-    for n, v in attributes.iteritems():
-        attrs[n] = v if isinstance(v, basestring) else str(v)
-    return attrs
+from upconvert.core.stringify import stringify_attributes
 
 
 class ComponentInstance:
