@@ -362,6 +362,14 @@ class Label(Shape):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
 
+    def min_point(self):
+        """ As a hack, return the label's position. """
+        return Point(self.x, self.y)
+
+    def max_point(self):
+        """ As a hack, return the label's position. """
+        return Point(self.x, self.y)
+
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the label. """
