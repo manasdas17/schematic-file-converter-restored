@@ -21,7 +21,7 @@
 
 
 from upconvert.core.shape import Point
-from upconvert.core.stringify import stringify_attributes
+from upconvert.utils.stringify import stringify_attributes
 
 
 class Net:

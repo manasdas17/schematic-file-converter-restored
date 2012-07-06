@@ -21,7 +21,7 @@
 
 
 from math import sqrt, pi, sin, cos, asin, acos
-from upconvert.core.stringify import stringify_attributes
+from upconvert.utils.stringify import stringify_attributes
 
 
 class Shape(object):

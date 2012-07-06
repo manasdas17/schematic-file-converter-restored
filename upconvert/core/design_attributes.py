@@ -21,7 +21,7 @@
 
 
 import time
-from upconvert.core.stringify import stringify_attributes
+from upconvert.utils.stringify import stringify_attributes
 
 
 class DesignAttributes:
