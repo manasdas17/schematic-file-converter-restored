@@ -30,10 +30,8 @@ from upconvert.core.shape import Label, Rectangle, Polygon, Arc, BezierCurve, Ci
 from upconvert.core.annotation import Annotation
 from upconvert.parser.openjson import JSON
 
-import os
 import sys
 import unittest
-import tempfile
 import math
 
 def to_string(writer, obj):
@@ -89,7 +87,7 @@ class SpecctraTests(unittest.TestCase):
         obj = writer._convert_shape(poly)
         self.assertEqual(
                 to_string(writer, obj), 
-                '( (polygon signal 0 0.000000 0.000000 0.000000 104.166667 104.166667 104.166667 104.166667 0.000000) )')
+                '( (polygon signal 10.416667 0.000000 0.000000 0.000000 104.166667 104.166667 104.166667 104.166667 0.000000) )')
 
     def test_arc(self):
         """ Convert arc to lines shape """
@@ -99,11 +97,11 @@ class SpecctraTests(unittest.TestCase):
         obj = writer._convert_shape(arc)
         self.assertEqual(
                 to_string(writer, obj), 
-                '( (path signal 0 -0.000000 -10.416667 -6.122763 -8.427260)' +
-                    ' (path signal 0 -6.122763 -8.427260 -9.906839 -3.218927)' +
-                    ' (path signal 0 -9.906839 -3.218927 -9.906839 3.218927)' +
-                    ' (path signal 0 -9.906839 3.218927 -6.122763 8.427260)' +
-                    ' (path signal 0 -6.122763 8.427260 -0.000000 10.416667) )')
+                '( (path signal 10.416667 -0.000000 -10.416667 -6.122763 -8.427260)' +
+                    ' (path signal 10.416667 -6.122763 -8.427260 -9.906839 -3.218927)' +
+                    ' (path signal 10.416667 -9.906839 -3.218927 -9.906839 3.218927)' +
+                    ' (path signal 10.416667 -9.906839 3.218927 -6.122763 8.427260)' +
+                    ' (path signal 10.416667 -6.122763 8.427260 -0.000000 10.416667) )')
 
     def test_bezier_curve(self):
         """ Convert bezier to lines shape """
@@ -113,17 +111,17 @@ class SpecctraTests(unittest.TestCase):
         obj = writer._convert_shape(bezier)
         self.assertEqual(
                 to_string(writer, obj),
-                '( (path signal 0 20.833333 20.833333 20.833333 20.833333)' +
-                ' (path signal 0 20.833333 20.833333 10.416667 10.416667)' +
-                ' (path signal 0 10.416667 10.416667 10.416667 10.416667)' +
-                ' (path signal 0 10.416667 10.416667 10.416667 10.416667)' +
-                ' (path signal 0 10.416667 10.416667 10.416667 10.416667)' +
-                ' (path signal 0 10.416667 10.416667 10.416667 10.416667)' +
-                ' (path signal 0 10.416667 10.416667 10.416667 10.416667)' +
-                ' (path signal 0 10.416667 10.416667 20.833333 20.833333)' +
-                ' (path signal 0 20.833333 20.833333 20.833333 20.833333)' +
-                ' (path signal 0 20.833333 20.833333 20.833333 20.833333)' +
-                ' (path signal 0 20.833333 20.833333 31.250000 31.250000) )')
+                '( (path signal 10.416667 20.833333 20.833333 20.833333 20.833333)' +
+                ' (path signal 10.416667 20.833333 20.833333 10.416667 10.416667)' +
+                ' (path signal 10.416667 10.416667 10.416667 10.416667 10.416667)' +
+                ' (path signal 10.416667 10.416667 10.416667 10.416667 10.416667)' +
+                ' (path signal 10.416667 10.416667 10.416667 10.416667 10.416667)' +
+                ' (path signal 10.416667 10.416667 10.416667 10.416667 10.416667)' +
+                ' (path signal 10.416667 10.416667 10.416667 10.416667 10.416667)' +
+                ' (path signal 10.416667 10.416667 10.416667 20.833333 20.833333)' +
+                ' (path signal 10.416667 20.833333 20.833333 20.833333 20.833333)' +
+                ' (path signal 10.416667 20.833333 20.833333 20.833333 20.833333)' +
+                ' (path signal 10.416667 20.833333 20.833333 31.250000 31.250000) )')
 
 if __name__ == '__main__':
     unittest.main()

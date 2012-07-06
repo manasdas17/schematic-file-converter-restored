@@ -360,14 +360,16 @@ class ViewDrawSch(ViewDrawBase):
         inst, libname, libnum, x, y, rot, _scale, _unknown = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
+        flip = False
         if int(rot) > 3:
             # part is flipped around y-axis. When applying transforms, flip it
             # first, then rotate it.
             rot = str(int(rot) - 4)
-            # flip = True
+            flip = True
 
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
-                                                      float(rot) / 2), False)
+                                                      (2 - float(rot) / 2) % 2,
+                                                      flip))
         subdata = self.sub_nodes('|R A C'.split())
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)
