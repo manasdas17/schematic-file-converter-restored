@@ -65,7 +65,8 @@ from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as g
     eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
     specctra as specctra_p
 from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
-    eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w
+    eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w, \
+    image as image_w
 
 
 # Logging
@@ -91,6 +92,7 @@ WRITERS = {
     'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
     'specctra': specctra_w.Specctra,
+    'image': image_w.Render,
 }
 
 EXTENSIONS = {
@@ -101,6 +103,7 @@ EXTENSIONS = {
     'fritzing': '.fz',
     'gerber': '.grb',
     'specctra': '.dsn',
+    'image': '.png',
 }
 
 
@@ -266,13 +269,13 @@ def main():
         profile = cProfile.Profile()
         profile.enable()
 
-    # parse and export the data
+    # parse the data
     try:
         design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
     except Exception:
         if args.raise_errors:
             raise
-        print "ERROR: Unsupported input type:", inputtype
+        print "ERROR: Failed to parse", inputtype
         exit(1)
 
     # we got a good result
@@ -282,7 +285,7 @@ def main():
         except Exception:
             if args.raise_errors:
                 raise
-            print "ERROR: Unsupported output type:", outputtype
+            print "ERROR: Failed to write", outputtype
             exit(1)
 
     # parse returned None -> something went wrong

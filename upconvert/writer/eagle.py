@@ -29,6 +29,7 @@
 # Note: This writer saves file as a 5.11 version one.
 #
 
+
 import struct
 import re
 import math
@@ -37,6 +38,7 @@ from upconvert.core.shape import Line, Label, Rectangle, Arc, \
     BezierCurve, Circle, Polygon
 
 #from upconvert.parser.eagle import EagleBinConsts
+
 
 class Eagle: # pylint: disable=R0902
     """ The Eagle format writer """

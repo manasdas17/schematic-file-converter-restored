@@ -58,6 +58,7 @@
 # a blueprint-style frame is present with origin at
 # (40'000, 40'000).
 
+
 import os
 import types
 import codecs

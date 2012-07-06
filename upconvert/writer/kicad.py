@@ -19,7 +19,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Basic Strategy
 # 0) converted file will be store in subdirectory
 # 1) create subdirectory, symbol and project file
@@ -31,6 +30,7 @@
 # OpenJSON, y coordinates increase upwards, so we negate them. In the
 # KiCAD library file (where components are stored) y coordinates
 # increase upwards as in OpenJSON and no transformation is needed.
+
 
 import time
 

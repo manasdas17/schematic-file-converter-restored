@@ -19,10 +19,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from PIL import Image, ImageDraw
 from math import cos, sin, pi, sqrt
 from collections import defaultdict
 from upconvert.core.shape import Point
+
 
 class Render:
     """ An image under construction. """
@@ -33,9 +35,9 @@ class Render:
                  'part'   : (  0,   0,   0),
                 }
 
-    def __init__(self, des, outtype='PNG', style={}, scale=1):
+    def write(self, design, filename, outtype='PNG', style={}, scale=1):
         """ des is the design to output. """
-        self.des, self.outtype = des, outtype
+        self.des, self.outtype = design, outtype
         self.style = self.def_style
         self.style.update(style)
         self.scale = scale
@@ -47,6 +49,7 @@ class Render:
         self.base = Scale(self.scale, FixY(maxpt.y - minpt.y, Shift(-minpt.x,
                                                                     -minpt.y)))
         self.draw = ImageDraw.Draw(self.img)
+        self.save(filename)
 
     def save(self, filename):
         """ Write out the image to filename """
