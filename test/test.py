@@ -255,7 +255,8 @@ def main():
          'gerber': gerber_ger_files,
          'kicad': kicad_sch_files,
          'openjson': upverter_upv_files,
-        #'specctra': upverter_dsn_files,
+        #'specctra': specctra_dsn_files,
+        #'image': image_files,
     }
 
     test_classes = {}
