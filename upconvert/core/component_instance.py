@@ -20,11 +20,7 @@
 # limitations under the License.
 
 
-def stringify_attributes(attributes):
-    attrs = {}
-    for n, v in attributes.iteritems():
-        attrs[n] = v if isinstance(v, basestring) else str(v)
-    return attrs
+from upconvert.utils.stringify import stringify_attributes
 
 
 class ComponentInstance:

@@ -2478,15 +2478,25 @@ class Eagle: # pylint: disable=R0902
                                 style="Continuous", layer=91, width=_width))
 
                 _prpts.add(_pp)
+                letter_pin_numbers = []
                 for _rr in _pt.connected_components:
                     _pno = -1
                     for _in, _ii in enumerate(self.shapeheader.parts):
                         if _rr.instance_id == _ii.name:
                             _pno = 1 + _in
                             break
+                    try:
+                        pin_number=int(_rr.pin_number)
+                    except ValueError:
+                        if letter_pin_numbers:
+                            pin_number=letter_pin_numbers.pop() + 1
+                        else: 
+                            pin_number=1
+                        letter_pin_numbers.append(pin_number)
+
                     _web.shapes.append(Eagle.PinRef(
                             partno= _pno, gateno=1, 
-                            pinno=int(_rr.pin_number),
+                            pinno=pin_number,
                         ))
         return
 

@@ -21,13 +21,7 @@
 
 
 from upconvert.core.shape import Point
-
-
-def stringify_attributes(attributes):
-    attrs = {}
-    for n, v in attributes.iteritems():
-        attrs[n] = str(v)
-    return attrs
+from upconvert.utils.stringify import stringify_attributes
 
 
 class Components:
