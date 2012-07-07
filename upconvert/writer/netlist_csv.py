@@ -29,7 +29,7 @@ class Netlist(object):
         nets = {}
         for n in design.nets:
             endpoints = []
-            for p in n.points:
+            for p in n.points.values():
                 for c in p.connected_components:
                     endpoints.append('%s.%s' % (c.instance_id, c.pin_number))
 
@@ -40,7 +40,7 @@ class Netlist(object):
                                   'endpoints': endpoints}
 
         with open(filename, "w") as f:
-            f.write('Name,Connections')
+            f.write('Name,Connections\n')
             for n in nets.values():
-                if len(n['enpoints']) > 0:
-                    f.write('%s:%s' % (n['name'], ','.join(n['endpoints'])))
+                if len(n['endpoints']) > 0:
+                    f.write('%s:%s\n' % (n['name'], ','.join(n['endpoints'])))

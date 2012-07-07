@@ -28,15 +28,26 @@ class BOM(object):
 
         bom = {}
         for c in design.component_instances:
+            refdes = c.instance_id
+            if 'refdes' in c.attributes:
+                refdes = c.attributes['refdes']
+
             if c.library_id in bom:
-                bom[c.library_id]['refs'].append(c.instance_id)
+                bom[c.library_id]['refs'].append(refdes)
+
             else:
+                library_part = design.components.components[c.library_id]
+                name = ''
+                if '_manufacturer' in library_part.attributes:
+                    name += library_part.attributes['_manufacturer'] + ' '
+                if '_part_number' in library_part.attributes:
+                    name += library_part.attributes['_part_number']
                 bom[c.library_id] = {'part': c.library_id,
-                                     'name': '',
-                                     'refs': [c.instance_id]}
+                                     'name': name,
+                                     'refs': [refdes]}
 
         with open(filename, "w") as f:
-            f.write('Part,Name,Reference,Qty')
+            f.write('Part,Name,Reference,Qty\n')
             for c in bom.values():
-                if len(c['refs']) > 0:
-                    f.write('%s,%s,%s,%s' % (c['part'], c['name'], c['refs'], len(c['refs'])))
+                if len(c['refs']) > 0 and c['part'] != '0000000000000001':
+                    f.write('%s,"%s","%s",%s\n' % (c['part'], c['name'], ','.join(c['refs']), len(c['refs'])))

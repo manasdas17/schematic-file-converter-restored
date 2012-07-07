@@ -67,10 +67,10 @@ Supported Formats
 * Eagle XML             (in testing)
 * ViewDraw / DxDesigner (in testing)
 * DSN                   (in testing)
-* PNG Image             (in testing)
+* PNG Image
+* Bill of Materials
+* CSV Netlist
 * Altium                (in development)
-* Bill of Materials     (in development)
-* CSV Netlist           (in development)
 * Telesis Netlist       (in development)
 
 
