@@ -68,6 +68,16 @@ from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as g
     eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w
 
 
+# Try to include image writer support
+try:
+    from upconvert.writer import image as image_w
+    image_parser = image_w.Image
+except ImportError, e:
+    if e.message != 'No module named PIL':
+        raise
+    image_parser = None
+
+
 # Logging
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger('main')
@@ -91,6 +101,7 @@ WRITERS = {
     'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
     'specctra': specctra_w.Specctra,
+    'image':  image_parser,
 }
 
 EXTENSIONS = {
@@ -101,16 +112,8 @@ EXTENSIONS = {
     'fritzing': '.fz',
     'gerber': '.grb',
     'specctra': '.dsn',
+    'image': '.png',
 }
-
-
-# Try to include image writer support
-try:
-    import image as image_w
-    WRITERS['image'] = image_w.Image
-    EXTENSIONS['image'] = '.png'
-except ImportError:
-    pass
 
 
 class Upconverter(object):
@@ -264,9 +267,9 @@ def main():
         try:
             fileName, fileExtension = os.path.splitext(inputfile)
             outputfile = fileName + EXTENSIONS[outputtype]
-            log.info('Auto-set output file: %s', outputfile)
+            log.info('Setting output file & format: %s', outputfile)
         except Exception:
-            log.error('Failed to auto-set output file.')
+            log.error('Failed to set output file & format.')
             ap.print_help()
             exit(1)
 
