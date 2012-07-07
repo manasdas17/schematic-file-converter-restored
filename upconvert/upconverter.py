@@ -112,6 +112,7 @@ EXTENSIONS = {
     'kicad': '.sch',
     'geda': '.sch',
     'eagle': '.sch',
+    'eaglexml': '.sch',
     'fritzing': '.fz',
     'gerber': '.grb',
     'specctra': '.dsn',
@@ -227,6 +228,8 @@ def main():
                     help="collect profiling information")
     ap.add_argument('-v', '--version', action='store_true', default=False,
                     help="print version information and quit")
+    ap.add_argument('--formats', action='store_true', default=False,
+                    help="print supported formats and quit")
 
     args = ap.parse_args()
 
@@ -235,6 +238,18 @@ def main():
         print "Copyright (C) 2007 Upverter, Inc."
         print "This is free software; see the source for copying conditions.  There is NO warranty; not even for",
         print "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+        sys.exit(0)
+
+    if args.formats:
+        print "upconverter supports the following file formats & encodings"
+        print ""
+        print "As Input:"
+        for f in PARSERS:
+            print "* %s (%s)" % (f, EXTENSIONS[f])
+        print ""
+        print "As Output:"
+        for f in WRITERS:
+            print "* %s (%s)" % (f, EXTENSIONS[f])
         sys.exit(0)
 
     # Fail if strict and wrong python version

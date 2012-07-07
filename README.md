@@ -39,6 +39,7 @@ optional arguments:
   --raise-errors        show tracebacks for parsing and writing errors
   --profile             collect profiling information
   -v, --version         print version information and quit
+  --formats             print supported formats and quit
 ```
 
 
