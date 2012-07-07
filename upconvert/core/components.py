@@ -43,6 +43,18 @@ class Components:
             c.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the library. """
+        for c in self.components.values():
+            c.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the library. """
+        for c in self.components.values():
+            c.rebase_y_axis(height)
+
+
     def json(self):
         """ Copy to a new dictionary to return """
         ret = dict()
@@ -83,6 +95,18 @@ class Component:
             s.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the component. """
+        for s in self.symbols:
+            s.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the component. """
+        for s in self.symbols:
+            s.rebase_y_axis(height)
+
+
     def json(self):
         """ Return a component as JSON """
         return {
@@ -110,6 +134,18 @@ class Symbol:
         """ Scale the x & y coordinates in the symbol. """
         for b in self.bodies:
             b.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the symbol. """
+        for b in self.bodies:
+            b.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the symbol. """
+        for b in self.bodies:
+            b.rebase_y_axis(height)
 
 
     def json(self):
@@ -156,6 +192,22 @@ class Body:
             p.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the symbol. """
+        for s in self.shapes:
+            s.shift(dx, dy)
+        for p in self.pins:
+            p.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the symbol. """
+        for s in self.shapes:
+            s.rebase_y_axis(height)
+        for p in self.pins:
+            p.rebase_y_axis(height)
+
+
     def json(self):
         """ Return a symbol as JSON """
         return {
@@ -196,9 +248,26 @@ class Pin:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the pin. """
-        self.label.scale(factor)
+        if self.label is not None:
+            self.label.scale(factor)
         self.p1.scale(factor)
         self.p2.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the pin. """
+        if self.label is not None:
+            self.label.shift(dx, dy)
+        self.p1.shift(dx, dy)
+        self.p2.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the pin. """
+        if self.label is not None:
+            self.label.rebase_y_axis(height)
+        self.p1.rebase_y_axis(height)
+        self.p2.rebase_y_axis(height)
 
 
     def json(self):

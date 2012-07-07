@@ -92,6 +92,22 @@ class Net:
             a.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the net. """
+        for p in self.points.values():
+            p.shift(dx, dy)
+        for a in self.annotations:
+            a.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the net. """
+        for p in self.points.values():
+            p.rebase_y_axis(height)
+        for a in self.annotations:
+            a.rebase_y_axis(height)
+
+
     def json(self):
         """ Return a net as JSON """
         return {
@@ -128,6 +144,17 @@ class NetPoint:
         """ Scale the x & y coordinates in the point. """
         self.x *= factor
         self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the point. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the point. """
+        self.y = height - self.y
 
 
     def json(self):

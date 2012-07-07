@@ -116,6 +116,32 @@ class Design:
             p.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the design dx to all x & dy to all y coordinates in the core. """
+        for n in self.nets:
+            n.shift(dx, dy)
+        self.components.shift(dx, dy)
+        for i in self.component_instances:
+            i.shift(dx, dy)
+        for s in self.shapes:
+            s.shift(dx, dy)
+        for p in self.pins:
+            p.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinates in the core. """
+        for n in self.nets:
+            n.rebase_y_axis(height)
+        self.components.rebase_y_axis(height)
+        for i in self.component_instances:
+            i.rebase_y_axis(height)
+        for s in self.shapes:
+            s.rebase_y_axis(height)
+        for p in self.pins:
+            p.rebase_y_axis(height)
+
+
     def generate_netlist(self):
         """ The netlist as generated from the schematic. """
         pass

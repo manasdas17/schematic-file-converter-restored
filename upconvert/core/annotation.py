@@ -40,10 +40,27 @@ class Annotation:
                 Point(self.x + 10, self.y + 10)]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def scale(self, factor):
-        """ Scale the x & y coordinates in the attributes. """
+        """ Scale the x & y coordinates in the annotation. """
         self.x *= factor
         self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the annotation. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the annotation. """
+        self.y = height - self.y
 
 
     def json(self):

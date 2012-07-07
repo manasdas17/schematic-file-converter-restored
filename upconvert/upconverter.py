@@ -92,7 +92,7 @@ WRITERS = {
     'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
     'specctra': specctra_w.Specctra,
-    'image': image_w.Render,
+    'image': image_w.Image,
 }
 
 EXTENSIONS = {

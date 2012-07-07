@@ -71,6 +71,12 @@ class Rectangle(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         return Point(min(self.x, self.x + self.width),
@@ -97,6 +103,17 @@ class Rectangle(Shape):
         self.y *= factor
         self.width *= factor
         self.height *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the rectangle. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the rectangle. """
+        self.y = height - self.y
 
 
     def json(self):
@@ -131,6 +148,12 @@ class RoundedRectangle(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         return Point(min(self.x, self.x + self.width),
@@ -159,6 +182,17 @@ class RoundedRectangle(Shape):
         self.width *= factor
         self.height *= factor
         self.radius *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the rounded rectangle. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the rectangle. """
+        self.y = height - self.y
 
 
     def json(self):
@@ -192,6 +226,12 @@ class Arc(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
+
+
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def _contains_angle(self, theta):
@@ -264,6 +304,17 @@ class Arc(Shape):
         self.radius *= factor
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the arc. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the arc. """
+        self.y = height - self.y
+
+
     def json(self):
         """ Return the arc as JSON """
         return {
@@ -294,6 +345,12 @@ class Circle(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self.radius
@@ -313,6 +370,17 @@ class Circle(Shape):
         self.x *= factor
         self.y *= factor
         self.radius *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the circle. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the circle. """
+        self.y = height - self.y
 
 
     def json(self):
@@ -356,9 +424,17 @@ class Label(Shape):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
 
+
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ As a hack, return the label's position. """
         return Point(self.x, self.y)
+
 
     def max_point(self):
         """ As a hack, return the label's position. """
@@ -369,6 +445,17 @@ class Label(Shape):
         """ Scale the x & y coordinates in the label. """
         self.x *= factor
         self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the label. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the label. """
+        self.y = height - self.y
 
 
     def json(self):
@@ -400,6 +487,12 @@ class Line(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.p1.x
@@ -428,6 +521,18 @@ class Line(Shape):
         self.p2.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the line. """
+        self.p1.shift(dx, dy)
+        self.p2.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the line. """
+        self.p1.rebase_y_axis(height)
+        self.p2.rebase_y_axis(height)
+
+
     def json(self):
         """ Return the line as JSON """
         return {
@@ -451,6 +556,12 @@ class Polygon(Shape):
     def bounds(self):
         """ Return the min and max points of the bounding box """
         return [self.min_point(), self.max_point()]
+
+
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -484,6 +595,18 @@ class Polygon(Shape):
         """ Scale the x & y coordinates in the polygon. """
         for p in self.points:
             p.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the polygon. """
+        for p in self.points:
+            p.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the polygon. """
+        for p in self.points:
+            p.rebase_y_axis(height)
 
 
     def json(self):
@@ -539,6 +662,12 @@ class BezierCurve(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         # key the memoization cache on the actual (x,y) co-ords of our points
@@ -583,6 +712,22 @@ class BezierCurve(Shape):
         self.p2.scale(factor)
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the curve. """
+        self.control1.shift(dx, dy)
+        self.control2.shift(dx, dy)
+        self.p1.shift(dx, dy)
+        self.p2.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the curve. """
+        self.control1.rebase_y_axis(height)
+        self.control2.rebase_y_axis(height)
+        self.p1.rebase_y_axis(height)
+        self.p2.rebase_y_axis(height)
+
+
     def json(self):
         """ Return the bezier curve as JSON """
         return {
@@ -625,6 +770,12 @@ class Moire(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
@@ -651,6 +802,17 @@ class Moire(Shape):
         """ Scale the x & y coordinates in the moire. """
         self.x *= factor
         self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the moire. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the moire. """
+        self.y = height - self.y
 
 
     def json(self):
@@ -694,6 +856,12 @@ class Thermal(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
@@ -727,6 +895,17 @@ class Thermal(Shape):
         """ Scale the x & y coordinates in the thermal. """
         self.x *= factor
         self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the thermal. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the thermal. """
+        self.y = height - self.y
 
 
     def json(self):
@@ -766,6 +945,12 @@ class RegularPolygon(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x + self._max_dist(1)
@@ -799,6 +984,21 @@ class RegularPolygon(Shape):
         self.y *= factor
         for v in self.vertices:
             v.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the polygon. """
+        self.x += dx
+        self.y += dy
+        for v in self.vertices:
+            v.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the polygon. """
+        self.y = height - self.y
+        for v in self.vertices:
+            v.rebase_y_axis(height)
 
 
     def json(self):
@@ -867,6 +1067,17 @@ class Point:
         self.y *= factor
 
 
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the point. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the point. """
+        self.y = height - self.y
+
+
     def json(self):
         """ Return the point as JSON """
         return {
@@ -892,6 +1103,12 @@ class Obround(Shape):
         return [self.min_point(), self.max_point()]
 
 
+    def ranges(self):
+        """ Return the min - max x range, and the min - max y range of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self.width / 2.0
@@ -912,6 +1129,17 @@ class Obround(Shape):
         self.y *= factor
         self.width *= factor
         self.height *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the oval. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the oval. """
+        self.y = height - self.y
 
 
     def json(self):
