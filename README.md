@@ -66,9 +66,9 @@ Supported Formats
 * Eagle
 * Eagle XML             (in testing)
 * ViewDraw / DxDesigner (in testing)
+* DSN                   (in testing)
+* PNG Image             (in testing)
 * Altium                (in development)
-* DSN                   (in development)
-* PNG Image             (in development)
 * Bill of Materials     (in development)
 * CSV Netlist           (in development)
 * Telesis Netlist       (in development)
@@ -105,7 +105,7 @@ Key Contributors
 * elbaschid   -  gEDA
 * iparshin    -  EagleBin
 * foobarmus   -  Gerber
-* patrickyeon -  ViewDraw
+* patrickyeon -  ViewDraw, Image
 * machinaut   -  OpenJSON, Architecture
 
 

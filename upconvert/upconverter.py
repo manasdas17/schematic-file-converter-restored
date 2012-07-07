@@ -22,7 +22,7 @@ Upverter's Open JSON Interchange Format """
 #
 #
 # Development:
-#   Active: As of June, 2012
+#   Active: As of July, 2012
 #   See: github.com/upverter/schematic-file-converter
 #
 # Authors:
@@ -65,8 +65,7 @@ from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as g
     eagle as eagle_p, eaglexml as eaglexml_p, fritzing as fritzing_p, gerber as gerber_p, \
     specctra as specctra_p
 from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
-    eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w, \
-    image as image_w
+    eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w
 
 
 # Logging
@@ -92,7 +91,6 @@ WRITERS = {
     'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
     'specctra': specctra_w.Specctra,
-    'image': image_w.Image,
 }
 
 EXTENSIONS = {
@@ -103,8 +101,16 @@ EXTENSIONS = {
     'fritzing': '.fz',
     'gerber': '.grb',
     'specctra': '.dsn',
-    'image': '.png',
 }
+
+
+# Try to include image writer support
+try:
+    import image as image_w
+    WRITERS['image'] = image_w.Image
+    EXTENSIONS['image'] = '.png'
+except ImportError:
+    pass
 
 
 class Upconverter(object):
