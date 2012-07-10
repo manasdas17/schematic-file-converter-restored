@@ -37,7 +37,7 @@ class EagleXML(object):
         # is a library dom object and name is a deviceset name
         self.dscache = {} # (lib, name) -> deviceset dom object
 
-        # map openjson Body objects to eaglexml gate dom objects
+        # map openjson Body objects to eaglexml gate names
         self.body2gate = {}
 
         # map openjson components ids to eaglexml libraries
@@ -63,6 +63,8 @@ class EagleXML(object):
 
     def make_dom(self, design):
         """ Return the DOM tree for a design. """
+
+        self.design = design
 
         eagle = G.eagle()
         eagle.drawing = G.drawing()
@@ -104,12 +106,15 @@ class EagleXML(object):
         """ Add the instances to a dom object. """
 
         for ci in design.component_instances:
-            for symattr in ci.symbol_attributes:
-                dom.instance.append(self.make_instance(ci, symattr))
+            for bodyindex, symattr in enumerate(ci.symbol_attributes):
+                dom.instance.append(self.make_instance(ci, symattr, bodyindex))
 
 
     def add_nets(self, dom, design):
         """ Add the nets to a dom object. """
+
+        for net in design.nets:
+            dom.net.append(self.make_net(net))
 
 
     def ensure_lib_for_cpt(self, libraries, cpt):
@@ -227,14 +232,25 @@ class EagleXML(object):
         part.library = self.cpt2lib[cpt_inst.library_id].name
         part.deviceset = self.cpt2deviceset[cpt_inst.library_id].name
         part.device = self.ensure_device_for_component_instance(cpt_inst).name
+
         return part
 
 
-    def make_instance(self, cpt_inst, symattr):
+    def make_instance(self, cpt_inst, symattr, bodyindex):
         """ Make an eaglexml part for an openjson component instance
         and symbol attribute. """
 
+        cpt = self.design.components.components[cpt_inst.library_id]
+        symbol = cpt.symbols[cpt_inst.symbol_index]
+        body = symbol.bodies[bodyindex]
+
         inst = G.instance()
+        inst.part = cpt_inst.instance_id
+        inst.gate = self.body2gate[body]
+        inst.x = self.make_length(symattr.x)
+        inst.y = self.make_length(symattr.y)
+        inst.rot = self.make_angle(symattr.rotation)
+
         return inst
 
 
@@ -252,7 +268,38 @@ class EagleXML(object):
         return device
 
 
+    def make_net(self, openjson_net):
+        """ Make a new eagle net from an openjson net. """
+
+        # connected components. maps point ids to sets of points
+        # in the net which are connected. These become eagle segments
+        conncomps = {} # point id -> set([point id])
+
+        for point in openjson_net.points.itervalues():
+            point_ids = set(point.connected_points)
+            point_ids.add(point.point_id)
+            for point_id in point_ids:
+                if point_id in conncomps:
+                    conncomp = conncomps[point_id]
+                    conncomp.update(point_ids)
+                    break
+            else:
+                conncomp = point_ids
+
+            for point_id in point_ids:
+                conncomps[point_id] = conncomp
+
+        net = G.net(name=openjson_net.net_id)
+        return net
+
+
     def make_length(self, value):
         """ Make an eagle length measurement from an openjson length. """
 
         return round(float(value) * self.MULT * self.SCALE, 3)
+
+
+    def make_angle(self, value):
+        """ Make an eaglexml angle measurement from an openjson angle. """
+
+        return 'R%d' % (value * 180,)

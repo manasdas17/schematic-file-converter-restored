@@ -21,12 +21,42 @@
 # limitations under the License.
 
 
-from upconvert.parser.t.eaglexml_t import use_file
+from upconvert.parser.t.eaglexml_t import get_design
 from upconvert.writer.eaglexml import EagleXML
+
+from functools import wraps
 
 import os
 import unittest
 import tempfile
+
+
+_cache = {} # filename -> DOM
+
+def get_dom(filename):
+    if filename not in _cache:
+        design = get_design(filename)
+        _cache[filename] = EagleXML().make_dom(design)
+    return _cache[filename]
+
+
+def use_file(filename):
+    """ Return a decorator which will parse a gerber file
+    before running the test. """
+
+    def decorator(test_method):
+        """ Add params to decorator function. """
+
+        @wraps(test_method)
+        def wrapper(self):
+            """ Parse file then run test. """
+            self.design = get_design(filename)
+            self.dom = get_dom(filename)
+            test_method(self)
+
+        return wrapper
+
+    return decorator
 
 
 class EagleXMLTests(unittest.TestCase):
@@ -45,3 +75,37 @@ class EagleXMLTests(unittest.TestCase):
         writer.write(self.design, filename)
         self.assertTrue(os.path.exists(filename))
         os.remove(filename)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_libraries(self):
+        """
+        The correct libraries are generated.
+        """
+
+        libnames = [lib.name for lib
+                    in self.dom.drawing.schematic.libraries.library]
+        self.assertTrue('atmel' in libnames, libnames)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_devicesets(self):
+        """
+        The correct devicesets are generated.
+        """
+
+        lib = [lib for lib in self.dom.drawing.schematic.libraries.library
+               if lib.name == 'atmel'][0]
+        dsnames = [ds.name for ds in lib.devicesets.deviceset]
+        self.assertTrue('TINY15L' in dsnames, dsnames)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_parts(self):
+        """
+        The correct parts are generated.
+        """
+
+        parts = self.dom.drawing.schematic.parts
+        names = [p.name for p in parts.part]
+        self.assertTrue('R1' in names, names)
