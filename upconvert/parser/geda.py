@@ -532,8 +532,7 @@ class GEDA:
         symbol = SymbolAttribute(
             self.x_to_px(params['x']),
             self.y_to_px(params['y']),
-            self.conv_angle(params['angle'],
-            False)
+            self.conv_angle(params['angle'])
         )
         instance.add_symbol_attribute(symbol)
 

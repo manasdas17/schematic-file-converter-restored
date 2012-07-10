@@ -55,31 +55,31 @@ class GEDACommandTests(TestCase):
 
         line_command = geda_commands.GEDALineCommand()
 
-        self.assertItemsEqual(
-            [p.name for p in line_command.PARAMETERS],
-            parameter_names
+        self.assertEqual(
+            sorted([p.name for p in line_command.PARAMETERS]),
+            sorted(parameter_names)
         )
 
     def test_getting_parameters(self):
         """ Test getting list of all parameters """
-        self.assertItemsEqual([
+        self.assertEqual(sorted([
                 self.param,
                 self.style_param,
                 self.extra_param,
-            ],
-            self.command.parameters()
+            ]),
+            sorted(self.command.parameters())
         )
 
     def test_getting_style_keywords(self):
         """ Test getting only style keywords. """
-        self.assertItemsEqual(
+        self.assertEqual(
             ['style_test'],
             self.command.get_style_keywords()
         )
 
     def test_getting_style_keywords_without_parameters(self):
         """ Test getting style keywords with no parameters """
-        self.assertItemsEqual(
+        self.assertEqual(
             [],
             geda_commands.GEDACommand().get_style_keywords()
         )
@@ -87,9 +87,9 @@ class GEDACommandTests(TestCase):
     def test_updating_default_kwargs_with_empty_dict(self):
         """ Test updating default keywords with empty dictionary """
         defaults = self.command.update_default_kwargs(**{})
-        self.assertItemsEqual(
-            ['test', 'style_test', 'extra_test'],
-            defaults.keys()
+        self.assertEqual(
+            sorted(['test', 'style_test', 'extra_test']),
+            sorted(defaults.keys())
         )
 
     def test_updating_default_kwargs(self):
@@ -97,9 +97,9 @@ class GEDACommandTests(TestCase):
         defaults = self.command.update_default_kwargs(**{
             'test': 'test_value',
         })
-        self.assertItemsEqual(
-            ['test', 'style_test', 'extra_test'],
-            defaults.keys()
+        self.assertEqual(
+            sorted(['test', 'style_test', 'extra_test']),
+            sorted(defaults.keys())
         )
         self.assertEquals(defaults['test'], 'test_value')
         self.assertEquals(defaults['style_test'], None)
