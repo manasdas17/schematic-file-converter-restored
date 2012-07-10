@@ -271,8 +271,9 @@ class EagleXML(object):
     def make_net(self, openjson_net):
         """ Make a new eagle net from an openjson net. """
 
-        # connected components. maps point ids to sets of points
-        # in the net which are connected. These become eagle segments
+        # connected components. maps point ids to sets of points in
+        # the net which are connected visually. These become eagle
+        # segments in the net.
         conncomps = {} # point id -> set([point id])
 
         for point in openjson_net.points.itervalues():
@@ -290,7 +291,37 @@ class EagleXML(object):
                 conncomps[point_id] = conncomp
 
         net = G.net(name=openjson_net.net_id)
+        done = set() # objects ids of point sets
+
+        for pointset in conncomps.itervalues():
+            if id(pointset) not in done:
+                done.add(id(pointset))
+                net.segment.append(self.make_segment(openjson_net, pointset))
+
         return net
+
+
+    def make_segment(self, openjson_net, pointset):
+        wires = set() # ((x1, y1), (x2, y2))
+
+        for point_id in pointset:
+            p1 = openjson_net.points[point_id]
+            x1 = self.make_length(p1.x)
+            y1 = self.make_length(p1.y)
+
+            for point_id in p1.connected_points:
+                p2 = openjson_net.points[point_id]
+                x2 = self.make_length(p2.x)
+                y2 = self.make_length(p2.y)
+                wires.add(tuple(sorted([(x1, y1), (x2, y2)])))
+
+        seg = G.segment()
+
+        for (x1, y1), (x2, y2) in sorted(wires):
+            wire = G.wire(x1=x1, y1=y1, x2=x2, y2=y2)
+            seg.wire.append(wire)
+
+        return seg
 
 
     def make_length(self, value):

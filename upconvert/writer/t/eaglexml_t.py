@@ -109,3 +109,46 @@ class EagleXMLTests(unittest.TestCase):
         parts = self.dom.drawing.schematic.parts
         names = [p.name for p in parts.part]
         self.assertTrue('R1' in names, names)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_nets(self):
+        """
+        The correct nets are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        names = [n.name for n in nets.net]
+        self.assertTrue('GND' in names, names)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_segments(self):
+        """
+        The correct segments are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        gnd = [n for n in nets.net if n.name == 'GND'][0]
+        self.assertEqual(len(gnd.segment), 7)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_segment_wires(self):
+        """
+        The correct wires in segments are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        net = [n for n in nets.net if n.name == 'N$7'][0]
+        self.assertEqual(len(net.segment), 1)
+        seg = net.segment[0]
+        self.assertEqual(len(seg.wire), 2)
+        self.assertEqual(seg.wire[0].x1, 76.2)
+        self.assertEqual(seg.wire[0].y1, 68.58)
+        self.assertEqual(seg.wire[0].x2, 83.82)
+        self.assertEqual(seg.wire[0].y2, 68.58)
+        self.assertEqual(seg.wire[1].x1, 83.82)
+        self.assertEqual(seg.wire[1].y1, 48.26)
+        self.assertEqual(seg.wire[1].x2, 83.82)
+        self.assertEqual(seg.wire[1].y2, 68.58)
