@@ -105,41 +105,41 @@ class Design:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the core. """
-        for n in self.nets:
-            n.scale(factor)
+        for net in self.nets:
+            net.scale(factor)
         self.components.scale(factor)
-        for i in self.component_instances:
-            i.scale(factor)
-        for s in self.shapes:
-            s.scale(factor)
-        for p in self.pins:
-            p.scale(factor)
+        for instance in self.component_instances:
+            instance.scale(factor)
+        for shape in self.shapes:
+            shape.scale(factor)
+        for pin in self.pins:
+            pin.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the design dx to all x & dy to all y coordinates in the core. """
-        for n in self.nets:
-            n.shift(dx, dy)
+        for net in self.nets:
+            net.shift(dx, dy)
         self.components.shift(dx, dy)
-        for i in self.component_instances:
-            i.shift(dx, dy)
-        for s in self.shapes:
-            s.shift(dx, dy)
-        for p in self.pins:
-            p.shift(dx, dy)
+        for instance in self.component_instances:
+            instance.shift(dx, dy)
+        for shape in self.shapes:
+            shape.shift(dx, dy)
+        for pin in self.pins:
+            pin.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinates in the core. """
-        for n in self.nets:
-            n.rebase_y_axis(height)
+        for net in self.nets:
+            net.rebase_y_axis(height)
         self.components.rebase_y_axis(height)
-        for i in self.component_instances:
-            i.rebase_y_axis(height)
-        for s in self.shapes:
-            s.rebase_y_axis(height)
-        for p in self.pins:
-            p.rebase_y_axis(height)
+        for instance in self.component_instances:
+            instance.rebase_y_axis(height)
+        for shape in self.shapes:
+            shape.rebase_y_axis(height)
+        for pin in self.pins:
+            pin.rebase_y_axis(height)
 
 
     def generate_netlist(self):

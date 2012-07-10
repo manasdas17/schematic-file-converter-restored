@@ -2638,16 +2638,16 @@ class Eagle:
                                                 radius=_ss.radius)
                                 _sp.add_attribute('width', _ss.width)
                             elif isinstance(_ss, Eagle.Rectangle):
-                                _w = abs(_ss.x2 - _ss.x1)
-                                _h = abs(_ss.y2 - _ss.y1)
+                                _width = abs(_ss.x2 - _ss.x1)
+                                _height = abs(_ss.y2 - _ss.y1)
                                 if None == _ss.rotate or "R180" == _ss.rotate: # normal position
                                     _x = _ss.x1
-                                    _y = _ss.y1 + _h # bottom left vs upper left
+                                    _y = _ss.y1 + _height # bottom left vs upper left
                                 elif "R90" == _ss.rotate or "R270" == _ss.rotate: # pi/2 rotation
-                                    _w, _h = _h, _w
-                                    _x = (_ss.x1 + _ss.x2 - _w) / 2 
-                                    _y = (_ss.y1 + _ss.y2 + _h) / 2
-                                _sp = Rectangle(x=_x, y=_y, width=_w, height=_h)
+                                    _width, _height = _height, _width
+                                    _x = (_ss.x1 + _ss.x2 - _width) / 2 
+                                    _y = (_ss.y1 + _ss.y2 + _height) / 2
+                                _sp = Rectangle(x=_x, y=_y, width=_width, height=_height)
                             elif isinstance(_ss, Eagle.Polygon):
 # second point for an every Eagle.Wire can be skipped since it'll be the first one
 #  for the next Wire

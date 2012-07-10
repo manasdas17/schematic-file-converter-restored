@@ -393,7 +393,8 @@ class ComponentParser(object):
                     body.add_pin(obj)
                 else:
                     if isinstance(obj, (list, tuple)):
-                        [body.add_shape(o) for o in obj]
+                        for o in obj:
+                            body.add_shape(o)
                     else:
                         body.add_shape(obj)
 

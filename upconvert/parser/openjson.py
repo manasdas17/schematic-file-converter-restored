@@ -150,8 +150,8 @@ class JSON:
 
     def parse_sch_shapes(self, shapes):
         """ Extract shapes drawn directly on the schematic. """
-        for sh in shapes:
-            self.design.add_shape(self.parse_shape(sh))
+        for shape in shapes:
+            self.design.add_shape(self.parse_shape(shape))
 
 
     def parse_symbol(self, symbol):
