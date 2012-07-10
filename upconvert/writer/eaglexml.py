@@ -49,6 +49,11 @@ class EagleXML(object):
         # map (component id, device name) to eaglexml devices
         self.cptdname2dev = {} # (component id, device name) -> device
 
+        # map (component id, pin name) to eaglexml gate names
+        self.cptpin2gate = {} # (component id, pin name) -> gate name
+
+        # map (instance id to component id)
+        self.inst2cpt = {}
 
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
@@ -65,6 +70,9 @@ class EagleXML(object):
         """ Return the DOM tree for a design. """
 
         self.design = design
+
+        for ci in design.component_instances:
+            self.inst2cpt[ci.instance_id] = ci.library_id
 
         eagle = G.eagle()
         eagle.drawing = G.drawing()
@@ -194,6 +202,9 @@ class EagleXML(object):
 
                 self.body2gate[body] = gatename
 
+                for pin in body.pins:
+                    self.cptpin2gate[cpt.name, pin.pin_number] = gatename
+
 
     def make_eagle_symbol_for_openjson_body(self, name, body):
         """ Make an eaglexml symbol from an opensjon body. """
@@ -320,6 +331,15 @@ class EagleXML(object):
         for (x1, y1), (x2, y2) in sorted(wires):
             wire = G.wire(x1=x1, y1=y1, x2=x2, y2=y2)
             seg.wire.append(wire)
+
+        for point_id in pointset:
+            for cc in openjson_net.points[point_id].connected_components:
+                cid = self.inst2cpt[cc.instance_id]
+                gate = self.cptpin2gate[cid, cc.pin_number]
+                pinref = G.pinref(part=cc.instance_id, gate=gate, pin=cc.pin_number)
+                seg.pinref.append(pinref)
+
+        seg.pinref.sort(key=lambda p : (p.part, p.gate, p.pin))
 
         return seg
 

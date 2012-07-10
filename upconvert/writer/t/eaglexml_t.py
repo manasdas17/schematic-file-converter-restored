@@ -152,3 +152,22 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(seg.wire[1].y1, 48.26)
         self.assertEqual(seg.wire[1].x2, 83.82)
         self.assertEqual(seg.wire[1].y2, 68.58)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_segment_pinrefs(self):
+        """
+        The correct pinrefs in segments are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        net = [n for n in nets.net if n.name == 'N$7'][0]
+        self.assertEqual(len(net.segment), 1)
+        seg = net.segment[0]
+        self.assertEqual(len(seg.pinref), 2)
+        self.assertEqual(seg.pinref[0].part, 'IC1')
+        self.assertEqual(seg.pinref[0].gate, 'G$1')
+        self.assertEqual(seg.pinref[0].pin, '(ADC1)PB2')
+        self.assertEqual(seg.pinref[1].part, 'R3')
+        self.assertEqual(seg.pinref[1].gate, 'G$1')
+        self.assertEqual(seg.pinref[1].pin, '2')
