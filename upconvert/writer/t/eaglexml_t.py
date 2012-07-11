@@ -112,6 +112,55 @@ class EagleXMLTests(unittest.TestCase):
 
 
     @use_file('E1AA60D5.sch')
+    def test_symbols(self):
+        """
+        The correct symbols are generated.
+        """
+
+        lib = [lib for lib
+               in self.dom.drawing.schematic.libraries.library
+               if lib.name == 'transistor-pnp'][0]
+        self.assertEqual(len(lib.symbols.symbol), 1)
+        self.assertEqual(lib.symbols.symbol[0].name, 'PNP')
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbol_wires(self):
+        """
+        The correct symbol wires are generated.
+        """
+
+        lib = [lib for lib
+               in self.dom.drawing.schematic.libraries.library
+               if lib.name == 'transistor-pnp'][0]
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(len(sym.wire), 11)
+        wire = sym.wire[0]
+        self.assertEqual(wire.x1, 2.117)
+        self.assertEqual(wire.y1, 1.693)
+        self.assertEqual(wire.x2, 1.552)
+        self.assertEqual(wire.y2, 2.54)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbol_rectangles(self):
+        """
+        The correct symbol wires are generated.
+        """
+
+        lib = [lib for lib
+               in self.dom.drawing.schematic.libraries.library
+               if lib.name == 'transistor-pnp'][0]
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(len(sym.rectangle), 1)
+        rect = sym.rectangle[0]
+        self.assertEqual(rect.x1, -0.282)
+        self.assertEqual(rect.y1, -2.54)
+        self.assertEqual(rect.x2, 0.565)
+        self.assertEqual(rect.y2, 2.54)
+
+
+    @use_file('E1AA60D5.sch')
     def test_nets(self):
         """
         The correct nets are generated.
