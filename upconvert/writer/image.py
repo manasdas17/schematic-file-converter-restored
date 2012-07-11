@@ -36,13 +36,16 @@ class Image:
                     }
 
 
-    def write(self, design, filename, format='PNG', style={}, scale=1):
-        """ write the image """
-        # Update style & scale the design
+    def __init__(self, img_format='PNG', style={}, scale=1):
+        # Override default style where the user provided some
         self.style = self.default_style
         self.style.update(style)
-        design.scale(scale)
+        self.scale = scale
+        self.img_format = img_format
 
+
+    def write(self, design, filename):
+        """ write the image """
         # Calculate the image size
         minpt, maxpt = design.bounds()
         width = int(maxpt.x - minpt.x)
@@ -51,13 +54,12 @@ class Image:
         # Setup image & design
         image = Img.new('RGB', (width, height), self.style['bground'])
         canvas = ImageDraw.Draw(image)
-        #design.shift(-minpt.x, -minpt.y)  # causes problems if top left corner is not (0,0)
-        #design.rebase_y_axis(height)  # from upverter coords to image coords
 
         # Draw & save image
-        self.base_xform = FixY(height, Shift(-minpt.x, -minpt.y))
+        self.base_xform = Scale(self.scale, FixY(height, Shift(-minpt.x,
+                                                               -minpt.y)))
         self.draw_schematic(canvas, design)
-        image.save(filename, format)
+        image.save(filename, self.img_format)
 
 
     def draw_schematic(self, canvas, design):
