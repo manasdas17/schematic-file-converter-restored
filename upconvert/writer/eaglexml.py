@@ -213,21 +213,61 @@ class EagleXML(object):
 
         for shape in body.shapes:
             if shape.type == 'line':
-                wire = G.wire(x1=self.make_length(shape.p1.x),
-                              y1=self.make_length(shape.p1.y),
-                              x2=self.make_length(shape.p2.x),
-                              y2=self.make_length(shape.p2.y))
-                symbol.wire.append(wire)
+                symbol.wire.append(
+                    G.wire(x1=self.make_length(shape.p1.x),
+                           y1=self.make_length(shape.p1.y),
+                           x2=self.make_length(shape.p2.x),
+                           y2=self.make_length(shape.p2.y)))
             elif shape.type == 'rectangle':
-                rect = G.rectangle(x1=self.make_length(shape.x),
-                                   y1=self.make_length(shape.y)
-                                   - self.make_length(shape.height),
-                                   x2=self.make_length(shape.x)
-                                   + self.make_length(shape.width),
-                                   y2=self.make_length(shape.y))
-                symbol.rectangle.append(rect)
+                symbol.rectangle.append(
+                    G.rectangle(x1=self.make_length(shape.x),
+                                y1=self.make_length(shape.y)
+                                - self.make_length(shape.height),
+                                x2=self.make_length(shape.x)
+                                + self.make_length(shape.width),
+                                y2=self.make_length(shape.y)))
+
+        for pin in body.pins:
+            symbol.pin.append(
+                G.pin(name=pin.pin_number,
+                      x=self.make_length(pin.p2.x),
+                      y=self.make_length(pin.p2.y),
+                      length=self.get_pin_length(pin),
+                      rot=self.get_pin_rotation(pin)))
 
         return symbol
+
+
+    def get_pin_length(self, pin):
+        """ Return the eaglexml length for an openjson pin. """
+
+        length = (((pin.p2.x - pin.p1.x) ** 2)
+                  + ((pin.p2.y - pin.p1.y) ** 2)) ** .5
+        length = self.make_length(length)
+        if length == 0:
+            return 'point'
+        elif length <= 2.60:
+            return 'short'
+        elif length <= 5.10:
+            return 'medium'
+        else:
+            return 'long'
+
+
+    def get_pin_rotation(self, pin):
+        """ Return the eaglexml rotation for an openjson pin. """
+
+        if pin.p2.x == pin.p1.x:
+            if pin.p2.y == pin.p1.y:
+                return None # point
+            elif pin.p2.y < pin.p1.y:
+                return 'R90'
+            else:
+                return 'R270'
+        elif pin.p2.x < pin.p1.x:
+            return None
+        else:
+            return 'R180'
 
 
     def add_physical_component_to_deviceset(self, cpt, lib, deviceset):
@@ -266,6 +306,9 @@ class EagleXML(object):
 
 
     def ensure_device_for_component_instance(self, cpt_inst):
+        """ Return an eagle device for an openjson component instance,
+        creating a new one if necessary. """
+
         name = cpt_inst.attributes.get('eaglexml_device', '')
 
         if (cpt_inst.library_id, name) in self.cptdname2dev:

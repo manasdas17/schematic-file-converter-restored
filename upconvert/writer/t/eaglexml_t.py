@@ -94,8 +94,7 @@ class EagleXMLTests(unittest.TestCase):
         The correct devicesets are generated.
         """
 
-        lib = [lib for lib in self.dom.drawing.schematic.libraries.library
-               if lib.name == 'atmel'][0]
+        lib = self.get_library('atmel')
         dsnames = [ds.name for ds in lib.devicesets.deviceset]
         self.assertTrue('TINY15L' in dsnames, dsnames)
 
@@ -117,9 +116,7 @@ class EagleXMLTests(unittest.TestCase):
         The correct symbols are generated.
         """
 
-        lib = [lib for lib
-               in self.dom.drawing.schematic.libraries.library
-               if lib.name == 'transistor-pnp'][0]
+        lib = self.get_library('transistor-pnp')
         self.assertEqual(len(lib.symbols.symbol), 1)
         self.assertEqual(lib.symbols.symbol[0].name, 'PNP')
 
@@ -130,9 +127,7 @@ class EagleXMLTests(unittest.TestCase):
         The correct symbol wires are generated.
         """
 
-        lib = [lib for lib
-               in self.dom.drawing.schematic.libraries.library
-               if lib.name == 'transistor-pnp'][0]
+        lib = self.get_library('transistor-pnp')
         sym = lib.symbols.symbol[0]
         self.assertEqual(len(sym.wire), 11)
         wire = sym.wire[0]
@@ -148,9 +143,7 @@ class EagleXMLTests(unittest.TestCase):
         The correct symbol wires are generated.
         """
 
-        lib = [lib for lib
-               in self.dom.drawing.schematic.libraries.library
-               if lib.name == 'transistor-pnp'][0]
+        lib = self.get_library('transistor-pnp')
         sym = lib.symbols.symbol[0]
         self.assertEqual(len(sym.rectangle), 1)
         rect = sym.rectangle[0]
@@ -158,6 +151,35 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(rect.y1, -2.54)
         self.assertEqual(rect.x2, 0.565)
         self.assertEqual(rect.y2, 2.54)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbol_pins(self):
+        """
+        The correct symbol pins are generated.
+        """
+
+        lib = self.get_library('transistor-pnp')
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(len(sym.pin), 3)
+        pin = sym.pin[0]
+        self.assertEqual(pin.name, "B")
+        self.assertEqual(pin.x, -2.54)
+        self.assertEqual(pin.y, 0)
+        self.assertEqual(pin.length, "short")
+        self.assertEqual(pin.rot, None)
+        pin = sym.pin[1]
+        self.assertEqual(pin.name, "E")
+        self.assertEqual(pin.x, 2.54)
+        self.assertEqual(pin.y, 5.08)
+        self.assertEqual(pin.length, "short")
+        self.assertEqual(pin.rot, "R270")
+        pin = sym.pin[2]
+        self.assertEqual(pin.name, "C")
+        self.assertEqual(pin.x, 2.54)
+        self.assertEqual(pin.y, -5.08)
+        self.assertEqual(pin.length, "short")
+        self.assertEqual(pin.rot, "R90")
 
 
     @use_file('E1AA60D5.sch')
@@ -220,3 +242,10 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(seg.pinref[1].part, 'R3')
         self.assertEqual(seg.pinref[1].gate, 'G$1')
         self.assertEqual(seg.pinref[1].pin, '2')
+
+    def get_library(self, name):
+        """ Return the named library from the dom. """
+
+        return [lib for lib
+                in self.dom.drawing.schematic.libraries.library
+                if lib.name == name][0]
