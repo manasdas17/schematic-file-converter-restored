@@ -15,16 +15,14 @@ def verify_json(data):
 	component_and_pins = {}
 
 	for comp_id, comp in data['components'].iteritems():
+		component_and_pins[comp_id] = 0
 		for symbol in comp['symbols']:
 			for body in symbol['bodies']:
 				for pin in body ['pins']:
-					if comp_id not in component_and_pins:
-						component_and_pins[comp_id] = pin['pin_number']
+					if component_and_pins[comp_id] >= pin['pin_number']:
+						continue
 					else:
-						if component_and_pins[comp_id] >= pin['pin_number']:
-							continue
-						else:
-							component_and_pins[comp_id] = pin['pin_number']
+						component_and_pins[comp_id] = pin['pin_number']
 
 	assert ('nets' in data)
 
