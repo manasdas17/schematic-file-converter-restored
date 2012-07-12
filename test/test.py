@@ -31,6 +31,7 @@ import subprocess
 import tempfile
 
 from upconvert.upconverter import Upconverter
+from upconvert.utils.verify_json import verify_json
 
 
 sch_re = re.compile(r'.*\.sch$')
@@ -110,6 +111,8 @@ def test_parse_generator(file_path, format):
     def test(self):
         data = Upconverter.parse(file_path, format)
         self.assertTrue(data != None)
+
+        verify_json(data.json())
 
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.close(tmp_fd)
