@@ -32,8 +32,8 @@ def verify_json(data):
 		for point in net['points']:
 			for comp in point['connected_components']:
 				lib_id = instance_and_lib[comp['instance_id']]
-				if type(comp['pin_number']) is str:
-					assert (int(comp['pin_number']) <= component_and_pins[lib_id])
-				else:
+				if type(comp['pin_number']) is int:
 					assert (comp['pin_number'] <= component_and_pins[lib_id])
+				else:
+					assert (int(comp['pin_number']) <= component_and_pins[lib_id])
 
