@@ -49,6 +49,11 @@ class EagleXML(object):
         # map (component id, device name) to eaglexml devices
         self.cptdname2dev = {} # (component id, device name) -> device
 
+        # map (component id, pin name) to eaglexml gate names
+        self.cptpin2gate = {} # (component id, pin name) -> gate name
+
+        # map (instance id to component id)
+        self.inst2cpt = {}
 
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
@@ -65,6 +70,9 @@ class EagleXML(object):
         """ Return the DOM tree for a design. """
 
         self.design = design
+
+        for ci in design.component_instances:
+            self.inst2cpt[ci.instance_id] = ci.library_id
 
         eagle = G.eagle()
         eagle.drawing = G.drawing()
@@ -194,6 +202,9 @@ class EagleXML(object):
 
                 self.body2gate[body] = gatename
 
+                for pin in body.pins:
+                    self.cptpin2gate[cpt.name, pin.pin_number] = gatename
+
 
     def make_eagle_symbol_for_openjson_body(self, name, body):
         """ Make an eaglexml symbol from an opensjon body. """
@@ -202,21 +213,61 @@ class EagleXML(object):
 
         for shape in body.shapes:
             if shape.type == 'line':
-                wire = G.wire(x1=self.make_length(shape.p1.x),
-                              y1=self.make_length(shape.p1.y),
-                              x2=self.make_length(shape.p2.x),
-                              y2=self.make_length(shape.p2.y))
-                symbol.wire.append(wire)
+                symbol.wire.append(
+                    G.wire(x1=self.make_length(shape.p1.x),
+                           y1=self.make_length(shape.p1.y),
+                           x2=self.make_length(shape.p2.x),
+                           y2=self.make_length(shape.p2.y)))
             elif shape.type == 'rectangle':
-                rect = G.rectangle(x1=self.make_length(shape.x),
-                                   y1=self.make_length(shape.y)
-                                   - self.make_length(shape.height),
-                                   x2=self.make_length(shape.x)
-                                   + self.make_length(shape.width),
-                                   y2=self.make_length(shape.y))
-                symbol.rectangle.append(rect)
+                symbol.rectangle.append(
+                    G.rectangle(x1=self.make_length(shape.x),
+                                y1=self.make_length(shape.y)
+                                - self.make_length(shape.height),
+                                x2=self.make_length(shape.x)
+                                + self.make_length(shape.width),
+                                y2=self.make_length(shape.y)))
+
+        for pin in body.pins:
+            symbol.pin.append(
+                G.pin(name=pin.pin_number,
+                      x=self.make_length(pin.p2.x),
+                      y=self.make_length(pin.p2.y),
+                      length=self.get_pin_length(pin),
+                      rot=self.get_pin_rotation(pin)))
 
         return symbol
+
+
+    def get_pin_length(self, pin):
+        """ Return the eaglexml length for an openjson pin. """
+
+        length = (((pin.p2.x - pin.p1.x) ** 2)
+                  + ((pin.p2.y - pin.p1.y) ** 2)) ** .5
+        length = self.make_length(length)
+        if length == 0:
+            return 'point'
+        elif length <= 2.60:
+            return 'short'
+        elif length <= 5.10:
+            return 'medium'
+        else:
+            return 'long'
+
+
+    def get_pin_rotation(self, pin):
+        """ Return the eaglexml rotation for an openjson pin. """
+
+        if pin.p2.x == pin.p1.x:
+            if pin.p2.y == pin.p1.y:
+                return None # point
+            elif pin.p2.y < pin.p1.y:
+                return 'R90'
+            else:
+                return 'R270'
+        elif pin.p2.x < pin.p1.x:
+            return None
+        else:
+            return 'R180'
 
 
     def add_physical_component_to_deviceset(self, cpt, lib, deviceset):
@@ -255,6 +306,9 @@ class EagleXML(object):
 
 
     def ensure_device_for_component_instance(self, cpt_inst):
+        """ Return an eagle device for an openjson component instance,
+        creating a new one if necessary. """
+
         name = cpt_inst.attributes.get('eaglexml_device', '')
 
         if (cpt_inst.library_id, name) in self.cptdname2dev:
@@ -271,8 +325,9 @@ class EagleXML(object):
     def make_net(self, openjson_net):
         """ Make a new eagle net from an openjson net. """
 
-        # connected components. maps point ids to sets of points
-        # in the net which are connected. These become eagle segments
+        # connected components. maps point ids to sets of points in
+        # the net which are connected visually. These become eagle
+        # segments in the net.
         conncomps = {} # point id -> set([point id])
 
         for point in openjson_net.points.itervalues():
@@ -290,7 +345,46 @@ class EagleXML(object):
                 conncomps[point_id] = conncomp
 
         net = G.net(name=openjson_net.net_id)
+        done = set() # objects ids of point sets
+
+        for pointset in conncomps.itervalues():
+            if id(pointset) not in done:
+                done.add(id(pointset))
+                net.segment.append(self.make_segment(openjson_net, pointset))
+
         return net
+
+
+    def make_segment(self, openjson_net, pointset):
+        wires = set() # ((x1, y1), (x2, y2))
+
+        for point_id in pointset:
+            p1 = openjson_net.points[point_id]
+            x1 = self.make_length(p1.x)
+            y1 = self.make_length(p1.y)
+
+            for point_id in p1.connected_points:
+                p2 = openjson_net.points[point_id]
+                x2 = self.make_length(p2.x)
+                y2 = self.make_length(p2.y)
+                wires.add(tuple(sorted([(x1, y1), (x2, y2)])))
+
+        seg = G.segment()
+
+        for (x1, y1), (x2, y2) in sorted(wires):
+            wire = G.wire(x1=x1, y1=y1, x2=x2, y2=y2)
+            seg.wire.append(wire)
+
+        for point_id in pointset:
+            for cc in openjson_net.points[point_id].connected_components:
+                cid = self.inst2cpt[cc.instance_id]
+                gate = self.cptpin2gate[cid, cc.pin_number]
+                pinref = G.pinref(part=cc.instance_id, gate=gate, pin=cc.pin_number)
+                seg.pinref.append(pinref)
+
+        seg.pinref.sort(key=lambda p : (p.part, p.gate, p.pin))
+
+        return seg
 
 
     def make_length(self, value):

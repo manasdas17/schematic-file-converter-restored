@@ -94,8 +94,7 @@ class EagleXMLTests(unittest.TestCase):
         The correct devicesets are generated.
         """
 
-        lib = [lib for lib in self.dom.drawing.schematic.libraries.library
-               if lib.name == 'atmel'][0]
+        lib = self.get_library('atmel')
         dsnames = [ds.name for ds in lib.devicesets.deviceset]
         self.assertTrue('TINY15L' in dsnames, dsnames)
 
@@ -109,3 +108,144 @@ class EagleXMLTests(unittest.TestCase):
         parts = self.dom.drawing.schematic.parts
         names = [p.name for p in parts.part]
         self.assertTrue('R1' in names, names)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbols(self):
+        """
+        The correct symbols are generated.
+        """
+
+        lib = self.get_library('transistor-pnp')
+        self.assertEqual(len(lib.symbols.symbol), 1)
+        self.assertEqual(lib.symbols.symbol[0].name, 'PNP')
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbol_wires(self):
+        """
+        The correct symbol wires are generated.
+        """
+
+        lib = self.get_library('transistor-pnp')
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(len(sym.wire), 11)
+        wire = sym.wire[0]
+        self.assertEqual(wire.x1, 2.117)
+        self.assertEqual(wire.y1, 1.693)
+        self.assertEqual(wire.x2, 1.552)
+        self.assertEqual(wire.y2, 2.54)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbol_rectangles(self):
+        """
+        The correct symbol wires are generated.
+        """
+
+        lib = self.get_library('transistor-pnp')
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(len(sym.rectangle), 1)
+        rect = sym.rectangle[0]
+        self.assertEqual(rect.x1, -0.282)
+        self.assertEqual(rect.y1, -2.54)
+        self.assertEqual(rect.x2, 0.565)
+        self.assertEqual(rect.y2, 2.54)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_symbol_pins(self):
+        """
+        The correct symbol pins are generated.
+        """
+
+        lib = self.get_library('transistor-pnp')
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(len(sym.pin), 3)
+        pin = sym.pin[0]
+        self.assertEqual(pin.name, "B")
+        self.assertEqual(pin.x, -2.54)
+        self.assertEqual(pin.y, 0)
+        self.assertEqual(pin.length, "short")
+        self.assertEqual(pin.rot, None)
+        pin = sym.pin[1]
+        self.assertEqual(pin.name, "E")
+        self.assertEqual(pin.x, 2.54)
+        self.assertEqual(pin.y, 5.08)
+        self.assertEqual(pin.length, "short")
+        self.assertEqual(pin.rot, "R270")
+        pin = sym.pin[2]
+        self.assertEqual(pin.name, "C")
+        self.assertEqual(pin.x, 2.54)
+        self.assertEqual(pin.y, -5.08)
+        self.assertEqual(pin.length, "short")
+        self.assertEqual(pin.rot, "R90")
+
+
+    @use_file('E1AA60D5.sch')
+    def test_nets(self):
+        """
+        The correct nets are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        names = [n.name for n in nets.net]
+        self.assertTrue('GND' in names, names)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_segments(self):
+        """
+        The correct segments are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        gnd = [n for n in nets.net if n.name == 'GND'][0]
+        self.assertEqual(len(gnd.segment), 7)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_segment_wires(self):
+        """
+        The correct wires in segments are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        net = [n for n in nets.net if n.name == 'N$7'][0]
+        self.assertEqual(len(net.segment), 1)
+        seg = net.segment[0]
+        self.assertEqual(len(seg.wire), 2)
+        self.assertEqual(seg.wire[0].x1, 76.2)
+        self.assertEqual(seg.wire[0].y1, 68.58)
+        self.assertEqual(seg.wire[0].x2, 83.82)
+        self.assertEqual(seg.wire[0].y2, 68.58)
+        self.assertEqual(seg.wire[1].x1, 83.82)
+        self.assertEqual(seg.wire[1].y1, 48.26)
+        self.assertEqual(seg.wire[1].x2, 83.82)
+        self.assertEqual(seg.wire[1].y2, 68.58)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_segment_pinrefs(self):
+        """
+        The correct pinrefs in segments are generated.
+        """
+
+        nets = self.dom.drawing.schematic.sheets.sheet[0].nets
+        net = [n for n in nets.net if n.name == 'N$7'][0]
+        self.assertEqual(len(net.segment), 1)
+        seg = net.segment[0]
+        self.assertEqual(len(seg.pinref), 2)
+        self.assertEqual(seg.pinref[0].part, 'IC1')
+        self.assertEqual(seg.pinref[0].gate, 'G$1')
+        self.assertEqual(seg.pinref[0].pin, '(ADC1)PB2')
+        self.assertEqual(seg.pinref[1].part, 'R3')
+        self.assertEqual(seg.pinref[1].gate, 'G$1')
+        self.assertEqual(seg.pinref[1].pin, '2')
+
+    def get_library(self, name):
+        """ Return the named library from the dom. """
+
+        return [lib for lib
+                in self.dom.drawing.schematic.libraries.library
+                if lib.name == name][0]
