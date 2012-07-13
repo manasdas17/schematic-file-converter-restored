@@ -125,6 +125,19 @@ class EagleXMLTests(unittest.TestCase):
                          self.make_length("-1.651") - self.make_length("-2.54"))
 
 
+    @use_file('450B679C.sch')
+    def test_component_body_polygons(self):
+        """ The right component Rectangles are created on Body objects. """
+
+        cpt = self.get_component('adafruit:LED:logical')
+        polys = [s for s in cpt.symbols[0].bodies[0].shapes
+                 if s.type == 'polygon']
+        self.assertEqual(len(polys), 2)
+        self.assertEqual(len(polys[0].points), 3)
+        self.assertEqual(polys[0].points[0].x, self.make_length("-3.429"))
+        self.assertEqual(polys[0].points[0].y, self.make_length("-2.159"))
+
+
     @use_file('E1AA60D5.sch')
     def test_component_body_labels(self):
         """ The right component Labels are created on Body objects. """
