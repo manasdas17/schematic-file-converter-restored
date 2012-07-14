@@ -161,39 +161,7 @@ class Worker:
                 #      (may actually be done)
 
         for pt in net.points.values():
-            if len(pt.connected_points) < 3:
-                # definitely not a solder dot, so don't try harder
-                continue
-            lines = defaultdict(list)
-            for pid in pt.connected_points:
-                connpt = net.points[pid]
-                if pt.x == connpt.x:
-                    if pt.y == connpt.y:
-                        # no idea why a pt would be connected to itself, but
-                        # we can safely ignore it here
-                        continue
-                    else:
-                        # infinite slope
-                        lines[None].append(connpt)
-                else:
-                    slope = float(connpt.y - pt.y) / (connpt.x - pt.x)
-                    lines[slope].append(connpt)
-            spokes = 0
-            for slope, pts in lines.items():
-                if slope is None:
-                    # actually, we mean infinite
-                    pts.sort(key=lambda p: p.y)
-                    if pts[0].y < pt.y:
-                        spokes += 1
-                    if pts[-1].y > pt.y:
-                        spokes += 1
-                else:
-                    pts.sort(key=lambda p: p.x)
-                    if pts[0].x < pt.x:
-                        spokes += 1
-                    if pts[-1].x > pt.x:
-                        spokes += 1
-            if spokes > 2:                           
+            if self.dot_at(pt, net):
                 drawpt = self.base_xform.chain(pt)
                 # arbitrarily, drawing the dot 4x the minimum dimension in the 
                 # design + 1 pixel.
@@ -208,6 +176,46 @@ class Worker:
             pos = self.base_xform.chain(Point(ann.x, ann.y))
             self.canvas.text((pos.x, pos.y), ann.value,
                              fill=self.options.style['annot'])
+
+
+    def dot_at(self, pt, net):
+        """ return True if a solder dot is required at pt on net """
+        if len(pt.connected_points) + len(pt.connected_components) < 3:
+            # definitely not a solder dot, so don't try harder
+            return False
+        lines = defaultdict(list)
+        for pid in pt.connected_points:
+            connpt = net.points[pid]
+            if pt.x == connpt.x:
+                # case of a pt connected to itself falls through the cracks
+                # here, as is appropriate. Not sure why it would happen, but if
+                # it does it doesn't make any difference as to whether to draw a
+                # solder dot or no
+                if pt.y != connpt.y:
+                    # infinite slope
+                    lines[None].append(connpt)
+            else:
+                slope = float(connpt.y - pt.y) / (connpt.x - pt.x)
+                lines[slope].append(connpt)
+
+        spokes = 0
+        for slope, pts in lines.items():
+            # figure out which axis to compare along
+            if slope is None:
+                # actually, this means infinite slope
+                axis = lambda p: p.y
+            else:
+                axis = lambda p: p.x
+
+            pts.sort(key=axis)
+            if axis(pts[0]) < axis(pt):
+                # there is at least one connected point "lower" along this slope
+                spokes += 1
+            if axis(pts[-1]) > axis(pt):
+                # there is at least one connected point "higher" along the slope
+                spokes += 1
+
+        return (spokes + len(pt.connected_components)) > 2
 
 
     def draw_shape_circle(self, circle, xform, colour):
