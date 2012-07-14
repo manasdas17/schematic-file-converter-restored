@@ -87,8 +87,7 @@ class Worker:
                                   inst.symbol_attributes):
                 # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
-                self.draw_symbol(body, pos, attr.rotation, attr.flip,
-                                 self.base_xform)
+                self.draw_symbol(body, pos, attr.rotation, attr.flip)
                 # draw in any annotations
                 for ann in attr.annotations:
                     if ann.visible:
@@ -115,14 +114,9 @@ class Worker:
                                   fill=self.options.style['annot'])
 
 
-    def draw_symbol(self, body, offset=None, rot=0, flip=False, xform=None):
+    def draw_symbol(self, body, offset, rot, flip):
         """draw a symbol at the location of offset"""
-        if xform is None:
-            xform = XForm()
-        else:
-            xform = xform.copy()
-        if offset is None:
-            offset = Point(0, 0)
+        xform = self.base_xform.copy()
         # flip if necessary, then rotate the symbol, then shift.
         # Want to rotate before it's been moved away from the global origin.
         if flip:
@@ -136,7 +130,8 @@ class Worker:
         for shape in body.shapes:
             if shape.type == 'arc':
                 # special case, to pass along rotation
-                self.draw_shape_arc(shape, xform, rot, self.options.style['part'])
+                self.draw_shape_arc(shape, xform, rot,
+                                    self.options.style['part'])
             else:
                 draw_method = getattr(self, 'draw_shape_%s' % shape.type)
                 draw_method(shape, xform, self.options.style['part'])
