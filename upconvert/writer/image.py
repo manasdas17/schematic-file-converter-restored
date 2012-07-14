@@ -63,7 +63,8 @@ class Worker:
         height = int(maxpt.y - minpt.y)
 
         # Setup image & design
-        self.image = Img.new('RGB', (width, height),
+        self.image = Img.new('RGB', (width * self.options.scale,
+                                     height * self.options.scale),
                              self.options.style['bground'])
         self.canvas = ImageDraw.Draw(self.image)
 
