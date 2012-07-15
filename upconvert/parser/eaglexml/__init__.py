@@ -43,8 +43,6 @@
 #     file.
 #
 # TODO: handle physical component representation
-# TODO: handle polygons
-# TODO: net connected component points
 
 from collections import defaultdict
 
