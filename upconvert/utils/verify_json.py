@@ -15,14 +15,11 @@ def verify_json(data):
 	component_and_pins = {}
 
 	for comp_id, comp in data['components'].iteritems():
-		component_and_pins[comp_id] = 0
+		component_and_pins[comp_id] = []
 		for symbol in comp['symbols']:
 			for body in symbol['bodies']:
 				for pin in body ['pins']:
-					if component_and_pins[comp_id] >= pin['pin_number']:
-						continue
-					else:
-						component_and_pins[comp_id] = pin['pin_number']
+					component_and_pins[comp_id].append(pin['pin_number'])
 
 	assert ('nets' in data)
 
@@ -32,8 +29,4 @@ def verify_json(data):
 		for point in net['points']:
 			for comp in point['connected_components']:
 				lib_id = instance_and_lib[comp['instance_id']]
-				if type(comp['pin_number']) is int:
-					assert (comp['pin_number'] <= component_and_pins[lib_id])
-				else:
-					assert (int(comp['pin_number']) <= component_and_pins[lib_id])
-
+				assert (comp['pin_number'] in component_and_pins[lib_id])
