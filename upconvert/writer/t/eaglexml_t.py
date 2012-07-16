@@ -153,6 +153,22 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(rect.y2, 2.54)
 
 
+    @use_file('450B679C.sch')
+    def test_symbol_polygons(self):
+        """
+        The correct symbol wires are generated.
+        """
+
+        lib = self.get_library('adafruit')
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(sym.name, 'LED')
+        self.assertEqual(len(sym.polygon), 2)
+        poly = sym.polygon[0]
+        self.assertEqual(len(poly.vertex), 3)
+        self.assertEqual(poly.vertex[0].x, -3.387)
+        self.assertEqual(poly.vertex[0].y, -2.117)
+
+
     @use_file('E1AA60D5.sch')
     def test_symbol_pins(self):
         """

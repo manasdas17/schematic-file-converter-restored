@@ -226,6 +226,8 @@ class EagleXML(object):
                                 x2=self.make_length(shape.x)
                                 + self.make_length(shape.width),
                                 y2=self.make_length(shape.y)))
+            elif shape.type == 'polygon':
+                symbol.polygon.append(self.make_polygon(shape))
 
         for pin in body.pins:
             symbol.pin.append(
@@ -236,6 +238,18 @@ class EagleXML(object):
                       rot=self.get_pin_rotation(pin)))
 
         return symbol
+
+
+    def make_polygon(self, ipoly):
+        """ Make an eagle polygon from an opensjon polygon. """
+
+        poly = G.polygon()
+
+        for point in ipoly.points:
+            poly.vertex.append(G.vertex(x=self.make_length(point.x),
+                                        y=self.make_length(point.y)))
+
+        return poly
 
 
     def get_pin_length(self, pin):
