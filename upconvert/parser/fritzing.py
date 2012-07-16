@@ -656,7 +656,7 @@ class PathParser(object):
         return data
 
 
-    def parse_z(self, data):
+    def parse_z(self, data, is_relative):
         """ Parse a Z or z (closepath) segment. """
 
         self.shapes.append(

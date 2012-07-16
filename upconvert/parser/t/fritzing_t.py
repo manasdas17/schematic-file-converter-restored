@@ -397,7 +397,7 @@ class FritzingTests(TestCase):
 
         pp.cur_point = (72, 144)
         pp.start_point = (-72, -144)
-        rest = pp.parse_z('rest')
+        rest = pp.parse_z('rest', False)
 
         self.assertEqual(rest, 'rest')
         self.assertEqual(pp.start_point, (-72, -144))
