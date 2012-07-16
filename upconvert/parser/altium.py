@@ -99,45 +99,45 @@ class Altium:
         in_file = open(file_path, "rb")
         if in_file:
             # Read the entire contents, omitting the interrupting blocks.
-            input_file = in_file.read(0x200)
+            input = in_file.read(0x200)
             # Skip the first 0x200 interrupting block.
             temp = in_file.read(0x200)
             while temp:
                 # Read the next 0x10000 minus 0x200.
                 temp = in_file.read(0xFE00)
-                input_file += temp
+                input += temp
                 # Skip the next 0x200 interrupting block.
                 temp = in_file.read(0x200)
             in_file.close()
             # Store all the headers, though they are not used.
             cursor_start = 0
-            self.first_header = input_file[cursor_start:cursor_start+0x200]
+            self.first_header = input[cursor_start:cursor_start+0x200]
             cursor_start += 0x200
-            self.root_entry = input_file[cursor_start:cursor_start+0x80]
+            self.root_entry = input[cursor_start:cursor_start+0x80]
             cursor_start += 0x80
-            self.file_header = input_file[cursor_start:cursor_start+0x80]
+            self.file_header = input[cursor_start:cursor_start+0x80]
             cursor_start += 0x80
-            self.storage = input_file[cursor_start:cursor_start+0x80]
+            self.storage = input[cursor_start:cursor_start+0x80]
             cursor_start += 0x80
-            self.additional = input_file[cursor_start:cursor_start+0x80]
+            self.additional = input[cursor_start:cursor_start+0x80]
             cursor_start += 0x80
-            self.last_header = input_file[cursor_start:cursor_start+0x200]
+            self.last_header = input[cursor_start:cursor_start+0x200]
             cursor_start += 0x200
             # Now prepare to read each of the parts.  Initialize an "end" cursor.
             cursor_end = 0
             # Get the size of the next part block.
-            next_size = struct.unpack("<I", input_file[cursor_start:cursor_start+4])[0]
+            next_size = struct.unpack("<I", input[cursor_start:cursor_start+4])[0]
             # Advance the "start" cursor.
             cursor_start += 4
             # Create a list to store all the parts.
             self.parts = []
             # Loop through until the "next size" is 0, which is the end of the parts list.
             while next_size != 0:
-                cursor_end = input_file.find("\x00", cursor_start)
+                cursor_end = input.find("\x00", cursor_start)
                 # Create a dictionary to store all the property:value pairs.
                 result = {}
                 # Get a list of pairs by splitting on the separator character "|".
-                property_list = input_file[cursor_start:cursor_end].split("|")
+                property_list = input[cursor_start:cursor_end].split("|")
                 # For each one, copy out whatever is before any "=" as property, and whatever is
                 # after any "=" as value.
                 for prop in property_list:
@@ -151,7 +151,7 @@ class Altium:
                 self.parts.append(result)
                 # Set things up for the next iteration of the loop.
                 cursor_start = cursor_end + 1
-                next_size = struct.unpack("<I", input_file[cursor_start:cursor_start+4])[0]
+                next_size = struct.unpack("<I", input[cursor_start:cursor_start+4])[0]
                 cursor_start += 4
             # Here the footers could be found and stored, but I don't think they're important.
 
