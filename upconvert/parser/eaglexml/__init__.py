@@ -53,7 +53,7 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.shape import Label, Line, Rectangle, Polygon
 
-from upconvert.parser.eaglexml.generated import parse
+from upconvert.parser.eaglexml.generated_g import parse
 
 
 class EagleXML(object):
