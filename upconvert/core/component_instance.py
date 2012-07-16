@@ -51,20 +51,20 @@ class ComponentInstance:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the instance. """
-        for a in self.symbol_attributes:
-            a.scale(factor)
+        for attr in self.symbol_attributes:
+            attr.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the instance. """
-        for a in self.symbol_attributes:
-            a.shift(dx, dy)
+        for attr in self.symbol_attributes:
+            attr.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the instance. """
-        for a in self.symbol_attributes:
-            a.rebase_y_axis(height)
+        for attr in self.symbol_attributes:
+            attr.rebase_y_axis(height)
 
 
     def json(self):
@@ -100,23 +100,23 @@ class SymbolAttribute:
         """ Scale the x & y coordinates in the attributes. """
         self.x *= factor
         self.y *= factor
-        for a in self.annotations:
-            a.scale(factor)
+        for anno in self.annotations:
+            anno.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the attributes. """
         self.x += dx
         self.y += dy
-        for a in self.annotations:
-            a.shift(dx, dy)
+        for anno in self.annotations:
+            anno.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the attributes. """
         self.y = height - self.y
-        for a in self.annotations:
-            a.rebase_y_axis(height)
+        for anno in self.annotations:
+            anno.rebase_y_axis(height)
 
 
     def json(self):

@@ -25,6 +25,7 @@ from upconvert.core.shape import Circle, Rectangle, Shape
 from upconvert.parser.fritzing import Fritzing, ComponentParser, PathParser
 from upconvert.parser.fritzing import make_x, make_y, make_length, get_pin
 from upconvert.parser.fritzing import get_x, get_y, get_length
+
 from unittest import TestCase
 
 from os.path import dirname, join
@@ -396,7 +397,7 @@ class FritzingTests(TestCase):
 
         pp.cur_point = (72, 144)
         pp.start_point = (-72, -144)
-        rest = pp.parse_z('rest', False)
+        rest = pp.parse_z('rest')
 
         self.assertEqual(rest, 'rest')
         self.assertEqual(pp.start_point, (-72, -144))

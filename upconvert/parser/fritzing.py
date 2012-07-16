@@ -45,6 +45,7 @@ class Fritzing(object):
 
     def __init__(self):
         self.design = Design()
+        self.body = None
 
         # This maps fritzing connector keys to (x, y) coordinates
         self.points = {} # (index, connid) -> (x, y)
@@ -73,12 +74,12 @@ class Fritzing(object):
         elif filename.endswith('.fzz'):
             confidence += 0.9
         if confidence == 0 and zipfile.is_zipfile(filename):
-            zf = zipfile.ZipFile(filename)
-            for name in zf.namelist():
+            zip_file = zipfile.ZipFile(filename)
+            for name in zip_file.namelist():
                 if name.endswith('.fz'):
                     confidence += 0.9
                     break
-            zf.close()
+            zip_file.close()
         return confidence
 
 
@@ -143,8 +144,8 @@ class Fritzing(object):
 
         conn_keys = []
 
-        for connect in view.findall('connectors/connector/connects/connect'):
-            if connect.get('layer') == 'breadboardbreadboard':
+        for connects in view.findall('connectors/connector/connects/connect'):
+            if connects.get('layer') == 'breadboardbreadboard':
                 return
 
         for i, connector in enumerate(view.findall('connectors/connector'), 1):
@@ -655,7 +656,7 @@ class PathParser(object):
         return data
 
 
-    def parse_z(self, data, is_relative):
+    def parse_z(self, data):
         """ Parse a Z or z (closepath) segment. """
 
         self.shapes.append(

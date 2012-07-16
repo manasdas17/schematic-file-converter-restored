@@ -29,8 +29,7 @@ from upconvert.core.design import Design
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
-from upconvert.core.shape import Circle, Line, Rectangle, Label, Polygon, Point, Arc
-from upconvert.core.annotation import Annotation
+from upconvert.core.shape import Circle, Line, Rectangle, Polygon, Point, Arc
 
 from string import whitespace
 from sys import maxint
@@ -61,7 +60,7 @@ class Specctra(object):
             confidence += 0.75
         return confidence
 
-    def parse(self, filename, library_filename=None):
+    def parse(self, filename):
         """ Parse a specctra file into a design """
 
         self.design = Design()
@@ -80,11 +79,11 @@ class Specctra(object):
     def _convert(self, struct):
         for bound in struct.structure.boundary:
             if bound.rectangle.layer_id == 'pcb':
-                v1, v2 = bound.rectangle.vertex1, bound.rectangle.vertex2
-                self.min_x = self.to_pixels(min(v1[0], v2[0]))
-                self.max_x = self.to_pixels(max(v1[0], v2[0]))
-                self.min_y = self.to_pixels(min(v1[1], v2[1]))
-                self.max_y = self.to_pixels(max(v1[1], v2[1]))
+                vertex1, vertex2 = bound.rectangle.vertex1, bound.rectangle.vertex2
+                self.min_x = self.to_pixels(min(vertex1[0], vertex2[0]))
+                self.max_x = self.to_pixels(max(vertex1[0], vertex2[0]))
+                self.min_y = self.to_pixels(min(vertex1[1], vertex2[1]))
+                self.max_y = self.to_pixels(max(vertex1[1], vertex2[1]))
                 break
 
         self._convert_library(struct)
@@ -163,7 +162,8 @@ class Specctra(object):
 
                         np1.add_connected_point(np2.point_id)
                         np2.add_connected_point(np1.point_id)
-                    except: pass
+                    except: 
+                        pass
 
     def _convert_nets(self, struct):
         # FIXME polyline_path is not documented and no success with reverse engineering yet

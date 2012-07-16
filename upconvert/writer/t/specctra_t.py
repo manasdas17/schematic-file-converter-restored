@@ -22,17 +22,11 @@
 
 
 from upconvert.writer.specctra import Specctra
-from upconvert.core.design import Design
-from upconvert.core.components import Pin
-from upconvert.core.net import Net, NetPoint
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
-from upconvert.core.shape import Label, Rectangle, Polygon, Arc, BezierCurve, Circle
-from upconvert.core.annotation import Annotation
-from upconvert.parser.openjson import JSON
+from upconvert.core.shape import Rectangle, Polygon, Arc, BezierCurve, Circle
+from upconvert.parser import specctraobj
 
-import sys
 import unittest
-import math
 
 def to_string(writer, obj):
     if isinstance(obj, list):
@@ -50,6 +44,9 @@ class SpecctraTests(unittest.TestCase):
         inst = ComponentInstance('id', 'libid', 1)
         inst.add_symbol_attribute(SymbolAttribute(3, 4, 0.5, False))
         writer = Specctra()
+        writer.resolution = specctraobj.Resolution()
+        writer.resolution.unit = 'mil'
+        writer.resolution.resolution = 10
         obj = writer._convert_component_instance(inst)
         self.assertEqual(
                 to_string(writer, obj),
@@ -60,6 +57,9 @@ class SpecctraTests(unittest.TestCase):
 
         circle = Circle(10, 20, 10)
         writer = Specctra()
+        writer.resolution = specctraobj.Resolution()
+        writer.resolution.unit = 'mil'
+        writer.resolution.resolution = 10
         obj = writer._convert_shape(circle)
         self.assertEqual(
                 to_string(writer, obj),
@@ -70,6 +70,9 @@ class SpecctraTests(unittest.TestCase):
 
         rect = Rectangle(10, 20, 5, 10)
         writer = Specctra()
+        writer.resolution = specctraobj.Resolution()
+        writer.resolution.unit = 'mil'
+        writer.resolution.resolution = 10
         obj = writer._convert_shape(rect)
         self.assertEqual(
                 to_string(writer, obj),
@@ -84,16 +87,23 @@ class SpecctraTests(unittest.TestCase):
         poly.add_point(10, 10)
         poly.add_point(10, 0)
         writer = Specctra()
+        writer.resolution = specctraobj.Resolution()
+        writer.resolution.unit = 'mil'
+        writer.resolution.resolution = 10
         obj = writer._convert_shape(poly)
         self.assertEqual(
                 to_string(writer, obj), 
-                '( (polygon signal 10.416667 0.000000 0.000000 0.000000 104.166667 104.166667 104.166667 104.166667 0.000000) )')
+                '( (polygon signal 10.416667 0.000000 0.000000 0.000000 104.166667 104.166667' +
+                ' 104.166667 104.166667 0.000000) )')
 
     def test_arc(self):
         """ Convert arc to lines shape """
 
         arc = Arc(0, 0, -0.5, 0.5, 1)
         writer = Specctra()
+        writer.resolution = specctraobj.Resolution()
+        writer.resolution.unit = 'mil'
+        writer.resolution.resolution = 10
         obj = writer._convert_shape(arc)
         self.assertEqual(
                 to_string(writer, obj), 
@@ -108,6 +118,9 @@ class SpecctraTests(unittest.TestCase):
 
         bezier = BezierCurve((0, 0), (1, 1), (2, 2), (3, 3))
         writer = Specctra()
+        writer.resolution = specctraobj.Resolution()
+        writer.resolution.unit = 'mil'
+        writer.resolution.resolution = 10
         obj = writer._convert_shape(bezier)
         self.assertEqual(
                 to_string(writer, obj),

@@ -393,7 +393,8 @@ class ComponentParser(object):
                     body.add_pin(obj)
                 else:
                     if isinstance(obj, (list, tuple)):
-                        [body.add_shape(o) for o in obj]
+                        for o in obj:
+                            body.add_shape(o)
                     else:
                         body.add_shape(obj)
 
@@ -457,7 +458,7 @@ class ComponentParser(object):
 
     def parse_x_line(self, parts):
         """ Parse an X (Pin) line """
-        name, num, direction = parts[1], parts[2], parts[6]
+        name, num, direction = parts[1], int(parts[2]), parts[6]
         p2x, p2y, pinlen = int(parts[3]), int(parts[4]), int(parts[5])
 
         if direction == 'U': # up

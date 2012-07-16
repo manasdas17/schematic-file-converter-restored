@@ -448,13 +448,13 @@ N 55700 44400 55700 43500 4"""
         ## check nets from design
         self.assertEquals(len(design.nets), 3)
 
-        self.assertItemsEqual(
-            [net.net_id for net in design.nets],
-            ['another name', 'test', '5320a4350']
+        self.assertEqual(
+            sorted([net.net_id for net in design.nets]),
+            sorted(['another name', 'test', '5320a4350'])
         )
-        self.assertItemsEqual(
-            [net.attributes.get('_name', None) for net in design.nets],
-            ['another name', 'test', None]
+        self.assertEqual(
+            sorted([net.attributes.get('_name', None) for net in design.nets]),
+            sorted(['another name', 'test', None])
         )
 
         sorted_nets = {}
@@ -467,9 +467,9 @@ N 55700 44400 55700 43500 4"""
         points_n2 = sorted_nets[3]
         points_n3 = sorted_nets[5]
 
-        self.assertItemsEqual(
-            points_n1.keys(),
-            ['5320a4510', '5320a4350']
+        self.assertEqual(
+            sorted(points_n1.keys()),
+            sorted(['5320a4510', '5320a4350'])
         )
         self.assertEquals(
             points_n1['5320a4510'].connected_points,
@@ -1171,9 +1171,9 @@ class GEDATopLevelShapeTests(GEDATestCase):
         self.assertEquals(len(design.shapes), 2)
         self.assertEquals(len(design.pins), 2)
 
-        self.assertItemsEqual(
-            ['line', 'line'],
-            [s.type for s in design.shapes]
+        self.assertEqual(
+            sorted(['line', 'line']),
+            sorted([s.type for s in design.shapes])
         )
 
 
@@ -1195,7 +1195,7 @@ class GEDAStyleTests(GEDATestCase):
         }
         shape_ = upconvert.core.shape.Arc(0, 0, 200, 200, 200)
         self.geda_parser._save_parameters_to_object(shape_, params)
-        self.assertItemsEqual(shape_.styles, {
+        self.assertEqual(shape_.styles, {
             'style_capstyle': None,
             'style_color': None,
             'style_dashlength': None,
@@ -1220,7 +1220,7 @@ class GEDAStyleTests(GEDATestCase):
             object,
             {'style_color': 1, 'style_somethingelse': 1},
         )
-        self.assertIn('without styles dict', stream.getvalue())
+        self.assertTrue('without styles dict' in stream.getvalue())
 
 
 class GEDAFullConversionTests(GEDATestCase):

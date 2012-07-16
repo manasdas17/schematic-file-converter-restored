@@ -27,20 +27,20 @@ class Netlist(object):
         """ Write the design to the Netlist format """
 
         nets = {}
-        for n in design.nets:
+        for net in design.nets:
             endpoints = []
-            for p in n.points.values():
-                for c in p.connected_components:
-                    endpoints.append('%s.%s' % (c.instance_id, c.pin_number))
+            for point in net.points.values():
+                for connect in point.connected_components:
+                    endpoints.append('%s.%s' % (connect.instance_id, connect.pin_number))
 
-            if n.net_id in nets:
-                nets[n.net_id]['endpoints'].extend(endpoints)
+            if net.net_id in nets:
+                nets[net.net_id]['endpoints'].extend(endpoints)
             else:
-                nets[n.net_id] = {'name': n.net_id,
+                nets[net.net_id] = {'name': net.net_id,
                                   'endpoints': endpoints}
 
         with open(filename, "w") as f:
             f.write('Name,Connections\n')
-            for n in nets.values():
-                if len(n['endpoints']) > 0:
-                    f.write('%s:%s\n' % (n['name'], ','.join(n['endpoints'])))
+            for net in nets.values():
+                if len(net['endpoints']) > 0:
+                    f.write('%s:%s\n' % (net['name'], ','.join(net['endpoints'])))

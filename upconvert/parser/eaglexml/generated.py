@@ -202,42 +202,42 @@ def showIndent(outfile, level):
 def quote_xml(inStr):
     if not inStr:
         return ''
-    s1 = (isinstance(inStr, basestring) and inStr or
+    string1 = (isinstance(inStr, basestring) and inStr or
           '%s' % inStr)
-    s1 = s1.replace('&', '&amp;')
-    s1 = s1.replace('<', '&lt;')
-    s1 = s1.replace('>', '&gt;')
-    return s1
+    string1 = string1.replace('&', '&amp;')
+    string1 = string1.replace('<', '&lt;')
+    string1 = string1.replace('>', '&gt;')
+    return string1
 
 def quote_attrib(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    string1 = (isinstance(inStr, basestring) and inStr or
           '%s' % inStr)
-    s1 = s1.replace('&', '&amp;')
-    s1 = s1.replace('<', '&lt;')
-    s1 = s1.replace('>', '&gt;')
-    if '"' in s1:
-        if "'" in s1:
-            s1 = '"%s"' % s1.replace('"', "&quot;")
+    string1 = string1.replace('&', '&amp;')
+    string1 = string1.replace('<', '&lt;')
+    string1 = string1.replace('>', '&gt;')
+    if '"' in string1:
+        if "'" in string1:
+            string1 = '"%s"' % string1.replace('"', "&quot;")
         else:
-            s1 = "'%s'" % s1
+            string1 = "'%s'" % string1
     else:
-        s1 = '"%s"' % s1
-    return s1
+        string1 = '"%s"' % string1
+    return string1
 
 def quote_python(inStr):
-    s1 = inStr
-    if s1.find("'") == -1:
-        if s1.find('\n') == -1:
-            return "'%s'" % s1
+    string1 = inStr
+    if string1.find("'") == -1:
+        if string1.find('\n') == -1:
+            return "'%s'" % string1
         else:
-            return "'''%s'''" % s1
+            return "'''%s'''" % string1
     else:
-        if s1.find('"') != -1:
-            s1 = s1.replace('"', '\\"')
-        if s1.find('\n') == -1:
-            return '"%s"' % s1
+        if string1.find('"') != -1:
+            string1 = string1.replace('"', '\\"')
+        if string1.find('\n') == -1:
+            return '"%s"' % string1
         else:
-            return '"""%s"""' % s1
+            return '"""%s"""' % string1
 
 def get_all_text_(node):
     if node.text is not None:
@@ -296,7 +296,7 @@ class MixedContainer:
         self.value = value
     def getCategory(self):
         return self.category
-    def getContenttype(self, content_type):
+    def getContenttype(self):
         return self.content_type
     def getValue(self):
         return self.value
@@ -308,10 +308,10 @@ class MixedContainer:
             if self.value.strip(): 
                 outfile.write(self.value)
         elif self.category == MixedContainer.CategorySimple:
-            self.exportSimple(outfile, level, name)
+            self.exportSimple(outfile, level)
         else:    # category == MixedContainer.CategoryComplex
-            self.value.export(outfile, level, namespace,name)
-    def exportSimple(self, outfile, level, name):
+            self.value.export(outfile, level, namespace, name)
+    def exportSimple(self, outfile, level):
         if self.content_type == MixedContainer.TypeString:
             outfile.write('<%s>%s</%s>' % (self.name, self.value, self.name))
         elif self.content_type == MixedContainer.TypeInteger or \
@@ -345,10 +345,14 @@ class MemberSpec_(object):
         self.name = name
         self.data_type = data_type
         self.container = container
-    def set_name(self, name): self.name = name
-    def get_name(self): return self.name
-    def set_data_type(self, data_type): self.data_type = data_type
-    def get_data_type_chain(self): return self.data_type
+    def set_name(self, name):
+        self.name = name
+    def get_name(self):
+        return self.name
+    def set_data_type(self, data_type):
+        self.data_type = data_type
+    def get_data_type_chain(self):
+        return self.data_type
     def get_data_type(self):
         if isinstance(self.data_type, list):
             if len(self.data_type) > 0:
@@ -357,8 +361,10 @@ class MemberSpec_(object):
                 return 'xs:string'
         else:
             return self.data_type
-    def set_container(self, container): self.container = container
-    def get_container(self): return self.container
+    def set_container(self, container):
+        self.container = container
+    def get_container(self):
+        return self.container
 
 def _cast(typ, value):
     if typ is None or value is None:
@@ -382,12 +388,18 @@ class eagle(GeneratedsSuper):
         else:
             return eagle(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_compatibility(self): return self.compatibility
-    def set_compatibility(self, compatibility): self.compatibility = compatibility
-    def get_drawing(self): return self.drawing
-    def set_drawing(self, drawing): self.drawing = drawing
-    def get_version(self): return self.version
-    def set_version(self, version): self.version = version
+    def get_compatibility(self):
+        return self.compatibility
+    def set_compatibility(self, compatibility):
+        self.compatibility = compatibility
+    def get_drawing(self):
+        return self.drawing
+    def set_drawing(self, drawing):
+        self.drawing = drawing
+    def get_version(self):
+        return self.version
+    def set_version(self, version):
+        self.version = version
     def export(self, outfile, level, namespace_='t:', name_='eagle', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -403,7 +415,8 @@ class eagle(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='eagle'):
         if self.version is not None and 'version' not in already_processed:
             already_processed.append('version')
-            outfile.write(' version=%s' % (self.gds_format_string(quote_attrib(self.version).encode(ExternalEncoding), input_name='version'), ))
+            outfile.write(' version=%s' % (self.gds_format_string(quote_attrib(self.version).encode(ExternalEncoding), 
+                input_name='version'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='eagle', fromsubclass_=False):
         if self.compatibility is not None:
             self.compatibility.export(outfile, level, namespace_, name_='compatibility')
@@ -476,10 +489,14 @@ class compatibility(GeneratedsSuper):
         else:
             return compatibility(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_note(self): return self.note
-    def set_note(self, note): self.note = note
-    def add_note(self, value): self.note.append(value)
-    def insert_note(self, index, value): self.note[index] = value
+    def get_note(self):
+        return self.note
+    def set_note(self, note):
+        self.note = note
+    def add_note(self, value):
+        self.note.append(value)
+    def insert_note(self, index, value):
+        self.note[index] = value
     def export(self, outfile, level, namespace_='t:', name_='compatibility', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -561,12 +578,18 @@ class note(GeneratedsSuper):
         else:
             return note(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_version(self): return self.version
-    def set_version(self, version): self.version = version
-    def get_severity(self): return self.severity
-    def set_severity(self, severity): self.severity = severity
-    def get_valueOf_(self): return self.valueOf_
-    def set_valueOf_(self, valueOf_): self.valueOf_ = valueOf_
+    def get_version(self):
+        return self.version
+    def set_version(self, version):
+        self.version = version
+    def get_severity(self):
+        return self.severity
+    def set_severity(self, severity):
+        self.severity = severity
+    def get_valueOf_(self):
+        return self.valueOf_
+    def set_valueOf_(self, valueOf_):
+        self.valueOf_ = valueOf_
     def export(self, outfile, level, namespace_='t:', name_='note', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -578,10 +601,14 @@ class note(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='note'):
         if self.version is not None and 'version' not in already_processed:
             already_processed.append('version')
-            outfile.write(' version=%s' % (self.gds_format_string(quote_attrib(self.version).encode(ExternalEncoding), input_name='version'), ))
+            outfile.write(' version=%s' 
+                % (self.gds_format_string(quote_attrib(self.version).encode(ExternalEncoding),
+                    input_name='version'), ))
         if self.severity is not None and 'severity' not in already_processed:
             already_processed.append('severity')
-            outfile.write(' severity=%s' % (self.gds_format_string(quote_attrib(self.severity).encode(ExternalEncoding), input_name='severity'), ))
+            outfile.write(' severity=%s' 
+                % (self.gds_format_string(quote_attrib(self.severity).encode(ExternalEncoding),
+                    input_name='severity'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='note', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -653,18 +680,30 @@ class drawing(GeneratedsSuper):
         else:
             return drawing(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_settings(self): return self.settings
-    def set_settings(self, settings): self.settings = settings
-    def get_grid(self): return self.grid
-    def set_grid(self, grid): self.grid = grid
-    def get_layers(self): return self.layers
-    def set_layers(self, layers): self.layers = layers
-    def get_library(self): return self.library
-    def set_library(self, library): self.library = library
-    def get_schematic(self): return self.schematic
-    def set_schematic(self, schematic): self.schematic = schematic
-    def get_board(self): return self.board
-    def set_board(self, board): self.board = board
+    def get_settings(self):
+        return self.settings
+    def set_settings(self, settings):
+        self.settings = settings
+    def get_grid(self):
+        return self.grid
+    def set_grid(self, grid):
+        self.grid = grid
+    def get_layers(self):
+        return self.layers
+    def set_layers(self, layers):
+        self.layers = layers
+    def get_library(self):
+        return self.library
+    def set_library(self, library):
+        self.library = library
+    def get_schematic(self):
+        return self.schematic
+    def set_schematic(self, schematic):
+        self.schematic = schematic
+    def get_board(self):
+        return self.board
+    def set_board(self, board):
+        self.board = board
     def export(self, outfile, level, namespace_='t:', name_='drawing', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -798,16 +837,26 @@ class library(GeneratedsSuper):
         else:
             return library(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_packages(self): return self.packages
-    def set_packages(self, packages): self.packages = packages
-    def get_symbols(self): return self.symbols
-    def set_symbols(self, symbols): self.symbols = symbols
-    def get_devicesets(self): return self.devicesets
-    def set_devicesets(self, devicesets): self.devicesets = devicesets
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_packages(self):
+        return self.packages
+    def set_packages(self, packages):
+        self.packages = packages
+    def get_symbols(self):
+        return self.symbols
+    def set_symbols(self, symbols):
+        self.symbols = symbols
+    def get_devicesets(self):
+        return self.devicesets
+    def set_devicesets(self, devicesets):
+        self.devicesets = devicesets
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='library', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -823,7 +872,8 @@ class library(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='library'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='library', fromsubclass_=False):
         if self.description is not None:
             self.description.export(outfile, level, namespace_, name_='description')
@@ -928,26 +978,46 @@ class schematic(GeneratedsSuper):
         else:
             return schematic(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_libraries(self): return self.libraries
-    def set_libraries(self, libraries): self.libraries = libraries
-    def get_attributes(self): return self.attributes
-    def set_attributes(self, attributes): self.attributes = attributes
-    def get_variantdefs(self): return self.variantdefs
-    def set_variantdefs(self, variantdefs): self.variantdefs = variantdefs
-    def get_classes(self): return self.classes
-    def set_classes(self, classes): self.classes = classes
-    def get_parts(self): return self.parts
-    def set_parts(self, parts): self.parts = parts
-    def get_sheets(self): return self.sheets
-    def set_sheets(self, sheets): self.sheets = sheets
-    def get_errors(self): return self.errors
-    def set_errors(self, errors): self.errors = errors
-    def get_xrefpart(self): return self.xrefpart
-    def set_xrefpart(self, xrefpart): self.xrefpart = xrefpart
-    def get_xreflabel(self): return self.xreflabel
-    def set_xreflabel(self, xreflabel): self.xreflabel = xreflabel
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_libraries(self):
+        return self.libraries
+    def set_libraries(self, libraries):
+        self.libraries = libraries
+    def get_attributes(self):
+        return self.attributes
+    def set_attributes(self, attributes):
+        self.attributes = attributes
+    def get_variantdefs(self):
+        return self.variantdefs
+    def set_variantdefs(self, variantdefs):
+        self.variantdefs = variantdefs
+    def get_classes(self):
+        return self.classes
+    def set_classes(self, classes):
+        self.classes = classes
+    def get_parts(self):
+        return self.parts
+    def set_parts(self, parts):
+        self.parts = parts
+    def get_sheets(self):
+        return self.sheets
+    def set_sheets(self, sheets):
+        self.sheets = sheets
+    def get_errors(self):
+        return self.errors
+    def set_errors(self, errors):
+        self.errors = errors
+    def get_xrefpart(self):
+        return self.xrefpart
+    def set_xrefpart(self, xrefpart):
+        self.xrefpart = xrefpart
+    def get_xreflabel(self):
+        return self.xreflabel
+    def set_xreflabel(self, xreflabel):
+        self.xreflabel = xreflabel
     def export(self, outfile, level, namespace_='t:', name_='schematic', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -963,10 +1033,14 @@ class schematic(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='schematic'):
         if self.xrefpart is not None and 'xrefpart' not in already_processed:
             already_processed.append('xrefpart')
-            outfile.write(' xrefpart=%s' % (self.gds_format_string(quote_attrib(self.xrefpart).encode(ExternalEncoding), input_name='xrefpart'), ))
+            outfile.write(' xrefpart=%s' 
+                % (self.gds_format_string(quote_attrib(self.xrefpart).encode(ExternalEncoding),
+                    input_name='xrefpart'), ))
         if self.xreflabel is not None and 'xreflabel' not in already_processed:
             already_processed.append('xreflabel')
-            outfile.write(' xreflabel=%s' % (self.gds_format_string(quote_attrib(self.xreflabel).encode(ExternalEncoding), input_name='xreflabel'), ))
+            outfile.write(' xreflabel=%s' 
+                % (self.gds_format_string(quote_attrib(self.xreflabel).encode(ExternalEncoding),
+                    input_name='xreflabel'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='schematic', fromsubclass_=False):
         if self.description is not None:
             self.description.export(outfile, level, namespace_, name_='description')
@@ -1132,28 +1206,50 @@ class board(GeneratedsSuper):
         else:
             return board(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_plain(self): return self.plain
-    def set_plain(self, plain): self.plain = plain
-    def get_libraries(self): return self.libraries
-    def set_libraries(self, libraries): self.libraries = libraries
-    def get_attributes(self): return self.attributes
-    def set_attributes(self, attributes): self.attributes = attributes
-    def get_variantdefs(self): return self.variantdefs
-    def set_variantdefs(self, variantdefs): self.variantdefs = variantdefs
-    def get_classes(self): return self.classes
-    def set_classes(self, classes): self.classes = classes
-    def get_designrules(self): return self.designrules
-    def set_designrules(self, designrules): self.designrules = designrules
-    def get_autorouter(self): return self.autorouter
-    def set_autorouter(self, autorouter): self.autorouter = autorouter
-    def get_elements(self): return self.elements
-    def set_elements(self, elements): self.elements = elements
-    def get_signals(self): return self.signals
-    def set_signals(self, signals): self.signals = signals
-    def get_errors(self): return self.errors
-    def set_errors(self, errors): self.errors = errors
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_plain(self):
+        return self.plain
+    def set_plain(self, plain):
+        self.plain = plain
+    def get_libraries(self):
+        return self.libraries
+    def set_libraries(self, libraries):
+        self.libraries = libraries
+    def get_attributes(self):
+        return self.attributes
+    def set_attributes(self, attributes):
+        self.attributes = attributes
+    def get_variantdefs(self):
+        return self.variantdefs
+    def set_variantdefs(self, variantdefs):
+        self.variantdefs = variantdefs
+    def get_classes(self):
+        return self.classes
+    def set_classes(self, classes):
+        self.classes = classes
+    def get_designrules(self):
+        return self.designrules
+    def set_designrules(self, designrules):
+        self.designrules = designrules
+    def get_autorouter(self):
+        return self.autorouter
+    def set_autorouter(self, autorouter):
+        self.autorouter = autorouter
+    def get_elements(self):
+        return self.elements
+    def set_elements(self, elements):
+        self.elements = elements
+    def get_signals(self):
+        return self.signals
+    def set_signals(self, signals):
+        self.signals = signals
+    def get_errors(self):
+        return self.errors
+    def set_errors(self, errors):
+        self.errors = errors
     def export(self, outfile, level, namespace_='t:', name_='board', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -1352,16 +1448,26 @@ class sheet(GeneratedsSuper):
         else:
             return sheet(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_plain(self): return self.plain
-    def set_plain(self, plain): self.plain = plain
-    def get_instances(self): return self.instances
-    def set_instances(self, instances): self.instances = instances
-    def get_busses(self): return self.busses
-    def set_busses(self, busses): self.busses = busses
-    def get_nets(self): return self.nets
-    def set_nets(self, nets): self.nets = nets
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_plain(self):
+        return self.plain
+    def set_plain(self, plain):
+        self.plain = plain
+    def get_instances(self):
+        return self.instances
+    def set_instances(self, instances):
+        self.instances = instances
+    def get_busses(self):
+        return self.busses
+    def set_busses(self, busses):
+        self.busses = busses
+    def get_nets(self):
+        return self.nets
+    def set_nets(self, nets):
+        self.nets = nets
     def export(self, outfile, level, namespace_='t:', name_='sheet', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -1515,46 +1621,86 @@ class package(GeneratedsSuper):
         else:
             return package(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_polygon(self): return self.polygon
-    def set_polygon(self, polygon): self.polygon = polygon
-    def add_polygon(self, value): self.polygon.append(value)
-    def insert_polygon(self, index, value): self.polygon[index] = value
-    def get_wire(self): return self.wire
-    def set_wire(self, wire): self.wire = wire
-    def add_wire(self, value): self.wire.append(value)
-    def insert_wire(self, index, value): self.wire[index] = value
-    def get_text(self): return self.text
-    def set_text(self, text): self.text = text
-    def add_text(self, value): self.text.append(value)
-    def insert_text(self, index, value): self.text[index] = value
-    def get_circle(self): return self.circle
-    def set_circle(self, circle): self.circle = circle
-    def add_circle(self, value): self.circle.append(value)
-    def insert_circle(self, index, value): self.circle[index] = value
-    def get_rectangle(self): return self.rectangle
-    def set_rectangle(self, rectangle): self.rectangle = rectangle
-    def add_rectangle(self, value): self.rectangle.append(value)
-    def insert_rectangle(self, index, value): self.rectangle[index] = value
-    def get_frame(self): return self.frame
-    def set_frame(self, frame): self.frame = frame
-    def add_frame(self, value): self.frame.append(value)
-    def insert_frame(self, index, value): self.frame[index] = value
-    def get_hole(self): return self.hole
-    def set_hole(self, hole): self.hole = hole
-    def add_hole(self, value): self.hole.append(value)
-    def insert_hole(self, index, value): self.hole[index] = value
-    def get_pad(self): return self.pad
-    def set_pad(self, pad): self.pad = pad
-    def add_pad(self, value): self.pad.append(value)
-    def insert_pad(self, index, value): self.pad[index] = value
-    def get_smd(self): return self.smd
-    def set_smd(self, smd): self.smd = smd
-    def add_smd(self, value): self.smd.append(value)
-    def insert_smd(self, index, value): self.smd[index] = value
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_polygon(self):
+        return self.polygon
+    def set_polygon(self, polygon):
+        self.polygon = polygon
+    def add_polygon(self, value):
+        self.polygon.append(value)
+    def insert_polygon(self, index, value):
+        self.polygon[index] = value
+    def get_wire(self):
+        return self.wire
+    def set_wire(self, wire):
+        self.wire = wire
+    def add_wire(self, value):
+        self.wire.append(value)
+    def insert_wire(self, index, value):
+        self.wire[index] = value
+    def get_text(self):
+        return self.text
+    def set_text(self, text):
+        self.text = text
+    def add_text(self, value):
+        self.text.append(value)
+    def insert_text(self, index, value):
+        self.text[index] = value
+    def get_circle(self):
+        return self.circle
+    def set_circle(self, circle):
+        self.circle = circle
+    def add_circle(self, value):
+        self.circle.append(value)
+    def insert_circle(self, index, value):
+        self.circle[index] = value
+    def get_rectangle(self):
+        return self.rectangle
+    def set_rectangle(self, rectangle):
+        self.rectangle = rectangle
+    def add_rectangle(self, value):
+        self.rectangle.append(value)
+    def insert_rectangle(self, index, value):
+        self.rectangle[index] = value
+    def get_frame(self):
+        return self.frame
+    def set_frame(self, frame):
+        self.frame = frame
+    def add_frame(self, value):
+        self.frame.append(value)
+    def insert_frame(self, index, value):
+        self.frame[index] = value
+    def get_hole(self):
+        return self.hole
+    def set_hole(self, hole):
+        self.hole = hole
+    def add_hole(self, value):
+        self.hole.append(value)
+    def insert_hole(self, index, value):
+        self.hole[index] = value
+    def get_pad(self):
+        return self.pad
+    def set_pad(self, pad):
+        self.pad = pad
+    def add_pad(self, value):
+        self.pad.append(value)
+    def insert_pad(self, index, value):
+        self.pad[index] = value
+    def get_smd(self):
+        return self.smd
+    def set_smd(self, smd):
+        self.smd = smd
+    def add_smd(self, value):
+        self.smd.append(value)
+    def insert_smd(self, index, value):
+        self.smd[index] = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='package', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -1570,7 +1716,8 @@ class package(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='package'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='package', fromsubclass_=False):
         if self.description is not None:
             self.description.export(outfile, level, namespace_, name_='description')
@@ -1827,38 +1974,70 @@ class symbol(GeneratedsSuper):
         else:
             return symbol(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_polygon(self): return self.polygon
-    def set_polygon(self, polygon): self.polygon = polygon
-    def add_polygon(self, value): self.polygon.append(value)
-    def insert_polygon(self, index, value): self.polygon[index] = value
-    def get_wire(self): return self.wire
-    def set_wire(self, wire): self.wire = wire
-    def add_wire(self, value): self.wire.append(value)
-    def insert_wire(self, index, value): self.wire[index] = value
-    def get_text(self): return self.text
-    def set_text(self, text): self.text = text
-    def add_text(self, value): self.text.append(value)
-    def insert_text(self, index, value): self.text[index] = value
-    def get_pin(self): return self.pin
-    def set_pin(self, pin): self.pin = pin
-    def add_pin(self, value): self.pin.append(value)
-    def insert_pin(self, index, value): self.pin[index] = value
-    def get_circle(self): return self.circle
-    def set_circle(self, circle): self.circle = circle
-    def add_circle(self, value): self.circle.append(value)
-    def insert_circle(self, index, value): self.circle[index] = value
-    def get_rectangle(self): return self.rectangle
-    def set_rectangle(self, rectangle): self.rectangle = rectangle
-    def add_rectangle(self, value): self.rectangle.append(value)
-    def insert_rectangle(self, index, value): self.rectangle[index] = value
-    def get_frame(self): return self.frame
-    def set_frame(self, frame): self.frame = frame
-    def add_frame(self, value): self.frame.append(value)
-    def insert_frame(self, index, value): self.frame[index] = value
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_polygon(self):
+        return self.polygon
+    def set_polygon(self, polygon):
+        self.polygon = polygon
+    def add_polygon(self, value):
+        self.polygon.append(value)
+    def insert_polygon(self, index, value):
+        self.polygon[index] = value
+    def get_wire(self):
+        return self.wire
+    def set_wire(self, wire):
+        self.wire = wire
+    def add_wire(self, value):
+        self.wire.append(value)
+    def insert_wire(self, index, value):
+        self.wire[index] = value
+    def get_text(self):
+        return self.text
+    def set_text(self, text):
+        self.text = text
+    def add_text(self, value):
+        self.text.append(value)
+    def insert_text(self, index, value):
+        self.text[index] = value
+    def get_pin(self):
+        return self.pin
+    def set_pin(self, pin):
+        self.pin = pin
+    def add_pin(self, value):
+        self.pin.append(value)
+    def insert_pin(self, index, value):
+        self.pin[index] = value
+    def get_circle(self):
+        return self.circle
+    def set_circle(self, circle):
+        self.circle = circle
+    def add_circle(self, value):
+        self.circle.append(value)
+    def insert_circle(self, index, value):
+        self.circle[index] = value
+    def get_rectangle(self):
+        return self.rectangle
+    def set_rectangle(self, rectangle):
+        self.rectangle = rectangle
+    def add_rectangle(self, value):
+        self.rectangle.append(value)
+    def insert_rectangle(self, index, value):
+        self.rectangle[index] = value
+    def get_frame(self):
+        return self.frame
+    def set_frame(self, frame):
+        self.frame = frame
+    def add_frame(self, value):
+        self.frame.append(value)
+    def insert_frame(self, index, value):
+        self.frame[index] = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='symbol', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -1874,7 +2053,8 @@ class symbol(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='symbol'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='symbol', fromsubclass_=False):
         if self.description is not None:
             self.description.export(outfile, level, namespace_, name_='description')
@@ -2069,18 +2249,30 @@ class deviceset(GeneratedsSuper):
         else:
             return deviceset(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def get_gates(self): return self.gates
-    def set_gates(self, gates): self.gates = gates
-    def get_devices(self): return self.devices
-    def set_devices(self, devices): self.devices = devices
-    def get_uservalue(self): return self.uservalue
-    def set_uservalue(self, uservalue): self.uservalue = uservalue
-    def get_prefix(self): return self.prefix
-    def set_prefix(self, prefix): self.prefix = prefix
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def get_gates(self):
+        return self.gates
+    def set_gates(self, gates):
+        self.gates = gates
+    def get_devices(self):
+        return self.devices
+    def set_devices(self, devices):
+        self.devices = devices
+    def get_uservalue(self):
+        return self.uservalue
+    def set_uservalue(self, uservalue):
+        self.uservalue = uservalue
+    def get_prefix(self):
+        return self.prefix
+    def set_prefix(self, prefix):
+        self.prefix = prefix
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='deviceset', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2096,13 +2288,17 @@ class deviceset(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='deviceset'):
         if self.uservalue is not None and 'uservalue' not in already_processed:
             already_processed.append('uservalue')
-            outfile.write(' uservalue=%s' % (self.gds_format_string(quote_attrib(self.uservalue).encode(ExternalEncoding), input_name='uservalue'), ))
+            outfile.write(' uservalue=%s' 
+                % (self.gds_format_string(quote_attrib(self.uservalue).encode(ExternalEncoding),
+                    input_name='uservalue'), ))
         if self.prefix is not None and 'prefix' not in already_processed:
             already_processed.append('prefix')
-            outfile.write(' prefix=%s' % (self.gds_format_string(quote_attrib(self.prefix).encode(ExternalEncoding), input_name='prefix'), ))
+            outfile.write(' prefix=%s' % (self.gds_format_string(quote_attrib(self.prefix).encode(ExternalEncoding),
+                input_name='prefix'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='deviceset', fromsubclass_=False):
         if self.description is not None:
             self.description.export(outfile, level, namespace_, name_='description')
@@ -2204,14 +2400,22 @@ class device(GeneratedsSuper):
         else:
             return device(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_connects(self): return self.connects
-    def set_connects(self, connects): self.connects = connects
-    def get_technologies(self): return self.technologies
-    def set_technologies(self, technologies): self.technologies = technologies
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_package(self): return self.package
-    def set_package(self, package): self.package = package
+    def get_connects(self):
+        return self.connects
+    def set_connects(self, connects):
+        self.connects = connects
+    def get_technologies(self):
+        return self.technologies
+    def set_technologies(self, technologies):
+        self.technologies = technologies
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_package(self):
+        return self.package
+    def set_package(self, package):
+        self.package = package
     def export(self, outfile, level, namespace_='t:', name_='device', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2227,10 +2431,12 @@ class device(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='device'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.package is not None and 'package' not in already_processed:
             already_processed.append('package')
-            outfile.write(' package=%s' % (self.gds_format_string(quote_attrib(self.package).encode(ExternalEncoding), input_name='package'), ))
+            outfile.write(' package=%s' % (self.gds_format_string(quote_attrib(self.package).encode(ExternalEncoding),
+                input_name='package'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='device', fromsubclass_=False):
         if self.connects is not None:
             self.connects.export(outfile, level, namespace_, name_='connects')
@@ -2312,12 +2518,18 @@ class bus(GeneratedsSuper):
         else:
             return bus(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_segment(self): return self.segment
-    def set_segment(self, segment): self.segment = segment
-    def add_segment(self, value): self.segment.append(value)
-    def insert_segment(self, index, value): self.segment[index] = value
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_segment(self):
+        return self.segment
+    def set_segment(self, segment):
+        self.segment = segment
+    def add_segment(self, value):
+        self.segment.append(value)
+    def insert_segment(self, index, value):
+        self.segment[index] = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='bus', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2333,7 +2545,8 @@ class bus(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='bus'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='bus', fromsubclass_=False):
         for segment_ in self.segment:
             segment_.export(outfile, level, namespace_, name_='segment')
@@ -2401,14 +2614,22 @@ class net(GeneratedsSuper):
         else:
             return net(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_segment(self): return self.segment
-    def set_segment(self, segment): self.segment = segment
-    def add_segment(self, value): self.segment.append(value)
-    def insert_segment(self, index, value): self.segment[index] = value
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_class(self): return self.classxx
-    def set_class(self, classxx): self.classxx = classxx
+    def get_segment(self):
+        return self.segment
+    def set_segment(self, segment):
+        self.segment = segment
+    def add_segment(self, value):
+        self.segment.append(value)
+    def insert_segment(self, index, value):
+        self.segment[index] = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name): 
+        self.name = name
+    def get_class(self):
+        return self.classxx
+    def set_class(self, classxx):
+        self.classxx = classxx
     def export(self, outfile, level, namespace_='t:', name_='net', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2424,10 +2645,12 @@ class net(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='net'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.classxx is not None and 'classxx' not in already_processed:
             already_processed.append('classxx')
-            outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding), input_name='class'), ))
+            outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding),
+                input_name='class'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='net', fromsubclass_=False):
         for segment_ in self.segment:
             segment_.export(outfile, level, namespace_, name_='segment')
@@ -2513,22 +2736,38 @@ class segment(GeneratedsSuper):
         else:
             return segment(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_pinref(self): return self.pinref
-    def set_pinref(self, pinref): self.pinref = pinref
-    def add_pinref(self, value): self.pinref.append(value)
-    def insert_pinref(self, index, value): self.pinref[index] = value
-    def get_wire(self): return self.wire
-    def set_wire(self, wire): self.wire = wire
-    def add_wire(self, value): self.wire.append(value)
-    def insert_wire(self, index, value): self.wire[index] = value
-    def get_junction(self): return self.junction
-    def set_junction(self, junction): self.junction = junction
-    def add_junction(self, value): self.junction.append(value)
-    def insert_junction(self, index, value): self.junction[index] = value
-    def get_label(self): return self.label
-    def set_label(self, label): self.label = label
-    def add_label(self, value): self.label.append(value)
-    def insert_label(self, index, value): self.label[index] = value
+    def get_pinref(self):
+        return self.pinref
+    def set_pinref(self, pinref):
+        self.pinref = pinref
+    def add_pinref(self, value):
+        self.pinref.append(value)
+    def insert_pinref(self, index, value):
+        self.pinref[index] = value
+    def get_wire(self):
+        return self.wire
+    def set_wire(self, wire):
+        self.wire = wire
+    def add_wire(self, value):
+        self.wire.append(value)
+    def insert_wire(self, index, value):
+        self.wire[index] = value
+    def get_junction(self):
+        return self.junction
+    def set_junction(self, junction):
+        self.junction = junction
+    def add_junction(self, value):
+        self.junction.append(value)
+    def insert_junction(self, index, value):
+        self.junction[index] = value
+    def get_label(self):
+        return self.label
+    def set_label(self, label):
+        self.label = label
+    def add_label(self, value):
+        self.label.append(value)
+    def insert_label(self, index, value):
+        self.label[index] = value
     def export(self, outfile, level, namespace_='t:', name_='segment', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2674,28 +2913,50 @@ class signal(GeneratedsSuper):
         else:
             return signal(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_contactref(self): return self.contactref
-    def set_contactref(self, contactref): self.contactref = contactref
-    def add_contactref(self, value): self.contactref.append(value)
-    def insert_contactref(self, index, value): self.contactref[index] = value
-    def get_polygon(self): return self.polygon
-    def set_polygon(self, polygon): self.polygon = polygon
-    def add_polygon(self, value): self.polygon.append(value)
-    def insert_polygon(self, index, value): self.polygon[index] = value
-    def get_wire(self): return self.wire
-    def set_wire(self, wire): self.wire = wire
-    def add_wire(self, value): self.wire.append(value)
-    def insert_wire(self, index, value): self.wire[index] = value
-    def get_via(self): return self.via
-    def set_via(self, via): self.via = via
-    def add_via(self, value): self.via.append(value)
-    def insert_via(self, index, value): self.via[index] = value
-    def get_airwireshidden(self): return self.airwireshidden
-    def set_airwireshidden(self, airwireshidden): self.airwireshidden = airwireshidden
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_class(self): return self.classxx
-    def set_class(self, classxx): self.classxx = classxx
+    def get_contactref(self):
+        return self.contactref
+    def set_contactref(self, contactref):
+        self.contactref = contactref
+    def add_contactref(self, value):
+        self.contactref.append(value)
+    def insert_contactref(self, index, value):
+        self.contactref[index] = value
+    def get_polygon(self):
+        return self.polygon
+    def set_polygon(self, polygon):
+        self.polygon = polygon
+    def add_polygon(self, value):
+        self.polygon.append(value)
+    def insert_polygon(self, index, value):
+        self.polygon[index] = value
+    def get_wire(self):
+        return self.wire
+    def set_wire(self, wire):
+        self.wire = wire
+    def add_wire(self, value):
+        self.wire.append(value)
+    def insert_wire(self, index, value):
+        self.wire[index] = value
+    def get_via(self):
+        return self.via
+    def set_via(self, via):
+        self.via = via
+    def add_via(self, value):
+        self.via.append(value)
+    def insert_via(self, index, value):
+        self.via[index] = value
+    def get_airwireshidden(self):
+        return self.airwireshidden
+    def set_airwireshidden(self, airwireshidden):
+        self.airwireshidden = airwireshidden
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_class(self):
+        return self.classxx
+    def set_class(self, classxx):
+        self.classxx = classxx
     def export(self, outfile, level, namespace_='t:', name_='signal', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2711,13 +2972,17 @@ class signal(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='signal'):
         if self.airwireshidden is not None and 'airwireshidden' not in already_processed:
             already_processed.append('airwireshidden')
-            outfile.write(' airwireshidden=%s' % (self.gds_format_string(quote_attrib(self.airwireshidden).encode(ExternalEncoding), input_name='airwireshidden'), ))
+            outfile.write(' airwireshidden=%s' 
+                % (self.gds_format_string(quote_attrib(self.airwireshidden).encode(ExternalEncoding),
+                    input_name='airwireshidden'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.classxx is not None and 'classxx' not in already_processed:
             already_processed.append('classxx')
-            outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding), input_name='class'), ))
+            outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding),
+                input_name='class'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='signal', fromsubclass_=False):
         for contactref_ in self.contactref:
             contactref_.export(outfile, level, namespace_, name_='contactref')
@@ -2870,7 +3135,8 @@ class variantdef(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='variantdef'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='variantdef', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -2922,14 +3188,22 @@ class variant(GeneratedsSuper):
         else:
             return variant(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_value(self): return self.value
-    def set_value(self, value): self.value = value
-    def get_technology(self): return self.technology
-    def set_technology(self, technology): self.technology = technology
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_populate(self): return self.populate
-    def set_populate(self, populate): self.populate = populate
+    def get_value(self):
+        return self.value
+    def set_value(self, value):
+        self.value = value
+    def get_technology(self):
+        return self.technology
+    def set_technology(self, technology):
+        self.technology = technology
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_populate(self):
+        return self.populate
+    def set_populate(self, populate):
+        self.populate = populate
     def export(self, outfile, level, namespace_='t:', name_='variant', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -2944,16 +3218,22 @@ class variant(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='variant'):
         if self.value is not None and 'value' not in already_processed:
             already_processed.append('value')
-            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding), input_name='value'), ))
+            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding),
+                input_name='value'), ))
         if self.technology is not None and 'technology' not in already_processed:
             already_processed.append('technology')
-            outfile.write(' technology=%s' % (self.gds_format_string(quote_attrib(self.technology).encode(ExternalEncoding), input_name='technology'), ))
+            outfile.write(' technology=%s' 
+                % (self.gds_format_string(quote_attrib(self.technology).encode(ExternalEncoding),
+                    input_name='technology'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.populate is not None and 'populate' not in already_processed:
             already_processed.append('populate')
-            outfile.write(' populate=%s' % (self.gds_format_string(quote_attrib(self.populate).encode(ExternalEncoding), input_name='populate'), ))
+            outfile.write(' populate=%s' 
+                % (self.gds_format_string(quote_attrib(self.populate).encode(ExternalEncoding),
+                    input_name='populate'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='variant', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3031,18 +3311,30 @@ class gate(GeneratedsSuper):
         else:
             return gate(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_symbol(self): return self.symbol
-    def set_symbol(self, symbol): self.symbol = symbol
-    def get_swaplevel(self): return self.swaplevel
-    def set_swaplevel(self, swaplevel): self.swaplevel = swaplevel
-    def get_addlevel(self): return self.addlevel
-    def set_addlevel(self, addlevel): self.addlevel = addlevel
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_symbol(self):
+        return self.symbol
+    def set_symbol(self, symbol):
+        self.symbol = symbol
+    def get_swaplevel(self):
+        return self.swaplevel
+    def set_swaplevel(self, swaplevel):
+        self.swaplevel = swaplevel
+    def get_addlevel(self):
+        return self.addlevel
+    def set_addlevel(self, addlevel):
+        self.addlevel = addlevel
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
     def export(self, outfile, level, namespace_='t:', name_='gate', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3057,22 +3349,30 @@ class gate(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='gate'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.symbol is not None and 'symbol' not in already_processed:
             already_processed.append('symbol')
-            outfile.write(' symbol=%s' % (self.gds_format_string(quote_attrib(self.symbol).encode(ExternalEncoding), input_name='symbol'), ))
+            outfile.write(' symbol=%s' % (self.gds_format_string(quote_attrib(self.symbol).encode(ExternalEncoding),
+                input_name='symbol'), ))
         if self.swaplevel is not None and 'swaplevel' not in already_processed:
             already_processed.append('swaplevel')
-            outfile.write(' swaplevel=%s' % (self.gds_format_string(quote_attrib(self.swaplevel).encode(ExternalEncoding), input_name='swaplevel'), ))
+            outfile.write(' swaplevel=%s' 
+                % (self.gds_format_string(quote_attrib(self.swaplevel).encode(ExternalEncoding),
+                    input_name='swaplevel'), ))
         if self.addlevel is not None and 'addlevel' not in already_processed:
             already_processed.append('addlevel')
-            outfile.write(' addlevel=%s' % (self.gds_format_string(quote_attrib(self.addlevel).encode(ExternalEncoding), input_name='addlevel'), ))
+            outfile.write(' addlevel=%s' 
+                % (self.gds_format_string(quote_attrib(self.addlevel).encode(ExternalEncoding),
+                    input_name='addlevel'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='gate', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3170,26 +3470,46 @@ class wire(GeneratedsSuper):
         else:
             return wire(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_y2(self): return self.y2
-    def set_y2(self, y2): self.y2 = y2
-    def get_width(self): return self.width
-    def set_width(self, width): self.width = width
-    def get_cap(self): return self.cap
-    def set_cap(self, cap): self.cap = cap
-    def get_curve(self): return self.curve
-    def set_curve(self, curve): self.curve = curve
-    def get_style(self): return self.style
-    def set_style(self, style): self.style = style
-    def get_x2(self): return self.x2
-    def set_x2(self, x2): self.x2 = x2
-    def get_extent(self): return self.extent
-    def set_extent(self, extent): self.extent = extent
-    def get_y1(self): return self.y1
-    def set_y1(self, y1): self.y1 = y1
-    def get_x1(self): return self.x1
-    def set_x1(self, x1): self.x1 = x1
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_y2(self):
+        return self.y2
+    def set_y2(self, y2):
+        self.y2 = y2
+    def get_width(self):
+        return self.width
+    def set_width(self, width):
+        self.width = width
+    def get_cap(self):
+        return self.cap
+    def set_cap(self, cap):
+        self.cap = cap
+    def get_curve(self):
+        return self.curve
+    def set_curve(self, curve):
+        self.curve = curve
+    def get_style(self):
+        return self.style
+    def set_style(self, style):
+        self.style = style
+    def get_x2(self):
+        return self.x2
+    def set_x2(self, x2):
+        self.x2 = x2
+    def get_extent(self):
+        return self.extent
+    def set_extent(self, extent):
+        self.extent = extent
+    def get_y1(self):
+        return self.y1
+    def set_y1(self, y1):
+        self.y1 = y1
+    def get_x1(self):
+        return self.x1
+    def set_x1(self, x1):
+        self.x1 = x1
     def export(self, outfile, level, namespace_='t:', name_='wire', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3204,34 +3524,44 @@ class wire(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='wire'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.y2 is not None and 'y2' not in already_processed:
             already_processed.append('y2')
-            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding), input_name='y2'), ))
+            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding),
+                input_name='y2'), ))
         if self.width is not None and 'width' not in already_processed:
             already_processed.append('width')
-            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding), input_name='width'), ))
+            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding),
+                input_name='width'), ))
         if self.cap is not None and 'cap' not in already_processed:
             already_processed.append('cap')
-            outfile.write(' cap=%s' % (self.gds_format_string(quote_attrib(self.cap).encode(ExternalEncoding), input_name='cap'), ))
+            outfile.write(' cap=%s' % (self.gds_format_string(quote_attrib(self.cap).encode(ExternalEncoding),
+                input_name='cap'), ))
         if self.curve is not None and 'curve' not in already_processed:
             already_processed.append('curve')
-            outfile.write(' curve=%s' % (self.gds_format_string(quote_attrib(self.curve).encode(ExternalEncoding), input_name='curve'), ))
+            outfile.write(' curve=%s' % (self.gds_format_string(quote_attrib(self.curve).encode(ExternalEncoding),
+                input_name='curve'), ))
         if self.style is not None and 'style' not in already_processed:
             already_processed.append('style')
-            outfile.write(' style=%s' % (self.gds_format_string(quote_attrib(self.style).encode(ExternalEncoding), input_name='style'), ))
+            outfile.write(' style=%s' % (self.gds_format_string(quote_attrib(self.style).encode(ExternalEncoding),
+                input_name='style'), ))
         if self.x2 is not None and 'x2' not in already_processed:
             already_processed.append('x2')
-            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding), input_name='x2'), ))
+            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding),
+                input_name='x2'), ))
         if self.extent is not None and 'extent' not in already_processed:
             already_processed.append('extent')
-            outfile.write(' extent=%s' % (self.gds_format_string(quote_attrib(self.extent).encode(ExternalEncoding), input_name='extent'), ))
+            outfile.write(' extent=%s' % (self.gds_format_string(quote_attrib(self.extent).encode(ExternalEncoding),
+                input_name='extent'), ))
         if self.y1 is not None and 'y1' not in already_processed:
             already_processed.append('y1')
-            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding), input_name='y1'), ))
+            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding),
+                input_name='y1'), ))
         if self.x1 is not None and 'x1' not in already_processed:
             already_processed.append('x1')
-            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding), input_name='x1'), ))
+            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding),
+                input_name='x1'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='wire', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3359,22 +3689,38 @@ class dimension(GeneratedsSuper):
         else:
             return dimension(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_y2(self): return self.y2
-    def set_y2(self, y2): self.y2 = y2
-    def get_dtype(self): return self.dtype
-    def set_dtype(self, dtype): self.dtype = dtype
-    def get_x2(self): return self.x2
-    def set_x2(self, x2): self.x2 = x2
-    def get_y1(self): return self.y1
-    def set_y1(self, y1): self.y1 = y1
-    def get_x3(self): return self.x3
-    def set_x3(self, x3): self.x3 = x3
-    def get_y3(self): return self.y3
-    def set_y3(self, y3): self.y3 = y3
-    def get_x1(self): return self.x1
-    def set_x1(self, x1): self.x1 = x1
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_y2(self):
+        return self.y2
+    def set_y2(self, y2):
+        self.y2 = y2
+    def get_dtype(self):
+        return self.dtype
+    def set_dtype(self, dtype):
+        self.dtype = dtype
+    def get_x2(self):
+        return self.x2
+    def set_x2(self, x2):
+        self.x2 = x2
+    def get_y1(self):
+        return self.y1
+    def set_y1(self, y1):
+        self.y1 = y1
+    def get_x3(self):
+        return self.x3
+    def set_x3(self, x3):
+        self.x3 = x3
+    def get_y3(self):
+        return self.y3
+    def set_y3(self, y3):
+        self.y3 = y3
+    def get_x1(self):
+        return self.x1
+    def set_x1(self, x1):
+        self.x1 = x1
     def export(self, outfile, level, namespace_='t:', name_='dimension', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3389,28 +3735,36 @@ class dimension(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='dimension'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.y2 is not None and 'y2' not in already_processed:
             already_processed.append('y2')
-            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding), input_name='y2'), ))
+            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding),
+                input_name='y2'), ))
         if self.dtype is not None and 'dtype' not in already_processed:
             already_processed.append('dtype')
-            outfile.write(' dtype=%s' % (self.gds_format_string(quote_attrib(self.dtype).encode(ExternalEncoding), input_name='dtype'), ))
+            outfile.write(' dtype=%s' % (self.gds_format_string(quote_attrib(self.dtype).encode(ExternalEncoding),
+                input_name='dtype'), ))
         if self.x2 is not None and 'x2' not in already_processed:
             already_processed.append('x2')
-            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding), input_name='x2'), ))
+            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding),
+                input_name='x2'), ))
         if self.y1 is not None and 'y1' not in already_processed:
             already_processed.append('y1')
-            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding), input_name='y1'), ))
+            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding),
+                input_name='y1'), ))
         if self.x3 is not None and 'x3' not in already_processed:
             already_processed.append('x3')
-            outfile.write(' x3=%s' % (self.gds_format_string(quote_attrib(self.x3).encode(ExternalEncoding), input_name='x3'), ))
+            outfile.write(' x3=%s' % (self.gds_format_string(quote_attrib(self.x3).encode(ExternalEncoding),
+                input_name='x3'), ))
         if self.y3 is not None and 'y3' not in already_processed:
             already_processed.append('y3')
-            outfile.write(' y3=%s' % (self.gds_format_string(quote_attrib(self.y3).encode(ExternalEncoding), input_name='y3'), ))
+            outfile.write(' y3=%s' % (self.gds_format_string(quote_attrib(self.y3).encode(ExternalEncoding),
+                input_name='y3'), ))
         if self.x1 is not None and 'x1' not in already_processed:
             already_processed.append('x1')
-            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding), input_name='x1'), ))
+            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding),
+                input_name='x1'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='dimension', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3531,24 +3885,42 @@ class text(GeneratedsSuper):
         else:
             return text(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_ratio(self): return self.ratio
-    def set_ratio(self, ratio): self.ratio = ratio
-    def get_align(self): return self.align
-    def set_align(self, align): self.align = align
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_font(self): return self.font
-    def set_font(self, font): self.font = font
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
-    def get_size(self): return self.size
-    def set_size(self, size): self.size = size
-    def get_valueOf_(self): return self.valueOf_
-    def set_valueOf_(self, valueOf_): self.valueOf_ = valueOf_
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_ratio(self):
+        return self.ratio
+    def set_ratio(self, ratio):
+        self.ratio = ratio
+    def get_align(self):
+        return self.align
+    def set_align(self, align):
+        self.align = align
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_font(self):
+        return self.font
+    def set_font(self, font):
+        self.font = font
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
+    def get_size(self):
+        return self.size
+    def set_size(self, size):
+        self.size = size
+    def get_valueOf_(self):
+        return self.valueOf_
+    def set_valueOf_(self, valueOf_):
+        self.valueOf_ = valueOf_
     def export(self, outfile, level, namespace_='t:', name_='text', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3560,28 +3932,36 @@ class text(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='text'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.ratio is not None and 'ratio' not in already_processed:
             already_processed.append('ratio')
-            outfile.write(' ratio=%s' % (self.gds_format_string(quote_attrib(self.ratio).encode(ExternalEncoding), input_name='ratio'), ))
+            outfile.write(' ratio=%s' % (self.gds_format_string(quote_attrib(self.ratio).encode(ExternalEncoding),
+                input_name='ratio'), ))
         if self.align is not None and 'align' not in already_processed:
             already_processed.append('align')
-            outfile.write(' align=%s' % (self.gds_format_string(quote_attrib(self.align).encode(ExternalEncoding), input_name='align'), ))
+            outfile.write(' align=%s' % (self.gds_format_string(quote_attrib(self.align).encode(ExternalEncoding),
+                input_name='align'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.font is not None and 'font' not in already_processed:
             already_processed.append('font')
-            outfile.write(' font=%s' % (self.gds_format_string(quote_attrib(self.font).encode(ExternalEncoding), input_name='font'), ))
+            outfile.write(' font=%s' % (self.gds_format_string(quote_attrib(self.font).encode(ExternalEncoding),
+                input_name='font'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
         if self.size is not None and 'size' not in already_processed:
             already_processed.append('size')
-            outfile.write(' size=%s' % (self.gds_format_string(quote_attrib(self.size).encode(ExternalEncoding), input_name='size'), ))
+            outfile.write(' size=%s' % (self.gds_format_string(quote_attrib(self.size).encode(ExternalEncoding),
+                input_name='size'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='text', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3701,16 +4081,26 @@ class circle(GeneratedsSuper):
         else:
             return circle(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_radius(self): return self.radius
-    def set_radius(self, radius): self.radius = radius
-    def get_width(self): return self.width
-    def set_width(self, width): self.width = width
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_radius(self):
+        return self.radius
+    def set_radius(self, radius):
+        self.radius = radius
+    def get_width(self):
+        return self.width
+    def set_width(self, width):
+        self.width = width
     def export(self, outfile, level, namespace_='t:', name_='circle', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3725,19 +4115,24 @@ class circle(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='circle'):
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.radius is not None and 'radius' not in already_processed:
             already_processed.append('radius')
-            outfile.write(' radius=%s' % (self.gds_format_string(quote_attrib(self.radius).encode(ExternalEncoding), input_name='radius'), ))
+            outfile.write(' radius=%s' % (self.gds_format_string(quote_attrib(self.radius).encode(ExternalEncoding),
+                input_name='radius'), ))
         if self.width is not None and 'width' not in already_processed:
             already_processed.append('width')
-            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding), input_name='width'), ))
+            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding),
+                input_name='width'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='circle', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3823,18 +4218,29 @@ class rectangle(GeneratedsSuper):
         else:
             return rectangle(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
+    def get_layer(self):
+        return self.layer
     def set_layer(self, layer): self.layer = layer
-    def get_y2(self): return self.y2
-    def set_y2(self, y2): self.y2 = y2
-    def get_x2(self): return self.x2
-    def set_x2(self, x2): self.x2 = x2
-    def get_y1(self): return self.y1
-    def set_y1(self, y1): self.y1 = y1
-    def get_x1(self): return self.x1
-    def set_x1(self, x1): self.x1 = x1
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
+    def get_y2(self):
+        return self.y2
+    def set_y2(self, y2):
+        self.y2 = y2
+    def get_x2(self):
+        return self.x2
+    def set_x2(self, x2):
+        self.x2 = x2
+    def get_y1(self):
+        return self.y1
+    def set_y1(self, y1):
+        self.y1 = y1
+    def get_x1(self):
+        return self.x1
+    def set_x1(self, x1):
+        self.x1 = x1
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
     def export(self, outfile, level, namespace_='t:', name_='rectangle', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3849,22 +4255,28 @@ class rectangle(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='rectangle'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.y2 is not None and 'y2' not in already_processed:
             already_processed.append('y2')
-            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding), input_name='y2'), ))
+            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding),
+                input_name='y2'), ))
         if self.x2 is not None and 'x2' not in already_processed:
             already_processed.append('x2')
-            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding), input_name='x2'), ))
+            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding),
+                input_name='x2'), ))
         if self.y1 is not None and 'y1' not in already_processed:
             already_processed.append('y1')
-            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding), input_name='y1'), ))
+            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding),
+                input_name='y1'), ))
         if self.x1 is not None and 'x1' not in already_processed:
             already_processed.append('x1')
-            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding), input_name='x1'), ))
+            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding),
+                input_name='x1'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='rectangle', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -3963,28 +4375,50 @@ class frame(GeneratedsSuper):
         else:
             return frame(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_y2(self): return self.y2
-    def set_y2(self, y2): self.y2 = y2
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_rows(self): return self.rows
-    def set_rows(self, rows): self.rows = rows
-    def get_border_right(self): return self.border_right
-    def set_border_right(self, border_right): self.border_right = border_right
-    def get_border_bottom(self): return self.border_bottom
-    def set_border_bottom(self, border_bottom): self.border_bottom = border_bottom
-    def get_x2(self): return self.x2
-    def set_x2(self, x2): self.x2 = x2
-    def get_border_top(self): return self.border_top
-    def set_border_top(self, border_top): self.border_top = border_top
-    def get_border_left(self): return self.border_left
-    def set_border_left(self, border_left): self.border_left = border_left
-    def get_y1(self): return self.y1
-    def set_y1(self, y1): self.y1 = y1
-    def get_x1(self): return self.x1
-    def set_x1(self, x1): self.x1 = x1
-    def get_columns(self): return self.columns
-    def set_columns(self, columns): self.columns = columns
+    def get_y2(self):
+        return self.y2
+    def set_y2(self, y2):
+        self.y2 = y2
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_rows(self):
+        return self.rows
+    def set_rows(self, rows):
+        self.rows = rows
+    def get_border_right(self):
+        return self.border_right
+    def set_border_right(self, border_right):
+        self.border_right = border_right
+    def get_border_bottom(self):
+        return self.border_bottom
+    def set_border_bottom(self, border_bottom):
+        self.border_bottom = border_bottom
+    def get_x2(self):
+        return self.x2
+    def set_x2(self, x2):
+        self.x2 = x2
+    def get_border_top(self):
+        return self.border_top
+    def set_border_top(self, border_top):
+        self.border_top = border_top
+    def get_border_left(self):
+        return self.border_left
+    def set_border_left(self, border_left):
+        self.border_left = border_left
+    def get_y1(self):
+        return self.y1
+    def set_y1(self, y1):
+        self.y1 = y1
+    def get_x1(self):
+        return self.x1
+    def set_x1(self, x1):
+        self.x1 = x1
+    def get_columns(self):
+        return self.columns
+    def set_columns(self, columns):
+        self.columns = columns
     def export(self, outfile, level, namespace_='t:', name_='frame', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -3999,34 +4433,48 @@ class frame(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='frame'):
         if self.y2 is not None and 'y2' not in already_processed:
             already_processed.append('y2')
-            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding), input_name='y2'), ))
+            outfile.write(' y2=%s' % (self.gds_format_string(quote_attrib(self.y2).encode(ExternalEncoding),
+                input_name='y2'), ))
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.rows is not None and 'rows' not in already_processed:
             already_processed.append('rows')
-            outfile.write(' rows=%s' % (self.gds_format_string(quote_attrib(self.rows).encode(ExternalEncoding), input_name='rows'), ))
+            outfile.write(' rows=%s' % (self.gds_format_string(quote_attrib(self.rows).encode(ExternalEncoding),
+                input_name='rows'), ))
         if self.border_right is not None and 'border_right' not in already_processed:
             already_processed.append('border_right')
-            outfile.write(' border-right=%s' % (self.gds_format_string(quote_attrib(self.border_right).encode(ExternalEncoding), input_name='border-right'), ))
+            outfile.write(' border-right=%s' 
+                % (self.gds_format_string(quote_attrib(self.border_right).encode(ExternalEncoding),
+                    input_name='border-right'), ))
         if self.border_bottom is not None and 'border_bottom' not in already_processed:
             already_processed.append('border_bottom')
-            outfile.write(' border-bottom=%s' % (self.gds_format_string(quote_attrib(self.border_bottom).encode(ExternalEncoding), input_name='border-bottom'), ))
+            outfile.write(' border-bottom=%s' 
+                % (self.gds_format_string(quote_attrib(self.border_bottom).encode(ExternalEncoding),
+                    input_name='border-bottom'), ))
         if self.x2 is not None and 'x2' not in already_processed:
             already_processed.append('x2')
-            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding), input_name='x2'), ))
+            outfile.write(' x2=%s' % (self.gds_format_string(quote_attrib(self.x2).encode(ExternalEncoding),
+                input_name='x2'), ))
         if self.border_top is not None and 'border_top' not in already_processed:
             already_processed.append('border_top')
-            outfile.write(' border-top=%s' % (self.gds_format_string(quote_attrib(self.border_top).encode(ExternalEncoding), input_name='border-top'), ))
+            outfile.write(' border-top=%s' 
+                % (self.gds_format_string(quote_attrib(self.border_top).encode(ExternalEncoding),
+                    input_name='border-top'), ))
         if self.border_left is not None and 'border_left' not in already_processed:
             already_processed.append('border_left')
-            outfile.write(' border-left=%s' % (self.gds_format_string(quote_attrib(self.border_left).encode(ExternalEncoding), input_name='border-left'), ))
+            outfile.write(' border-left=%s' 
+                % (self.gds_format_string(quote_attrib(self.border_left).encode(ExternalEncoding),
+                    input_name='border-left'), ))
         if self.y1 is not None and 'y1' not in already_processed:
             already_processed.append('y1')
-            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding), input_name='y1'), ))
+            outfile.write(' y1=%s' % (self.gds_format_string(quote_attrib(self.y1).encode(ExternalEncoding),
+                input_name='y1'), ))
         if self.x1 is not None and 'x1' not in already_processed:
             already_processed.append('x1')
-            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding), input_name='x1'), ))
+            outfile.write(' x1=%s' % (self.gds_format_string(quote_attrib(self.x1).encode(ExternalEncoding),
+                input_name='x1'), ))
         if self.columns is not None and 'columns' not in already_processed:
             already_processed.append('columns')
             outfile.write(' columns=%s' % (self.gds_format_string(quote_attrib(self.columns).encode(ExternalEncoding), input_name='columns'), ))
@@ -4160,12 +4608,18 @@ class hole(GeneratedsSuper):
         else:
             return hole(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_drill(self): return self.drill
-    def set_drill(self, drill): self.drill = drill
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_drill(self):
+        return self.drill
+    def set_drill(self, drill):
+        self.drill = drill
     def export(self, outfile, level, namespace_='t:', name_='hole', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -4180,13 +4634,16 @@ class hole(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='hole'):
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.drill is not None and 'drill' not in already_processed:
             already_processed.append('drill')
-            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding), input_name='drill'), ))
+            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding),
+                input_name='drill'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='hole', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -4260,26 +4717,46 @@ class pad(GeneratedsSuper):
         else:
             return pad(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_diameter(self): return self.diameter
-    def set_diameter(self, diameter): self.diameter = diameter
-    def get_thermals(self): return self.thermals
-    def set_thermals(self, thermals): self.thermals = thermals
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_stop(self): return self.stop
-    def set_stop(self, stop): self.stop = stop
-    def get_shape(self): return self.shape
-    def set_shape(self, shape): self.shape = shape
-    def get_drill(self): return self.drill
-    def set_drill(self, drill): self.drill = drill
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
-    def get_first(self): return self.first
-    def set_first(self, first): self.first = first
+    def get_diameter(self):
+        return self.diameter
+    def set_diameter(self, diameter):
+        self.diameter = diameter
+    def get_thermals(self):
+        return self.thermals
+    def set_thermals(self, thermals):
+        self.thermals = thermals
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_stop(self):
+        return self.stop
+    def set_stop(self, stop):
+        self.stop = stop
+    def get_shape(self):
+        return self.shape
+    def set_shape(self, shape):
+        self.shape = shape
+    def get_drill(self):
+        return self.drill
+    def set_drill(self, drill):
+        self.drill = drill
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
+    def get_first(self):
+        return self.first
+    def set_first(self, first):
+        self.first = first
     def export(self, outfile, level, namespace_='t:', name_='pad', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -4294,34 +4771,46 @@ class pad(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='pad'):
         if self.diameter is not None and 'diameter' not in already_processed:
             already_processed.append('diameter')
-            outfile.write(' diameter=%s' % (self.gds_format_string(quote_attrib(self.diameter).encode(ExternalEncoding), input_name='diameter'), ))
+            outfile.write(' diameter=%s' 
+                % (self.gds_format_string(quote_attrib(self.diameter).encode(ExternalEncoding),
+                    input_name='diameter'), ))
         if self.thermals is not None and 'thermals' not in already_processed:
             already_processed.append('thermals')
-            outfile.write(' thermals=%s' % (self.gds_format_string(quote_attrib(self.thermals).encode(ExternalEncoding), input_name='thermals'), ))
+            outfile.write(' thermals=%s' 
+                % (self.gds_format_string(quote_attrib(self.thermals).encode(ExternalEncoding),
+                input_name='thermals'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.stop is not None and 'stop' not in already_processed:
             already_processed.append('stop')
-            outfile.write(' stop=%s' % (self.gds_format_string(quote_attrib(self.stop).encode(ExternalEncoding), input_name='stop'), ))
+            outfile.write(' stop=%s' % (self.gds_format_string(quote_attrib(self.stop).encode(ExternalEncoding),
+                input_name='stop'), ))
         if self.shape is not None and 'shape' not in already_processed:
             already_processed.append('shape')
-            outfile.write(' shape=%s' % (self.gds_format_string(quote_attrib(self.shape).encode(ExternalEncoding), input_name='shape'), ))
+            outfile.write(' shape=%s' % (self.gds_format_string(quote_attrib(self.shape).encode(ExternalEncoding),
+                input_name='shape'), ))
         if self.drill is not None and 'drill' not in already_processed:
             already_processed.append('drill')
-            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding), input_name='drill'), ))
+            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding),
+                input_name='drill'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
         if self.first is not None and 'first' not in already_processed:
             already_processed.append('first')
-            outfile.write(' first=%s' % (self.gds_format_string(quote_attrib(self.first).encode(ExternalEncoding), input_name='first'), ))
+            outfile.write(' first=%s' % (self.gds_format_string(quote_attrib(self.first).encode(ExternalEncoding),
+                input_name='first'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='pad', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -4452,28 +4941,50 @@ class smd(GeneratedsSuper):
         else:
             return smd(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_thermals(self): return self.thermals
-    def set_thermals(self, thermals): self.thermals = thermals
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_stop(self): return self.stop
-    def set_stop(self, stop): self.stop = stop
-    def get_roundness(self): return self.roundness
-    def set_roundness(self, roundness): self.roundness = roundness
-    def get_dx(self): return self.dx
-    def set_dx(self, dx): self.dx = dx
-    def get_dy(self): return self.dy
-    def set_dy(self, dy): self.dy = dy
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
-    def get_cream(self): return self.cream
-    def set_cream(self, cream): self.cream = cream
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_thermals(self):
+        return self.thermals
+    def set_thermals(self, thermals):
+        self.thermals = thermals
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_stop(self):
+        return self.stop
+    def set_stop(self, stop):
+        self.stop = stop
+    def get_roundness(self):
+        return self.roundness
+    def set_roundness(self, roundness):
+        self.roundness = roundness
+    def get_dx(self):
+        return self.dx
+    def set_dx(self, dx):
+        self.dx = dx
+    def get_dy(self):
+        return self.dy
+    def set_dy(self, dy):
+        self.dy = dy
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
+    def get_cream(self):
+        return self.cream
+    def set_cream(self, cream):
+        self.cream = cream
     def export(self, outfile, level, namespace_='t:', name_='smd', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -4488,37 +4999,50 @@ class smd(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='smd'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.thermals is not None and 'thermals' not in already_processed:
             already_processed.append('thermals')
-            outfile.write(' thermals=%s' % (self.gds_format_string(quote_attrib(self.thermals).encode(ExternalEncoding), input_name='thermals'), ))
+            outfile.write(' thermals=%s' 
+                % (self.gds_format_string(quote_attrib(self.thermals).encode(ExternalEncoding),
+                    input_name='thermals'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.stop is not None and 'stop' not in already_processed:
             already_processed.append('stop')
-            outfile.write(' stop=%s' % (self.gds_format_string(quote_attrib(self.stop).encode(ExternalEncoding), input_name='stop'), ))
+            outfile.write(' stop=%s' % (self.gds_format_string(quote_attrib(self.stop).encode(ExternalEncoding),
+                input_name='stop'), ))
         if self.roundness is not None and 'roundness' not in already_processed:
             already_processed.append('roundness')
-            outfile.write(' roundness=%s' % (self.gds_format_string(quote_attrib(self.roundness).encode(ExternalEncoding), input_name='roundness'), ))
+            outfile.write(' roundness=%s' 
+                % (self.gds_format_string(quote_attrib(self.roundness).encode(ExternalEncoding),
+                    input_name='roundness'), ))
         if self.dx is not None and 'dx' not in already_processed:
             already_processed.append('dx')
-            outfile.write(' dx=%s' % (self.gds_format_string(quote_attrib(self.dx).encode(ExternalEncoding), input_name='dx'), ))
+            outfile.write(' dx=%s' % (self.gds_format_string(quote_attrib(self.dx).encode(ExternalEncoding),
+                input_name='dx'), ))
         if self.dy is not None and 'dy' not in already_processed:
             already_processed.append('dy')
-            outfile.write(' dy=%s' % (self.gds_format_string(quote_attrib(self.dy).encode(ExternalEncoding), input_name='dy'), ))
+            outfile.write(' dy=%s' % (self.gds_format_string(quote_attrib(self.dy).encode(ExternalEncoding),
+                input_name='dy'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
         if self.cream is not None and 'cream' not in already_processed:
             already_processed.append('cream')
-            outfile.write(' cream=%s' % (self.gds_format_string(quote_attrib(self.cream).encode(ExternalEncoding), input_name='cream'), ))
+            outfile.write(' cream=%s' % (self.gds_format_string(quote_attrib(self.cream).encode(ExternalEncoding),
+                input_name='cream'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='smd', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -4662,32 +5186,58 @@ class element(GeneratedsSuper):
         else:
             return element(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_attribute(self): return self.attribute
-    def set_attribute(self, attribute): self.attribute = attribute
-    def add_attribute(self, value): self.attribute.append(value)
-    def insert_attribute(self, index, value): self.attribute[index] = value
-    def get_variant(self): return self.variant
-    def set_variant(self, variant): self.variant = variant
-    def add_variant(self, value): self.variant.append(value)
-    def insert_variant(self, index, value): self.variant[index] = value
-    def get_locked(self): return self.locked
-    def set_locked(self, locked): self.locked = locked
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_package(self): return self.package
-    def set_package(self, package): self.package = package
-    def get_value(self): return self.value
-    def set_value(self, value): self.value = value
-    def get_smashed(self): return self.smashed
-    def set_smashed(self, smashed): self.smashed = smashed
-    def get_library(self): return self.library
-    def set_library(self, library): self.library = library
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
+    def get_attribute(self):
+        return self.attribute
+    def set_attribute(self, attribute):
+        self.attribute = attribute
+    def add_attribute(self, value):
+        self.attribute.append(value)
+    def insert_attribute(self, index, value):
+        self.attribute[index] = value
+    def get_variant(self):
+        return self.variant
+    def set_variant(self, variant):
+        self.variant = variant
+    def add_variant(self, value):
+        self.variant.append(value)
+    def insert_variant(self, index, value):
+        self.variant[index] = value
+    def get_locked(self):
+        return self.locked
+    def set_locked(self, locked):
+        self.locked = locked
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_package(self):
+        return self.package
+    def set_package(self, package):
+        self.package = package
+    def get_value(self):
+        return self.value
+    def set_value(self, value):
+        self.value = value
+    def get_smashed(self):
+        return self.smashed
+    def set_smashed(self, smashed):
+        self.smashed = smashed
+    def get_library(self):
+        return self.library
+    def set_library(self, library):
+        self.library = library
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
     def export(self, outfile, level, namespace_='t:', name_='element', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -4703,31 +5253,40 @@ class element(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='element'):
         if self.locked is not None and 'locked' not in already_processed:
             already_processed.append('locked')
-            outfile.write(' locked=%s' % (self.gds_format_string(quote_attrib(self.locked).encode(ExternalEncoding), input_name='locked'), ))
+            outfile.write(' locked=%s' % (self.gds_format_string(quote_attrib(self.locked).encode(ExternalEncoding),
+                input_name='locked'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.package is not None and 'package' not in already_processed:
             already_processed.append('package')
-            outfile.write(' package=%s' % (self.gds_format_string(quote_attrib(self.package).encode(ExternalEncoding), input_name='package'), ))
+            outfile.write(' package=%s' % (self.gds_format_string(quote_attrib(self.package).encode(ExternalEncoding),
+                input_name='package'), ))
         if self.value is not None and 'value' not in already_processed:
             already_processed.append('value')
-            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding), input_name='value'), ))
+            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding),
+                input_name='value'), ))
         if self.smashed is not None and 'smashed' not in already_processed:
             already_processed.append('smashed')
-            outfile.write(' smashed=%s' % (self.gds_format_string(quote_attrib(self.smashed).encode(ExternalEncoding), input_name='smashed'), ))
+            outfile.write(' smashed=%s' % (self.gds_format_string(quote_attrib(self.smashed).encode(ExternalEncoding),
+                input_name='smashed'), ))
         if self.library is not None and 'library' not in already_processed:
             already_processed.append('library')
-            outfile.write(' library=%s' % (self.gds_format_string(quote_attrib(self.library).encode(ExternalEncoding), input_name='library'), ))
+            outfile.write(' library=%s' % (self.gds_format_string(quote_attrib(self.library).encode(ExternalEncoding),
+                input_name='library'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='element', fromsubclass_=False):
         for attribute_ in self.attribute:
             attribute_.export(outfile, level, namespace_, name_='attribute')
@@ -4880,20 +5439,34 @@ class via(GeneratedsSuper):
         else:
             return via(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_diameter(self): return self.diameter
-    def set_diameter(self, diameter): self.diameter = diameter
-    def get_extent(self): return self.extent
-    def set_extent(self, extent): self.extent = extent
-    def get_shape(self): return self.shape
-    def set_shape(self, shape): self.shape = shape
-    def get_alwaysstop(self): return self.alwaysstop
-    def set_alwaysstop(self, alwaysstop): self.alwaysstop = alwaysstop
-    def get_drill(self): return self.drill
-    def set_drill(self, drill): self.drill = drill
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
+    def get_diameter(self):
+        return self.diameter
+    def set_diameter(self, diameter):
+        self.diameter = diameter
+    def get_extent(self):
+        return self.extent
+    def set_extent(self, extent):
+        self.extent = extent
+    def get_shape(self):
+        return self.shape
+    def set_shape(self, shape):
+        self.shape = shape
+    def get_alwaysstop(self):
+        return self.alwaysstop
+    def set_alwaysstop(self, alwaysstop):
+        self.alwaysstop = alwaysstop
+    def get_drill(self):
+        return self.drill
+    def set_drill(self, drill):
+        self.drill = drill
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
     def export(self, outfile, level, namespace_='t:', name_='via', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -4908,25 +5481,34 @@ class via(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='via'):
         if self.diameter is not None and 'diameter' not in already_processed:
             already_processed.append('diameter')
-            outfile.write(' diameter=%s' % (self.gds_format_string(quote_attrib(self.diameter).encode(ExternalEncoding), input_name='diameter'), ))
+            outfile.write(' diameter=%s' 
+                % (self.gds_format_string(quote_attrib(self.diameter).encode(ExternalEncoding),
+                    input_name='diameter'), ))
         if self.extent is not None and 'extent' not in already_processed:
             already_processed.append('extent')
-            outfile.write(' extent=%s' % (self.gds_format_string(quote_attrib(self.extent).encode(ExternalEncoding), input_name='extent'), ))
+            outfile.write(' extent=%s' % (self.gds_format_string(quote_attrib(self.extent).encode(ExternalEncoding),
+                input_name='extent'), ))
         if self.shape is not None and 'shape' not in already_processed:
             already_processed.append('shape')
-            outfile.write(' shape=%s' % (self.gds_format_string(quote_attrib(self.shape).encode(ExternalEncoding), input_name='shape'), ))
+            outfile.write(' shape=%s' % (self.gds_format_string(quote_attrib(self.shape).encode(ExternalEncoding),
+                input_name='shape'), ))
         if self.alwaysstop is not None and 'alwaysstop' not in already_processed:
             already_processed.append('alwaysstop')
-            outfile.write(' alwaysstop=%s' % (self.gds_format_string(quote_attrib(self.alwaysstop).encode(ExternalEncoding), input_name='alwaysstop'), ))
+            outfile.write(' alwaysstop=%s' 
+                % (self.gds_format_string(quote_attrib(self.alwaysstop).encode(ExternalEncoding),
+                    input_name='alwaysstop'), ))
         if self.drill is not None and 'drill' not in already_processed:
             already_processed.append('drill')
-            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding), input_name='drill'), ))
+            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding),
+                input_name='drill'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='via', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -5033,26 +5615,46 @@ class polygon(GeneratedsSuper):
         else:
             return polygon(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_vertex(self): return self.vertex
-    def set_vertex(self, vertex): self.vertex = vertex
-    def add_vertex(self, value): self.vertex.append(value)
-    def insert_vertex(self, index, value): self.vertex[index] = value
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_thermals(self): return self.thermals
-    def set_thermals(self, thermals): self.thermals = thermals
-    def get_spacing(self): return self.spacing
-    def set_spacing(self, spacing): self.spacing = spacing
-    def get_orphans(self): return self.orphans
-    def set_orphans(self, orphans): self.orphans = orphans
-    def get_isolate(self): return self.isolate
-    def set_isolate(self, isolate): self.isolate = isolate
-    def get_pour(self): return self.pour
-    def set_pour(self, pour): self.pour = pour
-    def get_width(self): return self.width
-    def set_width(self, width): self.width = width
-    def get_rank(self): return self.rank
-    def set_rank(self, rank): self.rank = rank
+    def get_vertex(self):
+        return self.vertex
+    def set_vertex(self, vertex):
+        self.vertex = vertex
+    def add_vertex(self, value):
+        self.vertex.append(value)
+    def insert_vertex(self, index, value):
+        self.vertex[index] = value
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_thermals(self):
+        return self.thermals
+    def set_thermals(self, thermals):
+        self.thermals = thermals
+    def get_spacing(self):
+        return self.spacing
+    def set_spacing(self, spacing):
+        self.spacing = spacing
+    def get_orphans(self):
+        return self.orphans
+    def set_orphans(self, orphans):
+        self.orphans = orphans
+    def get_isolate(self):
+        return self.isolate
+    def set_isolate(self, isolate):
+        self.isolate = isolate
+    def get_pour(self):
+        return self.pour
+    def set_pour(self, pour):
+        self.pour = pour
+    def get_width(self):
+        return self.width
+    def set_width(self, width):
+        self.width = width
+    def get_rank(self):
+        return self.rank
+    def set_rank(self, rank):
+        self.rank = rank
     def export(self, outfile, level, namespace_='t:', name_='polygon', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -5068,28 +5670,37 @@ class polygon(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='polygon'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.thermals is not None and 'thermals' not in already_processed:
             already_processed.append('thermals')
-            outfile.write(' thermals=%s' % (self.gds_format_string(quote_attrib(self.thermals).encode(ExternalEncoding), input_name='thermals'), ))
+            outfile.write(' thermals=%s' 
+                % (self.gds_format_string(quote_attrib(self.thermals).encode(ExternalEncoding),
+                    input_name='thermals'), ))
         if self.spacing is not None and 'spacing' not in already_processed:
             already_processed.append('spacing')
-            outfile.write(' spacing=%s' % (self.gds_format_string(quote_attrib(self.spacing).encode(ExternalEncoding), input_name='spacing'), ))
+            outfile.write(' spacing=%s' % (self.gds_format_string(quote_attrib(self.spacing).encode(ExternalEncoding),
+                input_name='spacing'), ))
         if self.orphans is not None and 'orphans' not in already_processed:
             already_processed.append('orphans')
-            outfile.write(' orphans=%s' % (self.gds_format_string(quote_attrib(self.orphans).encode(ExternalEncoding), input_name='orphans'), ))
+            outfile.write(' orphans=%s' % (self.gds_format_string(quote_attrib(self.orphans).encode(ExternalEncoding),
+                input_name='orphans'), ))
         if self.isolate is not None and 'isolate' not in already_processed:
             already_processed.append('isolate')
-            outfile.write(' isolate=%s' % (self.gds_format_string(quote_attrib(self.isolate).encode(ExternalEncoding), input_name='isolate'), ))
+            outfile.write(' isolate=%s' % (self.gds_format_string(quote_attrib(self.isolate).encode(ExternalEncoding),
+                input_name='isolate'), ))
         if self.pour is not None and 'pour' not in already_processed:
             already_processed.append('pour')
-            outfile.write(' pour=%s' % (self.gds_format_string(quote_attrib(self.pour).encode(ExternalEncoding), input_name='pour'), ))
+            outfile.write(' pour=%s' % (self.gds_format_string(quote_attrib(self.pour).encode(ExternalEncoding),
+                input_name='pour'), ))
         if self.width is not None and 'width' not in already_processed:
             already_processed.append('width')
-            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding), input_name='width'), ))
+            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding),
+                input_name='width'), ))
         if self.rank is not None and 'rank' not in already_processed:
             already_processed.append('rank')
-            outfile.write(' rank=%s' % (self.gds_format_string(quote_attrib(self.rank).encode(ExternalEncoding), input_name='rank'), ))
+            outfile.write(' rank=%s' % (self.gds_format_string(quote_attrib(self.rank).encode(ExternalEncoding),
+                input_name='rank'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='polygon', fromsubclass_=False):
         for vertex_ in self.vertex:
             vertex_.export(outfile, level, namespace_, name_='vertex')
@@ -5231,13 +5842,16 @@ class vertex(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='vertex'):
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.curve is not None and 'curve' not in already_processed:
             already_processed.append('curve')
-            outfile.write(' curve=%s' % (self.gds_format_string(quote_attrib(self.curve).encode(ExternalEncoding), input_name='curve'), ))
+            outfile.write(' curve=%s' % (self.gds_format_string(quote_attrib(self.curve).encode(ExternalEncoding),
+                input_name='curve'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='vertex', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -5310,24 +5924,42 @@ class pin(GeneratedsSuper):
         else:
             return pin(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_function(self): return self.function
-    def set_function(self, function): self.function = function
-    def get_direction(self): return self.direction
-    def set_direction(self, direction): self.direction = direction
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_visible(self): return self.visible
-    def set_visible(self, visible): self.visible = visible
-    def get_length(self): return self.length
-    def set_length(self, length): self.length = length
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
-    def get_swaplevel(self): return self.swaplevel
-    def set_swaplevel(self, swaplevel): self.swaplevel = swaplevel
+    def get_function(self):
+        return self.function
+    def set_function(self, function):
+        self.function = function
+    def get_direction(self):
+        return self.direction
+    def set_direction(self, direction):
+        self.direction = direction
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_visible(self):
+        return self.visible
+    def set_visible(self, visible):
+        self.visible = visible
+    def get_length(self):
+        return self.length
+    def set_length(self, length):
+        self.length = length
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
+    def get_swaplevel(self):
+        return self.swaplevel
+    def set_swaplevel(self, swaplevel):
+        self.swaplevel = swaplevel
     def export(self, outfile, level, namespace_='t:', name_='pin', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -5342,31 +5974,43 @@ class pin(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='pin'):
         if self.function is not None and 'function' not in already_processed:
             already_processed.append('function')
-            outfile.write(' function=%s' % (self.gds_format_string(quote_attrib(self.function).encode(ExternalEncoding), input_name='function'), ))
+            outfile.write(' function=%s' 
+                % (self.gds_format_string(quote_attrib(self.function).encode(ExternalEncoding),
+                input_name='function'), ))
         if self.direction is not None and 'direction' not in already_processed:
             already_processed.append('direction')
-            outfile.write(' direction=%s' % (self.gds_format_string(quote_attrib(self.direction).encode(ExternalEncoding), input_name='direction'), ))
+            outfile.write(' direction=%s' 
+                % (self.gds_format_string(quote_attrib(self.direction).encode(ExternalEncoding),
+                    input_name='direction'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.visible is not None and 'visible' not in already_processed:
             already_processed.append('visible')
-            outfile.write(' visible=%s' % (self.gds_format_string(quote_attrib(self.visible).encode(ExternalEncoding), input_name='visible'), ))
+            outfile.write(' visible=%s' % (self.gds_format_string(quote_attrib(self.visible).encode(ExternalEncoding),
+                input_name='visible'), ))
         if self.length is not None and 'length' not in already_processed:
             already_processed.append('length')
-            outfile.write(' length=%s' % (self.gds_format_string(quote_attrib(self.length).encode(ExternalEncoding), input_name='length'), ))
+            outfile.write(' length=%s' % (self.gds_format_string(quote_attrib(self.length).encode(ExternalEncoding),
+                input_name='length'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
         if self.swaplevel is not None and 'swaplevel' not in already_processed:
             already_processed.append('swaplevel')
-            outfile.write(' swaplevel=%s' % (self.gds_format_string(quote_attrib(self.swaplevel).encode(ExternalEncoding), input_name='swaplevel'), ))
+            outfile.write(' swaplevel=%s' 
+                % (self.gds_format_string(quote_attrib(self.swaplevel).encode(ExternalEncoding),
+                input_name='swaplevel'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='pin', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -5491,26 +6135,46 @@ class part(GeneratedsSuper):
         else:
             return part(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_attribute(self): return self.attribute
-    def set_attribute(self, attribute): self.attribute = attribute
-    def add_attribute(self, value): self.attribute.append(value)
-    def insert_attribute(self, index, value): self.attribute[index] = value
-    def get_variant(self): return self.variant
-    def set_variant(self, variant): self.variant = variant
-    def add_variant(self, value): self.variant.append(value)
-    def insert_variant(self, index, value): self.variant[index] = value
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_deviceset(self): return self.deviceset
-    def set_deviceset(self, deviceset): self.deviceset = deviceset
-    def get_value(self): return self.value
-    def set_value(self, value): self.value = value
-    def get_library(self): return self.library
-    def set_library(self, library): self.library = library
-    def get_device(self): return self.device
-    def set_device(self, device): self.device = device
-    def get_technology(self): return self.technology
-    def set_technology(self, technology): self.technology = technology
+    def get_attribute(self):
+        return self.attribute
+    def set_attribute(self, attribute):
+        self.attribute = attribute
+    def add_attribute(self, value):
+        self.attribute.append(value)
+    def insert_attribute(self, index, value):
+        self.attribute[index] = value
+    def get_variant(self):
+        return self.variant
+    def set_variant(self, variant):
+        self.variant = variant
+    def add_variant(self, value):
+        self.variant.append(value)
+    def insert_variant(self, index, value):
+        self.variant[index] = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_deviceset(self):
+        return self.deviceset
+    def set_deviceset(self, deviceset):
+        self.deviceset = deviceset
+    def get_value(self):
+        return self.value
+    def set_value(self, value):
+        self.value = value
+    def get_library(self):
+        return self.library
+    def set_library(self, library):
+        self.library = library
+    def get_device(self):
+        return self.device
+    def set_device(self, device):
+        self.device = device
+    def get_technology(self):
+        return self.technology
+    def set_technology(self, technology):
+        self.technology = technology
     def export(self, outfile, level, namespace_='t:', name_='part', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -5526,22 +6190,30 @@ class part(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='part'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.deviceset is not None and 'deviceset' not in already_processed:
             already_processed.append('deviceset')
-            outfile.write(' deviceset=%s' % (self.gds_format_string(quote_attrib(self.deviceset).encode(ExternalEncoding), input_name='deviceset'), ))
+            outfile.write(' deviceset=%s' 
+                % (self.gds_format_string(quote_attrib(self.deviceset).encode(ExternalEncoding),
+                input_name='deviceset'), ))
         if self.value is not None and 'value' not in already_processed:
             already_processed.append('value')
-            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding), input_name='value'), ))
+            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding),
+                input_name='value'), ))
         if self.library is not None and 'library' not in already_processed:
             already_processed.append('library')
-            outfile.write(' library=%s' % (self.gds_format_string(quote_attrib(self.library).encode(ExternalEncoding), input_name='library'), ))
+            outfile.write(' library=%s' % (self.gds_format_string(quote_attrib(self.library).encode(ExternalEncoding),
+                input_name='library'), ))
         if self.device is not None and 'device' not in already_processed:
             already_processed.append('device')
-            outfile.write(' device=%s' % (self.gds_format_string(quote_attrib(self.device).encode(ExternalEncoding), input_name='device'), ))
+            outfile.write(' device=%s' % (self.gds_format_string(quote_attrib(self.device).encode(ExternalEncoding),
+                input_name='device'), ))
         if self.technology is not None and 'technology' not in already_processed:
             already_processed.append('technology')
-            outfile.write(' technology=%s' % (self.gds_format_string(quote_attrib(self.technology).encode(ExternalEncoding), input_name='technology'), ))
+            outfile.write(' technology=%s' 
+                % (self.gds_format_string(quote_attrib(self.technology).encode(ExternalEncoding),
+                input_name='technology'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='part', fromsubclass_=False):
         for attribute_ in self.attribute:
             attribute_.export(outfile, level, namespace_, name_='attribute')
@@ -5672,22 +6344,38 @@ class instance(GeneratedsSuper):
         else:
             return instance(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_attribute(self): return self.attribute
-    def set_attribute(self, attribute): self.attribute = attribute
-    def add_attribute(self, value): self.attribute.append(value)
-    def insert_attribute(self, index, value): self.attribute[index] = value
-    def get_smashed(self): return self.smashed
-    def set_smashed(self, smashed): self.smashed = smashed
-    def get_part(self): return self.part
-    def set_part(self, part): self.part = part
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_gate(self): return self.gate
-    def set_gate(self, gate): self.gate = gate
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
+    def get_attribute(self):
+        return self.attribute
+    def set_attribute(self, attribute):
+        self.attribute = attribute
+    def add_attribute(self, value):
+        self.attribute.append(value)
+    def insert_attribute(self, index, value):
+        self.attribute[index] = value
+    def get_smashed(self):
+        return self.smashed
+    def set_smashed(self, smashed):
+        self.smashed = smashed
+    def get_part(self):
+        return self.part
+    def set_part(self, part):
+        self.part = part
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_gate(self):
+        return self.gate
+    def set_gate(self, gate):
+        self.gate = gate
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
     def export(self, outfile, level, namespace_='t:', name_='instance', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -5703,22 +6391,28 @@ class instance(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='instance'):
         if self.smashed is not None and 'smashed' not in already_processed:
             already_processed.append('smashed')
-            outfile.write(' smashed=%s' % (self.gds_format_string(quote_attrib(self.smashed).encode(ExternalEncoding), input_name='smashed'), ))
+            outfile.write(' smashed=%s' % (self.gds_format_string(quote_attrib(self.smashed).encode(ExternalEncoding),
+                input_name='smashed'), ))
         if self.part is not None and 'part' not in already_processed:
             already_processed.append('part')
-            outfile.write(' part=%s' % (self.gds_format_string(quote_attrib(self.part).encode(ExternalEncoding), input_name='part'), ))
+            outfile.write(' part=%s' % (self.gds_format_string(quote_attrib(self.part).encode(ExternalEncoding),
+                input_name='part'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.gate is not None and 'gate' not in already_processed:
             already_processed.append('gate')
-            outfile.write(' gate=%s' % (self.gds_format_string(quote_attrib(self.gate).encode(ExternalEncoding), input_name='gate'), ))
+            outfile.write(' gate=%s' % (self.gds_format_string(quote_attrib(self.gate).encode(ExternalEncoding),
+                input_name='gate'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='instance', fromsubclass_=False):
         for attribute_ in self.attribute:
             attribute_.export(outfile, level, namespace_, name_='attribute')
@@ -5829,22 +6523,38 @@ class label(GeneratedsSuper):
         else:
             return label(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_xref(self): return self.xref
-    def set_xref(self, xref): self.xref = xref
-    def get_ratio(self): return self.ratio
-    def set_ratio(self, ratio): self.ratio = ratio
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_font(self): return self.font
-    def set_font(self, font): self.font = font
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
-    def get_size(self): return self.size
-    def set_size(self, size): self.size = size
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_xref(self):
+        return self.xref
+    def set_xref(self, xref):
+        self.xref = xref
+    def get_ratio(self):
+        return self.ratio
+    def set_ratio(self, ratio):
+        self.ratio = ratio
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_font(self):
+        return self.font
+    def set_font(self, font):
+        self.font = font
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
+    def get_size(self):
+        return self.size
+    def set_size(self, size):
+        self.size = size
     def export(self, outfile, level, namespace_='t:', name_='label', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -5859,28 +6569,36 @@ class label(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='label'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.xref is not None and 'xref' not in already_processed:
             already_processed.append('xref')
-            outfile.write(' xref=%s' % (self.gds_format_string(quote_attrib(self.xref).encode(ExternalEncoding), input_name='xref'), ))
+            outfile.write(' xref=%s' % (self.gds_format_string(quote_attrib(self.xref).encode(ExternalEncoding),
+                input_name='xref'), ))
         if self.ratio is not None and 'ratio' not in already_processed:
             already_processed.append('ratio')
-            outfile.write(' ratio=%s' % (self.gds_format_string(quote_attrib(self.ratio).encode(ExternalEncoding), input_name='ratio'), ))
+            outfile.write(' ratio=%s' % (self.gds_format_string(quote_attrib(self.ratio).encode(ExternalEncoding),
+                input_name='ratio'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.font is not None and 'font' not in already_processed:
             already_processed.append('font')
-            outfile.write(' font=%s' % (self.gds_format_string(quote_attrib(self.font).encode(ExternalEncoding), input_name='font'), ))
+            outfile.write(' font=%s' % (self.gds_format_string(quote_attrib(self.font).encode(ExternalEncoding),
+                input_name='font'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
         if self.size is not None and 'size' not in already_processed:
             already_processed.append('size')
-            outfile.write(' size=%s' % (self.gds_format_string(quote_attrib(self.size).encode(ExternalEncoding), input_name='size'), ))
+            outfile.write(' size=%s' % (self.gds_format_string(quote_attrib(self.size).encode(ExternalEncoding),
+                input_name='size'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='label', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -6004,10 +6722,12 @@ class junction(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='junction'):
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='junction', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -6089,16 +6809,20 @@ class connect(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='connect'):
         if self.gate is not None and 'gate' not in already_processed:
             already_processed.append('gate')
-            outfile.write(' gate=%s' % (self.gds_format_string(quote_attrib(self.gate).encode(ExternalEncoding), input_name='gate'), ))
+            outfile.write(' gate=%s' % (self.gds_format_string(quote_attrib(self.gate).encode(ExternalEncoding),
+                input_name='gate'), ))
         if self.route is not None and 'route' not in already_processed:
             already_processed.append('route')
-            outfile.write(' route=%s' % (self.gds_format_string(quote_attrib(self.route).encode(ExternalEncoding), input_name='route'), ))
+            outfile.write(' route=%s' % (self.gds_format_string(quote_attrib(self.route).encode(ExternalEncoding),
+                input_name='route'), ))
         if self.pad is not None and 'pad' not in already_processed:
             already_processed.append('pad')
-            outfile.write(' pad=%s' % (self.gds_format_string(quote_attrib(self.pad).encode(ExternalEncoding), input_name='pad'), ))
+            outfile.write(' pad=%s' % (self.gds_format_string(quote_attrib(self.pad).encode(ExternalEncoding),
+                input_name='pad'), ))
         if self.pin is not None and 'pin' not in already_processed:
             already_processed.append('pin')
-            outfile.write(' pin=%s' % (self.gds_format_string(quote_attrib(self.pin).encode(ExternalEncoding), input_name='pin'), ))
+            outfile.write(' pin=%s' % (self.gds_format_string(quote_attrib(self.pin).encode(ExternalEncoding),
+                input_name='pin'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='connect', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -6174,12 +6898,18 @@ class technology(GeneratedsSuper):
         else:
             return technology(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_attribute(self): return self.attribute
-    def set_attribute(self, attribute): self.attribute = attribute
-    def add_attribute(self, value): self.attribute.append(value)
-    def insert_attribute(self, index, value): self.attribute[index] = value
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_attribute(self):
+        return self.attribute
+    def set_attribute(self, attribute):
+        self.attribute = attribute
+    def add_attribute(self, value):
+        self.attribute.append(value)
+    def insert_attribute(self, index, value):
+        self.attribute[index] = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='technology', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6195,7 +6925,8 @@ class technology(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='technology'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='technology', fromsubclass_=False):
         for attribute_ in self.attribute:
             attribute_.export(outfile, level, namespace_, name_='attribute')
@@ -6269,28 +7000,50 @@ class attribute(GeneratedsSuper):
         else:
             return attribute(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def get_ratio(self): return self.ratio
-    def set_ratio(self, ratio): self.ratio = ratio
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_value(self): return self.value
-    def set_value(self, value): self.value = value
-    def get_y(self): return self.y
-    def set_y(self, y): self.y = y
-    def get_x(self): return self.x
-    def set_x(self, x): self.x = x
-    def get_constant(self): return self.constant
-    def set_constant(self, constant): self.constant = constant
-    def get_font(self): return self.font
-    def set_font(self, font): self.font = font
-    def get_rot(self): return self.rot
-    def set_rot(self, rot): self.rot = rot
-    def get_display(self): return self.display
-    def set_display(self, display): self.display = display
-    def get_size(self): return self.size
-    def set_size(self, size): self.size = size
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def get_ratio(self):
+        return self.ratio
+    def set_ratio(self, ratio):
+        self.ratio = ratio
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_value(self):
+        return self.value
+    def set_value(self, value):
+        self.value = value
+    def get_y(self):
+        return self.y
+    def set_y(self, y):
+        self.y = y
+    def get_x(self):
+        return self.x
+    def set_x(self, x):
+        self.x = x
+    def get_constant(self):
+        return self.constant
+    def set_constant(self, constant):
+        self.constant = constant
+    def get_font(self):
+        return self.font
+    def set_font(self, font):
+        self.font = font
+    def get_rot(self):
+        return self.rot
+    def set_rot(self, rot):
+        self.rot = rot
+    def get_display(self):
+        return self.display
+    def set_display(self, display):
+        self.display = display
+    def get_size(self):
+        return self.size
+    def set_size(self, size):
+        self.size = size
     def export(self, outfile, level, namespace_='t:', name_='attribute', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6305,37 +7058,47 @@ class attribute(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='attribute'):
         if self.layer is not None and 'layer' not in already_processed:
             already_processed.append('layer')
-            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding), input_name='layer'), ))
+            outfile.write(' layer=%s' % (self.gds_format_string(quote_attrib(self.layer).encode(ExternalEncoding),
+                input_name='layer'), ))
         if self.ratio is not None and 'ratio' not in already_processed:
             already_processed.append('ratio')
-            outfile.write(' ratio=%s' % (self.gds_format_string(quote_attrib(self.ratio).encode(ExternalEncoding), input_name='ratio'), ))
+            outfile.write(' ratio=%s' % (self.gds_format_string(quote_attrib(self.ratio).encode(ExternalEncoding),
+                input_name='ratio'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.value is not None and 'value' not in already_processed:
             already_processed.append('value')
-            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding), input_name='value'), ))
+            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding),
+                input_name='value'), ))
         if self.y is not None and 'y' not in already_processed:
             already_processed.append('y')
-            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding), input_name='y'), ))
+            outfile.write(' y=%s' % (self.gds_format_string(quote_attrib(self.y).encode(ExternalEncoding),
+                input_name='y'), ))
         if self.x is not None and 'x' not in already_processed:
             already_processed.append('x')
-            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding), input_name='x'), ))
+            outfile.write(' x=%s' % (self.gds_format_string(quote_attrib(self.x).encode(ExternalEncoding),
+                input_name='x'), ))
         if self.constant is not None and 'constant' not in already_processed:
             already_processed.append('constant')
             outfile.write(' constant=%s' % (self.gds_format_string(quote_attrib(self.constant).encode(ExternalEncoding), input_name='constant'), ))
         if self.font is not None and 'font' not in already_processed:
             already_processed.append('font')
-            outfile.write(' font=%s' % (self.gds_format_string(quote_attrib(self.font).encode(ExternalEncoding), input_name='font'), ))
+            outfile.write(' font=%s' % (self.gds_format_string(quote_attrib(self.font).encode(ExternalEncoding),
+                input_name='font'), ))
         if self.rot is not None and 'rot' not in already_processed:
             already_processed.append('rot')
-            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding), input_name='rot'), ))
+            outfile.write(' rot=%s' % (self.gds_format_string(quote_attrib(self.rot).encode(ExternalEncoding),
+                input_name='rot'), ))
         if self.display is not None and 'display' not in already_processed:
             already_processed.append('display')
-            outfile.write(' display=%s' % (self.gds_format_string(quote_attrib(self.display).encode(ExternalEncoding), input_name='display'), ))
+            outfile.write(' display=%s' % (self.gds_format_string(quote_attrib(self.display).encode(ExternalEncoding),
+                input_name='display'), ))
         if self.size is not None and 'size' not in already_processed:
             already_processed.append('size')
-            outfile.write(' size=%s' % (self.gds_format_string(quote_attrib(self.size).encode(ExternalEncoding), input_name='size'), ))
+            outfile.write(' size=%s' % (self.gds_format_string(quote_attrib(self.size).encode(ExternalEncoding),
+                input_name='size'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='attribute', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -6466,12 +7229,18 @@ class pinref(GeneratedsSuper):
         else:
             return pinref(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_gate(self): return self.gate
-    def set_gate(self, gate): self.gate = gate
-    def get_part(self): return self.part
-    def set_part(self, part): self.part = part
-    def get_pin(self): return self.pin
-    def set_pin(self, pin): self.pin = pin
+    def get_gate(self):
+        return self.gate
+    def set_gate(self, gate):
+        self.gate = gate
+    def get_part(self):
+        return self.part
+    def set_part(self, part):
+        self.part = part
+    def get_pin(self):
+        return self.pin
+    def set_pin(self, pin):
+        self.pin = pin
     def export(self, outfile, level, namespace_='t:', name_='pinref', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6486,13 +7255,16 @@ class pinref(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='pinref'):
         if self.gate is not None and 'gate' not in already_processed:
             already_processed.append('gate')
-            outfile.write(' gate=%s' % (self.gds_format_string(quote_attrib(self.gate).encode(ExternalEncoding), input_name='gate'), ))
+            outfile.write(' gate=%s' % (self.gds_format_string(quote_attrib(self.gate).encode(ExternalEncoding),
+                input_name='gate'), ))
         if self.part is not None and 'part' not in already_processed:
             already_processed.append('part')
-            outfile.write(' part=%s' % (self.gds_format_string(quote_attrib(self.part).encode(ExternalEncoding), input_name='part'), ))
+            outfile.write(' part=%s' % (self.gds_format_string(quote_attrib(self.part).encode(ExternalEncoding),
+                input_name='part'), ))
         if self.pin is not None and 'pin' not in already_processed:
             already_processed.append('pin')
-            outfile.write(' pin=%s' % (self.gds_format_string(quote_attrib(self.pin).encode(ExternalEncoding), input_name='pin'), ))
+            outfile.write(' pin=%s' % (self.gds_format_string(quote_attrib(self.pin).encode(ExternalEncoding),
+                input_name='pin'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='pinref', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -6560,14 +7332,22 @@ class contactref(GeneratedsSuper):
         else:
             return contactref(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_routetag(self): return self.routetag
-    def set_routetag(self, routetag): self.routetag = routetag
-    def get_route(self): return self.route
-    def set_route(self, route): self.route = route
-    def get_pad(self): return self.pad
-    def set_pad(self, pad): self.pad = pad
-    def get_element(self): return self.element
-    def set_element(self, element): self.element = element
+    def get_routetag(self):
+        return self.routetag
+    def set_routetag(self, routetag):
+        self.routetag = routetag
+    def get_route(self):
+        return self.route
+    def set_route(self, route):
+        self.route = route
+    def get_pad(self):
+        return self.pad
+    def set_pad(self, pad):
+        self.pad = pad
+    def get_element(self):
+        return self.element
+    def set_element(self, element):
+        self.element = element
     def export(self, outfile, level, namespace_='t:', name_='contactref', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6582,16 +7362,20 @@ class contactref(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='contactref'):
         if self.routetag is not None and 'routetag' not in already_processed:
             already_processed.append('routetag')
-            outfile.write(' routetag=%s' % (self.gds_format_string(quote_attrib(self.routetag).encode(ExternalEncoding), input_name='routetag'), ))
+            outfile.write(' routetag=%s' % (self.gds_format_string(quote_attrib(self.routetag).encode(ExternalEncoding),
+                input_name='routetag'), ))
         if self.route is not None and 'route' not in already_processed:
             already_processed.append('route')
-            outfile.write(' route=%s' % (self.gds_format_string(quote_attrib(self.route).encode(ExternalEncoding), input_name='route'), ))
+            outfile.write(' route=%s' % (self.gds_format_string(quote_attrib(self.route).encode(ExternalEncoding),
+                input_name='route'), ))
         if self.pad is not None and 'pad' not in already_processed:
             already_processed.append('pad')
-            outfile.write(' pad=%s' % (self.gds_format_string(quote_attrib(self.pad).encode(ExternalEncoding), input_name='pad'), ))
+            outfile.write(' pad=%s' % (self.gds_format_string(quote_attrib(self.pad).encode(ExternalEncoding),
+                input_name='pad'), ))
         if self.element is not None and 'element' not in already_processed:
             already_processed.append('element')
-            outfile.write(' element=%s' % (self.gds_format_string(quote_attrib(self.element).encode(ExternalEncoding), input_name='element'), ))
+            outfile.write(' element=%s' % (self.gds_format_string(quote_attrib(self.element).encode(ExternalEncoding),
+                input_name='element'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='contactref', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -6666,10 +7450,14 @@ class variantdefs(GeneratedsSuper):
         else:
             return variantdefs(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_variantdef(self): return self.variantdef
-    def set_variantdef(self, variantdef): self.variantdef = variantdef
-    def add_variantdef(self, value): self.variantdef.append(value)
-    def insert_variantdef(self, index, value): self.variantdef[index] = value
+    def get_variantdef(self):
+        return self.variantdef
+    def set_variantdef(self, variantdef):
+        self.variantdef = variantdef
+    def add_variantdef(self, value):
+        self.variantdef.append(value)
+    def insert_variantdef(self, index, value):
+        self.variantdef[index] = value
     def export(self, outfile, level, namespace_='t:', name_='variantdefs', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6743,10 +7531,14 @@ class settings(GeneratedsSuper):
         else:
             return settings(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_setting(self): return self.setting
-    def set_setting(self, setting): self.setting = setting
-    def add_setting(self, value): self.setting.append(value)
-    def insert_setting(self, index, value): self.setting[index] = value
+    def get_setting(self):
+        return self.setting
+    def set_setting(self, setting):
+        self.setting = setting
+    def add_setting(self, value):
+        self.setting.append(value)
+    def insert_setting(self, index, value):
+        self.setting[index] = value
     def export(self, outfile, level, namespace_='t:', name_='settings', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6820,10 +7612,14 @@ class sheets(GeneratedsSuper):
         else:
             return sheets(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_sheet(self): return self.sheet
-    def set_sheet(self, sheet): self.sheet = sheet
-    def add_sheet(self, value): self.sheet.append(value)
-    def insert_sheet(self, index, value): self.sheet[index] = value
+    def get_sheet(self):
+        return self.sheet
+    def set_sheet(self, sheet):
+        self.sheet = sheet
+    def add_sheet(self, value):
+        self.sheet.append(value)
+    def insert_sheet(self, index, value):
+        self.sheet[index] = value
     def export(self, outfile, level, namespace_='t:', name_='sheets', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -6897,10 +7693,14 @@ class layers(GeneratedsSuper):
         else:
             return layers(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_layer(self): return self.layer
-    def set_layer(self, layer): self.layer = layer
-    def add_layer(self, value): self.layer.append(value)
-    def insert_layer(self, index, value): self.layer[index] = value
+    def get_layer(self):
+        return self.layer
+    def set_layer(self, layer):
+        self.layer = layer
+    def add_layer(self, value):
+        self.layer.append(value)
+    def insert_layer(self, index, value):
+        self.layer[index] = value
     def export(self, outfile, level, namespace_='t:', name_='layers', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7051,10 +7851,14 @@ class symbols(GeneratedsSuper):
         else:
             return symbols(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_symbol(self): return self.symbol
-    def set_symbol(self, symbol): self.symbol = symbol
-    def add_symbol(self, value): self.symbol.append(value)
-    def insert_symbol(self, index, value): self.symbol[index] = value
+    def get_symbol(self):
+        return self.symbol
+    def set_symbol(self, symbol):
+        self.symbol = symbol
+    def add_symbol(self, value):
+        self.symbol.append(value)
+    def insert_symbol(self, index, value):
+        self.symbol[index] = value
     def export(self, outfile, level, namespace_='t:', name_='symbols', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7128,10 +7932,14 @@ class devicesets(GeneratedsSuper):
         else:
             return devicesets(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_deviceset(self): return self.deviceset
-    def set_deviceset(self, deviceset): self.deviceset = deviceset
-    def add_deviceset(self, value): self.deviceset.append(value)
-    def insert_deviceset(self, index, value): self.deviceset[index] = value
+    def get_deviceset(self):
+        return self.deviceset
+    def set_deviceset(self, deviceset):
+        self.deviceset = deviceset
+    def add_deviceset(self, value):
+        self.deviceset.append(value)
+    def insert_deviceset(self, index, value):
+        self.deviceset[index] = value
     def export(self, outfile, level, namespace_='t:', name_='devicesets', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7205,10 +8013,14 @@ class gates(GeneratedsSuper):
         else:
             return gates(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_gate(self): return self.gate
-    def set_gate(self, gate): self.gate = gate
-    def add_gate(self, value): self.gate.append(value)
-    def insert_gate(self, index, value): self.gate[index] = value
+    def get_gate(self):
+        return self.gate
+    def set_gate(self, gate):
+        self.gate = gate
+    def add_gate(self, value):
+        self.gate.append(value)
+    def insert_gate(self, index, value):
+        self.gate[index] = value
     def export(self, outfile, level, namespace_='t:', name_='gates', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7282,10 +8094,14 @@ class devices(GeneratedsSuper):
         else:
             return devices(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_device(self): return self.device
-    def set_device(self, device): self.device = device
-    def add_device(self, value): self.device.append(value)
-    def insert_device(self, index, value): self.device[index] = value
+    def get_device(self):
+        return self.device
+    def set_device(self, device):
+        self.device = device
+    def add_device(self, value):
+        self.device.append(value)
+    def insert_device(self, index, value):
+        self.device[index] = value
     def export(self, outfile, level, namespace_='t:', name_='devices', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7359,10 +8175,14 @@ class libraries(GeneratedsSuper):
         else:
             return libraries(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_library(self): return self.library
-    def set_library(self, library): self.library = library
-    def add_library(self, value): self.library.append(value)
-    def insert_library(self, index, value): self.library[index] = value
+    def get_library(self):
+        return self.library
+    def set_library(self, library):
+        self.library = library
+    def add_library(self, value):
+        self.library.append(value)
+    def insert_library(self, index, value):
+        self.library[index] = value
     def export(self, outfile, level, namespace_='t:', name_='libraries', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7436,10 +8256,14 @@ class connects(GeneratedsSuper):
         else:
             return connects(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_connect(self): return self.connect
-    def set_connect(self, connect): self.connect = connect
-    def add_connect(self, value): self.connect.append(value)
-    def insert_connect(self, index, value): self.connect[index] = value
+    def get_connect(self):
+        return self.connect
+    def set_connect(self, connect):
+        self.connect = connect
+    def add_connect(self, value):
+        self.connect.append(value)
+    def insert_connect(self, index, value):
+        self.connect[index] = value
     def export(self, outfile, level, namespace_='t:', name_='connects', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7513,10 +8337,14 @@ class technologies(GeneratedsSuper):
         else:
             return technologies(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_technology(self): return self.technology
-    def set_technology(self, technology): self.technology = technology
-    def add_technology(self, value): self.technology.append(value)
-    def insert_technology(self, index, value): self.technology[index] = value
+    def get_technology(self):
+        return self.technology
+    def set_technology(self, technology):
+        self.technology = technology
+    def add_technology(self, value):
+        self.technology.append(value)
+    def insert_technology(self, index, value):
+        self.technology[index] = value
     def export(self, outfile, level, namespace_='t:', name_='technologies', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7590,10 +8418,14 @@ class attributes(GeneratedsSuper):
         else:
             return attributes(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_attribute(self): return self.attribute
-    def set_attribute(self, attribute): self.attribute = attribute
-    def add_attribute(self, value): self.attribute.append(value)
-    def insert_attribute(self, index, value): self.attribute[index] = value
+    def get_attribute(self):
+        return self.attribute
+    def set_attribute(self, attribute):
+        self.attribute = attribute
+    def add_attribute(self, value):
+        self.attribute.append(value)
+    def insert_attribute(self, index, value):
+        self.attribute[index] = value
     def export(self, outfile, level, namespace_='t:', name_='attributes', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7667,10 +8499,14 @@ class classes(GeneratedsSuper):
         else:
             return classes(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_class(self): return self.classxx
-    def set_class(self, classxx): self.classxx = classxx
-    def add_class(self, value): self.classxx.append(value)
-    def insert_class(self, index, value): self.classxx[index] = value
+    def get_class(self):
+        return self.classxx
+    def set_class(self, classxx):
+        self.classxx = classxx
+    def add_class(self, value):
+        self.classxx.append(value)
+    def insert_class(self, index, value):
+        self.classxx[index] = value
     def export(self, outfile, level, namespace_='t:', name_='classes', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7744,10 +8580,14 @@ class parts(GeneratedsSuper):
         else:
             return parts(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_part(self): return self.part
-    def set_part(self, part): self.part = part
-    def add_part(self, value): self.part.append(value)
-    def insert_part(self, index, value): self.part[index] = value
+    def get_part(self):
+        return self.part
+    def set_part(self, part):
+        self.part = part
+    def add_part(self, value):
+        self.part.append(value)
+    def insert_part(self, index, value):
+        self.part[index] = value
     def export(self, outfile, level, namespace_='t:', name_='parts', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7821,10 +8661,14 @@ class instances(GeneratedsSuper):
         else:
             return instances(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_instance(self): return self.instance
-    def set_instance(self, instance): self.instance = instance
-    def add_instance(self, value): self.instance.append(value)
-    def insert_instance(self, index, value): self.instance[index] = value
+    def get_instance(self):
+        return self.instance
+    def set_instance(self, instance):
+        self.instance = instance
+    def add_instance(self, value):
+        self.instance.append(value)
+    def insert_instance(self, index, value):
+        self.instance[index] = value
     def export(self, outfile, level, namespace_='t:', name_='instances', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7898,10 +8742,14 @@ class errors(GeneratedsSuper):
         else:
             return errors(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_approved(self): return self.approved
-    def set_approved(self, approved): self.approved = approved
-    def add_approved(self, value): self.approved.append(value)
-    def insert_approved(self, index, value): self.approved[index] = value
+    def get_approved(self):
+        return self.approved
+    def set_approved(self, approved):
+        self.approved = approved
+    def add_approved(self, value):
+        self.approved.append(value)
+    def insert_approved(self, index, value):
+        self.approved[index] = value
     def export(self, outfile, level, namespace_='t:', name_='errors', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -7999,34 +8847,62 @@ class plain(GeneratedsSuper):
         else:
             return plain(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_polygon(self): return self.polygon
-    def set_polygon(self, polygon): self.polygon = polygon
-    def add_polygon(self, value): self.polygon.append(value)
-    def insert_polygon(self, index, value): self.polygon[index] = value
-    def get_wire(self): return self.wire
-    def set_wire(self, wire): self.wire = wire
-    def add_wire(self, value): self.wire.append(value)
-    def insert_wire(self, index, value): self.wire[index] = value
-    def get_text(self): return self.text
-    def set_text(self, text): self.text = text
-    def add_text(self, value): self.text.append(value)
-    def insert_text(self, index, value): self.text[index] = value
-    def get_circle(self): return self.circle
-    def set_circle(self, circle): self.circle = circle
-    def add_circle(self, value): self.circle.append(value)
-    def insert_circle(self, index, value): self.circle[index] = value
-    def get_rectangle(self): return self.rectangle
-    def set_rectangle(self, rectangle): self.rectangle = rectangle
-    def add_rectangle(self, value): self.rectangle.append(value)
-    def insert_rectangle(self, index, value): self.rectangle[index] = value
-    def get_frame(self): return self.frame
-    def set_frame(self, frame): self.frame = frame
-    def add_frame(self, value): self.frame.append(value)
-    def insert_frame(self, index, value): self.frame[index] = value
-    def get_hole(self): return self.hole
-    def set_hole(self, hole): self.hole = hole
-    def add_hole(self, value): self.hole.append(value)
-    def insert_hole(self, index, value): self.hole[index] = value
+    def get_polygon(self):
+        return self.polygon
+    def set_polygon(self, polygon):
+        self.polygon = polygon
+    def add_polygon(self, value):
+        self.polygon.append(value)
+    def insert_polygon(self, index, value):
+        self.polygon[index] = value
+    def get_wire(self):
+        return self.wire
+    def set_wire(self, wire):
+        self.wire = wire
+    def add_wire(self, value):
+        self.wire.append(value)
+    def insert_wire(self, index, value):
+        self.wire[index] = value
+    def get_text(self):
+        return self.text
+    def set_text(self, text):
+        self.text = text
+    def add_text(self, value):
+        self.text.append(value)
+    def insert_text(self, index, value):
+        self.text[index] = value
+    def get_circle(self):
+        return self.circle
+    def set_circle(self, circle):
+        self.circle = circle
+    def add_circle(self, value):
+        self.circle.append(value)
+    def insert_circle(self, index, value):
+        self.circle[index] = value
+    def get_rectangle(self):
+        return self.rectangle
+    def set_rectangle(self, rectangle):
+        self.rectangle = rectangle
+    def add_rectangle(self, value):
+        self.rectangle.append(value)
+    def insert_rectangle(self, index, value):
+        self.rectangle[index] = value
+    def get_frame(self):
+        return self.frame
+    def set_frame(self, frame):
+        self.frame = frame
+    def add_frame(self, value):
+        self.frame.append(value)
+    def insert_frame(self, index, value):
+        self.frame[index] = value
+    def get_hole(self):
+        return self.hole
+    def set_hole(self, hole):
+        self.hole = hole
+    def add_hole(self, value):
+        self.hole.append(value)
+    def insert_hole(self, index, value):
+        self.hole[index] = value
     def export(self, outfile, level, namespace_='t:', name_='plain', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8218,14 +9094,22 @@ class designrules(GeneratedsSuper):
         else:
             return designrules(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_description(self): return self.description
-    def set_description(self, description): self.description = description
-    def add_description(self, value): self.description.append(value)
-    def insert_description(self, index, value): self.description[index] = value
-    def get_param(self): return self.param
-    def set_param(self, param): self.param = param
-    def add_param(self, value): self.param.append(value)
-    def insert_param(self, index, value): self.param[index] = value
+    def get_description(self):
+        return self.description
+    def set_description(self, description):
+        self.description = description
+    def add_description(self, value):
+        self.description.append(value)
+    def insert_description(self, index, value):
+        self.description[index] = value
+    def get_param(self):
+        return self.param
+    def set_param(self, param):
+        self.param = param
+    def add_param(self, value):
+        self.param.append(value)
+    def insert_param(self, index, value):
+        self.param[index] = value
     def export(self, outfile, level, namespace_='t:', name_='designrules', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8318,10 +9202,14 @@ class autorouter(GeneratedsSuper):
         else:
             return autorouter(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_pass(self): return self.passxx
-    def set_pass(self, passxx): self.passxx = passxx
-    def add_pass(self, value): self.passxx.append(value)
-    def insert_pass(self, index, value): self.passxx[index] = value
+    def get_pass(self):
+        return self.passxx
+    def set_pass(self, passxx):
+        self.passxx = passxx
+    def add_pass(self, value):
+        self.passxx.append(value)
+    def insert_pass(self, index, value):
+        self.passxx[index] = value
     def export(self, outfile, level, namespace_='t:', name_='autorouter', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8395,10 +9283,14 @@ class elements(GeneratedsSuper):
         else:
             return elements(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_element(self): return self.element
-    def set_element(self, element): self.element = element
-    def add_element(self, value): self.element.append(value)
-    def insert_element(self, index, value): self.element[index] = value
+    def get_element(self):
+        return self.element
+    def set_element(self, element):
+        self.element = element
+    def add_element(self, value):
+        self.element.append(value)
+    def insert_element(self, index, value):
+        self.element[index] = value
     def export(self, outfile, level, namespace_='t:', name_='elements', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8472,10 +9364,14 @@ class signals(GeneratedsSuper):
         else:
             return signals(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_signal(self): return self.signal
-    def set_signal(self, signal): self.signal = signal
-    def add_signal(self, value): self.signal.append(value)
-    def insert_signal(self, index, value): self.signal[index] = value
+    def get_signal(self):
+        return self.signal
+    def set_signal(self, signal):
+        self.signal = signal
+    def add_signal(self, value):
+        self.signal.append(value)
+    def insert_signal(self, index, value):
+        self.signal[index] = value
     def export(self, outfile, level, namespace_='t:', name_='signals', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8549,10 +9445,14 @@ class busses(GeneratedsSuper):
         else:
             return busses(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_bus(self): return self.bus
-    def set_bus(self, bus): self.bus = bus
-    def add_bus(self, value): self.bus.append(value)
-    def insert_bus(self, index, value): self.bus[index] = value
+    def get_bus(self):
+        return self.bus
+    def set_bus(self, bus):
+        self.bus = bus
+    def add_bus(self, value):
+        self.bus.append(value)
+    def insert_bus(self, index, value):
+        self.bus[index] = value
     def export(self, outfile, level, namespace_='t:', name_='busses', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8626,10 +9526,14 @@ class nets(GeneratedsSuper):
         else:
             return nets(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_net(self): return self.net
-    def set_net(self, net): self.net = net
-    def add_net(self, value): self.net.append(value)
-    def insert_net(self, index, value): self.net[index] = value
+    def get_net(self):
+        return self.net
+    def set_net(self, net):
+        self.net = net
+    def add_net(self, value):
+        self.net.append(value)
+    def insert_net(self, index, value):
+        self.net[index] = value
     def export(self, outfile, level, namespace_='t:', name_='nets', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8702,10 +9606,14 @@ class setting(GeneratedsSuper):
         else:
             return setting(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_alwaysvectorfont(self): return self.alwaysvectorfont
-    def set_alwaysvectorfont(self, alwaysvectorfont): self.alwaysvectorfont = alwaysvectorfont
-    def get_verticaltext(self): return self.verticaltext
-    def set_verticaltext(self, verticaltext): self.verticaltext = verticaltext
+    def get_alwaysvectorfont(self):
+        return self.alwaysvectorfont
+    def set_alwaysvectorfont(self, alwaysvectorfont):
+        self.alwaysvectorfont = alwaysvectorfont
+    def get_verticaltext(self):
+        return self.verticaltext
+    def set_verticaltext(self, verticaltext):
+        self.verticaltext = verticaltext
     def export(self, outfile, level, namespace_='t:', name_='setting', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8720,10 +9628,14 @@ class setting(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='setting'):
         if self.alwaysvectorfont is not None and 'alwaysvectorfont' not in already_processed:
             already_processed.append('alwaysvectorfont')
-            outfile.write(' alwaysvectorfont=%s' % (self.gds_format_string(quote_attrib(self.alwaysvectorfont).encode(ExternalEncoding), input_name='alwaysvectorfont'), ))
+            outfile.write(' alwaysvectorfont=%s' 
+                % (self.gds_format_string(quote_attrib(self.alwaysvectorfont).encode(ExternalEncoding),
+                input_name='alwaysvectorfont'), ))
         if self.verticaltext is not None and 'verticaltext' not in already_processed:
             already_processed.append('verticaltext')
-            outfile.write(' verticaltext=%s' % (self.gds_format_string(quote_attrib(self.verticaltext).encode(ExternalEncoding), input_name='verticaltext'), ))
+            outfile.write(' verticaltext=%s' 
+                % (self.gds_format_string(quote_attrib(self.verticaltext).encode(ExternalEncoding),
+                input_name='verticaltext'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='setting', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -8788,24 +9700,42 @@ class grid(GeneratedsSuper):
         else:
             return grid(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_distance(self): return self.distance
-    def set_distance(self, distance): self.distance = distance
-    def get_style(self): return self.style
-    def set_style(self, style): self.style = style
-    def get_multiple(self): return self.multiple
-    def set_multiple(self, multiple): self.multiple = multiple
-    def get_altdistance(self): return self.altdistance
-    def set_altdistance(self, altdistance): self.altdistance = altdistance
-    def get_altunit(self): return self.altunit
-    def set_altunit(self, altunit): self.altunit = altunit
-    def get_unitdist(self): return self.unitdist
-    def set_unitdist(self, unitdist): self.unitdist = unitdist
-    def get_altunitdist(self): return self.altunitdist
-    def set_altunitdist(self, altunitdist): self.altunitdist = altunitdist
-    def get_display(self): return self.display
-    def set_display(self, display): self.display = display
-    def get_unit(self): return self.unit
-    def set_unit(self, unit): self.unit = unit
+    def get_distance(self):
+        return self.distance
+    def set_distance(self, distance):
+        self.distance = distance
+    def get_style(self):
+        return self.style
+    def set_style(self, style):
+        self.style = style
+    def get_multiple(self):
+        return self.multiple
+    def set_multiple(self, multiple):
+        self.multiple = multiple
+    def get_altdistance(self):
+        return self.altdistance
+    def set_altdistance(self, altdistance):
+        self.altdistance = altdistance
+    def get_altunit(self):
+        return self.altunit
+    def set_altunit(self, altunit):
+        self.altunit = altunit
+    def get_unitdist(self):
+        return self.unitdist
+    def set_unitdist(self, unitdist):
+        self.unitdist = unitdist
+    def get_altunitdist(self):
+        return self.altunitdist
+    def set_altunitdist(self, altunitdist):
+        self.altunitdist = altunitdist
+    def get_display(self):
+        return self.display
+    def set_display(self, display):
+        self.display = display
+    def get_unit(self):
+        return self.unit
+    def set_unit(self, unit):
+        self.unit = unit
     def export(self, outfile, level, namespace_='t:', name_='grid', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8820,31 +9750,40 @@ class grid(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='grid'):
         if self.distance is not None and 'distance' not in already_processed:
             already_processed.append('distance')
-            outfile.write(' distance=%s' % (self.gds_format_string(quote_attrib(self.distance).encode(ExternalEncoding), input_name='distance'), ))
+            outfile.write(' distance=%s' % (self.gds_format_string(quote_attrib(self.distance).encode(ExternalEncoding),
+                input_name='distance'), ))
         if self.style is not None and 'style' not in already_processed:
             already_processed.append('style')
-            outfile.write(' style=%s' % (self.gds_format_string(quote_attrib(self.style).encode(ExternalEncoding), input_name='style'), ))
+            outfile.write(' style=%s' % (self.gds_format_string(quote_attrib(self.style).encode(ExternalEncoding),
+                input_name='style'), ))
         if self.multiple is not None and 'multiple' not in already_processed:
             already_processed.append('multiple')
-            outfile.write(' multiple=%s' % (self.gds_format_string(quote_attrib(self.multiple).encode(ExternalEncoding), input_name='multiple'), ))
+            outfile.write(' multiple=%s' % (self.gds_format_string(quote_attrib(self.multiple).encode(ExternalEncoding),
+                input_name='multiple'), ))
         if self.altdistance is not None and 'altdistance' not in already_processed:
             already_processed.append('altdistance')
-            outfile.write(' altdistance=%s' % (self.gds_format_string(quote_attrib(self.altdistance).encode(ExternalEncoding), input_name='altdistance'), ))
+            outfile.write(' altdistance=%s' % (self.gds_format_string(quote_attrib(self.altdistance).encode(ExternalEncoding),
+                input_name='altdistance'), ))
         if self.altunit is not None and 'altunit' not in already_processed:
             already_processed.append('altunit')
-            outfile.write(' altunit=%s' % (self.gds_format_string(quote_attrib(self.altunit).encode(ExternalEncoding), input_name='altunit'), ))
+            outfile.write(' altunit=%s' % (self.gds_format_string(quote_attrib(self.altunit).encode(ExternalEncoding),
+                input_name='altunit'), ))
         if self.unitdist is not None and 'unitdist' not in already_processed:
             already_processed.append('unitdist')
-            outfile.write(' unitdist=%s' % (self.gds_format_string(quote_attrib(self.unitdist).encode(ExternalEncoding), input_name='unitdist'), ))
+            outfile.write(' unitdist=%s' % (self.gds_format_string(quote_attrib(self.unitdist).encode(ExternalEncoding),
+                input_name='unitdist'), ))
         if self.altunitdist is not None and 'altunitdist' not in already_processed:
             already_processed.append('altunitdist')
-            outfile.write(' altunitdist=%s' % (self.gds_format_string(quote_attrib(self.altunitdist).encode(ExternalEncoding), input_name='altunitdist'), ))
+            outfile.write(' altunitdist=%s' % (self.gds_format_string(quote_attrib(self.altunitdist).encode(ExternalEncoding),
+                input_name='altunitdist'), ))
         if self.display is not None and 'display' not in already_processed:
             already_processed.append('display')
-            outfile.write(' display=%s' % (self.gds_format_string(quote_attrib(self.display).encode(ExternalEncoding), input_name='display'), ))
+            outfile.write(' display=%s' % (self.gds_format_string(quote_attrib(self.display).encode(ExternalEncoding),
+                input_name='display'), ))
         if self.unit is not None and 'unit' not in already_processed:
             already_processed.append('unit')
-            outfile.write(' unit=%s' % (self.gds_format_string(quote_attrib(self.unit).encode(ExternalEncoding), input_name='unit'), ))
+            outfile.write(' unit=%s' % (self.gds_format_string(quote_attrib(self.unit).encode(ExternalEncoding),
+                input_name='unit'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='grid', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -8962,18 +9901,30 @@ class layer(GeneratedsSuper):
         else:
             return layer(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_color(self): return self.color
-    def set_color(self, color): self.color = color
-    def get_number(self): return self.number
-    def set_number(self, number): self.number = number
-    def get_visible(self): return self.visible
-    def set_visible(self, visible): self.visible = visible
-    def get_active(self): return self.active
-    def set_active(self, active): self.active = active
-    def get_fill(self): return self.fill
-    def set_fill(self, fill): self.fill = fill
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_color(self):
+        return self.color
+    def set_color(self, color):
+        self.color = color
+    def get_number(self):
+        return self.number
+    def set_number(self, number):
+        self.number = number
+    def get_visible(self):
+        return self.visible
+    def set_visible(self, visible):
+        self.visible = visible
+    def get_active(self):
+        return self.active
+    def set_active(self, active):
+        self.active = active
+    def get_fill(self):
+        return self.fill
+    def set_fill(self, fill):
+        self.fill = fill
     def export(self, outfile, level, namespace_='t:', name_='layer', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -8988,22 +9939,28 @@ class layer(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='layer'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.color is not None and 'color' not in already_processed:
             already_processed.append('color')
-            outfile.write(' color=%s' % (self.gds_format_string(quote_attrib(self.color).encode(ExternalEncoding), input_name='color'), ))
+            outfile.write(' color=%s' % (self.gds_format_string(quote_attrib(self.color).encode(ExternalEncoding),
+                input_name='color'), ))
         if self.number is not None and 'number' not in already_processed:
             already_processed.append('number')
-            outfile.write(' number=%s' % (self.gds_format_string(quote_attrib(self.number).encode(ExternalEncoding), input_name='number'), ))
+            outfile.write(' number=%s' % (self.gds_format_string(quote_attrib(self.number).encode(ExternalEncoding),
+                input_name='number'), ))
         if self.visible is not None and 'visible' not in already_processed:
             already_processed.append('visible')
-            outfile.write(' visible=%s' % (self.gds_format_string(quote_attrib(self.visible).encode(ExternalEncoding), input_name='visible'), ))
+            outfile.write(' visible=%s' % (self.gds_format_string(quote_attrib(self.visible).encode(ExternalEncoding),
+                input_name='visible'), ))
         if self.active is not None and 'active' not in already_processed:
             already_processed.append('active')
-            outfile.write(' active=%s' % (self.gds_format_string(quote_attrib(self.active).encode(ExternalEncoding), input_name='active'), ))
+            outfile.write(' active=%s' % (self.gds_format_string(quote_attrib(self.active).encode(ExternalEncoding),
+                input_name='active'), ))
         if self.fill is not None and 'fill' not in already_processed:
             already_processed.append('fill')
-            outfile.write(' fill=%s' % (self.gds_format_string(quote_attrib(self.fill).encode(ExternalEncoding), input_name='fill'), ))
+            outfile.write(' fill=%s' % (self.gds_format_string(quote_attrib(self.fill).encode(ExternalEncoding),
+                input_name='fill'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='layer', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -9098,18 +10055,30 @@ class classxx(GeneratedsSuper):
         else:
             return classxx(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_clearance(self): return self.clearance
-    def set_clearance(self, clearance): self.clearance = clearance
-    def add_clearance(self, value): self.clearance.append(value)
-    def insert_clearance(self, index, value): self.clearance[index] = value
-    def get_width(self): return self.width
-    def set_width(self, width): self.width = width
-    def get_number(self): return self.number
-    def set_number(self, number): self.number = number
-    def get_drill(self): return self.drill
-    def set_drill(self, drill): self.drill = drill
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
+    def get_clearance(self):
+        return self.clearance
+    def set_clearance(self, clearance):
+        self.clearance = clearance
+    def add_clearance(self, value):
+        self.clearance.append(value)
+    def insert_clearance(self, index, value):
+        self.clearance[index] = value
+    def get_width(self):
+        return self.width
+    def set_width(self, width):
+        self.width = width
+    def get_number(self):
+        return self.number
+    def set_number(self, number):
+        self.number = number
+    def get_drill(self):
+        return self.drill
+    def set_drill(self, drill):
+        self.drill = drill
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
     def export(self, outfile, level, namespace_='t:', name_='class', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -9125,16 +10094,20 @@ class classxx(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='class'):
         if self.width is not None and 'width' not in already_processed:
             already_processed.append('width')
-            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding), input_name='width'), ))
+            outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding),
+                input_name='width'), ))
         if self.number is not None and 'number' not in already_processed:
             already_processed.append('number')
-            outfile.write(' number=%s' % (self.gds_format_string(quote_attrib(self.number).encode(ExternalEncoding), input_name='number'), ))
+            outfile.write(' number=%s' % (self.gds_format_string(quote_attrib(self.number).encode(ExternalEncoding),
+                input_name='number'), ))
         if self.drill is not None and 'drill' not in already_processed:
             already_processed.append('drill')
-            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding), input_name='drill'), ))
+            outfile.write(' drill=%s' % (self.gds_format_string(quote_attrib(self.drill).encode(ExternalEncoding),
+                input_name='drill'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='class', fromsubclass_=False):
         for clearance_ in self.clearance:
             clearance_.export(outfile, level, namespace_, name_='clearance')
@@ -9223,10 +10196,14 @@ class clearance(GeneratedsSuper):
         else:
             return clearance(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_class(self): return self.classxx
-    def set_class(self, classxx): self.classxx = classxx
-    def get_value(self): return self.value
-    def set_value(self, value): self.value = value
+    def get_class(self):
+        return self.classxx
+    def set_class(self, classxx):
+        self.classxx = classxx
+    def get_value(self):
+        return self.value
+    def set_value(self, value):
+        self.value = value
     def export(self, outfile, level, namespace_='t:', name_='clearance', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -9241,10 +10218,12 @@ class clearance(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='clearance'):
         if self.classxx is not None and 'classxx' not in already_processed:
             already_processed.append('classxx')
-            outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding), input_name='class'), ))
+            outfile.write(' class=%s' % (self.gds_format_string(quote_attrib(self.classxx).encode(ExternalEncoding),
+                input_name='class'), ))
         if self.value is not None and 'value' not in already_processed:
             already_processed.append('value')
-            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding), input_name='value'), ))
+            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding),
+                input_name='value'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='clearance', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -9310,9 +10289,12 @@ class description(GeneratedsSuper):
         else:
             return description(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_language(self): return self.language
-    def set_language(self, language): self.language = language
-    def get_valueOf_(self): return self.valueOf_
+    def get_language(self):
+        return self.language
+    def set_language(self, language):
+        self.language = language
+    def get_valueOf_(self):
+        return self.valueOf_
     def set_valueOf_(self, valueOf_): self.valueOf_ = valueOf_
     def export(self, outfile, level, namespace_='t:', name_='description', namespacedef_=''):
         showIndent(outfile, level)
@@ -9325,7 +10307,8 @@ class description(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='description'):
         if self.language is not None and 'language' not in already_processed:
             already_processed.append('language')
-            outfile.write(' language=%s' % (self.gds_format_string(quote_attrib(self.language).encode(ExternalEncoding), input_name='language'), ))
+            outfile.write(' language=%s' % (self.gds_format_string(quote_attrib(self.language).encode(ExternalEncoding),
+                input_name='language'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='description', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -9386,10 +10369,14 @@ class param(GeneratedsSuper):
         else:
             return param(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_value(self): return self.value
-    def set_value(self, value): self.value = value
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_value(self):
+        return self.value
+    def set_value(self, value):
+        self.value = value
     def export(self, outfile, level, namespace_='t:', name_='param', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -9404,10 +10391,12 @@ class param(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='param'):
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.value is not None and 'value' not in already_processed:
             already_processed.append('value')
-            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding), input_name='value'), ))
+            outfile.write(' value=%s' % (self.gds_format_string(quote_attrib(self.value).encode(ExternalEncoding),
+                input_name='value'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='param', fromsubclass_=False):
         pass
     def hasContent_(self):
@@ -9469,16 +10458,26 @@ class passxx(GeneratedsSuper):
         else:
             return passxx(*args_, **kwargs_)
     factory = staticmethod(factory)
-    def get_param(self): return self.param
-    def set_param(self, param): self.param = param
-    def add_param(self, value): self.param.append(value)
-    def insert_param(self, index, value): self.param[index] = value
-    def get_active(self): return self.active
-    def set_active(self, active): self.active = active
-    def get_name(self): return self.name
-    def set_name(self, name): self.name = name
-    def get_refer(self): return self.refer
-    def set_refer(self, refer): self.refer = refer
+    def get_param(self):
+        return self.param
+    def set_param(self, param):
+        self.param = param
+    def add_param(self, value):
+        self.param.append(value)
+    def insert_param(self, index, value):
+        self.param[index] = value
+    def get_active(self):
+        return self.active
+    def set_active(self, active):
+        self.active = active
+    def get_name(self):
+        return self.name
+    def set_name(self, name):
+        self.name = name
+    def get_refer(self):
+        return self.refer
+    def set_refer(self, refer):
+        self.refer = refer
     def export(self, outfile, level, namespace_='t:', name_='pass', namespacedef_=''):
         showIndent(outfile, level)
         outfile.write('<%s%s%s' % (namespace_, name_, namespacedef_ and ' ' + namespacedef_ or '', ))
@@ -9494,13 +10493,16 @@ class passxx(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='pass'):
         if self.active is not None and 'active' not in already_processed:
             already_processed.append('active')
-            outfile.write(' active=%s' % (self.gds_format_string(quote_attrib(self.active).encode(ExternalEncoding), input_name='active'), ))
+            outfile.write(' active=%s' % (self.gds_format_string(quote_attrib(self.active).encode(ExternalEncoding),
+                input_name='active'), ))
         if self.name is not None and 'name' not in already_processed:
             already_processed.append('name')
-            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+            outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding),
+                input_name='name'), ))
         if self.refer is not None and 'refer' not in already_processed:
             already_processed.append('refer')
-            outfile.write(' refer=%s' % (self.gds_format_string(quote_attrib(self.refer).encode(ExternalEncoding), input_name='refer'), ))
+            outfile.write(' refer=%s' % (self.gds_format_string(quote_attrib(self.refer).encode(ExternalEncoding),
+                input_name='refer'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='pass', fromsubclass_=False):
         for param_ in self.param:
             param_.export(outfile, level, namespace_, name_='param')
@@ -9596,7 +10598,8 @@ class approved(GeneratedsSuper):
     def exportAttributes(self, outfile, level, already_processed, namespace_='t:', name_='approved'):
         if self.hash is not None and 'hash' not in already_processed:
             already_processed.append('hash')
-            outfile.write(' hash=%s' % (self.gds_format_string(quote_attrib(self.hash).encode(ExternalEncoding), input_name='hash'), ))
+            outfile.write(' hash=%s' % (self.gds_format_string(quote_attrib(self.hash).encode(ExternalEncoding),
+                input_name='hash'), ))
     def exportChildren(self, outfile, level, namespace_='t:', name_='approved', fromsubclass_=False):
         pass
     def hasContent_(self):
