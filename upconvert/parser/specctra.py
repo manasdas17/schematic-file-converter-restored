@@ -91,6 +91,7 @@ class Specctra(object):
         self._convert_nets(struct)
 
     def _convert_library(self, struct):
+        """ Convert library """
         for image in struct.library.image:
             component = Component(image.image_id)
             self.design.add_component(image.image_id, component)
@@ -112,6 +113,7 @@ class Specctra(object):
                     body.add_shape(shape)
 
     def _convert_components(self, struct):
+        """ Convert component """
         for component in struct.placement.component:
             library_id = component.image_id
             for place in component.place:
@@ -166,6 +168,7 @@ class Specctra(object):
                         pass
 
     def _convert_nets(self, struct):
+        """ Convert nets """
         # FIXME polyline_path is not documented and no success with reverse engineering yet
         self._convert_wires(struct)
 
@@ -242,6 +245,7 @@ class Specctra(object):
         return result
    
     def _convert_path(self, aperture, points):
+        """ Convert path """
         result = []
         prev = points[0]
         for point in points[1:]:
@@ -251,6 +255,7 @@ class Specctra(object):
         return result
 
     def _convert_shapes(self, shapes, center = (0, 0), absolute=False):
+        """ Convert shapes """
         result = []
 
         def fix_point(point):

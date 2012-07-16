@@ -33,8 +33,10 @@ load-plugins=
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=W0511,R0903,R0201,R0801,I0011
+disable=W0511,W0232,W0212,R0903,R0201,R0801,I0011
 #W0511: Used when a warning note as FIXME or XXX is detected
+#W0232: Class has no __init__ method
+#W0212: Access to a protected member _do_ojs of a client class (This needs to be turned back on)
 #R0903: Too few public methods (%s/%s) Used when class has too few public methods, so be sure it's really worth it.
 #R0201: Method could be a function
 #R0801:	Similar lines in %s files Indicates that a set of similar lines has been detected among multiple file. This usually means that the code should be refactored to avoid this duplication.
