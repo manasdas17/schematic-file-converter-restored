@@ -105,6 +105,24 @@ def filter_test(arg, top, names):
             arg.append(File(os.path.join(top, name)))
     filter_non_python(top, names)
 
+test_re = re.compile(r'.*/(t|test)/.*_t\.py$')
+def filter_test(arg, top, names):
+    for name in names:
+        if test_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
+    filter_non_python(top, names)
+
+init_re = re.compile(r'.*/.*__init__\.py$')
+gen_re = re.compile(r'.*_g\.py$')
+def filter_lint(arg, top, names):
+    for name in names:
+        if source_re.match(os.path.join(top, name)) and \
+           not test_re.match(os.path.join(top, name)) and \
+           not init_re.match(os.path.join(top, name)) and \
+           not gen_re.match(os.path.join(top, name)):
+            arg.append(File(os.path.join(top, name)))
+    filter_non_python(top, names)
+
 sch_re = re.compile(r'.*\.sch$')
 def filter_sch(arg, top, names):
     for name in names:
@@ -158,6 +176,10 @@ all_source.extend([str(py) for py in parser_source])
 all_source.extend([str(py) for py in library_source])
 all_source.extend([str(py) for py in writer_source])
 
+linter_source = []
+os.path.walk('./upconvert', filter_lint, linter_source)
+
+
 core_tests = []
 os.path.walk('./upconvert/core', filter_test, core_tests)
 
@@ -175,6 +197,7 @@ all_tests.extend([str(py) for py in core_tests])
 all_tests.extend([str(py) for py in parser_tests])
 all_tests.extend([str(py) for py in library_tests])
 all_tests.extend([str(py) for py in writer_tests])
+
 
 eagle_sch_files = []
 os.path.walk('./test/eagle', filter_sch, eagle_sch_files)
@@ -231,7 +254,7 @@ env = Environment(BUILDERS = {'test': bld_test,
                   ENV = {'PATH' : os.environ['PATH']},
                   tools = ['default'])
 
-lint = env.lint(['fake_target_to_force_lint'], all_source)
+lint = env.lint(['fake_target_to_force_lint'], linter_source)
 check = env.check(['fake_target_to_force_check'], all_source)
 pyflakes = env.pyflakes(['fake_target_to_force_pyflakes'], all_source)
 test = env.test(['fake_target_to_force_test'], all_tests)

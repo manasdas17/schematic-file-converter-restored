@@ -17,7 +17,6 @@
 # limitations under the License.
 
 import unittest
-import os, sys
 
 from upconvert.parser.specctra import DsnParser
 

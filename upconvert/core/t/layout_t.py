@@ -31,26 +31,26 @@ class ApertureTests(unittest.TestCase):
     """ Tests of core.layout.Aperture """
 
     def test_eq(self):
-        c1 = Circle(0, 0, 5)
-        c2 = Circle(0, 0, 1)
+        circle1 = Circle(0, 0, 5)
+        circle2 = Circle(0, 0, 1)
 
-        self.assertEqual(Aperture('a', c1, c1),
-                         Aperture('b', c1, c1))
+        self.assertEqual(Aperture('a', circle1, circle1),
+                         Aperture('b', circle1, circle1))
 
-        self.assertEqual(Aperture('a', c1, c2),
-                         Aperture('b', c1, c2))
+        self.assertEqual(Aperture('a', circle1, circle2),
+                         Aperture('b', circle1, circle2))
 
-        self.assertEqual(Aperture('a', c1, None),
-                         Aperture('b', c1, None))
+        self.assertEqual(Aperture('a', circle1, None),
+                         Aperture('b', circle1, None))
 
-        self.assertNotEqual(Aperture('a', c1, None),
-                            Aperture('b', c2, None))
+        self.assertNotEqual(Aperture('a', circle1, None),
+                            Aperture('b', circle2, None))
 
-        self.assertNotEqual(Aperture('a', c1, c1),
-                            Aperture('b', c1, c2))
+        self.assertNotEqual(Aperture('a', circle1, circle1),
+                            Aperture('b', circle1, circle2))
 
-        self.assertNotEqual(Aperture('a', c1, None),
-                            Aperture('b', c1, c2))
+        self.assertNotEqual(Aperture('a', circle1, None),
+                            Aperture('b', circle1, circle2))
 
-        self.assertNotEqual(Aperture('a', c1, c1),
-                            Aperture('b', c1, None))
+        self.assertNotEqual(Aperture('a', circle1, circle1),
+                            Aperture('b', circle1, None))

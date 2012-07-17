@@ -39,20 +39,20 @@ class Components:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the library. """
-        for c in self.components.values():
-            c.scale(factor)
+        for component in self.components.values():
+            component.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the library. """
-        for c in self.components.values():
-            c.shift(dx, dy)
+        for component in self.components.values():
+            component.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the library. """
-        for c in self.components.values():
-            c.rebase_y_axis(height)
+        for component in self.components.values():
+            component.rebase_y_axis(height)
 
 
     def json(self):
@@ -91,20 +91,20 @@ class Component:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the component. """
-        for s in self.symbols:
-            s.scale(factor)
+        for symbol in self.symbols:
+            symbol.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the component. """
-        for s in self.symbols:
-            s.shift(dx, dy)
+        for symbol in self.symbols:
+            symbol.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the component. """
-        for s in self.symbols:
-            s.rebase_y_axis(height)
+        for symbol in self.symbols:
+            symbol.rebase_y_axis(height)
 
 
     def json(self):
@@ -132,20 +132,20 @@ class Symbol:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the symbol. """
-        for b in self.bodies:
-            b.scale(factor)
+        for body in self.bodies:
+            body.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the symbol. """
-        for b in self.bodies:
-            b.shift(dx, dy)
+        for body in self.bodies:
+            body.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the symbol. """
-        for b in self.bodies:
-            b.rebase_y_axis(height)
+        for body in self.bodies:
+            body.rebase_y_axis(height)
 
 
     def json(self):
@@ -186,26 +186,26 @@ class Body:
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the symbol. """
-        for s in self.shapes:
-            s.scale(factor)
-        for p in self.pins:
-            p.scale(factor)
+        for shape in self.shapes:
+            shape.scale(factor)
+        for pin in self.pins:
+            pin.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the symbol. """
-        for s in self.shapes:
-            s.shift(dx, dy)
-        for p in self.pins:
-            p.shift(dx, dy)
+        for shape in self.shapes:
+            shape.shift(dx, dy)
+        for pin in self.pins:
+            pin.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the symbol. """
-        for s in self.shapes:
-            s.rebase_y_axis(height)
-        for p in self.pins:
-            p.rebase_y_axis(height)
+        for shape in self.shapes:
+            shape.rebase_y_axis(height)
+        for pin in self.pins:
+            pin.rebase_y_axis(height)
 
 
     def json(self):

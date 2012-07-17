@@ -41,7 +41,8 @@ def pop_types(args, ptype):
     lst = []
     while True:
         arg = pop_type(args, ptype)
-        if arg is None: break
+        if arg is None: 
+            break
         lst.append(arg)
     return lst
 
@@ -54,7 +55,8 @@ def pop_strings(args):
     lst = []
     while True:
         arg = pop_string(args)
-        if arg is None: break
+        if arg is None: 
+            break
         lst.append(arg)
     return lst
 
@@ -70,7 +72,8 @@ def pop_vertexes(args):
     lst = []
     while True:
         arg = pop_vertex(args)
-        if arg is None: break
+        if arg is None: 
+            break
         lst.append(arg)
     return lst
 
@@ -88,7 +91,8 @@ def pop_listtypes(args, fname, ptype):
     lst = []
     while True:
         arg = pop_listtype(args, fname, ptype)
-        if arg is None: break
+        if arg is None: 
+            break
         lst.append(arg)
     return lst
 
@@ -122,6 +126,11 @@ class Ancestor:
     """ ancestor_file_descriptor """
     function = 'ancestor'
 
+    def __init__(self):
+        self.file_path_name = None
+        self.created_time = None
+        self.comment = None
+
     def parse(self, args):
         assert len(args) in (2, 3)
         assert args[1][0] == 'created_time'
@@ -132,12 +141,14 @@ class Ancestor:
         if len(args) == 3:
             assert args[2][0] == 'comment'
             self.comment = args[2][1]
-        else:
-            self.comment = None
 
 class Attach:
     """ attach_descriptor """
     function = 'attach'
+
+    def __init__(self):
+        self.attach = None
+        self.use_via = None
 
     def parse(self, args):
         assert len(args) in (1, 2)
@@ -147,12 +158,17 @@ class Attach:
         if len(args) == 2:
             assert args[1][0] == 'use_via'
             self.use_via = args[1][1]
-        else:
-            self.use_via = None
 
 class Bond:
     """ bond_shape_descriptor """
     function = 'bond'
+    
+    def __init__(self):
+        self.pin_reference = None
+        self.padstack_id = None
+        self.vertex = None
+        self.signal_back = None
+        self.bond_shape_rotation = None
 
     def parse(self, args):
         assert len(args) == 6
@@ -181,12 +197,21 @@ class Bundle:
     """ bundle_descriptor """
     function = 'bundle'
 
+    def __init__(self):
+        self.bundle_id = None
+        self.nets = None
+        self.gap = []
+
     class Gap:
         function = 'gap'
+
+        def __init__(self):
+            self.gap = None
+            self.layer = []
+
         def parse(self, args):
             assert len(args) >= 1
             self.gap = int(args[0])
-            self.layer = []
             for arg in args[1:]:
                 assert arg[0] == 'layer'
                 # FIXME
@@ -198,7 +223,6 @@ class Bundle:
 
         self.bundle_id = args[0]
         self.nets = args[1][1:]
-        self.gap = []
         for arg in args[2:]:
             assert arg[0] == 'gap'
             self.gap.append(Bundle.Gap(arg[1:]))
@@ -206,6 +230,10 @@ class Bundle:
 class CapacitanceResolution:
     """ capacitance_resolution_descriptor """
     function = 'capacitance_resolution'
+
+    def __init__(self):
+        self.farad = None
+        self.value = None
 
     def parse(self, args):
         assert len(args) == 2
@@ -217,6 +245,9 @@ class CapacitanceResolution:
 class CheckingTrim:
     """ checking_trim_descriptor """
     function = 'checking_trim_by_pin'
+
+    def __init__(self):
+        self.checking_trim_by_pin = None
 
     def parse(self, args):
         assert len(args) == 1
@@ -308,6 +339,9 @@ class Polygon(ShapeBase):
 
 class Circuit:
     """ circuit_descriptor """
+
+    def __init__(self):
+        self.circuit = None
     
     def parse(self, args):
         self.circuit = args
@@ -408,6 +442,10 @@ class Place:
 class PartNumber:
     """ part_number """
     function = 'PN'
+
+    def __init__(self):
+        self.part_number = None
+
     def parse(self, args):
         assert len(args) == 1
         self.part_number = pop_string(args)
@@ -419,6 +457,7 @@ class Net:
 
     def __init__(self):
         self.net_id = None
+        self.no_idea_what = None
         self.pins = []
 
     def parse(self, args):
@@ -603,7 +642,7 @@ class Keepout(object):
             self.function,
             self.keepout_id,
             self.shape and self.shape.compose(),
-            self.junk and self.junk.composeo()
+            self.junk and self.junk.compose()
         ]
 
 class PlaceKeepout(Keepout):

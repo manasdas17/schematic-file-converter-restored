@@ -25,6 +25,7 @@ from upconvert.core.shape import Circle, Rectangle, Shape
 from upconvert.parser.fritzing import Fritzing, ComponentParser, PathParser
 from upconvert.parser.fritzing import make_x, make_y, make_length, get_pin
 from upconvert.parser.fritzing import get_x, get_y, get_length
+
 from unittest import TestCase
 
 from os.path import dirname, join

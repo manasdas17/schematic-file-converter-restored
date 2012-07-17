@@ -55,7 +55,13 @@ class Altium:
     """ The Altium Format Parser """
 
     def __init__(self):
-        pass
+        self.last_header = None
+        self.file_header = None
+        self.first_header = None
+        self.root_entry = None
+        self.storage = None
+        self.parts = None
+        self.additional = None
 
 
     @staticmethod
@@ -134,13 +140,13 @@ class Altium:
                 property_list = input[cursor_start:cursor_end].split("|")
                 # For each one, copy out whatever is before any "=" as property, and whatever is
                 # after any "=" as value.
-                for p in property_list:
-                    if p:
-                        property = p.split("=")[0]
+                for prop in property_list:
+                    if prop:
+                        property_val = p.split("=")[0]
                         # The negative list index is to handle the cases with "==" instead of "=".
                         value = p.split("=")[-1]
                         # Add the property to the result dictionary.
-                        result[property] = value
+                        result[property_val] = value
                 # Add the dictionary to the list of parts.
                 self.parts.append(result)
                 # Set things up for the next iteration of the loop.

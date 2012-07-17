@@ -1058,22 +1058,22 @@ class Modifier(object):
             raise InvalidExpression(token, tokens)
 
 
-    def _evaluate_op(self, op, stack, values):
+    def _evaluate_op(self, operand, stack, values):
         """ Evaluate the given operand and push the value onto the
         stack. """
-        v2 = self._pop_value(stack, values)
-        v1 = self._pop_value(stack, values)
+        val2 = self._pop_value(stack, values)
+        val1 = self._pop_value(stack, values)
 
-        if op.value == '+':
-            val = v1 + v2
-        elif op.value == '-':
-            val = v1 - v2
-        elif op.value == 'x':
-            val = v1 * v2
-        elif op.value == '/':
-            val = v1 / v2
+        if operand.value == '+':
+            val = val1 + val2
+        elif operand.value == '-':
+            val = val1 - val2
+        elif operand.value == 'x':
+            val = val1 * val2
+        elif operand.value == '/':
+            val = val1 / val2
         else:
-            raise InvalidExpression(op, stack)
+            raise InvalidExpression(operand, stack)
 
         stack.append(Token('number', val))
 

@@ -21,8 +21,6 @@
 
 
 from math import sqrt, pi, sin, cos, asin, acos
-from upconvert.utils.stringify import stringify_attributes
-
 
 class Shape(object):
     """a Shape with metadata and a list of shape parts
@@ -593,20 +591,20 @@ class Polygon(Shape):
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the polygon. """
-        for p in self.points:
-            p.scale(factor)
+        for point in self.points:
+            point.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the polygon. """
-        for p in self.points:
-            p.shift(dx, dy)
+        for point in self.points:
+            point.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the polygon. """
-        for p in self.points:
-            p.rebase_y_axis(height)
+        for point in self.points:
+            point.rebase_y_axis(height)
 
 
     def json(self):

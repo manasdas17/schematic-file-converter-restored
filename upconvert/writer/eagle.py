@@ -2488,12 +2488,12 @@ class Eagle: # pylint: disable=R0902
                             _pno = 1 + _in
                             break
                     try:
-                        pin_number=int(_rr.pin_number)
+                        pin_number = int(_rr.pin_number)
                     except ValueError:
                         if letter_pin_numbers:
-                            pin_number=letter_pin_numbers.pop() + 1
+                            pin_number = letter_pin_numbers.pop() + 1
                         else: 
-                            pin_number=1
+                            pin_number = 1
                         letter_pin_numbers.append(pin_number)
 
                     _web.shapes.append(Eagle.PinRef(

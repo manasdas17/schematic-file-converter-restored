@@ -34,14 +34,17 @@ class GEDAParameter(object):
 
 
 class GEDAStyleParameter(GEDAParameter):
+    """ Style parameter """
     TYPE = 'style'
 
 
 class GEDAExtraParameter(GEDAParameter):
+    """ Extra parameter """
     TYPE = 'extra'
 
 
 class GEDACommand(object):
+    """ Command """
     TYPE = None
     PARAMETERS = ()
     EXTRA_PARAMETERS = ()
@@ -70,6 +73,7 @@ class GEDACommand(object):
 
 
 class GEDALineCommand(GEDACommand):
+    """ Line command """
     TYPE = 'L'
     PARAMETERS = (
         GEDAParameter('x1'),
@@ -86,6 +90,7 @@ class GEDALineCommand(GEDACommand):
 
 
 class GEDABoxCommand(GEDACommand):
+    """ Box command """
     TYPE = "B"
     PARAMETERS = (
         GEDAParameter('x'),
@@ -108,6 +113,7 @@ class GEDABoxCommand(GEDACommand):
 
 
 class GEDACircleCommand(GEDACommand):
+    """ Circle command """
     TYPE = 'V'
     PARAMETERS = (
         GEDAParameter('x'),
@@ -129,6 +135,7 @@ class GEDACircleCommand(GEDACommand):
 
 
 class GEDAArcCommand(GEDACommand):
+    """ Arc command """
     TYPE = 'A'
     PARAMETERS = (
         GEDAParameter('x'),
@@ -146,6 +153,7 @@ class GEDAArcCommand(GEDACommand):
 
 
 class GEDATextCommand(GEDACommand):
+    """ Text command """
     TYPE = 'T'
     PARAMETERS = (
         GEDAParameter('x'),
@@ -161,6 +169,7 @@ class GEDATextCommand(GEDACommand):
 
 
 class GEDASegmentCommand(GEDACommand):
+    """ Segment command """
     TYPE = 'N'
     PARAMETERS = (
         GEDAParameter('x1'),
@@ -172,6 +181,7 @@ class GEDASegmentCommand(GEDACommand):
 
 
 class GEDAPinCommand(GEDACommand):
+    """ Pin command """
     TYPE = 'P'
     PARAMETERS = (
         GEDAParameter('x1'),
@@ -187,6 +197,7 @@ class GEDAPinCommand(GEDACommand):
 
 
 class GEDAComponentCommand(GEDACommand):
+    """ Component command """
     TYPE = 'C'
     PARAMETERS = (
         GEDAParameter('x'),
@@ -199,6 +210,7 @@ class GEDAComponentCommand(GEDACommand):
 
 
 class GEDAPathCommand(GEDACommand):
+    """ Path command """
     TYPE = "H"
     PARAMETERS = (
         GEDAStyleParameter('color', default=GEDAColor.GRAPHIC_COLOR),
@@ -221,6 +233,7 @@ class GEDAPathCommand(GEDACommand):
 
 
 class GEDAVersionCommand(GEDACommand):
+    """ Version command """
     TYPE = 'v'
     PARAMETERS = (
         GEDAParameter('version'),
@@ -229,6 +242,7 @@ class GEDAVersionCommand(GEDACommand):
 
 
 class GEDABusCommand(GEDACommand):
+    """ Bus command """
     TYPE = 'U'
     PARAMETERS = (
         GEDAParameter('x1'),
@@ -241,20 +255,24 @@ class GEDABusCommand(GEDACommand):
 
 
 class GEDAPictureCommand(GEDACommand):
+    """ Picture command """
     TYPE = 'G'
     PARAMETERS = ()
 
 
 class GEDAEmbeddedEnvironmentCommand(GEDACommand):
+    """ Embeded command """
     TYPE = '['
     PARAMETERS = ()
 
 
 class GEDAAttributeEnvironmentCommand(GEDACommand):
+    """ Attribute environment command """
     TYPE = '{'
     PARAMETERS = ()
 
 
 class GEDACommand(GEDACommand):
+    """ Command """
     TYPE = 'U'
     PARAMETERS = ()
