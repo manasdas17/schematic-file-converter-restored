@@ -25,8 +25,8 @@ import subprocess
 def version():
     """ Attempt to return the version of the converter """
     try:
-        if os.path.exists(".git/hooks/post-commit.version"):
-            subprocess.call([".git/hooks/post-commit.version"])
+        if os.path.exists(".git/"):
+            subprocess.call(["git describe --tags > version"])
         with open('version', 'r') as f:
             vrsn = f.read().strip()
     except Exception: #pylint: disable=W0703
