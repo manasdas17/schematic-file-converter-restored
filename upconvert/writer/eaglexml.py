@@ -19,6 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO: handle layers
 
 import upconvert.parser.eaglexml.generated as G
 
@@ -228,6 +229,8 @@ class EagleXML(object):
                                 y2=self.make_length(shape.y)))
             elif shape.type == 'polygon':
                 symbol.polygon.append(self.make_polygon(shape))
+            elif shape.type == 'circle':
+                symbol.circle.append(self.make_circle(shape))
 
         for pin in body.pins:
             symbol.pin.append(
@@ -250,6 +253,21 @@ class EagleXML(object):
                                         y=self.make_length(point.y)))
 
         return poly
+
+
+    def make_circle(self, shape):
+        """ Make an eagle circle from an opensjon circle. """
+
+        circ = G.circle(x=self.make_length(shape.x),
+                        y=self.make_length(shape.y),
+                        radius=self.make_length(shape.radius))
+
+        if 'eaglexml_width' in shape.attributes:
+            circ.width = shape.attributes['eaglexml_width']
+        else:
+            circ.width = "0.254"
+
+        return circ
 
 
     def get_pin_length(self, pin):
