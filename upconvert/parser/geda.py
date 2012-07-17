@@ -216,7 +216,7 @@ class GEDA:
 
         ## add flag to allow for auto inclusion
         if symbol_dirs is None:
-            symbol_dirs = []
+            symbol_dirs = ['./']
 
         symbol_dirs = symbol_dirs + \
             [os.path.join(os.path.dirname(__file__), '..', 'library', 'geda')]
