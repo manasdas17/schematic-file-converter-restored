@@ -140,7 +140,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_symbol_rectangles(self):
         """
-        The correct symbol wires are generated.
+        The correct symbol rectangles are generated.
         """
 
         lib = self.get_library('transistor-pnp')
@@ -156,7 +156,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('450B679C.sch')
     def test_symbol_polygons(self):
         """
-        The correct symbol wires are generated.
+        The correct symbol polygons are generated.
         """
 
         lib = self.get_library('adafruit')
@@ -167,6 +167,22 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(len(poly.vertex), 3)
         self.assertEqual(poly.vertex[0].x, -3.387)
         self.assertEqual(poly.vertex[0].y, -2.117)
+
+
+    @use_file('D9CD1423.sch')
+    def test_symbol_circles(self):
+        """
+        The correct symbol circles are generated.
+        """
+
+        lib = self.get_library('CONNECTER')
+        sym = lib.symbols.symbol[0]
+        self.assertEqual(sym.name, 'HEADER_1X10')
+        self.assertEqual(len(sym.circle), 9)
+        self.assertEqual(sym.circle[0].x, 0)
+        self.assertEqual(sym.circle[0].y, 8.89)
+        self.assertEqual(sym.circle[0].radius, 0.988)
+        self.assertEqual(sym.circle[0].width, '0.254')
 
 
     @use_file('E1AA60D5.sch')

@@ -51,7 +51,7 @@ from upconvert.core.annotation import Annotation
 from upconvert.core.components import Component, Symbol, Body, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
-from upconvert.core.shape import Label, Line, Rectangle, Polygon
+from upconvert.core.shape import Circle, Label, Line, Rectangle, Polygon
 
 from upconvert.parser.eaglexml.generated import parse
 
@@ -185,6 +185,9 @@ class EagleXML(object):
         for poly in symbol.polygon:
             map(body.add_shape, self.make_shapes_for_poly(poly))
 
+        for circ in symbol.circle:
+            body.add_shape(self.make_shape_for_circle(circ))
+
         pin_map = {}
 
         for pin in symbol.pin:
@@ -221,6 +224,18 @@ class EagleXML(object):
             opoly.add_point(self.make_length(vertex.x),
                             self.make_length(vertex.y))
         yield opoly
+
+
+    def make_shape_for_circle(self, circ):
+        """ Generate an openjson shape for an eaglexml circle. """
+
+        ocirc = Circle(self.make_length(circ.x),
+                       self.make_length(circ.y),
+                       self.make_length(circ.radius))
+
+        ocirc.add_attribute('eaglexml_width', circ.width)
+
+        return ocirc
 
 
     def get_pin_null_point(self, (x, y), length, rotation):

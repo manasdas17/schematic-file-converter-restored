@@ -138,6 +138,20 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(polys[0].points[0].y, self.make_length("-2.159"))
 
 
+    @use_file('D9CD1423.sch')
+    def test_component_body_circles(self):
+        """ The right component Circles are created on Body objects. """
+
+        cpt = self.get_component('CONNECTER:HEADER_1X10:logical')
+        circs = [s for s in cpt.symbols[0].bodies[0].shapes
+                 if s.type == 'circle']
+        self.assertEqual(len(circs), 9)
+        self.assertEqual(circs[0].x, self.make_length("0"))
+        self.assertEqual(circs[0].y, self.make_length("8.89"))
+        self.assertEqual(circs[0].radius, self.make_length("1.016"))
+        self.assertEqual(circs[0].attributes['eaglexml_width'], "0.254")
+
+
     @use_file('E1AA60D5.sch')
     def test_component_body_labels(self):
         """ The right component Labels are created on Body objects. """
