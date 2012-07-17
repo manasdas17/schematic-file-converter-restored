@@ -28,3 +28,4 @@ class Telesis(object):
 
         with open(filename, "w") as f:
             f.write('Telesis netlist export is currently unsupported')
+            design = design

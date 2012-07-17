@@ -28,3 +28,4 @@ class Viewdraw(object):
 
         with open(filename, "w") as f:
             f.write('Viewdraw export is currently unsupported')
+            design = design

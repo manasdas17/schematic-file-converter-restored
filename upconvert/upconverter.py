@@ -72,16 +72,16 @@ from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as g
 # Try to include image writer support
 try:
     from upconvert.writer import image as image_w
-    image_parser = image_w.Image
-except ImportError, e:
-    if e.message != 'No module named PIL':
+    image_parser = image_w.Image # pylint: disable=C0103
+except ImportError, err:
+    if err.message != 'No module named PIL':
         raise
-    image_parser = None
+    image_parser = None # pylint: disable=C0103
 
 
 # Logging
 logging.basicConfig(level=logging.DEBUG)
-log = logging.getLogger('main')
+log = logging.getLogger('main')  # pylint: disable=C0103
 
 PARSERS = {
     'openjson': openjson_p.JSON,
@@ -123,6 +123,7 @@ EXTENSIONS = {
 
 
 class Upconverter(object):
+    """ The bee knees """
 
     @staticmethod
     def autodetect(inputfile):
@@ -148,13 +149,13 @@ class Upconverter(object):
 
         try:
             if in_format == 'geda':
-                p = PARSERS[in_format](**parser_kwargs)
+                par = PARSERS[in_format](**parser_kwargs)
             else:
-                p = PARSERS[in_format]()
+                par = PARSERS[in_format]()
         except KeyError:
             raise Exception('ERROR: Unsupported input type: %s' % (in_format))
 
-        return p.parse(in_file)
+        return par.parse(in_file)
 
 
     @staticmethod
@@ -163,13 +164,13 @@ class Upconverter(object):
 
         try:
             if out_format == 'geda':
-                w = WRITERS[out_format](**parser_kwargs)
+                wri = WRITERS[out_format](**parser_kwargs)
             else:
-                w = WRITERS[out_format]()
+                wri = WRITERS[out_format]()
         except KeyError:
             raise Exception('ERROR: Unsupported output type: %s' % (out_format))
 
-        return w.write(dsgn, out_file)
+        return wri.write(dsgn, out_file)
 
 
     @staticmethod
@@ -181,57 +182,58 @@ class Upconverter(object):
         os.write(tmp_fd, file_content.read())
         os.close(tmp_fd)
 
-        format = Upconverter.autodetect(tmp_path)
-        design = Upconverter.parse(tmp_path, format)
+        frmt = Upconverter.autodetect(tmp_path)
+        design = Upconverter.parse(tmp_path, frmt)
         os.remove(tmp_path)
 
         return json.loads(json.dumps(design.json(), sort_keys=True, indent=4))
 
 
     @staticmethod
-    def json_to_format(upv_json_data, format, path):
+    def json_to_format(upv_json_data, frmt, path):
         """ convert upv_json_data into format as a file @ path """
-        log.info('Converting upv data into %s at %s', format, path)
+        log.info('Converting upv data into %s at %s', frmt, path)
 
-        path_w_ext = path + EXTENSIONS[format]
+        path_w_ext = path + EXTENSIONS[frmt]
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.write(tmp_fd, upv_json_data)
         os.close(tmp_fd)
 
         design = Upconverter.parse(tmp_path, 'openjson')
-        Upconverter.write(design, path_w_ext, format)
+        Upconverter.write(design, path_w_ext, frmt)
         os.remove(tmp_path)
 
         return path_w_ext
 
 
-def main():
-    ap = ArgumentParser()
-    ap.add_argument("-i", "--input", dest="inputfile",
-                    help="read INPUT file in", metavar="INPUT")
-    ap.add_argument("-f", "--from", dest="inputtype",
-                    help="read input file as TYPE", metavar="TYPE")
-    ap.add_argument("-o", "--output", dest="outputfile",
-                    help="write OUTPUT file out", metavar="OUTPUT")
-    ap.add_argument("-t", "--to", dest="outputtype",
-                    help="write output file as TYPE", metavar="TYPE",
-                    default="openjson")
-    ap.add_argument("-s", "--sym-dirs", dest="sym_dirs",
-                    help="specify SYMDIRS to search for .sym files (for gEDA only)", 
-                    metavar="SYMDIRS", nargs="+")
-    ap.add_argument('--unsupported', action='store_true', default=False,
-                    help="run with an unsupported python version")
-    ap.add_argument('--raise-errors', dest='raise_errors',
-                    action='store_true', default=False,
-                    help="show tracebacks for parsing and writing errors")
-    ap.add_argument('--profile', action='store_true', default=False,
-                    help="collect profiling information")
-    ap.add_argument('-v', '--version', action='store_true', default=False,
-                    help="print version information and quit")
-    ap.add_argument('--formats', action='store_true', default=False,
-                    help="print supported formats and quit")
+def main(): #pylint: disable=R0912,R0915
+    """ Also, bees knees """
+    argp = ArgumentParser()
+    argp.add_argument("-i", "--input", dest="inputfile",
+                      help="read INPUT file in", metavar="INPUT")
+    argp.add_argument("-f", "--from", dest="inputtype",
+                      help="read input file as TYPE", metavar="TYPE")
+    argp.add_argument("-o", "--output", dest="outputfile",
+                      help="write OUTPUT file out", metavar="OUTPUT")
+    argp.add_argument("-t", "--to", dest="outputtype",
+                      help="write output file as TYPE", metavar="TYPE",
+                      default="openjson")
+    argp.add_argument("-s", "--sym-dirs", dest="sym_dirs",
+                      help="specify SYMDIRS to search for .sym files (for gEDA only)", 
+                      metavar="SYMDIRS", nargs="+")
+    argp.add_argument('--unsupported', action='store_true', default=False,
+                      help="run with an unsupported python version")
+    argp.add_argument('--raise-errors', dest='raise_errors',
+                      action='store_true', default=False,
+                      help="show tracebacks for parsing and writing errors")
+    argp.add_argument('--profile', action='store_true', default=False,
+                      help="collect profiling information")
+    argp.add_argument('-v', '--version', action='store_true', default=False,
+                      help="print version information and quit")
+    argp.add_argument('--formats', action='store_true', default=False,
+                      help="print supported formats and quit")
 
-    args = ap.parse_args()
+    args = argp.parse_args()
 
     if args.version:
         print "upconverter %s in python %s.%s" % (ver.version(), sys.version_info[0], sys.version_info[1])
@@ -244,12 +246,12 @@ def main():
         print "upconverter supports the following file formats & encodings"
         print ""
         print "As Input:"
-        for f in PARSERS:
-            print "* %s (%s)" % (f, EXTENSIONS[f])
+        for frmt in PARSERS:
+            print "* %s (%s)" % (frmt, EXTENSIONS[frmt])
         print ""
         print "As Output:"
-        for f in WRITERS:
-            print "* %s (%s)" % (f, EXTENSIONS[f])
+        for frmt in WRITERS:
+            print "* %s (%s)" % (frmt, EXTENSIONS[frmt])
         sys.exit(0)
 
     # Fail if strict and wrong python version
@@ -271,26 +273,26 @@ def main():
     # Test for input file
     if inputfile == None:
         log.error('No input file provided.')
-        ap.print_help()
+        argp.print_help()
         exit(1)
 
     # Autodetect input type
     if inputtype == None:
         try:
             inputtype = Upconverter.autodetect(inputfile)
-        except Exception:
-            ap.print_help()
+        except Exception: #pylint: disable=W0703
+            argp.print_help()
             exit(1)
 
     # Autoset output file
     if outputfile == None:
         try:
-            fileName, fileExtension = os.path.splitext(inputfile)
-            outputfile = fileName + EXTENSIONS[outputtype]
+            file_name, file_ext = os.path.splitext(inputfile)  #pylint: disable=W0612
+            outputfile = file_name + EXTENSIONS[outputtype]
             log.info('Setting output file & format: %s', outputfile)
-        except Exception:
+        except Exception: #pylint: disable=W0703
             log.error('Failed to set output file & format.')
-            ap.print_help()
+            argp.print_help()
             exit(1)
 
     if args.profile:
@@ -300,8 +302,8 @@ def main():
 
     # parse the data
     try:
-        design = Upconverter.parse(inputfile, inputtype, **parser_kwargs)
-    except Exception:
+        design = Upconverter.parse(inputfile, inputtype, **parser_kwargs) #pylint: disable=W0142
+    except Exception: #pylint: disable=W0703
         if args.raise_errors:
             raise
         print "ERROR: Failed to parse", inputtype
@@ -310,8 +312,8 @@ def main():
     # we got a good result
     if design is not None:
         try:
-            Upconverter.write(design, outputfile, outputtype, **parser_kwargs)
-        except Exception:
+            Upconverter.write(design, outputfile, outputtype, **parser_kwargs) #pylint: disable=W0142
+        except Exception: #pylint: disable=W0703
             if args.raise_errors:
                 raise
             print "ERROR: Failed to write", outputtype

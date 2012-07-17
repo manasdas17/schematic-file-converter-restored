@@ -28,6 +28,7 @@ import math
 _PIN = 'pin0'
 
 class Specctra(object):
+    """ The Specctra (DSN) Format Writer """
 
     def __init__(self):
         self.resolution = None
@@ -38,13 +39,15 @@ class Specctra(object):
         self.max_offset = 0
         self.pcb = None
 
-    def write(self, design, filename, library_filename=None):
+    def write(self, design, filename):
+        """ Write the design to the Specctra format """
         self._convert(design)
 
         with open(filename, "w") as f:
             f.write(self._to_string(self.pcb.compose()))
 
     def _make_layer(self, name, index):
+        """ Make a layer """
         layer = specctraobj.Layer()
         layer.layer_id = name 
         layer.ltype = specctraobj.Type()
@@ -55,6 +58,7 @@ class Specctra(object):
         return layer
 
     def _make_pcb(self, design):
+        """ Make a pcb """
         pcb = specctraobj.Pcb()
         pcb.library = specctraobj.Library()
         pcb.placement = specctraobj.Placement()
@@ -75,6 +79,7 @@ class Specctra(object):
         return pcb
  
     def _convert(self, design):
+        """ Convert """
         self.pcb = self._make_pcb(design)
 
         self._make_pin(_PIN)
@@ -92,6 +97,7 @@ class Specctra(object):
         self.pcb.structure = self._make_structure()
 
     def _convert_component_instance(self, inst):
+        """ Convert an instance """
         component = specctraobj.Component()
         component.image_id = inst.library_id + '-' + str(inst.symbol_index)
         component.place = specctraobj.Place()
@@ -103,6 +109,7 @@ class Specctra(object):
         return component
 
     def _make_structure(self):
+        """ Make a structure """
         structure = specctraobj.Structure()
         boundary = specctraobj.Boundary()
         boundary.rectangle = specctraobj.Rectangle()
@@ -129,14 +136,15 @@ class Specctra(object):
         point = self.resolution.from_pixels(point)
         try:
             self.max_offset = max(self.max_offset, max(abs(point[0]), abs(point[1])))
-        except:
+        except IndexError:
             self.max_offset = max(self.max_offset, abs(point))
         return point
 
     def _convert_net(self, net):
-        """
-            Pins (padstack) and wires must be on the same layer!
-        """
+        """ Convert a net """
+
+        #TODO: Pins (padstack) and wires must be on the same layer!
+
         pcbnet = specctraobj.Net()
         pcbnet.net_id = net.net_id
         pcbnet.pins.append(specctraobj.Pins())
@@ -174,6 +182,7 @@ class Specctra(object):
             self.pcb.wiring.wire.append(wire)
 
     def _convert_pin_to_outline(self, pin):
+        """ Convert a pin into an outline """
         pcbshape = specctraobj.Path()
         pcbshape.layer_id = 'Front'
         pcbshape.aperture_width = self._from_pixels(1)
@@ -184,6 +193,7 @@ class Specctra(object):
         return outline
 
     def _convert_component(self, library_id, cpt):
+        """ Convert a component """
         for idx, symbol in enumerate(cpt.symbols):
             image = specctraobj.Image()
             image.image_id = library_id + '-' + str(idx)
@@ -207,6 +217,7 @@ class Specctra(object):
         max_angle = max(arc.start_angle, arc.end_angle)
 
         def make_point(angle):
+            """ Make a point """
             opp = math.sin(angle * math.pi) * arc.radius
             adj = math.cos(angle * math.pi) * arc.radius
             return (arc.x + adj, arc.y - opp)
@@ -225,8 +236,7 @@ class Specctra(object):
         return points
 
     def _get_arc_points(self, arc):
-        """ Specctra does not have arcs so convert them to lines
-        """
+        """ Specctra does not have arcs so convert them to lines """
         
         min_angle = min(arc.start_angle, arc.end_angle)
         max_angle = max(arc.start_angle, arc.end_angle)
@@ -241,6 +251,7 @@ class Specctra(object):
         angles.append(max_angle)
 
         def make_point(angle):
+            """ Make a point """
             opp = math.sin(angle * math.pi) * arc.radius
             adj = math.cos(angle * math.pi) * arc.radius
             return (arc.x - adj, arc.y + opp)
@@ -251,6 +262,7 @@ class Specctra(object):
         return points
 
     def _points_to_paths(self, points):
+        """ Convert points to paths """
         prev = points[0]
         result = []
         for point in points[1:]:
@@ -263,6 +275,7 @@ class Specctra(object):
         return result
 
     def _convert_shape(self, shape):
+        """ Convert a shape """
         if shape.type == 'circle':
             circle = specctraobj.Circle()
             circle.aperture_width = self._from_pixels(1)
@@ -283,19 +296,19 @@ class Specctra(object):
             return [polygon]
         elif shape.type == 'arc':
             # Can't get freerouting.net to show qarc, replace it with multiple paths
-            '''
-            points = self._get_arc_qarcs(shape)
-            center = self._from_pixels((shape.x, shape.y))
+            #
+            #points = self._get_arc_qarcs(shape)
+            #center = self._from_pixels((shape.x, shape.y))
+            #
+            #result = []
+            #for start, end in points:
+            #    qarc = specctraobj.QArc()
+            #    qarc.vertex1 = self._from_pixels(start)
+            #    qarc.vertex2 = self._from_pixels(end)
+            #    qarc.vertex3 = center
+            #    result.append(qarc)
+            #return result
 
-            result = []
-            for start, end in points:
-                qarc = specctraobj.QArc()
-                qarc.vertex1 = self._from_pixels(start)
-                qarc.vertex2 = self._from_pixels(end)
-                qarc.vertex3 = center
-                result.append(qarc)
-            return result
-            '''
             points = [self._from_pixels(point) for point in self._get_arc_points(shape)]
             return self._points_to_paths(points)
            
@@ -313,6 +326,7 @@ class Specctra(object):
             assert shape.type is None # Not reached
 
     def _make_pin(self, padstack_id):
+        """ Make a pin """
         shape = specctraobj.Path()
         shape.layer_id = 'Front'
         shape.vertex.append((0, 0))
@@ -325,14 +339,16 @@ class Specctra(object):
         self.pcb.library.padstack.append(padstack)
 
     def _convert_pin(self, pin):
-        p = specctraobj.Pin()
-        p.pin_id = pin.pin_number
-        p.vertex = self._from_pixels_abs((pin.p2.x, pin.p2.y))
-        p.padstack_id = _PIN
+        """ Convert a pin """
+        new_pin = specctraobj.Pin()
+        new_pin.pin_id = pin.pin_number
+        new_pin.vertex = self._from_pixels_abs((pin.p2.x, pin.p2.y))
+        new_pin.padstack_id = _PIN
 
-        return p
+        return new_pin
  
     def _to_string(self, lst, indent=''):
+        """ Convert to a string """
         result = []
         for elem in lst:
             if isinstance(elem, list):

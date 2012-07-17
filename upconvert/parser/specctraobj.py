@@ -97,6 +97,7 @@ def pop_listtypes(args, fname, ptype):
     return lst
 
 def assert_empty(obj, args):
+    """ Assert if args is empty """
     if len(args) > 0:
         print obj, len(args), args
     assert len(args) == 0
@@ -112,11 +113,13 @@ class Shape:
         self.shape = None
 
     def parse(self, args):
+        """ parse a shape """
         assert len(args) >= 0
         self.shape = pop_type(args, ShapeBase)
         #assert_empty(self, args)
 
     def compose(self):
+        """ compose a shape """
         return [
             self.function,
             self.shape and self.shape.compose()
@@ -132,6 +135,7 @@ class Ancestor:
         self.comment = None
 
     def parse(self, args):
+        """ parse an ancestor """
         assert len(args) in (2, 3)
         assert args[1][0] == 'created_time'
 
@@ -151,6 +155,7 @@ class Attach:
         self.use_via = None
 
     def parse(self, args):
+        """ parse an attach """
         assert len(args) in (1, 2)
         assert args[0] in ('off', 'on')
 
@@ -171,6 +176,7 @@ class Bond:
         self.bond_shape_rotation = None
 
     def parse(self, args):
+        """ parse a bond """
         assert len(args) == 6
         assert args[4] in ('signal', 'back')
 
@@ -188,9 +194,11 @@ class Boundary:
         self.rectangle = None
 
     def parse(self, args):
+        """ parse a boundry """
         self.rectangle = pop_type(args, Rectangle)
 
     def compose(self):
+        """ compose a boundry """
         return [self.function, self.rectangle and self.rectangle.compose()]
 
 class Bundle:
@@ -203,6 +211,7 @@ class Bundle:
         self.gap = []
 
     class Gap:
+        """ A Gap """
         function = 'gap'
 
         def __init__(self):
@@ -210,6 +219,7 @@ class Bundle:
             self.layer = []
 
         def parse(self, args):
+            """ parse a gap """
             assert len(args) >= 1
             self.gap = int(args[0])
             for arg in args[1:]:
@@ -218,6 +228,7 @@ class Bundle:
                 self.layer = arg[1:]
 
     def parse(self, args):
+        """ parse a bundle """
         assert len(args) >= 2
         assert args[1][0] == 'nets'
 
@@ -236,6 +247,7 @@ class CapacitanceResolution:
         self.value = None
 
     def parse(self, args):
+        """ parse a capres """
         assert len(args) == 2
         assert args[0] in ('farad', 'mfarad', 'ufarad', 'nfarad', 'pfarad', 'ffarad')
 
@@ -250,6 +262,7 @@ class CheckingTrim:
         self.checking_trim_by_pin = None
 
     def parse(self, args):
+        """ parse a trim """
         assert len(args) == 1
         self.checking_trim_by_pin = pop_string(args)
         assert self.checking_trim_by_pin in ('on', 'off')
@@ -265,6 +278,7 @@ class Circle(ShapeBase):
         self.vertex = (0, 0)
 
     def parse(self, args):
+        """ parse a circle """
         assert len(args) in (2, 4)
         self.layer_id = args[0]
         self.diameter = float(args[1])
@@ -274,6 +288,7 @@ class Circle(ShapeBase):
             self.vertex = (0, 0)
 
     def compose(self):
+        """ componse a circle """
         return [
             self.function,
             self.layer_id,
@@ -293,6 +308,7 @@ class QArc(ShapeBase):
         self.vertex3 = (0, 0)
 
     def parse(self, args):
+        """ parse a QArc """
         assert len(args) == 5
         self.layer_id = pop_string(args)
         self.aperture_width = pop_string(args)
@@ -302,6 +318,7 @@ class QArc(ShapeBase):
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a QArc """
         return [
             self.function,
             self.layer_id,
@@ -321,6 +338,7 @@ class Polygon(ShapeBase):
         self.vertex = []
 
     def parse(self, args):
+        """ parse a polygon """
         assert len(args) > 3
         self.layer_id = pop_string(args)
         self.aperture_width = pop_type(args, basestring)
@@ -328,6 +346,7 @@ class Polygon(ShapeBase):
         assert_empty(self, args) 
 
     def compose(self):
+        """ compose a polygon """
         result = [
             self.function,
             self.layer_id,
@@ -344,6 +363,7 @@ class Circuit:
         self.circuit = None
     
     def parse(self, args):
+        """ parse a circuit """
         self.circuit = args
 
 class PlaceControl:
@@ -351,6 +371,7 @@ class PlaceControl:
     function = 'place_control'
 
     def parse(self, args):
+        """ parse a control """
         assert len(args) == 1
         self.flip_style = pop_type(args, FlipStyle)
         assert_empty(self, args)
@@ -360,6 +381,7 @@ class FlipStyle:
     function = 'flip_style'
 
     def parse(self, args):
+        """ parse a flip """
         assert len(args) == 1
         self.first = pop_string(args)
         assert_empty(self, args)
@@ -375,12 +397,14 @@ class Placement:
         self.component = []
 
     def parse(self, args):
+        """ parse a placement """
         assert len(args) >= 1
         self.place_control = pop_type(args, PlaceControl)
         self.component = pop_types(args, Component)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a placement """
         return [
             self.function,
             self.place_control and self.place_control.compose(),
@@ -396,12 +420,14 @@ class Component:
 
 
     def parse(self, args):
+        """ parse a component """
         assert len(args) >= 2
         self.image_id = pop_string(args)
         self.place = pop_types(args, Place)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a component """
         return [
             self.function,
             self.image_id,
@@ -420,6 +446,7 @@ class Place:
         self.part_number = None
 
     def parse(self, args):
+        """ parse a place """
         assert len(args) >= 1
         self.component_id = pop_string(args)
         self.vertex = pop_vertex(args)
@@ -430,6 +457,7 @@ class Place:
         #assert_empty(self, args)
 
     def compose(self):
+        """ compose a place """
         return [
             self.function,
             self.component_id,
@@ -447,6 +475,7 @@ class PartNumber:
         self.part_number = None
 
     def parse(self, args):
+        """ parse a part number """
         assert len(args) == 1
         self.part_number = pop_string(args)
         assert_empty(self, args)
@@ -461,6 +490,7 @@ class Net:
         self.pins = []
 
     def parse(self, args):
+        """ parse a net """
         assert len(args) >= 1
         self.net_id = pop_string(args)
         self.no_idea_what = pop_string(args)
@@ -468,6 +498,7 @@ class Net:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a net """
         return [self.function, self.net_id] + [x.compose() for x in self.pins]
 
 class Network:
@@ -478,11 +509,13 @@ class Network:
         self.net = []
 
     def parse(self, args):
+        """ parse a network """
         self.net = pop_types(args, Net)
         #assert_empty(self, args)
         # (via ...
 
     def compose(self):
+        """ compose a network """
         return [self.function] + [x.compose() for x in self.net]
 
 class Pins:
@@ -493,11 +526,13 @@ class Pins:
         self.pin_reference = []
 
     def parse(self, args):
+        """ parse a pin """
         assert len(args) >= 0
         self.pin_reference = pop_strings(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a pin """
         return [self.function] + self.pin_reference
 
 class Library:
@@ -509,11 +544,13 @@ class Library:
         self.padstack = []
 
     def parse(self, args):
+        """ parse a library """
         self.image = pop_types(args, Image)
         self.padstack = pop_types(args, Padstack)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a library """
         return [
             self.function,
         ] + [x.compose() for x in self.image] + [x.compose() for x in self.padstack]
@@ -528,6 +565,7 @@ class Padstack:
         self.attach = None
     
     def parse(self, args):
+        """ parse a padstack """
         assert len(args) >= 1
         self.padstack_id = pop_string(args)
         self.shape = pop_types(args, Shape)
@@ -535,6 +573,7 @@ class Padstack:
 #assert_empty(self, args)
 
     def compose(self):
+        """ compose a padstack """
         return [
             self.function,
             self.padstack_id,
@@ -553,6 +592,7 @@ class Pin:
         self.vertex = (None, None)
 
     def parse(self, args):
+        """ parse a pin """
         assert len(args) >= 1
 
         self.padstack_id = pop_string(args)
@@ -563,6 +603,7 @@ class Pin:
         #self.property = pop_type(args, Property)
 
     def compose(self):
+        """ compose a pin """
         return [
             self.function,
             self.padstack_id,
@@ -579,11 +620,13 @@ class Rotate:
         self.rotation = None
 
     def parse(self, args):
+        """ parse a rotation """
         assert len(args) == 1
         self.rotation = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a rotation """
         return [
             self.function,
             self.rotation
@@ -601,6 +644,7 @@ class Image:
         self.keepout = []
 
     def parse(self, args):
+        """ parse an image """
         assert len(args) >= 1
         self.image_id = pop_string(args)
         self.side = pop_type(args, Side)
@@ -613,6 +657,7 @@ class Image:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose an image """
         return [
             self.function,
             self.image_id,
@@ -631,6 +676,7 @@ class Keepout(object):
         self.junk = None
 
     def parse(self, args):
+        """ parse a keepout """
         assert len(args) >= 1
         self.keepout_id = pop_string(args)
         self.shape = pop_types(args, ShapeBase)
@@ -638,6 +684,7 @@ class Keepout(object):
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a keepout """
         return [
             self.function,
             self.keepout_id,
@@ -661,11 +708,13 @@ class ClearanceClass:
         self.value = None
 
     def parse(self, args):
+        """ parse a clearance """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a clearance """
         return [
             self.function,
             self.value
@@ -679,12 +728,14 @@ class Side:
         self.side = None
 
     def parse(self, args):
+        """ parse a side """
         assert len(args) == 1
         self.side = pop_string(args)
         assert self.side in ('front', 'back', 'both')
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a side """
         return [
             self.function,
             self.side
@@ -698,10 +749,12 @@ class Outline:
         self.shape = None
 
     def parse(self, args):
+        """ parse a outline """
         assert len(args) == 1
         self.shape = pop_type(args, ShapeBase)
 
     def compose(self):
+        """ compose a outline """
         return [
             self.function,
             self.shape and self.shape.compose()
@@ -717,6 +770,7 @@ class Rectangle(ShapeBase):
         self.vertex2 = (None, None)
 
     def parse(self, args):
+        """ parse a rectangle """
         assert len(args) == 5
         self.layer_id = pop_string(args)
         self.vertex1 = pop_vertex(args)
@@ -724,6 +778,7 @@ class Rectangle(ShapeBase):
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a rectangle """
         return [
             self.function,
             self.layer_id,
@@ -742,6 +797,7 @@ class Path(ShapeBase):
         self.aperture_type = None
 
     def parse(self, args):
+        """ parse a path """
         assert len(args) >= 2
         self.layer_id = pop_string(args)
         self.aperture_width = pop_string(args)
@@ -750,6 +806,7 @@ class Path(ShapeBase):
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a path """
         result = [
             self.function,
             self.layer_id,
@@ -772,12 +829,14 @@ class ApertureType:
         self.aperture_type = None
 
     def parse(self, args):
+        """ parse a aperture """
         assert len(args) == 1
         assert args[0] in ('round', 'square')
 
         self.aperture_type = args[0]
 
     def compose(self):
+        """ compose a arpeture """
         return [
             self.function,
             self.aperture_type
@@ -799,6 +858,7 @@ class Pcb:
         self.wiring = None
  
     def parse(self, args):
+        """ parse a pcb """
         assert len(args) >= 1
         self.pcb_id = pop_string(args)
         self.parser = pop_type(args, Parser)
@@ -812,6 +872,7 @@ class Pcb:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a pcb """
         return [
             self.function,
             self.pcb_id,
@@ -840,6 +901,7 @@ class Parser:
         self.host_version = None
 
     def parse(self, args):
+        """ parse a parser """
         self.string_quote = pop_type(args, StringQuote)
         self.space_in_quoted_tokens = pop_type(args, SpaceInQuotedTokens)
         self.host_cad = pop_type(args, HostCad)
@@ -848,6 +910,7 @@ class Parser:
         # (generated_by_freeroute)
 
     def compose(self):
+        """ compose a parser """
         return [
             self.function,
             self.string_quote and self.string_quote.compose(),
@@ -863,11 +926,13 @@ class StringQuote:
         self.value = '"'
 
     def parse(self, args):
+        """ parse a string """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a string """
         return [self.function, self.value]
 
 class SpaceInQuotedTokens:
@@ -877,11 +942,13 @@ class SpaceInQuotedTokens:
         self.value = 'on'
 
     def parse(self, args):
+        """ parse a space """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a space """
         return [self.function, self.value]
 
 class Structure:
@@ -893,10 +960,12 @@ class Structure:
         self.boundary = []
 
     def parse(self, args):
+        """ parse a structure """
         self.layer = [x for x in args if isinstance(x, Layer)]
         self.boundary = [x for x in args if isinstance(x, Boundary)]
 
     def compose(self):
+        """ compose a structure """
         return [
             self.function,
         ] + [x.compose() for x in self.layer] \
@@ -912,6 +981,7 @@ class Resolution:
         self.resolution = 0
 
     def parse(self, args):
+        """ parse a resolution """
         assert len(args) == 2
         self.unit = pop_string(args)
         assert self.unit in ('inch', 'mil', 'cm', 'mm', 'um')
@@ -919,6 +989,7 @@ class Resolution:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a resolution """
         return [
             self.function,
             self.unit,
@@ -926,6 +997,7 @@ class Resolution:
         ]
 
     def to_pixels(self, point):
+        """ convert to pixels """
         if self.unit == 'inch':
             mult = self.dpi / 1.0
         elif self.unit == 'mil':
@@ -943,6 +1015,7 @@ class Resolution:
         return int(round(float(point) * mult))
 
     def from_pixels(self, point):
+        """ convert from pixels """
         if self.unit == 'inch':
             mult = 1.0 / self.dpi
         elif self.unit == 'mil':
@@ -967,11 +1040,13 @@ class HostCad:
         self.value = None
 
     def parse(self, args):
+        """ parse a host """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a host """
         return [self.function, self.value]
 
 class HostVersion:
@@ -982,11 +1057,13 @@ class HostVersion:
         self.value = None
 
     def parse(self, args):
+        """ parse a version """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a version """
         return [self.function, self.value]
 
 class Absolute:
@@ -997,12 +1074,14 @@ class Absolute:
         self.value = None
 
     def parse(self, args):
+        """ parse a abs """
         assert len(args) == 1
         self.value = pop_string(args)
         assert self.value in ('on', 'off')
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a abs """
         return [self.function, self.value]
 
 class Unit:
@@ -1013,11 +1092,13 @@ class Unit:
         self.value = None
 
     def parse(self, args):
+        """ parse a unit """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a unit """
         return [self.function, self.value]
 
 class Wiring:
@@ -1029,6 +1110,7 @@ class Wiring:
         self.via = None
 
     def parse(self, args):
+        """ parse a wiring """
         # Empty seems to be ok
         self.wire = pop_types(args, Wire)
         self.via = pop_listtypes(args, 'via', WireVia)
@@ -1036,6 +1118,7 @@ class Wiring:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a wiring """
         return [
             self.function,
         ] + [x.compose() for x in self.wire] + [
@@ -1053,6 +1136,7 @@ class Wire:
         self.wire_type = None
 
     def parse(self, args):
+        """ parse a wire """
         assert len(args) >= 1
         self.shape = pop_type(args, ShapeBase)
         self.net = pop_type(args, Net)
@@ -1061,6 +1145,7 @@ class Wire:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a wire """
         return [
             self.function,
             self.shape and self.shape.compose(),
@@ -1077,11 +1162,13 @@ class Type:
         self.value = None
 
     def parse(self, args):
+        """ parse a type """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a type """
         return [self.function, self.value]
 
 class Property:
@@ -1091,11 +1178,13 @@ class Property:
         self.index = None
 
     def parse(self, args):
+        """ parse a property """
         assert len(args) >= 1
         self.index = pop_type(args, Index)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a property """
         return [
             self.function,
             self.index and self.index.compose()
@@ -1108,11 +1197,13 @@ class Index:
         self.value = None
 
     def parse(self, args):
+        """ parse a index """
         assert len(args) == 1
         self.value = pop_string(args)
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a index """
         return [self.function, self.value]
 
 class Layer:
@@ -1124,6 +1215,7 @@ class Layer:
         self.lproperty = None
 
     def parse(self, args):
+        """ parse a layer """
         assert len(args) >= 1
         self.layer_id = pop_string(args)
         self.ltype = pop_type(args, Type)
@@ -1131,6 +1223,7 @@ class Layer:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a layer """
         return [
             self.function,
             self.layer_id,
@@ -1151,6 +1244,7 @@ class WireVia:
         self.clearance = None
 
     def parse(self, args):
+        """ parse a via """
         assert len(args) >= 1
         self.padstack_id = pop_string(args)
         self.vertex = pop_vertex(args)
@@ -1160,6 +1254,7 @@ class WireVia:
         assert_empty(self, args)
 
     def compose(self):
+        """ compose a via """
         return [
             'via', 
             self.padstack_id,
