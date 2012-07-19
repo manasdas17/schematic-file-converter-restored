@@ -126,10 +126,9 @@ class ViewDrawBase:
 
     def parse_annot(self, args):
         """ Returns a parsed annotation. """
-        x, y, _font_size, _rot, _anchor, viz, val = args.split(' ', 6)
+        x, y, _font_size, rot, _anchor, viz, val = args.split(' ', 6)
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
-        # FIXME use rotation
         self.sub_nodes(['Q'])
         # Q cmd is ignored for now anyway, but need to get it out of the way
         display = True
@@ -142,18 +141,20 @@ class ViewDrawBase:
         else:
             value = val
             display = False
-        return ('annot', Annotation(value, int(x), int(y), 0, display))
+        rot, _flip = self.rot_and_flip(rot)
+        return ('annot', Annotation(value, int(x), int(y), rot, display))
 
     def parse_label(self, args):
         """ Returns a parsed label. """
         args = args.split(' ', 8)
-        x, y, _font_size, _rot, _anchor, _scope, _vis, _sense, text = args
+        x, y, _font_size, rot, _anchor, _scope, _vis, _sense, text = args
         # treat them as annotations for now, I guess.
         # suspect that anchor and vis are as in parse_annot
         # According to other research, _scope is (0=local, 1=global) and _sense
         # might be logic sense (for overbars, 0=normal, 1=inverted)
-        # FIXME use rot and vis
-        return ('annot', Annotation(text, int(x), int(y), 0, True))
+        # FIXME use vis
+        rot, _flip = self.rot_and_flip(rot)
+        return ('annot', Annotation(text, int(x), int(y), rot, True))
 
     def parse_rev(self, args):
         """ Returns the file revision date, parsed into an annotation. """
@@ -181,9 +182,10 @@ class ViewDrawBase:
 
     def parse_text(self, args):
         """ Parses a text label and returns as a Shape.Label. """
-        x, y, _size, _rot, _anchor, text = args.split(' ', 5)
-        # TODO sort out rotation, alignment
-        return ('shape', Label(int(x), int(y), text, 'left', 0))
+        x, y, _size, rot, _anchor, text = args.split(' ', 5)
+        # TODO sort out alignment
+        rot, _flip = self.rot_and_flip(rot)
+        return ('shape', Label(int(x), int(y), text, 'left', rot))
 
     def parse_ver(self, args):
         """ Returns the ViewDraw output file format version. """
