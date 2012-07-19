@@ -71,6 +71,19 @@ class ViewDrawBase:
         # will report 'V 5.4' or similar)
         return confidence
 
+
+    @staticmethod
+    def rot_and_flip(vd_rot):
+        """ translates the standard rotation argument from ViewDraw into a
+        (rotation, flip) tuple that wakes sense in the upverter world """
+        vd_rot = int(vd_rot)
+        flip = vd_rot > 3
+        # if part is flipped around y-axis. When applying transforms, flip it
+        # first, then rotate it.
+        vd_rot %= 4
+        return ((2 - float(vd_rot) / 2) % 2, flip)
+
+
     def __init__(self, filename):
         self.filename = filename
         self.stream = None
@@ -360,16 +373,9 @@ class ViewDrawSch(ViewDrawBase):
         inst, libname, libnum, x, y, rot, _scale, _unknown = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
-        flip = False
-        if int(rot) > 3:
-            # part is flipped around y-axis. When applying transforms, flip it
-            # first, then rotate it.
-            rot = str(int(rot) - 4)
-            flip = True
-
+        rot, flip = self.rot_and_flip(rot)
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
-                                                      (2 - float(rot) / 2) % 2,
-                                                      flip))
+                                                      rot, flip))
         subdata = self.sub_nodes('|R A C'.split())
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)
@@ -479,7 +485,8 @@ class ViewDrawSym(ViewDrawBase):
         if inv == '1':
             # cheap-o overbar
             text = '/' + text
-        return ('label', Label(int(x), int(y), text, 'left', int(rot) * 0.5))
+        rot, _flip = self.rot_and_flip(rot)
+        return ('label', Label(int(x), int(y), text, 'left', rot))
         # I have a feeling the alignment will break, but anchor is a
         # vertical alignment thing
 
