@@ -83,6 +83,13 @@ class ViewDrawBaseTests(unittest.TestCase):
         unstub_file_stack()
         del self.base
 
+    def test_rot_and_flip(self):
+        rotations = (0, 1.5, 1, 0.5)
+        for vd_rot, rot in enumerate(rotations):
+            self.assertEqual((rot, False), self.base.rot_and_flip(str(vd_rot)))
+        for vd_rot, rot in enumerate(rotations, 4):
+            self.assertEqual((rot, True), self.base.rot_and_flip(str(vd_rot)))
+
     def test_base_init(self):
         self.assertEqual(self.base.filename, 'foo')
 
@@ -98,13 +105,14 @@ class ViewDrawBaseTests(unittest.TestCase):
 
     def test_label(self):
         """ Test basic label parsing """
-        args = '2 3 12 0 # # # # this is a text label'
+        args = '2 3 12 2 # # # # this is a text label'
         # `#` args are unhandled, but may be in the future
         k, v = self.base.parse_label(args)
         self.assertEqual(k, 'annot')
         self.assertTrue(isinstance(v, Annotation))
         self.assertEqual(v.x, 2)
         self.assertEqual(v.y, 3)
+        self.assertAlmostEqual(v.rotation, 1.0)
         self.assertEqual(v.value, 'this is a text label')
 
     def test_annot(self):
@@ -170,10 +178,11 @@ class ViewDrawBaseTests(unittest.TestCase):
 
     def test_text(self):
         """ Test text labels """
-        k, v = self.base.parse_text('3 4 # # # hello world')
+        k, v = self.base.parse_text('3 4 # 1 # hello world')
         self.assertEqual(k, 'shape')
         self.assertEqual(v.type, 'label')
         self.assertEqual((v.x, v.y), (3, 4))
+        self.assertAlmostEqual(v.rotation, 1.5)
         self.assertEqual(v.text, 'hello world')
 
     def test_version(self):
