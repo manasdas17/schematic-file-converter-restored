@@ -226,6 +226,7 @@ class GEDA:
         self.design = None
         self.segments = None
         self.net_points = None
+        self.component_pins = None
         self.net_names = None
         self.geda_zip = None
 
@@ -346,6 +347,7 @@ class GEDA:
 
         self.segments = set()
         self.net_points = dict()
+        self.component_pins = dict()
         self.net_names = dict()
 
         obj_type, params = self._parse_command(stream)
@@ -547,6 +549,26 @@ class GEDA:
                         0, 0+idx*10, 0.0, 'true'
                     )
                 )
+
+        ## parse all bodies of this component for pins and add them
+        ## to the lookup with their corresponding instance. This is
+        ## required to connect net points with components later on
+        ## during the calculation of the nets.
+        for index, body in enumerate(component.symbols[0].bodies):
+            try:
+                sym_attr = instance.symbol_attributes[index]
+            except IndexError:
+                continue
+
+            for pin in body.pins:
+                coords = (sym_attr.x + pin.p2.x, sym_attr.y + pin.p2.y)
+                if coords not in self.component_pins:
+                    self.component_pins[coords] = []
+
+                self.component_pins[coords].append(net.ConnectedComponent(
+                    instance.instance_id,
+                    pin.pin_number
+                ))
 
         return component, instance
 
@@ -773,11 +795,17 @@ class GEDA:
 
         # check if names are available for calculated nets
         for net_obj in nets:
-            for point_id in net_obj.points:
+            for point_id, point in net_obj.points.items():
                 ## check for stored net names based on pointIDs
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
                     net_obj.attributes['_name'] = self.net_names[point_id]
+
+                ## check if net point is connected to component pins and
+                ## add matching components to net point
+                if (point.x, point.y) in self.component_pins:
+                    for comp in self.component_pins[(point.x, point.y)]:
+                        point.add_connected_component(comp)
 
             if '_name' in net_obj.attributes:
                 annotation = Annotation(
