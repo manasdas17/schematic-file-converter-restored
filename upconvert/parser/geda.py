@@ -229,6 +229,8 @@ class GEDA:
         self.component_pins = None
         self.net_names = None
         self.geda_zip = None
+        self.instance_ids = None
+        self.instance_counter = None
 
     @staticmethod
     def auto_detect(filename):
@@ -349,6 +351,8 @@ class GEDA:
         self.net_points = dict()
         self.component_pins = dict()
         self.net_names = dict()
+        self.instance_ids = []
+        self.instance_counter = itertools.count(0)
 
         obj_type, params = self._parse_command(stream)
 
@@ -512,20 +516,29 @@ class GEDA:
         ## get all attributes assigned to component instance
         attributes = self._parse_environment(stream)
 
+        def get_instance_id(name):
+            if name in self.instance_ids:
+                name += '-%d' % self.instance_counter.next()
+
+            self.instance_ids.append(name)
+            return name
         ## refdes attribute is name of component (mandatory as of gEDA doc)
         ## examples if gaf repo have components without refdes, use part of
         ## basename
         if attributes is not None:
             instance = ComponentInstance(
-                attributes.get('_refdes', component.name),
-                component.name, 0
+                get_instance_id(attributes.get('_refdes', component.name)),
+                component.name,
+                0
             )
             for key, value in attributes.items():
                 instance.add_attribute(key, value)
 
         else:
             instance = ComponentInstance(
-                component.name, component.name, 0
+                get_instance_id(component.name),
+                component.name,
+                0
             )
 
         ## generate a component instance using attributes
