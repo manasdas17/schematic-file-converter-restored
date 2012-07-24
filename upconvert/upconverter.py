@@ -174,17 +174,29 @@ class Upconverter(object):
 
 
     @staticmethod
-    def file_to_upv(file_content):
+    def file_to_upv(file_content, lib_contents):
         """ convert file_content into upv data pre-jsonification """
         log.info('Starting to convert content into upv')
 
-        tmp_fd, tmp_path = tempfile.mkstemp()
+        tmp_dir = tempfile.mkdtemp()
+
+        tmp_fd, tmp_path = tempfile.mkstemp(dir=tmp_dir)
         os.write(tmp_fd, file_content.read())
         os.close(tmp_fd)
+
+        lib_path_list = []
+        for lib_filename, lib_content in lib_contents.iteritems():
+            lib_tmp_fd, lib_tmp_path = tempfile.mkstemp(suffix = '-libname-' + lib_filename, dir=tmp_dir)
+            os.write(lib_tmp_fd, lib_content.read())
+            os.close(lib_tmp_fd)
+            lib_path_list.append(lib_tmp_path)
 
         frmt = Upconverter.autodetect(tmp_path)
         design = Upconverter.parse(tmp_path, frmt)
         os.remove(tmp_path)
+
+        for path in lib_path_list:
+            os.remove(path)
 
         return json.loads(json.dumps(design.json(), sort_keys=True, indent=4))
 

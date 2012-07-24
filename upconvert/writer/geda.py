@@ -374,6 +374,7 @@ class GEDA:
 
             Returns gEDA fileformat string.
         """
+
         commands = ['v 20110115 2'] + commands
         return '\n'.join(commands)
 
@@ -576,7 +577,10 @@ class GEDA:
             key = key[1:]
             kwargs['visibility'] = 0
 
-        text = "%s=%s" % (unicode(key), unicode(value))
+        try:
+            text = "%s=%s" % (unicode(key), unicode(value))
+        except UnicodeDecodeError:
+            text = "%s=%s" % (unicode(key), unicode(value, errors='replace'))
 
         kwargs['style_color'] = geda_commands.GEDAColor.ATTRIBUTE_COLOR
 

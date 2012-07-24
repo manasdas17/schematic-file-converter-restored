@@ -43,7 +43,8 @@ from upconvert.core.annotation import Annotation
 from upconvert.library.kicad import lookup_part
 
 from collections import defaultdict
-from os.path import exists, splitext
+from os.path import exists, splitext, split
+from os import listdir
 
 
 class KiCAD(object):
@@ -70,11 +71,12 @@ class KiCAD(object):
         junctions = set() # wire junction point (connects all wires under it)
 
         if library_filename is None:
-            library_filename = splitext(filename)[0] + '-cache.lib'
-            if exists(library_filename):
-                self.library = KiCADLibrary.parse(library_filename)
-                for cpt in self.library.components:
-                    design.add_component(cpt.name, cpt)
+            directory, name = split(filename)
+            for dir_file in listdir(directory):
+                if dir_file.endswith('.lib'):
+                    self.library = KiCADLibrary.parse(directory + '/' + dir_file)
+                    for cpt in self.library.components:
+                        design.add_component(cpt.name, cpt)
 
         with open(filename) as f:
             libs = []
@@ -113,6 +115,22 @@ class KiCAD(object):
         self.calc_connected_components(design)
 
         return design
+
+    def ensure_component(self, design, name, libs):
+        """
+        Add a component to the design, it if is not already present.
+        """
+     
+        if self.library is not None and self.library.lookup_part(name) is not None:
+            return
+
+        cpt = lookup_part(name, libs)
+        
+        if cpt is None:
+            return
+        
+        if cpt.name not in design.components.components:
+            design.components.add_component(cpt.name, cpt)
 
 
     def ensure_component(self, design, name, libs):
@@ -177,6 +195,10 @@ class KiCAD(object):
         prefix, name, reference = f.readline().split()
         assert prefix == 'L'
 
+        library_part = self.library.lookup_part(name)
+        if library_part is not None:
+            name = library_part.name
+
         # unit & convert
         prefix, unit, convert, _ = f.readline().split(None, 3)
         unit, convert = int(unit), int(convert)
@@ -201,7 +223,7 @@ class KiCAD(object):
                         tuple(int(i) for i in parts), 0)
             line = f.readline()
 
-        inst = ComponentInstance(reference, name, convert - 1)
+        inst = ComponentInstance(reference, name.upper(), convert - 1)
         symbattr = SymbolAttribute(make_length(compx), -make_length(compy),
                                    rotation, False)
         for ann in annotations:
@@ -324,19 +346,17 @@ class KiCADLibrary(object):
         self.components = components
         self.name2cpt = {}
         for cpt in components:
-            self.name2cpt[cpt.name.lower()] = cpt
+            self.name2cpt[cpt.name.upper()] = cpt
             if 'kicad_alias' in cpt.attributes:
                 for name in cpt.attributes['kicad_alias'].split():
-                    self.name2cpt[name.lower()] = cpt
-
+                    self.name2cpt[name.upper()] = cpt
 
     def lookup_part(self, name):
         """
         Return a kicad component by name, or None if not found.
         """
 
-        return self.name2cpt.get(name.lower())
-
+        return self.name2cpt.get(name.upper())
 
     def __getitem__(self, name):
         return self.lookup_part(name)
@@ -356,6 +376,9 @@ class KiCADLibrary(object):
             for line in f:
                 if line.startswith('DEF '):
                     components.append(ComponentParser(line).parse(f))
+
+        for component in components:
+            component.name = component.name.upper()
 
         return klass(components)
 
