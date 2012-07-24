@@ -49,6 +49,8 @@ from os.path import exists, splitext
 class KiCAD(object):
     """ The KiCAD Format Parser """
 
+    library = None
+
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an kicad schematic """
@@ -70,7 +72,8 @@ class KiCAD(object):
         if library_filename is None:
             library_filename = splitext(filename)[0] + '-cache.lib'
             if exists(library_filename):
-                for cpt in parse_library(library_filename):
+                self.library = KiCADLibrary.parse(library_filename)
+                for cpt in self.library.components:
                     design.add_component(cpt.name, cpt)
 
         with open(filename) as f:
@@ -101,10 +104,7 @@ class KiCAD(object):
                 elif prefix == "$Comp": # Component Instance
                     inst = self.parse_component_instance(f)
                     design.add_component_instance(inst)
-                    if inst.library_id not in design.components.components:
-                        cpt = lookup_part(inst.library_id, libs)
-                        if cpt is not None:
-                            design.components.add_component(cpt.name, cpt)
+                    self.ensure_component(design, inst.library_id, libs)
 
                 line = f.readline()
 
@@ -113,6 +113,24 @@ class KiCAD(object):
         self.calc_connected_components(design)
 
         return design
+
+
+    def ensure_component(self, design, name, libs):
+        """
+        Add a component to the design, it if is not already present.
+        """
+
+        if self.library is not None \
+                and self.library.lookup_part(name) is not None:
+            return
+
+        cpt = lookup_part(name, libs)
+
+        if cpt is None:
+            return
+
+        if cpt.name not in design.components.components:
+            design.components.add_component(cpt.name, cpt)
 
 
     def parse_wire(self, f, segments):
@@ -297,19 +315,49 @@ MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, -1, -1, 0): 1.5}
 
 
-def parse_library(filename):
+class KiCADLibrary(object):
     """
-    Parse the library file and return the list of components found.
+    I represent a library of kicad parts.
     """
 
-    components = []
+    def __init__(self, components):
+        self.components = components
+        self.name2cpt = {}
+        for cpt in components:
+            self.name2cpt[cpt.name.lower()] = cpt
+            if 'kicad_alias' in cpt.attributes:
+                for name in cpt.attributes['kicad_alias'].split():
+                    self.name2cpt[name.lower()] = cpt
 
-    with open(filename) as f:
-        for line in f:
-            if line.startswith('DEF '):
-                components.append(ComponentParser(line).parse(f))
 
-    return components
+    def lookup_part(self, name):
+        """
+        Return a kicad component by name, or None if not found.
+        """
+
+        return self.name2cpt.get(name.lower())
+
+
+    def __getitem__(self, name):
+        return self.lookup_part(name)
+
+    def __contains__(self, name):
+        return self.lookup_part(name) != None
+
+    @classmethod
+    def parse(klass, filename):
+        """
+        Parse the library file and return the KiCADLibrary of components found.
+        """
+
+        components = []
+
+        with open(filename) as f:
+            for line in f:
+                if line.startswith('DEF '):
+                    components.append(ComponentParser(line).parse(f))
+
+        return klass(components)
 
 
 class ComponentParser(object):
@@ -321,7 +369,10 @@ class ComponentParser(object):
 
     def __init__(self, line):
         parts = line.split()
-        self.component = Component(parts[1])
+        name = parts[1]
+        if name.startswith('~'):
+            name = name[1:]
+        self.component = Component(name)
         self.component.add_attribute('_prefix', parts[2])
         self.num_units = max(int(parts[7]), 1)
 
@@ -376,6 +427,8 @@ class ComponentParser(object):
                 draw_lines.append((int(parts[self.unit_cols[prefix]]),
                                    int(parts[self.convert_cols[prefix]]),
                                    prefix, parts))
+            elif prefix == 'ALIAS':
+                self.component.add_attribute('kicad_alias', ' '.join(parts[1:]))
             elif prefix == 'ENDDEF':
                 break
 
