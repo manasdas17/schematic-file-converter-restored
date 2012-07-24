@@ -242,9 +242,43 @@ class Image:
 
 
     def draw_shape_rounded_rectangle(self, canvas, rect, xform, colour):
-        """ draw a rectangle, eventually with rounded corners """
-        #TODO handle this with lines and arcs
-        self.draw_shape_rectangle(canvas, rect, xform, colour)
+        """ draw a rectangle with rounded corners """
+        # pylint: disable=R0914
+        # Too many local variables is a small price to pay for understandable
+        # code.
+
+        # I feel like there's a tidier way to do this, but it's not coming to
+        # me, so I'll just bash through the process for now.
+        x, y = rect.x, rect.y
+        # shut up pylint, I do what I want
+        h, w, r = rect.height, rect.width, rect.radius # pylint: disable=C0103
+        lines = [(xform.chain(Point(a)), xform.chain(Point(b))) for a, b in
+                 [((    x,  y-r),  (    x,  y-h+r)),
+                  ((  x+r,    y),  (x+w-r,      y)),
+                  ((  x+w,  y-r),  (  x+w,  y-h+r)),
+                  ((x+w-r,  y-h),  (  x+r,    y-h))]]
+        arc_boxes = [(xform.chain(Point(a)), xform.chain(Point(b))) for a, b in
+                     [((x+2*r,        y),  (      x,  y-2*r)),
+                      ((  x+w,        y),  (x+w-2*r,  y-2*r)),
+                      ((  x+w,  y-h+2*r),  (x+w-2*r,    y-h)),
+                      ((x+2*r,  y-h+2*r),  (      x,    y-h))]]
+        # Sort the boxes enclosing the rounded corners bottom to top, left to
+        # right. Ordering is important when hooking them up to the angles they
+        # sweeep through.
+        arc_boxes.sort(cmp=lambda p0, p1: (cmp(p0.x, p1.x) if p0.y == p1.y
+                                           else cmp(p0.y, p1.y)),
+                       # each box identified by bottom-left corner
+                       key=lambda (p0, p1): Point(min(p0.x, p1.x),
+                                                  min(p0.y, p1.y)))
+        arc_angles = [((90 * i) % 360, (90 * (i + 1)) % 360)
+                      for i in (2, 3, 1, 0)]
+
+        for line in lines:
+            canvas.line([(p.x, p.y) for p in line], fill=colour)
+        for box, (start, end) in zip(arc_boxes, arc_angles):
+            xs, ys = (box[0].x, box[1].x), (box[0].y, box[1].y)
+            canvas.arc((min(xs), min(ys), max(xs), max(ys)),
+                       start, end, fill=colour)
 
 
     def draw_shape_label(self, canvas, label, xform, colour):
