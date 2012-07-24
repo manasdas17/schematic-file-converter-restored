@@ -169,7 +169,7 @@ class KiCAD(object):
         """ Parse a Text line """
         parts = line.split()
         x, y, rotation = int(parts[2]), int(parts[3]), int(parts[4])
-        rotation = rotation / 1800.0
+        rotation = round((rotation / 1800.0)/0.5)*0.5
         value = f.readline().decode('utf-8', 'replace').strip()
         return Annotation(value, make_length(x), -make_length(y),
                           rotation, 'true')
