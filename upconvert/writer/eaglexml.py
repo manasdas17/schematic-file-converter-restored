@@ -23,6 +23,12 @@
 
 import upconvert.parser.eaglexml.generated as G
 
+default_layers = {
+    "net": G.layer(number="91", name="Nets", color="2", fill="1", visible="yes", active="yes"),
+    "pin": G.layer(number="93", name="Pins", color="2", fill="1", visible="yes", active="yes"),
+    "symbol": G.layer(number="94", name="Symbols", color="4", fill="1", visible="yes", active="yes"),
+    }
+
 
 class EagleXML(object):
     """ The Eagle XML Format Writer """
@@ -33,6 +39,9 @@ class EagleXML(object):
     def __init__(self):
         # map library names to eaglexml library dom objects
         self.libcache = {}
+
+        # map string layer numbers to eaglexml layer objects.
+        self.layercache = {}
 
         # map (lib, name) to deviceset dom objects where lib
         # is a library dom object and name is a deviceset name
@@ -77,6 +86,7 @@ class EagleXML(object):
 
         eagle = G.eagle()
         eagle.drawing = G.drawing()
+        eagle.drawing.layers = G.layers()
         eagle.drawing.schematic = G.schematic()
         eagle.drawing.schematic.libraries = G.libraries()
         eagle.drawing.schematic.parts = G.parts()
@@ -86,6 +96,8 @@ class EagleXML(object):
         sheet = eagle.drawing.schematic.sheets.sheet[0]
         sheet.instances = G.instances()
         sheet.nets = G.nets()
+
+        self.layers = eagle.drawing.layers
 
         self.add_libraries(eagle.drawing.schematic.libraries, design)
         self.add_parts(eagle.drawing.schematic.parts, design)
@@ -212,13 +224,16 @@ class EagleXML(object):
 
         symbol = G.symbol(name=name)
 
+        layer = self.ensure_layer(body, 'symbol')
+
         for shape in body.shapes:
             if shape.type == 'line':
                 symbol.wire.append(
                     G.wire(x1=self.make_length(shape.p1.x),
                            y1=self.make_length(shape.p1.y),
                            x2=self.make_length(shape.p2.x),
-                           y2=self.make_length(shape.p2.y)))
+                           y2=self.make_length(shape.p2.y),
+                           layer=layer.number))
             elif shape.type == 'rectangle':
                 symbol.rectangle.append(
                     G.rectangle(x1=self.make_length(shape.x),
@@ -226,11 +241,14 @@ class EagleXML(object):
                                 - self.make_length(shape.height),
                                 x2=self.make_length(shape.x)
                                 + self.make_length(shape.width),
-                                y2=self.make_length(shape.y)))
+                                y2=self.make_length(shape.y),
+                                layer=layer.number))
             elif shape.type == 'polygon':
                 symbol.polygon.append(self.make_polygon(shape))
+                symbol.polygon[-1].layer = layer.number
             elif shape.type == 'circle':
                 symbol.circle.append(self.make_circle(shape))
+                symbol.circle[-1].layer = layer.number
 
         for pin in body.pins:
             symbol.pin.append(
@@ -281,7 +299,7 @@ class EagleXML(object):
         elif length <= 2.60:
             return 'short'
         elif length <= 5.10:
-            return 'medium'
+            return 'middle'
         else:
             return 'long'
 
@@ -403,8 +421,10 @@ class EagleXML(object):
 
         seg = G.segment()
 
+        layer = self.ensure_layer(openjson_net, "net")
+
         for (x1, y1), (x2, y2) in sorted(wires):
-            wire = G.wire(x1=x1, y1=y1, x2=x2, y2=y2)
+            wire = G.wire(x1=x1, y1=y1, x2=x2, y2=y2, layer=layer.number)
             seg.wire.append(wire)
 
         for point_id in pointset:
@@ -417,6 +437,38 @@ class EagleXML(object):
         seg.pinref.sort(key=lambda p : (p.part, p.gate, p.pin))
 
         return seg
+
+
+    def ensure_layer(self, openjson_obj, eagle_context):
+        """
+        Return the eaglexml layer for the given openjson object (Pin, Shape, etc.)
+        given an eaglexml context string (pin, symbol, etc.). If the layer does
+        not exists, create it and add it to the design.
+        """
+
+        layernum = None
+
+        if hasattr(openjson_obj, 'attributes') \
+                and 'eaglexml_layer' in openjson_obj.attributes:
+            layernum = openjson_obj.attributes['eaglexml_layer']
+
+            if layernum in self.layercache:
+                return self.layercache[layernum]
+
+        layer = default_layers[eagle_context]
+
+        if layernum is None or layernum == layer.number:
+            pass
+        else:
+            layer = G.layer(number=layernum, name=layernum,
+                            color="1", fill="1", visible="yes", active="yes")
+
+        if layer.number in self.layercache:
+            return self.layercache[layer.number]
+        else:
+            self.layercache[layer.number] = layer
+            self.layers.layer.append(layer)
+            return layer
 
 
     def make_length(self, value):
