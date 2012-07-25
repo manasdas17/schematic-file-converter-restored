@@ -71,6 +71,19 @@ class ViewDrawBase:
         # will report 'V 5.4' or similar)
         return confidence
 
+
+    @staticmethod
+    def rot_and_flip(vd_rot):
+        """ translates the standard rotation argument from ViewDraw into a
+        (rotation, flip) tuple that wakes sense in the upverter world """
+        vd_rot = int(vd_rot)
+        flip = vd_rot > 3
+        # if part is flipped around y-axis. When applying transforms, flip it
+        # first, then rotate it.
+        vd_rot %= 4
+        return ((2 - float(vd_rot) / 2) % 2, flip)
+
+
     def __init__(self, filename):
         self.filename = filename
         self.stream = None
@@ -113,10 +126,9 @@ class ViewDrawBase:
 
     def parse_annot(self, args):
         """ Returns a parsed annotation. """
-        x, y, _font_size, _rot, _anchor, viz, val = args.split(' ', 6)
+        x, y, _font_size, rot, _anchor, viz, val = args.split(' ', 6)
         # anchor is 1,2,3: bottom,mid,top respectively
         # visibility is 0,1,2,3: invis, vis, name only, val only
-        # FIXME use rotation
         self.sub_nodes(['Q'])
         # Q cmd is ignored for now anyway, but need to get it out of the way
         display = True
@@ -129,18 +141,20 @@ class ViewDrawBase:
         else:
             value = val
             display = False
-        return ('annot', Annotation(value, int(x), int(y), 0, display))
+        rot, _flip = self.rot_and_flip(rot)
+        return ('annot', Annotation(value, int(x), int(y), rot, display))
 
     def parse_label(self, args):
         """ Returns a parsed label. """
         args = args.split(' ', 8)
-        x, y, _font_size, _rot, _anchor, _scope, _vis, _sense, text = args
+        x, y, _font_size, rot, _anchor, _scope, _vis, _sense, text = args
         # treat them as annotations for now, I guess.
         # suspect that anchor and vis are as in parse_annot
         # According to other research, _scope is (0=local, 1=global) and _sense
         # might be logic sense (for overbars, 0=normal, 1=inverted)
-        # FIXME use rot and vis
-        return ('annot', Annotation(text, int(x), int(y), 0, True))
+        # FIXME use vis
+        rot, _flip = self.rot_and_flip(rot)
+        return ('annot', Annotation(text, int(x), int(y), rot, True))
 
     def parse_rev(self, args):
         """ Returns the file revision date, parsed into an annotation. """
@@ -168,9 +182,10 @@ class ViewDrawBase:
 
     def parse_text(self, args):
         """ Parses a text label and returns as a Shape.Label. """
-        x, y, _size, _rot, _anchor, text = args.split(' ', 5)
-        # TODO sort out rotation, alignment
-        return ('shape', Label(int(x), int(y), text, 'left', 0))
+        x, y, _size, rot, _anchor, text = args.split(' ', 5)
+        # TODO sort out alignment
+        rot, _flip = self.rot_and_flip(rot)
+        return ('shape', Label(int(x), int(y), text, 'left', rot))
 
     def parse_ver(self, args):
         """ Returns the ViewDraw output file format version. """
@@ -360,16 +375,9 @@ class ViewDrawSch(ViewDrawBase):
         inst, libname, libnum, x, y, rot, _scale, _unknown = args.split()
         # scale is a floating point scaling constant. Also, evil.
         thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
-        flip = False
-        if int(rot) > 3:
-            # part is flipped around y-axis. When applying transforms, flip it
-            # first, then rotate it.
-            rot = str(int(rot) - 4)
-            flip = True
-
+        rot, flip = self.rot_and_flip(rot)
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
-                                                      (2 - float(rot) / 2) % 2,
-                                                      flip))
+                                                      rot, flip))
         subdata = self.sub_nodes('|R A C'.split())
         for annot in subdata['annot']:
             thisinst.symbol_attributes[0].add_annotation(annot)
@@ -479,7 +487,8 @@ class ViewDrawSym(ViewDrawBase):
         if inv == '1':
             # cheap-o overbar
             text = '/' + text
-        return ('label', Label(int(x), int(y), text, 'left', int(rot) * 0.5))
+        rot, _flip = self.rot_and_flip(rot)
+        return ('label', Label(int(x), int(y), text, 'left', rot))
         # I have a feeling the alignment will break, but anchor is a
         # vertical alignment thing
 
