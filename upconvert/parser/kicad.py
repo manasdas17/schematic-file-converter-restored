@@ -71,7 +71,7 @@ class KiCAD(object):
         junctions = set() # wire junction point (connects all wires under it)
 
         if library_filename is None:
-            directory, name = split(filename)
+            directory, _ = split(filename)
             for dir_file in listdir(directory):
                 if dir_file.endswith('.lib'):
                     self.library = KiCADLibrary.parse(directory + '/' + dir_file)
@@ -179,9 +179,10 @@ class KiCAD(object):
         prefix, name, reference = f.readline().split()
         assert prefix == 'L'
 
-        library_part = self.library.lookup_part(name)
-        if library_part is not None:
-            name = library_part.name
+        if self.library is not None:
+            library_part = self.library.lookup_part(name)
+            if library_part is not None:
+                name = library_part.name
 
         # unit & convert
         prefix, unit, convert, _ = f.readline().split(None, 3)
