@@ -4,7 +4,7 @@ from os.path import dirname, exists, join
 
 PARTS_DIR = join(dirname(__file__), 'parts')
 
-ALL_COMPONENTS = {} # { libname: { partname : Component } }
+ALL_COMPONENTS = {} # { libname: { KiCADLibrary } }
 
 
 def lookup_part(name, libs):
@@ -25,14 +25,13 @@ def lookup_part(name, libs):
 def read_library(lib):
     """
     Read the library with the given name if it exists and return a
-    dictionary mapping part names to Components. Otherwise return an
-    empty dictionary.
+    KiCADLibrary object. Otherwise return an empty dict.
     """
 
     libfile = join(PARTS_DIR, lib + '.lib')
 
     if exists(libfile):
-        from upconvert.parser.kicad import parse_library
-        return dict((cpt.name, cpt) for cpt in parse_library(libfile))
+        from upconvert.parser.kicad import KiCADLibrary
+        return KiCADLibrary.parse(libfile)
     else:
         return {}
