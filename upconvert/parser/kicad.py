@@ -43,7 +43,7 @@ from upconvert.core.annotation import Annotation
 from upconvert.library.kicad import lookup_part
 
 from collections import defaultdict
-from os.path import exists, splitext, split
+from os.path import split
 from os import listdir
 
 
@@ -115,22 +115,6 @@ class KiCAD(object):
         self.calc_connected_components(design)
 
         return design
-
-    def ensure_component(self, design, name, libs):
-        """
-        Add a component to the design, it if is not already present.
-        """
-     
-        if self.library is not None and self.library.lookup_part(name) is not None:
-            return
-
-        cpt = lookup_part(name, libs)
-        
-        if cpt is None:
-            return
-        
-        if cpt.name not in design.components.components:
-            design.components.add_component(cpt.name, cpt)
 
 
     def ensure_component(self, design, name, libs):
