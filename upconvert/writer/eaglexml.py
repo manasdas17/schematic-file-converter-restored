@@ -21,7 +21,7 @@
 
 # TODO: handle layers
 
-import upconvert.parser.eaglexml.generated as G
+import upconvert.parser.eaglexml.generated_g as G
 
 default_layers = {
     "net": G.layer(number="91", name="Nets", color="2", fill="1", visible="yes", active="yes"),
