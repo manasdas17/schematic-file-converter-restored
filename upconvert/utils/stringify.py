@@ -1,6 +1,7 @@
 import unicodedata
 
 def stringify_attributes(attributes):
+    """ Converts all attribute values to a string """
     attrs = {}
     for name, value in attributes.iteritems():
         try:
