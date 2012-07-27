@@ -186,7 +186,7 @@ class Upconverter(object):
 
         lib_path_list = []
         for lib_filename, lib_content in lib_contents.iteritems():
-            lib_tmp_fd, lib_tmp_path = tempfile.mkstemp(suffix = '-libname-' + lib_filename, dir=tmp_dir)
+            lib_tmp_fd, lib_tmp_path = tempfile.mkstemp(suffix = lib_filename, prefix = lib_filename, dir=tmp_dir)
             os.write(lib_tmp_fd, lib_content.read())
             os.close(lib_tmp_fd)
             lib_path_list.append(lib_tmp_path)
