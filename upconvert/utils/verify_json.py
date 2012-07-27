@@ -1,4 +1,10 @@
 def verify_json(data):
+    """ 
+    Checks the following for the converted JSON:
+        - has component component instances
+        - component instances match up with a defined component
+        - nets do not contain pins that doesn't exist 
+    """
     assert ('component_instances' in data)
     assert (len(data['component_instances']) > 0)
     assert ('components' in data)

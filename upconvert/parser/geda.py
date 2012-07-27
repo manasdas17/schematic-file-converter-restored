@@ -271,8 +271,7 @@ class GEDA:
         directory, _ = os.path.split(inputfile)
         for dir_file in os.listdir(directory):
             if dir_file.endswith('.sym'):
-                _, _, lib_name = dir_file.partition('-libname-')
-                lib_name, _ = os.path.splitext(lib_name)
+                lib_name, _, _ = dir_file.partition('.sym')
                 self.known_symbols[lib_name] = directory + '/' + dir_file
 
         inputfiles = []
