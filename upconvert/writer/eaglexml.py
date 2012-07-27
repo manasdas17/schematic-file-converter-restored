@@ -262,6 +262,8 @@ class EagleXML(object):
                       x=self.make_length(pin.p2.x),
                       y=self.make_length(pin.p2.y),
                       length=self.get_pin_length(pin),
+                      direction=pin.attributes.get('eaglexml_direction'),
+                      visible=pin.attributes.get('eaglexml_visible'),
                       rot=self.get_pin_rotation(pin)))
 
         return symbol

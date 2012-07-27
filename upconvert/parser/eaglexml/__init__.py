@@ -196,6 +196,10 @@ class EagleXML(object):
                                                  pin.length, pin.rot)
             label = self.get_pin_label(pin, null_point)
             pin_map[pin.name] = Pin(pin.name, null_point, connect_point, label)
+            if pin.direction:
+                pin_map[pin.name].add_attribute('eaglexml_direction', pin.direction)
+            if pin.visible:
+                pin_map[pin.name].add_attribute('eaglexml_visible', pin.visible)
             body.add_pin(pin_map[pin.name])
 
         ann_map = {}
