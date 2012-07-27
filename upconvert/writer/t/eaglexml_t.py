@@ -89,6 +89,16 @@ class EagleXMLTests(unittest.TestCase):
 
 
     @use_file('E1AA60D5.sch')
+    def test_layers(self):
+        """
+        The correct layers are generated.
+        """
+
+        layers = [layer.name for layer in self.dom.drawing.layers.layer]
+        self.assertTrue('Nets' in layers, layers)
+
+
+    @use_file('E1AA60D5.sch')
     def test_devicesets(self):
         """
         The correct devicesets are generated.
