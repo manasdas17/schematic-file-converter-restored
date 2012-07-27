@@ -48,7 +48,7 @@ class Fritzing(object):
         self.body = None
 
         # This maps fritzing connector keys to (x, y) coordinates
-        self.points = {} # (index, connid) -> (x, y)
+        self.connkey2xy = {} # (index, connid) -> (x, y)
 
         # This maps fritzing component indices to ComponentInstances
         self.component_instances = {} # index -> ComponentInstance
@@ -150,8 +150,8 @@ class Fritzing(object):
 
         for i, connector in enumerate(view.findall('connectors/connector'), 1):
             cid = connector.get('connectorId')
-            self.points[index, cid] = (origin_x + get_x(geom, 'x%d' % i),
-                                       origin_y + get_y(geom, 'y%d' % i))
+            self.connkey2xy[index, cid] = (origin_x + get_x(geom, 'x%d' % i),
+                                           origin_y + get_y(geom, 'y%d' % i))
 
             conn_keys.append((index, cid))
 
@@ -274,23 +274,64 @@ class Fritzing(object):
     def build_nets(self):
         """ Build the nets from the connects, points, and instances """
 
-        todo = set(self.connects) # set([(index, cid)])
-        points = {} # (x, y) -> NetPoint
-        nets = []
+        xy2point = {} # x, y -> NetPoint
 
-        def get_point(point):
-            """ Return a new or existing NetPoint for an (x,y) point """
-            if point not in points:
-                points[point] = NetPoint('%da%d' % point, point[0], point[1])
-            return points[point]
+        def get_point(connkey):
+            """ Return a new or existing NetPoint for an (x,y) coordinate """
+            x, y = self.connkey2xy[connkey]
+            if (x, y) not in xy2point:
+                xy2point[x,y] = NetPoint('%da%d' % (x, y), x, y)
+            return xy2point[x,y]
 
-        def update_net(net, main_key):
+        # connector key -> NetPoint
+        connkey2point = dict((ck, get_point(ck)) for ck in self.connkey2xy)
+
+        todo = set(self.connects) # set([(connector  key)])
+        point2net = {} # NetPoint -> Net
+        nets = set()
+
+        def get_net(point):
+            """ Return a new or existing Net for a NetPoint. """
+            if point not in point2net:
+                point2net[point] = Net(str(len(nets)))
+                nets.add(point2net[point])
+            return point2net[point]
+
+        def combine_nets(n1, n2):
+            """Add net n2 into n1, get rid of n1."""
+            for point in n2.points.itervalues():
+                n1.add_point(point)
+                point2net[point] = n1
+            nets.discard(n2)
+
+        def connect(p1, p2):
+            """ Connect two points in a net, maybe the same point """
+
+            net = get_net(p1)
+            point2net[p1] = net
+            net.add_point(p1)
+
+            if point2net.get(p2, net) is not net:
+                combine_nets(net, point2net[p2])
+            else:
+                net.add_point(p2)
+                point2net[p2] = net
+
+            if p1 is p2:
+                return
+
+            if p2.point_id not in p1.connected_points:
+                p1.connected_points.append(p2.point_id)
+            if p1.point_id not in p2.connected_points:
+                p2.connected_points.append(p1.point_id)
+
+        def add_to_net(main_key):
             """ Update a net with a new set of connects """
 
             todo.discard(main_key)
 
-            main_point = get_point(self.points[main_key])
-            net.add_point(main_point)
+            main_point = connkey2point[main_key]
+            connect(main_point, main_point)
 
             remaining = []
 
@@ -298,8 +339,8 @@ class Fritzing(object):
                 if conn_key in todo:
                     remaining.append(conn_key)
 
-                if conn_key in self.points:
-                    connect(net, main_point, get_point(self.points[conn_key]))
+                if conn_key in connkey2point:
+                    connect(main_point, connkey2point[conn_key])
                 elif conn_key[0] in self.component_instances:
                     inst = self.component_instances[conn_key[0]]
                     cpt_parser = self.components[inst.library_id]
@@ -308,29 +349,16 @@ class Fritzing(object):
             return remaining
 
         while todo:
-            net = Net(str(len(nets)))
-            nets.append(net)
             remaining = [todo.pop()]
-
             while remaining:
-                remaining.extend(update_net(net, remaining.pop(0)))
+                remaining.extend(add_to_net(remaining.pop(0)))
+
+        nets = sorted(nets, key = lambda n : int(n.net_id))
+
+        for i, net in enumerate(nets):
+            net.net_id = str(i)
 
         return nets
-
-
-def connect(net, p1, p2):
-    """ Connect two points in a net """
-
-    if p1 is p2:
-        return
-
-    net.add_point(p1)
-    net.add_point(p2)
-
-    if p2.point_id not in p1.connected_points:
-        p1.connected_points.append(p2.point_id)
-    if p1.point_id not in p2.connected_points:
-        p2.connected_points.append(p1.point_id)
 
 
 # map fritzing rotation matrices to pi radians
