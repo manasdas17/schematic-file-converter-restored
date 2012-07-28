@@ -206,14 +206,14 @@ class EagleXML(object):
             for bodyindex, body in enumerate(symbol.bodies):
                 index = (symindex * len(symbol.bodies)) + bodyindex
                 symname = cpt.attributes.get('eaglexml_symbol_%d' % index,
-                                             'symbol_%d' % index)
+                                             'symbol_%d' % len(lib.symbols.symbol))
                 if symname not in symbol_names:
                     lib.symbols.symbol.append(
                         self.make_eagle_symbol_for_openjson_body(symname, body))
                     symbol_names.add(symname)
 
                 gatename = cpt.attributes.get('eaglexml_gate_%d' % bodyindex,
-                                              'G$%d' % symindex)
+                                              'G$%d' % bodyindex)
                 if gatename not in gate_names:
                     deviceset.gates.gate.append(
                         G.gate(name=gatename, symbol=symname, x="0", y="0"))
