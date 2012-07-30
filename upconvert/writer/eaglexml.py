@@ -25,8 +25,13 @@ import upconvert.parser.eaglexml.generated_g as G
 
 default_layers = {
     "net": G.layer(number="91", name="Nets", color="2", fill="1", visible="yes", active="yes"),
-    "pin": G.layer(number="93", name="Pins", color="2", fill="1", visible="yes", active="yes"),
+    "bus": G.layer(number="92", name="Busses", color="1", fill="1", visible="yes", active="yes"),
+    "pin": G.layer(number="93", name="Pins", color="2", fill="1", visible="no", active="yes"),
     "symbol": G.layer(number="94", name="Symbols", color="4", fill="1", visible="yes", active="yes"),
+    "name": G.layer(number="95", name="Names", color="7", fill="1", visible="yes", active="yes"),
+    "value": G.layer(number="96", name="Values", color="7", fill="1", visible="yes", active="yes"),
+    "info": G.layer(number="97", name="Info", color="7", fill="1", visible="yes", active="yes"),
+    "guide": G.layer(number="98", name="Guide", color="6", fill="1", visible="yes", active="yes"),
     }
 
 
@@ -103,6 +108,7 @@ class EagleXML(object):
         self.add_parts(eagle.drawing.schematic.parts, design)
         self.add_instances(sheet.instances, design)
         self.add_nets(sheet.nets, design)
+        self.add_default_layers()
 
         return eagle
 
@@ -200,14 +206,14 @@ class EagleXML(object):
             for bodyindex, body in enumerate(symbol.bodies):
                 index = (symindex * len(symbol.bodies)) + bodyindex
                 symname = cpt.attributes.get('eaglexml_symbol_%d' % index,
-                                             'symbol_%d' % index)
+                                             'symbol_%d' % len(lib.symbols.symbol))
                 if symname not in symbol_names:
                     lib.symbols.symbol.append(
                         self.make_eagle_symbol_for_openjson_body(symname, body))
                     symbol_names.add(symname)
 
                 gatename = cpt.attributes.get('eaglexml_gate_%d' % bodyindex,
-                                              'G$%d' % symindex)
+                                              'G$%d' % bodyindex)
                 if gatename not in gate_names:
                     deviceset.gates.gate.append(
                         G.gate(name=gatename, symbol=symname, x="0", y="0"))
@@ -256,6 +262,8 @@ class EagleXML(object):
                       x=self.make_length(pin.p2.x),
                       y=self.make_length(pin.p2.y),
                       length=self.get_pin_length(pin),
+                      direction=pin.attributes.get('eaglexml_direction'),
+                      visible=pin.attributes.get('eaglexml_visible'),
                       rot=self.get_pin_rotation(pin)))
 
         return symbol
@@ -469,6 +477,19 @@ class EagleXML(object):
             self.layercache[layer.number] = layer
             self.layers.layer.append(layer)
             return layer
+
+
+    def add_default_layers(self):
+        """
+        Add default layers to the design if they have not been added already.
+        """
+
+        for layer in default_layers.itervalues():
+            if layer.number not in self.layercache:
+                self.layercache[layer.number] = layer
+                self.layers.layer.append(layer)
+
+        self.layers.layer.sort(key=lambda layer : int(layer.number))
 
 
     def make_length(self, value):
