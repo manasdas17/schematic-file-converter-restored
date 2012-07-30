@@ -271,8 +271,27 @@ class Worker:
 
     def draw_shape_rounded_rectangle(self, rect, xform, colour):
         """ draw a rectangle, eventually with rounded corners """
-        #TODO handle this with lines and arcs
-        self.draw_shape_rectangle(rect, xform, colour)
+        top_lft_lft = Point(rect.x, rect.y - rect.radius)
+        top_lft_rgt = Point(rect.x + rect.radius, rect.y)
+
+        top_rgt_lft = Point(rect.x + rect.width - rect.radius, rect.y)
+        top_rgt_rgt = Point(rect.x + rect.width, rect.y - rect.radius)
+
+        bot_rgt_rgt = Point(rect.x + rect.width, rect.y - rect.height - rect.radius)
+        bot_rgt_lft = Point(rect.x + rect.width- rect.radius, rect.y - rect.height)
+
+        bot_lft_rgt = Point(rect.x - rect.radius, rect.y - rect.height)
+        bot_lft_lft = Point(rect.x, rect.y - rect.height - rect.radius)
+
+        self.draw_shape_arc(Arc(top_lft_lft, top_lft_rgt, 0.5), xform, colour)
+        self.draw_shape_arc(Arc(top_rgt_lft, top_rgt_rgt, 0.5), xform, colour)
+        self.draw_shape_arc(Arc(bot_rgt_rgt, bot_rgt_lft, 0.5), xform, colour)
+        self.draw_shape_arc(Arc(bot_lft_rgt, bot_lft_lft, 0.5), xform, colour)
+        
+        self.draw_shape_line(Line(top_lft_rgt, top_rgt_lft), xform, colour)
+        self.draw_shape_line(Line(top_rgt_rgt, bot_rgt_rgt), xform, colour)
+        self.draw_shape_line(Line(bot_rgt_lft, bot_lft_rgt), xform, colour)
+        self.draw_shape_line(Line(bot_lft_lft, top_lft_lft), xform, colour)
 
 
     def draw_shape_label(self, label, xform, colour):
