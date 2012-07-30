@@ -39,7 +39,13 @@ class Shape(object):
 
     def bounds(self):
         """ Return the min and max points of the bounding box """
-        raise NotImplementedError("Not implemented")
+        return [self.min_point(), self.max_point()]
+
+
+    def ranges(self):
+        """ Return the min - max x and y ranges of the bounding box """
+        minpt, maxpt = self.bounds()
+        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -62,17 +68,6 @@ class Rectangle(Shape):
         self.y = y
         self.width = width
         self.height = height
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -139,17 +134,6 @@ class RoundedRectangle(Shape):
         self.width = width
         self.height = height
         self.radius = radius
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -219,17 +203,6 @@ class Arc(Shape):
         self.start_angle = start_angle
         self.end_angle = end_angle
         self.radius = radius
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def _contains_angle(self, theta):
@@ -338,17 +311,6 @@ class Circle(Shape):
         self.radius = abs(radius)
 
 
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
-
-
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self.radius
@@ -418,17 +380,6 @@ class Label(Shape):
                     "\"left\", \"right\", or \"center\" ")
 
 
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
-
-
     def min_point(self):
         """ As a hack, return the label's position. """
         return Point(self.x, self.y)
@@ -478,17 +429,6 @@ class Line(Shape):
         self.type = "line"
         self.p1 = Point(p1)
         self.p2 = Point(p2)
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -549,17 +489,6 @@ class Polygon(Shape):
         super(Polygon, self).__init__()
         self.type = "polygon"
         self.points = points or list()
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -653,17 +582,6 @@ class BezierCurve(Shape):
         points = [Point(bzx(t), bzy(t)) for t in [float(s)/maxpath for s in
                                                 range(int(maxpath) + 1)]]
         return points
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -763,17 +681,6 @@ class Moire(Shape):
         self.rotation = rotation
 
 
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
-
-
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self._half_box()
@@ -847,17 +754,6 @@ class Thermal(Shape):
         self.inner_diameter = inner
         self.gap_thickness = gap
         self.rotation = rotation
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -936,17 +832,6 @@ class RegularPolygon(Shape):
         self.outer_diameter = outer
         self.vertices = vertices
         self.rotation = rotation
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
@@ -1094,17 +979,6 @@ class Obround(Shape):
         self.y = y
         self.width = width
         self.height = height
-
-
-    def bounds(self):
-        """ Return the min and max points of the bounding box """
-        return [self.min_point(), self.max_point()]
-
-
-    def ranges(self):
-        """ Return the min - max x range, and the min - max y range of the bounding box """
-        minpt, maxpt = self.bounds()
-        return [minpt.x, maxpt.x], [minpt.y, maxpt.y]
 
 
     def min_point(self):
