@@ -27,7 +27,7 @@ from upconvert.core.shape import Point
 
 
 class Image:
-    """ An image under construction. """
+    """ encapsulates rendering options and provides the write() method """
     default_style = {'bground': (255, 255, 255),
                      'fground': (  0,   0,   0),
                      'net'    : (  0, 180,   0),
@@ -36,73 +36,88 @@ class Image:
                     }
 
 
-    def write(self, design, filename, format='PNG', style={}, scale=1):
-        """ write the image """
-        # Update style & scale the design
+    def __init__(self, img_format='PNG', style={}, scale=1):
+        # Override default style where the user provided some
         self.style = self.default_style
         self.style.update(style)
-        design.scale(scale)
+        self.scale = scale
+        self.img_format = img_format
 
+
+    def write(self, design, filename):
+        """ create a worker and have it build and output the image """
+        writer = Worker(design, self)
+        writer.save(filename)
+
+
+
+class Worker:
+    """ Does the actual work of converting and saving an image """
+    
+
+    def __init__(self, design, options):
+        self.design, self.options = design, options
         # Calculate the image size
-        minpt, maxpt = design.bounds()
+        minpt, maxpt = self.design.bounds()
         width = int(maxpt.x - minpt.x)
         height = int(maxpt.y - minpt.y)
 
         # Setup image & design
-        image = Img.new('RGB', (width, height), self.style['bground'])
-        canvas = ImageDraw.Draw(image)
-        #design.shift(-minpt.x, -minpt.y)  # causes problems if top left corner is not (0,0)
-        #design.rebase_y_axis(height)  # from upverter coords to image coords
+        self.image = Img.new('RGB', (width * self.options.scale,
+                                     height * self.options.scale),
+                             self.options.style['bground'])
+        self.canvas = ImageDraw.Draw(self.image)
 
         # Draw & save image
-        self.base_xform = FixY(height, Shift(-minpt.x, -minpt.y))
-        self.draw_schematic(canvas, design)
-        image.save(filename, format)
+        self.base_xform = Scale(self.options.scale,
+                                FixY(height, Shift(-minpt.x, -minpt.y)))
+        self.draw_schematic()
 
 
-    def draw_schematic(self, canvas, design):
+    def save(self, filename):
+        """ Save to a file """
+        self.image.save(filename, self.options.img_format)
+
+
+    def draw_schematic(self):
         """ Render the image into self.img """
         # start off with all the component instances
-        for inst in design.component_instances:
-            comp = design.components.components[inst.library_id]
+        for inst in self.design.component_instances:
+            comp = self.design.components.components[inst.library_id]
             for body, attr in zip(comp.symbols[inst.symbol_index].bodies,
                                   inst.symbol_attributes):
                 # draw the appropriate body, at the position in attr
                 pos = Point(attr.x, attr.y)
-                self.draw_symbol(canvas, body, pos, attr.rotation, attr.flip, self.base_xform)
+                self.draw_symbol(body, pos, attr.rotation, attr.flip)
                 # draw in any annotations
                 for ann in attr.annotations:
                     if ann.visible:
                         pos = self.base_xform.chain(Point(ann.x, ann.y))
-                        canvas.text((pos.x, pos.y), ann.value,
-                                       fill=self.style['annot'])
+                        self.canvas.text((pos.x, pos.y), ann.value,
+                                         fill=self.options.style['annot'])
 
-        for shape in design.shapes:
+        for shape in self.design.shapes:
             if shape.type == 'arc':
                 # special case, it needs a rotation passed, even for 0
-                self.draw_shape_arc(canvas, shape, self.base_xform, 0, self.style['annot'])
+                self.draw_shape_arc(shape, self.base_xform, 0,
+                                    self.options.style['annot'])
             else:
-                getattr(self, 'draw_shape_%s' % shape.type)(canvas, shape, self.base_xform,
-                                                            self.style['annot'])
+                draw_method = getattr(self, 'draw_shape_%s' % shape.type)
+                draw_method(shape, self.base_xform, self.options.style['annot'])
 
-        for net in design.nets:
-            self.draw_net(canvas, net)
+        for net in self.design.nets:
+            self.draw_net(net)
 
-        for ann in design.design_attributes.annotations:
+        for ann in self.design.design_attributes.annotations:
             if ann.visible:
                 pos = self.base_xform.chain(Point(ann.x, ann.y))
-                canvas.text((pos.x, pos.y), ann.value,
-                               fill=self.style['annot'])
+                self.canvas.text((pos.x, pos.y), ann.value,
+                                  fill=self.options.style['annot'])
 
 
-    def draw_symbol(self, canvas, body, offset=None, rot=0, flip=False, xform=None):
+    def draw_symbol(self, body, offset, rot, flip):
         """draw a symbol at the location of offset"""
-        if xform is None:
-            xform = XForm()
-        else:
-            xform = xform.copy()
-        if offset is None:
-            offset = Point(0, 0)
+        xform = self.base_xform.copy()
         # flip if necessary, then rotate the symbol, then shift.
         # Want to rotate before it's been moved away from the global origin.
         if flip:
@@ -116,16 +131,17 @@ class Image:
         for shape in body.shapes:
             if shape.type == 'arc':
                 # special case, to pass along rotation
-                self.draw_shape_arc(canvas, shape, xform, rot, self.style['part'])
+                self.draw_shape_arc(shape, xform, rot,
+                                    self.options.style['part'])
             else:
-                getattr(self, 'draw_shape_%s' % shape.type)(canvas, shape, xform,
-                                                            self.style['part'])
+                draw_method = getattr(self, 'draw_shape_%s' % shape.type)
+                draw_method(shape, xform, self.options.style['part'])
 
         for pin in body.pins:
-            self.draw_pin(canvas, pin, xform)
+            self.draw_pin(pin, xform)
 
 
-    def draw_net(self, canvas, net):
+    def draw_net(self, net):
         """ draw out a net """
         # need a second dict so that removing nets as they are drawn does
         # not affect the actual design object.
@@ -136,82 +152,94 @@ class Image:
             for junc in connlist:
                 juncpt = self.base_xform.chain(net.points[junc])
                 # draw a line to each connected point from this junction
-                canvas.line([(pidpt.x, pidpt.y),
-                                (juncpt.x, juncpt.y)],
-                                fill=self.style['net'])
+                self.canvas.line([(pidpt.x, pidpt.y),
+                                  (juncpt.x, juncpt.y)],
+                                 fill=self.options.style['net'])
                 # don't need the connected point to draw a line back
                 connects[junc].remove(pid)
                 # TODO draw the connection to the component pin
                 #      (may actually be done)
 
         for pt in net.points.values():
-            if len(pt.connected_points) < 3:
-                # definitely not a solder dot, so don't try harder
-                continue
-            lines = defaultdict(list)
-            for pid in pt.connected_points:
-                connpt = net.points[pid]
-                if pt.x == connpt.x:
-                    if pt.y == connpt.y:
-                        # no idea why a pt would be connected to itself, but
-                        # we can safely ignore it here
-                        continue
-                    else:
-                        # infinite slope
-                        lines[None].append(connpt)
-                else:
-                    slope = float(connpt.y - pt.y) / (connpt.x - pt.x)
-                    lines[slope].append(connpt)
-            spokes = 0
-            for slope, pts in lines.items():
-                if slope is None:
-                    # actually, we mean infinite
-                    pts.sort(key=lambda p: p.y)
-                    if pts[0].y < pt.y:
-                        spokes += 1
-                    if pts[-1].y > pt.y:
-                        spokes += 1
-                else:
-                    pts.sort(key=lambda p: p.x)
-                    if pts[0].x < pt.x:
-                        spokes += 1
-                    if pts[-1].x > pt.x:
-                        spokes += 1
-            if spokes > 2:                           
+            if self.dot_at(pt, net):
                 drawpt = self.base_xform.chain(pt)
+                # arbitrarily, drawing the dot 4x the minimum dimension in the 
+                # design + 1 pixel.
+                scale = self.options.scale * 2
                 # draw the actual solder dot
-                scale = 1 * 2
-                canvas.ellipse((drawpt.x - scale, drawpt.y - scale,
-                                   drawpt.x + scale, drawpt.y + scale),
-                                  outline=self.style['net'],
-                                  fill=self.style['net'])
+                self.canvas.ellipse((drawpt.x - scale, drawpt.y - scale,
+                                     drawpt.x + scale, drawpt.y + scale),
+                                     outline=self.options.style['net'],
+                                     fill=self.options.style['net'])
 
         for ann in net.annotations:
             pos = self.base_xform.chain(Point(ann.x, ann.y))
-            canvas.text((pos.x, pos.y), ann.value, fill=self.style['annot'])
+            self.canvas.text((pos.x, pos.y), ann.value,
+                             fill=self.options.style['annot'])
 
 
-    def draw_shape_circle(self, canvas, circle, xform, colour):
+    def dot_at(self, pt, net):
+        """ return True if a solder dot is required at pt on net """
+        if len(pt.connected_points) + len(pt.connected_components) < 3:
+            # definitely not a solder dot, so don't try harder
+            return False
+        lines = defaultdict(list)
+        for pid in pt.connected_points:
+            connpt = net.points[pid]
+            if pt.x == connpt.x:
+                # case of a pt connected to itself falls through the cracks
+                # here, as is appropriate. Not sure why it would happen, but if
+                # it does it doesn't make any difference as to whether to draw a
+                # solder dot or no
+                if pt.y != connpt.y:
+                    # infinite slope
+                    lines[None].append(connpt)
+            else:
+                slope = float(connpt.y - pt.y) / (connpt.x - pt.x)
+                lines[slope].append(connpt)
+
+        spokes = 0
+        for slope, pts in lines.items():
+            # figure out which axis to compare along
+            if slope is None:
+                # actually, this means infinite slope
+                axis = lambda p: p.y
+            else:
+                axis = lambda p: p.x
+
+            pts.sort(key=axis)
+            if axis(pts[0]) < axis(pt):
+                # there is at least one connected point "lower" along this slope
+                spokes += 1
+            if axis(pts[-1]) > axis(pt):
+                # there is at least one connected point "higher" along the slope
+                spokes += 1
+
+        return (spokes + len(pt.connected_components)) > 2
+
+
+    def draw_shape_circle(self, circle, xform, colour):
         """ draw a circle """
         minpt, maxpt = [xform.chain(p) for p in circle.bounds()]
         xs, ys = [minpt.x, maxpt.x], [minpt.y, maxpt.y]
         # draw.ellipse gets confused if x1 > x0 or y1 > y0
-        canvas.ellipse((min(xs), min(ys), max(xs), max(ys)), outline=colour)
+        self.canvas.ellipse((min(xs), min(ys), max(xs), max(ys)),
+                            outline=colour)
 
 
-    def draw_shape_line(self, canvas, line, xform, colour):
+    def draw_shape_line(self, line, xform, colour):
         """ draw a line segment """
         pts = [xform.chain(p) for p in (line.p1, line.p2)]
-        canvas.line([(p.x, p.y) for p in pts], fill=colour)
+        self.canvas.line([(p.x, p.y) for p in pts], fill=colour)
 
 
-    def draw_shape_polygon(self, canvas, poly, xform, colour):
+    def draw_shape_polygon(self, poly, xform, colour):
         """ draw a multi-segment polygon """
         pts = [xform.chain(p) for p in poly.points]
-        canvas.polygon([(p.x, p.y) for p in pts], outline=colour)
+        self.canvas.polygon([(p.x, p.y) for p in pts], outline=colour)
 
 
-    def draw_shape_arc(self, canvas, arc, xform, rot, colour):
+    def draw_shape_arc(self, arc, xform, rot, colour):
         """ draw an arc segment
         note that rot is required, as a rotation will change the angles """
         # TODO remove reliance on rot, so that this can be called the same as
@@ -227,10 +255,10 @@ class Image:
         # 3 o'clock is angle of 0, angles increase clockwise
         start, end = [int(180 * (theta + rot)) for theta in
                       [arc.start_angle, arc.end_angle]]
-        canvas.arc(box, start, end, fill=colour)
+        self.canvas.arc(box, start, end, fill=colour)
 
 
-    def draw_shape_rectangle(self, canvas, rect, xform, colour):
+    def draw_shape_rectangle(self, rect, xform, colour):
         """ draw a rectangle """
         # use polygon-style, so it'll handle rotated rectangles
         pts = [Point(p) for p in [(rect.x, rect.y),
@@ -238,23 +266,23 @@ class Image:
                                   (rect.x + rect.width, rect.y - rect.height),
                                   (rect.x, rect.y - rect.height)]]
         pts = [xform.chain(p) for p in pts]
-        canvas.polygon([(p.x, p.y) for p in pts], outline=colour)
+        self.canvas.polygon([(p.x, p.y) for p in pts], outline=colour)
 
 
-    def draw_shape_rounded_rectangle(self, canvas, rect, xform, colour):
+    def draw_shape_rounded_rectangle(self, rect, xform, colour):
         """ draw a rectangle, eventually with rounded corners """
         #TODO handle this with lines and arcs
-        self.draw_shape_rectangle(canvas, rect, xform, colour)
+        self.draw_shape_rectangle(rect, xform, colour)
 
 
-    def draw_shape_label(self, canvas, label, xform, colour):
+    def draw_shape_label(self, label, xform, colour):
         """ draw a text label """
         #TODO deal with alignment, rotation
         pos = xform.chain(Point(label.x, label.y))
-        canvas.text((pos.x, pos.y), label.text, fill=colour)
+        self.canvas.text((pos.x, pos.y), label.text, fill=colour)
 
 
-    def draw_shape_bezier(self, canvas, bez, xform, colour):
+    def draw_shape_bezier(self, bez, xform, colour):
         """ draw a bezier curve """
         # hasn't really been tested properly, but seems okay
         # calculate maximum path length as straight lines between each point,
@@ -276,16 +304,17 @@ class Image:
                                           t**3 * p3.y)
 
         for i in xrange(0, int(1./dt)):
-            canvas.point((Bx(i * dt), By(i * dt)), fill=colour)
+            self.canvas.point((Bx(i * dt), By(i * dt)), fill=colour)
         # make sure to draw in the endpoint
-        canvas.point((Bx(1.), By(1.)), fill=colour)
+        self.canvas.point((Bx(1.), By(1.)), fill=colour)
 
 
-    def draw_pin(self, canvas, pin, xform):
+    def draw_pin(self, pin, xform):
         """ draw a component's pin """
         # TODO special pin characteristics (inverted, clock)?
         line = [xform.chain(p) for p in (pin.p1, pin.p2)]
-        canvas.line([(p.x, p.y) for p in line], fill=self.style['part'])
+        self.canvas.line([(p.x, p.y) for p in line],
+                         fill=self.options.style['part'])
 
 
 
