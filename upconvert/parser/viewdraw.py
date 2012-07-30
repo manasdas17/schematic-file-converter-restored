@@ -29,6 +29,7 @@ from upconvert.core.shape import Circle, Line, Rectangle, Label, Arc
 from os import listdir, sep as dirsep
 from math import pi, sqrt, atan
 from collections import defaultdict
+from copy import deepcopy
 
 # Notes:
 # ViewDraw files are line-based, where the first character of a line is a
@@ -372,10 +373,20 @@ class ViewDrawSch(ViewDrawBase):
 
     def parse_inst(self, args):
         """ Returns a parsed component instance. """
-        inst, libname, libnum, x, y, rot, _scale, _unknown = args.split()
+        inst, libname, libnum, x, y, rot, scale, _unknown = args.split()
         # scale is a floating point scaling constant. Also, evil.
-        thisinst = ComponentInstance(inst, self.lookup(libname, libnum), 0)
-        rot, flip = self.rot_and_flip(rot)
+        if scale != '1':
+            libkey = self.scaled_component(libname, libnum, scale)
+        else:
+            libkey = self.lookup(libname, libnum)
+        thisinst = ComponentInstance(inst, libkey, 0)
+        flip = False
+        if int(rot) > 3:
+            # part is flipped around y-axis. When applying transforms, flip it
+            # first, then rotate it.
+            rot = str(int(rot) - 4)
+            flip = True
+
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
                                                       rot, flip))
         subdata = self.sub_nodes('|R A C'.split())
@@ -388,6 +399,31 @@ class ViewDrawSch(ViewDrawBase):
         # the N command. Really don't like passing stuff inband like this. Ugh.
         thisinst.conns = subdata['conn']
         return ('inst', thisinst)
+
+
+    def scaled_component(self, libname, libnum, scale):
+        """ Returns library key for a scaled component, creates it if needed """
+        # libnames that we have parsed are lower case, so this is guaranteed
+        # not to collide
+        scaled_libname = ("SCALED-%s-" % scale) + self.lookup(libname, libnum)
+        if scaled_libname not in self.lib.components:
+            scaled_comp = deepcopy(self.lib.components[self.lookup(libname,
+                                                                   libnum)])
+
+            bodies = [bod for sym in scaled_comp.symbols for bod in sym.bodies]
+            # ViewDraw scales towards the (minx, miny) corner, as opposed to
+            # doing the sensible thing and scaling towards the origin. So for
+            # every body, we're going to have to keep track of how the (minx,
+            # miny) corner has moved, and shift it back to be in the same spot.
+            premins = [body.bounds()[0] for body in bodies]
+            scaled_comp.scale(float(scale))
+            for body, premin in zip(bodies, premins):
+                postmin = body.bounds()[0]
+                body.shift(premin.x - postmin.x, premin.y - postmin.y)
+
+            self.lib.add_component(scaled_libname, scaled_comp)
+        return scaled_libname
+
 
     def parse_conn(self, args):
         """ Returns a parsed connection between component and net. """
