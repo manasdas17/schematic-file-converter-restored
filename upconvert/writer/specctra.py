@@ -134,9 +134,10 @@ class Specctra(object):
     def _from_pixels(self, point):
         """ Converts relative position and updates max value for boundary calculation """
         point = self.resolution.from_pixels(point)
-        try:
+
+        if isinstance(point, tuple):
             self.max_offset = max(self.max_offset, max(abs(point[0]), abs(point[1])))
-        except IndexError:
+        else:            
             self.max_offset = max(self.max_offset, abs(point))
         return point
 

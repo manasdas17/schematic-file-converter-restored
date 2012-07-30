@@ -25,6 +25,7 @@ import os
 from unittest import TestCase
 import StringIO
 from upconvert.parser.geda import GEDA, GEDAError, GEDAText
+from tempfile import mkstemp
 
 import upconvert.core.design
 import upconvert.core.shape
@@ -530,7 +531,48 @@ N 55700 44400 55700 43500 4"""
 
     def test_complex_net_example_with_test_file(self):
         """ Test complex net example with test file. """
-        net_schematic = 'test/geda/nets.sch'
+
+        net = """v 20110115 2
+C 40000 40000 0 0 0 title-B.sym
+N 45300 47000 45400 47000 4
+{
+T 45300 47000 5 10 1 1 0 0 1
+netname=short_test
+}
+N 44900 46500 45400 46500 4
+{
+T 44900 46500 5 10 1 1 0 0 1
+netname=long test
+}
+N 48500 48500 48500 46500 4
+N 48500 46500 52500 46500 4
+N 50400 46500 50400 48500 4
+N 50400 48500 52000 48500 4
+{
+T 50400 48500 5 10 1 1 0 0 1
+netname=simple
+}
+N 51100 48500 51100 49900 4
+N 51100 49900 54100 49900 4
+N 42000 43000 48500 43000 4
+{
+T 42000 43000 5 10 1 1 0 0 1
+netname=advanced
+}
+N 48500 43000 48500 45100 4
+N 48500 45100 50500 45100 4
+N 45300 43000 45300 44400 4
+N 45300 44400 42000 44400 4
+{
+T 45300 44400 5 10 1 1 0 0 1
+netname=more_advanced
+}
+N 48500 44400 50500 44400 4
+N 43000 44400 43000 43000 4"""
+
+        net_handle, net_schematic = mkstemp()
+        os.write(net_handle, net)
+
         design = self.geda_parser.parse(net_schematic)
 
         self.assertEquals(len(design.nets), 4)
@@ -1129,12 +1171,27 @@ class GEDAComponentParsingTests(GEDATestCase):
         self.geda_parser = GEDA([
             './test/geda/simple_example/symbols',
         ])
+        # need to do this to force setup since parse_schematic isn't being run
+        self.geda_parser.parse_setup()
 
-        fpath = open('test/geda/path.sch')
-        component = self.geda_parser.parse_component_data(fpath, {
+        symbol = """v 20110115 2
+H 3 0 0 0 -1 -1 1 -1 -1 -1 -1 -1 5
+M 510,240
+L 601,200
+L 555,295
+L 535,265
+z
+H 3 0 0 0 -1 -1 0 2 20 100 -1 -1 6
+M 100,100
+L 500,100
+C 700,100 800,300 800,400
+C 800,500 700,700 500,700
+L 100,700
+z"""
+        stream = StringIO.StringIO(symbol)
+        component = self.geda_parser.parse_component_data(stream, {
             'basename': 'test.sym',
         })
-        fpath.close()
 
         self.assertEquals(component.name, 'test')
         self.assertEquals(len(component.symbols), 1)

@@ -26,6 +26,7 @@ from shutil import rmtree
 from collections import namedtuple
 from tarfile import TarFile
 from zipfile import ZipFile
+import errno
 
 from upconvert.core.shape import Circle, Rectangle, Obround, RegularPolygon
 from upconvert.core.shape import Polygon, Moire, Thermal
@@ -130,34 +131,32 @@ class Gerber:
                 except OSError:
                     makedirs(dir_)
         batch = self._get_archive(outfile)
-        try:
+
+        if batch:
             cfg_name = self._config_batch(batch, outfile)
-            cfg = open(cfg_name, 'w')
-        except NotBatch:
+            with open(cfg_name, 'w') as cfg:
+                for layer in design.layout.layers:
+                    member_name = layer.name.lower().replace(' ', '_') + '.ger'
+                    with open(batch.rootdir and
+                              path.join(batch.rootdir, member_name) or
+                              path.join(dir_, member_name), 'w') as member:
+                        self._gerberize(layer, units, member)
+                    cfg.write(LINE.format(', '.join([layer.name,
+                                                     layer.type,
+                                                     member_name])))
+            if batch.archive:
+                #TODO: line below doesn't work
+                #batch.add_(batch.rootdir)
+                for member_name in listdir(batch.rootdir):
+                    batch.add_(path.join(batch.rootdir, member_name))
+                batch.archive.close()
+                rmtree(batch.rootdir)
+
+        else:
             #TODO: check that there's actually only one layer
             with outfile and open(outfile, 'w') or stdout as f:
                 self._gerberize(design.layout.layers[0], units, f)
-        else:
-            for layer in design.layout.layers:
-                member_name = layer.name.lower().replace(' ', '_') + '.ger'
-                with open(batch.rootdir and
-                          path.join(batch.rootdir, member_name) or
-                          path.join(dir_, member_name), 'w') as member:
-                    self._gerberize(layer, units, member)
-                cfg.write(LINE.format(', '.join([layer.name,
-                                                 layer.type,
-                                                 member_name])))
-        finally:
-            if batch:
-                cfg.close()
-                if batch.archive:
-                    batch.add_(batch.rootdir)
-                    for member_name in listdir(batch.rootdir):
-                        batch.add_(path.join(batch.rootdir, member_name))
-                    batch.archive.close()
-                    rmtree(batch.rootdir)
-
-
+    
     # primary writer support methods
 
     def _get_archive(self, outfile):
@@ -186,7 +185,12 @@ class Gerber:
             raise NotBatch
         else:
             if batch.rootdir:
-                mkdir(batch.rootdir)
+                try:
+                    mkdir(batch.rootdir)
+                except OSError as exc: # Python >2.5
+                    if exc.errno == errno.EEXIST:
+                        pass
+                    else: raise
                 cfg_name = path.join(batch.rootdir, LAYERS_CFG)
             else:
                 cfg_name = outfile

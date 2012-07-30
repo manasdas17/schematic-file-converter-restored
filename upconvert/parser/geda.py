@@ -344,11 +344,8 @@ class GEDA:
         log.warn("ignoring picture/font in gEDA file. Not supported!")
         return
 
-    def parse_schematic(self, stream):
-        """ Parse a gEDA schematic provided as a *stream* object into a
-            design.
-
-            Returns the design corresponding to the schematic.
+    def parse_setup(self):
+        """ Set up class data structures for parsing
         """
         # pylint: disable=R0912
         if self.design is None:
@@ -360,6 +357,14 @@ class GEDA:
         self.net_names = dict()
         self.instance_ids = []
         self.instance_counter = itertools.count(0)
+
+    def parse_schematic(self, stream):
+        """ Parse a gEDA schematic provided as a *stream* object into a
+            design.
+
+            Returns the design corresponding to the schematic.
+        """
+        self.parse_setup()
 
         obj_type, params = self._parse_command(stream)
 

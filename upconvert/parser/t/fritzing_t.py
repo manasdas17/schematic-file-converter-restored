@@ -53,7 +53,7 @@ class FritzingTests(TestCase):
     def test_autodetect(self):
         """ The fritzing autodetection works. """
         self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, '..', 'kicad',
-                                                   'conn.sch')), 0.0)
+                                                   'starkadroid_e.sch')), 0.0)
         self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, "Wiring.fzz")), 0.9)
         self.assertEqual(Fritzing.auto_detect(join(TEST_DIR, "Wiring.fz")), 0.9)
 
