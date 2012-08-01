@@ -21,7 +21,7 @@
 
 
 from PIL import Image as Img, ImageDraw
-from math import cos, sin, pi, sqrt
+from math import cos, sin, pi, sqrt, atan
 from collections import defaultdict
 from upconvert.core.shape import Point
 
@@ -97,13 +97,8 @@ class Worker:
                                          fill=self.options.style['annot'])
 
         for shape in self.design.shapes:
-            if shape.type == 'arc':
-                # special case, it needs a rotation passed, even for 0
-                self.draw_shape_arc(shape, self.base_xform, 0,
-                                    self.options.style['annot'])
-            else:
-                draw_method = getattr(self, 'draw_shape_%s' % shape.type)
-                draw_method(shape, self.base_xform, self.options.style['annot'])
+            draw_method = getattr(self, 'draw_shape_%s' % shape.type)
+            draw_method(shape, self.base_xform, self.options.style['annot'])
 
         for net in self.design.nets:
             self.draw_net(net)
@@ -129,13 +124,8 @@ class Worker:
         xform.prefix(locxform)
 
         for shape in body.shapes:
-            if shape.type == 'arc':
-                # special case, to pass along rotation
-                self.draw_shape_arc(shape, xform, rot,
-                                    self.options.style['part'])
-            else:
-                draw_method = getattr(self, 'draw_shape_%s' % shape.type)
-                draw_method(shape, xform, self.options.style['part'])
+            draw_method = getattr(self, 'draw_shape_%s' % shape.type)
+            draw_method(shape, xform, self.options.style['part'])
 
         for pin in body.pins:
             self.draw_pin(pin, xform)
@@ -239,23 +229,56 @@ class Worker:
         self.canvas.polygon([(p.x, p.y) for p in pts], outline=colour)
 
 
-    def draw_shape_arc(self, arc, xform, rot, colour):
-        """ draw an arc segment
-        note that rot is required, as a rotation will change the angles """
-        # TODO remove reliance on rot, so that this can be called the same as
-        # the other draw_shape_* methods
+    def draw_shape_arc(self, arc, xform, colour):
+        """ draw an arc segment """
         x, y, r = arc.x, arc.y, arc.radius
-        # using arc.bounds would break if arc.bounds() no longer returns bounds
-        # of full circle
+        # if the arc segment were extended to draw a full circle, box would
+        # enclose that circle
         minpt, maxpt = [xform.chain(Point(px, py)) for (px, py)
                         in [(x - r, y - r), (x + r, y + r)]]
         xs, ys = [minpt.x, maxpt.x], [minpt.y, maxpt.y]
         box = (min(xs), min(ys), max(xs), max(ys))
 
-        # 3 o'clock is angle of 0, angles increase clockwise
-        start, end = [int(180 * (theta + rot)) for theta in
-                      [arc.start_angle, arc.end_angle]]
-        self.canvas.arc(box, start, end, fill=colour)
+        center = xform.chain(Point(x, y))
+
+        def pt_to_deg(pt):
+            # given a point, give the angle w.r.t. to the xform'd center of the
+            # arc (ie. where it will be when drawn)
+            # 3 o'clock is angle of 0, angles increase clockwise
+            opp, adj = pt.y - center.y, pt.x - center.x
+            if adj == 0:
+                if opp > 0:
+                    return 90
+                return 270
+            angle = 180 * atan(opp / float(adj)) / pi
+            if pt.x < center.x:
+                angle += 180
+            return int(angle % 360)
+
+        # create a point in the middle of the arc (used to detect that the xform
+        # has flipped the arc around. In that case, drawing from start_angle to
+        # end_angle will go in the wrong direction, and draw out exactly the
+        # wrong part of the circle)
+        mid_ang = (arc.start_angle + arc.end_angle) / 2
+        if arc.start_angle > arc.end_angle:
+            mid_ang = (mid_ang - 1) % 2
+        mid_pt = xform.chain(Point(cos((2 - mid_ang) * pi) * arc.radius + x,
+                                   sin((2 - mid_ang) * pi) * arc.radius + y))
+
+        start, end = [xform.chain(pt) for pt in arc.ends()]
+        if pt_to_deg(start) < pt_to_deg(end):
+            if not (pt_to_deg(start) < pt_to_deg(mid_pt) <  pt_to_deg(end)):
+                # swap start and end so that the arc traces through the
+                # transformed midpoint
+                start, end = end, start
+        elif (pt_to_deg(end) < pt_to_deg(mid_pt) < pt_to_deg(start)):
+            # swap start and end so that the arc traces through the
+            # transformed midpoint
+            start, end = end, start
+
+        # by using the arc.ends() points, any rotation in xform gets handled
+        # properly.
+        self.canvas.arc(box, pt_to_deg(start), pt_to_deg(end), fill=colour)
 
 
     def draw_shape_rectangle(self, rect, xform, colour):
@@ -271,8 +294,8 @@ class Worker:
 
     def draw_shape_rounded_rectangle(self, rect, xform, colour):
         """ draw a rectangle, eventually with rounded corners """
-        #TODO handle this with lines and arcs
-        self.draw_shape_rectangle(rect, xform, colour)
+        for shape in rect.as_arcs_lines():
+            getattr(self, 'draw_shape_%s' % shape.type)(shape, xform, colour)
 
 
     def draw_shape_label(self, label, xform, colour):
