@@ -294,8 +294,8 @@ class Worker:
 
     def draw_shape_rounded_rectangle(self, rect, xform, colour):
         """ draw a rectangle, eventually with rounded corners """
-        #TODO handle this with lines and arcs
-        self.draw_shape_rectangle(rect, xform, colour)
+        for shape in rect.as_arcs_lines():
+            getattr(self, 'draw_shape_%s' % shape.type)(shape, xform, colour)
 
 
     def draw_shape_label(self, label, xform, colour):
