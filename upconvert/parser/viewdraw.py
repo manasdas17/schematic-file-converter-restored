@@ -380,13 +380,7 @@ class ViewDrawSch(ViewDrawBase):
         else:
             libkey = self.lookup(libname, libnum)
         thisinst = ComponentInstance(inst, libkey, 0)
-        flip = False
-        if int(rot) > 3:
-            # part is flipped around y-axis. When applying transforms, flip it
-            # first, then rotate it.
-            rot = str(int(rot) - 4)
-            flip = True
-
+        rot, flip = self.rot_and_flip(rot)
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
                                                       rot, flip))
         subdata = self.sub_nodes('|R A C'.split())
