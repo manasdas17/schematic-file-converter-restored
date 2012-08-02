@@ -40,7 +40,7 @@ def get_design(filename):
 
 
 def use_file(filename):
-    """ Return a decorator which will parse a gerber file
+    """ Return a decorator which will parse an eaglexml file
     before running the test. """
 
     def decorator(test_method):
