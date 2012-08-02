@@ -46,6 +46,8 @@ from collections import defaultdict
 from os.path import split
 from os import listdir
 
+MULT = 90.0 / 1000.0 # mils to 90 dpi
+
 
 class KiCAD(object):
     """ The KiCAD Format Parser """
@@ -114,6 +116,8 @@ class KiCAD(object):
         design.nets = self.calc_nets(segments)
         self.calc_connected_components(design)
 
+        design.scale(MULT)
+
         return design
 
 
@@ -155,8 +159,7 @@ class KiCAD(object):
         x, y, rotation = int(parts[2]), int(parts[3]), int(parts[4])
         rotation = rotation / 2.0
         value = f.readline().decode('utf-8', 'replace').strip()
-        return Annotation(value, make_length(x), -make_length(y),
-                          rotation, 'true')
+        return Annotation(value, x, -y, rotation, 'true')
 
 
     def parse_field(self, compx, compy, line):
@@ -166,8 +169,8 @@ class KiCAD(object):
         parts = parts[1].strip().split()
 
         return Annotation(value,
-                          make_length(int(parts[1]) - compx),
-                          -make_length(int(parts[2]) - compy),
+                          int(parts[1]) - compx,
+                          -(int(parts[2]) - compy),
                           0 if parts[0] == 'H' else 1, 'true')
 
 
@@ -209,8 +212,7 @@ class KiCAD(object):
             line = f.readline()
 
         inst = ComponentInstance(reference, name.upper(), convert - 1)
-        symbattr = SymbolAttribute(make_length(compx), -make_length(compy),
-                                   rotation, False)
+        symbattr = SymbolAttribute(compx, -compy, rotation, False)
         for ann in annotations:
             symbattr.add_annotation(ann)
         inst.add_symbol_attribute(symbattr)
@@ -257,7 +259,7 @@ class KiCAD(object):
 
         def get_point(point):
             """ Return a new or existing NetPoint for an (x,y) point """
-            point = (make_length(point[0]), make_length(point[1]))
+            point = (int(point[0]), int(point[1]))
             if point not in points:
                 points[point] = NetPoint('%da%d' % point, point[0], point[1])
             return points[point]
@@ -305,7 +307,7 @@ class KiCAD(object):
                 for symba, body in zip(inst.symbol_attributes,
                                        cpt.symbols[inst.symbol_index].bodies):
                     for pin in body.pins:
-                        pins[symba.x + pin.p2.x, symba.y - pin.p2.y].add(
+                        pins[self.get_pin_coord(pin, symba)].add(
                             (inst.instance_id, pin.pin_number))
 
         for net in design.nets:
@@ -315,11 +317,27 @@ class KiCAD(object):
                     point.add_connected_component(conncpt)
 
 
+    def get_pin_coord(self, pin, symba):
+        """ Return the x, y coordinate of a pin on a symbol attribute """
+
+        x, y = pin.p2.x, pin.p2.y
+
+        matrix = ROT2MATRIX.get(symba.rotation) or ROT2MATRIX[0]
+
+        x, y = (matrix[0] * x + matrix[1] * y,
+                matrix[2] * x + matrix[3] * y)
+
+        return symba.x + x, symba.y - y
+
+
 # map kicad rotation matrices to pi radians
 MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, 1, 1, 0): 0.5,
                    (-1, 0, 0, 1): 1,
                    (0, -1, -1, 0): 1.5}
+
+# map openjson rotations to rotation matrices
+ROT2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.iteritems())
 
 
 class KiCADLibrary(object):
@@ -472,14 +490,13 @@ class ComponentParser(object):
         # convert tenths of degrees to pi radians
         start = start / 1800.0
         end = end / 1800.0
-        return Arc(make_length(x), make_length(y),
-                   end, start, make_length(radius))
+        return Arc(x, y, end, start, radius)
 
 
     def parse_c_line(self, parts):
         """ Parse a C (Circle) line """
         x, y, radius = [int(i) for i in parts[1:4]]
-        return Circle(make_length(x), make_length(y), make_length(radius))
+        return Circle(x, y, radius)
 
 
     def parse_p_line(self, parts):
@@ -488,8 +505,7 @@ class ComponentParser(object):
         lines = []
         last_point = None
         for i in xrange(num_points):
-            x, y = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
-            point = (make_length(x), make_length(y))
+            point = int(parts[5 + 2 * i]), int(parts[6 + 2 * i])
             if last_point is not None:
                 lines.append(Line(last_point, point))
             last_point = point
@@ -499,8 +515,7 @@ class ComponentParser(object):
     def parse_s_line(self, parts):
         """ Parse an S (Rectangle) line """
         x, y, x2, y2 = [int(i) for i in parts[1:5]]
-        return Rectangle(make_length(x), make_length(y),
-                         make_length(x2 - x), make_length(y - y2))
+        return Rectangle(x, y, x2 - x, y - y2)
 
 
     def parse_t_line(self, parts):
@@ -514,7 +529,7 @@ class ComponentParser(object):
         else:
             align = 'left'
 
-        return Label(make_length(x), make_length(y), text, align, angle)
+        return Label(x, y, text, align, angle)
 
 
     def parse_x_line(self, parts):
@@ -552,16 +567,7 @@ class ComponentParser(object):
         if name == '~':
             label = None
         else:
-            label = Label(make_length(label_x), make_length(label_y),
+            label = Label(label_x, label_y,
                           name, 'center', label_rotation)
 
-        return Pin(num,
-                   (make_length(p1x), make_length(p1y)),
-                   (make_length(p2x), make_length(p2y)), label)
-
-
-MULT = 90.0 / 1000.0 # mils to 90 dpi
-
-def make_length(value):
-    """ Make a length measurement from a kicad measurement """
-    return int(round(float(value) * MULT))
+        return Pin(num, (p1x, p1y), (p2x, p2y), label)
