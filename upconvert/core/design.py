@@ -114,7 +114,6 @@ class Design:
             shape.scale(factor)
         for pin in self.pins:
             pin.scale(factor)
-        self.design_attributes.scale(factor)
 
 
     def shift(self, dx, dy):
@@ -128,6 +127,14 @@ class Design:
             shape.shift(dx, dy)
         for pin in self.pins:
             pin.shift(dx, dy)
+
+    def round_pin_points(self):
+        """ Make sure all pin points in the design are multiples of 10. """
+        for component in self.components.components.values():
+            for symbol in component.symbols:
+                for body in symbol.bodies:
+                    for pin in body.pins:
+                        pin.round_to_10()
 
 
     def rebase_y_axis(self, height):

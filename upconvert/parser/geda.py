@@ -77,7 +77,6 @@ from upconvert.parser import geda_commands
 # Logging
 log = logging.getLogger('parser.geda')
 
-
 UNKNOWN_COMPONENT = """v 20110115 2
 T 0 0 9 3 1 0 0 0 1
 Symbol Unknown '%s'"""
@@ -326,6 +325,8 @@ class GEDA:
             self.offset.x = self.offset.x - self.frame_width
 
             f_in.close()
+
+        self.design.round_pin_points()
 
         return self.design
 
