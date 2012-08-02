@@ -107,9 +107,13 @@ class JSON:
         y = int(symbol_attribute.get('y') or 0)
 
         rotation = float(symbol_attribute.get('rotation'))
+        try:
+            flip = (symbol_attribute.get('flip').lower() == "true")
+        except:
+            flip = False
 
         # Make SymbolAttribute
-        symbol_attr = SymbolAttribute(x, y, rotation, False)
+        symbol_attr = SymbolAttribute(x, y, rotation, flip)
 
         # Add Annotations
         for annotation in symbol_attribute.get('annotations'):

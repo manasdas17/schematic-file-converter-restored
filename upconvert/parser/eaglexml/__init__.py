@@ -55,6 +55,8 @@ from upconvert.core.shape import Circle, Label, Line, Rectangle, Polygon
 
 from upconvert.parser.eaglexml.generated_g import parse
 
+EAGLE_SCALE = 10.0/9.0
+
 
 class EagleXML(object):
     """ The Eagle XML Format Parser.
@@ -123,6 +125,7 @@ class EagleXML(object):
         self.make_components(root)
         self.make_component_instances(root)
         self.make_nets(root)
+        self.design.scale(EAGLE_SCALE)
 
         return self.design
 
@@ -255,14 +258,23 @@ class EagleXML(object):
         else: # point
             distance = 0
 
-        if rotation == 'R90':
-            return (x, y + distance)
-        elif rotation == 'R180':
-            return (x - distance, y)
-        elif rotation == 'R270':
-            return (x, y - distance)
+        if rotation is None:
+            rotation = ""
+
+        if rotation.endswith('R90'):
+            coords = (x, y + distance)
+        elif rotation.endswith('R180'):
+            coords = (x - distance, y)
+        elif rotation.endswith('R270'):
+            coords = (x, y - distance)
         else:
-            return (x + distance, y)
+            coords = (x + distance, y)
+
+        if rotation.startswith('M'):
+            x, y = coords
+            coords = (-x, y)
+
+        return coords
 
 
     def get_pin_label(self, pin, (null_x, null_y)):
@@ -274,15 +286,22 @@ class EagleXML(object):
 
         distance = int(self.SCALE * (len(pin.name) * 10) / 2)
 
-        if pin.rot == 'R90':
-            x, y = (null_x, null_y + distance)
-            rotation = 1.5
-        elif pin.rot == 'R180':
-            x, y = (null_x - distance, null_y)
-            rotation = 0.0
-        elif pin.rot == 'R270':
-            x, y = (null_x, null_y - distance)
-            rotation = 0.5
+        if pin.rot is not None:
+            if pin.rot.endswith('R90'):
+                x, y = (null_x, null_y + distance)
+                rotation = 1.5
+            elif pin.rot.endswith('R180'):
+                x, y = (null_x - distance, null_y)
+                rotation = 0.0
+            elif pin.rot.endswith('R270'):
+                x, y = (null_x, null_y - distance)
+                rotation = 0.5
+            else:
+                x, y = (null_x + distance, null_y)
+                rotation = 0.0
+
+            if pin.rot.startswith('M'):
+                x = -x
         else:
             x, y = (null_x + distance, null_y)
             rotation = 0.0
@@ -345,6 +364,7 @@ class EagleXML(object):
 
         attr.x = self.make_length(instance.x)
         attr.y = self.make_length(instance.y)
+        attr.flip = (instance.rot is not None and instance.rot.startswith('M'))
         attr.rotation = self.make_angle(instance.rot or '0')
 
         if instance.smashed == 'yes':
@@ -422,13 +442,23 @@ class EagleXML(object):
         pin = self.cptgate2pin_map[cpt, pinref.gate][pinref.pin]
 
         if symattr.rotation == 0.0:
-            return (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
+            point = (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
+            if symattr.flip:
+                point = (symattr.x - pin.p2.x, symattr.y + pin.p2.y)
         elif symattr.rotation == 0.5:
-            return (symattr.x + pin.p2.y, symattr.y - pin.p2.x)
+            point = (symattr.x + pin.p2.y, symattr.y - pin.p2.x)
+            if symattr.flip:
+                point = (symattr.x - pin.p2.y, symattr.y - pin.p2.x)
         elif symattr.rotation == 1.0:
-            return (symattr.x - pin.p2.x, symattr.y + pin.p2.y)
+            point = (symattr.x - pin.p2.x, symattr.y + pin.p2.y)
+            if symattr.flip:
+                point = (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
         elif symattr.rotation == 1.5:
-            return (symattr.x - pin.p2.y, symattr.y + pin.p2.x)
+            point = (symattr.x - pin.p2.y, symattr.y + pin.p2.x)
+            if symattr.flip:
+                point = (symattr.x + pin.p2.y, symattr.y + pin.p2.x)
+
+        return point
 
 
     def connect_pinref(self, pinref, point):
