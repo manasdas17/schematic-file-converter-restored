@@ -30,6 +30,7 @@ import os
 import unittest
 import tempfile
 
+EAGLE_SCALE = 10.0/9.0
 
 _cache = {} # filename -> DOM
 
@@ -141,10 +142,10 @@ class EagleXMLTests(unittest.TestCase):
         sym = lib.symbols.symbol[0]
         self.assertEqual(len(sym.wire), 11)
         wire = sym.wire[0]
-        self.assertEqual(wire.x1, 2.117)
-        self.assertEqual(wire.y1, 1.693)
-        self.assertEqual(wire.x2, 1.552)
-        self.assertEqual(wire.y2, 2.54)
+        self.assertEqual(round(wire.x1 / EAGLE_SCALE, 3), 2.117)
+        self.assertEqual(round(wire.y1 / EAGLE_SCALE, 3), 1.693)
+        self.assertEqual(round(wire.x2 / EAGLE_SCALE, 2), 1.55)
+        self.assertEqual(round(wire.y2 / EAGLE_SCALE, 2), 2.54)
 
 
     @use_file('E1AA60D5.sch')
@@ -157,10 +158,10 @@ class EagleXMLTests(unittest.TestCase):
         sym = lib.symbols.symbol[0]
         self.assertEqual(len(sym.rectangle), 1)
         rect = sym.rectangle[0]
-        self.assertEqual(rect.x1, -0.282)
-        self.assertEqual(rect.y1, -2.54)
-        self.assertEqual(rect.x2, 0.565)
-        self.assertEqual(rect.y2, 2.54)
+        self.assertEqual(round(rect.x1 / EAGLE_SCALE, 2), -0.28)
+        self.assertEqual(round(rect.y1 / EAGLE_SCALE, 2), -2.54)
+        self.assertEqual(round(rect.x2 / EAGLE_SCALE, 2), 0.56)
+        self.assertEqual(round(rect.y2 / EAGLE_SCALE, 2), 2.54)
 
 
     @use_file('450B679C.sch')
@@ -175,8 +176,8 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(len(sym.polygon), 2)
         poly = sym.polygon[0]
         self.assertEqual(len(poly.vertex), 3)
-        self.assertEqual(poly.vertex[0].x, -3.387)
-        self.assertEqual(poly.vertex[0].y, -2.117)
+        self.assertEqual(round(poly.vertex[0].x / EAGLE_SCALE, 3), -3.387)
+        self.assertEqual(round(poly.vertex[0].y / EAGLE_SCALE, 3), -2.117)
 
 
     @use_file('D9CD1423.sch')
@@ -189,9 +190,9 @@ class EagleXMLTests(unittest.TestCase):
         sym = lib.symbols.symbol[0]
         self.assertEqual(sym.name, 'HEADER_1X10')
         self.assertEqual(len(sym.circle), 9)
-        self.assertEqual(sym.circle[0].x, 0)
-        self.assertEqual(sym.circle[0].y, 8.89)
-        self.assertEqual(sym.circle[0].radius, 0.988)
+        self.assertEqual(round(sym.circle[0].x / EAGLE_SCALE, 2), 0)
+        self.assertEqual(round(sym.circle[0].y / EAGLE_SCALE, 2), 8.89)
+        self.assertEqual(round(sym.circle[0].radius / EAGLE_SCALE, 3), 0.988)
         self.assertEqual(sym.circle[0].width, '0.254')
 
 
@@ -206,20 +207,20 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(len(sym.pin), 3)
         pin = sym.pin[0]
         self.assertEqual(pin.name, "B")
-        self.assertEqual(pin.x, -2.54)
-        self.assertEqual(pin.y, 0)
+        self.assertEqual(round(pin.x / EAGLE_SCALE, 2), -2.54)
+        self.assertEqual(round(pin.y / EAGLE_SCALE, 2), 0)
         self.assertEqual(pin.length, "short")
         self.assertEqual(pin.rot, None)
         pin = sym.pin[1]
         self.assertEqual(pin.name, "E")
-        self.assertEqual(pin.x, 2.54)
-        self.assertEqual(pin.y, 5.08)
+        self.assertEqual(round(pin.x / EAGLE_SCALE, 2), 2.54)
+        self.assertEqual(round(pin.y / EAGLE_SCALE, 2), 5.08)
         self.assertEqual(pin.length, "short")
         self.assertEqual(pin.rot, "R270")
         pin = sym.pin[2]
         self.assertEqual(pin.name, "C")
-        self.assertEqual(pin.x, 2.54)
-        self.assertEqual(pin.y, -5.08)
+        self.assertEqual(round(pin.x / EAGLE_SCALE, 2), 2.54)
+        self.assertEqual(round(pin.y / EAGLE_SCALE, 2), -5.08)
         self.assertEqual(pin.length, "short")
         self.assertEqual(pin.rot, "R90")
 
@@ -257,14 +258,14 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(len(net.segment), 1)
         seg = net.segment[0]
         self.assertEqual(len(seg.wire), 2)
-        self.assertEqual(seg.wire[0].x1, 76.2)
-        self.assertEqual(seg.wire[0].y1, 68.58)
-        self.assertEqual(seg.wire[0].x2, 83.82)
-        self.assertEqual(seg.wire[0].y2, 68.58)
-        self.assertEqual(seg.wire[1].x1, 83.82)
-        self.assertEqual(seg.wire[1].y1, 48.26)
-        self.assertEqual(seg.wire[1].x2, 83.82)
-        self.assertEqual(seg.wire[1].y2, 68.58)
+        self.assertEqual(round(seg.wire[0].x1 / EAGLE_SCALE, 1), 76.2)
+        self.assertEqual(round(seg.wire[0].y1 / EAGLE_SCALE, 2), 68.58)
+        self.assertEqual(round(seg.wire[0].x2 / EAGLE_SCALE, 2), 83.82)
+        self.assertEqual(round(seg.wire[0].y2 / EAGLE_SCALE, 2), 68.58)
+        self.assertEqual(round(seg.wire[1].x1 / EAGLE_SCALE, 2), 83.82)
+        self.assertEqual(round(seg.wire[1].y1 / EAGLE_SCALE, 2), 48.26)
+        self.assertEqual(round(seg.wire[1].x2 / EAGLE_SCALE, 2), 83.82)
+        self.assertEqual(round(seg.wire[1].y2 / EAGLE_SCALE, 2), 68.58)
 
 
     @use_file('E1AA60D5.sch')

@@ -29,7 +29,7 @@ from functools import wraps
 from os.path import dirname, join
 
 TEST_DIR = join(dirname(__file__), '..', '..', '..', 'test', 'eaglexml')
-
+EAGLE_SCALE = 10.0/9.0
 
 _cache = {} # filename -> Design
 
@@ -104,10 +104,10 @@ class EagleXMLTests(unittest.TestCase):
         lines = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'line']
         self.assertEqual(len(lines), 4)
-        self.assertEqual(lines[0].p1.x, self.make_length("12.7"))
-        self.assertEqual(lines[0].p1.y, self.make_length("-10.16"))
-        self.assertEqual(lines[0].p2.x, self.make_length("-12.7"))
-        self.assertEqual(lines[0].p2.y, self.make_length("-10.16"))
+        self.assertEqual(lines[0].p1.x / EAGLE_SCALE, self.make_length("12.7"))
+        self.assertEqual(lines[0].p1.y / EAGLE_SCALE, self.make_length("-10.16"))
+        self.assertEqual(lines[0].p2.x / EAGLE_SCALE, self.make_length("-12.7"))
+        self.assertEqual(lines[0].p2.y / EAGLE_SCALE, self.make_length("-10.16"))
 
 
     @use_file('E1AA60D5.sch')
@@ -117,11 +117,11 @@ class EagleXMLTests(unittest.TestCase):
         rects = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'rectangle']
         self.assertEqual(len(rects), 1)
-        self.assertEqual(rects[0].x, self.make_length("-1.651"))
-        self.assertEqual(rects[0].y, self.make_length("-1.651"))
-        self.assertEqual(rects[0].width,
+        self.assertEqual(rects[0].x / EAGLE_SCALE, self.make_length("-1.651"))
+        self.assertEqual(rects[0].y / EAGLE_SCALE, self.make_length("-1.651"))
+        self.assertEqual(rects[0].width / EAGLE_SCALE,
                          self.make_length("1.651") - self.make_length("-1.651"))
-        self.assertEqual(rects[0].height,
+        self.assertEqual(rects[0].height / EAGLE_SCALE,
                          self.make_length("-1.651") - self.make_length("-2.54"))
 
 
@@ -134,8 +134,8 @@ class EagleXMLTests(unittest.TestCase):
                  if s.type == 'polygon']
         self.assertEqual(len(polys), 2)
         self.assertEqual(len(polys[0].points), 3)
-        self.assertEqual(polys[0].points[0].x, self.make_length("-3.429"))
-        self.assertEqual(polys[0].points[0].y, self.make_length("-2.159"))
+        self.assertEqual(polys[0].points[0].x / EAGLE_SCALE, self.make_length("-3.429"))
+        self.assertEqual(polys[0].points[0].y / EAGLE_SCALE, self.make_length("-2.159"))
 
 
     @use_file('D9CD1423.sch')
@@ -147,8 +147,8 @@ class EagleXMLTests(unittest.TestCase):
                  if s.type == 'circle']
         self.assertEqual(len(circs), 9)
         self.assertEqual(circs[0].x, self.make_length("0"))
-        self.assertEqual(circs[0].y, self.make_length("8.89"))
-        self.assertEqual(circs[0].radius, self.make_length("1.016"))
+        self.assertEqual(circs[0].y / EAGLE_SCALE, self.make_length("8.89"))
+        self.assertEqual(circs[0].radius / EAGLE_SCALE, self.make_length("1.016"))
         self.assertEqual(circs[0].attributes['eaglexml_width'], "0.254")
 
 
@@ -159,8 +159,8 @@ class EagleXMLTests(unittest.TestCase):
         labels = [s for s in cpt.symbols[0].bodies[0].shapes
                   if s.type == 'label']
         self.assertEqual(len(labels), 1)
-        self.assertEqual(labels[0].x, self.make_length("5.08"))
-        self.assertEqual(labels[0].y, self.make_length("-2.54"))
+        self.assertEqual(labels[0].x / EAGLE_SCALE, self.make_length("5.08"))
+        self.assertEqual(labels[0].y / EAGLE_SCALE, self.make_length("-2.54"))
         self.assertEqual(labels[0].text, 'USB')
         self.assertEqual(labels[0].rotation, 1.5)
 
@@ -171,13 +171,13 @@ class EagleXMLTests(unittest.TestCase):
         cpt = self.get_component('atmel:TINY15L:logical')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(len(pins), 8)
-        self.assertEqual(pins[0].p1.x, 90)
-        self.assertEqual(pins[0].p1.y, 18)
-        self.assertEqual(pins[0].p2.x, self.make_length("17.78"))
-        self.assertEqual(pins[0].p2.y, self.make_length("2.54"))
+        self.assertEqual(pins[0].p1.x / EAGLE_SCALE, 90)
+        self.assertEqual(pins[0].p1.y / EAGLE_SCALE, 18)
+        self.assertEqual(pins[0].p2.x / EAGLE_SCALE, self.make_length("17.78"))
+        self.assertEqual(pins[0].p2.y / EAGLE_SCALE, self.make_length("2.54"))
         self.assertEqual(pins[0].label.text, '(ADC3)PB4')
-        self.assertEqual(pins[0].label.x, 0)
-        self.assertEqual(pins[0].label.y, 18)
+        self.assertEqual(pins[0].label.x / EAGLE_SCALE, 0)
+        self.assertEqual(pins[0].label.y / EAGLE_SCALE, 18)
         self.assertEqual(pins[0].label.rotation, 0.0)
 
         cpt = self.get_component('diode:ZENER-DIODE:logical')
@@ -209,8 +209,8 @@ class EagleXMLTests(unittest.TestCase):
         """ Component instance position is correct. """
         inst = self.get_instance('GND3')
         self.assertEqual(len(inst.symbol_attributes), 1)
-        self.assertEqual(inst.symbol_attributes[0].x, self.make_length("116.84"))
-        self.assertEqual(inst.symbol_attributes[0].y, self.make_length("55.88"))
+        self.assertEqual(inst.symbol_attributes[0].x / EAGLE_SCALE, self.make_length("116.84"))
+        self.assertEqual(inst.symbol_attributes[0].y / EAGLE_SCALE, self.make_length("55.88"))
 
 
     @use_file('E1AA60D5.sch')
@@ -227,11 +227,11 @@ class EagleXMLTests(unittest.TestCase):
         anns = inst.symbol_attributes[0].annotations
         self.assertEqual(len(anns), 2)
         self.assertEqual(anns[0].value, 'R2')
-        self.assertEqual(anns[0].x, -27)
-        self.assertEqual(anns[0].y, 11)
+        self.assertEqual(anns[0].x / EAGLE_SCALE, -27)
+        self.assertEqual(anns[0].y / EAGLE_SCALE, 11)
         self.assertEqual(anns[1].value, '68')
-        self.assertEqual(anns[1].x, -27)
-        self.assertEqual(anns[1].y, -23)
+        self.assertEqual(anns[1].x / EAGLE_SCALE, -27)
+        self.assertEqual(anns[1].y / EAGLE_SCALE, -23)
 
 
     @use_file('E1AA60D5.sch')
@@ -277,12 +277,12 @@ class EagleXMLTests(unittest.TestCase):
         symattr = inst.symbol_attributes[0]
         self.assertEqual(len(symattr.annotations), 2)
         self.assertEqual(symattr.annotations[0].value, 'U1')
-        self.assertEqual(symattr.annotations[0].x, self.parser.make_length("22.86"))
-        self.assertEqual(symattr.annotations[0].y, self.parser.make_length("52.07"))
+        self.assertEqual(symattr.annotations[0].x / EAGLE_SCALE, self.parser.make_length("22.86"))
+        self.assertEqual(symattr.annotations[0].y / EAGLE_SCALE, self.parser.make_length("52.07"))
         self.assertEqual(symattr.annotations[0].rotation, 0.0)
         self.assertEqual(symattr.annotations[1].value, 'ATMEGA328AU')
-        self.assertEqual(symattr.annotations[1].x, self.parser.make_length("22.86"))
-        self.assertEqual(symattr.annotations[1].y, self.parser.make_length("43.18"))
+        self.assertEqual(symattr.annotations[1].x / EAGLE_SCALE, self.parser.make_length("22.86"))
+        self.assertEqual(symattr.annotations[1].y / EAGLE_SCALE, self.parser.make_length("43.18"))
         self.assertEqual(symattr.annotations[1].rotation, 0.0)
 
 
