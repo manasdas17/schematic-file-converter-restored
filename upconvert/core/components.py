@@ -250,8 +250,18 @@ class Pin:
         """ Scale the x & y coordinates in the pin. """
         if self.label is not None:
             self.label.scale(factor)
+
         self.p1.scale(factor)
+        if self.p1.x % 10 != 0:
+            self.p1.x = round(self.p1.x, -1)
+        if self.p1.y % 10 != 0:
+            self.p1.y = round(self.p1.y, -1)
+
         self.p2.scale(factor)
+        if self.p2.x % 10 != 0:
+            self.p2.x = round(self.p2.x, -1)
+        if self.p2.y % 10 != 0:
+            self.p2.y = round(self.p2.y, -1)
 
 
     def shift(self, dx, dy):
