@@ -22,163 +22,138 @@
 
 
 from upconvert.parser.kicad import KiCAD, ComponentParser
-from upconvert.parser.openjson import JSON
 from upconvert.writer.openjson import JSON as JSONWriter
 
 import unittest
 
+from functools import wraps
 from os.path import dirname, join
 from os import devnull
 
 TEST_DIR = join(dirname(__file__), '..', '..', '..', 'test', 'kicad')
 
-TEST_INPUT_FILE = join(TEST_DIR, 'test.sch')
-GOOD_OUTPUT_FILE = join(TEST_DIR, 'test.upv')
+
+_cache = {} # filename -> Design
+
+def get_design(filename):
+    if filename not in _cache:
+        _cache[filename] = KiCAD().parse(join(TEST_DIR, filename))
+    return _cache[filename]
+
+
+def use_file(filename):
+    """ Return a decorator which will parse a kicad file
+    before running the test. """
+
+    def decorator(test_method):
+        """ Add params to decorator function. """
+
+        @wraps(test_method)
+        def wrapper(self):
+            """ Parse file then run test. """
+            self.design = get_design(filename)
+            test_method(self)
+
+        return wrapper
+
+    return decorator
 
 
 class KiCADTests(unittest.TestCase):
     """ The tests of the kicad parser """
 
-    good = None
-    actual = None
-
-    def setUp(self):
-        """ Set load the test files """
-
-        if KiCADTests.good is None:
-            KiCADTests.good = JSON().parse(GOOD_OUTPUT_FILE)
-
-        if KiCADTests.actual is None:
-            KiCADTests.actual = KiCAD().parse(TEST_INPUT_FILE)
-
-
+    @use_file('test.sch')
     def test_design_attributes(self):
         """ All the design attributes are correct """
 
-        self.assert_annotations_equal(
-            self.actual.design_attributes.annotations,
-            self.good.design_attributes.annotations)
+        anns = self.design.design_attributes.annotations
+        self.assertTrue(len(anns), 1)
+        self.assertEqual(anns[0].value, "I'm a net label")
 
 
+    @use_file('test.sch')
     def test_points(self):
         """
         Test that all the points are present and have the right
         positions and connected points and components.
         """
 
-        good_points = {}
-
-        for net in self.good.nets:
-            for pid, point in net.points.items():
-                good_points[pid] = point
-
-        self.assertEqual(len(good_points), 24)
-
-        for net in self.actual.nets:
-            for pid, point in net.points.items():
-                goodp = good_points.pop(pid)
-                self.assertEqual(point.point_id, goodp.point_id)
-                self.assertEqual(point.x, goodp.x)
-                self.assertEqual(point.y, goodp.y)
-                self.assertEqual(set(point.connected_points),
-                                 set(goodp.connected_points))
-                self.assertEqual(
-                    set((cc.instance_id, cc.pin_number)
-                        for cc in point.connected_components),
-                    set((cc.instance_id, cc.pin_number)
-                        for cc in goodp.connected_components))
-
-        self.assertEqual(good_points, {})
+        self.assertEqual(len(self.design.nets[0].points), 3)
+        self.assertEqual(set(self.design.nets[0].points),
+                         set(['2700a-6450',
+                              '2700a-3950',
+                              '3250a-3950']))
 
 
+    @use_file('test.sch')
     def test_nets(self):
         """
-        Test that all the right nets are present with
-        the right points.
+        Test that all the right nets are present.
         """
 
-        good_nets = self.good.nets[:]
-
-        self.assertEqual(len(good_nets), 5)
-
-        for net in self.actual.nets:
-            for goodnet in good_nets:
-                if set(net.points) == set(goodnet.points):
-                    good_nets.remove(goodnet)
-                    break
-            else:
-                raise Exception('bad net', net)
-
-        self.assertEqual(good_nets, [])
+        self.assertEqual(len(self.design.nets), 5)
+        self.assertEqual(self.design.nets[0].net_id, '2700a-3950')
 
 
+    @use_file('test.sch')
     def test_components(self):
         """
-        Test that all the right components are present
-        with the correct values.
+        Test that all the right components are present with the
+        correct values.
         """
 
-        good_cpts = self.good.components.components.copy()
+        self.assertEqual(len(self.design.components.components), 5)
+        self.assertEqual(set([c.name for c in self.design.components.components.values()]),
+                         set(['74LS00',
+                             'ATMEGA8-P',
+                             'NSL-32',
+                             'LP3966',
+                             'LAA110']))
 
-        for cid, cpt in self.actual.components.components.items():
-            goodcpt = good_cpts.pop(cid)
+        cpt = self.design.components.components['74LS00']
 
-            self.assertEqual(cpt.name, goodcpt.name)
-            self.assertEqual(cpt.attributes, goodcpt.attributes)
-            self.assertEqual(len(cpt.symbols), len(goodcpt.symbols))
-
-            for sym, goodsym in zip(cpt.symbols, goodcpt.symbols):
-                self.assertEqual(len(sym.bodies), len(goodsym.bodies))
-
-                for body, goodbody in zip(sym.bodies, goodsym.bodies):
-                    self.assertEqual(len(body.shapes), len(goodbody.shapes))
-                    for shape, goodshape in zip(body.shapes, goodbody.shapes):
-                        self.assertEqual(shape.__class__, goodshape.__class__)
-                        self.assertEqual(shape.json(), goodshape.json())
-
-                    self.assertEqual(len(body.pins), len(goodbody.pins))
-                    for pin, goodpin in zip(body.pins, goodbody.pins):
-                        self.assertEqual(pin.__class__, goodpin.__class__)
-                        self.assertEqual(pin.json(), goodpin.json())
-
-        self.assertEqual(good_cpts, {})
+        self.assertEqual(len(cpt.symbols), 2)
+        self.assertEqual(len(cpt.symbols[0].bodies), 4)
+        self.assertEqual(len(cpt.symbols[0].bodies[0].pins), 5)
 
 
+    @use_file('test.sch')
     def test_component_instances(self):
         """
         Test that the component instances were loaded correctly.
         """
 
-        good_insts = self.good.component_instances[:]
-        test_insts = self.actual.component_instances[:]
+        self.assertEqual(len(self.design.component_instances), 5)
 
-        while good_insts:
-            good_inst = good_insts.pop(0)
-            test_inst = None
-            for test_inst in test_insts:
-                if good_inst.instance_id == test_inst.instance_id:
-                    test_insts.remove(test_inst)
-                    break
+        inst = self.design.component_instances[0]
 
-            if test_inst is None:
-                raise Exception('missing instance', good_inst.instance_id)
+        self.assertEqual(inst.instance_id, 'U3')
+        self.assertEqual(inst.library_id, 'LAA110')
+        self.assertEqual(len(inst.symbol_attributes), 1)
+        self.assertEqual(inst.symbol_attributes[0].rotation, 1.5)
+        self.assertEqual(inst.symbol_attributes[0].x, 148.5)
+        self.assertEqual(inst.symbol_attributes[0].y, -306)
 
-            self.assertEqual(test_inst.library_id, good_inst.library_id)
-            self.assertEqual(test_inst.attributes, good_inst.attributes)
-            self.assertEqual(test_inst.symbol_index, good_inst.symbol_index)
 
-            self.assertEqual(len(test_inst.symbol_attributes),
-                             len(good_inst.symbol_attributes))
+    @use_file('arduino/Arduino-Ethernet.sch')
+    def test_connected_components(self):
+        """
+        The components are connected correctly.
+        """
 
-            for test_sa, good_sa in zip(test_inst.symbol_attributes,
-                                        good_inst.symbol_attributes):
-                self.assertEqual(test_sa.x, good_sa.x)
-                self.assertEqual(test_sa.y, good_sa.y)
-                self.assertEqual(test_sa.rotation, good_sa.rotation)
-                self.assert_annotations_equal(test_sa.annotations,
-                                              good_sa.annotations)
+        ccomps = set()
+        for net in self.design.nets:
+            for point in net.points.itervalues():
+                for cc in point.connected_components:
+                    ccomps.add((cc.instance_id, cc.pin_number))
 
-        self.assertEqual(test_insts, [])
+        self.assertTrue(('R1', '2') in ccomps)
+        self.assertTrue(('P1', '1') in ccomps)
+        self.assertTrue(('P1', '2') in ccomps)
+        self.assertTrue(('P1', '3') in ccomps)
+        self.assertTrue(('P1', '4') in ccomps)
+        self.assertTrue(('P1', '5') in ccomps)
+        self.assertTrue(('P1', '6') in ccomps)
 
 
     def test_bad_x_line_rotation(self):
@@ -191,39 +166,25 @@ class KiCADTests(unittest.TestCase):
         self.assertRaises(ValueError, parser.parse_x_line, line.split())
 
 
-    def assert_annotations_equal(self, test_anns, good_anns):
-        """
-        Assert that two sets of annotations are equal.
-        """
-
-        self.assertEqual(len(test_anns), len(good_anns))
-        for test_ann, good_ann in zip(test_anns, good_anns):
-            self.assertEqual(test_ann.value, good_ann.value)
-            self.assertEqual(test_ann.x, good_ann.x)
-            self.assertEqual(test_ann.y, good_ann.y)
-            self.assertEqual(test_ann.rotation, good_ann.rotation)
-            self.assertEqual(test_ann.visible, good_ann.visible)
-
-
+    @use_file('jtag_schematic.sch')
     def test_annotation_spaces(self):
         """
         Annotations with spaces are handled correctly.
         """
 
-        design = KiCAD().parse(join(TEST_DIR, 'jtag_schematic.sch'))
-        inst = [i for i in design.component_instances
+        inst = [i for i in self.design.component_instances
                 if i.library_id == 'CONN_4X2'][0]
         self.assertEqual(inst.symbol_attributes[0].annotations[1].value,
                          'MAPLE JTAG')
 
 
+    @use_file('ps2toserial.sch')
     def test_utf8_annotations(self):
         """
         Annotations with special chars are handled correctly.
         """
 
-        design = KiCAD().parse(join(TEST_DIR, 'ps2toserial.sch'))
-        JSONWriter().write(design, devnull)
+        JSONWriter().write(self.design, devnull)
 
 
     def test_t_line_no_alignment(self):
@@ -247,6 +208,6 @@ class KiCADTests(unittest.TestCase):
         line = 'F 0 "Reference Designs ARE PROVIDED "AS IS"" H 1150 11950 120 0000 L B'
         ann = KiCAD().parse_field(0, 0, line)
         self.assertEqual(ann.value, 'Reference Designs ARE PROVIDED "AS IS"')
-        self.assertEqual(ann.x, 104)
-        self.assertEqual(ann.y, -1076)
+        self.assertEqual(ann.x, 1150)
+        self.assertEqual(ann.y, -11950)
         self.assertEqual(ann.rotation, 0)

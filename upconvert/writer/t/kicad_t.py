@@ -28,7 +28,7 @@ from upconvert.core.net import Net, NetPoint
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.shape import Label, Rectangle, Polygon, Arc, BezierCurve
 from upconvert.core.annotation import Annotation
-from upconvert.parser.openjson import JSON
+from upconvert.parser.kicad import KiCAD as KiCADParser
 
 import os
 import unittest
@@ -37,7 +37,7 @@ import tempfile
 from cStringIO import StringIO
 
 
-from upconvert.parser.t.kicad_t import GOOD_OUTPUT_FILE as TEST_UPV_FILE
+from upconvert.parser.t.kicad_t import TEST_DIR
 
 
 class KiCADTests(unittest.TestCase):
@@ -48,7 +48,7 @@ class KiCADTests(unittest.TestCase):
         We can write out a complete design file.
         """
 
-        design = JSON().parse(TEST_UPV_FILE)
+        design = KiCADParser().parse(os.path.join(TEST_DIR, 'test.sch'))
         writer = KiCAD()
         filedesc, filename = tempfile.mkstemp()
         os.close(filedesc)
