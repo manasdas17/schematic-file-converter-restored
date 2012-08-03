@@ -326,8 +326,6 @@ class GEDA:
 
             f_in.close()
 
-        self.design.round_pin_points()
-
         return self.design
 
     def _parse_v(self, stream, params):

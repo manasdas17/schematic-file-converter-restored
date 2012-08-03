@@ -129,14 +129,6 @@ class Design:
         for pin in self.pins:
             pin.shift(dx, dy)
 
-    def round_pin_points(self):
-        """ Make sure all pin points in the design are multiples of 10. """
-        for component in self.components.components.values():
-            for symbol in component.symbols:
-                for body in symbol.bodies:
-                    for pin in body.pins:
-                        pin.round_to_10()
-
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinates in the core. """
