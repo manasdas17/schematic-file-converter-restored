@@ -23,6 +23,7 @@
 from upconvert.core.design_attributes import DesignAttributes
 from upconvert.core.components import Components
 from upconvert.core.shape import Point
+import math
 
 
 class Design:
@@ -128,6 +129,36 @@ class Design:
             shape.shift(dx, dy)
         for pin in self.pins:
             pin.shift(dx, dy)
+
+    def ensure_proper_pins(self):
+        """ Make sure all pin points in the design are multiples of 10. """
+        for component in self.components.components.values():
+            for symbol in component.symbols:
+                for body in symbol.bodies:
+                    for pin in body.pins:
+                        if pin.p1.x % 10 != 0:
+                            body.shift(10 - (pin.p1.x % 10), 0)
+                            break
+                    for pin in body.pins:
+                        if pin.p1.y % 10 != 0:
+                            body.shift(0, 10 - (pin.p1.y % 10))
+                            break
+                    for pin in body.pins:
+                        # first make sure p1 is at a multiple of 10. elongate p2 if needed
+                        if pin.p1.x % 10 != 0:
+                            pin.p1.x = round(pin.p1.x, -1)
+                        if pin.p1.y % 10 != 0:
+                            pin.p1.y = round(pin.p1.y, -1)
+                        if pin.p2.x % 10 != 0:
+                            if pin.p2.x > pin.p1.x:
+                                pin.p2.x = math.ceil(pin.p2.x / 10.0) * 10.0
+                            else:
+                                pin.p2.x = math.floor(pin.p2.x / 10.0) * 10.0
+                        if pin.p2.y % 10 != 0:
+                            if pin.p2.y > pin.p1.y:
+                                pin.p2.y = math.ceil(pin.p2.y / 10.0) * 10.0
+                            else:
+                                pin.p2.y = math.floor(pin.p2.y / 10.0) * 10.0
 
 
     def rebase_y_axis(self, height):

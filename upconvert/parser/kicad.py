@@ -46,7 +46,7 @@ from collections import defaultdict
 from os.path import split
 from os import listdir
 
-MULT = 90.0 / 1000.0 # mils to 90 dpi
+MULT = 1.0 / 10.0 # mils to 90 dpi
 
 
 class KiCAD(object):
@@ -117,6 +117,7 @@ class KiCAD(object):
         self.calc_connected_components(design)
 
         design.scale(MULT)
+        design.ensure_proper_pins()
 
         return design
 
