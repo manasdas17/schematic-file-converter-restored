@@ -114,6 +114,7 @@ class Design:
             shape.scale(factor)
         for pin in self.pins:
             pin.scale(factor)
+        self.design_attributes.scale(factor)
 
 
     def shift(self, dx, dy):

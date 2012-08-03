@@ -48,6 +48,12 @@ class DesignAttributes:
         self.metadata = metadata
 
 
+    def scale(self, factor):
+        """ Scale the x & y coordinates of the design attributes. """
+        for ann in self.annotations:
+            ann.scale(factor)
+
+
     def json(self):
         """ Return the design attributes as JSON """
         return {
