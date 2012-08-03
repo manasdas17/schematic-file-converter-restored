@@ -256,12 +256,7 @@ class Pin:
         
 
     def round_to_10(self):
-        """ Round pin locations to a multiple of 10. """
-        if self.p1.x % 10 != 0:
-            self.p1.x = round(self.p1.x, -1)
-        if self.p1.y % 10 != 0:
-            self.p1.y = round(self.p1.y, -1)
-
+        """ Round pin end locations to a multiple of 10. """
         if self.p2.x % 10 != 0:
             self.p2.x = round(self.p2.x, -1)
         if self.p2.y % 10 != 0:
