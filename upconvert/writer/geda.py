@@ -111,11 +111,12 @@ class GEDA:
         self.ignored_attributes = [
             '_prefix',
             '_suffix',
-            '_refdes',
-            '_name',
             '_geda_imported',
         ]
-
+        self.ignored_annotations = self.ignored_attributes + [
+            'name',
+            'refdes'
+        ]
         self.project_dirs = {
             'symbol': None,
             'project': None,
@@ -253,8 +254,8 @@ class GEDA:
             ## start an attribute environment
             commands.append('{')
 
-            refdes = instance.attributes.get('_name', None)
-            refdes = instance.attributes.get('_refdes', refdes)
+            refdes = instance.attributes.get('name', None)
+            refdes = instance.attributes.get('refdes', refdes)
 
             if refdes:
                 commands += self._create_attribute(
@@ -294,10 +295,10 @@ class GEDA:
         geda_imported = component.attributes.get('_geda_imported', 'false')
         geda_imported = (geda_imported == "true")
 
-        component.attributes['_refdes'] = '%s?%s' % (
-            component.attributes.get('_prefix', ''),
-            component.attributes.get('_suffix', '')
-        )
+        prefix = component.attributes.get('_prefix', None)
+        suffix = component.attributes.get('_suffix', None)
+        if prefix is not None and suffix is not None:
+            component.attributes['refdes'] = '%s?%s' % (prefix, suffix)
 
         symbol_filename = None
         ##NOTE: this attributed is used in the parser to mark at component
@@ -416,7 +417,7 @@ class GEDA:
 
     def generate_net_commands(self, nets):
         """ Generates gEDA commands for list of *nets*. Net names are
-            retrieved from the '_name' attribute and are stored in the
+            retrieved from the 'name' attribute and are stored in the
             first gEDA net segment. By definition this will be populated
             in gEDA to all segments in the same net.
 
@@ -426,9 +427,9 @@ class GEDA:
 
         for net in nets:
 
-            ## check if '_name' attribute carries net name
-            if '_name' in net.attributes and net.attributes['_name']:
-                net.attributes['netname'] = net.attributes['_name']
+            ## check if 'name' attribute carries net name
+            if 'name' in net.attributes and net.attributes['name']:
+                net.attributes['netname'] = net.attributes['name']
 
             elif len(net.annotations) > 0:
                 ## assume that the first annotation is net name
@@ -438,7 +439,7 @@ class GEDA:
 
             ## parse annotations into text commands
             for annotation in net.annotations:
-                if annotation.value == '{{_name}}':
+                if annotation.value == 'name':
                     continue
                 commands += self._create_text(
                     annotation.value,
@@ -456,7 +457,7 @@ class GEDA:
                         segments.add((start_id, end_id))
 
             attributes = dict(net.attributes)
-            net_name = attributes.get('_name', None)
+            net_name = attributes.get('name', None)
 
             for segment in segments:
                 start_id, end_id = segment
@@ -673,15 +674,20 @@ class GEDA:
         """
         assert(issubclass(annotation.__class__, Annotation))
 
-        if annotation.value.startswith('{{'):
+        if annotation.value in self.ignored_annotations:
             return []
+
+        if bool(annotation.visible in (True, 'true')):
+            visibility = 1
+        else:
+            visibility = 0
 
         kwargs = dict(
             text=annotation.value,
             x=annotation.x,
             y=annotation.y,
             angle=annotation.rotation,
-            visibility=bool(annotation.visible in (True, 'true')),
+            visibility=visibility,
         )
         return self._create_text(**kwargs)
 

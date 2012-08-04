@@ -258,19 +258,22 @@ class GEDAAngleConversionTests(GEDATestCase):
 
 class GEDATests(GEDATestCase):
 
+    def get_all_symbols(self, path):
+        symbols = set()
+        for dummy, dummy, filenames in os.walk(path):
+            for filename in filenames:
+                if filename.endswith('.sym'):
+                    symbols.add(filename)
+        return symbols
+
     def test_constructor(self):
         """
         Test constructor with different parameters to ensure
         that symbols and symbol directories are handled correctly.
         """
         ## get number of symbols in symbols directory
-        symbols = set()
-        for dummy, dummy, filenames in os.walk('upconvert/library/geda'):
-            for filename in filenames:
-                if filename.endswith('.sym'):
-                    symbols.add(filename)
-
-        geda_parser = GEDA()
+        symbols = self.get_all_symbols('upconvert/library/geda')
+        geda_parser = GEDA(['upconvert/library/geda'])
         self.assertEquals(len(geda_parser.known_symbols), len(symbols))
 
         geda_parser = GEDA([
@@ -457,7 +460,7 @@ N 55700 44400 55700 43500 4"""
             sorted(['another name', 'test', '5320a4350'])
         )
         self.assertEqual(
-            sorted([net.attributes.get('_name', None) for net in design.nets]),
+            sorted([net.attributes.get('name', None) for net in design.nets]),
             sorted(['another name', 'test', None])
         )
 
