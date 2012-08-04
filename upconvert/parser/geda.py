@@ -61,6 +61,7 @@ import logging
 import tempfile
 import itertools
 
+from math import pi, cos, sin
 from StringIO import StringIO
 
 from upconvert.core import shape
@@ -585,7 +586,8 @@ class GEDA:
                 continue
 
             for pin in body.pins:
-                coords = (sym_attr.x + pin.p2.x, sym_attr.y + pin.p2.y)
+                x, y = self.translate_coords(pin.p2.x, pin.p2.y, sym_attr.rotation)
+                coords = (sym_attr.x + x, sym_attr.y + y)
                 if coords not in self.component_pins:
                     self.component_pins[coords] = []
 
@@ -1372,6 +1374,16 @@ class GEDA:
             self.x_to_px(orig_x),
             self.y_to_px(orig_y)
         )
+
+    @classmethod
+    def translate_coords(cls, x, y, angle):
+        """ Translate a coordinate *x*, *y* accroding to the given
+            *angle* in OpenJSON coordinates.
+        """
+        angle = (-angle % 2.0) * pi
+        xn = int(round(x * cos(angle) - y * sin(angle)))
+        yn = int(round(y * cos(angle) + x * sin(angle)))
+        return xn, yn
 
     @staticmethod
     def conv_bool(value):
