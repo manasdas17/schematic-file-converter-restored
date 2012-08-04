@@ -152,11 +152,14 @@ class GEDAText(object):
         if num_lines == 1 and '=' in content:
             attribute, content = content.split('=', 1)
 
+            if attribute == 'refdes':
+                return cls(content, attribute=attribute, params=params)
+
             ## prefix attributes that are marked as invisible
             if params['visibility'] == 0:
                 attribute = "_" + attribute
             ## these are special attributes that are treated differently
-            elif attribute in ['netname', 'pinnumber', 'pinlabel', 'refdes']:
+            elif attribute in ['netname', 'pinnumber', 'pinlabel']:
                 attribute = "_" + attribute
 
         return cls(content, attribute=attribute, params=params)
@@ -539,7 +542,7 @@ class GEDA:
         ## basename
         if attributes is not None:
             instance = ComponentInstance(
-                get_instance_id(attributes.get('_refdes', component.name)),
+                get_instance_id(attributes.get('refdes', component.name)),
                 component.name,
                 0
             )
@@ -564,13 +567,13 @@ class GEDA:
         instance.add_symbol_attribute(symbol)
 
         ## add annotation for special attributes
-        for idx, attribute_key in enumerate(['_refdes', 'device']):
+        for idx, attribute_key in enumerate(['refdes', 'device']):
             if attribute_key in component.attributes \
                or attribute_key in instance.attributes:
 
                 symbol.add_annotation(
                     Annotation(
-                        '{{%s}}' % attribute_key,
+                        attribute_key,
                         0, 0+idx*10, 0.0, 'true'
                     )
                 )
@@ -804,7 +807,7 @@ class GEDA:
             found = True
 
             if net_name:
-                new_net.attributes['_name'] = net_name
+                new_net.attributes['name'] = net_name
 
             while found:
                 found = set()
@@ -825,7 +828,7 @@ class GEDA:
                 ## check for stored net names based on pointIDs
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
-                    net_obj.attributes['_name'] = self.net_names[point_id]
+                    net_obj.attributes['name'] = self.net_names[point_id]
 
                 ## check if net point is connected to component pins and
                 ## add matching components to net point
@@ -833,9 +836,9 @@ class GEDA:
                     for comp in self.component_pins[(point.x, point.y)]:
                         point.add_connected_component(comp)
 
-            if '_name' in net_obj.attributes:
+            if 'name' in net_obj.attributes:
                 annotation = Annotation(
-                    "{{_name}}", ## annotation referencing attribute '_name'
+                    "name", ## annotation referencing attribute 'name'
                     0, 0,
                     self.conv_angle(0.0),
                     self.conv_bool(1),
@@ -874,7 +877,7 @@ class GEDA:
         if geda_text.is_text():
             component.symbols[0].bodies[0].add_shape(geda_text.as_label())
 
-        elif geda_text.attribute == '_refdes' \
+        elif geda_text.attribute == 'refdes' \
              and '?' in geda_text.content:
 
             prefix, suffix = geda_text.content.split('?')
@@ -1417,7 +1420,6 @@ def find_symbols(symbol_dirs):
         Returns a dictionary of file basename and absolute path.
     """
     known_symbols = {}
-
     for symbol_dir in symbol_dirs:
         if os.path.exists(symbol_dir):
             for dirpath, dirnames, filenames in os.walk(symbol_dir):
