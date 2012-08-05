@@ -1407,6 +1407,8 @@ class GedaLightningProjectTests(TestCase):
             if not comp['filename'].startswith('title'):
                 self.components[comp['refdes']] = comp
 
+        self.bom = self.reference['bom']
+
     def test_something(self):
         self.geda_parser = GEDA(['./test/geda/lightning/symbols',])
         design = self.geda_parser.parse('test/geda/lightning/lightning.sch')
