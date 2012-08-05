@@ -390,7 +390,7 @@ class GEDA:
 
         calculated_nets = self.calculate_nets()
 
-        for cnet in sorted(calculated_nets, key=lambda n : n.net_id):
+        for cnet in sorted(calculated_nets, key=lambda n: n.net_id):
             self.design.add_net(cnet)
 
         return self.design
@@ -466,13 +466,25 @@ class GEDA:
 
         ## create second point for busripper segment on bus
         if angle == 0:
-            pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y+ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x + ripper_size,
+                pt_a.y + ripper_size
+            )
         elif angle == 90:
-            pt_b = self.get_netpoint(pt_a.x-ripper_size, pt_a.y+ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x - ripper_size,
+                pt_a.y + ripper_size
+            )
         elif angle == 180:
-            pt_b = self.get_netpoint(pt_a.x-ripper_size, pt_a.y-ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x - ripper_size,
+                pt_a.y - ripper_size
+            )
         elif angle == 270:
-            pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y-ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x + ripper_size,
+                pt_a.y - ripper_size
+            )
         else:
             raise GEDAError(
                 "invalid angle in component '%s'" % params['basename']
@@ -577,7 +589,7 @@ class GEDA:
                 symbol.add_annotation(
                     Annotation(
                         attribute_key,
-                        0, 0+idx*10, 0.0, 'true'
+                        0, (0 + idx * 10), 0.0, 'true'
                     )
                 )
 
@@ -592,7 +604,11 @@ class GEDA:
                 continue
 
             for pin in body.pins:
-                x, y = self.translate_coords(pin.p2.x, pin.p2.y, sym_attr.rotation)
+                x, y = self.translate_coords(
+                    pin.p2.x,
+                    pin.p2.y,
+                    sym_attr.rotation
+                )
                 coords = (sym_attr.x + x, sym_attr.y + y)
                 if coords not in self.component_pins:
                     self.component_pins[coords] = []
@@ -743,8 +759,8 @@ class GEDA:
             if min(pt_a.x, pt_b.x) < pt_c.x < max(pt_a.x, pt_b.x):
                 return True
         #check diagonal segment
-        elif (pt_c.x-pt_a.x)*(pt_b.y-pt_a.y) \
-              == (pt_b.x-pt_a.x)*(pt_c.y-pt_a.y):
+        elif (pt_c.x - pt_a.x) * (pt_b.y - pt_a.y) \
+              == (pt_b.x - pt_a.x) * (pt_c.y - pt_a.y):
             if min(pt_a.x, pt_b.x) < pt_c.x < max(pt_a.x, pt_b.x):
                 return True
         ## point C not on segment
@@ -774,8 +790,11 @@ class GEDA:
                 if geda_text.is_attribute():
                     attributes[geda_text.attribute] = geda_text.content
                 else:
-                    log.warn("normal text in environemnt does not comply "
-                             "with GEDA format specification: %s", geda_text.content)
+                    log.warn(
+                        "normal text in environemnt does not comply "
+                        "with GEDA format specification: %s",
+                        geda_text.content
+                    )
 
             typ, params = self._parse_command(stream)
 
@@ -796,7 +815,7 @@ class GEDA:
 
         # Iterate over the segments, removing segments when added to a net
         while self.segments:
-            seg = self.segments.pop() # pick a point
+            seg = self.segments.pop()  # pick a point
 
             net_name = ''
             pt_a, pt_b = seg
@@ -815,9 +834,9 @@ class GEDA:
             while found:
                 found = set()
 
-                for seg in self.segments: # iterate over segments
-                    if new_net.connected(seg): # segment touching the net
-                        new_net.connect(seg) # add the segment
+                for seg in self.segments:  # iterate over segments
+                    if new_net.connected(seg):  # segment touching the net
+                        new_net.connect(seg)  # add the segment
                         found.add(seg)
 
                 for seg in found:
@@ -841,7 +860,7 @@ class GEDA:
 
             if 'name' in net_obj.attributes:
                 annotation = Annotation(
-                    "name", ## annotation referencing attribute 'name'
+                    "name",  # annotation referencing attribute 'name'
                     0, 0,
                     self.conv_angle(0.0),
                     self.conv_bool(1),
@@ -1010,11 +1029,11 @@ class GEDA:
         """
         rect_x = params['x']
         if self._is_mirrored_command(params):
-            rect_x = 0-(rect_x+params['width'])
+            rect_x = 0 - (rect_x + params['width'])
 
         rect = shape.Rectangle(
             self.x_to_px(rect_x),
-            self.y_to_px(params['y']+params['height']),
+            self.y_to_px(params['y'] + params['height']),
             self.to_px(params['width']),
             self.to_px(params['height'])
         )
@@ -1029,7 +1048,7 @@ class GEDA:
         """
         vertex_x = params['x']
         if self._is_mirrored_command(params):
-            vertex_x = 0-vertex_x
+            vertex_x = 0 - vertex_x
 
         circle = shape.Circle(
             self.x_to_px(vertex_x),
@@ -1062,7 +1081,7 @@ class GEDA:
             self.x_to_px(arc_x),
             self.y_to_px(params['y']),
             self.conv_angle(start_angle),
-            self.conv_angle(start_angle+sweep_angle),
+            self.conv_angle(start_angle + sweep_angle),
             self.to_px(params['radius']),
         )
         ## store style data for arc in 'style' dict
@@ -1141,8 +1160,8 @@ class GEDA:
 
         pin_x1, pin_x2 = params['x1'], params['x2']
         if self._is_mirrored_command(params):
-            pin_x1 = 0-pin_x1
-            pin_x2 = 0-pin_x2
+            pin_x1 = 0 - pin_x1
+            pin_x2 = 0 - pin_x2
 
         ## determine wich end of the pin is the connected end
         ## 0: first point is connector
@@ -1165,7 +1184,7 @@ class GEDA:
             )
 
         pin = components.Pin(
-            attributes['_pinnumber'], #pin number
+            attributes['_pinnumber'],  # pin number
             null_end,
             connect_end,
             label=label
@@ -1230,7 +1249,7 @@ class GEDA:
         current_pos = initial_pos = (get_coords(command[1], mirrored))
 
         ## loop over the remaining lines of commands (after 'M')
-        for _ in range(num_lines-1):
+        for _ in range(num_lines - 1):
             command = stream.readline().strip().split(self.DELIMITER)
 
             ## draw line from current to given position
@@ -1411,7 +1430,7 @@ class GEDA:
         angle = angle % 360.0
         if angle > 0:
             angle = abs(360 - angle)
-        return round(angle/180.0, 1)
+        return round(angle / 180.0, 1)
 
 
 def find_symbols(symbol_dirs):
