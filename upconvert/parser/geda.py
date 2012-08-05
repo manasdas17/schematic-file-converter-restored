@@ -270,8 +270,11 @@ class GEDA:
 
             Returns the design corresponding to the gEDA file.
         """
-
         directory, _ = os.path.split(inputfile)
+
+        if not directory:
+            directory = '.'
+
         for dir_file in os.listdir(directory):
             if dir_file.endswith('.sym'):
                 lib_name, _, _ = dir_file.partition('.sym')
