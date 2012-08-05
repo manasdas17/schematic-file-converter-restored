@@ -1,4 +1,5 @@
 #! /usr/bin/env python2
+# pylint: disable=C0302
 """ This module provides a parser for the gEDA format into a
     OpenJSON design. The OpenJSON format does not provide
     color/style settings, hence, color/style data from the
@@ -75,13 +76,14 @@ from upconvert.core.component_instance import SymbolAttribute
 
 from upconvert.parser import geda_commands
 
+# pylint: disable=R0904
+
 # Logging
-log = logging.getLogger('parser.geda')
+log = logging.getLogger('parser.geda') # pylint: disable=C0103
 
 UNKNOWN_COMPONENT = """v 20110115 2
 T 0 0 9 3 1 0 0 0 1
 Symbol Unknown '%s'"""
-
 
 class GEDAText(object):
     """ Class representation of text as in GEDA format. """
@@ -172,6 +174,7 @@ class GEDAError(Exception):
 
 class GEDA:
     """ The GEDA Format Parser """
+    # pylint: disable=R0902
 
     DELIMITER = ' '
     SCALE_FACTOR = 10.0  # maps 1000 MILS to 10 pixels
@@ -238,7 +241,7 @@ class GEDA:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an geda schematic """
-        with open(filename, 'rU') as f:
+        with open(filename, 'rU') as f:  # pylint: disable=C0103
             data = f.read()
         confidence = 0
         if data[0:2] == 'v ':
@@ -335,14 +338,14 @@ class GEDA:
 
         return self.design
 
-    def _parse_v(self, stream, params):
+    def _parse_v(self, stream, params):  # pylint: disable=W0613,R0201
         """
         Only required to be callable when 'v' command is found.
         Returns without any processing.
         """
         return
 
-    def _parse_G(self, stream, params):
+    def _parse_G(self, stream, params):  # pylint: disable=W0613,R0201,C0103
         """
         Parse picture command 'G'. Returns without any processing but
         logs a warning.
@@ -453,6 +456,7 @@ class GEDA:
 
             Returns a tuple of two NetPoint objects for the segment.
         """
+        # pylint: disable=C0103
         x, y = params['x'], params['y']
         angle, mirror = params['angle'], params['mirror']
 
@@ -506,6 +510,7 @@ class GEDA:
 
             Returns a tuple of Component and ComponentInstance objects.
         """
+        # pylint: disable=C0103,R0914,R0912
         basename, _ = os.path.splitext(params['basename'])
 
         component_name = basename
@@ -547,6 +552,10 @@ class GEDA:
         attributes = self._parse_environment(stream)
 
         def get_instance_id(name):
+            """ Get unique instance ID based on *name*. If *name* already
+                exists, a numeric value is appended based on the instance
+                counter.
+            """
             if name in self.instance_ids:
                 name += '-%d' % self.instance_counter.next()
 
@@ -632,7 +641,9 @@ class GEDA:
             )
         return True
 
-    def _is_mirrored_command(self, params):
+    def _is_mirrored_command(self, params):  # pylint: disable=R0201
+        """ Returns boolean value for 'mirror' in *params*, False by default.
+        """
         return bool(params.get('mirror', False))
 
     def parse_component_data(self, stream, params):
@@ -732,7 +743,7 @@ class GEDA:
         while typ != ']':
             typ = stream.readline().split(self.DELIMITER, 1)[0].strip()
 
-    def get_netpoint(self, x, y):
+    def get_netpoint(self, x, y):  # pylint: disable=C0103
         """ Creates a new NetPoint at coordinates *x*,*y* and stores
             it in the net point lookup table. If a NetPoint does already
             exist, the existing point is returned.
@@ -800,7 +811,7 @@ class GEDA:
 
         return attributes
 
-    def calculate_nets(self):
+    def calculate_nets(self):  # pylint: disable=R0912
         """ Calculate connected nets from previously stored segments
             and netpoints. The code has been adapted from the kiCAD
             parser since the definition of segments in the schematic
@@ -896,6 +907,7 @@ class GEDA:
         attribute will be added as ``Label`` to the components
         body.
         """
+        # pylint: disable=R0201
         if geda_text.is_text():
             component.symbols[0].bodies[0].add_shape(geda_text.as_label())
 
@@ -945,6 +957,7 @@ class GEDA:
         *geda_text* that is not an attribute will be added as
         ``Label`` to the components body.
         """
+        # pylint: disable=R0201
         if geda_text.is_text():
             design.add_shape(geda_text.as_label())
         elif geda_text.attribute == 'use_license':
@@ -981,12 +994,13 @@ class GEDA:
             elif issubclass(obj_cls, GEDAText):
                 self.add_text_to_design(design, obj)
 
-    def _parse_U(self, stream, params):
+    def _parse_U(self, stream, params):  # pylint: disable=W0613,C0103
         """ Processing a bus instance with start end end coordinates
             at (x1, y1) and (x2, y2). *color* is ignored. *ripperdir*
             defines the direction in which the bus rippers are oriented
             relative to the direction of the bus.
         """
+        # pylint: disable=C0103
         x1, x2 = params['x1'], params['x2']
         y1, y2 = params['y1'], params['y2']
 
@@ -1002,7 +1016,7 @@ class GEDA:
             self.get_netpoint(ptb_x, ptb_y)
         ))
 
-    def _parse_L(self, stream, params):
+    def _parse_L(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates a Line object from the parameters in *params*. All
             style related parameters are ignored.
             Returns a Line object.
@@ -1022,7 +1036,7 @@ class GEDA:
         self._save_parameters_to_object(line, params)
         return line
 
-    def _parse_B(self, stream, params):
+    def _parse_B(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates rectangle from gEDA box with origin in bottom left
             corner. All style related values are ignored.
             Returns a Rectangle object.
@@ -1041,7 +1055,7 @@ class GEDA:
         self._save_parameters_to_object(rect, params)
         return rect
 
-    def _parse_V(self, stream, params):
+    def _parse_V(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates a Circle object from the gEDA parameters in *params. All
             style related parameters are ignored.
             Returns a Circle object.
@@ -1059,7 +1073,7 @@ class GEDA:
         self._save_parameters_to_object(circle, params)
         return circle
 
-    def _parse_A(self, stream, params):
+    def _parse_A(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates an Arc object from the parameter in *params*. All
             style related parameters are ignored.
             Returns Arc object.
@@ -1088,7 +1102,7 @@ class GEDA:
         self._save_parameters_to_object(arc, params)
         return arc
 
-    def _parse_T(self, stream, params):
+    def _parse_T(self, stream, params):  # pylint: disable=W0613,C0103
         """ Parses text element and determins if text is a text object
             or an attribute.
             Returns a tuple (key, value). If text is an annotation key is None.
@@ -1103,7 +1117,7 @@ class GEDA:
         self._parse_environment(stream)
         return geda_text
 
-    def _parse_N(self, stream, params):
+    def _parse_N(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates a segment from the command *params* and
             stores it in the global segment list for further
             processing in :py:method:divide_segments and
@@ -1111,6 +1125,7 @@ class GEDA:
             net name from the attribute environment if
             present.
         """
+        # pylint: disable=C0103
         ## store segement for processing later
         x1, y1 = self.conv_coords(params['x1'], params['y1'])
         x2, y2 = self.conv_coords(params['x2'], params['y2'])
@@ -1143,6 +1158,7 @@ class GEDA:
 
             Returns a Pin object.
         """
+        # pylint: disable=C0103,W0613,R0201
         ## pin requires an attribute enviroment, so parse it first
         attributes = self._parse_environment(stream)
 
@@ -1193,7 +1209,7 @@ class GEDA:
         self._save_parameters_to_object(pin, params)
         return pin
 
-    def _parse_C(self, stream, params):
+    def _parse_C(self, stream, params):  # pylint: disable=W0613,R0201,C0103
         """
         Parse component command 'C'. *stream* is the file stream
         pointing to the line after the component command. *params*
@@ -1219,7 +1235,7 @@ class GEDA:
         else:
             self._parse_component(stream, params)
 
-    def _parse_H(self, stream, params):
+    def _parse_H(self, stream, params):  # pylint: disable=W0613,R0201
         """ Parses a SVG-like path provided path into a list
             of simple shapes. The gEDA formats allows only line
             and curve segments with absolute coordinates. Hence,
@@ -1228,6 +1244,7 @@ class GEDA:
             the number of lines in *params*.
             Returns a list of Line and BezierCurve shapes.
         """
+        # pylint: disable=C0103
         params['extra_id'] = self.path_counter.next()
         num_lines = params['num_lines']
         mirrored = self._is_mirrored_command(params)
@@ -1296,6 +1313,7 @@ class GEDA:
         objects ``styles`` dictionary. If *obj* does not have
         a ``styles`` property, a ``GEDAError`` is raised.
         """
+        # pylint: disable=R0201
         parameter_types = [
             geda_commands.GEDAStyleParameter.TYPE,
             geda_commands.GEDAExtraParameter.TYPE,
@@ -1405,6 +1423,7 @@ class GEDA:
         """ Translate a coordinate *x*, *y* accroding to the given
             *angle* in OpenJSON coordinates.
         """
+        # pylint: disable=C0103
         angle = (-angle % 2.0) * pi
         xn = int(round(x * cos(angle) - y * sin(angle)))
         yn = int(round(y * cos(angle) + x * sin(angle)))
