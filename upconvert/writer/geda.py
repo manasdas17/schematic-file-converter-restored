@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# pylint: disable=C0302
 """ This module provides a writer class to generate valid gEDA
     file format data from a OpenJSON design. The module does
     not generate embedded symbols but writes each symbol to
@@ -269,7 +270,7 @@ class GEDA:
             for key, value in instance.attributes.items():
                 if key != 'refdes':
                     ## no position details available, stack attributes
-                    attr_x, attr_y = attr_x+10, attr_y+10
+                    attr_x, attr_y = attr_x + 10, attr_y + 10
                     commands += self._create_attribute(
                             key, value,
                             attr_x, attr_y
@@ -350,7 +351,7 @@ class GEDA:
                         key, value,
                         0, attr_y,
                     )
-                    attr_y = attr_y+10
+                    attr_y = attr_y + 10
 
             ## write commands to file
             path = os.path.join(
@@ -504,7 +505,7 @@ class GEDA:
             return []
 
         commands += self._create_component(
-            0, 0, # use 0, 0 as coordinates will be converted in component
+            0, 0,  # use 0, 0 as coordinates will be converted in component
             title_frame + '.sym',
         )
 
@@ -541,7 +542,7 @@ class GEDA:
                 attr_x,
                 attr_y,
             )
-            attr_y = attr_y+10
+            attr_y = attr_y + 10
 
         return commands
 
@@ -553,6 +554,7 @@ class GEDA:
 
             Returns a list of gEDA commands without linebreaks.
         """
+        # pylint: disable=C0103,R0913
         x, y = self.conv_coords(x, y)
         return geda_commands.GEDAComponentCommand().generate_command(
             x=x, y=y,
@@ -570,6 +572,7 @@ class GEDA:
 
             Returns a list of gEDA commands without linebreaks.
         """
+        # pylint: disable=C0103
         if key in self.ignored_attributes or not value:
             return []
 
@@ -594,6 +597,7 @@ class GEDA:
 
             Returns a list of gEDA commands without trailing linebreaks.
         """
+        # pylint: disable=C0103
         if isinstance(text, basestring):
             text = text.split('\n')
 
@@ -620,6 +624,7 @@ class GEDA:
 
             Returns a list of gEDA commands without trailing linebreaks.
         """
+        # pylint: disable=W0142
         assert(issubclass(pin.__class__, components.Pin))
 
         connected_x, connected_y = pin.p2.x, pin.p2.y
@@ -649,15 +654,15 @@ class GEDA:
         command += self._create_attribute(
             'pinseq',
             pin_seq,
-            connected_x+10,
-            connected_y+10,
+            connected_x + 10,
+            connected_y + 10,
             visibility=0,
         )
         command += self._create_attribute(
             'pinnumber',
             pin.pin_number,
-            connected_x+10,
-            connected_y+20,
+            connected_x + 10,
+            connected_y + 20,
             visibility=0,
         )
 
@@ -672,6 +677,7 @@ class GEDA:
 
             Returns a list of gEDA commands without linebreaks.
         """
+        # pylint: disable=W0142
         assert(issubclass(annotation.__class__, Annotation))
 
         if annotation.value in self.ignored_annotations:
@@ -695,6 +701,7 @@ class GEDA:
         """ Converts Arc object in *arc* into a gEDA arc command.
             Returns a list of gEDA commands without line breaks.
         """
+        # pylint: disable=C0103,W0142
         assert(issubclass(arc.__class__, shape.Arc))
 
         x, y = self.conv_coords(arc.x, arc.y)
@@ -718,6 +725,7 @@ class GEDA:
 
             Returns gEDA command as list without trailing line breaks.
         """
+        # pylint: disable=W0142
         assert(issubclass(circle.__class__, shape.Circle))
 
         center_x, center_y = self.conv_coords(circle.x, circle.y)
@@ -741,6 +749,7 @@ class GEDA:
 
             Returns gEDA command (without trailing line break) as list.
         """
+        # pylint: disable=W0142
         assert(issubclass(rect.__class__, (shape.Rectangle,
                                            shape.RoundedRectangle)))
 
@@ -760,6 +769,7 @@ class GEDA:
 
             Returns gEDA command (without line break) as list.
         """
+        # pylint: disable=W0142
         assert(issubclass(line.__class__, shape.Line))
 
         start_x, start_y = self.conv_coords(line.p1.x, line.p1.y)
@@ -778,6 +788,7 @@ class GEDA:
         """ Converts Label object in *label* to gEDA command.
             Returns gEDA command (without line break) as list.
         """
+        # pylint: disable=W0142
         assert(issubclass(label.__class__, shape.Label))
 
         kwargs = dict(
@@ -818,8 +829,8 @@ class GEDA:
                 command += self._create_attribute(
                     key,
                     value,
-                    np1.x+10,
-                    np1.y+10
+                    np1.x + 10,
+                    np1.y + 10
                 )
             command.append('}')
 
@@ -830,7 +841,7 @@ class GEDA:
 
             Returns a list of gEDA commands without trailing linebreaks.
         """
-        num_lines = len(polygon.points)+1 ##add closing command to polygon
+        num_lines = len(polygon.points) + 1  # add closing command to polygon
         commands = geda_commands.GEDAPathCommand().generate_command(
             num_lines=num_lines
         )
@@ -841,7 +852,7 @@ class GEDA:
         for point in polygon.points[1:]:
             commands.append('L %d,%d' % self.conv_coords(point.x, point.y))
 
-        commands.append('z') #closes the polygon
+        commands.append('z')  # closes the polygon
 
         return commands
 
@@ -850,8 +861,9 @@ class GEDA:
 
             Returns gEDA commands without trailing linebreaks as list.
         """
+        # pylint: disable=R0914,W0142
         num_lines = 1
-        shapes = list(shapes) #create new list to be able to modify
+        shapes = list(shapes)  # create new list to be able to modify
 
         current_x, current_y = self.conv_coords(
             shapes[0].p1.x,
@@ -870,6 +882,7 @@ class GEDA:
                 shapes.remove(shapes[-1])
                 num_lines += 1
 
+        shape_styles = {}  # store shape style in this dict for later use
         for shape_obj in shapes:
             if shape_obj.type == 'line':
                 current_x, current_y = self.conv_coords(
@@ -906,11 +919,12 @@ class GEDA:
                 )
 
             num_lines += 1
+            shape_styles.update(shape_obj.styles)
 
         kwargs = {
             'num_lines': num_lines,
         }
-        kwargs.update(shape_obj.styles)
+        kwargs.update(shape_styles)
         return geda_commands.GEDAPathCommand().generate_command(
             **kwargs
         ) + command + close_command
@@ -920,6 +934,7 @@ class GEDA:
 
             Returns gEDA command without trailing linebreaks as list.
         """
+        # pylint: disable=W0142
         assert(issubclass(curve.__class__, shape.BezierCurve))
         p1_x, p1_y = self.conv_coords(curve.p1.x, curve.p1.y)
         c1_x, c1_y = self.conv_coords(curve.control1.x, curve.control1.y)
@@ -959,7 +974,7 @@ class GEDA:
             if current_pt is None:
                 current_pt = shape_obj.p1
 
-            if not (current_pt.x == shape_obj.p1.x \
+            if not (current_pt.x == shape_obj.p1.x
                 and current_pt.y == shape_obj.p1.y):
                 return False
 
