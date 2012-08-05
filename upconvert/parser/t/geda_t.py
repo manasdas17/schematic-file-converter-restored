@@ -25,13 +25,12 @@ import os
 from unittest import TestCase
 import json
 import StringIO
-from math import sin, cos
-from upconvert.parser.geda import GEDA, GEDAError, GEDAText
 from tempfile import mkstemp
 
 import upconvert.core.design
 import upconvert.core.shape
 from upconvert.core.shape import Point
+from upconvert.parser.geda import GEDA, GEDAError, GEDAText
 
 
 class GEDAEmpty(TestCase):
@@ -1433,8 +1432,6 @@ class GedaLightningProjectTests(TestCase):
         net_names = ['net%d' % (idx+1) for idx, ___ in enumerate(design.nets)]
         for net in design.nets:
             net_names.remove(net.net_id)
-            #TODO check number of point belonging to the net
-            #TODO this requires reference info
         self.assertFalse(net_names)
 
         pin_lookup = {}
@@ -1450,14 +1447,9 @@ class GedaLightningProjectTests(TestCase):
         for inst in design.component_instances:
             comp = design.components.components[inst.library_id]
             body = comp.symbols[inst.symbol_index].bodies[0]
-
-            # get pin locations
             self.assertEquals(len(body.pins), pin_lookup[inst.instance_id])
-            #TODO lookup pin coordinates for components
-            for pin in body.pins:
-                inst_origin = inst.symbol_attributes[inst.symbol_index]
 
-        #TODO check for correct amount of netpoints with connections
+        # check for correct amount of netpoints with connections
         # fail early when not the right amount of points connected
         connected_nets = {
             'net1': ['A1', 'L2'],
@@ -1476,33 +1468,10 @@ class GedaLightningProjectTests(TestCase):
         }
 
         for net in design.nets:
-            #print '=' * 80
-            #print 'working on net', net.net_id
             net_connections = []
             for np in net.points.values():
                 net_connections += [c.instance_id for c in np.connected_components]
-                #print net.net_id, np.x, np.y, np.connected_components
-
-            #print net.net_id, connected_nets[net.net_id], net_connections
             self.assertItemsEqual(connected_nets[net.net_id], net_connections)
-
-        #TODO now check each pin for connection to correct net and the
-        # connected netpoint for correct lib ID and pin number
-        inst_a1 = [inst for inst in design.component_instances if inst.instance_id == 'A1'][0]
-
-        pins = self.get_normalised_pins(design, inst_a1)
-
-        net1 = [n for n in design.nets if n.net_id == 'net1'][0]
-
-        #TODO check the correct connection of components with netpoints
-        # 1. find correct
-
-        assert True in [self.is_connected(p, inst_a1) for p in net1.points.values()]
-
-        for p in net1.points.values():
-            for c in p.connected_components:
-                pass
-                #print 'net1', p.x, p.y, c.instance_id, c.pin_number
 
     def is_connected(self, point, inst):
         for conn_comp in point.connected_components:
