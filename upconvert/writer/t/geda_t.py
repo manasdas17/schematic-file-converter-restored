@@ -355,17 +355,6 @@ class GEDAWriterTests(GEDAWriterTestCase):
 
     def test_create_attribute(self):
         """ Tests creating attribute commands. """
-        attribute = self.geda_writer._create_attribute('_refdes', 'U1', 0, 0)
-        self.assertEquals(
-            attribute,
-            []
-        )
-        attribute = self.geda_writer._create_attribute('_refdes', '', 0, 0)
-        self.assertEquals(
-            attribute,
-            []
-        )
-
         attribute = self.geda_writer._create_attribute(
             '_private_attr', 'U1',
             0, 0

@@ -1,4 +1,5 @@
 #! /usr/bin/env python2
+# pylint: disable=C0302
 """ This module provides a parser for the gEDA format into a
     OpenJSON design. The OpenJSON format does not provide
     color/style settings, hence, color/style data from the
@@ -61,6 +62,7 @@ import logging
 import tempfile
 import itertools
 
+from math import pi, cos, sin
 from StringIO import StringIO
 
 from upconvert.core import shape
@@ -74,13 +76,14 @@ from upconvert.core.component_instance import SymbolAttribute
 
 from upconvert.parser import geda_commands
 
+# pylint: disable=R0904
+
 # Logging
-log = logging.getLogger('parser.geda')
+log = logging.getLogger('parser.geda') # pylint: disable=C0103
 
 UNKNOWN_COMPONENT = """v 20110115 2
 T 0 0 9 3 1 0 0 0 1
 Symbol Unknown '%s'"""
-
 
 class GEDAText(object):
     """ Class representation of text as in GEDA format. """
@@ -151,11 +154,14 @@ class GEDAText(object):
         if num_lines == 1 and '=' in content:
             attribute, content = content.split('=', 1)
 
+            if attribute == 'refdes':
+                return cls(content, attribute=attribute, params=params)
+
             ## prefix attributes that are marked as invisible
             if params['visibility'] == 0:
                 attribute = "_" + attribute
             ## these are special attributes that are treated differently
-            elif attribute in ['netname', 'pinnumber', 'pinlabel', 'refdes']:
+            elif attribute in ['netname', 'pinnumber', 'pinlabel']:
                 attribute = "_" + attribute
 
         return cls(content, attribute=attribute, params=params)
@@ -168,6 +174,7 @@ class GEDAError(Exception):
 
 class GEDA:
     """ The GEDA Format Parser """
+    # pylint: disable=R0902
 
     DELIMITER = ' '
     SCALE_FACTOR = 10.0  # maps 1000 MILS to 10 pixels
@@ -234,7 +241,7 @@ class GEDA:
     @staticmethod
     def auto_detect(filename):
         """ Return our confidence that the given file is an geda schematic """
-        with open(filename, 'rU') as f:
+        with open(filename, 'rU') as f:  # pylint: disable=C0103
             data = f.read()
         confidence = 0
         if data[0:2] == 'v ':
@@ -266,8 +273,11 @@ class GEDA:
 
             Returns the design corresponding to the gEDA file.
         """
-
         directory, _ = os.path.split(inputfile)
+
+        if not directory:
+            directory = '.'
+
         for dir_file in os.listdir(directory):
             if dir_file.endswith('.sym'):
                 lib_name, _, _ = dir_file.partition('.sym')
@@ -328,14 +338,14 @@ class GEDA:
 
         return self.design
 
-    def _parse_v(self, stream, params):
+    def _parse_v(self, stream, params):  # pylint: disable=W0613,R0201
         """
         Only required to be callable when 'v' command is found.
         Returns without any processing.
         """
         return
 
-    def _parse_G(self, stream, params):
+    def _parse_G(self, stream, params):  # pylint: disable=W0613,R0201,C0103
         """
         Parse picture command 'G'. Returns without any processing but
         logs a warning.
@@ -383,7 +393,7 @@ class GEDA:
 
         calculated_nets = self.calculate_nets()
 
-        for cnet in sorted(calculated_nets, key=lambda n : n.net_id):
+        for cnet in sorted(calculated_nets, key=lambda n: n.net_id):
             self.design.add_net(cnet)
 
         return self.design
@@ -446,6 +456,7 @@ class GEDA:
 
             Returns a tuple of two NetPoint objects for the segment.
         """
+        # pylint: disable=C0103
         x, y = params['x'], params['y']
         angle, mirror = params['angle'], params['mirror']
 
@@ -459,13 +470,25 @@ class GEDA:
 
         ## create second point for busripper segment on bus
         if angle == 0:
-            pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y+ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x + ripper_size,
+                pt_a.y + ripper_size
+            )
         elif angle == 90:
-            pt_b = self.get_netpoint(pt_a.x-ripper_size, pt_a.y+ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x - ripper_size,
+                pt_a.y + ripper_size
+            )
         elif angle == 180:
-            pt_b = self.get_netpoint(pt_a.x-ripper_size, pt_a.y-ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x - ripper_size,
+                pt_a.y - ripper_size
+            )
         elif angle == 270:
-            pt_b = self.get_netpoint(pt_a.x+ripper_size, pt_a.y-ripper_size)
+            pt_b = self.get_netpoint(
+                pt_a.x + ripper_size,
+                pt_a.y - ripper_size
+            )
         else:
             raise GEDAError(
                 "invalid angle in component '%s'" % params['basename']
@@ -487,6 +510,7 @@ class GEDA:
 
             Returns a tuple of Component and ComponentInstance objects.
         """
+        # pylint: disable=C0103,R0914,R0912
         basename, _ = os.path.splitext(params['basename'])
 
         component_name = basename
@@ -528,6 +552,10 @@ class GEDA:
         attributes = self._parse_environment(stream)
 
         def get_instance_id(name):
+            """ Get unique instance ID based on *name*. If *name* already
+                exists, a numeric value is appended based on the instance
+                counter.
+            """
             if name in self.instance_ids:
                 name += '-%d' % self.instance_counter.next()
 
@@ -538,7 +566,7 @@ class GEDA:
         ## basename
         if attributes is not None:
             instance = ComponentInstance(
-                get_instance_id(attributes.get('_refdes', component.name)),
+                get_instance_id(attributes.get('refdes', component.name)),
                 component.name,
                 0
             )
@@ -563,14 +591,14 @@ class GEDA:
         instance.add_symbol_attribute(symbol)
 
         ## add annotation for special attributes
-        for idx, attribute_key in enumerate(['_refdes', 'device']):
+        for idx, attribute_key in enumerate(['refdes', 'device']):
             if attribute_key in component.attributes \
                or attribute_key in instance.attributes:
 
                 symbol.add_annotation(
                     Annotation(
-                        '{{%s}}' % attribute_key,
-                        0, 0+idx*10, 0.0, 'true'
+                        attribute_key,
+                        0, (0 + idx * 10), 0.0, 'true'
                     )
                 )
 
@@ -585,7 +613,12 @@ class GEDA:
                 continue
 
             for pin in body.pins:
-                coords = (sym_attr.x + pin.p2.x, sym_attr.y + pin.p2.y)
+                x, y = self.translate_coords(
+                    pin.p2.x,
+                    pin.p2.y,
+                    sym_attr.rotation
+                )
+                coords = (sym_attr.x + x, sym_attr.y + y)
                 if coords not in self.component_pins:
                     self.component_pins[coords] = []
 
@@ -608,7 +641,9 @@ class GEDA:
             )
         return True
 
-    def _is_mirrored_command(self, params):
+    def _is_mirrored_command(self, params):  # pylint: disable=R0201
+        """ Returns boolean value for 'mirror' in *params*, False by default.
+        """
         return bool(params.get('mirror', False))
 
     def parse_component_data(self, stream, params):
@@ -708,7 +743,7 @@ class GEDA:
         while typ != ']':
             typ = stream.readline().split(self.DELIMITER, 1)[0].strip()
 
-    def get_netpoint(self, x, y):
+    def get_netpoint(self, x, y):  # pylint: disable=C0103
         """ Creates a new NetPoint at coordinates *x*,*y* and stores
             it in the net point lookup table. If a NetPoint does already
             exist, the existing point is returned.
@@ -735,8 +770,8 @@ class GEDA:
             if min(pt_a.x, pt_b.x) < pt_c.x < max(pt_a.x, pt_b.x):
                 return True
         #check diagonal segment
-        elif (pt_c.x-pt_a.x)*(pt_b.y-pt_a.y) \
-              == (pt_b.x-pt_a.x)*(pt_c.y-pt_a.y):
+        elif (pt_c.x - pt_a.x) * (pt_b.y - pt_a.y) \
+              == (pt_b.x - pt_a.x) * (pt_c.y - pt_a.y):
             if min(pt_a.x, pt_b.x) < pt_c.x < max(pt_a.x, pt_b.x):
                 return True
         ## point C not on segment
@@ -766,14 +801,17 @@ class GEDA:
                 if geda_text.is_attribute():
                     attributes[geda_text.attribute] = geda_text.content
                 else:
-                    log.warn("normal text in environemnt does not comply "
-                             "with GEDA format specification: %s", geda_text.content)
+                    log.warn(
+                        "normal text in environemnt does not comply "
+                        "with GEDA format specification: %s",
+                        geda_text.content
+                    )
 
             typ, params = self._parse_command(stream)
 
         return attributes
 
-    def calculate_nets(self):
+    def calculate_nets(self):  # pylint: disable=R0912
         """ Calculate connected nets from previously stored segments
             and netpoints. The code has been adapted from the kiCAD
             parser since the definition of segments in the schematic
@@ -788,7 +826,7 @@ class GEDA:
 
         # Iterate over the segments, removing segments when added to a net
         while self.segments:
-            seg = self.segments.pop() # pick a point
+            seg = self.segments.pop()  # pick a point
 
             net_name = ''
             pt_a, pt_b = seg
@@ -802,14 +840,14 @@ class GEDA:
             found = True
 
             if net_name:
-                new_net.attributes['_name'] = net_name
+                new_net.attributes['name'] = net_name
 
             while found:
                 found = set()
 
-                for seg in self.segments: # iterate over segments
-                    if new_net.connected(seg): # segment touching the net
-                        new_net.connect(seg) # add the segment
+                for seg in self.segments:  # iterate over segments
+                    if new_net.connected(seg):  # segment touching the net
+                        new_net.connect(seg)  # add the segment
                         found.add(seg)
 
                 for seg in found:
@@ -823,7 +861,7 @@ class GEDA:
                 ## check for stored net names based on pointIDs
                 if point_id in self.net_names:
                     net_obj.net_id = self.net_names[point_id]
-                    net_obj.attributes['_name'] = self.net_names[point_id]
+                    net_obj.attributes['name'] = self.net_names[point_id]
 
                 ## check if net point is connected to component pins and
                 ## add matching components to net point
@@ -831,9 +869,9 @@ class GEDA:
                     for comp in self.component_pins[(point.x, point.y)]:
                         point.add_connected_component(comp)
 
-            if '_name' in net_obj.attributes:
+            if 'name' in net_obj.attributes:
                 annotation = Annotation(
-                    "{{_name}}", ## annotation referencing attribute '_name'
+                    "name",  # annotation referencing attribute 'name'
                     0, 0,
                     self.conv_angle(0.0),
                     self.conv_bool(1),
@@ -869,10 +907,11 @@ class GEDA:
         attribute will be added as ``Label`` to the components
         body.
         """
+        # pylint: disable=R0201
         if geda_text.is_text():
             component.symbols[0].bodies[0].add_shape(geda_text.as_label())
 
-        elif geda_text.attribute == '_refdes' \
+        elif geda_text.attribute == 'refdes' \
              and '?' in geda_text.content:
 
             prefix, suffix = geda_text.content.split('?')
@@ -918,6 +957,7 @@ class GEDA:
         *geda_text* that is not an attribute will be added as
         ``Label`` to the components body.
         """
+        # pylint: disable=R0201
         if geda_text.is_text():
             design.add_shape(geda_text.as_label())
         elif geda_text.attribute == 'use_license':
@@ -954,12 +994,13 @@ class GEDA:
             elif issubclass(obj_cls, GEDAText):
                 self.add_text_to_design(design, obj)
 
-    def _parse_U(self, stream, params):
+    def _parse_U(self, stream, params):  # pylint: disable=W0613,C0103
         """ Processing a bus instance with start end end coordinates
             at (x1, y1) and (x2, y2). *color* is ignored. *ripperdir*
             defines the direction in which the bus rippers are oriented
             relative to the direction of the bus.
         """
+        # pylint: disable=C0103
         x1, x2 = params['x1'], params['x2']
         y1, y2 = params['y1'], params['y2']
 
@@ -975,7 +1016,7 @@ class GEDA:
             self.get_netpoint(ptb_x, ptb_y)
         ))
 
-    def _parse_L(self, stream, params):
+    def _parse_L(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates a Line object from the parameters in *params*. All
             style related parameters are ignored.
             Returns a Line object.
@@ -995,18 +1036,18 @@ class GEDA:
         self._save_parameters_to_object(line, params)
         return line
 
-    def _parse_B(self, stream, params):
+    def _parse_B(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates rectangle from gEDA box with origin in bottom left
             corner. All style related values are ignored.
             Returns a Rectangle object.
         """
         rect_x = params['x']
         if self._is_mirrored_command(params):
-            rect_x = 0-(rect_x+params['width'])
+            rect_x = 0 - (rect_x + params['width'])
 
         rect = shape.Rectangle(
             self.x_to_px(rect_x),
-            self.y_to_px(params['y']+params['height']),
+            self.y_to_px(params['y'] + params['height']),
             self.to_px(params['width']),
             self.to_px(params['height'])
         )
@@ -1014,14 +1055,14 @@ class GEDA:
         self._save_parameters_to_object(rect, params)
         return rect
 
-    def _parse_V(self, stream, params):
+    def _parse_V(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates a Circle object from the gEDA parameters in *params. All
             style related parameters are ignored.
             Returns a Circle object.
         """
         vertex_x = params['x']
         if self._is_mirrored_command(params):
-            vertex_x = 0-vertex_x
+            vertex_x = 0 - vertex_x
 
         circle = shape.Circle(
             self.x_to_px(vertex_x),
@@ -1032,7 +1073,7 @@ class GEDA:
         self._save_parameters_to_object(circle, params)
         return circle
 
-    def _parse_A(self, stream, params):
+    def _parse_A(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates an Arc object from the parameter in *params*. All
             style related parameters are ignored.
             Returns Arc object.
@@ -1054,14 +1095,14 @@ class GEDA:
             self.x_to_px(arc_x),
             self.y_to_px(params['y']),
             self.conv_angle(start_angle),
-            self.conv_angle(start_angle+sweep_angle),
+            self.conv_angle(start_angle + sweep_angle),
             self.to_px(params['radius']),
         )
         ## store style data for arc in 'style' dict
         self._save_parameters_to_object(arc, params)
         return arc
 
-    def _parse_T(self, stream, params):
+    def _parse_T(self, stream, params):  # pylint: disable=W0613,C0103
         """ Parses text element and determins if text is a text object
             or an attribute.
             Returns a tuple (key, value). If text is an annotation key is None.
@@ -1076,7 +1117,7 @@ class GEDA:
         self._parse_environment(stream)
         return geda_text
 
-    def _parse_N(self, stream, params):
+    def _parse_N(self, stream, params):  # pylint: disable=W0613,C0103
         """ Creates a segment from the command *params* and
             stores it in the global segment list for further
             processing in :py:method:divide_segments and
@@ -1084,6 +1125,7 @@ class GEDA:
             net name from the attribute environment if
             present.
         """
+        # pylint: disable=C0103
         ## store segement for processing later
         x1, y1 = self.conv_coords(params['x1'], params['y1'])
         x2, y2 = self.conv_coords(params['x2'], params['y2'])
@@ -1116,6 +1158,7 @@ class GEDA:
 
             Returns a Pin object.
         """
+        # pylint: disable=C0103,W0613,R0201
         ## pin requires an attribute enviroment, so parse it first
         attributes = self._parse_environment(stream)
 
@@ -1133,8 +1176,8 @@ class GEDA:
 
         pin_x1, pin_x2 = params['x1'], params['x2']
         if self._is_mirrored_command(params):
-            pin_x1 = 0-pin_x1
-            pin_x2 = 0-pin_x2
+            pin_x1 = 0 - pin_x1
+            pin_x2 = 0 - pin_x2
 
         ## determine wich end of the pin is the connected end
         ## 0: first point is connector
@@ -1157,7 +1200,7 @@ class GEDA:
             )
 
         pin = components.Pin(
-            attributes['_pinnumber'], #pin number
+            attributes['_pinnumber'],  # pin number
             null_end,
             connect_end,
             label=label
@@ -1166,7 +1209,7 @@ class GEDA:
         self._save_parameters_to_object(pin, params)
         return pin
 
-    def _parse_C(self, stream, params):
+    def _parse_C(self, stream, params):  # pylint: disable=W0613,R0201,C0103
         """
         Parse component command 'C'. *stream* is the file stream
         pointing to the line after the component command. *params*
@@ -1192,7 +1235,7 @@ class GEDA:
         else:
             self._parse_component(stream, params)
 
-    def _parse_H(self, stream, params):
+    def _parse_H(self, stream, params):  # pylint: disable=W0613,R0201
         """ Parses a SVG-like path provided path into a list
             of simple shapes. The gEDA formats allows only line
             and curve segments with absolute coordinates. Hence,
@@ -1201,6 +1244,7 @@ class GEDA:
             the number of lines in *params*.
             Returns a list of Line and BezierCurve shapes.
         """
+        # pylint: disable=C0103
         params['extra_id'] = self.path_counter.next()
         num_lines = params['num_lines']
         mirrored = self._is_mirrored_command(params)
@@ -1222,7 +1266,7 @@ class GEDA:
         current_pos = initial_pos = (get_coords(command[1], mirrored))
 
         ## loop over the remaining lines of commands (after 'M')
-        for _ in range(num_lines-1):
+        for _ in range(num_lines - 1):
             command = stream.readline().strip().split(self.DELIMITER)
 
             ## draw line from current to given position
@@ -1269,6 +1313,7 @@ class GEDA:
         objects ``styles`` dictionary. If *obj* does not have
         a ``styles`` property, a ``GEDAError`` is raised.
         """
+        # pylint: disable=R0201
         parameter_types = [
             geda_commands.GEDAStyleParameter.TYPE,
             geda_commands.GEDAExtraParameter.TYPE,
@@ -1373,6 +1418,17 @@ class GEDA:
             self.y_to_px(orig_y)
         )
 
+    @classmethod
+    def translate_coords(cls, x, y, angle):
+        """ Translate a coordinate *x*, *y* accroding to the given
+            *angle* in OpenJSON coordinates.
+        """
+        # pylint: disable=C0103
+        angle = (-angle % 2.0) * pi
+        xn = int(round(x * cos(angle) - y * sin(angle)))
+        yn = int(round(y * cos(angle) + x * sin(angle)))
+        return xn, yn
+
     @staticmethod
     def conv_bool(value):
         """ Converts *value* into string representing boolean
@@ -1393,7 +1449,7 @@ class GEDA:
         angle = angle % 360.0
         if angle > 0:
             angle = abs(360 - angle)
-        return round(angle/180.0, 1)
+        return round(angle / 180.0, 1)
 
 
 def find_symbols(symbol_dirs):
@@ -1405,7 +1461,6 @@ def find_symbols(symbol_dirs):
         Returns a dictionary of file basename and absolute path.
     """
     known_symbols = {}
-
     for symbol_dir in symbol_dirs:
         if os.path.exists(symbol_dir):
             for dirpath, dirnames, filenames in os.walk(symbol_dir):

@@ -23,12 +23,14 @@
 
 import os
 from unittest import TestCase
+import json
 import StringIO
-from upconvert.parser.geda import GEDA, GEDAError, GEDAText
 from tempfile import mkstemp
 
 import upconvert.core.design
 import upconvert.core.shape
+from upconvert.core.shape import Point
+from upconvert.parser.geda import GEDA, GEDAError, GEDAText
 
 
 class GEDAEmpty(TestCase):
@@ -70,7 +72,7 @@ class GEDATestCase(TestCase):
     def setUp(self):
         """
         Set up a new GEDA parser with simplified setting for easier
-        testing. The scale factor is 10 and the origin is set to 
+        testing. The scale factor is 10 and the origin is set to
         (0, 0) for easier calculation of correct/converted values.
         """
         self.geda_parser = GEDA()
@@ -83,7 +85,7 @@ class GEDATestCase(TestCase):
         invalid_string = "L -400 500 440 560 3 0 0 0 -1 -1",
         stream =  StringIO.StringIO(invalid_string)
         self.assertRaises(
-            GEDAError, 
+            GEDAError,
             self.geda_parser._parse_command,
             stream
         )
@@ -255,19 +257,22 @@ class GEDAAngleConversionTests(GEDATestCase):
 
 class GEDATests(GEDATestCase):
 
+    def get_all_symbols(self, path):
+        symbols = set()
+        for dummy, dummy, filenames in os.walk(path):
+            for filename in filenames:
+                if filename.endswith('.sym'):
+                    symbols.add(filename)
+        return symbols
+
     def test_constructor(self):
         """
         Test constructor with different parameters to ensure
         that symbols and symbol directories are handled correctly.
         """
         ## get number of symbols in symbols directory
-        symbols = set()
-        for dummy, dummy, filenames in os.walk('upconvert/library/geda'):
-            for filename in filenames:
-                if filename.endswith('.sym'):
-                    symbols.add(filename)
-
-        geda_parser = GEDA()
+        symbols = self.get_all_symbols('upconvert/library/geda')
+        geda_parser = GEDA(['upconvert/library/geda'])
         self.assertEquals(len(geda_parser.known_symbols), len(symbols))
 
         geda_parser = GEDA([
@@ -454,7 +459,7 @@ N 55700 44400 55700 43500 4"""
             sorted(['another name', 'test', '5320a4350'])
         )
         self.assertEqual(
-            sorted([net.attributes.get('_name', None) for net in design.nets]),
+            sorted([net.attributes.get('name', None) for net in design.nets]),
             sorted(['another name', 'test', None])
         )
 
@@ -863,7 +868,7 @@ z"""
         stream =  StringIO.StringIO(invalid_example)
         typ, params = self.geda_parser._parse_command(stream)
         self.assertRaises(
-            GEDAError, 
+            GEDAError,
             self.geda_parser._parse_H,
             stream,
             params
@@ -877,7 +882,7 @@ z"""
         stream =  StringIO.StringIO(invalid_example)
         typ, params = self.geda_parser._parse_command(stream)
         self.assertRaises(
-            GEDAError, 
+            GEDAError,
             self.geda_parser._parse_H,
             stream,
             params
@@ -1106,8 +1111,8 @@ pintype=in
 
     def test_parse_reversed_pin_with_mirror_flag(self):
         """
-        Test parsing pin command with ends in reversed order and 
-        the mirror flag set. 
+        Test parsing pin command with ends in reversed order and
+        the mirror flag set.
         """
         reversed_pin_sample = self.get_reversed_pin()
         stream = StringIO.StringIO(reversed_pin_sample)
@@ -1388,3 +1393,114 @@ class GEDAFullConversionTests(GEDATestCase):
             sorted(net_names),
             sorted(['+_1', '-_In+']),
         )
+
+
+class GedaLightningProjectTests(TestCase):
+    filename = 'test/geda/lightning/lightning.json'
+
+    def setUp(self):
+        with open(self.filename) as fh:
+            self.reference = json.load(fh)
+
+        self.components = {}
+        for comp in self.reference['components']:
+            if not comp['filename'].startswith('title'):
+                self.components[comp['refdes']] = comp
+
+        self.bom = self.reference['bom']
+
+    def test_something(self):
+        self.geda_parser = GEDA(['./test/geda/lightning/symbols',])
+        design = self.geda_parser.parse('test/geda/lightning/lightning.sch')
+
+        self.assertEquals(
+            len(design.component_instances),
+            len(self.components)
+        )
+
+        for comp in design.component_instances:
+            refcomp = self.components[comp.instance_id]
+
+            self.assertEquals(comp.instance_id, refcomp['refdes'])
+            # check that the library ID corresponds to the filename
+            # of the symbol but ignoring the suffix that might indicate
+            # a mirrored component.
+            assert comp.library_id.startswith(
+                refcomp['filename'].replace('.sym', '')
+            )
+
+        self.assertEquals(len(design.nets), 13)
+
+        net_names = ['net%d' % (idx+1) for idx, ___ in enumerate(design.nets)]
+        for net in design.nets:
+            net_names.remove(net.net_id)
+        self.assertFalse(net_names)
+
+        pin_lookup = {}
+        def make_pin_lookup(lst, pins):
+            for i in lst:
+                pin_lookup[i] = pins
+
+        make_pin_lookup(['A1', 'bat(+3v)', 'lamp(1)', 'lamp(2)', 'bat(0v)'], 1)
+        make_pin_lookup(['L1', 'L2', 'C1', 'C2', 'R1', 'R2', 'C3', 'R3',
+                         'D1', 'C4', 'R5', 'C5', 'R6', 'C6', 'R7'], 2)
+        make_pin_lookup(['Q%d' % idx for idx in range(1, 5)] + ['R4'], 3)
+
+        for inst in design.component_instances:
+            comp = design.components.components[inst.library_id]
+            body = comp.symbols[inst.symbol_index].bodies[0]
+            self.assertEquals(len(body.pins), pin_lookup[inst.instance_id])
+
+        # check for correct amount of netpoints with connections
+        # fail early when not the right amount of points connected
+        connected_nets = {
+            'net1': ['A1', 'L2'],
+            'net2': ['L2', 'L1', 'C2', 'C1'],
+            'net3': ['L1', 'Q1', 'C1', 'R6', 'C6', 'Q4', 'bat(0v)'],
+            'net4': ['Q1', 'R1', 'C2'],
+            'net5': ['Q1', 'R1', 'R2', 'C3'],
+            'net6': ['R2', 'C6', 'R7', 'bat(+3v)'],
+            'net7': ['R4']*2 + ['D1', 'Q3', 'R7', 'lamp(1)'],
+            'net8': ['D1', 'Q2', 'C4'],
+            'net9': ['R3', 'R4', 'Q2', 'C3'],
+            'net10': ['R3', 'C4', 'C5', 'Q3', 'R6', 'Q4'],
+            'net11': ['R5', 'C5', 'Q3'],
+            'net12': ['Q4', 'lamp(2)'],
+            'net13': ['Q2', 'R5'],
+        }
+
+        for net in design.nets:
+            net_connections = []
+            for np in net.points.values():
+                net_connections += [c.instance_id for c in np.connected_components]
+            self.assertItemsEqual(connected_nets[net.net_id], net_connections)
+
+    def is_connected(self, point, inst):
+        for conn_comp in point.connected_components:
+            if conn_comp.instance_id == inst.instance_id:
+                return True
+        return False
+
+    def get_normalised_pins(self, design, inst):
+        try:
+            inst.library_id
+        except AttributeError:
+            for i in design.component_instances:
+                if i.instance_id == inst:
+                    inst = i
+                    break
+
+        comp = design.components.components[inst.library_id]
+
+        norm_pins = []
+        for pin in comp.symbols[inst.symbol_index].bodies[0].pins:
+            inst_origin = inst.symbol_attributes[inst.symbol_index]
+
+            x1, y1 = GEDA.translate_coords(pin.p1.x, pin.p1.y, inst_origin.rotation)
+            x2, y2 = GEDA.translate_coords(pin.p2.x, pin.p2.y, inst_origin.rotation)
+
+            norm_pins.append(Point(
+                x2 + inst_origin.x,
+                y2 + inst_origin.y)
+            )
+        return norm_pins
