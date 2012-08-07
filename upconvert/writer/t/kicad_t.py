@@ -48,7 +48,7 @@ class KiCADTests(unittest.TestCase):
         We can write out a complete design file.
         """
 
-        design = KiCADParser().parse(os.path.join(TEST_DIR, 'test.sch'))
+        design = KiCADParser().parse(os.path.join(TEST_DIR, 'test/test.sch'))
         writer = KiCAD()
         filedesc, filename = tempfile.mkstemp()
         os.close(filedesc)

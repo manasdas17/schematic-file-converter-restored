@@ -280,8 +280,8 @@ class Fritzing(object):
             """ Return a new or existing NetPoint for an (x,y) coordinate """
             x, y = self.connkey2xy[connkey]
             if (x, y) not in xy2point:
-                xy2point[x,y] = NetPoint('%da%d' % (x, y), x, y)
-            return xy2point[x,y]
+                xy2point[x, y] = NetPoint('%da%d' % (x, y), x, y)
+            return xy2point[x, y]
 
         # connector key -> NetPoint
         connkey2point = dict((ck, get_point(ck)) for ck in self.connkey2xy)
