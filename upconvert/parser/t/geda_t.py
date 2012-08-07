@@ -1473,7 +1473,7 @@ class GedaLightningProjectTests(TestCase):
             net_connections = []
             for np in net.points.values():
                 net_connections += [c.instance_id for c in np.connected_components]
-            self.assertItemsEqual(connected_nets[net.net_id], net_connections)
+            self.assertEquals(sorted(connected_nets[net.net_id]), sorted(net_connections))
 
     def is_connected(self, point, inst):
         for conn_comp in point.connected_components:
