@@ -43,7 +43,7 @@ from upconvert.core.annotation import Annotation
 from upconvert.library.kicad import lookup_part
 
 from collections import defaultdict
-from os.path import split, join, dirname, exists
+from os.path import split
 from os import listdir
 
 MULT = 1.0 / 10.0 # mils to 90 dpi
@@ -379,7 +379,7 @@ class KiCADLibrary(object):
         with open(filename) as f:
             for line in f:
                 if line.startswith('DEF '):
-                        new_components.append(ComponentParser(line).parse(f))
+                    new_components.append(ComponentParser(line).parse(f))
 
         for new_component in new_components:
             new_component.name = new_component.name.upper()

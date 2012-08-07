@@ -62,7 +62,7 @@ def use_file(filename):
 class KiCADTests(unittest.TestCase):
     """ The tests of the kicad parser """
 
-    @use_file('test.sch')
+    @use_file('test/test.sch')
     def test_design_attributes(self):
         """ All the design attributes are correct """
 
@@ -71,7 +71,7 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(anns[0].value, "I'm a net label")
 
 
-    @use_file('test.sch')
+    @use_file('test/test.sch')
     def test_points(self):
         """
         Test that all the points are present and have the right
@@ -85,7 +85,7 @@ class KiCADTests(unittest.TestCase):
                               '3250a-3950']))
 
 
-    @use_file('test.sch')
+    @use_file('test/test.sch')
     def test_nets(self):
         """
         Test that all the right nets are present.
@@ -95,7 +95,7 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(self.design.nets[0].net_id, '2700a-3950')
 
 
-    @use_file('test.sch')
+    @use_file('test/test.sch')
     def test_components(self):
         """
         Test that all the right components are present with the
@@ -117,7 +117,7 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(len(cpt.symbols[0].bodies[0].pins), 5)
 
 
-    @use_file('test.sch')
+    @use_file('test/test.sch')
     def test_component_instances(self):
         """
         Test that the component instances were loaded correctly.
