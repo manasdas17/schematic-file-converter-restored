@@ -15,4 +15,5 @@ setup(
     license='Apache 2.0',
     url='https://github.com/upverter/schematic-file-converter',
     packages=packages,
+    package_data={'upconvert': ['library/geda/*.sym', 'library/kicad/parts/*.lib']},
 )

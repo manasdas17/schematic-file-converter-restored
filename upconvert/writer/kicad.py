@@ -186,7 +186,8 @@ $EndDescr
     def write_library_component(self, f, cpt):
         """ Write a single component to a kiCAD cache library """
         ref = cpt.attributes.get('_prefix', 'U').encode('utf-8')
-        name = cpt.name.encode('utf-8')
+        name = cpt.name.replace(' ', '')
+        name = name.encode('utf-8')
         f.write('#\n')
         f.write('# ' + name + '\n')
         f.write('#\n')
@@ -224,9 +225,15 @@ $EndDescr
                     add_line(shape, symbol, unit, convert)
 
                 for pin in body.pins:
+                    if pin.label is not None:
+                        pin.label.text = pin.label.text.replace(' ', '')
                     add_line(pin, symbol, unit, convert)
 
         for _, line, symbol, units, converts in sorted(lines.values()):
+            for body in symbol.bodies:
+                for pin in body.pins:
+                    if pin.label is not None:
+                        pin.label.text = pin.label.text.replace(' ', '')
             if len(units) == len(symbol.bodies):
                 units = (0,)
             if len(converts) == 2:

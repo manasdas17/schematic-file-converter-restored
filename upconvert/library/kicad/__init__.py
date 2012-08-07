@@ -13,7 +13,6 @@ def lookup_part(name, libs):
     first library which matches it. Return the Component if
     successful, None otherwise.
     """
-
     for lib in libs:
         if lib not in ALL_COMPONENTS:
             ALL_COMPONENTS[lib] = read_library(lib)
@@ -32,6 +31,8 @@ def read_library(lib):
 
     if exists(libfile):
         from upconvert.parser.kicad import KiCADLibrary
-        return KiCADLibrary.parse(libfile)
+        library = KiCADLibrary()
+        library.parse(libfile)
+        return library.name2cpt
     else:
         return {}

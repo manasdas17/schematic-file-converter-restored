@@ -33,6 +33,8 @@ import tempfile
 from upconvert.upconverter import Upconverter
 from upconvert.utils.verify_json import verify_json
 
+from os.path import splitext
+
 
 sch_re = re.compile(r'.*\.sch$')
 def filter_sch(arg, top, names):
@@ -147,35 +149,52 @@ def test_diff_generator(file_path, format):
     both files. Assert the ratio is below a given threshold.
     """
     def test(self):
-        data = Upconverter.parse(file_path, format)
-        self.assertNotEqual(data, None)
+        try:
+            data = Upconverter.parse(file_path, format)
+            self.assertNotEqual(data, None)
 
-        tmp_fd, json_path_1 = tempfile.mkstemp(prefix='test.1.', suffix='.upv')
-        os.close(tmp_fd)
-        Upconverter.write(data, json_path_1, 'openjson')
-        self.assertNotEqual(get_file_contents(json_path_1), '')
+            tmp_fd, json_path_1 = tempfile.mkstemp(prefix='test.1.', suffix='.upv')
+            os.close(tmp_fd)
+            Upconverter.write(data, json_path_1, 'openjson')
+            self.assertNotEqual(get_file_contents(json_path_1), '')
 
-        tmp_fd, tmp_path = tempfile.mkstemp(suffix='.' + format)
-        os.close(tmp_fd)
-        Upconverter.write(data, tmp_path, format)
-        self.assertNotEqual(get_file_contents(tmp_path), '')
+            tmp_fd, tmp_path = tempfile.mkstemp(suffix='.' + format)
+            os.close(tmp_fd)
+            Upconverter.write(data, tmp_path, format)
+            self.assertNotEqual(get_file_contents(tmp_path), '')
 
-        data = Upconverter.parse(tmp_path, format)
-        self.assertNotEqual(data, None)
+            data = Upconverter.parse(tmp_path, format)
+            self.assertNotEqual(data, None)
 
-        tmp_fd, json_path_2 = tempfile.mkstemp(prefix='test.2.', suffix='.upv')
-        os.close(tmp_fd)
-        Upconverter.write(data, json_path_2, 'openjson')
-        self.assertNotEqual(get_file_contents(json_path_2), '')
+            tmp_fd, json_path_2 = tempfile.mkstemp(prefix='test.2.', suffix='.upv')
+            os.close(tmp_fd)
+            Upconverter.write(data, json_path_2, 'openjson')
+            self.assertNotEqual(get_file_contents(json_path_2), '')
 
-        ratio = get_file_diff_ratio(json_path_1, json_path_2)
+            ratio = get_file_diff_ratio(json_path_1, json_path_2)
 
-        self.assertTrue(ratio <= max_diff_ratios[format],
-                        (file_path, tmp_path, json_path_1, json_path_2, ratio))
-
-        os.remove(json_path_1)
-        os.remove(json_path_2)
-        os.remove(tmp_path)
+            self.assertTrue(ratio <= max_diff_ratios[format],
+                            (file_path, tmp_path, json_path_1, json_path_2, ratio))
+        finally:
+            # need to remove each file if a failure occured.
+            # tries handle variables that have not yet been instantiated.
+            try:
+                os.remove(json_path_1)
+            except:
+                pass
+            try:
+                os.remove(json_path_2)
+            except:
+                pass
+            try:
+                os.remove(splitext(tmp_path)[0] + '-cache.lib')
+            except:
+                pass
+            try:
+                os.remove(tmp_path)
+            except:
+                pass
+        
     return test
 
 

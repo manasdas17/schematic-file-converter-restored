@@ -43,7 +43,7 @@ from upconvert.core.annotation import Annotation
 from upconvert.library.kicad import lookup_part
 
 from collections import defaultdict
-from os.path import split
+from os.path import split, join, dirname, exists
 from os import listdir
 
 MULT = 1.0 / 10.0 # mils to 90 dpi
@@ -72,13 +72,16 @@ class KiCAD(object):
         segments = set() # each wire segment
         junctions = set() # wire junction point (connects all wires under it)
 
+        self.library = KiCADLibrary()
+
         if library_filename is None:
             directory, _ = split(filename)
             for dir_file in listdir(directory):
                 if dir_file.endswith('.lib'):
-                    self.library = KiCADLibrary.parse(directory + '/' + dir_file)
-                    for cpt in self.library.components:
-                        design.add_component(cpt.name, cpt)
+                    self.library.parse(directory + '/' + dir_file)
+        
+        for cpt in self.library.components:
+            design.add_component(cpt.name, cpt)
 
         with open(filename) as f:
             libs = []
@@ -106,8 +109,10 @@ class KiCAD(object):
                     design.design_attributes.add_annotation(
                         self.parse_text(f, line))
                 elif prefix == "$Comp": # Component Instance
-                    inst = self.parse_component_instance(f)
+                    inst, comp = self.parse_component_instance(f)
                     design.add_component_instance(inst)
+                    if comp is not None:
+                        design.add_component(comp.name, comp)
                     self.ensure_component(design, inst.library_id, libs)
 
                 line = f.readline()
@@ -183,6 +188,7 @@ class KiCAD(object):
         prefix, name, reference = f.readline().split()
         assert prefix == 'L'
 
+        comp = None
         if self.library is not None:
             library_part = self.library.lookup_part(name)
             if library_part is not None:
@@ -218,7 +224,7 @@ class KiCAD(object):
             symbattr.add_annotation(ann)
         inst.add_symbol_attribute(symbattr)
 
-        return inst
+        return inst, comp
 
 
     def intersect(self, segment, ptc):
@@ -346,14 +352,9 @@ class KiCADLibrary(object):
     I represent a library of kicad parts.
     """
 
-    def __init__(self, components):
-        self.components = components
+    def __init__(self):
+        self.components = []
         self.name2cpt = {}
-        for cpt in components:
-            self.name2cpt[cpt.name.upper()] = cpt
-            if 'kicad_alias' in cpt.attributes:
-                for name in cpt.attributes['kicad_alias'].split():
-                    self.name2cpt[name.upper()] = cpt
 
     def lookup_part(self, name):
         """
@@ -368,23 +369,26 @@ class KiCADLibrary(object):
     def __contains__(self, name):
         return self.lookup_part(name) != None
 
-    @classmethod
-    def parse(klass, filename):
+    def parse(self, filename):
         """
-        Parse the library file and return the KiCADLibrary of components found.
+        Parse the library file, and update the KiCADLibrary.
         """
 
-        components = []
+        new_components = []
 
         with open(filename) as f:
             for line in f:
                 if line.startswith('DEF '):
-                    components.append(ComponentParser(line).parse(f))
+                        new_components.append(ComponentParser(line).parse(f))
 
-        for component in components:
-            component.name = component.name.upper()
-
-        return klass(components)
+        for new_component in new_components:
+            new_component.name = new_component.name.upper()
+            if new_component.name not in self.name2cpt:
+                self.name2cpt[new_component.name] = new_component
+                self.components.append(new_component)
+                if 'kicad_alias' in new_component.attributes:
+                    for name in new_component.attributes['kicad_alias'].split():
+                        self.name2cpt[name.upper()] = new_component
 
 
 class ComponentParser(object):
@@ -452,8 +456,8 @@ class ComponentParser(object):
 
             if prefix in ('A', 'C', 'P', 'S', 'T', 'X'):
                 draw_lines.append((int(parts[self.unit_cols[prefix]]),
-                                   int(parts[self.convert_cols[prefix]]),
-                                   prefix, parts))
+                                           int(parts[self.convert_cols[prefix]]),
+                                           prefix, parts))
             elif prefix == 'ALIAS':
                 self.component.add_attribute('kicad_alias', ' '.join(parts[1:]))
             elif prefix == 'ENDDEF':
