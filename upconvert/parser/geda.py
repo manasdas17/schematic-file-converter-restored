@@ -220,10 +220,9 @@ class GEDA:
         # initialise  PATH counter
         self.path_counter = itertools.count(0)
 
-        ## add flag to allow for auto inclusion
         if symbol_dirs is None:
-            symbol_dirs = ['./']
-
+            symbol_dirs = []
+        ## add flag to allow for auto inclusion
         symbol_dirs = symbol_dirs + \
             [os.path.join(os.path.dirname(__file__), '..', 'library', 'geda')]
 
@@ -275,13 +274,10 @@ class GEDA:
         """
         directory, _ = os.path.split(inputfile)
 
-        if not directory:
-            directory = '.'
-
         for dir_file in os.listdir(directory):
             if dir_file.endswith('.sym'):
                 lib_name, _, _ = dir_file.partition('.sym')
-                self.known_symbols[lib_name] = directory + '/' + dir_file
+                self.known_symbols[lib_name.lower()] = directory + '/' + dir_file
 
         inputfiles = []
 
@@ -407,7 +403,7 @@ class GEDA:
         self.offset.x = params['x']
         self.offset.y = params['y']
 
-        filename = self.known_symbols.get(params['basename'])
+        filename = self.known_symbols.get(params['basename'].lower())
         if not filename or not os.path.exists(filename):
             log.warn("could not find title symbol '%s'" % params['basename'])
 
@@ -527,10 +523,10 @@ class GEDA:
             ##check if sym file is embedded or referenced
             if basename.startswith('EMBEDDED'):
                 ## embedded only has to be processed when NOT in symbol lookup
-                if basename not in self.known_symbols:
+                if basename.lower() not in self.known_symbols:
                     component = self.parse_component_data(stream, params)
             else:
-                if basename not in self.known_symbols:
+                if basename.lower() not in self.known_symbols:
                     log.warn("referenced symbol file '%s' unknown" % basename)
                     ## create a unknown symbol reference
                     component = self.parse_component_data(
@@ -542,7 +538,7 @@ class GEDA:
                     return None, None
 
                 ## requires parsing of referenced symbol file
-                with open(self.known_symbols[basename], "rU") as f_in:
+                with open(self.known_symbols[basename.lower()], "rU") as f_in:
                     self._check_version(f_in)
                     component = self.parse_component_data(f_in, params)
 
@@ -802,7 +798,7 @@ class GEDA:
                     attributes[geda_text.attribute] = geda_text.content
                 else:
                     log.warn(
-                        "normal text in environemnt does not comply "
+                        "normal text in environment does not comply "
                         "with GEDA format specification: %s",
                         geda_text.content
                     )
@@ -1113,7 +1109,7 @@ class GEDA:
 
         geda_text = GEDAText.from_command(stream, params)
 
-        ## text can have environemnt attached: parse & ignore
+        ## text can have environment attached: parse & ignore
         self._parse_environment(stream)
         return geda_text
 
@@ -1423,7 +1419,6 @@ class GEDA:
         """ Translate a coordinate *x*, *y* accroding to the given
             *angle* in OpenJSON coordinates.
         """
-        # pylint: disable=C0103
         angle = (-angle % 2.0) * pi
         xn = int(round(x * cos(angle) - y * sin(angle)))
         yn = int(round(y * cos(angle) + x * sin(angle)))
@@ -1470,6 +1465,6 @@ def find_symbols(symbol_dirs):
                         filepath = os.path.join(dirpath, filename)
                         filename, _ = os.path.splitext(filename)
                         if filename not in known_symbols:
-                            known_symbols[filename] = filepath
+                            known_symbols[filename.lower()] = filepath
 
     return known_symbols
