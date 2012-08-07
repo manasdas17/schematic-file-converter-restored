@@ -1,3 +1,5 @@
+""" Converts all attribute values to a string """
+
 import unicodedata
 
 def stringify_attributes(attributes):
