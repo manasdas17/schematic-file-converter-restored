@@ -46,7 +46,7 @@ from collections import defaultdict
 from os.path import split
 from os import listdir
 
-MULT = 1.0 / 10.0 # mils to 90 dpi
+MULT = 1.0 / 10.0 # mils to 90 dpi, then multiplied by 10.0/9.0
 
 
 class KiCAD(object):
@@ -195,7 +195,7 @@ class KiCAD(object):
                 name = library_part.name
 
         # unit & convert
-        prefix, unit, convert, _ = f.readline().split(None, 3)
+        prefix, unit, convert, ar_path = f.readline().split(None, 3)
         unit, convert = int(unit), int(convert)
         assert prefix == 'U'
 
@@ -216,6 +216,13 @@ class KiCAD(object):
                 if len(parts) == 4:
                     rotation = MATRIX2ROTATION.get(
                         tuple(int(i) for i in parts), 0)
+            elif line.startswith('AR Path'):
+                if '?' in reference:
+                    path_line = line.strip().split()
+                    ar_path_check = path_line[1].strip('"')[7:] #removes Path="/
+                    if ar_path.strip() == ar_path_check:
+                        reference = path_line[2].strip('"')[5:] #removes Ref="
+
             line = f.readline()
 
         inst = ComponentInstance(reference, name.upper(), convert - 1)
