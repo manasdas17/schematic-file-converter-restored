@@ -154,6 +154,8 @@ class KiCADTests(unittest.TestCase):
         self.assertTrue(('P1', '4') in ccomps)
         self.assertTrue(('P1', '5') in ccomps)
         self.assertTrue(('P1', '6') in ccomps)
+        self.assertTrue(('D1', '1') in ccomps)
+        self.assertTrue(('D1', '2') in ccomps)
 
 
     def test_bad_x_line_rotation(self):
