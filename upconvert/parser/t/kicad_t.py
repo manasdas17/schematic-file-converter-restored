@@ -131,8 +131,8 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(inst.library_id, 'LAA110')
         self.assertEqual(len(inst.symbol_attributes), 1)
         self.assertEqual(inst.symbol_attributes[0].rotation, 1.5)
-        self.assertEqual(inst.symbol_attributes[0].x, 148.5)
-        self.assertEqual(inst.symbol_attributes[0].y, -306)
+        self.assertEqual(inst.symbol_attributes[0].x, 165)
+        self.assertEqual(inst.symbol_attributes[0].y, -340)
 
 
     @use_file('arduino/Arduino-Ethernet.sch')
