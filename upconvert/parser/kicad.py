@@ -42,7 +42,6 @@ from upconvert.core.annotation import Annotation
 
 from upconvert.library.kicad import lookup_part
 
-from collections import defaultdict
 from os.path import split
 from os import listdir
 
@@ -79,7 +78,7 @@ class KiCAD(object):
             for dir_file in listdir(directory):
                 if dir_file.endswith('.lib'):
                     self.library.parse(directory + '/' + dir_file)
-        
+
         for cpt in self.library.components:
             design.add_component(cpt.name, cpt)
 
@@ -118,8 +117,7 @@ class KiCAD(object):
                 line = f.readline()
 
         segments = self.divide(segments, junctions)
-        design.nets = self.calc_nets(segments)
-        self.calc_connected_components(design)
+        design.nets = self.calc_nets(design, segments)
 
         design.scale(MULT)
         design.ensure_proper_pins()
@@ -266,17 +264,23 @@ class KiCAD(object):
         return segments
 
 
-    def calc_nets(self, segments):
+    def calc_nets(self, design, segments):
         """ Return a set of Nets from segments """
 
-        points = {} # (x, y) -> NetPoint
+        coord2point = {} # (x, y) -> NetPoint
 
-        def get_point(point):
+        def get_point(coord):
             """ Return a new or existing NetPoint for an (x,y) point """
-            point = (int(point[0]), int(point[1]))
-            if point not in points:
-                points[point] = NetPoint('%da%d' % point, point[0], point[1])
-            return points[point]
+            coord = (int(coord[0]), int(coord[1]))
+            if coord not in coord2point:
+                coord2point[coord] = NetPoint('%da%d' % coord, coord[0], coord[1])
+            return coord2point[coord]
+
+        # use this to track connected pins not yet added to a net
+        self.make_pin_points(design, get_point)
+
+        # set of points connected to pins
+        pin_points = set(coord2point.itervalues())
 
         # turn the (x, y) points into unique NetPoint objects
         segments = set((get_point(p1), get_point(p2)) for p1, p2 in segments)
@@ -294,6 +298,7 @@ class KiCAD(object):
 
                 for seg in segments: # iterate over segments
                     if newnet.connected(seg): # segment touching the net
+                        map(pin_points.discard, seg) # mark points as used
                         newnet.connect(seg) # add the segment
                         found.add(seg)
 
@@ -301,6 +306,14 @@ class KiCAD(object):
                     segments.remove(seg)
 
             nets.append(newnet)
+
+        # add single-point nets for overlapping pins that are not
+        # already in other nets
+        for point in pin_points:
+            if len(point.connected_components) > 1:
+                net = Net('')
+                net.add_point(point)
+                nets.append(net)
 
         for net in nets:
             net.net_id = min(net.points)
@@ -310,10 +323,8 @@ class KiCAD(object):
         return nets
 
 
-    def calc_connected_components(self, design):
-        """ Add all the connected components to the nets """
-
-        pins = defaultdict(set) # (x, y) -> set([(instance_id, pin_number)])
+    def make_pin_points(self, design, point_factory):
+        """ Construct a set of NetPoints connected to pins. """
 
         for inst in design.component_instances:
             if inst.library_id in design.components.components:
@@ -321,14 +332,9 @@ class KiCAD(object):
                 for symba, body in zip(inst.symbol_attributes,
                                        cpt.symbols[inst.symbol_index].bodies):
                     for pin in body.pins:
-                        pins[self.get_pin_coord(pin, symba)].add(
-                            (inst.instance_id, pin.pin_number))
-
-        for net in design.nets:
-            for point in net.points.values():
-                for instance_id, pin_number in pins.get((point.x, point.y), ()):
-                    conncpt = ConnectedComponent(instance_id, pin_number)
-                    point.add_connected_component(conncpt)
+                        point = point_factory(self.get_pin_coord(pin, symba))
+                        point.add_connected_component(
+                            ConnectedComponent(inst.instance_id, pin.pin_number))
 
 
     def get_pin_coord(self, pin, symba):

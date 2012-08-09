@@ -131,8 +131,8 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(inst.library_id, 'LAA110')
         self.assertEqual(len(inst.symbol_attributes), 1)
         self.assertEqual(inst.symbol_attributes[0].rotation, 1.5)
-        self.assertEqual(inst.symbol_attributes[0].x, 148.5)
-        self.assertEqual(inst.symbol_attributes[0].y, -306)
+        self.assertEqual(inst.symbol_attributes[0].x, 165)
+        self.assertEqual(inst.symbol_attributes[0].y, -340)
 
 
     @use_file('arduino/Arduino-Ethernet.sch')
@@ -154,6 +154,8 @@ class KiCADTests(unittest.TestCase):
         self.assertTrue(('P1', '4') in ccomps)
         self.assertTrue(('P1', '5') in ccomps)
         self.assertTrue(('P1', '6') in ccomps)
+        self.assertTrue(('D1', '1') in ccomps)
+        self.assertTrue(('D1', '2') in ccomps)
 
 
     def test_bad_x_line_rotation(self):
