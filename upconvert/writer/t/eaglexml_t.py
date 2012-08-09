@@ -122,6 +122,30 @@ class EagleXMLTests(unittest.TestCase):
 
 
     @use_file('E1AA60D5.sch')
+    def test_instances(self):
+        """
+        The correct instances are generated.
+        """
+
+        instances = self.dom.drawing.schematic.sheets.sheet[0].instances.instance
+        names = [i.part for i in instances]
+        self.assertTrue('IC1' in names, names)
+
+
+    @use_file('E1AA60D5.sch')
+    def test_attributes(self):
+        """
+        The correct instances are generated.
+        """
+
+        instances = self.dom.drawing.schematic.sheets.sheet[0].instances.instance
+        instance = [i for i in instances if i.part == 'IC1'][0]
+        self.assertTrue(len(instance.attribute), 2)
+        self.assertTrue(set(a.value for a in instance.attribute),
+                        set(['IC1', 'TINY25']))
+
+
+    @use_file('E1AA60D5.sch')
     def test_symbols(self):
         """
         The correct symbols are generated.
@@ -285,6 +309,7 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(seg.pinref[1].part, 'R3')
         self.assertEqual(seg.pinref[1].gate, 'G$1')
         self.assertEqual(seg.pinref[1].pin, '2')
+
 
     def get_library(self, name):
         """ Return the named library from the dom. """

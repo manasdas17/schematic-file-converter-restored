@@ -304,9 +304,9 @@ class EagleXML(object):
         length = self.make_length(length)
         if length == 0:
             return 'point'
-        elif length <= 2.60:
+        elif length <= 2.90:
             return 'short'
-        elif length <= 5.10:
+        elif length <= 5.70:
             return 'middle'
         else:
             return 'long'
@@ -359,6 +359,19 @@ class EagleXML(object):
         inst.x = self.make_length(symattr.x)
         inst.y = self.make_length(symattr.y)
         inst.rot = self.make_angle(symattr.rotation)
+
+        layer = self.ensure_layer(body, 'symbol')
+
+        for ann in symattr.annotations:
+            inst.attribute.append(
+                G.attribute(name=ann.value,
+                            value=ann.value,
+                            layer=layer.number,
+                            size="1.27",
+                            x=self.make_length(ann.x + symattr.x),
+                            y=self.make_length(ann.y + symattr.y),
+                            rot=self.make_angle(ann.rotation),
+                            display='value' if ann.visible else 'off'))
 
         return inst
 
