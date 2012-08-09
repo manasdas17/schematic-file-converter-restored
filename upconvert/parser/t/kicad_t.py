@@ -95,6 +95,17 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(self.design.nets[0].net_id, '2700a-3950')
 
 
+    @use_file('arduino/Arduino-Ethernet.sch')
+    def test_nets_no_dups(self):
+        """
+        Test that no duplicate nets are present.
+        """
+
+        self.assertEqual(len(self.design.nets), 83)
+        self.assertEqual(len(self.design.nets),
+                         len(set(n.net_id for n in self.design.nets)))
+
+
     @use_file('test/test.sch')
     def test_components(self):
         """
