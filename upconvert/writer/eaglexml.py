@@ -360,6 +360,19 @@ class EagleXML(object):
         inst.y = self.make_length(symattr.y)
         inst.rot = self.make_angle(symattr.rotation)
 
+        layer = self.ensure_layer(body, 'symbol')
+
+        for ann in symattr.annotations:
+            inst.attribute.append(
+                G.attribute(name=ann.value,
+                            value=ann.value,
+                            layer=layer.number,
+                            size="1.27",
+                            x=self.make_length(ann.x + symattr.x),
+                            y=self.make_length(ann.y + symattr.y),
+                            rot=self.make_angle(ann.rotation),
+                            display='value' if ann.visible else 'off'))
+
         return inst
 
 
