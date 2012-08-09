@@ -304,9 +304,9 @@ class EagleXML(object):
         length = self.make_length(length)
         if length == 0:
             return 'point'
-        elif length <= 2.60:
+        elif length <= 2.90:
             return 'short'
-        elif length <= 5.10:
+        elif length <= 5.70:
             return 'middle'
         else:
             return 'long'
