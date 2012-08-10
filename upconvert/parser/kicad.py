@@ -290,6 +290,7 @@ class KiCAD(object):
         while segments:
             seg = segments.pop() # pick a point
             newnet = Net('')
+            map(pin_points.discard, seg) # mark points as used
             newnet.connect(seg)
             found = True
 
