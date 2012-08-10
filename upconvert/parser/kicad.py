@@ -45,7 +45,7 @@ from upconvert.library.kicad import lookup_part
 from os.path import split
 from os import listdir
 
-MULT = 1.0 / 10.0 # mils to 90 dpi, then multiplied by 10.0/9.0
+MULT = 2.0 / 10.0 # mils to 90 dpi
 
 
 class KiCAD(object):
@@ -120,7 +120,6 @@ class KiCAD(object):
         design.nets = self.calc_nets(design, segments)
 
         design.scale(MULT)
-        design.ensure_proper_pins()
 
         return design
 
@@ -355,7 +354,8 @@ class KiCAD(object):
 MATRIX2ROTATION = {(1, 0, 0, -1): 0,
                    (0, 1, 1, 0): 0.5,
                    (-1, 0, 0, 1): 1,
-                   (0, -1, -1, 0): 1.5}
+                   (0, -1, -1, 0): 1.5,
+                   (0, 1, -1, 0): 0.5}
 
 # map openjson rotations to rotation matrices
 ROT2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.iteritems())
