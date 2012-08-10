@@ -222,6 +222,14 @@ class Upconverter(object):
             kicad_zip.write(path + '-cache.lib', os.path.basename(path + '-cache.lib'))
             kicad_zip.close()
             path_w_ext = path + '.zip'
+        elif frmt == 'geda':
+            geda_zip = zipfile.ZipFile(path + '.zip', mode='w')
+            geda_zip.write(path_w_ext, os.path.basename(path_w_ext))
+            symbol_dir = os.path.join(os.path.dirname(path), 'symbols-' + os.path.basename(path_w_ext))
+            for symbol_file in os.listdir(symbol_dir):
+                geda_zip.write(os.path.join(symbol_dir, symbol_file), symbol_file)
+            geda_zip.close()
+            path_w_ext = path + '.zip'
 
         return path_w_ext
 

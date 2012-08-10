@@ -173,20 +173,10 @@ class GEDA:
             stdout to remind you to add the directory lookup.
         """
         project_dir = os.path.dirname(filename)
-        symbol_dir = os.path.join(project_dir, 'symbols')
+        symbol_dir = os.path.join(project_dir, 'symbols-' + os.path.basename(filename))
 
         if not os.path.exists(symbol_dir):
             os.mkdir(symbol_dir)
-
-        ## create project file to allow gEDA find symbol files
-        project_file = os.path.join(project_dir, 'gafrc')
-        if not os.path.exists(project_file):
-            with codecs.open(
-                os.path.join(project_dir, 'gafrc'),
-                encoding='utf-8',
-                mode='w'
-            ) as f_out:
-                f_out.write('(component-library "./symbols")')
 
         self.project_dirs['symbol'] = symbol_dir
         self.project_dirs['project'] = project_dir
