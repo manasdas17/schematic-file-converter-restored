@@ -171,7 +171,7 @@ $EndDescr
         """ Write out a kiCAD cache library to the given filename """
         with open(filename, 'w') as f:
             self.write_library_header(f, design)
-            for cpt in design.components.components.itervalues():
+            for cpt in design.components.components.iteritems():
                 self.write_library_component(f, cpt)
             self.write_library_footer(f)
 
@@ -185,8 +185,9 @@ $EndDescr
 
     def write_library_component(self, f, cpt):
         """ Write a single component to a kiCAD cache library """
+        cpt_name, cpt = cpt
         ref = cpt.attributes.get('_prefix', 'U').encode('utf-8')
-        name = cpt.name.replace(' ', '')
+        name = cpt_name.replace(' ', '')
         name = name.encode('utf-8')
         f.write('#\n')
         f.write('# ' + name + '\n')

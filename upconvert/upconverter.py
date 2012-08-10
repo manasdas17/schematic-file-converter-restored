@@ -53,6 +53,7 @@ import os
 import sys
 import operator
 import tempfile
+import zipfile
 from argparse import ArgumentParser
 try:
     import simplejson as json
@@ -214,6 +215,13 @@ class Upconverter(object):
         design = Upconverter.parse(tmp_path, 'openjson')
         Upconverter.write(design, path_w_ext, frmt)
         os.remove(tmp_path)
+
+        if frmt == 'kicad':
+            kicad_zip = zipfile.ZipFile(path + '.zip', mode='w')
+            kicad_zip.write(path_w_ext, os.path.basename(path_w_ext))
+            kicad_zip.write(path + '-cache.lib', os.path.basename(path + '-cache.lib'))
+            kicad_zip.close()
+            path_w_ext = path + '.zip'
 
         return path_w_ext
 
