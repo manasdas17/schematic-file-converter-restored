@@ -81,7 +81,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
         )
         self.assertEquals(
             self.geda_writer.project_dirs['symbol'],
-            '/tmp/symbols'
+            '/tmp/symbols-test_geda.sch'
         )
         self.assertTrue(os.path.exists('/tmp/gafrc'))
 
