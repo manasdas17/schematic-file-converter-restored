@@ -34,6 +34,7 @@ default_layers = {
     "guide": G.layer(number="98", name="Guide", color="6", fill="1", visible="yes", active="yes"),
     }
 
+EAGLE_SCALE = 10.0/9.0
 
 class EagleXML(object):
     """ The Eagle XML Format Writer """
@@ -70,8 +71,13 @@ class EagleXML(object):
         # map (instance id to component id)
         self.inst2cpt = {}
 
+        # map a (library id, pin number) to the pin name
+        self.pinnum2name = {}
+
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
+
+        design.scale(1 / EAGLE_SCALE)
 
         eagle = self.make_dom(design)
 
@@ -116,10 +122,10 @@ class EagleXML(object):
     def add_libraries(self, dom, design):
         """ Add the libraries to a dom object. """
 
-        for cpt in design.components.components.itervalues():
+        for cpt_name, cpt in design.components.components.iteritems():
             lib = self.ensure_lib_for_cpt(dom, cpt)
             deviceset = self.ensure_deviceset_for_cpt(lib, cpt)
-            self.add_component_to_deviceset(cpt, lib, deviceset)
+            self.add_component_to_deviceset(cpt_name, cpt, lib, deviceset)
 
 
     def add_parts(self, dom, design):
@@ -183,19 +189,19 @@ class EagleXML(object):
         return deviceset
 
 
-    def add_component_to_deviceset(self, cpt, lib, deviceset):
+    def add_component_to_deviceset(self, cpt_name, cpt, lib, deviceset):
         """ Add the openjson component to the eagle library and deviceset objects. """
 
         if cpt.attributes.get('eaglexml_type', 'logical') == 'physical':
             self.add_physical_component_to_deviceset(cpt, lib, deviceset)
         else:
-            self.add_logical_component_to_deviceset(cpt, lib, deviceset)
+            self.add_logical_component_to_deviceset(cpt_name, cpt, lib, deviceset)
 
-        self.cpt2lib[cpt.name] = lib
-        self.cpt2deviceset[cpt.name] = deviceset
+        self.cpt2lib[cpt_name] = lib
+        self.cpt2deviceset[cpt_name] = deviceset
 
 
-    def add_logical_component_to_deviceset(self, cpt, lib, deviceset):
+    def add_logical_component_to_deviceset(self, cpt_name, cpt, lib, deviceset):
         """ Add the openjson component to the eagle library and deviceset objects
         as a logical device with gates. """
 
@@ -222,7 +228,12 @@ class EagleXML(object):
                 self.body2gate[body] = gatename
 
                 for pin in body.pins:
-                    self.cptpin2gate[cpt.name, pin.pin_number] = gatename
+                    if pin.label is not None:
+                        pin_name = pin.label.text
+                    else:
+                        pin_name = pin.pin_number
+                    self.pinnum2name[(cpt_name, pin.pin_number)] = pin_name
+                    self.cptpin2gate[cpt_name, pin.pin_number] = gatename
 
 
     def make_eagle_symbol_for_openjson_body(self, name, body):
@@ -257,8 +268,12 @@ class EagleXML(object):
                 symbol.circle[-1].layer = layer.number
 
         for pin in body.pins:
+            if pin.label is not None:
+                pin_name = pin.label.text
+            else:
+                pin_name = pin.pin_number
             symbol.pin.append(
-                G.pin(name=pin.pin_number,
+                G.pin(name=pin_name,
                       x=self.make_length(pin.p2.x),
                       y=self.make_length(pin.p2.y),
                       length=self.get_pin_length(pin),
@@ -452,7 +467,8 @@ class EagleXML(object):
             for cc in openjson_net.points[point_id].connected_components:
                 cid = self.inst2cpt[cc.instance_id]
                 gate = self.cptpin2gate[cid, cc.pin_number]
-                pinref = G.pinref(part=cc.instance_id, gate=gate, pin=cc.pin_number)
+                pin_name = self.pinnum2name[(cid, cc.pin_number)]
+                pinref = G.pinref(part=cc.instance_id, gate=gate, pin=pin_name)
                 seg.pinref.append(pinref)
 
         seg.pinref.sort(key=lambda p : (p.part, p.gate, p.pin))
