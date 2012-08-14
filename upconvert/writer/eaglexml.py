@@ -530,4 +530,4 @@ class EagleXML(object):
     def make_angle(self, value):
         """ Make an eaglexml angle measurement from an openjson angle. """
 
-        return 'R%d' % (value * 180,)
+        return 'R%d' % (360 - value * 180,)
