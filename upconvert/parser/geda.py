@@ -154,7 +154,7 @@ class GEDAText(object):
         if num_lines == 1 and '=' in content:
             attribute, content = content.split('=', 1)
 
-            if attribute == '_refdes':
+            if attribute == 'refdes':
                 return cls(content, attribute=attribute, params=params)
 
             ## prefix attributes that are marked as invisible
@@ -249,7 +249,7 @@ class GEDA:
             confidence += 0.25
         if 'footprint=' in data:
             confidence += 0.25
-        if '_refdes=' in data:
+        if 'refdes=' in data:
             confidence += 0.25
         if 'netname=' in data:
             confidence += 0.25
@@ -518,7 +518,6 @@ class GEDA:
 
             ## skipping embedded data might be required
             self.skip_embedded_section(stream)
-
         else:
             ##check if sym file is embedded or referenced
             if basename.startswith('EMBEDDED'):
@@ -557,18 +556,17 @@ class GEDA:
 
             self.instance_ids.append(name)
             return name
-        ## _refdes attribute is name of component (mandatory as of gEDA doc)
-        ## examples if gaf repo have components without _refdes, use part of
+        ## refdes attribute is name of component (mandatory as of gEDA doc)
+        ## examples if gaf repo have components without refdes, use part of
         ## basename
         if attributes is not None:
             instance = ComponentInstance(
-                get_instance_id(attributes.get('_refdes', component.name)),
+                get_instance_id(attributes.get('refdes', component.name)),
                 component.name,
                 0
             )
             for key, value in attributes.items():
                 instance.add_attribute(key, value)
-
         else:
             instance = ComponentInstance(
                 get_instance_id(component.name),
@@ -590,7 +588,6 @@ class GEDA:
         for idx, attribute_key in enumerate(['_refdes', 'device']):
             if attribute_key in component.attributes \
                or attribute_key in instance.attributes:
-
                 symbol.add_annotation(
                     Annotation(
                         attribute_key,
@@ -897,7 +894,7 @@ class GEDA:
     def add_text_to_component(self, component, geda_text):
         """
         Add the content of a ``GEDAText`` instance to the
-        component. If *geda_text* contains ``_refdes``, ``prefix``
+        component. If *geda_text* contains ``refdes``, ``prefix``
         or ``suffix`` attributes it will be stored as special
         attribute in the component. *geda_text* that is not an
         attribute will be added as ``Label`` to the components
@@ -907,9 +904,8 @@ class GEDA:
         if geda_text.is_text():
             component.symbols[0].bodies[0].add_shape(geda_text.as_label())
 
-        elif geda_text.attribute == '_refdes' \
+        elif geda_text.attribute == 'refdes' \
              and '?' in geda_text.content:
-
             prefix, suffix = geda_text.content.split('?')
             component.add_attribute('_prefix', prefix)
             component.add_attribute('_suffix', suffix)
@@ -1464,7 +1460,7 @@ def find_symbols(symbol_dirs):
                     if filename.endswith('.sym'):
                         filepath = os.path.join(dirpath, filename)
                         filename, _ = os.path.splitext(filename)
-                        if filename not in known_symbols:
+                        if filename.lower() not in known_symbols:
                             known_symbols[filename.lower()] = filepath
 
     return known_symbols

@@ -262,7 +262,7 @@ class GEDATests(GEDATestCase):
         for dummy, dummy, filenames in os.walk(path):
             for filename in filenames:
                 if filename.endswith('.sym'):
-                    symbols.add(filename)
+                    symbols.add(filename.lower())
         return symbols
 
     def test_constructor(self):
@@ -291,10 +291,10 @@ class GEDATests(GEDATestCase):
             '/invalid/dir/gEDA',
         ])
 
-        self.assertTrue('title-B' in geda_parser.known_symbols)
+        self.assertTrue('title-b' in geda_parser.known_symbols)
 
         geda_parser = GEDA()
-        self.assertTrue('title-B' in geda_parser.known_symbols)
+        self.assertTrue('title-b' in geda_parser.known_symbols)
 
 
 class GEDATitleParsingTest(GEDATestCase):
@@ -302,31 +302,31 @@ class GEDATitleParsingTest(GEDATestCase):
     def test_parse_title_frame(self):
         """ Test parsing title frame components """
         title_frames = {
-            'title-E': (44000, 34000),
-            'title-bordered-E': (44000, 34000),
-            'title-bordered-D': (34000, 22000),
-            'title-bordered-A': (11000, 8500),
-            'title-bordered-C': (22000, 17000),
-            'title-bordered-B': (17000, 11000),
-            'title-A0': (46800, 33100),
-            'title-A1': (33100, 23300),
-            'title-A2': (23300, 16500),
-            'title-A3': (16500, 11600),
-            'title-A4': (11600, 8200),
-            'title-A0-2': (46800, 33100),
-            'title-A1-2': (33100, 23300),
-            'title-A2-2': (23300, 16500),
-            'title-A3-2': (16500, 11600),
-            'title-A4-2': (11600, 8200),
-            'title-D': (34000, 22000),
-            'title-B': (17000, 11000),
-            'title-C': (22000, 17000),
-            'title-A': (11000, 8500),
-            'title-bordered-A4': (11600, 8200),
-            'title-bordered-A1': (33100, 23300),
-            'title-bordered-A0': (46800, 33100),
-            'title-bordered-A3': (16500, 11600),
-            'title-bordered-A2': (23300, 16500),
+            'title-e': (44000, 34000),
+            'title-bordered-e': (44000, 34000),
+            'title-bordered-d': (34000, 22000),
+            'title-bordered-a': (11000, 8500),
+            'title-bordered-c': (22000, 17000),
+            'title-bordered-b': (17000, 11000),
+            'title-a0': (46800, 33100),
+            'title-a1': (33100, 23300),
+            'title-a2': (23300, 16500),
+            'title-a3': (16500, 11600),
+            'title-a4': (11600, 8200),
+            'title-a0-2': (46800, 33100),
+            'title-a1-2': (33100, 23300),
+            'title-a2-2': (23300, 16500),
+            'title-a3-2': (16500, 11600),
+            'title-a4-2': (11600, 8200),
+            'title-d': (34000, 22000),
+            'title-b': (17000, 11000),
+            'title-c': (22000, 17000),
+            'title-a': (11000, 8500),
+            'title-bordered-a4': (11600, 8200),
+            'title-bordered-a1': (33100, 23300),
+            'title-bordered-a0': (46800, 33100),
+            'title-bordered-a3': (16500, 11600),
+            'title-bordered-a2': (23300, 16500),
             'title-dg-1': (17000, 11000),
             'title-small-square': (7600, 6900),
             'titleblock': (7500, 1800),
@@ -334,8 +334,9 @@ class GEDATitleParsingTest(GEDATestCase):
             'titleblock2': (22000, 17000),
             'titleblock3': (33000, 25500),
             'titleblock4': (44000, 34000),
-            'title-B-nameOnEdge': (26600, 17000),
-            'title-B-cibolo': (26600, 17000),
+            'titleblock_a4-1': (17000, 12000),
+            'title-b-nameonedge': (26600, 17000),
+            'title-b-cibolo': (26600, 17000),
             'title-block': (7500, 1800),
         }
 
