@@ -34,7 +34,7 @@ default_layers = {
     "guide": G.layer(number="98", name="Guide", color="6", fill="1", visible="yes", active="yes"),
     }
 
-EAGLE_SCALE = 10.0/9.0
+EAGLE_SCALE = 9.0 / 10.0
 
 class EagleXML(object):
     """ The Eagle XML Format Writer """
@@ -74,11 +74,13 @@ class EagleXML(object):
         # map a (library id, pin number) to the pin name
         self.pinnum2name = {}
 
+        # map a library id to a list of its pin names (to prevent duplication)
+        self.cpt2pinnames = {}
+
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
 
-        design.scale(1 / EAGLE_SCALE)
-
+        design.scale(EAGLE_SCALE)
         eagle = self.make_dom(design)
 
         with open(filename, 'wb') as outfile:
@@ -207,15 +209,27 @@ class EagleXML(object):
 
         symbol_names = set() # set of names used for eaglexml symbols
         gate_names = set() # set of names used for eaglemxl gates
+        self.cpt2pinnames[cpt_name] = []
 
         for symindex, symbol in enumerate(cpt.symbols):
             for bodyindex, body in enumerate(symbol.bodies):
                 index = (symindex * len(symbol.bodies)) + bodyindex
                 symname = cpt.attributes.get('eaglexml_symbol_%d' % index,
                                              'symbol_%d' % len(lib.symbols.symbol))
+                for pin in body.pins:
+                    if pin.label is not None:
+                        pin_name = pin.label.text
+                    else:
+                        pin_name = pin.pin_number
+                    if pin_name in self.cpt2pinnames[cpt_name]:
+                        self.pinnum2name[(cpt_name, pin.pin_number)] = pin_name + ' ' + str(self.cpt2pinnames[cpt_name].count(pin_name) + 1)
+                    else:
+                        self.pinnum2name[(cpt_name, pin.pin_number)] = pin_name
+                    self.cpt2pinnames[cpt_name].append(pin_name)
+
                 if symname not in symbol_names:
                     lib.symbols.symbol.append(
-                        self.make_eagle_symbol_for_openjson_body(symname, body))
+                        self.make_eagle_symbol_for_openjson_body(symname, body, cpt_name))
                     symbol_names.add(symname)
 
                 gatename = cpt.attributes.get('eaglexml_gate_%d' % bodyindex,
@@ -228,15 +242,10 @@ class EagleXML(object):
                 self.body2gate[body] = gatename
 
                 for pin in body.pins:
-                    if pin.label is not None:
-                        pin_name = pin.label.text
-                    else:
-                        pin_name = pin.pin_number
-                    self.pinnum2name[(cpt_name, pin.pin_number)] = pin_name
                     self.cptpin2gate[cpt_name, pin.pin_number] = gatename
 
 
-    def make_eagle_symbol_for_openjson_body(self, name, body):
+    def make_eagle_symbol_for_openjson_body(self, name, body, cpt_name):
         """ Make an eaglexml symbol from an opensjon body. """
 
         symbol = G.symbol(name=name)
@@ -268,12 +277,8 @@ class EagleXML(object):
                 symbol.circle[-1].layer = layer.number
 
         for pin in body.pins:
-            if pin.label is not None:
-                pin_name = pin.label.text
-            else:
-                pin_name = pin.pin_number
             symbol.pin.append(
-                G.pin(name=pin_name,
+                G.pin(name=self.pinnum2name[(cpt_name, pin.pin_number)],
                       x=self.make_length(pin.p2.x),
                       y=self.make_length(pin.p2.y),
                       length=self.get_pin_length(pin),
