@@ -62,6 +62,7 @@ import logging
 import tempfile
 import itertools
 
+from collections import defaultdict
 from math import pi, cos, sin
 from StringIO import StringIO
 
@@ -302,9 +303,7 @@ class GEDA:
                     obj_type, params = self._parse_command(StringIO(line))
                     assert(obj_type == 'C')
 
-                    params['basename'], _ = os.path.splitext(
-                        params['basename'],
-                    )
+                    params['basename'], _ = os.path.splitext(params['basename'])
 
                     log.debug("using title file: %s", params['basename'])
 
@@ -358,7 +357,7 @@ class GEDA:
 
         self.segments = set()
         self.net_points = dict()
-        self.component_pins = dict()
+        self.component_pins = defaultdict(list) # (x, y) -> [NetPoint]
         self.net_names = dict()
         self.instance_ids = []
         self.instance_counter = itertools.count(0)
@@ -374,7 +373,6 @@ class GEDA:
         obj_type, params = self._parse_command(stream)
 
         while obj_type is not None:
-
             objects = getattr(self, "_parse_%s" % obj_type)(stream, params)
 
             attributes = self._parse_environment(stream)
@@ -387,9 +385,7 @@ class GEDA:
         ## process net segments into nets & net points and add to design
         self.divide_segments()
 
-        calculated_nets = self.calculate_nets()
-
-        for cnet in sorted(calculated_nets, key=lambda n: n.net_id):
+        for cnet in sorted(self.calculate_nets(), key=lambda n: n.net_id):
             self.design.add_net(cnet)
 
         return self.design
@@ -406,7 +402,6 @@ class GEDA:
         filename = self.known_symbols.get(params['basename'].lower())
         if not filename or not os.path.exists(filename):
             log.warn("could not find title symbol '%s'" % params['basename'])
-
             self.frame_width = 46800
             self.frame_height = 34000
             return
@@ -444,7 +439,7 @@ class GEDA:
                 self.frame_height = 34000
 
     def _create_ripper_segment(self, params):
-        """ Creates a new segement from the busripper provided
+        """ Creates a new segment from the busripper provided
             in gEDA. The busripper is a graphical feature that
             provides a nicer look for a part of a net. The bus
             rippers are turned into net segments according to the
@@ -611,14 +606,15 @@ class GEDA:
                     pin.p2.y,
                     sym_attr.rotation
                 )
-                coords = (sym_attr.x + x, sym_attr.y + y)
-                if coords not in self.component_pins:
-                    self.component_pins[coords] = []
 
-                self.component_pins[coords].append(net.ConnectedComponent(
-                    instance.instance_id,
-                    pin.pin_number
-                ))
+                coords = (sym_attr.x + x, sym_attr.y + y)
+
+                pt = self.get_netpoint(*coords)
+                pt.add_connected_component(
+                    net.ConnectedComponent(instance.instance_id,
+                                           pin.pin_number))
+
+                self.component_pins[coords].append(pt)
 
         return component, instance
 
@@ -682,7 +678,6 @@ class GEDA:
         self.pin_counter = itertools.count(0)
 
         while typ is not None:
-
             params['mirror'] = mirror
             objects = getattr(self, "_parse_%s" % typ)(stream, params)
 
@@ -817,6 +812,8 @@ class GEDA:
         """
         nets = []
 
+        used_points = set() # set([NetPoint])
+
         # Iterate over the segments, removing segments when added to a net
         while self.segments:
             seg = self.segments.pop()  # pick a point
@@ -829,6 +826,7 @@ class GEDA:
                 net_name = self.net_names[pt_b.point_id]
 
             new_net = net.Net(net_name)
+            map(used_points.add, seg)
             new_net.connect(seg)
             found = True
 
@@ -840,6 +838,7 @@ class GEDA:
 
                 for seg in self.segments:  # iterate over segments
                     if new_net.connected(seg):  # segment touching the net
+                        map(used_points.add, seg)
                         new_net.connect(seg)  # add the segment
                         found.add(seg)
 
@@ -856,12 +855,6 @@ class GEDA:
                     net_obj.net_id = self.net_names[point_id]
                     net_obj.attributes['name'] = self.net_names[point_id]
 
-                ## check if net point is connected to component pins and
-                ## add matching components to net point
-                if (point.x, point.y) in self.component_pins:
-                    for comp in self.component_pins[(point.x, point.y)]:
-                        point.add_connected_component(comp)
-
             if 'name' in net_obj.attributes:
                 annotation = Annotation(
                     "name",  # annotation referencing attribute 'name'
@@ -870,6 +863,14 @@ class GEDA:
                     self.conv_bool(1),
                 )
                 net_obj.add_annotation(annotation)
+
+        # add single-point nets for overlapping pins that are not
+        # already in other nets
+        for point in set(self.net_points.itervalues()) - used_points:
+            if len(point.connected_components) > 1:
+                new_net = net.Net('')
+                new_net.add_point(point)
+                nets.append(new_net)
 
         for net_obj in nets:
             if not net_obj.net_id:
