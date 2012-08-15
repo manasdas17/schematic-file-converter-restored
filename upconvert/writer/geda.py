@@ -123,6 +123,8 @@ class GEDA:
             'project': None,
         }
 
+        self.component_names = []
+
     def set_offset(self, point):
         """ Set the offset point for the gEDA output. As OpenJSON
             positions the origin in the center of the viewport and
@@ -327,7 +329,13 @@ class GEDA:
 
             if not geda_imported:
                 prefix = prefix.replace(' ', '_')
+                prefix_idx = 1
+                while prefix in self.component_names:
+                    prefix_idx += 1
+                    prefix = prefix + str(prefix_idx)
                 symbol_filename = "%s-%d.sym" % (prefix, sym_idx)
+                if prefix not in self.component_names:
+                    self.component_names.append(prefix)
 
             commands = []
             for body in symbol.bodies:
