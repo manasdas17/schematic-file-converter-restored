@@ -22,6 +22,8 @@
 # limitations under the License.
 
 import os
+from os.path import dirname, join
+from functools import wraps
 from unittest import TestCase
 import json
 import StringIO
@@ -31,6 +33,34 @@ import upconvert.core.design
 import upconvert.core.shape
 from upconvert.core.shape import Point
 from upconvert.parser.geda import GEDA, GEDAError, GEDAText
+
+TEST_DIR = join(dirname(__file__), '..', '..', '..', 'test', 'geda')
+
+
+_cache = {} # filename -> Design
+
+def get_design(filename):
+    if filename not in _cache:
+        _cache[filename] = GEDA().parse(join(TEST_DIR, filename))
+    return _cache[filename]
+
+
+def use_file(filename):
+    """ Return a decorator which will parse a kicad file
+    before running the test. """
+
+    def decorator(test_method):
+        """ Add params to decorator function. """
+
+        @wraps(test_method)
+        def wrapper(self):
+            """ Parse file then run test. """
+            self.design = get_design(filename)
+            test_method(self)
+
+        return wrapper
+
+    return decorator
 
 
 class GEDAEmpty(TestCase):
@@ -69,6 +99,7 @@ class GEDATextTests(TestCase):
         )
 
 class GEDATestCase(TestCase):
+
     def setUp(self):
         """
         Set up a new GEDA parser with simplified setting for easier
@@ -588,6 +619,18 @@ N 43000 44400 43000 43000 4"""
             sorted(net_names),
             sorted(['advanced', 'long test', 'short_test', 'simple']),
         )
+
+    @use_file('10M_receiver.sch')
+    def test_single_point_nets(self):
+        """ Test nets created by overlapping pins."""
+
+        net = [n for n in self.design.nets if n.net_id == '400a1170'][0]
+        self.assertEqual(list(net.points), ['400a1170'])
+        point = net.points.values()[0]
+        self.assertEqual(len(point.connected_components), 2)
+        self.assertEqual(set((cc.instance_id, cc.pin_number)
+                             for cc in point.connected_components),
+                         set([('C153', '1'), ('gnd-1-30', '1')]))
 
 
 class GEDABusParsingTests(GEDATestCase):
@@ -1397,6 +1440,7 @@ class GEDAFullConversionTests(GEDATestCase):
 
 
 class GedaLightningProjectTests(TestCase):
+
     filename = 'test/geda/lightning/lightning.json'
 
     def setUp(self):
