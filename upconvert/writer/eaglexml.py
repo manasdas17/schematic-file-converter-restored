@@ -22,6 +22,7 @@
 # TODO: handle layers
 
 import upconvert.parser.eaglexml.generated_g as G
+from math import fabs
 
 default_layers = {
     "net": G.layer(number="91", name="Nets", color="2", fill="1", visible="yes", active="yes"),
@@ -80,6 +81,74 @@ class EagleXML(object):
     def write(self, design, filename):
         """ Write the design to the Eagle XML format """
 
+        inst2coordrot = {}
+        for ci in design.component_instances:
+            self.inst2cpt[ci.instance_id] = ci.library_id
+            inst2coordrot[ci.instance_id] = {}
+            for sym_idx, sym_attr in enumerate(ci.symbol_attributes):
+                inst2coordrot[ci.instance_id][sym_idx] = sym_attr.x, sym_attr.y, sym_attr.rotation
+
+        # shift pins if they arent a multiple of 20
+        edited_pins = {}
+        pin2symidx = {}
+        for lib_id, cpt in design.components.components.iteritems():
+            for sym_idx, symbol in enumerate(cpt.symbols):
+                for body in symbol.bodies:
+                    for pin in body.pins:
+                        pin2symidx[pin.pin_number] = sym_idx
+                        if pin.p2.x == pin.p1.x and (pin.p2.y - pin.p1.y) % 20 != 0:
+                            if fabs(pin.p2.y - pin.p1.y) <= 5:
+                                shift_val = 20
+                            else:
+                                shift_val = 10
+                            if pin.p2.y > pin.p1.y:
+                                edited_pins[lib_id, pin.pin_number] = ('y', shift_val, pin.p2.x, pin.p2.y)
+                                pin.p2.y += shift_val
+                            elif pin.p2.y < pin.p1.y:
+                                edited_pins[lib_id, pin.pin_number] = ('y', -shift_val, pin.p2.x, pin.p2.y)
+                                pin.p2.y += -shift_val
+                        elif pin.p2.y == pin.p1.y and (pin.p2.x - pin.p1.x) % 20 != 0:
+                            if fabs(pin.p2.x - pin.p1.x) <= 5:
+                                shift_val = 20
+                            else:
+                                shift_val = 10
+                            if pin.p2.x > pin.p1.x:
+                                edited_pins[lib_id, pin.pin_number] = ('x', shift_val, pin.p2.x, pin.p2.y)
+                                pin.p2.x += shift_val
+                            elif pin.p2.x < pin.p1.x:
+                                edited_pins[lib_id, pin.pin_number] = ('x', -shift_val, pin.p2.x, pin.p2.y)
+                                pin.p2.x += -shift_val
+
+        # shift nets if we had to shift the pins its connected to.
+        for net in design.nets:
+            for netpoint in net.points.itervalues():
+                for cc in netpoint.connected_components:
+                    if (self.inst2cpt[cc.instance_id], cc.pin_number) in edited_pins:
+                        direction, shift, pin_x, pin_y = edited_pins[self.inst2cpt[cc.instance_id], cc.pin_number]
+                        inst_x, inst_y, rot = inst2coordrot[cc.instance_id][pin2symidx[cc.pin_number]]
+                        if rot == 1.5:
+                            t = pin_y
+                            pin_y = pin_x
+                            pin_x = -t
+                        elif rot == 1.0:
+                            pin_x = -pin_x
+                            pin_y = -pin_y
+                        elif rot == 0.5:
+                            t = pin_y
+                            pin_y = - pin_x
+                            pin_x = t
+                        x, y = inst_x + pin_x, inst_y + pin_y
+
+                        dir_shift_rot = {0.0: {'y': ('y', shift), 'x': ('x', shift)}, 1.5: {'y': ('x', -shift), 'x': ('y', shift)}, 1.0: {'y': ('y', -shift), 'x': ('x', -shift)}, 0.5: {'y': ('x', shift), 'x': ('y', -shift)}}
+                        direction, shift = dir_shift_rot[rot][direction]
+
+                        if direction == 'y':
+                            if netpoint.y in range(y, y + shift + 1) or netpoint.y in range(y + shift, y + 1):
+                                netpoint.y = y + shift
+                        else:
+                            if netpoint.x in range(x, x + shift + 1) or netpoint.x in range(x + shift, x + 1):
+                                netpoint.x = x + shift
+
         design.scale(EAGLE_SCALE)
         eagle = self.make_dom(design)
 
@@ -93,9 +162,6 @@ class EagleXML(object):
         """ Return the DOM tree for a design. """
 
         self.design = design
-
-        for ci in design.component_instances:
-            self.inst2cpt[ci.instance_id] = ci.library_id
 
         eagle = G.eagle()
         eagle.drawing = G.drawing()
@@ -319,8 +385,11 @@ class EagleXML(object):
     def get_pin_length(self, pin):
         """ Return the eaglexml length for an openjson pin. """
 
-        length = (((pin.p2.x - pin.p1.x) ** 2)
-                  + ((pin.p2.y - pin.p1.y) ** 2)) ** .5
+        delta_x = int(round(fabs(pin.p2.x - pin.p1.x) -1, - 1))
+        delta_y = int(round(fabs(pin.p2.y - pin.p1.y) -1, - 1))
+
+        length = ((delta_x ** 2)
+                  + (delta_y ** 2)) ** .5
         length = self.make_length(length)
         if length == 0:
             return 'point'

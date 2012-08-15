@@ -37,7 +37,10 @@ _cache = {} # filename -> DOM
 def get_dom(filename):
     if filename not in _cache:
         design = get_design(filename)
-        _cache[filename] = EagleXML().make_dom(design)
+        eaglexml = EagleXML()
+        for ci in design.component_instances:
+            eaglexml.inst2cpt[ci.instance_id] = ci.library_id
+        _cache[filename] = eaglexml.make_dom(design)
     return _cache[filename]
 
 
