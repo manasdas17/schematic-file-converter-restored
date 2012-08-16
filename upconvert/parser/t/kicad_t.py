@@ -21,7 +21,7 @@
 # limitations under the License.
 
 
-from upconvert.parser.kicad import KiCAD, ComponentParser
+from upconvert.parser.kicad import KiCAD, ComponentParser, MULT
 from upconvert.writer.openjson import JSON as JSONWriter
 
 import unittest
@@ -142,8 +142,8 @@ class KiCADTests(unittest.TestCase):
         self.assertEqual(inst.library_id, 'LAA110')
         self.assertEqual(len(inst.symbol_attributes), 1)
         self.assertEqual(inst.symbol_attributes[0].rotation, 1.5)
-        self.assertEqual(inst.symbol_attributes[0].x, 165)
-        self.assertEqual(inst.symbol_attributes[0].y, -340)
+        self.assertEqual(inst.symbol_attributes[0].x, 1650 * MULT)
+        self.assertEqual(inst.symbol_attributes[0].y, -3400 * MULT)
 
 
     @use_file('arduino/Arduino-Ethernet.sch')

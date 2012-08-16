@@ -28,7 +28,7 @@ from upconvert.core.net import Net, NetPoint
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.shape import Label, Rectangle, Polygon, Arc, BezierCurve
 from upconvert.core.annotation import Annotation
-from upconvert.parser.kicad import KiCAD as KiCADParser
+from upconvert.parser.kicad import MULT, KiCAD as KiCADParser
 
 import os
 import unittest
@@ -99,7 +99,10 @@ class KiCADTests(unittest.TestCase):
         ann = Annotation('test', 1, 2, .5, 'true')
         writer.write_annotation(buf, ann)
         self.assertEqual(buf.getvalue(),
-                         'Text Label 10 -20 900 60 ~ 0\ntest\n')
+                         'Text Label ' 
+                         + str(int(1 / MULT)) + ' '
+                         + str(int(-2 / MULT)) + ' '
+                         '900 60 ~ 0\ntest\n')
 
     def test_write_instance(self):
         """
@@ -116,8 +119,10 @@ class KiCADTests(unittest.TestCase):
 $Comp
 L libid id
 U 1 1 00000000
-P 30 -40
-\t1    30 -40
+P ''' + str(int(3 / MULT)) + ' ' + str(int(-4 / MULT)) + 
+'''
+\t1    ''' + str(int(3 / MULT)) + ' ' + str(int(-4 / MULT)) + 
+'''
 \t0    1    1    0
 $EndComp
 ''')
@@ -145,7 +150,9 @@ $EndComp
         writer.write_net(buf, net)
         self.assertEqual(
             buf.getvalue(),
-            'Wire Wire Line\n\t0 0 0 -10\nWire Wire Line\n\t0 0 10 0\n')
+            'Wire Wire Line\n\t0 0 0 ' + str(int(-1 / MULT)) + 
+            '\nWire Wire Line\n\t0 0 ' + str(int(1 / MULT)) + 
+            ' 0\n')
 
     def test_write_footer(self):
         """
@@ -167,28 +174,42 @@ $EndComp
         pin = Pin('1', (-300, 100), (-600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 -6000 1000 3000 R 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 ' 
+            + str(int(-600 / MULT)) + ' ' 
+            + str(int(100 / MULT)) + ' ' 
+            + str(int(300 / MULT)) + ' ' 
+            + 'R 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('1', (300, 100), (600, 100))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 1 6000 1000 3000 L 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 1 '
+            + str(int(600 / MULT)) + ' '
+            + str(int(100 / MULT)) + ' '
+            + str(int(300 / MULT)) + ' '
+            + 'L 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, -1300), (0, -1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 -15000 2000 U 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 '
+            + str(int(-1500 / MULT)) + ' '
+            + str(int(200 / MULT)) + ' U 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X ~ 2 0 15000 2000 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X ~ 2 0 '
+            + str(int(1500 / MULT)) + ' '
+            + str(int(200 / MULT)) + ' D 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500),
                   Label(0, 0, 'name', 'center', 0))
         line = writer.get_pin_line(pin)
         self.assertEqual(
-            line, 'X name 2 0 15000 2000 D 60 60 %(unit)d %(convert)d B\n')
+            line, 'X name 2 0 '
+            + str(int(1500 / MULT)) + ' '
+            + str(int(200 / MULT)) + ' D 60 60 %(unit)d %(convert)d B\n')
 
     def test_write_library_footer(self):
         """
@@ -209,7 +230,11 @@ $EndComp
         writer = KiCAD()
         rect = Rectangle(10, 20, 5, 10)
         line = writer.get_shape_line(rect)
-        self.assertEqual(line, 'S 100 200 150 100 %(unit)d %(convert)d 0 N\n')
+        self.assertEqual(line, 'S ' + str(int(10 / MULT)) + ' '
+            + str(int(20 / MULT)) + ' '
+            + str(int(15 / MULT)) + ' '
+            + str(int(10 / MULT)) + ' '
+            + '%(unit)d %(convert)d 0 N\n')
 
 
     def test_polygon(self):
@@ -224,7 +249,12 @@ $EndComp
         poly.add_point(10, 10)
         poly.add_point(10, 0)
         line = writer.get_shape_line(poly)
-        self.assertEqual(line, 'P 5 %(unit)d %(convert)d 0 0 0 0 100 100 100 100 0 0 0 N\n')
+        self.assertEqual(line, 'P 5 %(unit)d %(convert)d 0 0 0 0 '
+            + str(int(10 / MULT)) + ' '
+            + str(int(10 / MULT)) + ' '
+            + str(int(10 / MULT)) + ' '
+            + str(int(10 / MULT)) + ' '
+            + '0 0 0 N\n')
 
 
     def test_arc(self):
@@ -235,7 +265,8 @@ $EndComp
         writer = KiCAD()
         arc = Arc(0, 0, -0.5, 0.5, 1)
         line = writer.get_shape_line(arc)
-        self.assertEqual(line, 'A 0 0 10 900 -900 %(unit)d %(convert)d 0 N\n')
+        self.assertEqual(line, 'A 0 0 ' + str(int(1 / MULT)) 
+            + ' 900 -900 %(unit)d %(convert)d 0 N\n')
 
 
     def test_bezier_curve(self):
@@ -246,4 +277,7 @@ $EndComp
         writer = KiCAD()
         bezier = BezierCurve((0, 0), (1, 1), (2, 2), (3, 3))
         line = writer.get_shape_line(bezier)
-        self.assertEqual(line, 'P 2 %(unit)d %(convert)d 0 20 20 30 30 N\n')
+        self.assertEqual(line, 'P 2 %(unit)d %(convert)d 0 ' 
+            + str(int(2 / MULT)) + ' ' + str(int(2 / MULT)) + ' ' 
+            + str(int(3 / MULT)) + ' ' 
+            + str(int(3 / MULT)) + ' N\n')

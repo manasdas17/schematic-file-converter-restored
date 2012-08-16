@@ -83,12 +83,6 @@ class GEDAWriterTests(GEDAWriterTestCase):
             self.geda_writer.project_dirs['symbol'],
             '/tmp/symbols-test_geda.sch'
         )
-        self.assertTrue(os.path.exists('/tmp/gafrc'))
-
-        filh = open('/tmp/gafrc', 'r')
-        data = ''.join(filh.readlines())
-        filh.close()
-        self.assertEquals(data, '(component-library "./symbols")')
 
     def test_write_schematic_file(self):
         """ Reads the gEDA *simple_example* file into a design using the
