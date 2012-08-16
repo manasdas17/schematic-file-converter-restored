@@ -138,7 +138,7 @@ $EndDescr
         f.write('\t1    %d %d\n' % (make_length(inst.symbol_attributes[0].x),
                                     -make_length(inst.symbol_attributes[0].y)))
         f.write('\t%d    %d    %d    %d\n' %
-                ROTATION2MATRIX[inst.symbol_attributes[0].rotation % 2])
+                ROTATION2MATRIX[(inst.symbol_attributes[0].rotation % 2, inst.symbol_attributes[0].flip)])
         f.write('$EndComp\n')
 
 

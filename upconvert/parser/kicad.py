@@ -203,6 +203,7 @@ class KiCAD(object):
 
         line = f.readline()
         rotation = 0
+        flip = False
         annotations = []
 
         while line.strip() not in ("$EndComp", ''):
@@ -211,8 +212,8 @@ class KiCAD(object):
             elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
-                    rotation = MATRIX2ROTATION.get(
-                        tuple(int(i) for i in parts), 0)
+                    rotation, flip = MATRIX2ROTATION.get(
+                        tuple(int(i) for i in parts), (0, False))
             elif line.startswith('AR Path'):
                 if '?' in reference:
                     path_line = line.strip().split()
@@ -223,7 +224,7 @@ class KiCAD(object):
             line = f.readline()
 
         inst = ComponentInstance(reference, name.upper(), convert - 1)
-        symbattr = SymbolAttribute(compx, -compy, rotation, False)
+        symbattr = SymbolAttribute(compx, -compy, rotation, flip)
         for ann in annotations:
             symbattr.add_annotation(ann)
         inst.add_symbol_attribute(symbattr)
@@ -342,7 +343,7 @@ class KiCAD(object):
 
         x, y = pin.p2.x, pin.p2.y
 
-        matrix = ROT2MATRIX.get(symba.rotation) or ROT2MATRIX[0]
+        matrix = ROT2MATRIX.get((symba.rotation, symba.flip), ROT2MATRIX[(0, False)])
 
         x, y = (matrix[0] * x + matrix[1] * y,
                 matrix[2] * x + matrix[3] * y)
@@ -351,11 +352,15 @@ class KiCAD(object):
 
 
 # map kicad rotation matrices to pi radians
-MATRIX2ROTATION = {(1, 0, 0, -1): 0,
-                   (0, 1, 1, 0): 0.5,
-                   (-1, 0, 0, 1): 1,
-                   (0, -1, -1, 0): 1.5,
-                   (0, 1, -1, 0): 0.5}
+#TODO: add flip
+MATRIX2ROTATION = {(1, 0, 0, -1): (0, False),
+                   (0, 1, 1, 0): (0.5, False),
+                   (-1, 0, 0, 1): (1, False),
+                   (0, -1, -1, 0): (1.5, False),
+                   (0, 1, -1, 0): (0.5, True),
+                   (0, -1, 1, 0): (1.5, True),
+                   (1, 0, 0, 1): (1, True),
+                   (-1, 0, 0, -1): (0, True)}
 
 # map openjson rotations to rotation matrices
 ROT2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.iteritems())
