@@ -581,14 +581,20 @@ class GEDA:
 
         ## add annotation for special attributes
         for idx, attribute_key in enumerate(['refdes', 'device']):
-            if attribute_key in component.attributes \
-               or attribute_key in instance.attributes:
+            if attribute_key in component.attributes:
                 symbol.add_annotation(
                     Annotation(
-                        attribute_key,
+                        component.attributes[attribute_key],
                         0, (0 + idx * 10), 0.0, 'true'
                     )
-                )
+                    )
+            elif attribute_key in instance.attributes:
+                symbol.add_annotation(
+                    Annotation(
+                        instance.attributes[attribute_key],
+                        0, (0 + idx * 10), 0.0, 'true'
+                    )
+                    )
 
         ## parse all bodies of this component for pins and add them
         ## to the lookup with their corresponding instance. This is

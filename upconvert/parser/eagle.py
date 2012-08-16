@@ -2534,10 +2534,12 @@ class Eagle:
 # File Version is applied by Design itself
 
 # Component Instances (Array) / Components (Array)
+        value_names = []
         for _pp in self.shapeheader.parts:
             _libid = ':'.join((self.libraries[-1 + _pp.libid].name,
-                               _pp.value if len(_pp.value) else 
+                               _pp.value if _pp.value not in value_names else 
                                    self.get_unique_string())) # to avoid same name collisions
+            value_names.append(_pp.value)
             _ci = ComponentInstance(instance_id=_pp.name,
                                     library_id=_libid,
                                     symbol_index=0)    # There appears to only have the possibility
