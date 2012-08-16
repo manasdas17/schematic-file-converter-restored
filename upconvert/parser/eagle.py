@@ -2267,6 +2267,8 @@ class Eagle:
 #        self.parts = []
         self.texts = []
         self.netclasses = []
+
+        self.noname_counter = self.noname_def_counter
         return
 
 
@@ -2419,6 +2421,17 @@ class Eagle:
                                                        _ncconst, _ncdta))
         return
 
+    noname_def_counter = 10000
+    noname_def_prefix = 'EagleINR/'
+
+    def get_unique_string(self):
+        """ Gives a name when it's required; 
+            not a random one to get the same schematic on subsequent runs
+        """
+        _ret_val = '%s%d' % (self.noname_def_prefix, self.noname_counter)
+        self.noname_counter += 1
+        return _ret_val
+
     attr_jar = [] # attribute list
 
     @classmethod
@@ -2523,7 +2536,8 @@ class Eagle:
 # Component Instances (Array) / Components (Array)
         for _pp in self.shapeheader.parts:
             _libid = ':'.join((self.libraries[-1 + _pp.libid].name,
-                               _pp.value)) # to avoid same name collisions
+                               _pp.value if len(_pp.value) else 
+                                   self.get_unique_string())) # to avoid same name collisions
             _ci = ComponentInstance(instance_id=_pp.name,
                                     library_id=_libid,
                                     symbol_index=0)    # There appears to only have the possibility
