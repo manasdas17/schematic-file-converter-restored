@@ -71,6 +71,8 @@ class KiCAD(object):
         segments = set() # each wire segment
         junctions = set() # wire junction point (connects all wires under it)
 
+        self.instance_names = []
+
         self.library = KiCADLibrary()
 
         if library_filename is None:
@@ -184,6 +186,13 @@ class KiCAD(object):
         # name & reference
         prefix, name, reference = f.readline().split()
         assert prefix == 'L'
+
+        ref_count_idx = 1
+        while reference in self.instance_names:
+            ref_count_idx += 1
+            reference = reference + '-' + str(ref_count_idx)
+
+        self.instance_names.append(reference)
 
         comp = None
         if self.library is not None:
