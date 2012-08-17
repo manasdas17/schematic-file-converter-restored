@@ -221,7 +221,7 @@ class KiCAD(object):
             elif line.startswith('\t'):
                 parts = line.strip().split()
                 if len(parts) == 4:
-                    rotation, flip = MATRIX2ROTATION.get(
+                    rotation, flip = MATRIX2ROTATIONFLIP.get(
                         tuple(int(i) for i in parts), (0, False))
             elif line.startswith('AR Path'):
                 if '?' in reference:
@@ -352,7 +352,7 @@ class KiCAD(object):
 
         x, y = pin.p2.x, pin.p2.y
 
-        matrix = ROT2MATRIX.get((symba.rotation, symba.flip), ROT2MATRIX[(0, False)])
+        matrix = ROTFLIP2MATRIX.get((symba.rotation, symba.flip), ROTFLIP2MATRIX[(0, False)])
 
         x, y = (matrix[0] * x + matrix[1] * y,
                 matrix[2] * x + matrix[3] * y)
@@ -362,7 +362,7 @@ class KiCAD(object):
 
 # map kicad rotation matrices to pi radians
 #TODO: add flip
-MATRIX2ROTATION = {(1, 0, 0, -1): (0, False),
+MATRIX2ROTATIONFLIP = {(1, 0, 0, -1): (0, False),
                    (0, 1, 1, 0): (0.5, False),
                    (-1, 0, 0, 1): (1, False),
                    (0, -1, -1, 0): (1.5, False),
@@ -372,7 +372,7 @@ MATRIX2ROTATION = {(1, 0, 0, -1): (0, False),
                    (-1, 0, 0, -1): (0, True)}
 
 # map openjson rotations to rotation matrices
-ROT2MATRIX = dict((v, k) for k, v in MATRIX2ROTATION.iteritems())
+ROTFLIP2MATRIX = dict((v, k) for k, v in MATRIX2ROTATIONFLIP.iteritems())
 
 
 class KiCADLibrary(object):
