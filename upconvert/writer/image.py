@@ -81,10 +81,10 @@ class Worker:
 
     def draw_design(self):
         """ Render the design into 2 images """
-        if len(self.design.component_instances) > 0:
-            self.draw_schematic()
-        if self.design.layout != None:
+        if len(self.design.traces) > 0:
             self.draw_layout()
+        else:
+            self.draw_schematic()
 
 
     def draw_schematic(self):
@@ -109,7 +109,7 @@ class Worker:
             draw_method(shape, self.base_xform, self.options.style['annot'])
 
         for net in self.design.nets:
-            pass#self.draw_net(net)
+            self.draw_net(net)
 
         for ann in self.design.design_attributes.annotations:
             if ann.visible:
@@ -120,7 +120,23 @@ class Worker:
 
     def draw_layout(self):
         """ Render the layout into self.img """
-        pass
+        # start off with all the component instances
+        for inst in self.design.component_instances:
+            comp = self.design.components.components[inst.library_id]
+            for body, attr in zip(comp.footprints[inst.footprint_index].bodies,
+                                  inst.footprint_attributes):
+                # draw the appropriate body, at the position in attr
+                pos = Point(attr.x, attr.y)
+                self.draw_footprint(body, pos, attr.rotation, attr.flip)
+                # draw in any annotations
+                for ann in attr.annotations:
+                    if ann.visible:
+                        pos = self.base_xform.chain(Point(ann.x, ann.y))
+                        self.canvas.text((pos.x, pos.y), ann.value,
+                                         fill=self.options.style['annot'])
+
+        for trace in self.design.traces:
+            self.draw_trace(trace)
 
 
     def draw_symbol(self, body, offset, rot, flip):
@@ -142,6 +158,27 @@ class Worker:
 
         for pin in body.pins:
             self.draw_pin(pin, xform)
+
+
+    def draw_footprint(self, body, offset, rot, flip):
+        """draw a footprint at the location of offset"""
+        xform = self.base_xform.copy()
+        # flip if necessary, then rotate the footprint, then shift.
+        # Want to rotate before it's been moved away from the global origin.
+        if flip:
+            flipper = FlipY()
+        else:
+            flipper = XForm()
+
+        locxform = Shift(offset.x, offset.y, Rotate(rot, flipper))
+        xform.prefix(locxform)
+
+        for shape in body.shapes:
+            draw_method = getattr(self, 'draw_shape_%s' % shape.type)
+            draw_method(shape, xform, self.options.style['part'])
+
+        for pad in body.pads:
+            self.draw_pad(pad, xform)
 
 
     def draw_net(self, net):
@@ -179,6 +216,12 @@ class Worker:
             pos = self.base_xform.chain(Point(ann.x, ann.y))
             self.canvas.text((pos.x, pos.y), ann.value,
                              fill=self.options.style['annot'])
+
+
+    def draw_trace(self, trace):
+        """ draw out a trace """
+        pts = [xform.chain(p) for p in (trace.p1, trace.p2)]
+        self.canvas.line([(p.x, p.y) for p in pts], fill=colour)
 
 
     def dot_at(self, pt, net):
