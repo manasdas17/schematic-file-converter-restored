@@ -33,6 +33,7 @@ class Design:
 
     def __init__(self):
         self.nets = list()
+        self.traces = list()
         self.components = Components()
         self.component_instances = list()
         self.shapes = list()
@@ -91,13 +92,21 @@ class Design:
         """ Add a net """
         self.nets.append(net)
 
+
+    def add_trace(self, trace):
+        """ Add a trace """
+        self.traces.append(trace)
+
+
     def add_pin(self, pin):
         """ Add a pin to the schematic sheet """
         self.pins.append(pin)
 
+
     def add_shape(self, shape):
         """ Add a shape to the schematic sheet """
         self.shapes.append(shape)
+
 
     def set_design_attributes(self, design_attributes):
         """ Add design level attributes """
@@ -159,6 +168,7 @@ class Design:
         return {
             "version": self.version,
             "nets": [n.json() for n in self.nets],
+            "traces": [n.json() for n in self.traces],
             "components": self.components.json(),
             "component_instances": [i.json() for i in self.component_instances],
             "shapes": [s.json() for s in self.shapes],

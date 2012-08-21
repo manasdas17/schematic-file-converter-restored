@@ -34,7 +34,7 @@
 # KiCAD units are mils (1/1000th of an inch)
 
 from upconvert.core.design import Design
-from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.components import Component, Symbol, SBody, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.shape import Arc, Circle, Line, Rectangle, Label
@@ -444,7 +444,7 @@ class ComponentParser(object):
         for _ in range(2 if has_convert else 1):
             symbol = Symbol()
             for _ in range(self.num_units):
-                symbol.add_body(Body())
+                symbol.add_body(SBody())
             self.component.add_symbol(symbol)
 
 

@@ -332,7 +332,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
 
         commands += ['v 20110115 2\n']
         geda_parser = upconvert.parser.geda.GEDA()
-        geda_parser.unassigned_body = components.Body()
+        geda_parser.unassigned_body = components.SBody()
         new_design = geda_parser.parse_schematic(
             StringIO.StringIO('\n'.join(commands))
         )
@@ -607,7 +607,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
         )
 
     def test_create_path(self):
-        """ Test creating path commands from Body objects. """
+        """ Test creating path commands from SBody objects. """
         shapes = [
             shape.Line((10, 10), (50, 10)),
             shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)),
@@ -643,7 +643,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
         )
 
     def test_is_valid_path(self):
-        """ Tests if Body objects contain valid paths."""
+        """ Tests if SBody objects contain valid paths."""
         shapes = [
             shape.Line((10, 10), (50, 10)), #L 500,100
             shape.BezierCurve((70, 10), (80, 30), (50, 10), (80, 40)), #C 700,100 800,300 800,400
@@ -651,7 +651,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
             shape.Line((50, 70), (10, 70)), #L 100,700
         ]
 
-        body = components.Body()
+        body = components.SBody()
         body.shapes = shapes
         self.assertTrue(self.geda_writer.is_valid_path(body))
 

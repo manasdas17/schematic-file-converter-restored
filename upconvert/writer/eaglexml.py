@@ -54,7 +54,7 @@ class EagleXML(object):
         # is a library dom object and name is a deviceset name
         self.dscache = {} # (lib, name) -> deviceset dom object
 
-        # map openjson Body objects to eaglexml gate names
+        # map openjson SBody objects to eaglexml gate names
         self.body2gate = {}
 
         # map openjson components ids to eaglexml libraries

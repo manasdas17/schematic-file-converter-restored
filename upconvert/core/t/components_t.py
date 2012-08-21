@@ -25,7 +25,7 @@
 from upconvert.core.components import Components
 from upconvert.core.components import Component
 from upconvert.core.components import Symbol
-from upconvert.core.components import Body
+from upconvert.core.components import SBody
 from upconvert.core.components import Pin
 from upconvert.core.shape import Point, Shape, Label
 import unittest
@@ -90,16 +90,16 @@ class SymbolTests(unittest.TestCase):
         assert len(symb.bodies) == 0
 
 
-class BodyTests(unittest.TestCase):
+class SBodyTests(unittest.TestCase):
     """ The tests of the core module body feature """
 
     def setUp(self):
         """ Setup the test case. """
-        self.bod = Body()
+        self.bod = SBody()
 
     def tearDown(self):
         """ Teardown the test case. """
-        self.bod = Body()
+        self.bod = SBody()
 
     def test_create_new_body(self):
         """ Test the creation of a new empty body. """
@@ -132,7 +132,7 @@ class BodyTests(unittest.TestCase):
         self.assertEqual(bottom_right.y, 6)
 
     def test_bounds_shapes(self):
-        '''Test Body.bounds() when the body only consists of shapes'''
+        '''Test SBody.bounds() when the body only consists of shapes'''
         shapes = [Shape() for i in range(4)]
         for i, shape in enumerate(shapes):
             bounds = [3, 3, 3, 3]
@@ -147,7 +147,7 @@ class BodyTests(unittest.TestCase):
         self.assertEqual(bottom_right.y, 6)
 
     def test_bounds_pins_shapes(self):
-        '''Test Body.bounds() when some extremes are from pins, others shapes'''
+        '''Test SBody.bounds() when some extremes are from pins, others shapes'''
         point = Point(0, 0)
         pin1 = Pin('foo', point, point)
         pin2 = Pin('bar', point, point)

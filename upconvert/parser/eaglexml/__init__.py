@@ -39,7 +39,7 @@
 #   + There is one openjson Symbol in the logical component.
 #
 #   + The openjson Symbols for logical components have one openjson
-#     Body for each eaglemxl gate, in the order listed in the eaglexml
+#     SBody for each eaglemxl gate, in the order listed in the eaglexml
 #     file.
 #
 # TODO: handle physical component representation
@@ -48,7 +48,7 @@ from collections import defaultdict
 
 from upconvert.core.design import Design
 from upconvert.core.annotation import Annotation
-from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.components import Component, Symbol, SBody, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.shape import Circle, Label, Line, Rectangle, Polygon
@@ -165,9 +165,9 @@ class EagleXML(object):
 
 
     def make_body_from_symbol(self, lib, symbol_name):
-        """ Construct an openjson Body from an eagle symbol in a library. """
+        """ Construct an openjson SBody from an eagle symbol in a library. """
 
-        body = Body()
+        body = SBody()
 
         symbol = [s for s in get_subattr(lib, 'symbols.symbol')
                   if s.name == symbol_name][0]

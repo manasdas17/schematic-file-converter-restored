@@ -26,7 +26,7 @@
 import json
 from upconvert.core.annotation import Annotation
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
-from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.components import Component, Symbol, SBody, Pin
 from upconvert.core.design import Design
 from upconvert.core.design_attributes import DesignAttributes, Metadata
 from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, Point
@@ -169,7 +169,7 @@ class JSON:
 
     def parse_body(self, body):
         """ Extract a body of a symbol. """
-        bdy = Body()
+        bdy = SBody()
         for pin in body.get('pins'):
             parsed_pin = self.parse_pin(pin)
             bdy.add_pin(parsed_pin)

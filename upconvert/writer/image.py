@@ -71,7 +71,7 @@ class Worker:
         # Draw & save image
         self.base_xform = Scale(self.options.scale,
                                 FixY(height, Shift(-minpt.x, -minpt.y)))
-        self.draw_schematic()
+        self.draw_design()
 
 
     def save(self, filename):
@@ -79,8 +79,16 @@ class Worker:
         self.image.save(filename, self.options.img_format)
 
 
+    def draw_design(self):
+        """ Render the design into 2 images """
+        if len(self.design.component_instances) > 0:
+            self.draw_schematic()
+        if self.design.layout != None:
+            self.draw_layout()
+
+
     def draw_schematic(self):
-        """ Render the image into self.img """
+        """ Render the schematic into self.img """
         # start off with all the component instances
         for inst in self.design.component_instances:
             comp = self.design.components.components[inst.library_id]
@@ -101,13 +109,18 @@ class Worker:
             draw_method(shape, self.base_xform, self.options.style['annot'])
 
         for net in self.design.nets:
-            self.draw_net(net)
+            pass#self.draw_net(net)
 
         for ann in self.design.design_attributes.annotations:
             if ann.visible:
                 pos = self.base_xform.chain(Point(ann.x, ann.y))
                 self.canvas.text((pos.x, pos.y), ann.value,
                                   fill=self.options.style['annot'])
+
+
+    def draw_layout(self):
+        """ Render the layout into self.img """
+        pass
 
 
     def draw_symbol(self, body, offset, rot, flip):

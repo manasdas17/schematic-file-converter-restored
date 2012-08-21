@@ -20,7 +20,7 @@
 # limitations under the License.
 
 from upconvert.core.design import Design
-from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.components import Component, Symbol, SBody, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.shape import Circle, Line, Polygon, Rectangle, BezierCurve
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
@@ -400,7 +400,7 @@ class ComponentParser(object):
         symbol = Symbol()
         self.component.add_symbol(symbol)
 
-        self.body = Body()
+        self.body = SBody()
         symbol.add_body(self.body)
 
         self.cid2termid.update(self.parse_terminals(tree))

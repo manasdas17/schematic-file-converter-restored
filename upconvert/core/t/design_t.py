@@ -26,7 +26,7 @@ from upconvert.core.design import Design
 from upconvert.core.net import Net
 from upconvert.core.shape import Point
 from upconvert.core.annotation import Annotation
-from upconvert.core.components import Component, Symbol, Body
+from upconvert.core.components import Component, Symbol, SBody
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 import unittest
 
@@ -105,7 +105,7 @@ class DesignTests(unittest.TestCase):
         '''test bounds() with just components in the design'''
         libcomp = Component('bar')
         libcomp.add_symbol(Symbol())
-        libcomp.symbols[0].add_body(Body())
+        libcomp.symbols[0].add_body(SBody())
         mkbounds(libcomp.symbols[0].bodies[0], 0, 0, 10, 10)
         self.des.add_component('foo', libcomp)
         for (x, y) in ((1, 3), (3, 2), (5, 3), (3, 7)):
@@ -143,7 +143,7 @@ class DesignTests(unittest.TestCase):
 
         libcomp = Component('bar')
         libcomp.add_symbol(Symbol())
-        libcomp.symbols[0].add_body(Body())
+        libcomp.symbols[0].add_body(SBody())
         mkbounds(libcomp.symbols[0].bodies[0], 0, 0, 3, 3)
         self.des.add_component('foo', libcomp)
 

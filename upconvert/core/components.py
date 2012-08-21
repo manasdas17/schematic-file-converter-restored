@@ -77,6 +77,7 @@ class Component:
         self.name = name
         self.attributes = dict()
         self.symbols = list()
+        self.footprints = list()
 
 
     def add_attribute(self, key, value):
@@ -111,6 +112,7 @@ class Component:
         """ Return a component as JSON """
         return {
             "symbols": [s.json() for s in self.symbols],
+            "footprints": [s.json() for s in self.footprints],
             "attributes": stringify_attributes(self.attributes),
             "name": self.name
             }
@@ -153,7 +155,44 @@ class Symbol:
         return {"bodies":[b.json() for b in self.bodies]}
 
 
-class Body:
+class Footprint:
+    """ This is the physical representation of a Component.
+    A Component can have many Footprints, and each Footprint can have
+    multiple Bodies """
+
+    def __init__(self):
+        self.bodies = list()
+
+
+    def add_body(self, body):
+        """ Add a body to a footprint """
+        self.bodies.append(body)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the footprint. """
+        for body in self.bodies:
+            body.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the footprint. """
+        for body in self.bodies:
+            body.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the footprint. """
+        for body in self.bodies:
+            body.rebase_y_axis(height)
+
+
+    def json(self):
+        """ Return a symbol as JSON """
+        return {"bodies":[b.json() for b in self.bodies]}
+
+
+class SBody:
     """ A body of a Symbol of a Component """
 
     def __init__(self):
@@ -216,8 +255,71 @@ class Body:
             }
 
 
+class FBody:
+    """ A body of a Symbol of a Component """
+
+    def __init__(self):
+        self.shapes = list()
+        self.pads = list()
+
+
+    def bounds(self):
+        """ Return the min and max points of the bounding box around a body """
+        points = sum([s.bounds() for s in self.shapes + self.pins], [])
+        x_values = [pt.x for pt in points]
+        y_values = [pt.y for pt in points]
+        if len(x_values) == 0:
+            # Empty body includes just the origin
+            x_values = [0]
+            y_values = [0]
+        return [Point(min(x_values), min(y_values)),
+                Point(max(x_values), max(y_values))]
+
+
+    def add_pad(self, pad):
+        """ Add a pad to a footprint """
+        self.pads.append(pad)
+
+
+    def add_shape(self, shape):
+        """ Add a shape to a footprint """
+        self.shapes.append(shape)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the footprint. """
+        for shape in self.shapes:
+            shape.scale(factor)
+        for pad in self.pads:
+            pad.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the footprint. """
+        for shape in self.shapes:
+            shape.shift(dx, dy)
+        for pad in self.pads:
+            pad.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the footprint. """
+        for shape in self.shapes:
+            shape.rebase_y_axis(height)
+        for pad in self.pads:
+            pad.rebase_y_axis(height)
+
+
+    def json(self):
+        """ Return a footprint as JSON """
+        return {
+            "shapes":[s.json() for s in self.shapes],
+            "pads"  :[p.json() for p in self.pads]
+            }
+
+
 class Pin:
-    """ Pins are the parts of Bodies (/symbols/components) that connect
+    """ Pins are the parts of SBodies (/symbols/components) that connect
     to nets. Basically a line segment, with a null end and a connect end
     """
 
@@ -276,6 +378,59 @@ class Pin:
             "pin_number": self.pin_number,
             "p1": self.p1.json(),
             "p2": self.p2.json(),
+            "attributes": stringify_attributes(self.attributes),
+            "styles": self.styles,
+            }
+        if self.label is not None:
+            ret["label"] = self.label.json()
+        return ret
+
+
+class Pad:
+    """ Pads are the parts of FBodies (/footprints/components) that connect
+    to traces. Basically a set of shapes.
+    """
+
+    def __init__(self, pin_number, p, shapes, label=None):
+        self.label = label # is a Label
+        self.p = Point(p)
+        self.pin_number = pin_number
+        self.shapes = shapes
+        self.attributes = dict()
+        self.styles = dict()
+
+
+    def add_attribute(self, key, value):
+        """ Add attribute to a pin """
+        self.attributes[key] = value
+
+
+    def bounds(self):
+        """ Return the min and max points of a pin """
+        pass
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the pin. """
+        pass
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the pin. """
+        pass
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the pin. """
+        pass
+
+
+    def json(self):
+        """ Return a pin as JSON """
+        ret = {
+            "pin_number": self.pin_number,
+            "p": self.p.json(),
+            "shapes": [s.json() for s in self.shapes],
             "attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }

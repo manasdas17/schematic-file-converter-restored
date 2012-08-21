@@ -23,7 +23,7 @@
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.annotation import Annotation
 from upconvert.core.design import Design
-from upconvert.core.components import Components, Component, Symbol, Body, Pin
+from upconvert.core.components import Components, Component, Symbol, SBody, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.shape import Circle, Line, Rectangle, Label, Arc
 from os import listdir, sep as dirsep
@@ -464,7 +464,7 @@ class ViewDrawSym(ViewDrawBase):
         """ Parses a component from the library, returns a Compenent. """
         part = Component(self.filename)
         part.add_symbol(Symbol())
-        part.symbols[0].add_body(Body())
+        part.symbols[0].add_body(SBody())
 
         tree = ViewDrawBase.parse(self)
         for k, v in tree['attr']:

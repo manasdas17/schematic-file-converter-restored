@@ -30,7 +30,7 @@ from upconvert.core.annotation import Annotation
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.design import Design
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
-from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.components import Component, Symbol, SBody, Pin
 from upconvert.core.shape import Point, Line, Label, Arc, Circle, Rectangle, Polygon
 
 #class EagleBinConsts:
@@ -2569,7 +2569,7 @@ class Eagle:
             if not _libid in design.components.components:
                 _co = Component(_sym.name)
                 _sy = Symbol()
-                _bd = Body()
+                _bd = SBody()
                 _pc = 1 # Eagle counts from 1
 
                 if 0 != len(_dd.connblocks[0].attributes):

@@ -99,7 +99,7 @@ class EagleXMLTests(unittest.TestCase):
 
     @use_file('E1AA60D5.sch')
     def test_component_body_lines(self):
-        """ The right component Lines are created on Body objects. """
+        """ The right component Lines are created on SBody objects. """
         cpt = self.get_component('atmel:TINY15L:logical')
         lines = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'line']
@@ -112,7 +112,7 @@ class EagleXMLTests(unittest.TestCase):
 
     @use_file('E1AA60D5.sch')
     def test_component_body_rectangles(self):
-        """ The right component Rectangles are created on Body objects. """
+        """ The right component Rectangles are created on SBody objects. """
         cpt = self.get_component('resistor:CPOL-EU:logical')
         rects = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'rectangle']
@@ -127,7 +127,7 @@ class EagleXMLTests(unittest.TestCase):
 
     @use_file('450B679C.sch')
     def test_component_body_polygons(self):
-        """ The right component Rectangles are created on Body objects. """
+        """ The right component Rectangles are created on SBody objects. """
 
         cpt = self.get_component('adafruit:LED:logical')
         polys = [s for s in cpt.symbols[0].bodies[0].shapes
@@ -140,7 +140,7 @@ class EagleXMLTests(unittest.TestCase):
 
     @use_file('D9CD1423.sch')
     def test_component_body_circles(self):
-        """ The right component Circles are created on Body objects. """
+        """ The right component Circles are created on SBody objects. """
 
         cpt = self.get_component('CONNECTER:HEADER_1X10:logical')
         circs = [s for s in cpt.symbols[0].bodies[0].shapes
@@ -154,7 +154,7 @@ class EagleXMLTests(unittest.TestCase):
 
     @use_file('E1AA60D5.sch')
     def test_component_body_labels(self):
-        """ The right component Labels are created on Body objects. """
+        """ The right component Labels are created on SBody objects. """
         cpt = self.get_component('con-berg:PN87520:logical')
         labels = [s for s in cpt.symbols[0].bodies[0].shapes
                   if s.type == 'label']
@@ -167,7 +167,7 @@ class EagleXMLTests(unittest.TestCase):
 
     @use_file('E1AA60D5.sch')
     def test_component_body_pins(self):
-        """ The right component Pins are created on Body objects. """
+        """ The right component Pins are created on SBody objects. """
         cpt = self.get_component('atmel:TINY15L:logical')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(len(pins), 8)

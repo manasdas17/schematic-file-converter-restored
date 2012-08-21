@@ -675,7 +675,7 @@ class GEDA:
         component = components.Component(basename)
         symbol = components.Symbol()
         component.add_symbol(symbol)
-        body = components.Body()
+        body = components.SBody()
         symbol.add_body(body)
 
         ##NOTE: adding this attribute to make parsing UPV data easier

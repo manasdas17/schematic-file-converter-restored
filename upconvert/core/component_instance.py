@@ -26,11 +26,13 @@ from upconvert.utils.stringify import stringify_attributes
 class ComponentInstance:
     """ An instance of a component with a specific symbol """
 
-    def __init__(self, instance_id, library_id, symbol_index):
+    def __init__(self, instance_id, library_id, symbol_index, footprint_index=0):
         self.instance_id = instance_id
         self.library_id = library_id
         self.symbol_index = symbol_index
         self.symbol_attributes = list()
+        self.footprint_index = footprint_index
+        self.footprint_attributes = list()
         self.attributes = dict()
 
 
@@ -42,6 +44,11 @@ class ComponentInstance:
     def add_symbol_attribute(self, symbol_attribute):
         """ Add attribute to a components symbol """
         self.symbol_attributes.append(symbol_attribute)
+
+
+    def add_footprint_attribute(self, footprint_attribute):
+        """ Add attribute to a components footprint """
+        self.footprint_attributes.append(footprint_attribute)
 
 
     def get_instance_id(self):
@@ -74,6 +81,8 @@ class ComponentInstance:
             "library_id" : self.library_id,
             "symbol_index" : self.symbol_index,
             "symbol_attributes":[s.json() for s in self.symbol_attributes],
+            "footprint_index" : self.footprint_index,
+            "footprint_attributes":[s.json() for s in self.footprint_attributes],
             "attributes" : stringify_attributes(self.attributes)
             }
 
@@ -132,5 +141,58 @@ class SymbolAttribute:
             "y": int(self.y),
             "rotation": self.rotation,
             "flip": flip,
+            "annotations": [a.json() for a in self.annotations]
+            }
+
+
+class FootprintAttribute:
+    """ The instance of a single body.  There should be a FootprintAttribute
+    for every body in the footprint that ComponentInstance is an instance of.
+    """
+
+    def __init__(self, x, y, rotation, side="top"):
+        self.x = x
+        self.y = y
+        self.rotation = rotation
+        self.side = side
+        self.annotations = []
+
+
+    def add_annotation(self, annotation):
+        """ Add annotations to the body """
+        self.annotations.append(annotation)
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+        for anno in self.annotations:
+            anno.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the attributes. """
+        self.x += dx
+        self.y += dy
+        for anno in self.annotations:
+            anno.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the attributes. """
+        self.y = height - self.y
+        for anno in self.annotations:
+            anno.rebase_y_axis(height)
+
+
+    def json(self):
+        """ Return the body as JSON """
+
+        return {
+            "x": int(self.x),
+            "y": int(self.y),
+            "rotation": self.rotation,
+            "side": side,
             "annotations": [a.json() for a in self.annotations]
             }

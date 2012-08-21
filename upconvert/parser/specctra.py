@@ -26,7 +26,7 @@
 #
 
 from upconvert.core.design import Design
-from upconvert.core.components import Component, Symbol, Body, Pin
+from upconvert.core.components import Component, Symbol, FBody, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.shape import Circle, Line, Rectangle, Polygon, Point, Arc
@@ -96,7 +96,7 @@ class Specctra(object):
             component = Component(image.image_id)
             self.design.add_component(image.image_id, component)
             sym = Symbol()
-            body = Body()
+            body = FBody()
             component.add_symbol(sym)
             sym.add_body(body)
             for pin in image.pin:
