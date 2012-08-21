@@ -267,8 +267,8 @@ def main():
     upverter_upv_files = []
     os.path.walk('./test/openjson', filter_upv, upverter_upv_files)
 
-    upverter_dsn_files = []
-    os.path.walk('./test/specctra', filter_dsn, upverter_dsn_files)
+    specctra_dsn_files = []
+    os.path.walk('./test/specctra', filter_dsn, specctra_dsn_files)
 
     l = {'eagle': eagle_sch_files,
          'eaglexml': eaglexml_sch_files,
@@ -277,7 +277,7 @@ def main():
          'gerber': gerber_ger_files,
          'kicad': kicad_sch_files,
          'openjson': upverter_upv_files,
-        #'specctra': specctra_dsn_files,
+         'specctra': specctra_dsn_files,
         #'image': image_files,
     }
 
