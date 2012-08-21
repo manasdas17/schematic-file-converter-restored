@@ -114,7 +114,8 @@ def test_parse_generator(file_path, format):
         data = Upconverter.parse(file_path, format)
         self.assertTrue(data != None)
 
-        verify_json(data.json())
+        if format not in ['gerber']:
+            verify_json(data.json())
 
         tmp_fd, tmp_path = tempfile.mkstemp()
         os.close(tmp_fd)
@@ -309,7 +310,7 @@ def main():
             base = os.path.basename(f)
 
             if 'write' in args.test_types \
-                    and format not in ('eaglexml', 'fritzing', 'gerber'):
+                    and format not in ['fritzing', 'gerber']:
                 test_name = 'test_%s_%s_%s' % (format, base, 'write')
                 test = test_write_generator(f, format)
                 setattr(test_class, test_name, test)
