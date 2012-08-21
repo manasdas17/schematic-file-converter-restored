@@ -1,0 +1,262 @@
+(PCB "/web-mszyca242/mycelium/7_segment_shift_register_based_display/74hc595D_smd_2_digit_hp_display_simplified_0.1_left_to_right_shifting_uniform_mapping_d_laced_pads_b_perfect_route_2nd_side_bridges2.brd"
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad CadSoft)
+    (host_version 'EAGLE Version 5.9.0 Copyright (c) 1988-2010 CadSoft')
+  )
+  (resolution inch 10000)
+  (unit inch)
+  (structure
+    (layer "1#Top"  (type signal))
+    (layer "16#Bottom"  (type signal))
+    (boundary 
+      (rect pcb  0.000000 0.000000 3.937008 3.149606)
+    )
+    (boundary (path signal 0 0.000000 3.149606 0.000000 0.000000 3.937008 0.000000 3.937008 3.149606 ))
+    (via
+       "Round1$0.024000"
+    )
+    (rule (width 0.011000)(clearance 0.013000))
+    (rule (clearance 0.008000 (type pin_pin)))
+    (rule (clearance 0.008000 (type pin_via)))
+    (rule (clearance 0.008000 (type via_via)))
+    (rule (clearance 0.008000 (type smd_pin)))
+    (rule (clearance 0.008000 (type smd_via)))
+    (rule (clearance 0.008000 (type smd_smd)))
+    (control
+      (via_at_smd on)
+    )
+  )
+  (placement
+    (place_control (flip_style rotate_first))
+    (component "1,6/0,8$wirepad" 
+      (place "+5V" 1.903311 1.444850 Back 90.000000)
+    )
+    (component "1,6/0,8$wirepad" 
+      (place "CLK1" 1.913220 1.746583 Back 90.000000)
+    )
+    (component "1,6/0,8$wirepad" 
+      (place "DATA" 1.905929 1.560122 Back 270.000000)
+    )
+    (component "HDSP-R$display-hp" 
+      (place "DIS1" 1.446524 1.631551 Front 0.000000)
+    )
+    (component "1,6/0,8$wirepad" 
+      (place "GND2" 0.979339 1.818598 Back 270.000000)
+    )
+    (component "SO16$74xx-eu" 
+      (place "IC1" 1.172823 1.638843 Back 90.000000)
+    )
+    (component "SO16$74xx-eu" 
+      (place "IC2" 1.710449 1.642413 Back 90.000000)
+    )
+    (component "1,6/0,8$wirepad" 
+      (place "LATCH1" 1.907815 1.672118 Back 270.000000)
+    )
+    (component "1,6/0,8$wirepad" 
+      (place "O2" 1.373520 1.809461 Front 0.000000)
+    )
+    (component "1,6/0,8$wirepad" 
+      (place "TRIS1" 1.377343 1.613472 Back 270.000000)
+    )
+  )
+  (library
+    (image "SO16$74xx-eu"
+    (outline (path "1#Top" 0.002000 -0.200000 -0.063000 0.200000 -0.063000 ))
+    (outline (path "1#Top" 0.002000 -0.193819 0.019020 -0.200000 0.020000 -0.200000 0.062000 -0.199264 0.066634 -0.197134 0.070815 -0.193815 0.074134 -0.189634 0.076264 ))
+    (outline (path "1#Top" 0.002000 -0.188244 0.016177 -0.193819 0.019020 ))
+    (outline (path "1#Top" 0.002000 -0.183819 0.011752 -0.188244 0.016177 ))
+    (outline (path "1#Top" 0.002000 -0.180976 0.006177 -0.183819 0.011752 ))
+    (outline (path "1#Top" 0.002000 -0.180000 0.000000 -0.180976 0.006177 ))
+    (outline (path "1#Top" 0.002000 -0.180976 -0.006177 -0.180000 0.000000 ))
+    (outline (path "1#Top" 0.002000 -0.183819 -0.011752 -0.180976 -0.006177 ))
+    (outline (path "1#Top" 0.002000 -0.188244 -0.016177 -0.183819 -0.011752 ))
+    (outline (path "1#Top" 0.002000 -0.193819 -0.019020 -0.188244 -0.016177 ))
+    (outline (path "1#Top" 0.002000 -0.200000 -0.020000 -0.193819 -0.019020 ))
+    (outline (path "1#Top" 0.002000 -0.200000 -0.020000 -0.200000 -0.062000 -0.199264 -0.066634 -0.197134 -0.070815 -0.193815 -0.074134 -0.189634 -0.076264 ))
+    (outline (path "1#Top" 0.002000 -0.200000 0.020000 -0.200000 -0.020000 ))
+    (outline (path "1#Top" 0.002000 0.200000 -0.062000 0.200000 0.062000 0.199264 0.066634 0.197134 0.070815 0.193815 0.074134 0.189634 0.076264 ))
+    (outline (path "1#Top" 0.002000 0.199264 -0.066634 0.200000 -0.062000 ))
+    (outline (path "1#Top" 0.002000 0.197134 -0.070815 0.199264 -0.066634 ))
+    (outline (path "1#Top" 0.002000 0.193815 -0.074134 0.197134 -0.070815 ))
+    (outline (path "1#Top" 0.002000 0.189634 -0.076264 0.193815 -0.074134 ))
+    (outline (path "1#Top" 0.002000 0.185000 -0.077000 0.189634 -0.076264 ))
+      (pin "Rectangle1" "1" -0.175000 -0.121000)
+      (pin "Rectangle1" "2" -0.125000 -0.121000)
+      (pin "Rectangle1" "3" -0.075000 -0.121000)
+      (pin "Rectangle1" "4" -0.025000 -0.121000)
+      (pin "Rectangle1" "5" 0.025000 -0.121000)
+      (pin "Rectangle1" "6" 0.075000 -0.121000)
+      (pin "Rectangle1" "7" 0.125000 -0.121000)
+      (pin "Rectangle1" "8" 0.175000 -0.121000)
+      (pin "Rectangle1" "9" 0.175000 0.121000)
+      (pin "Rectangle1" "10" 0.125000 0.121000)
+      (pin "Rectangle1" "11" 0.075000 0.121000)
+      (pin "Rectangle1" "12" 0.025000 0.121000)
+      (pin "Rectangle1" "13" -0.025000 0.121000)
+      (pin "Rectangle1" "14" -0.075000 0.121000)
+      (pin "Rectangle1" "15" -0.125000 0.121000)
+      (pin "Rectangle1" "16" -0.175000 0.121000)
+    )
+    (image "HDSP-R$display-hp"
+    (outline (path "1#Top" 0.006000 -0.495000 0.335000 0.495000 0.335000 0.495000 -0.335000 -0.495000 -0.335000 ))
+      (pin "Oblong1" "1" -0.400000 -0.300000)
+      (pin "Oblong1" "2" -0.300000 -0.300000)
+      (pin "Oblong1" "3" -0.200000 -0.300000)
+      (pin "Oblong1" "4" -0.100000 -0.300000)
+      (pin "Oblong1" "5" 0.000000 -0.300000)
+      (pin "Oblong1" "6" 0.100000 -0.300000)
+      (pin "Oblong1" "7" 0.200000 -0.300000)
+      (pin "Oblong1" "8" 0.300000 -0.300000)
+      (pin "Oblong1" "9" 0.400000 -0.300000)
+      (pin "Oblong1" "10" 0.400000 0.300000)
+      (pin "Oblong1" "11" 0.300000 0.300000)
+      (pin "Oblong1" "12" 0.200000 0.300000)
+      (pin "Oblong1" "13" 0.100000 0.300000)
+      (pin "Oblong1" "14" 0.000000 0.300000)
+      (pin "Oblong1" "15" -0.100000 0.300000)
+      (pin "Oblong1" "16" -0.200000 0.300000)
+      (pin "Oblong1" "17" -0.300000 0.300000)
+      (pin "Oblong1" "18" -0.400000 0.300000)
+    )
+    (image "1,6/0,8$wirepad"
+    (outline (path "1#Top" 0.006000 -0.030000 -0.030000 -0.030000 -0.020000 ))
+    (outline (path "1#Top" 0.006000 -0.020000 -0.030000 -0.030000 -0.030000 ))
+    (outline (path "1#Top" 0.006000 0.030000 -0.030000 0.020000 -0.030000 ))
+    (outline (path "1#Top" 0.006000 0.030000 -0.020000 0.030000 -0.030000 ))
+    (outline (path "1#Top" 0.006000 0.030000 0.030000 0.020000 0.030000 ))
+    (outline (path "1#Top" 0.006000 0.030000 0.030000 0.030000 0.020000 ))
+    (outline (path "1#Top" 0.006000 -0.030000 0.030000 -0.030000 0.020000 ))
+    (outline (path "1#Top" 0.006000 -0.030000 0.030000 -0.020000 0.030000 ))
+      (pin "Octagon1" "1" 0.000000 0.000000)
+    )
+    (padstack "ViaDefault$0.024000"
+      (shape (circle signal 0.040000 0 0))
+    )
+    (padstack "Round1$0.024000" 
+      (shape (circle "1#Top" 0.040000 0 0))
+      (shape (circle "16#Bottom" 0.040000 0 0))
+      (attach off)
+    )
+    (padstack "Rectangle1" 
+      (shape (rect "1#Top" -0.013000 -0.040000 0.013000 0.040000))
+      (attach off)
+    )
+    (padstack "Oblong1" 
+      (shape (path signal 0.056000 0 0.028000 0 -0.028000))
+      (attach off)
+    )
+    (padstack "Octagon1" 
+      (shape (polygon "1#Top" 0 0.031500 0.013048 0.013048 0.031500 -0.013048 0.031500 -0.031500 0.013048 -0.031500 -0.013048 -0.013048 -0.031500 0.013048 -0.031500 0.031500 -0.013048 ))
+      (shape (polygon "16#Bottom" 0 0.031500 0.013048 0.013048 0.031500 -0.013048 0.031500 -0.031500 0.013048 -0.031500 -0.013048 -0.013048 -0.031500 0.013048 -0.031500 0.031500 -0.013048 ))
+      (attach off)
+    )
+  )
+  (network
+    (net "N$1"
+      (pins  "IC1"-"9" "O2"-"1")
+    )
+    (net "N$2"
+      (pins  "IC2"-"14" "DATA"-"1")
+    )
+    (net "N$3"
+      (pins  "IC1"-"15" "DIS1"-"16")
+    )
+    (net "N$4"
+      (pins  "DIS1"-"15" "IC1"-"1")
+    )
+    (net "N$5"
+      (pins  "DIS1"-"3" "IC1"-"2")
+    )
+    (net "N$6"
+      (pins  "IC1"-"3" "DIS1"-"2")
+    )
+    (net "N$7"
+      (pins  "IC1"-"4" "DIS1"-"1")
+    )
+    (net "N$8"
+      (pins  "IC1"-"5" "DIS1"-"18")
+    )
+    (net "N$9"
+      (pins  "DIS1"-"13")
+    )
+    (net "N$10"
+      (pins  "IC1"-"6" "DIS1"-"17")
+    )
+    (net "N$11"
+      (pins  "DIS1"-"4" "IC1"-"7")
+    )
+    (net "N$12"
+      (pins  "IC2"-"15" "DIS1"-"11")
+    )
+    (net "N$13"
+      (pins  "IC2"-"1" "DIS1"-"10")
+    )
+    (net "N$14"
+      (pins  "IC2"-"2" "DIS1"-"8")
+    )
+    (net "N$15"
+      (pins  "IC2"-"3" "DIS1"-"6")
+    )
+    (net "N$16"
+      (pins  "IC2"-"4" "DIS1"-"5")
+    )
+    (net "N$17"
+      (pins  "IC2"-"5" "DIS1"-"12")
+    )
+    (net "N$18"
+      (pins  "IC2"-"6" "DIS1"-"7")
+    )
+    (net "N$19"
+      (pins  "IC2"-"7" "DIS1"-"9")
+    )
+    (net "N$20"
+      (pins  "IC1"-"14" "IC2"-"9")
+    )
+    (net "N$21"
+      (pins  "IC2"-"8" "IC1"-"8" "GND2"-"1")
+    )
+    (net "N$22"
+      (pins  "CLK1"-"1" "IC1"-"11" "IC2"-"11")
+    )
+    (net "N$25"
+      (pins  "IC1"-"10" "IC2"-"16" "+5V"-"1" "IC2"-"10" "IC1"-"16")
+    )
+    (net "N$27"
+      (pins  "IC1"-"12" "LATCH1"-"1" "IC2"-"12")
+    )
+    (net "N$28"
+      (pins  "IC1"-"13" "TRIS1"-"1" "IC2"-"13")
+    )
+    (net "N$32"
+      (pins  "DIS1"-"14")
+    )
+  )
+  (wiring
+    (wire
+      (path "16#Bottom" 0.011000 1.294000 1.813000 1.297000 1.810000) 
+      (net "N$1")
+    )
+    (wire
+      (path "16#Bottom" 0.011000 1.297000 1.810000 1.373000 1.810000) 
+      (net "N$1")
+    )
+    (wire
+      (path "16#Bottom" 0.011000 1.293823 1.813843 1.294000 1.813000) 
+      (net "N$1")
+    )
+    (wire
+      (path "16#Bottom" 0.011000 1.373000 1.810000 1.373520 1.809461) 
+      (net "N$1")
+    )
+    (wire
+      (path "16#Bottom" 0.011000 1.293823 1.613843 1.294000 1.614000) 
+      (net "N$28")
+    )
+    (wire
+      (path "16#Bottom" 0.011000 1.377000 1.614000 1.377343 1.613472) 
+      (net "N$28")
+    )
+  )
+)

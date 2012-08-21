@@ -1,0 +1,252 @@
+(pcb /home/peter/subversion/caltech/Kicad/projects/CameraTriggerBoards/CameraTrigger/CameraTrigger.dsn
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(20100406 SVN-R2509)-final")
+  )
+  (resolution mil 10)
+  (unit mil)
+  (structure
+    (layer Front
+      (type signal)
+      (property
+        (index 0)
+      )
+    )
+    (layer Back
+      (type signal)
+      (property
+        (index 1)
+      )
+    )
+    (boundary
+      (path pcb 0  2900 -3075  5900 -3075  5900 -5325  2900 -5325  2900 -3075)
+    )
+    (plane GND (polygon Back 0  5900 -5325  5900 -3075  2900 -3075  2900 -5325))
+    (plane +5V (polygon Front 0  5900 -5325  5900 -3075  2900 -3075  2900 -5325))
+    (via "Via[0-1]_35:25_mil" "Via[0-1]_35:0_mil")
+    (rule
+      (width 8)
+      (clearance 10.1)
+      (clearance 10.1 (type default_smd))
+      (clearance 2.5 (type smd_smd))
+    )
+  )
+  (placement
+    (component BNC
+      (place P1 3350 -4700 front 90 (PN BNC))
+    )
+    (component Teensypp
+      (place U1 3925 -3700 front 0 (PN TEENSYPP))
+    )
+    (component MOUNT_HOLE
+      (place MOUNT_HOLE_02 3025 -3200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_01 3025 -5200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_03 3900 -5200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_04 3900 -3200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_06 4900 -3200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_05 4900 -5200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_08 5775 -3200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_07 5775 -5200 front 0 (PN VAL**))
+    )
+    (component HEADER_5x2_LARGE
+      (place P2 4400 -4700 front 270 (PN camera_trigger_x4))
+      (place P3 5400 -4700 front 270 (PN external_triggers))
+      (place P4 5400 -3700 front 270 (PN analog_inputs))
+    )
+  )
+  (library
+    (image BNC
+      (outline (path signal 15  300 100  300 -500))
+      (outline (path signal 15  -300 100  -300 -500))
+      (outline (path signal 15  -200 100  -200 130))
+      (outline (path signal 15  -200 130  200 130))
+      (outline (path signal 15  200 130  200 100))
+      (outline (path signal 15  -300 -300  300 -300))
+      (outline (path signal 15  -300 100  300 100))
+      (outline (path signal 15  -300 -500  300 -500))
+      (pin Round[A]Pad_120_mil @1 -200 0)
+      (pin Round[A]Pad_120_mil @2 200 0)
+      (pin Rect[A]Pad_65x65_mil 1 0 -200)
+      (pin Round[A]Pad_65_mil 2 -100 -200)
+      (pin Round[A]Pad_120_mil @3 -200 -400)
+    )
+    (image Teensypp
+      (outline (path signal 15  -1000 150  -725 150))
+      (outline (path signal 15  -725 150  -725 -150))
+      (outline (path signal 15  -725 -150  -1000 -150))
+      (outline (path signal 15  -1000 250  -1000 -250))
+      (outline (path signal 15  -1000 -250  1000 -250))
+      (outline (path signal 15  1000 -250  1000 250))
+      (outline (path signal 15  1000 250  -1000 250))
+      (pin Round[A]Pad_69_mil 101 -950 300)
+      (pin Round[A]Pad_69_mil 16 -850 300)
+      (pin Round[A]Pad_69_mil 15 -750 300)
+      (pin Round[A]Pad_69_mil 14 -650 300)
+      (pin Round[A]Pad_69_mil 13 -550 300)
+      (pin Round[A]Pad_69_mil 12 -450 300)
+      (pin Round[A]Pad_69_mil 11 -350 300)
+      (pin Round[A]Pad_69_mil 10 -250 300)
+      (pin Round[A]Pad_69_mil 2 -150 300)
+      (pin Round[A]Pad_69_mil 1 -50 300)
+      (pin Round[A]Pad_69_mil 63 50 300)
+      (pin Round[A]Pad_69_mil 62 150 300)
+      (pin Round[A]Pad_69_mil 61 250 300)
+      (pin Round[A]Pad_69_mil 60 350 300)
+      (pin Round[A]Pad_69_mil 54 950 300)
+      (pin Round[A]Pad_69_mil 55 850 300)
+      (pin Round[A]Pad_69_mil 56 750 300)
+      (pin Round[A]Pad_69_mil 57 650 300)
+      (pin Round[A]Pad_69_mil 58 550 300)
+      (pin Round[A]Pad_69_mil 59 450 300)
+      (pin Rect[A]Pad_69x69_mil 100 -950 -300)
+      (pin Round[A]Pad_69_mil 17 -850 -300)
+      (pin Round[A]Pad_69_mil 25 -750 -300)
+      (pin Round[A]Pad_69_mil 26 -650 -300)
+      (pin Round[A]Pad_69_mil 27 -550 -300)
+      (pin Round[A]Pad_69_mil 28 -450 -300)
+      (pin Round[A]Pad_69_mil 29 -350 -300)
+      (pin Round[A]Pad_69_mil 30 -250 -300)
+      (pin Round[A]Pad_69_mil 31 -150 -300)
+      (pin Round[A]Pad_69_mil 32 -50 -300)
+      (pin Round[A]Pad_69_mil 33 50 -300)
+      (pin Round[A]Pad_69_mil 34 150 -300)
+      (pin Round[A]Pad_69_mil 35 250 -300)
+      (pin Round[A]Pad_69_mil 36 350 -300)
+      (pin Round[A]Pad_69_mil 37 450 -300)
+      (pin Round[A]Pad_69_mil 38 550 -300)
+      (pin Round[A]Pad_69_mil 39 650 -300)
+      (pin Round[A]Pad_69_mil 40 750 -300)
+      (pin Round[A]Pad_69_mil 41 850 -300)
+      (pin Round[A]Pad_69_mil 42 950 -300)
+    )
+    (image MOUNT_HOLE
+      (pin Round[A]Pad_130_mil @1 0 0)
+    )
+    (image HEADER_5x2_LARGE
+      (outline (path signal 15  -400 180  -400 -180))
+      (outline (path signal 15  -400 -180  400 -180))
+      (outline (path signal 15  400 -180  400 180))
+      (outline (path signal 15  400 180  -400 180))
+      (outline (path signal 15  -200 -200  -250 -260))
+      (outline (path signal 15  -250 -260  -150 -260))
+      (outline (path signal 15  -150 -260  -200 -200))
+      (pin Rect[A]Pad_70x70_mil 1 -200 -50)
+      (pin Round[A]Pad_70_mil 2 -200 50)
+      (pin Round[A]Pad_70_mil 3 -100 -50)
+      (pin Round[A]Pad_70_mil 4 -100 50)
+      (pin Round[A]Pad_70_mil 5 0 -50)
+      (pin Round[A]Pad_70_mil 6 0 50)
+      (pin Round[A]Pad_70_mil 7 100 -50)
+      (pin Round[A]Pad_70_mil 8 100 50)
+      (pin Round[A]Pad_70_mil 9 200 -50)
+      (pin Round[A]Pad_70_mil 10 200 50)
+    )
+    (padstack Round[A]Pad_120_mil
+      (shape (circle Front 120))
+      (shape (circle Back 120))
+      (attach off)
+    )
+    (padstack Round[A]Pad_130_mil
+      (shape (circle Front 130))
+      (shape (circle Back 130))
+      (attach off)
+    )
+    (padstack Round[A]Pad_65_mil
+      (shape (circle Front 65))
+      (shape (circle Back 65))
+      (attach off)
+    )
+    (padstack Round[A]Pad_69_mil
+      (shape (circle Front 69))
+      (shape (circle Back 69))
+      (attach off)
+    )
+    (padstack Round[A]Pad_70_mil
+      (shape (circle Front 70))
+      (shape (circle Back 70))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_65x65_mil
+      (shape (rect Front -32.5 -32.5 32.5 32.5))
+      (shape (rect Back -32.5 -32.5 32.5 32.5))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_69x69_mil
+      (shape (rect Front -34.5 -34.5 34.5 34.5))
+      (shape (rect Back -34.5 -34.5 34.5 34.5))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_70x70_mil
+      (shape (rect Front -35 -35 35 35))
+      (shape (rect Back -35 -35 35 35))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:25_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:0_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+  )
+  (network
+    (net +5V
+      (pins U1-101 P2-1 P3-1 P4-1)
+    )
+    (net /analog_input_0
+      (pins U1-61 P4-3)
+    )
+    (net /analog_input_1
+      (pins U1-60 P4-5)
+    )
+    (net /analog_input_2
+      (pins U1-59 P4-7)
+    )
+    (net /analog_input_3
+      (pins U1-58 P4-9)
+    )
+    (net /camera_sync_trigger
+      (pins P1-1 U1-41 P2-3 P2-5 P2-7 P2-9 P3-3)
+    )
+    (net /external_device_trigger_1
+      (pins U1-36 P3-5)
+    )
+    (net /external_device_trigger_2
+      (pins U1-37 P3-7)
+    )
+    (net /external_device_trigger_3
+      (pins U1-38 P3-9)
+    )
+    (net GND
+      (pins P1-2 U1-100 P2-2 P2-4 P2-6 P2-8 P2-10 P3-2 P3-4 P3-6 P3-8 P3-10 P4-2 P4-4
+        P4-6 P4-8 P4-10)
+    )
+    (class kicad_default ""
+      (circuit
+        (use_via Via[0-1]_35:25_mil)
+      )
+      (rule
+        (width 8)
+        (clearance 10.1)
+      )
+    )
+    (class Signal +5V /analog_input_0 /analog_input_1 /analog_input_2 /analog_input_3
+      /camera_sync_trigger /external_device_trigger_1 /external_device_trigger_2
+      /external_device_trigger_3 GND
+      (circuit
+        (use_via Via[0-1]_35:25_mil)
+      )
+      (rule
+        (width 32)
+        (clearance 10.1)
+      )
+    )
+  )
+  (wiring
+  )
+)

@@ -1,0 +1,685 @@
+(PCB "NES232"
+    (parser
+        (string_quote ")
+        (space_in_quoted_tokens on)
+        (host_cad "FreePCB Ver 1.355")
+        (host_version "translated by: FpcROUTE Ver 1.303R")
+        (case_sensitive on)
+    )
+    (resolution mil 100)
+    (structure
+        (boundary
+            (rect pcb -60.00 -230.00 1940.00 1600.00)
+        )
+        (boundary
+            (path signal 0
+                -50.00  -230.00
+                -50.00  1600.00
+                1940.00  1600.00
+                1940.00  -230.00
+                -60.00  -230.00
+            )
+        )
+        (snap_angle
+            fortyfive_degree
+        )
+        (via
+            DefVia
+        )
+        (control
+            (via_at_smd off)
+        )
+        (rule
+            (width 10.0)
+            (clear 10.0)
+            (clear 10.0 (type pad_to_turn_gap))
+            (clear 10.0 (type smd_to_turn_gap))
+            (clear 10.0 (type default_area))
+            (clear 10.0 (type via_via))
+            (clear 10.0 (type via_smd))
+            (clear 10.0 (type via_pin))
+            (clear 10.0 (type pin_pin))
+            (clear 10.0 (type smd_pin))
+            (clear 10.0 (type smd_smd))
+            (clear 25.0 (type default_Outlines))
+            (clear 25.0 (type area_Outlines))
+            (clear 25.0 (type via_Outlines))
+            (clear 25.0 (type smd_Outlines))
+            (clear 25.0 (type pin_Outlines))
+            (clear 0.00 (type Outlines_Outlines))
+        )
+        (layer Top
+            (type signal)
+            (direction horizontal)
+        )
+        (layer Bottom
+            (type signal)
+            (direction vertical)
+        )
+    )
+    (placement
+        (place_control
+            (flip_style mirror_first)
+        )
+        (component "S016"
+            (place "MAX232" 610.00 70.00 front 0)
+        )
+        (component "S020W"
+            (place "ATTiny2313" 580.00 1440.00 front 270)
+        )
+        (component "C0402"
+            (place "16v5" 1080.00 110.00 front 270)
+            (place "16v7" 720.00 670.00 front 270)
+            (place "16v8" 820.00 670.00 front 270)
+        )
+        (component "1X2HDR-100"
+            (place "ATTiny2316" 460.00 420.00 front 180)
+            (place "MAXRXTX" 1080.00 320.00 front 180)
+        )
+        (component "DB9M-90-MiddlePosts"
+            (place "RS232" 1520.00 580.00 back 90)
+        )
+        (component "C0603"
+            (place "16v1" 600.00 420.00 front 0)
+            (place "16v2" 880.00 -50.00 front 270)
+            (place "16v3" 790.00 -120.00 front 90)
+            (place "16v4" 650.00 -50.00 front 180)
+        )
+        (component "8TERMCON"
+            (place "Header8" 150.00 1390.00 front 270)
+        )
+        (component "6X2HDR-100"
+            (place "HDR12" 1780.00 1470.00 front 180)
+        )
+        (component "HC49S"
+            (place "16v9" 610.00 840.00 front 0)
+        )
+    )
+    (library
+        (image "S016"
+            (side front)
+            (pin Pad101 (rotate 0) "1" 0.00 0.00)
+            (pin Pad101 (rotate 0) "2" 50.00 0.00)
+            (pin Pad101 (rotate 0) "3" 100.00 0.00)
+            (pin Pad101 (rotate 0) "4" 150.00 0.00)
+            (pin Pad101 (rotate 0) "5" 200.00 0.00)
+            (pin Pad101 (rotate 0) "6" 250.00 0.00)
+            (pin Pad101 (rotate 0) "7" 300.00 0.00)
+            (pin Pad101 (rotate 0) "8" 350.00 0.00)
+            (pin Pad101 (rotate 0) "9" 350.00 196.85)
+            (pin Pad101 (rotate 0) "10" 300.00 196.85)
+            (pin Pad101 (rotate 0) "11" 250.00 196.85)
+            (pin Pad101 (rotate 0) "12" 200.00 196.85)
+            (pin Pad101 (rotate 0) "13" 150.00 196.85)
+            (pin Pad101 (rotate 0) "14" 100.00 196.85)
+            (pin Pad101 (rotate 0) "15" 50.00 196.85)
+            (pin Pad101 (rotate 0) "16" 0.00 196.85)
+            (outline
+                (rect signal -55.24 -55.24 405.24 252.09)
+            )
+            (outline
+                (polygon signal 0
+                    -27.56  59.06
+                    377.56  59.06
+                    377.56  137.80
+                    -27.56  137.80
+                )
+            )
+            (outline
+                (polygon signal 0
+                    -27.56  78.74
+                    -7.87  78.74
+                    -7.87  118.11
+                    -27.56  118.11
+                )
+            )
+        )
+        (image "S020W"
+            (side front)
+            (pin Pad102 (rotate 0) "1" 0.00 0.00)
+            (pin Pad102 (rotate 0) "2" 50.00 0.00)
+            (pin Pad102 (rotate 0) "3" 100.00 0.00)
+            (pin Pad102 (rotate 0) "4" 150.00 0.00)
+            (pin Pad102 (rotate 0) "5" 200.00 0.00)
+            (pin Pad102 (rotate 0) "6" 250.00 0.00)
+            (pin Pad102 (rotate 0) "7" 300.00 0.00)
+            (pin Pad102 (rotate 0) "8" 350.00 0.00)
+            (pin Pad102 (rotate 0) "9" 400.00 0.00)
+            (pin Pad102 (rotate 0) "10" 450.00 0.00)
+            (pin Pad102 (rotate 0) "11" 450.00 362.20)
+            (pin Pad102 (rotate 0) "12" 400.00 362.20)
+            (pin Pad102 (rotate 0) "13" 350.00 362.20)
+            (pin Pad102 (rotate 0) "14" 300.00 362.20)
+            (pin Pad102 (rotate 0) "15" 250.00 362.20)
+            (pin Pad102 (rotate 0) "16" 200.00 362.20)
+            (pin Pad102 (rotate 0) "17" 150.00 362.20)
+            (pin Pad102 (rotate 0) "18" 100.00 362.20)
+            (pin Pad102 (rotate 0) "19" 50.00 362.20)
+            (pin Pad102 (rotate 0) "20" 0.00 362.20)
+            (outline
+                (rect signal -59.18 -59.18 509.18 421.39)
+            )
+            (outline
+                (polygon signal 0
+                    -27.56  62.99
+                    477.56  62.99
+                    477.56  299.21
+                    -27.56  299.21
+                )
+            )
+            (outline
+                (polygon signal 0
+                    -27.56  82.68
+                    -7.87  82.68
+                    -7.87  279.53
+                    -27.56  279.53
+                )
+            )
+        )
+        (image "C0402"
+            (side front)
+            (pin Pad103 (rotate 0) "1" 0.00 0.00)
+            (pin Pad103 (rotate 0) "2" 51.18 0.00)
+            (outline
+                (rect signal -37.53 -35.56 88.71 35.56)
+            )
+            (outline
+                (polygon signal 0
+                    -29.53  27.56
+                    80.71  27.56
+                    80.71  -27.56
+                    -29.53  -27.56
+                )
+            )
+        )
+        (image "1X2HDR-100"
+            (side front)
+            (pin Pad104 (rotate 0) "1" 0.00 0.00)
+            (pin Pad105 (rotate 0) "2" 0.00 100.00)
+            (outline
+                (rect signal -65.00 -65.00 65.00 165.00)
+            )
+            (outline
+                (polygon signal 0
+                    -50.00  150.00
+                    -50.00  -50.00
+                    50.00  -50.00
+                    50.00  150.00
+                )
+            )
+            (outline
+                (circle  signal 40.00 0.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 0.00 100.00)
+            )
+        )
+        (image "DB9M-90-MiddlePosts"
+            (side front)
+            (pin Pad106 (rotate 0) "1" 0.00 0.00)
+            (pin Pad107 (rotate 0) "2" 109.00 0.00)
+            (pin Pad107 (rotate 0) "3" 218.00 0.00)
+            (pin Pad107 (rotate 0) "4" 327.00 0.00)
+            (pin Pad107 (rotate 0) "5" 436.00 0.00)
+            (pin Pad107 (rotate 0) "6" 54.00 -112.00)
+            (pin Pad107 (rotate 0) "7" 163.00 -112.00)
+            (pin Pad107 (rotate 0) "8" 272.00 -112.00)
+            (pin Pad107 (rotate 0) "9" 381.00 -112.00)
+            (pin Pad108 (rotate 0) "10" -280.00 -50.00)
+            (pin Pad108 (rotate 0) "11" 700.00 -50.00)
+            (outline
+                (rect signal -365.00 -670.50 785.00 113.50)
+            )
+            (outline
+                (polygon signal 0
+                    -130.00  100.00
+                    566.00  100.00
+                    566.00  -657.00
+                    -130.00  -657.00
+                )
+            )
+            (outline
+                (circle  signal 43.00 0.00 0.00)
+            )
+            (outline
+                (circle  signal 43.00 109.00 0.00)
+            )
+            (outline
+                (circle  signal 43.00 218.00 0.00)
+            )
+            (outline
+                (circle  signal 43.00 327.00 0.00)
+            )
+            (outline
+                (circle  signal 43.00 436.00 0.00)
+            )
+            (outline
+                (circle  signal 43.00 54.00 -112.00)
+            )
+            (outline
+                (circle  signal 43.00 163.00 -112.00)
+            )
+            (outline
+                (circle  signal 43.00 272.00 -112.00)
+            )
+            (outline
+                (circle  signal 43.00 381.00 -112.00)
+            )
+            (outline
+                (circle  signal 125.00 -280.00 -50.00)
+            )
+            (outline
+                (circle  signal 125.00 700.00 -50.00)
+            )
+        )
+        (image "C0603"
+            (side front)
+            (pin Pad109 (rotate 0) "1" 0.00 0.00)
+            (pin Pad109 (rotate 0) "2" 66.93 0.00)
+            (outline
+                (rect signal -41.46 -43.43 108.39 43.43)
+            )
+            (outline
+                (polygon signal 0
+                    -33.46  35.43
+                    100.39  35.43
+                    100.39  -35.43
+                    -33.46  -35.43
+                )
+            )
+        )
+        (image "8TERMCON"
+            (side front)
+            (pin Pad110 (rotate 0) "1" 0.00 0.00)
+            (pin Pad110 (rotate 0) "2" 200.00 0.00)
+            (pin Pad110 (rotate 0) "3" 400.00 0.00)
+            (pin Pad110 (rotate 0) "4" 600.00 0.00)
+            (pin Pad110 (rotate 0) "5" 800.00 0.00)
+            (pin Pad110 (rotate 0) "6" 1200.00 0.00)
+            (pin Pad110 (rotate 0) "7" 1000.00 0.00)
+            (pin Pad110 (rotate 0) "8" 1400.00 0.00)
+            (outline
+                (rect signal -158.00 -208.00 1558.00 208.00)
+            )
+            (outline
+                (path signal 0
+                    -150.00  200.00
+                    -150.00  -200.00
+                )
+            )
+            (outline
+                (path signal 0
+                    -150.00  -200.00
+                    1550.00  -200.00
+                )
+            )
+            (outline
+                (path signal 0
+                    1550.00  -200.00
+                    1550.00  200.00
+                )
+            )
+            (outline
+                (path signal 0
+                    1550.00  200.00
+                    -150.00  200.00
+                )
+            )
+            (outline
+                (path signal 0
+                    -100.00  200.00
+                    -100.00  -200.00
+                )
+            )
+            (outline
+                (circle  signal 79.00 0.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 200.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 400.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 600.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 800.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 1200.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 1000.00 0.00)
+            )
+            (outline
+                (circle  signal 79.00 1400.00 0.00)
+            )
+        )
+        (image "6X2HDR-100"
+            (side front)
+            (pin Pad104 (rotate 0) "1" 0.00 0.00)
+            (pin Pad105 (rotate 0) "2" 0.00 100.00)
+            (pin Pad105 (rotate 0) "3" 100.00 0.00)
+            (pin Pad105 (rotate 0) "4" 100.00 100.00)
+            (pin Pad105 (rotate 0) "5" 200.00 0.00)
+            (pin Pad105 (rotate 0) "6" 200.00 100.00)
+            (pin Pad105 (rotate 0) "7" 300.00 0.00)
+            (pin Pad105 (rotate 0) "8" 300.00 100.00)
+            (pin Pad105 (rotate 0) "9" 400.00 0.00)
+            (pin Pad105 (rotate 0) "10" 400.00 100.00)
+            (pin Pad105 (rotate 0) "11" 500.00 0.00)
+            (pin Pad105 (rotate 0) "12" 500.00 100.00)
+            (outline
+                (rect signal -33.00 -33.00 533.00 133.00)
+            )
+            (outline
+                (circle  signal 40.00 0.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 0.00 100.00)
+            )
+            (outline
+                (circle  signal 40.00 100.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 100.00 100.00)
+            )
+            (outline
+                (circle  signal 40.00 200.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 200.00 100.00)
+            )
+            (outline
+                (circle  signal 40.00 300.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 300.00 100.00)
+            )
+            (outline
+                (circle  signal 40.00 400.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 400.00 100.00)
+            )
+            (outline
+                (circle  signal 40.00 500.00 0.00)
+            )
+            (outline
+                (circle  signal 40.00 500.00 100.00)
+            )
+        )
+        (image "HC49S"
+            (side front)
+            (pin Pad111 (rotate 90) "1" 0.00 0.00)
+            (pin Pad111 (rotate 90) "2" 480.00 0.00)
+            (outline
+                (rect signal -55.00 -55.00 535.00 55.00)
+            )
+            (outline
+                (polygon signal 0
+                    -40.00  40.00
+                    -40.00  -40.00
+                    520.00  -40.00
+                    520.00  40.00
+                )
+            )
+        )
+        (padstack DefVia
+            (shape (circle signal 28.00))
+        )
+        (padstack Pad101
+            (shape (rect Top -15.75 -47.25 15.75 47.25))
+        )
+        (padstack Pad102
+            (shape (rect Top -15.75 -51.20 15.75 51.20))
+        )
+        (padstack Pad103
+            (shape (rect Top -17.70 -15.75 17.70 15.75))
+        )
+        (padstack Pad104
+            (shape (rect signal -30.00 -30.00 30.00 30.00))
+        )
+        (padstack Pad105
+            (shape (circle signal 60.00))
+        )
+        (padstack Pad106
+            (shape (rect signal -30.00 -30.00 30.00 30.00))
+        )
+        (padstack Pad107
+            (shape (circle signal 60.00))
+        )
+        (padstack Pad108
+            (shape (circle signal 150.00))
+        )
+        (padstack Pad109
+            (shape (rect Top -21.65 -23.60 21.65 23.60))
+        )
+        (padstack Pad110
+            (shape (circle signal 115.00))
+        )
+        (padstack Pad111
+            (shape (rect Top -30.00 -30.00 30.00 30.00))
+        )
+    )
+    (network
+        (net "PortB2"
+            (pins
+                "ATTiny2313"-"13"
+                "HDR12"-"6"
+            )
+        )
+        (net "PortB3"
+            (pins
+                "ATTiny2313"-"14"
+                "HDR12"-"7"
+            )
+        )
+        (net "VCC"
+            (pins
+                "ATTiny2313"-"20"
+                "ATTiny2316"-"2"
+                "Header8"-"1"
+                "HDR12"-"1"
+            )
+        )
+        (net "PortD6"
+            (pins
+                "ATTiny2313"-"9"
+                "Header8"-"6"
+            )
+        )
+        (net "PortB4"
+            (pins
+                "ATTiny2313"-"15"
+                "HDR12"-"8"
+            )
+        )
+        (net "PortD7"
+            (pins
+                "HDR12"-"4"
+                "ATTiny2313"-"11"
+            )
+        )
+        (net "PortB5"
+            (pins
+                "ATTiny2313"-"16"
+                "HDR12"-"9"
+            )
+        )
+        (net "UCTX"
+            (pins
+                "ATTiny2313"-"3"
+                "Header8"-"3"
+            )
+        )
+        (net "PortB6"
+            (pins
+                "ATTiny2313"-"17"
+                "HDR12"-"10"
+            )
+        )
+        (net "PortB7"
+            (pins
+                "HDR12"-"11"
+                "ATTiny2313"-"18"
+            )
+        )
+        (net "UCRX"
+            (pins
+                "ATTiny2313"-"2"
+                "Header8"-"2"
+            )
+        )
+        (net "Cap1-1"
+            (pins
+                "MAX232"-"6"
+                "16v2"-"1"
+            )
+        )
+        (net "PortB8"
+            (pins
+                "ATTiny2313"-"19"
+                "HDR12"-"12"
+            )
+        )
+        (net "MAXVCC1"
+            (pins
+                "MAX232"-"16"
+                "ATTiny2316"-"1"
+                "16v1"-"1"
+            )
+        )
+        (net "Cap2-1"
+            (pins
+                "16v3"-"2"
+                "MAX232"-"5"
+            )
+        )
+        (net "Cap2-2"
+            (pins
+                "16v3"-"1"
+                "MAX232"-"4"
+            )
+        )
+        (net "NESCLK"
+            (pins
+                "ATTiny2313"-"6"
+                "Header8"-"4"
+            )
+        )
+        (net "Cap4-1"
+            (pins
+                "16v4"-"1"
+                "MAX232"-"2"
+            )
+        )
+        (net "XTAL1"
+            (pins
+                "ATTiny2313"-"4"
+                "16v9"-"2"
+                "16v8"-"1"
+            )
+        )
+        (net "Cap5-1"
+            (pins
+                "16v5"-"2"
+                "MAX232"-"3"
+            )
+        )
+        (net "XTAL2"
+            (pins
+                "ATTiny2313"-"5"
+                "16v9"-"1"
+                "16v7"-"1"
+            )
+        )
+        (net "GND"
+            (pins
+                "RS232"-"5"
+                "MAX232"-"15"
+                "Header8"-"8"
+                "16v1"-"2"
+                "16v2"-"2"
+                "16v4"-"2"
+                "16v7"-"2"
+                "16v8"-"2"
+                "HDR12"-"2"
+                "ATTiny2313"-"10"
+            )
+        )
+        (net "RS232TX"
+            (pins
+                "MAX232"-"14"
+                "RS232"-"3"
+            )
+        )
+        (net "Cap5-2"
+            (pins
+                "16v5"-"1"
+                "MAX232"-"1"
+            )
+        )
+        (net "NESLATCH"
+            (pins
+                "ATTiny2313"-"7"
+                "Header8"-"5"
+            )
+        )
+        (net "NESDATA"
+            (pins
+                "ATTiny2313"-"8"
+                "Header8"-"7"
+            )
+        )
+        (net "RS232RX"
+            (pins
+                "MAX232"-"13"
+                "RS232"-"2"
+            )
+        )
+        (net "MAXUCTX"
+            (pins
+                "MAXRXTX"-"2"
+                "MAX232"-"11"
+            )
+        )
+        (net "MAXUCRX"
+            (pins
+                "MAXRXTX"-"1"
+                "MAX232"-"12"
+            )
+        )
+        (net "PortD1"
+            (pins
+                "ATTiny2313"-"1"
+                "HDR12"-"3"
+            )
+        )
+        (net "CLK"
+        )
+        (net "PortB1"
+            (pins
+                "ATTiny2313"-"12"
+                "HDR12"-"5"
+            )
+        )
+        (via DefVia DefVia via)
+        (via_rule default DefVia)
+        (class default
+            "PortB2"  "PortB3"  "VCC"  "PortD6"  
+            "PortB4"  "PortD7"  "PortB5"  "UCTX"  
+            "PortB6"  "PortB7"  "UCRX"  "Cap1-1"  
+            "PortB8"  "MAXVCC1"  "Cap2-1"  "Cap2-2"  
+            "NESCLK"  "Cap4-1"  "XTAL1"  "Cap5-1"  
+            "XTAL2"  "GND"  "RS232TX"  "Cap5-2"  
+            "NESLATCH"  "NESDATA"  "RS232RX"  "MAXUCTX"  
+            "MAXUCRX"  "PortD1"  "CLK"  "PortB1"  
+            (clearance_class default)
+            (via_rule default)
+        )
+    )
+    (wiring
+    )
+)

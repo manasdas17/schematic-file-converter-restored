@@ -1,0 +1,624 @@
+(PCB C:\PSD_Data\tp\worklib\carte1\physical\unnamed.brd
+ (parser
+  (string_quote ')
+  (space_in_quoted_tokens on)
+  (host_cad allegro)
+  (host_version 'v15-1-31A_11/18/2003')
+  (write_resolution MM 100000)
+  (routes_include testpoint)
+  (constant pcb_xlo 0)
+  (constant pcb_ylo 0)
+  (constant pcb_xhi 533.4000)
+  (constant pcb_yhi 431.8000)
+  (constant board_name 'C:\PSD_Data\tp\worklib\carte1\physical\unnamed.brd')
+  (via_rotate_first off))
+ (resolution MM 100000)
+ (time_resolution nsec 1000000)
+ (structure
+  (boundary (rect pcb 0 0 533.4000 431.8000))
+  (boundary (rect signal 0 0 533.4000 431.8000))
+  (place_boundary (rect signal 10.1600 7.6200 190.5000 287.0200))
+  (control (off_grid off)
+   (force_to_terminal_point on)
+   (noise_accumulation RSS)
+   (noise_calculation linear_interpolation)
+   (crosstalk_model CCT1A)
+   (bbv_ctr2ctr on)
+   (roundoff_rotation on)
+   (average_pair_length off)
+   (reroute_order_viols on))
+  (layer TOP
+   (type signal))
+  (layer BOTTOM
+   (type signal))
+  (rule (clearance 0.3000))
+  (rule (width 1))
+  (via VIA)
+  (grid via 0.0001)
+  (grid wire 0.0001))
+ (placement
+  (place_control (flip_style mirror_first))
+  (component BNC_U10
+   (place U10 19.6850 76.8350 front 0 (property (height 3.8100))))
+  (component BNC_U9
+   (place U9 20.9550 102.2350 front 0 (property (height 3.8100))))
+  (component BNC_U7
+   (place U7 165.1000 167.6400 front 0 (property (height 3.8100))))
+  (component BNC_U6
+   (place U6 144.7800 167.6400 front 0 (property (height 3.8100))))
+  (component BNC_U5
+   (place U5 20.9550 126.3650 front 0 (property (height 3.8100))))
+  (component BNC_U4
+   (place U4 46.9900 173.3550 front 0 (property (height 3.8100))))
+  (component BNC_U3
+   (place U3 24.1300 173.3550 front 0 (property (height 3.8100))))
+  (component BNC_U2
+   (place U2 19.6850 50.1650 front 0 (property (height 3.8100))))
+  (component BNC_U1
+   (place U1 20.3200 24.7650 front 0 (property (height 3.8100))))
+  (component BNC_U8
+   (place U8 17.7800 259.0800 front 0 (property (height 3.8100))))
+  (component POINTTEST_J58
+   (place J58 205.7400 292.1000 front 0 (property (height 3.8100))))
+  (component POINTTEST_J57
+   (place J57 81.2800 248.9200 front 0 (property (height 3.8100))))
+  (component POINTTEST_J56
+   (place J56 20.3200 271.7800 front 0 (property (height 3.8100))))
+  (component POINTTEST_J55
+   (place J55 187.0456 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J54
+   (place J54 184.0738 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J53
+   (place J53 181.1020 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J52
+   (place J52 178.1302 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J51
+   (place J51 175.1584 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J50
+   (place J50 172.1866 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J49
+   (place J49 169.2148 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J48
+   (place J48 166.2430 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J47
+   (place J47 167.6400 271.7800 front 0 (property (height 3.8100))))
+  (component POINTTEST_J46
+   (place J46 160.0200 276.8600 front 0 (property (height 3.8100))))
+  (component POINTTEST_J45
+   (place J45 157.3276 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J44
+   (place J44 154.3558 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J43
+   (place J43 151.3840 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J42
+   (place J42 148.4122 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J41
+   (place J41 145.4404 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J40
+   (place J40 142.4686 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J39
+   (place J39 139.4968 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J38
+   (place J38 136.5250 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J37
+   (place J37 133.5532 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J36
+   (place J36 185.4200 125.7300 front 0 (property (height 3.8100))))
+  (component POINTTEST_J35
+   (place J35 127.6096 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J34
+   (place J34 124.6378 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J33
+   (place J33 121.6660 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J32
+   (place J32 118.6942 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J31
+   (place J31 115.7224 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J30
+   (place J30 112.7506 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J29
+   (place J29 109.7788 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J28
+   (place J28 106.8070 288.5694 front 0 (property (height 3.8100))))
+  (component POINTTEST_J27
+   (place J27 185.4200 269.2400 front 0 (property (height 3.8100))))
+  (component POINTTEST_J26
+   (place J26 185.4200 281.9400 front 0 (property (height 3.8100))))
+  (component POINTTEST_J25
+   (place J25 185.4200 259.0800 front 0 (property (height 3.8100))))
+  (component POINTTEST_J24
+   (place J24 91.4400 284.4800 front 0 (property (height 3.8100))))
+  (component POINTTEST_J23
+   (place J23 184.7850 203.8350 front 0 (property (height 3.8100))))
+  (component POINTTEST_J22
+   (place J22 88.9762 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J20
+   (place J20 83.0326 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J19
+   (place J19 80.0608 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J18
+   (place J18 77.0890 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J21
+   (place J21 71.1454 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J8
+   (place J8 68.1736 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J7
+   (place J7 65.2018 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J6
+   (place J6 62.2300 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J17
+   (place J17 59.2582 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J4
+   (place J4 53.3146 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J3
+   (place J3 50.3428 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J16
+   (place J16 44.3992 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J15
+   (place J15 41.4274 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J14
+   (place J14 38.4556 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J13
+   (place J13 32.5120 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J12
+   (place J12 29.5402 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J11
+   (place J11 26.5684 291.1094 front 0 (property (height 3.8100))))
+  (component POINTTEST_J5
+   (place J5 40.6400 248.9200 front 0 (property (height 3.8100))))
+  (component POINTTEST_J2
+   (place J2 30.4800 269.2400 front 0 (property (height 3.8100))))
+  (component POINTTEST_J1
+   (place J1 15.2400 281.9400 front 0 (property (height 3.8100))))
+  (component POINTTEST_J10
+   (place J10 30.4800 226.6950 front 0 (property (height 3.8100))))
+  (component POINTTEST_J9
+   (place J9 26.0350 203.8350 front 0 (property (height 3.8100)))))
+ (library
+  (image BNC
+   (pin BNC 1 0 0)
+   (outline (rect signal -8.0010 -8.0010 7.9985 7.9985)))
+  (image BNC_U10
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U9
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U7
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U6
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U5
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U4
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U3
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U2
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U1
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image BNC_U8
+   (pin BNC 1 0 0)
+   (outline (polygon signal 0 -8.0010 -8.0010 7.9985 -8.0010 7.9985 7.9985
+     -8.0010 7.9985 -8.0010 -8.0010)))
+  (image POINTTEST
+   (pin PAD70SQ45D 1 0 0)
+   (outline (rect signal -1.4224 -1.4224 1.4224 1.4224)))
+  (image POINTTEST_J58
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J57
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J56
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J55
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J54
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J53
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J52
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J51
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J50
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J49
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J48
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J47
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J46
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J45
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J44
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J43
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J42
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J41
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J40
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J39
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J38
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J37
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J36
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J35
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J34
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J33
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J32
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J31
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J30
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J29
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J28
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J27
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J26
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J25
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J24
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J23
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J22
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J20
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J19
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J18
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J21
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J8
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J7
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J6
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J17
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J4
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J3
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J16
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J15
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J14
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J13
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J12
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J11
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J5
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J2
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J1
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J10
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (image POINTTEST_J9
+   (pin PAD70SQ45D 1 0 0)
+   (outline (polygon signal 0 -1.4224 -1.4224 1.4224 -1.4224 1.4224 1.4224
+     -1.4224 1.4224 -1.4224 -1.4224)))
+  (padstack VIA
+   (shape (circle signal 0.6096 0 0)))
+  (padstack BNC
+   (shape (circle signal 14 0 0)))
+  (padstack PAD70SQ45D
+   (shape (rect signal -0.88900 -0.88900 0.88900 0.88900))))
+ (floor_plan)
+ (part_library
+  (logical_part_mapping BNCT
+   (comp U1 U2 U3 U4 U5 U6 U7 U9 U10 U8))
+  (logical_part BNCT
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 1               0    G1             1    B                    0 ))
+  (logical_part_mapping PT
+   (comp J9 J10 J1 J2 J5 J11 J12 J13 J14 J15 J16 J3 J4 J17 J6 J7 J8 J21 J18
+    J19 J20 J22 J23 J24 J25 J26 J27 J28 J29 J30 J31 J32 J33 J34 J35 J36 J37
+    J38 J39 J40 J41 J42 J43 J44 J45 J46 J47 J48 J49 J50 J51 J52 J53 J54 J55
+    J56 J57 J58))
+  (logical_part PT
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 1               5    G1             2    P                    0 )))
+ (network
+  (net 9V+
+   (pins J47-1 J53-1))
+  (net 6V+
+   (pins J6-1 J41-1))
+  (net 5VMASSE
+   (pins J40-1 U6-1))
+  (net 10VVICTIME
+   (pins J52-1 J58-1))
+  (net 8V+
+   (pins J21-1 J19-1))
+  (net 2V+
+   (pins J1-1 J26-1))
+  (net 10V+
+   (pins J50-1 J56-1))
+  (net 9ECRAN
+   (pins J48-1 J54-1))
+  (net 9VVICTIME
+   (pins J49-1 J55-1))
+  (net 8VMASSE
+   (pins J20-1 J22-1))
+  (net 6ECRAN
+   (pins J8-1 J43-1))
+  (net 6VVICTIME
+   (pins J7-1 J42-1))
+  (net 6VMASSE
+   (pins U7-1 J44-1))
+  (net 5ECRAN
+   (pins J5-1 J39-1))
+  (net 7VMASSE
+   (pins J18-1 J46-1))
+  (net 5VVICTIME
+   (pins J4-1 J38-1))
+  (net 7V+
+   (pins J45-1 J17-1))
+  (net 4ECRAN
+   (pins J16-1 J35-1))
+  (net 5V+
+   (pins J3-1 J37-1))
+  (net 4VVICTIME
+   (pins J15-1 J34-1))
+  (net 4VMASSE
+   (pins U5-1 J36-1))
+  (net 3ECRAN
+   (pins J13-1 J31-1))
+  (net 4V+
+   (pins J14-1 J33-1))
+  (net 3VVICTIME
+   (pins J12-1 J30-1))
+  (net 3VMASSE
+   (pins U4-1 J32-1))
+  (net 2VMASSE
+   (pins U3-1 J28-1))
+  (net 3V+
+   (pins J11-1 J29-1))
+  (net 2VVICTIME
+   (pins J2-1 J27-1))
+  (net 1VVICTIME
+   (pins J10-1 J24-1))
+  (net 1VMASSE
+   (pins J25-1 U8-1))
+  (net 1V+
+   (pins J23-1 J9-1))
+  (net 10ECRAN
+   (pins J51-1 J57-1)))
+ (wiring
+  (wire (path TOP 1 26.0350 203.8350 184.7850 203.8350) (net 1V+)))
+ (colors
+  (color 0 color0 0 0 0)
+  (color 1 color1 255 255 255)
+  (color 2 color2 14 210 255)
+  (color 3 color3 255 121 203)
+  (color 5 color4 0 255 106)
+  (color 7 color5 166 16 255)
+  (color 8 color6 121 153 196)
+  (color 9 color7 255 0 0)
+  (color 11 color8 255 255 0)
+  (color 12 color9 0 0 255)
+  (color 13 color10 55 247 215)
+  (color 14 color11 179 179 185)
+  (color 15 color12 116 196 143)
+  (color 16 color13 252 199 46)
+  (color 17 color14 255 178 255)
+  (color 18 color15 172 138 138)
+  (color 19 color16 2 168 213)
+  (color 20 color17 176 0 206)
+  (color 21 color18 234 190 0)
+  (color 22 color19 217 224 224)
+  (color 23 color20 242 127 134)
+  (color 24 color21 14 249 182)
+  (color 25 color22 161 4 4)
+  (color 26 color23 224 141 202)
+  (color 27 color24 255 255 255)
+  (color 4 redColor 255 0 0)
+  (color 10 darkGreenColor 0 170 0)
+  (color 6 whiteColor 255 255 255)
+  (color 28 darkGrayColor 120 120 120)
+  (color 29 blackColor 0 0 0)
+  (color 30 greenColor 0 255 0)
+  (color 31 blueColor 0 0 255)
+  (color 32 yellowColor 255 255 0)
+  (color 33 lightMagentaColor 255 0 255)
+  (set_color via darkGreenColor)
+  (set_color thru darkGrayColor)
+  (set_color select color1)
+  (set_color highlight color21)
+  (set_color antipad whiteColor)
+  (set_color guide color3)
+  (set_color histogram grid color24)
+  (set_color histogram segment redColor)
+  (set_color histogram peak redColor)
+  (set_color grid via color24)
+  (set_color grid wiring color24)
+  (set_color grid place color24)
+  (set_color grid manuf color24)
+  (set_color grid major route color24)
+  (set_color grid major place color24)
+  (set_color error clearance yellowColor)
+  (set_color error length yellowColor)
+  (set_color error crosstalk whiteColor)
+  (set_color error balance whiteColor)
+  (set_color error placement whiteColor)
+  (set_color routability min greenColor)
+  (set_color routability max redColor)
+  (set_color iroute target whiteColor)
+  (set_color testpoint color3)
+  (set_color protect whiteColor)
+  (set_color fix component lightMagentaColor)
+  (set_color component front color3)
+  (set_color component back color3)
+  (set_color site whiteColor)
+  (set_color ruler darkGrayColor)
+  (set_color rowcolumn whiteColor)
+  (set_color viakeepouts color3)
+  (set_color signal 1 color7)
+  (set_color signal 2 color9)))

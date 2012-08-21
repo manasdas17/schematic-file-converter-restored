@@ -1,0 +1,4646 @@
+(PCB 'U:\PRODUCTS\HOLLYWOOD\ILLUMIMOTE2.0\SpecctraWithinLayout.max'
+(parser
+  (space_in_quoted_tokens on)
+  (string_quote ')
+  (host_cad 'OrCAD Layout')
+  (host_version 9.1)
+  )
+(resolution mil 1000)
+(structure
+  (boundary(rect pcb  -18.254 -181.254  2353.617 1403.254)
+    )
+  (boundary(path signal  30.000  -17.000 -177.000  2337.000 -177.000
+       2337.000 1400.000  -17.000 1400.000  -17.000 -177.000)
+    )
+  (via VIA1
+    )
+  (control
+    (off_grid OFF)
+    (force_to_terminal_point ON)
+    )
+  (grid via   1.000)
+  (grid wire   1.000)
+  (grid place   1.000)
+  (rule(clearance  7.000))
+  (rule(width  10.000))
+  (layer TOP(type signal)(direction horizontal)
+    )
+  (layer GND(type power)
+    (use_net AGND_CN))
+  (layer POWER(type power)
+    (use_net 5.0V))
+  (layer INNER2(type signal)(direction horizontal)
+    )
+  (layer BOTTOM(type signal)(direction vertical)
+    )
+  )
+(placement
+  (component ANALOG_DEVICES/ADXL320_ACCEL1
+    (place ACCEL1  1387.000 43.000 front  0.00 (PN ANALOG_DEVICES/ADXL330)
+      (property(value '3-Axis Accel')))
+    )
+  (component BATTERY_PACK_AA2_REV1_195_BATTERY
+    (place BATTERY  92.000 936.000 front  270.00 (PN battery_case))
+    )
+  (component SM/C_0402_C1
+    (place C1  15.000 -74.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C2
+    (place C2  218.000 -74.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C3
+    (place C3  292.000 -74.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C4
+    (place C4  495.000 -74.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C5
+    (place C5  1751.000 770.000 back  0.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C6
+    (place C6  1699.000 987.000 back  180.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C7
+    (place C7  1659.000 770.000 back  0.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0603_C8
+    (place C8  1084.000 790.000 back  0.00 (PN CAP_NP)(property(value 4.7uF)))
+    )
+  (component SM/C_0603_C9
+    (place C9  1142.000 546.000 back  180.00 (PN CAP_NP)(property(value 4.7uF)))
+    )
+  (component SM/C_0402_C10
+    (place C10  1470.200 85.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C11
+    (place C11  2130.000 1327.000 back  180.00 (PN CAP_NP)(property(value 39pF)))
+    )
+  (component SM/C_0603_C12
+    (place C12  1489.000 175.000 front  0.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_0603_C13
+    (place C13  1300.000 100.000 front  180.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_0603_C14
+    (place C14  1621.000 -77.000 front  0.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_0603_C15
+    (place C15  1621.000 -8.000 front  0.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_0603_C16
+    (place C16  1621.000 61.000 front  0.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_1210_C17
+    (place C17  1584.500 1302.500 front  270.00 (PN CAP_NP)(property(value 22uF)))
+    )
+  (component SM/C_0603_C18
+    (place C18  2150.000 1098.000 back  180.00 (PN CAP_NP)(property(value 4.7uF)))
+    )
+  (component SM/C_0402_C19
+    (place C19  609.000 457.000 back  0.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_0402_C20
+    (place C20  613.200 798.100 front  270.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0603_C21
+    (place C21  480.000 588.000 front  90.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/CT_7343_12_C22
+    (place C22  1991.000 964.000 front  0.00 (PN CAPACITOR_POL)(property(value
+          220uF)))
+    )
+  (component SM/C_0603_C23
+    (place C23  2034.000 983.000 back  0.00 (PN CAP_NP)(property(value 4.7uF)))
+    )
+  (component SM/C_0603_C24
+    (place C24  2170.000 982.000 back  0.00 (PN CAP_NP)(property(value 4.7uF)))
+    )
+  (component SM/C_0402_C25
+    (place C25  2083.000 908.000 back  0.00 (PN CAP_NP)(property(value 0.01uF)))
+    )
+  (component SM/C_0402_C26
+    (place C26  574.200 632.100 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C27
+    (place C27  604.000 754.000 back  0.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_0402_C28
+    (place C28  1127.000 119.000 back  90.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_0603_C29
+    (place C29  1014.000 1.000 front  180.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_1210_C30
+    (place C30  837.000 861.000 front  180.00 (PN CAP_NP)(property(value 22uF)))
+    )
+  (component SM/C_0402_C31
+    (place C31  840.000 173.000 front  270.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C32
+    (place C32  582.000 347.000 back  0.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C33
+    (place C33  963.000 90.000 back  180.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C34
+    (place C34  843.200 124.000 back  90.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_0402_C35
+    (place C35  774.000 133.000 back  0.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_1210_C36
+    (place C36  1444.500 1167.500 front  90.00 (PN CAP_NP)(property(value 22uF)))
+    )
+  (component SM/C_0402_C37
+    (place C37  276.000 743.000 front  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0603_C38
+    (place C38  652.000 249.000 front  90.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_0402_C39
+    (place C39  818.000 418.000 front  180.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C40
+    (place C40  748.000 299.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C41
+    (place C41  759.000 49.000 front  180.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C42
+    (place C42  775.000 418.000 back  0.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_0402_C43
+    (place C43  1373.000 455.000 front  0.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C44
+    (place C44  446.000 710.000 front  180.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component SM/C_0402_C45
+    (place C45  1639.200 -134.000 front  0.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0603_C46
+    (place C46  322.000 871.000 front  90.00 (PN CAP_NP)(property(value 0.47uF)))
+    )
+  (component SM/C_0402_C47
+    (place C47  455.000 1085.000 front  270.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C48
+    (place C48  465.000 935.000 back  90.00 (PN CAP_NP)(property(value 0.1uF)))
+    )
+  (component SM/C_0402_C49
+    (place C49  404.000 929.000 back  0.00 (PN CAP_NP)(property(value .001uF)))
+    )
+  (component 'LITEON/LTST-C170_D1'
+    (place D1  2035.517 830.517 front  90.00 (PN LED)(property(value RED)))
+    )
+  (component 'LITEON/LTST-C170_D2'
+    (place D2  1301.000 400.000 front  180.00 (PN LED)(property(value RED)))
+    )
+  (component 'LITEON/LTST-C170_D3'
+    (place D3  1301.000 640.000 front  180.00 (PN LED)(property(value GREEN)))
+    )
+  (component 'LITEON/LTST-C170_D4'
+    (place D4  1301.000 875.000 front  180.00 (PN LED)(property(value BLUE)))
+    )
+  (component SM/DO213AC_21/JON_SILK_D5
+    (place D5  2005.000 1141.000 front  270.00 (PN DIODE)(property(value .)))
+    )
+  (component HAMAMATSU/S1133/2_D6
+    (place D6  776.000 516.000 front  90.00 (PN PHOTODIODE)(property(value S1133)))
+    )
+  (component 'HAMAMATSU/S642X-01/2_D7'
+    (place D7  938.267 439.917 front  0.00 (PN PHOTODIODE)(property(value Red)))
+    )
+  (component 'HAMAMATSU/S642X-01/2_D8'
+    (place D8  938.267 676.917 front  0.00 (PN PHOTODIODE)(property(value Green)))
+    )
+  (component 'HAMAMATSU/S642X-01/2_D9'
+    (place D9  938.267 912.917 front  0.00 (PN PHOTODIODE)(property(value Blue)))
+    )
+  (component BLKCON.100/VH/TM1SQ/W.100/3_EXT_I2C1
+    (place EXT_I2C1  37.000 1346.000 front  0.00 (PN HEADER_3)(property(value
+          'HEADER 3')))
+    )
+  (component XBOW/MICAX_BRAIN1_IF1
+    (place IF1  1555.183 1192.917 back  180.00 (PN 51_pin_connector_5_ON_MOTE)
+      (property(value 'Mica2 Sensor  HDR (to Mote)')))
+    )
+  (component 'SAMTEC/MEC8-120-D-RA/NANONODE_J1'
+    (place J1  2247.000 662.467 front  180.00 (PN CONN_SOCKET_20x2)(property
+        (value 'MEC8 Right Angle')))
+    )
+  (component MILLMAX/0.050_SIP/5_J2
+    (place J2  2097.000 831.000 front  0.00 (PN CONN_TRBLK_5)(property(value
+          'CONN TRBLK 5')))
+    )
+  (component PANASONIC/ELL6_M/2_L1
+    (place L1  1803.633 1169.000 front  0.00 (PN INDUCTOR)(property(value 6.8uH)))
+    )
+  (component SM/C_0603_L2
+    (place L2  556.200 816.100 front  270.00 (PN 'DK_445-1553-1-ND')(property
+        (value 1.5K)))
+    )
+  (component SM/C_0603_L3
+    (place L3  852.000 958.000 front  180.00 (PN 'DK_445-1553-1-ND')(property
+        (value 1.5K)))
+    )
+  (component SM/C_0603_L4
+    (place L4  836.000 20.000 front  90.00 (PN 'DK_445-1553-1-ND')(property(value
+          1.5K)))
+    )
+  (component SM/C_0603_L5
+    (place L5  1377.000 994.000 front  180.00 (PN 'DK_445-1553-1-ND')(property
+        (value 1.5K)))
+    )
+  (component SM/C_0603_L6
+    (place L6  724.000 -80.000 front  90.00 (PN 'DK_445-1553-1-ND')(property
+        (value 1.5K)))
+    )
+  (component SM/C_0603_L7
+    (place L7  665.000 426.000 front  0.00 (PN 'DK_445-1553-1-ND')(property(value
+          1.5K)))
+    )
+  (component SM/C_0603_L8
+    (place L8  399.000 1104.000 front  270.00 (PN 'DK_445-1553-1-ND')(property
+        (value 1.5K)))
+    )
+  (component TI/SC70/5_LV1
+    (place LV1  144.833 -74.000 back  90.00 (PN MAXIM/MAX3370)(property(value .)))
+    )
+  (component TI/SC70/5_LV2
+    (place LV2  420.833 -74.000 back  90.00 (PN MAXIM/MAX3370)(property(value .)))
+    )
+  (component SOG.050/8/WG.275/L.250_Q1
+    (place Q1  612.000 1195.000 front  270.00 (PN FAIRCHILD/NDS8958_DUAL_NP)
+      (property(value 'dual mosfet')))
+    )
+  (component SOG.050/8/WG.275/L.250_Q2
+    (place Q2  1020.000 1195.000 front  270.00 (PN FAIRCHILD/NDS8958_DUAL_NP)
+      (property(value 'dual mosfet')))
+    )
+  (component SM/R_0402_R1
+    (place R1  1477.200 1318.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R2
+    (place R2  1397.000 1318.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R3
+    (place R3  2082.000 324.000 back  270.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R4
+    (place R4  1901.000 324.000 back  270.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R5
+    (place R5  2131.000 324.000 back  270.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R6
+    (place R6  1885.000 682.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R7
+    (place R7  1789.000 682.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R8
+    (place R8  1837.000 682.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R9
+    (place R9  802.000 1326.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R10
+    (place R10  851.000 1326.000 back  90.00 (PN R)(property(value 330)))
+    )
+  (component SM/R_0402_R11
+    (place R11  1984.000 830.000 back  180.00 (PN R)(property(value 150)))
+    )
+  (component SM/C_0402_R12
+    (place R12  1064.000 344.000 back  270.00 (PN R)(property(value 82)))
+    )
+  (component SM/C_0402_R13
+    (place R13  1025.000 651.000 back  90.00 (PN R)(property(value 68)))
+    )
+  (component SM/C_0402_R14
+    (place R14  1190.000 829.000 back  0.00 (PN R)(property(value 10Meg)))
+    )
+  (component SM/C_0402_R15
+    (place R15  1190.000 781.000 back  0.00 (PN R)(property(value 10Meg)))
+    )
+  (component SM/R_0402_R16
+    (place R16  1365.000 203.000 back  0.00 (PN R)(property(value 100k)))
+    )
+  (component SM/C_0805_R17
+    (place R17  2108.000 1324.000 front  0.00 (PN R)(property(value 470k)))
+    )
+  (component SM/C_0402_R18
+    (place R18  2263.000 1311.000 front  0.00 (PN R)(property(value '150 kOhm')))
+    )
+  (component SM/C_0402_R19
+    (place R19  2215.000 1221.000 back  0.00 (PN R)(property(value 200K)))
+    )
+  (component SM/R_0402_R20
+    (place R20  609.000 457.000 front  180.00 (PN R)(property(value 3.57k)))
+    )
+  (component SM/R_0402_R21
+    (place R21  424.000 588.000 front  180.00 (PN R)(property(value 470)))
+    )
+  (component SM/R_0603_R22
+    (place R22  2149.000 1100.000 front  0.00 (PN R)(property(value 0)))
+    )
+  (component SM/R_0402_R23
+    (place R23  424.000 644.000 front  180.00 (PN R)(property(value 470)))
+    )
+  (component SM/R_0402_R24
+    (place R24  682.000 198.000 back  0.00 (PN R)(property(value 2.0k)))
+    )
+  (component SM/C_0402_R25
+    (place R25  682.000 144.000 back  0.00 (PN R)(property(value 33k)))
+    )
+  (component SM/C_0402_R26
+    (place R26  682.000 90.000 back  0.00 (PN R)(property(value 576K)))
+    )
+  (component SM/R_0402_R27
+    (place R27  1127.000 119.000 front  270.00 (PN R)(property(value 3.57k)))
+    )
+  (component SM/C_0402_R28
+    (place R28  682.000 40.000 back  0.00 (PN R)(property(value 10Meg)))
+    )
+  (component SM/R_0402_R29
+    (place R29  210.000 44.000 back  180.00 (PN R)(property(value 2.0k)))
+    )
+  (component SM/C_0402_R30
+    (place R30  210.000 95.000 back  180.00 (PN R)(property(value 33k)))
+    )
+  (component SM/C_0402_R31
+    (place R31  210.000 147.000 back  180.00 (PN R)(property(value 576K)))
+    )
+  (component SM/R_0402_R32
+    (place R32  1014.000 -55.000 front  270.00 (PN R)(property(value 470)))
+    )
+  (component SM/R_0402_R33
+    (place R33  958.000 -55.000 front  270.00 (PN R)(property(value 470)))
+    )
+  (component SM/C_0402_R34
+    (place R34  210.000 198.000 back  180.00 (PN R)(property(value 10Meg)))
+    )
+  (component SM/R_0402_R35
+    (place R35  501.000 774.000 back  0.00 (PN R)(property(value 2.0k)))
+    )
+  (component SM/C_0402_R36
+    (place R36  530.000 926.000 back  90.00 (PN R)(property(value 576K)))
+    )
+  (component SM/C_0402_R37
+    (place R37  501.000 723.000 back  0.00 (PN R)(property(value 33k)))
+    )
+  (component SM/C_0402_R38
+    (place R38  501.000 672.000 back  0.00 (PN R)(property(value 576K)))
+    )
+  (component SM/C_0402_R39
+    (place R39  501.000 621.000 back  0.00 (PN R)(property(value 10Meg)))
+    )
+  (component SM/R_0402_R40
+    (place R40  774.000 133.000 front  180.00 (PN R)(property(value 3.57k)))
+    )
+  (component SM/C_0402_R41
+    (place R41  468.000 1226.000 front  270.00 (PN R)(property(value 576K)))
+    )
+  (component SM/R_0402_R42
+    (place R42  41.000 621.000 back  180.00 (PN R)(property(value 2.0k)))
+    )
+  (component SM/C_0402_R43
+    (place R43  41.000 672.000 back  180.00 (PN R)(property(value 33k)))
+    )
+  (component SM/R_0402_R44
+    (place R44  596.000 249.000 front  180.00 (PN R)(property(value 470)))
+    )
+  (component SM/C_0402_R45
+    (place R45  41.000 723.000 back  180.00 (PN R)(property(value 576K)))
+    )
+  (component SM/C_0402_R46
+    (place R46  938.000 1000.000 front  0.00 (PN R)(property(value 576K)))
+    )
+  (component SM/C_0402_R47
+    (place R47  41.000 775.000 back  180.00 (PN R)(property(value 10Meg)))
+    )
+  (component SM/R_0402_R48
+    (place R48  596.000 305.000 front  180.00 (PN R)(property(value 470)))
+    )
+  (component SM/C_0402_R49
+    (place R49  938.000 1189.000 front  270.00 (PN R)(property(value 576K)))
+    )
+  (component SM/R_0402_R50
+    (place R50  446.000 758.000 front  180.00 (PN R)(property(value 3.57k)))
+    )
+  (component SM/R_0402_R51
+    (place R51  266.000 871.000 front  180.00 (PN R)(property(value 470)))
+    )
+  (component SM/R_0402_R52
+    (place R52  266.000 927.000 front  180.00 (PN R)(property(value 470)))
+    )
+  (component NESL/SM_TEST/2.5MMX1MM/1_REF1
+    (place REF1  95.000 454.000 back  270.00 (PN HEADER_1)(property(value
+          'HEADER 1')))
+    )
+  (component SM/0402X8_RN1
+    (place RN1  154.733 86.850 back  0.00 (PN EXB2HVxx1JV)(property(value 10K)))
+    )
+  (component SOG.050/8/WG.244/L.200_U1
+    (place U1  241.000 -148.000 front  90.00 (PN PHILIPS/PCA9513)(property(value
+          'I2C Hotswap Buffer')))
+    )
+  (component SOG.050/8/WG.244/L.200_U2
+    (place U2  254.000 1211.000 back  180.00 (PN PHILIPS/PCA9513)(property(value
+          'I2C Hotswap Buffer')))
+    )
+  (component 'ATMEL/32M1-A/32_U4'
+    (place U4  1615.000 770.683 front  0.00 (PN ATMEL/ATMEGA48/88/168/MLF32)
+      (property(value .)))
+    )
+  (component FAIRCHILD/SOT23/5_U6
+    (place U6  1083.200 718.350 back  180.00 (PN TI/TPS761XX_5P)(property(value
+          3.3VDC)))
+    )
+  (component TI/SC70/5_U7
+    (place U7  1308.150 205.000 front  270.00 (PN TI/TPS797xx/SC70)(property
+        (value 3.3V)))
+    )
+  (component SOG.65M/8/WG5.8/L3.17_U8
+    (place U8  2275.867 1170.083 front  90.00 (PN LM2621_SO)(property(value
+          'Step-Up')))
+    )
+  (component MAXIM/QSOP/16_U9
+    (place U9  357.000 371.000 front  180.00 (PN MAX1239_0)(property(value 12)))
+    )
+  (component SOG.65M/8/WG5.6/L3.17_U10
+    (place U10  623.000 706.100 front  180.00 (PN ANALOG_DEVICES/AD8132_0)
+      (property(value Differential)))
+    )
+  (component SOG.65M/24/WG8.00/L8.25_U11
+    (place U11  558.000 300.000 back  90.00 (PN ADG715_SO)(property(value 8xSPST)))
+    )
+  (component SOG.65M/8/WG5.6/L3.17_U12
+    (place U12  894.833 140.933 front  270.00 (PN ANALOG_DEVICES/AD8132_0)
+      (property(value Differential)))
+    )
+  (component SOG.65M/24/WG8.00/L8.25_U13
+    (place U13  386.000 877.000 back  90.00 (PN ADG715_SO)(property(value 8xSPST)))
+    )
+  (component SOG.65M/8/WG5.6/L3.17_U14
+    (place U14  792.783 368.100 front  180.00 (PN ANALOG_DEVICES/AD8132_0)
+      (property(value Differential)))
+    )
+  (component SOG.050/8/WG.244/L.200_U15
+    (place U15  508.000 -40.000 front  0.00 (PN MAX518)(property(value 2xDAC)))
+    )
+  (component SOG.65M/24/WG8.00/L8.25_U16
+    (place U16  1732.000 -106.000 front  0.00 (PN ADG715_SO)(property(value
+          8xSPST)))
+    )
+  (component SOG.65M/8/WG5.6/L3.17_U17
+    (place U17  463.783 988.100 front  180.00 (PN ANALOG_DEVICES/AD8132_0)
+      (property(value Differential)))
+    )
+  (component LINEAR/TSOT23/6_U18
+    (place U18  1451.800 400.133 front  180.00 (PN AD7414_0)(property(value
+          'Temp Sensor')))
+    )
+  (component SOG.50M/8/WG3.1/L2.0_U19
+    (place U19  1084.000 444.000 back  0.00 (PN TOSHIBA/TC7W04Fx/8)(property
+        (value NOT3)))
+    )
+  (component VIA1
+    (place ~FV1  2117.133 1246.867 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV2  2307.917 1170.083 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV3  2305.000 1331.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV4  2206.000 1139.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV5  2145.267 1221.267 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV6  2238.000 1220.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV7  2172.000 1350.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV8  2172.000 1304.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV9  1414.400 364.400 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV10  1415.000 435.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV11  1648.583 400.583 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV12  1648.583 297.417 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV13  2247.000 397.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV14  2247.000 295.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV15  2247.000 613.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV16  2247.000 713.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV17  2007.000 862.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV18  2020.000 908.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV19  2041.000 931.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV20  2114.000 1012.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV21  2114.000 952.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV22  1978.000 1034.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV23  1915.000 983.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV24  1674.000 1046.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV25  1700.000 1067.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV26  1789.000 1018.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV27  1789.000 987.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV28  2251.000 1024.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV29  2251.000 904.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV30  1648.583 604.583 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV31  1659.000 854.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV32  1659.000 903.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV33  1710.000 904.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV34  1710.000 853.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV35  1406.000 1355.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV36  1484.000 1354.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV37  1622.000 1148.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV38  1622.000 1209.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV39  404.000 1266.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV40  404.000 1156.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV41  486.000 1226.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV42  448.000 1226.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV43  543.000 1195.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV44  276.000 724.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV45  219.000 800.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV46  183.000 933.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV47  567.000 434.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV48  609.000 434.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV49  1544.000 205.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV50  1544.000 143.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV51  1703.000 61.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV52  1704.000 -8.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV53  1704.000 -78.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV54  1808.000 -55.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV55  1618.000 -134.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV56  1481.483 -32.517 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV57  1455.883 -123.883 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV58  1441.000 -28.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV59  1336.000 -14.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV60  1336.000 22.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV61  1470.200 20.200 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV62  1120.000 687.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV63  1028.000 820.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV64  1028.000 759.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV65  1198.000 576.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV66  1198.000 516.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV67  1010.000 444.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV68  818.000 438.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV69  832.000 402.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV70  769.000 257.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV71  741.600 217.600 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV72  496.217 223.217 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV73  759.500 26.500 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV74  387.783 223.217 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV75  388.000 244.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV76  232.000 227.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV77  179.000 2.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV78  117.000 -100.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV79  145.000 -49.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV80  558.000 -97.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV81  495.000 -139.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV82  1227.000 121.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV83  1284.583 179.417 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV84  1005.000 71.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV85  1043.750 89.750 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV86  455.000 1107.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV87  571.817 550.817 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV88  595.900 590.100 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV89  1715.333 122.333 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV90  1936.783 177.783 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV91  1808.783 180.783 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV92  1783.183 202.817 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV93  938.000 1255.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV94  1020.000 1256.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV95  840.000 193.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV96  321.217 800.217 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV97  465.000 877.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV98  590.633 945.633 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV99  668.000 913.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV100  669.000 809.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV101  613.200 815.800 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV102  2205.000 1056.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV103  2170.000 1012.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV104  2170.000 952.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV105  2104.000 908.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV106  1954.000 932.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV107  1986.000 932.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV108  2018.000 965.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV109  1355.000 400.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV110  1352.000 455.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV111  1053.000 874.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV112  1098.000 874.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV113  1169.000 874.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV114  1069.000 667.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV115  276.000 804.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV116  254.000 1072.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV117  254.000 966.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV118  530.000 949.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV119  321.583 851.417 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV120  564.000 1095.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV121  664.000 1095.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV122  973.000 1095.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV123  1070.000 1095.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV124  938.000 1057.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV125  492.000 274.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV126  520.000 347.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV127  385.000 300.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV128  265.000 229.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV129  314.000 -76.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV130  349.983 -57.983 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV131  100.000 -74.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV132  1681.000 -118.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV133  1757.583 -36.583 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV134  1834.383 -26.617 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV135  1988.000 -43.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV136  1988.000 61.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV137  724.000 -106.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV138  453.000 126.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV139  1308.150 219.850 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV140  1379.000 221.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV141  582.000 367.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV142  16.850 252.850 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV143  36.550 32.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV144  135.050 31.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV145  173.000 -74.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV146  108.000 -148.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV147  473.000 -74.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV148  591.000 903.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV149  632.000 919.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV150  1545.000 1353.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV151  1621.000 1353.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV152  1741.000 1046.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV153  1679.000 1306.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV154  1928.000 1306.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV155  1780.000 782.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV156  1674.000 722.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV157  1780.000 760.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV158  1713.000 722.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV159  2215.517 417.517 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV160  2215.000 276.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV161  2130.000 1350.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV162  2130.000 1305.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV163  2232.000 1180.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV164  239.000 836.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV165  452.000 846.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV166  693.000 274.000 front  0.00 (PN VIA1))
+    )
+  (component VIA1
+    (place ~FV167  1757.000 58.000 front  0.00 (PN VIA1))
+    )
+  )
+(library
+  (image VIA1
+    (pin VIA1 FV  0.000 0.000)
+    )
+  (image SM/C_0603_L3
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad7_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image ANALOG_DEVICES/ADXL320_ACCEL1
+    (outline(path TOP  1.000  -47.467 -167.533  -47.467 90.767  210.850 90.767
+         210.850 -167.533  -47.467 -167.533)
+      )
+    (pin PIN1_2(rotate  90.00) 1  0.000 0.000)
+    (pin PIN_HORZ(rotate  90.00) 2  0.000 -25.583)
+    (pin PIN_HORZ(rotate  90.00) 3  0.000 -51.167)
+    (pin PIN_HORZ(rotate  90.00) 4  0.000 -76.767)
+    (pin PIN_VERT 5  43.300 -120.067)
+    (pin PIN_VERT 6  68.883 -120.067)
+    (pin PIN_VERT 7  94.483 -120.067)
+    (pin PIN_VERT 8  120.067 -120.067)
+    (pin PIN_HORZ(rotate  90.00) 9  163.383 -76.767)
+    (pin PIN_HORZ(rotate  90.00) 10  163.383 -51.167)
+    (pin PIN_HORZ(rotate  90.00) 11  163.383 -25.583)
+    (pin PIN_HORZ(rotate  90.00) 12  163.383 0.000)
+    (pin PIN_VERT 13  120.067 43.300)
+    (pin PIN_VERT 14  94.483 43.300)
+    (pin PIN_VERT 15  68.883 43.300)
+    (pin PIN_VERT 16  43.300 43.300)
+    )
+  (image SM/C_0603_C13
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_C45
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.050/8/WG.244/L.200_U2
+    (outline(path BOTTOM  1.000  -29.000 -62.000  179.000 -62.000
+         179.000 258.000  -29.000 258.000  -29.000 -62.000)
+      )
+    (pin 111(rotate  90.00) 1  0.000 0.000)
+    (pin 112(rotate  90.00) 2  50.000 0.000)
+    (pin 112(rotate  90.00) 3  100.000 0.000)
+    (pin 112(rotate  90.00) 4  150.000 0.000)
+    (pin 112(rotate  90.00) 5  150.000 196.000)
+    (pin 112(rotate  90.00) 6  100.000 196.000)
+    (pin 112(rotate  90.00) 7  50.000 196.000)
+    (pin 112(rotate  90.00) 8  0.000 196.000)
+    )
+  (image XBOW/MICAX_BRAIN1_IF1
+    (outline(path BOTTOM  1.000  -1572.067 -72.083  -1572.067 1206.733
+         722.100 1206.733  722.100 -72.083  -1572.067 -72.083)
+      )
+    (pin 113 1  0.000 0.000)
+    (pin 113 2  -39.367 0.000)
+    (pin 113 3  -78.733 0.000)
+    (pin 113 4  -118.100 0.000)
+    (pin 113 5  -157.483 0.000)
+    (pin 113 6  -196.850 0.000)
+    (pin 113 7  -236.217 0.000)
+    (pin 113 8  -275.583 0.000)
+    (pin 113 9  -314.950 0.000)
+    (pin 113 10  -354.333 0.000)
+    (pin 113 11  -393.700 0.000)
+    (pin 113 12  -433.050 0.000)
+    (pin 113 13  -472.417 0.000)
+    (pin 113 14  -511.783 0.000)
+    (pin 113 15  -551.167 0.000)
+    (pin 113 16  -590.533 0.000)
+    (pin 113 17  -629.900 0.000)
+    (pin 113 18  -669.267 0.000)
+    (pin 113 19  -708.633 0.000)
+    (pin 113 20  -748.017 0.000)
+    (pin 113 21  -787.383 0.000)
+    (pin 113 22  -826.750 0.000)
+    (pin 113 23  -866.117 0.000)
+    (pin 113 24  -905.483 0.000)
+    (pin 113 25  -944.867 0.000)
+    (pin 113 26  -984.233 0.000)
+    (pin 113 27  -19.683 200.783)
+    (pin 113 28  -59.050 200.783)
+    (pin 113 29  -98.417 200.783)
+    (pin 113 30  -137.783 200.783)
+    (pin 113 31  -177.183 200.783)
+    (pin 113 32  -216.533 200.783)
+    (pin 113 33  -255.900 200.783)
+    (pin 113 34  -295.267 200.783)
+    (pin 113 35  -334.633 200.783)
+    (pin 113 36  -374.017 200.783)
+    (pin 113 37  -413.383 200.783)
+    (pin 113 38  -452.733 200.783)
+    (pin 113 39  -492.100 200.783)
+    (pin 113 40  -531.467 200.783)
+    (pin 113 41  -570.850 200.783)
+    (pin 113 42  -610.217 200.783)
+    (pin 113 43  -649.583 200.783)
+    (pin 113 44  -688.950 200.783)
+    (pin 113 45  -728.317 200.783)
+    (pin 113 46  -767.700 200.783)
+    (pin 113 47  -807.067 200.783)
+    (pin 113 48  -846.433 200.783)
+    (pin 113 49  -885.800 200.783)
+    (pin 113 50  -925.183 200.783)
+    (pin 113 51  -964.550 200.783)
+    (pin 114 52  -1086.600 102.350)
+    (pin 114 53  102.367 102.350)
+    (pin 115 54  -1043.283 102.350)
+    (pin 115 55  59.067 102.350)
+    (pin 116 MTH1  575.983 1037.000)
+    (pin 116 MTH2  -1425.967 33.067)
+    )
+  (image SM/C_0402_C32
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_C12
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0603_C14
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/R_0402_R4
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C47
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_L4
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad7_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0603_L5
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_C41
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R16
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C33
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C40
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C35
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C37
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C39
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R5
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C2
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image TI/SC70/5_LV2
+    (outline(path BOTTOM  1.000  -7.867 -19.683  -7.867 90.550  59.050 90.550
+         59.050 -19.683  -7.867 -19.683)
+      )
+    (pin 118 1  0.000 0.000)
+    (pin 118 2  25.583 0.000)
+    (pin 118 3  51.167 0.000)
+    (pin 118 4  51.167 70.850)
+    (pin 118 5  0.000 70.850)
+    )
+  (image SM/C_0402_C25
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R2
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R1
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.050/8/WG.275/L.250_Q1
+    (outline(path TOP  1.000  -54.000 -58.000  204.000 -58.000  204.000 270.000
+         -54.000 270.000  -54.000 -58.000)
+      )
+    (pin SOG.llb_pad15_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.llb_pad14_1(rotate  90.00) 2  50.000 0.000)
+    (pin SOG.llb_pad14_1(rotate  90.00) 3  100.000 0.000)
+    (pin SOG.llb_pad14_1(rotate  90.00) 4  150.000 0.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 5  150.000 212.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 6  100.000 212.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 7  50.000 212.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 8  0.000 212.000)
+    )
+  (image SM/C_0402_C3
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C31
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R15
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R23
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R27
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C4
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R6
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image NESL/SM_TEST/2.5MMX1MM/1_REF1
+    (outline(path ASYBOT  1.000  -64.217 -34.683  -64.217 34.683  64.217 34.683
+         64.217 -34.683  -64.217 -34.683)
+      )
+    (pin 119 1  0.000 0.000)
+    )
+  (image SM/C_0402_R25
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R34
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R11
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C7
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R26
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_C21
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_C26
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R10
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.050/8/WG.244/L.200_U1
+    (outline(path TOP  1.000  -29.000 -62.000  179.000 -62.000  179.000 258.000
+         -29.000 258.000  -29.000 -62.000)
+      )
+    (pin SOG.llb_pad5_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.llb_pad6_1(rotate  90.00) 2  50.000 0.000)
+    (pin SOG.llb_pad6_1(rotate  90.00) 3  100.000 0.000)
+    (pin SOG.llb_pad6_1(rotate  90.00) 4  150.000 0.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 5  150.000 196.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 6  100.000 196.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 7  50.000 196.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 8  0.000 196.000)
+    )
+  (image SM/C_0402_C6
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R37
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R9
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R8
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C5
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/8/WG5.6/L3.17_U10
+    (outline(path TOP  1.000  -28.083 -19.683  -28.083 200.783  104.883 200.783
+         104.883 -19.683  -28.083 -19.683)
+      )
+    (pin SOG.LLB_PAD65_1_3_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 2  25.583 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 3  51.183 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 4  76.783 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 5  76.783 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 6  51.183 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 7  25.583 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 8  0.000 181.100)
+    )
+  (image SM/R_0402_R35
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R7
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/24/WG8.00/L8.25_U11
+    (outline(path BOTTOM  1.000  -25.683 -45.267  -25.683 273.617
+         307.283 273.617  307.283 -45.267  -25.683 -45.267)
+      )
+    (pin 120(rotate  90.00) 1  0.000 0.000)
+    (pin 121(rotate  90.00) 2  25.583 0.000)
+    (pin 121(rotate  90.00) 3  51.183 0.000)
+    (pin 121(rotate  90.00) 4  76.783 0.000)
+    (pin 121(rotate  90.00) 5  102.383 0.000)
+    (pin 121(rotate  90.00) 6  128.000 0.000)
+    (pin 121(rotate  90.00) 7  153.583 0.000)
+    (pin 121(rotate  90.00) 8  179.183 0.000)
+    (pin 121(rotate  90.00) 9  204.783 0.000)
+    (pin 121(rotate  90.00) 10  230.383 0.000)
+    (pin 121(rotate  90.00) 11  256.000 0.000)
+    (pin 121(rotate  90.00) 12  281.583 0.000)
+    (pin 121(rotate  90.00) 13  281.583 228.333)
+    (pin 121(rotate  90.00) 14  256.000 228.333)
+    (pin 121(rotate  90.00) 15  230.383 228.333)
+    (pin 121(rotate  90.00) 16  204.783 228.333)
+    (pin 121(rotate  90.00) 17  179.183 228.333)
+    (pin 121(rotate  90.00) 18  153.583 228.333)
+    (pin 121(rotate  90.00) 19  128.000 228.333)
+    (pin 121(rotate  90.00) 20  102.383 228.333)
+    (pin 121(rotate  90.00) 21  76.783 228.333)
+    (pin 121(rotate  90.00) 22  51.183 228.333)
+    (pin 121(rotate  90.00) 23  25.583 228.333)
+    (pin 121(rotate  90.00) 24  0.000 228.333)
+    )
+  (image 'SAMTEC/MEC8-120-D-RA/NANONODE_J1'
+    (outline(path TOP  1.000  -106.617 -41.733  688.433 -41.733  688.433 358.017
+         -106.617 358.017  -106.617 -41.733)
+      )
+    (pin SM.HSEC8.1_1 1  0.000 0.000)
+    (pin SM.HSEC8.1_1 2  0.000 314.933)
+    (pin SM.HSEC8.1_1 3  31.483 0.000)
+    (pin SM.HSEC8.1_1 4  31.483 314.933)
+    (pin SM.HSEC8.1_1 5  63.000 0.000)
+    (pin SM.HSEC8.1_1 6  63.000 314.933)
+    (pin SM.HSEC8.1_1 7  94.483 0.000)
+    (pin SM.HSEC8.1_1 8  94.483 314.933)
+    (pin SM.HSEC8.1_1 9  126.000 0.000)
+    (pin SM.HSEC8.1_1 10  126.000 314.933)
+    (pin SM.HSEC8.1_1 11  157.467 0.000)
+    (pin SM.HSEC8.1_1 12  157.467 314.933)
+    (pin SM.HSEC8.1_1 13  188.967 0.000)
+    (pin SM.HSEC8.1_1 14  188.967 314.933)
+    (pin SM.HSEC8.1_1 15  220.467 0.000)
+    (pin SM.HSEC8.1_1 16  220.467 314.933)
+    (pin SM.HSEC8.1_1 17  251.967 0.000)
+    (pin SM.HSEC8.1_1 18  251.967 314.933)
+    (pin SM.HSEC8.1_1 19  283.450 0.000)
+    (pin SM.HSEC8.1_1 20  283.450 314.933)
+    (pin SM.HSEC8.1_1 21  314.950 0.000)
+    (pin SM.HSEC8.1_1 22  314.950 314.933)
+    (pin SM.HSEC8.1_1 23  346.450 0.000)
+    (pin SM.HSEC8.1_1 24  346.450 314.933)
+    (pin SM.HSEC8.1_1 25  377.950 0.000)
+    (pin SM.HSEC8.1_1 26  377.950 314.933)
+    (pin SM.HSEC8.1_1 27  409.433 0.000)
+    (pin SM.HSEC8.1_1 28  409.433 314.933)
+    (pin SM.HSEC8.1_1 29  440.933 0.000)
+    (pin SM.HSEC8.1_1 30  440.933 314.933)
+    (pin SM.HSEC8.1_1 31  472.433 0.000)
+    (pin SM.HSEC8.1_1 32  472.433 314.933)
+    (pin SM.HSEC8.1_1 33  503.933 0.000)
+    (pin SM.HSEC8.1_1 34  503.933 314.933)
+    (pin SM.HSEC8.1_1 35  535.417 0.000)
+    (pin SM.HSEC8.1_1 36  535.417 314.933)
+    (pin SM.HSEC8.1_1 37  566.917 0.000)
+    (pin SM.HSEC8.1_1 38  566.917 314.933)
+    (pin SM.HSEC8.1_1 39  598.417 0.000)
+    (pin SM.HSEC8.1_1 40  598.417 314.933)
+    (pin TH.HSEC.MOUNT1_1 A  -59.050 157.467)
+    (pin TH.HSEC.MOUNT1_1 B  657.467 157.467)
+    )
+  (image SM/C_0402_R38
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/8/WG5.6/L3.17_U12
+    (outline(path TOP  1.000  -28.083 -19.683  -28.083 200.783  104.883 200.783
+         104.883 -19.683  -28.083 -19.683)
+      )
+    (pin SOG.LLB_PAD65_1_3_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 2  25.583 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 3  51.183 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 4  76.783 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 5  76.783 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 6  51.183 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 7  25.583 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 8  0.000 181.100)
+    )
+  (image BLKCON.100/VH/TM1SQ/W.100/3_EXT_I2C1
+    (outline(path TOP  1.000  -54.000 -54.000  254.000 -54.000  254.000 54.000
+         -54.000 54.000  -54.000 -54.000)
+      )
+    (pin BCON100T.llb_pad2_1 1  0.000 0.000)
+    (pin BCON100T.llb_pad1_1 2  100.000 0.000)
+    (pin BCON100T.llb_pad1_1 3  200.000 0.000)
+    )
+  (image SM/C_0402_R14
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/0402X8_RN1
+    (outline(path BOTTOM  1.000  -19.683 137.783  157.467 137.783
+         157.467 -39.367  -19.683 -39.367  -19.683 137.783)
+      )
+    (pin 122(rotate  90.00) 1  0.000 0.000)
+    (pin 123(rotate  90.00) 2  19.683 0.000)
+    (pin 123(rotate  90.00) 3  39.383 0.000)
+    (pin 123(rotate  90.00) 4  59.083 0.000)
+    (pin 123(rotate  90.00) 5  78.783 0.000)
+    (pin 123(rotate  90.00) 6  98.483 0.000)
+    (pin 123(rotate  90.00) 7  118.183 0.000)
+    (pin 123(rotate  90.00) 8  137.883 0.000)
+    (pin 123(rotate  90.00) 9  137.883 98.417)
+    (pin 123(rotate  90.00) 10  118.183 98.417)
+    (pin 123(rotate  90.00) 11  98.483 98.417)
+    (pin 123(rotate  90.00) 12  78.783 98.417)
+    (pin 123(rotate  90.00) 13  59.083 98.417)
+    (pin 123(rotate  90.00) 14  39.383 98.417)
+    (pin 123(rotate  90.00) 15  19.683 98.417)
+    (pin 123(rotate  90.00) 16  0.000 98.417)
+    )
+  (image SM/C_0402_C42
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R41
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image TI/SC70/5_LV1
+    (outline(path BOTTOM  1.000  -7.867 -19.683  -7.867 90.550  59.050 90.550
+         59.050 -19.683  -7.867 -19.683)
+      )
+    (pin 118 1  0.000 0.000)
+    (pin 118 2  25.583 0.000)
+    (pin 118 3  51.167 0.000)
+    (pin 118 4  51.167 70.850)
+    (pin 118 5  0.000 70.850)
+    )
+  (image MILLMAX/0.050_SIP/5_J2
+    (outline(path TOP  1.000  -25.000 -25.000  225.000 -25.000  225.000 25.000
+         -25.000 25.000  -25.000 -25.000)
+      )
+    (pin T1_8_1 1  0.000 0.000)
+    (pin T1_8_1 2  50.000 0.000)
+    (pin T1_8_1 3  100.000 0.000)
+    (pin T1_8_1 4  150.000 0.000)
+    (pin T1_8_1 5  200.000 0.000)
+    )
+  (image SM/C_0402_C43
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R3
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C1
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R31
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.050/8/WG.275/L.250_Q2
+    (outline(path TOP  1.000  -54.000 -58.000  204.000 -58.000  204.000 270.000
+         -54.000 270.000  -54.000 -58.000)
+      )
+    (pin SOG.llb_pad15_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.llb_pad14_1(rotate  90.00) 2  50.000 0.000)
+    (pin SOG.llb_pad14_1(rotate  90.00) 3  100.000 0.000)
+    (pin SOG.llb_pad14_1(rotate  90.00) 4  150.000 0.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 5  150.000 212.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 6  100.000 212.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 7  50.000 212.000)
+    (pin SOG.llb_pad13_1(rotate  90.00) 8  0.000 212.000)
+    )
+  (image 'ATMEL/32M1-A/32_U4'
+    (outline(path TOP  1.000  -108.983 -69.667  246.883 -69.667  246.883 286.200
+         -108.983 286.200  -108.983 -69.667)
+      )
+    (pin QUAD.llb_pad33_1_1(rotate  90.00) 1  0.000 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 2  19.683 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 3  39.383 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 4  59.083 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 5  78.783 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 6  98.483 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 7  118.183 0.000)
+    (pin QUAD.llb_pad34_1_1(rotate  90.00) 8  137.883 0.000)
+    (pin QUAD.llb_pad35_1_1 9  177.150 39.317)
+    (pin QUAD.llb_pad36_1_1 10  177.150 59.000)
+    (pin QUAD.llb_pad35_1_1 11  177.150 78.700)
+    (pin QUAD.llb_pad35_1_1 12  177.150 98.400)
+    (pin QUAD.llb_pad35_1_1 13  177.150 118.100)
+    (pin QUAD.llb_pad35_1_1 14  177.150 137.800)
+    (pin QUAD.llb_pad35_1_1 15  177.150 157.500)
+    (pin QUAD.llb_pad35_1_1 16  177.150 177.200)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 17  137.883 216.533)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 18  118.183 216.533)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 19  98.483 216.533)
+    (pin QUAD.llb_pad38_1_1(rotate  90.00) 20  78.783 216.533)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 21  59.083 216.533)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 22  39.383 216.533)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 23  19.683 216.533)
+    (pin QUAD.llb_pad37_1_1(rotate  90.00) 24  0.000 216.533)
+    (pin QUAD.llb_pad39_1 25  -39.367 177.200)
+    (pin QUAD.llb_pad39_1 26  -39.367 157.500)
+    (pin QUAD.llb_pad39_1 27  -39.367 137.800)
+    (pin QUAD.llb_pad39_1 28  -39.367 118.100)
+    (pin QUAD.llb_pad39_1 29  -39.367 98.400)
+    (pin QUAD.llb_pad40_1 30  -39.367 78.700)
+    (pin QUAD.llb_pad39_1 31  -39.367 59.000)
+    (pin QUAD.llb_pad39_1 32  -39.367 39.317)
+    (pin CENTER_PAD 33  68.967 108.100)
+    )
+  (image SM/R_0402_R33
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image 'LITEON/LTST-C170_D4'
+    (outline(path TOP  1.000  -25.583 -9.833  25.583 -9.833  25.583 68.883
+         -25.583 68.883  -25.583 -9.833)
+      )
+    (pin T1_29 2  0.000 0.000)
+    (pin T1_29 1  0.000 59.050)
+    )
+  (image SM/CT_7343_12_C22
+    (outline(path TOP  1.000  -83.000 -93.000  330.500 -93.000  330.500 93.000
+         -83.000 93.000  -83.000 -93.000)
+      )
+    (pin SM.llb_pad32_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad32_1(rotate  90.00) 2  260.000 0.000)
+    )
+  (image SOG.65M/8/WG5.6/L3.17_U17
+    (outline(path TOP  1.000  -28.083 -19.683  -28.083 200.783  104.883 200.783
+         104.883 -19.683  -28.083 -19.683)
+      )
+    (pin SOG.LLB_PAD65_1_3_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 2  25.583 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 3  51.183 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 4  76.783 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 5  76.783 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 6  51.183 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 7  25.583 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 8  0.000 181.100)
+    )
+  (image SM/C_0603_C16
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_C27
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.050/8/WG.244/L.200_U15
+    (outline(path TOP  1.000  -29.000 -62.000  179.000 -62.000  179.000 258.000
+         -29.000 258.000  -29.000 -62.000)
+      )
+    (pin SOG.llb_pad5_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.llb_pad6_1(rotate  90.00) 2  50.000 0.000)
+    (pin SOG.llb_pad6_1(rotate  90.00) 3  100.000 0.000)
+    (pin SOG.llb_pad6_1(rotate  90.00) 4  150.000 0.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 5  150.000 196.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 6  100.000 196.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 7  50.000 196.000)
+    (pin SOG.llb_pad7_1(rotate  90.00) 8  0.000 196.000)
+    )
+  (image 'LITEON/LTST-C170_D2'
+    (outline(path TOP  1.000  -25.583 -9.833  25.583 -9.833  25.583 68.883
+         -25.583 68.883  -25.583 -9.833)
+      )
+    (pin T1_29 2  0.000 0.000)
+    (pin T1_29 1  0.000 59.050)
+    )
+  (image SM/C_0402_C34
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C10
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R48
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image 'LITEON/LTST-C170_D1'
+    (outline(path TOP  1.000  -25.583 -9.833  25.583 -9.833  25.583 68.883
+         -25.583 68.883  -25.583 -9.833)
+      )
+    (pin T1_29 2  0.000 0.000)
+    (pin T1_29 1  0.000 59.050)
+    )
+  (image 'HAMAMATSU/S642X-01/2_D9'
+    (outline(path TOP  1.000  -52.583 -200.017  -52.583 66.183  349.633 66.183
+         349.633 -200.017  -52.583 -200.017)
+      )
+    (pin T1_12_1 2  0.000 0.000)
+    (pin T1_12_1 1  0.000 -133.833)
+    )
+  (image SM/C_0402_R12
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_C46
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad7_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_R19
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R29
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R32
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R49
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0603_R22
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad7_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image 'HAMAMATSU/S642X-01/2_D8'
+    (outline(path TOP  1.000  -52.583 -200.017  -52.583 66.183  349.633 66.183
+         349.633 -200.017  -52.583 -200.017)
+      )
+    (pin T1_12_1 2  0.000 0.000)
+    (pin T1_12_1 1  0.000 -133.833)
+    )
+  (image SM/C_0603_C8
+    (outline(path BOTTOM  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin 124(rotate  90.00) 1  0.000 0.000)
+    (pin 124(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0603_L6
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image 'LITEON/LTST-C170_D3'
+    (outline(path TOP  1.000  -25.583 -9.833  25.583 -9.833  25.583 68.883
+         -25.583 68.883  -25.583 -9.833)
+      )
+    (pin T1_29 2  0.000 0.000)
+    (pin T1_29 1  0.000 59.050)
+    )
+  (image SM/C_0402_R30
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R39
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_L8
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image 'HAMAMATSU/S642X-01/2_D7'
+    (outline(path TOP  1.000  -52.583 -200.017  -52.583 66.183  349.633 66.183
+         349.633 -200.017  -52.583 -200.017)
+      )
+    (pin T1_12_1 2  0.000 0.000)
+    (pin T1_12_1 1  0.000 -133.833)
+    )
+  (image SM/R_0402_R50
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R44
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R13
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_C23
+    (outline(path BOTTOM  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin 124(rotate  90.00) 1  0.000 0.000)
+    (pin 124(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_C19
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C28
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image LINEAR/TSOT23/6_U18
+    (outline(path TOP  1.000  -19.683 -25.583  -19.683 127.950  94.483 127.950
+         94.483 -25.583  -19.683 -25.583)
+      )
+    (pin TSOT_23 1  0.000 0.000)
+    (pin TSOT_23 2  37.400 0.000)
+    (pin TSOT_23 3  74.800 0.000)
+    (pin TSOT_23 4  74.800 103.133)
+    (pin TSOT_23 5  37.400 103.133)
+    (pin TSOT_23 6  0.000 103.133)
+    )
+  (image SM/C_0603_L7
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_1210_C36
+    (outline(path TOP  1.000  -50.000 -68.000  183.500 -68.000  183.500 68.000
+         -50.000 68.000  -50.000 -68.000)
+      )
+    (pin SM.llb_pad6 1  0.000 0.000)
+    (pin SM.llb_pad6 2  135.000 0.000)
+    )
+  (image SM/C_0603_C24
+    (outline(path BOTTOM  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin 124(rotate  90.00) 1  0.000 0.000)
+    (pin 124(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0603_C9
+    (outline(path BOTTOM  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin 124(rotate  90.00) 1  0.000 0.000)
+    (pin 124(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_1210_C30
+    (outline(path TOP  1.000  -50.000 -68.000  183.500 -68.000  183.500 68.000
+         -50.000 68.000  -50.000 -68.000)
+      )
+    (pin SM.llb_pad6 1  0.000 0.000)
+    (pin SM.llb_pad6 2  135.000 0.000)
+    )
+  (image SM/R_0402_R52
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_L2
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/R_0402_R20
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image FAIRCHILD/SOT23/5_U6
+    (outline(path BOTTOM  1.000  -19.983 -24.983  -19.983 128.217  95.000 128.217
+         95.000 -24.983  -19.983 -24.983)
+      )
+    (pin 125 1  0.000 0.000)
+    (pin 126 2  37.400 0.000)
+    (pin 126 3  74.800 0.000)
+    (pin 126 4  74.800 102.350)
+    (pin 126 5  0.000 102.350)
+    )
+  (image SM/R_0402_R21
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C49
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/8/WG5.8/L3.17_U8
+    (outline(path TOP  1.000  -28.083 -19.683  -28.083 208.650  104.883 208.650
+         104.883 -19.683  -28.083 -19.683)
+      )
+    (pin SOG.LLB_PAD65_1_3_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 2  25.583 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 3  51.183 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 4  76.783 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 5  76.783 188.967)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 6  51.183 188.967)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 7  25.583 188.967)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 8  0.000 188.967)
+    )
+  (image HAMAMATSU/S1133/2_D6
+    (outline(path TOP  1.000  -74.050 -133.100  -74.050 133.100  270.900 133.100
+         270.900 -133.100  -74.050 -133.100)
+      )
+    (pin T1_12 1  0.000 0.000)
+    (pin T1_12 2  196.850 0.000)
+    )
+  (image SM/C_0402_R47
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R24
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C48
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/24/WG8.00/L8.25_U16
+    (outline(path TOP  1.000  -25.683 -45.267  -25.683 273.617  307.283 273.617
+         307.283 -45.267  -25.683 -45.267)
+      )
+    (pin SOG.llb_pad65_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 2  25.583 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 3  51.183 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 4  76.783 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 5  102.383 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 6  128.000 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 7  153.583 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 8  179.183 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 9  204.783 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 10  230.383 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 11  256.000 0.000)
+    (pin SOG.llb_pad66_1(rotate  90.00) 12  281.583 0.000)
+    (pin SOG.llb_pad67_1(rotate  90.00) 13  281.583 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 14  256.000 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 15  230.383 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 16  204.783 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 17  179.183 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 18  153.583 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 19  128.000 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 20  102.383 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 21  76.783 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 22  51.183 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 23  25.583 228.333)
+    (pin SOG.llb_pad67_1(rotate  90.00) 24  0.000 228.333)
+    )
+  (image SM/C_0805_R17
+    (outline(path TOP  1.000  -41.000 -40.500  125.000 -40.500  125.000 40.500
+         -41.000 40.500  -41.000 -40.500)
+      )
+    (pin SM.llb_pad5_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad5_1(rotate  90.00) 2  84.000 0.000)
+    )
+  (image SM/R_0402_R51
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C11
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/R_0402_R42
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_C20
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/24/WG8.00/L8.25_U13
+    (outline(path BOTTOM  1.000  -25.683 -45.267  -25.683 273.617
+         307.283 273.617  307.283 -45.267  -25.683 -45.267)
+      )
+    (pin 120(rotate  90.00) 1  0.000 0.000)
+    (pin 121(rotate  90.00) 2  25.583 0.000)
+    (pin 121(rotate  90.00) 3  51.183 0.000)
+    (pin 121(rotate  90.00) 4  76.783 0.000)
+    (pin 121(rotate  90.00) 5  102.383 0.000)
+    (pin 121(rotate  90.00) 6  128.000 0.000)
+    (pin 121(rotate  90.00) 7  153.583 0.000)
+    (pin 121(rotate  90.00) 8  179.183 0.000)
+    (pin 121(rotate  90.00) 9  204.783 0.000)
+    (pin 121(rotate  90.00) 10  230.383 0.000)
+    (pin 121(rotate  90.00) 11  256.000 0.000)
+    (pin 121(rotate  90.00) 12  281.583 0.000)
+    (pin 121(rotate  90.00) 13  281.583 228.333)
+    (pin 121(rotate  90.00) 14  256.000 228.333)
+    (pin 121(rotate  90.00) 15  230.383 228.333)
+    (pin 121(rotate  90.00) 16  204.783 228.333)
+    (pin 121(rotate  90.00) 17  179.183 228.333)
+    (pin 121(rotate  90.00) 18  153.583 228.333)
+    (pin 121(rotate  90.00) 19  128.000 228.333)
+    (pin 121(rotate  90.00) 20  102.383 228.333)
+    (pin 121(rotate  90.00) 21  76.783 228.333)
+    (pin 121(rotate  90.00) 22  51.183 228.333)
+    (pin 121(rotate  90.00) 23  25.583 228.333)
+    (pin 121(rotate  90.00) 24  0.000 228.333)
+    )
+  (image SM/C_0402_R43
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SOG.65M/8/WG5.6/L3.17_U14
+    (outline(path TOP  1.000  -28.083 -19.683  -28.083 200.783  104.883 200.783
+         104.883 -19.683  -28.083 -19.683)
+      )
+    (pin SOG.LLB_PAD65_1_3_1(rotate  90.00) 1  0.000 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 2  25.583 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 3  51.183 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 4  76.783 0.000)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 5  76.783 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 6  51.183 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 7  25.583 181.100)
+    (pin SOG.LLB_PAD66_1_3_1(rotate  90.00) 8  0.000 181.100)
+    )
+  (image PANASONIC/ELL6_M/2_L1
+    (outline(path TOP  1.000  -137.783 196.850  137.783 196.850  137.783 -82.667
+         -137.783 -82.667  -137.783 196.850)
+      )
+    (pin CR75_1 1  0.000 0.000)
+    (pin CR75_1 2  0.000 114.167)
+    )
+  (image TI/SC70/5_U7
+    (outline(path TOP  1.000  -7.867 -19.683  -7.867 90.550  59.050 90.550
+         59.050 -19.683  -7.867 -19.683)
+      )
+    (pin OW27L40MIL_1_1 1  0.000 0.000)
+    (pin OW27L40MIL_1_1 2  25.583 0.000)
+    (pin OW27L40MIL_1_1 3  51.167 0.000)
+    (pin OW27L40MIL_1_1 4  51.167 70.850)
+    (pin OW27L40MIL_1_1 5  0.000 70.850)
+    )
+  (image SM/C_0402_R18
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_C29
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_C44
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R45
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R46
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0402_R28
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image MAXIM/QSOP/16_U9
+    (outline(path TOP  1.000  187.000 235.000  -13.000 235.000  -13.000 -40.000
+         187.000 -40.000  187.000 235.000)
+      )
+    (pin QSOP1_3_1 1  0.000 0.000)
+    (pin QSOP2_3_1 2  25.000 0.000)
+    (pin QSOP2_3_1 3  50.000 0.000)
+    (pin QSOP2_3_1 4  75.000 0.000)
+    (pin QSOP2_3_1 5  100.000 0.000)
+    (pin QSOP2_3_1 6  125.000 0.000)
+    (pin QSOP2_3_1 7  150.000 0.000)
+    (pin QSOP2_3_1 8  175.000 0.000)
+    (pin QSOP2_3_1 9  175.000 195.000)
+    (pin QSOP2_3_1 10  150.000 195.000)
+    (pin QSOP2_3_1 11  125.000 195.000)
+    (pin QSOP2_3_1 12  100.000 195.000)
+    (pin QSOP2_3_1 13  75.000 195.000)
+    (pin QSOP2_3_1 14  50.000 195.000)
+    (pin QSOP2_3_1 15  25.000 195.000)
+    (pin QSOP2_3_1 16  0.000 195.000)
+    )
+  (image SM/C_0603_C38
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/C_0402_R36
+    (outline(path BOTTOM  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin 117(rotate  90.00) 1  0.000 0.000)
+    (pin 117(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_1210_C17
+    (outline(path TOP  1.000  -50.000 -68.000  183.500 -68.000  183.500 68.000
+         -50.000 68.000  -50.000 -68.000)
+      )
+    (pin SM.llb_pad6 1  0.000 0.000)
+    (pin SM.llb_pad6 2  135.000 0.000)
+    )
+  (image SM/R_0402_R40
+    (outline(path TOP  1.000  -27.000 -27.000  70.000 -27.000  70.000 27.200
+         -27.000 27.200  -27.000 -27.000)
+      )
+    (pin SM.llb_pad4(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad4(rotate  90.00) 2  42.000 0.000)
+    )
+  (image SM/C_0603_C15
+    (outline(path TOP  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin SM.llb_pad7_1(rotate  90.00) 1  0.000 0.000)
+    (pin SM.llb_pad8_1(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SM/DO213AC_21/JON_SILK_D5
+    (outline(path TOP  1.000  -250.000 -53.000  53.000 -53.000  53.000 53.000
+         -250.000 53.000  -250.000 -53.000)
+      )
+    (pin SM.llb_pad73_1 1  0.000 0.000)
+    (pin SM.llb_pad72 2  -140.000 0.000)
+    )
+  (image SM/C_0603_C18
+    (outline(path BOTTOM  1.000  -32.500 -35.500  88.500 -35.500  88.500 35.000
+         -32.500 35.000  -32.500 -35.500)
+      )
+    (pin 124(rotate  90.00) 1  0.000 0.000)
+    (pin 124(rotate  90.00) 2  56.000 0.000)
+    )
+  (image SOG.50M/8/WG3.1/L2.0_U19
+    (outline(path BOTTOM  1.000  -13.767 -21.650  -13.767 127.950  70.850 127.950
+         70.850 -21.650  -13.767 -21.650)
+      )
+    (pin 127(rotate  90.00) 1  0.000 0.000)
+    (pin 128(rotate  90.00) 2  19.683 0.000)
+    (pin 128(rotate  90.00) 3  39.367 0.000)
+    (pin 128(rotate  90.00) 4  59.050 0.000)
+    (pin 128(rotate  90.00) 5  59.050 106.283)
+    (pin 128(rotate  90.00) 6  39.367 106.283)
+    (pin 128(rotate  90.00) 7  19.683 106.283)
+    (pin 128(rotate  90.00) 8  0.000 106.283)
+    )
+  (image BATTERY_PACK_AA2_REV1_195_BATTERY
+    (outline(path TOP  1.000  655.500 -55.500  -55.500 -55.500  -55.500 55.500
+         655.500 55.500  655.500 -55.500)
+      )
+    (pin TM_RAD.LLB_PAD3_1 2  0.000 0.000)
+    (pin TM_RAD.LLB_PAD3_1 1  600.000 0.000)
+    )
+  (padstack VIA1
+    (shape(circle TOP  25.000))
+    (shape(circle BOTTOM  25.000))
+    (shape(circle GND  43.000))
+    (shape(circle POWER  43.000))
+    (shape(circle INNER2  25.000))
+    )
+  (padstack SM.llb_pad4
+    (shape(rect TOP  -11.000 -11.000  11.000 11.000))
+    )
+  (padstack SM.llb_pad7_1
+    (shape(rect TOP  -19.000 -16.000  19.000 16.000))
+    )
+  (padstack SM.llb_pad8_1
+    (shape(rect TOP  -19.000 -16.000  19.000 16.000))
+    )
+  (padstack SM.llb_pad32_1
+    (shape(rect TOP  -48.000 -52.000  48.000 52.000))
+    )
+  (padstack PIN1_2
+    (shape(rect TOP  -6.883 -32.467  6.883 32.467))
+    )
+  (padstack PIN_HORZ
+    (shape(path TOP  13.767  0.000 -25.583  0.000 25.583))
+    )
+  (padstack PIN_VERT
+    (shape(path TOP  13.767  0.000 -25.583  0.000 25.583))
+    )
+  (padstack SOG.llb_pad5_1
+    (shape(rect TOP  -47.000 -12.500  47.000 12.500))
+    )
+  (padstack SOG.llb_pad6_1
+    (shape(path TOP  25.000  -34.500 0.000  34.500 0.000))
+    )
+  (padstack SOG.llb_pad7_1
+    (shape(path TOP  25.000  -34.500 0.000  34.500 0.000))
+    )
+  (padstack SOG.llb_pad31_1_1
+    (shape(rect TOP  -34.000 -5.900  34.000 5.900))
+    )
+  (padstack SOG.llb_pad32_1_1
+    (shape(path TOP  11.800  -28.100 0.000  28.100 0.000))
+    )
+  (padstack SOG.llb_pad33_1_1
+    (shape(path TOP  11.800  -28.100 0.000  28.100 0.000))
+    )
+  (padstack QUAD.llb_pad33_1_1
+    (shape(rect TOP  -29.517 -5.483  29.517 5.483))
+    )
+  (padstack QUAD.llb_pad34_1_1
+    (shape(path TOP  10.967  -24.033 0.000  24.033 0.000))
+    )
+  (padstack QUAD.llb_pad35_1_1
+    (shape(path TOP  10.967  -24.033 0.000  24.033 0.000))
+    )
+  (padstack QUAD.llb_pad36_1_1
+    (shape(rect TOP  -29.517 -5.483  29.517 5.483))
+    )
+  (padstack QUAD.llb_pad37_1_1
+    (shape(path TOP  10.967  -24.033 0.000  24.033 0.000))
+    )
+  (padstack QUAD.llb_pad38_1_1
+    (shape(rect TOP  -29.517 -5.483  29.517 5.483))
+    )
+  (padstack QUAD.llb_pad39_1
+    (shape(path TOP  10.967  -24.033 0.000  24.033 0.000))
+    )
+  (padstack QUAD.llb_pad40_1
+    (shape(rect TOP  -29.517 -5.483  29.517 5.483))
+    )
+  (padstack CENTER_PAD
+    (shape(rect TOP  -39.367 -39.367  39.367 39.367))
+    )
+  (padstack T1_12_1
+    (shape(circle TOP  75.167))
+    (shape(circle BOTTOM  75.167))
+    (shape(circle GND  75.167))
+    (shape(circle POWER  75.167))
+    (shape(circle INNER2  75.167))
+    )
+  (padstack BCON100T.llb_pad2
+    (shape(rect TOP  -29.000 -29.000  29.000 29.000))
+    (shape(rect BOTTOM  -29.000 -29.000  29.000 29.000))
+    (shape(rect GND  -39.000 -39.000  39.000 39.000))
+    (shape(rect POWER  -39.000 -39.000  39.000 39.000))
+    (shape(rect INNER2  -29.000 -29.000  29.000 29.000))
+    )
+  (padstack BCON100T.llb_pad1
+    (shape(circle TOP  58.000))
+    (shape(circle BOTTOM  58.000))
+    (shape(circle GND  78.000))
+    (shape(circle POWER  78.000))
+    (shape(circle INNER2  58.000))
+    )
+  (padstack SM.LLB_PAD64_1_1_1
+    (shape(rect TOP  -63.967 -42.500  63.967 42.500))
+    )
+  (padstack TSOT_23
+    (shape(rect TOP  -12.200 -24.000  12.200 24.000))
+    )
+  (padstack T1_13
+    (shape(circle TOP  62.000))
+    (shape(circle BOTTOM  62.000))
+    (shape(circle GND  75.000))
+    (shape(circle POWER  75.000))
+    (shape(circle INNER2  62.000))
+    )
+  (padstack T1_8_1
+    (shape(circle TOP  36.000))
+    (shape(circle BOTTOM  36.000))
+    (shape(circle GND  60.000))
+    (shape(circle POWER  60.000))
+    (shape(circle INNER2  36.000))
+    )
+  (padstack OW27L40MIL_1_1
+    (shape(rect TOP  -5.900 -15.733  5.900 15.733))
+    )
+  (padstack 'REC-W0.4L0.9MM_2_1_1'
+    (shape(rect TOP  -7.867 -35.417  7.867 35.417))
+    )
+  (padstack 'RECT-W0.9L2.9_1_1'
+    (shape(rect TOP  -17.683 -57.067  17.683 57.067))
+    )
+  (padstack R1.2MM_2
+    (shape(circle TOP  47.233))
+    (shape(circle BOTTOM  47.233))
+    (shape(circle GND  86.600))
+    (shape(circle POWER  86.600))
+    (shape(circle INNER2  60.000))
+    )
+  (padstack 'MNT_HOLE_4-40'
+    (shape(circle TOP  174.967))
+    (shape(circle BOTTOM  174.967))
+    (shape(circle GND  174.967))
+    (shape(circle POWER  174.967))
+    (shape(circle INNER2  174.967))
+    )
+  (padstack SOG.LLB_PAD65_1_3_1
+    (shape(rect TOP  -19.683 -7.867  19.683 7.867))
+    )
+  (padstack SOG.LLB_PAD66_1_3_1
+    (shape(path TOP  15.733  -11.817 0.000  11.817 0.000))
+    )
+  (padstack QSOP1_3_1
+    (shape(rect TOP  -8.000 -35.000  8.000 35.000))
+    )
+  (padstack QSOP2_3_1
+    (shape(path TOP  16.000  0.000 -27.000  0.000 27.000))
+    )
+  (padstack SM.llb_pad5_1
+    (shape(rect TOP  -25.000 -25.000  25.000 25.000))
+    )
+  (padstack SM.llb_pad38_1
+    (shape(rect TOP  -46.000 -28.000  46.000 28.000))
+    )
+  (padstack SM.llb_pad37_1
+    (shape(rect TOP  -46.000 -28.000  46.000 28.000))
+    )
+  (padstack CR75_1
+    (shape(rect TOP  -137.783 -35.417  137.783 35.417))
+    )
+  (padstack T1_12
+    (shape(circle TOP  36.600))
+    (shape(circle BOTTOM  36.600))
+    (shape(circle GND  57.067))
+    (shape(circle POWER  57.067))
+    (shape(circle INNER2  36.600))
+    )
+  (padstack SM.llb_pad6
+    (shape(rect TOP  -32.000 -50.000  32.000 50.000))
+    )
+  (padstack SM.LLB_PAD6_1
+    (shape(rect TOP  -50.183 -53.133  50.183 53.133))
+    )
+  (padstack 'REC-W0.4L0.9MM_2_1_1-M'
+    (shape(rect BOTTOM  -7.867 -35.417  7.867 35.417))
+    )
+  (padstack 'RECT-W0.9L2.9_1_1-M'
+    (shape(rect BOTTOM  -17.683 -57.067  17.683 57.067))
+    )
+  (padstack 'SOG.llb_pad5_1-M'
+    (shape(rect BOTTOM  -47.000 -12.500  47.000 12.500))
+    )
+  (padstack 'SOG.llb_pad6_1-M'
+    (shape(path BOTTOM  25.000  -34.500 0.000  34.500 0.000))
+    )
+  (padstack 'QUAD.llb_pad33_1_1-M'
+    (shape(rect BOTTOM  -29.517 -5.483  29.517 5.483))
+    )
+  (padstack 'QUAD.llb_pad34_1_1-M'
+    (shape(path BOTTOM  10.967  -24.033 0.000  24.033 0.000))
+    )
+  (padstack 'QUAD.llb_pad35_1_1-M'
+    (shape(path BOTTOM  10.967  -24.033 0.000  24.033 0.000))
+    )
+  (padstack 'QUAD.llb_pad36_1_1-M'
+    (shape(rect BOTTOM  -29.517 -5.483  29.517 5.483))
+    )
+  (padstack 'CENTER_PAD-M'
+    (shape(rect BOTTOM  -39.367 -39.367  39.367 39.367))
+    )
+  (padstack 'OW27L40MIL_1_1-M'
+    (shape(rect BOTTOM  -5.900 -15.733  5.900 15.733))
+    )
+  (padstack 'SOG.llb_pad31_1_1-M'
+    (shape(rect BOTTOM  -34.000 -5.900  34.000 5.900))
+    )
+  (padstack 'SOG.llb_pad32_1_1-M'
+    (shape(path BOTTOM  11.800  -28.100 0.000  28.100 0.000))
+    )
+  (padstack 'SM.llb_pad4-M'
+    (shape(rect BOTTOM  -11.000 -11.000  11.000 11.000))
+    )
+  (padstack 'SM.llb_pad7_1-M'
+    (shape(rect BOTTOM  -19.000 -16.000  19.000 16.000))
+    )
+  (padstack CR75_2_1_1_1
+    (shape(rect TOP  -29.517 -4.317  29.517 4.317))
+    )
+  (padstack 'CR75_2_1_1_1-M'
+    (shape(rect BOTTOM  -29.517 -4.317  29.517 4.317))
+    )
+  (padstack SOG.llb_pad15_1
+    (shape(rect TOP  -43.000 -12.500  43.000 12.500))
+    )
+  (padstack SOG.llb_pad14_1
+    (shape(path TOP  25.000  -30.500 0.000  30.500 0.000))
+    )
+  (padstack SOG.llb_pad13_1
+    (shape(path TOP  25.000  -30.500 0.000  30.500 0.000))
+    )
+  (padstack SOG.llb_pad65_1
+    (shape(rect TOP  -45.000 -8.000  45.000 8.000))
+    )
+  (padstack SOG.llb_pad66_1
+    (shape(path TOP  16.000  -37.000 0.000  37.000 0.000))
+    )
+  (padstack SOG.llb_pad67_1
+    (shape(path TOP  16.000  -37.000 0.000  37.000 0.000))
+    )
+  (padstack SM.HSEC8.1_1
+    (shape(rect TOP  -9.817 -39.367  9.817 39.367))
+    )
+  (padstack TH.HSEC.MOUNT1_1
+    (shape(circle TOP  61.000))
+    (shape(circle BOTTOM  61.000))
+    (shape(circle GND  78.733))
+    (shape(circle POWER  78.733))
+    (shape(circle INNER2  61.000))
+    )
+  (padstack BCON100T.llb_pad2_1
+    (shape(rect TOP  -29.000 -29.000  29.000 29.000))
+    (shape(rect BOTTOM  -29.000 -29.000  29.000 29.000))
+    (shape(rect GND  -39.000 -39.000  39.000 39.000))
+    (shape(rect POWER  -39.000 -39.000  39.000 39.000))
+    (shape(rect INNER2  -29.000 -29.000  29.000 29.000))
+    )
+  (padstack BCON100T.llb_pad1_1
+    (shape(circle TOP  58.000))
+    (shape(circle BOTTOM  58.000))
+    (shape(circle GND  78.000))
+    (shape(circle POWER  78.000))
+    (shape(circle INNER2  58.000))
+    )
+  (padstack TM_RAD.LLB_PAD3_1
+    (shape(circle TOP  81.000))
+    (shape(circle BOTTOM  81.000))
+    (shape(circle GND  81.000))
+    (shape(circle POWER  81.000))
+    (shape(circle INNER2  81.000))
+    )
+  (padstack 'SOG.LLB_PAD65_1_3_1-M'
+    (shape(rect BOTTOM  -19.683 -7.867  19.683 7.867))
+    )
+  (padstack 'SOG.LLB_PAD66_1_3_1-M'
+    (shape(path BOTTOM  15.733  -11.817 0.000  11.817 0.000))
+    )
+  (padstack R1.2MM
+    (shape(circle TOP  47.233))
+    (shape(circle BOTTOM  47.233))
+    (shape(circle GND  47.233))
+    (shape(circle POWER  47.233))
+    (shape(circle INNER2  47.233))
+    )
+  (padstack T1_29
+    (shape(rect TOP  -25.583 -9.833  25.583 9.833))
+    )
+  (padstack SM.llb_pad7
+    (shape(rect TOP  -19.000 -16.000  19.000 16.000))
+    )
+  (padstack SM.llb_pad8
+    (shape(rect TOP  -19.000 -16.000  19.000 16.000))
+    )
+  (padstack OW27L40MIL
+    (shape(rect TOP  -13.767 -19.683  13.767 19.683))
+    )
+  (padstack OW27L39MIL_1
+    (shape(path TOP  27.533  0.000 -5.917  0.000 5.917))
+    )
+  (padstack 'SM.LLB_PAD6_1-M'
+    (shape(rect BOTTOM  -50.183 -53.133  50.183 53.133))
+    )
+  (padstack 'SM.llb_pad6-M'
+    (shape(rect BOTTOM  -32.000 -50.000  32.000 50.000))
+    )
+  (padstack SM.llb_pad73_1
+    (shape(rect TOP  -36.000 -36.000  36.000 36.000))
+    )
+  (padstack SM.llb_pad72
+    (shape(rect TOP  -36.000 -36.000  36.000 36.000))
+    )
+  (padstack 'SOG.llb_pad65_1-M'
+    (shape(rect BOTTOM  -45.000 -8.000  45.000 8.000))
+    )
+  (padstack 'SOG.llb_pad66_1-M'
+    (shape(path BOTTOM  16.000  -37.000 0.000  37.000 0.000))
+    )
+  (padstack SOG.llb_pad31_1_2
+    (shape(rect TOP  -21.650 -4.917  21.650 4.917))
+    )
+  (padstack SOG.llb_pad32_1_2
+    (shape(path TOP  9.833  -16.733 0.000  16.733 0.000))
+    )
+  (padstack 'SOG.llb_pad31_1_2-M'
+    (shape(rect BOTTOM  -21.650 -4.917  21.650 4.917))
+    )
+  (padstack 'SOG.llb_pad32_1_2-M'
+    (shape(path BOTTOM  9.833  -16.733 0.000  16.733 0.000))
+    )
+  (padstack 'OW27L40MIL-M'
+    (shape(rect BOTTOM  -13.767 -19.683  13.767 19.683))
+    )
+  (padstack 'OW27L39MIL_1-M'
+    (shape(path BOTTOM  27.533  0.000 -5.917  0.000 5.917))
+    )
+  (padstack T1_11
+    (shape(rect TOP  -49.217 -19.683  49.217 19.683))
+    )
+  (padstack 'T1_11-M'
+    (shape(rect BOTTOM  -49.217 -19.683  49.217 19.683))
+    )
+  (padstack 111
+    (shape(rect TOP  -47.000 -12.500  47.000 12.500))
+    )
+  (padstack 112
+    (shape(path TOP  25.000  -34.500 0.000  34.500 0.000))
+    )
+  (padstack 113
+    (shape(rect TOP  -7.867 -35.417  7.867 35.417))
+    )
+  (padstack 114
+    (shape(rect TOP  -17.683 -57.067  17.683 57.067))
+    )
+  (padstack 115
+    (shape(circle TOP  47.233))
+    (shape(circle BOTTOM  47.233))
+    (shape(circle GND  86.600))
+    (shape(circle POWER  86.600))
+    (shape(circle INNER2  60.000))
+    )
+  (padstack 116
+    (shape(circle TOP  174.967))
+    (shape(circle BOTTOM  174.967))
+    (shape(circle GND  174.967))
+    (shape(circle POWER  174.967))
+    (shape(circle INNER2  174.967))
+    )
+  (padstack 117
+    (shape(rect TOP  -11.000 -11.000  11.000 11.000))
+    )
+  (padstack 118
+    (shape(rect TOP  -5.900 -15.733  5.900 15.733))
+    )
+  (padstack 119
+    (shape(rect TOP  -49.217 -19.683  49.217 19.683))
+    )
+  (padstack 120
+    (shape(rect TOP  -45.000 -8.000  45.000 8.000))
+    )
+  (padstack 121
+    (shape(path TOP  16.000  -37.000 0.000  37.000 0.000))
+    )
+  (padstack 122
+    (shape(rect TOP  -34.000 -5.900  34.000 5.900))
+    )
+  (padstack 123
+    (shape(path TOP  11.800  -28.100 0.000  28.100 0.000))
+    )
+  (padstack 124
+    (shape(rect TOP  -19.000 -16.000  19.000 16.000))
+    )
+  (padstack 125
+    (shape(rect TOP  -13.767 -19.683  13.767 19.683))
+    )
+  (padstack 126
+    (shape(path TOP  27.533  0.000 -5.917  0.000 5.917))
+    )
+  (padstack 127
+    (shape(rect TOP  -21.650 -4.917  21.650 4.917))
+    )
+  (padstack 128
+    (shape(path TOP  9.833  -16.733 0.000  16.733 0.000))
+    )
+  )
+(part_library
+  (logical_part CAP_NP
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    )
+  (logical_part 'DK_445-1553-1-ND'
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    )
+  (logical_part R
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    )
+  (logical_part INDUCTOR
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    )
+  (logical_part CAPACITOR_POL
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    )
+  (logical_part EXB2HVXX1JV
+    (pin 1 0 none 1 R1 0)
+    (pin 2 0 none 1 R2 0)
+    (pin 3 0 none 1 R3 0)
+    (pin 4 0 none 1 R4 0)
+    (pin 5 0 none 1 R5 0)
+    (pin 6 0 none 1 R6 0)
+    (pin 7 0 none 1 R7 0)
+    (pin 8 0 none 1 R8 0)
+    (pin 9 0 none 1 R8 0)
+    (pin 10 0 none 1 R7 0)
+    (pin 11 0 none 1 R6 0)
+    (pin 12 0 none 1 R5 0)
+    (pin 13 0 none 1 R4 0)
+    (pin 14 0 none 1 R3 0)
+    (pin 15 0 none 1 R2 0)
+    (pin 16 0 none 1 R1 0)
+    )
+  (logical_part ATMEL/ATMEGA48/88/168/MLF32
+    (pin 1 0 none 1 'PD3 (INT1/OC2B/PCINT19)' 0)
+    (pin 2 0 none 1 'PD4 (T0/XCK/PCINT20)' 0)
+    (pin 3 0 none 1 GND 0)
+    (pin 4 0 none 1 VCC 0)
+    (pin 5 0 none 1 GND 0)
+    (pin 6 0 none 1 VCC 0)
+    (pin 7 0 none 1 'PB6 (PCINT6/XTAL1/TOSC1)' 0)
+    (pin 8 0 none 1 'PB7 (PCINT7/XTAL2/TOSC2)' 0)
+    (pin 9 0 none 1 'PD5 (T1/OC0B/PCINT21)' 0)
+    (pin 10 0 none 1 'PD6 (AIN0/OC0A/PCINT22)' 0)
+    (pin 11 0 none 1 'PD7 (AIN1/PCINT23)' 0)
+    (pin 12 0 none 1 'PB0 (PCINT0/CLK0/ICP1)' 0)
+    (pin 13 0 none 1 'PB1 (PCINT1/OC1A)' 0)
+    (pin 14 0 none 1 'PB2 (PCINT2/SS/OC1B)' 0)
+    (pin 15 0 none 1 'PB3 (PCINT3/OC2A/MOSI)' 0)
+    (pin 16 0 none 1 'PB4 (PCINT4/MISO)' 0)
+    (pin 17 0 none 1 'PB5 (SCK/PCINT5)' 0)
+    (pin 18 0 none 1 AVCC 0)
+    (pin 19 0 none 1 ADC6 0)
+    (pin 20 0 none 1 AREF 0)
+    (pin 21 0 none 1 AGND 0)
+    (pin 22 0 none 1 ADC7 0)
+    (pin 23 0 none 1 'PC0 (ADC0/PCINT8)' 0)
+    (pin 24 0 none 1 'PC1 (ADC1/PCINT9)' 0)
+    (pin 25 0 none 1 'PC2 (ADC2/PCINT10)' 0)
+    (pin 26 0 none 1 'PC3 (ADC3/PCINT11)' 0)
+    (pin 27 0 none 1 'PC4 (ADC4/SDA/PCINT12)' 0)
+    (pin 28 0 none 1 'PC5 (ADC5/SCL/PCINT13)' 0)
+    (pin 29 0 none 1 'PC6 (RESET/PCINT14)' 0)
+    (pin 30 0 none 1 'PD0 (RXD/PCINT16)' 0)
+    (pin 31 0 none 1 'PD1 (TXD/PCINT17)' 0)
+    (pin 32 0 none 1 'PD2 (INT0/PCINT18)' 0)
+    (pin 33 0 none 1 GND 0)
+    )
+  (logical_part PHOTODIODE
+    (pin 1 0 none 1 CATHODE 0)
+    (pin 2 0 none 1 ANODE 0)
+    )
+  (logical_part CONN_TRBLK_5
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    (pin 3 0 none 1 3 0)
+    (pin 4 0 none 1 4 0)
+    (pin 5 0 none 1 5 0)
+    )
+  (logical_part PHILIPS/PCA9513
+    (pin 1 0 none 1 ENABLE 0)
+    (pin 2 0 none 1 SCLOUT 0)
+    (pin 3 0 none 1 SCLIN 0)
+    (pin 4 0 none 1 GND 0)
+    (pin 5 0 none 1 READY 0)
+    (pin 6 0 none 1 SDAIN 0)
+    (pin 7 0 none 1 SDAOUT 0)
+    (pin 8 0 none 1 VCC 0)
+    )
+  (logical_part 51_PIN_CONNECTOR_5_ON_MOTE
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    (pin 3 0 none 1 3 0)
+    (pin 4 0 none 1 4 0)
+    (pin 5 0 none 1 5 0)
+    (pin 6 0 none 1 6 0)
+    (pin 7 0 none 1 7 0)
+    (pin 8 0 none 1 8 0)
+    (pin 9 0 none 1 9 0)
+    (pin 10 0 none 1 10 0)
+    (pin 11 0 none 1 11 0)
+    (pin 12 0 none 1 12 0)
+    (pin 13 0 none 1 13 0)
+    (pin 14 0 none 1 14 0)
+    (pin 15 0 none 1 15 0)
+    (pin 16 0 none 1 16 0)
+    (pin 17 0 none 1 17 0)
+    (pin 18 0 none 1 18 0)
+    (pin 19 0 none 1 19 0)
+    (pin 20 0 none 1 20 0)
+    (pin 21 0 none 1 21 0)
+    (pin 22 0 none 1 22 0)
+    (pin 23 0 none 1 23 0)
+    (pin 24 0 none 1 24 0)
+    (pin 25 0 none 1 25 0)
+    (pin 26 0 none 1 26 0)
+    (pin 27 0 none 1 27 0)
+    (pin 28 0 none 1 28 0)
+    (pin 29 0 none 1 29 0)
+    (pin 30 0 none 1 30 0)
+    (pin 31 0 none 1 31 0)
+    (pin 32 0 none 1 32 0)
+    (pin 33 0 none 1 33 0)
+    (pin 34 0 none 1 34 0)
+    (pin 35 0 none 1 35 0)
+    (pin 36 0 none 1 36 0)
+    (pin 37 0 none 1 37 0)
+    (pin 38 0 none 1 38 0)
+    (pin 39 0 none 1 39 0)
+    (pin 40 0 none 1 40 0)
+    (pin 41 0 none 1 41 0)
+    (pin 42 0 none 1 42 0)
+    (pin 43 0 none 1 43 0)
+    (pin 44 0 none 1 44 0)
+    (pin 45 0 none 1 45 0)
+    (pin 46 0 none 1 46 0)
+    (pin 47 0 none 1 47 0)
+    (pin 48 0 none 1 48 0)
+    (pin 49 0 none 1 49 0)
+    (pin 50 0 none 1 50 0)
+    (pin 51 0 none 1 51 0)
+    (pin 52 0 none 0 52 0)
+    (pin 53 0 none 0 53 0)
+    (pin 54 0 none 0 54 0)
+    (pin 55 0 none 0 55 0)
+    (pin MTH1 0 none 0 56 0)
+    (pin MTH2 0 none 0 57 0)
+    )
+  (logical_part LM2621_SO
+    (pin 1 0 none 0 1 0)
+    (pin 2 0 none 1 'E\N\' 0)
+    (pin 3 0 none 1 FRQADJ 0)
+    (pin 4 0 none 1 FB 0)
+    (pin 5 0 none 0 5 0)
+    (pin 6 0 none 0 6 0)
+    (pin 7 0 none 0 7 0)
+    (pin 8 0 none 1 SW 0)
+    )
+  (logical_part LED
+    (pin 2 0 none 1 CATHODE 0)
+    (pin 1 0 none 1 ANODE 0)
+    )
+  (logical_part HEADER_1
+    (pin 1 0 none 1 1 0)
+    )
+  (logical_part ANALOG_DEVICES/AD8132_0
+    (pin 1 0 none 1 'IN-' 0)
+    (pin 2 0 none 1 VOCM 0)
+    (pin 3 0 none 1 V+ 0)
+    (pin 4 0 none 1 OUT+ 0)
+    (pin 5 0 none 1 'OUT-' 0)
+    (pin 6 0 none 1 'V-' 0)
+    (pin 7 0 none 1 NC 0)
+    (pin 8 0 none 1 IN+ 0)
+    )
+  (logical_part MAXIM/MAX3370
+    (pin 1 0 none 1 VL 0)
+    (pin 2 0 none 1 GND 0)
+    (pin 3 0 none 1 'I/O VL' 0)
+    (pin 4 0 none 1 'I/O VCC' 0)
+    (pin 5 0 none 1 VCC 0)
+    )
+  (logical_part MAX518
+    (pin 1 0 none 1 OUT0 0)
+    (pin 2 0 none 0 2 0)
+    (pin 3 0 none 1 SCL 0)
+    (pin 4 0 none 1 SDA 0)
+    (pin 5 0 none 1 AD1 0)
+    (pin 6 0 none 1 AD0 0)
+    (pin 7 0 none 0 7 0)
+    (pin 8 0 none 1 OUT1 0)
+    )
+  (logical_part FAIRCHILD/NDS8958_DUAL_NP
+    (pin 1 0 none 1 S1 0)
+    (pin 2 0 none 1 G1 0)
+    (pin 3 0 none 1 S2 0)
+    (pin 4 0 none 1 G2 0)
+    (pin 5 0 none 1 D2 0)
+    (pin 6 0 none 1 D2 0)
+    (pin 7 0 none 1 D1 0)
+    (pin 8 0 none 1 D1 0)
+    )
+  (logical_part ADG715_SO
+    (pin 1 0 none 1 SCL 0)
+    (pin 2 0 none 0 2 0)
+    (pin 3 0 none 1 SDA 0)
+    (pin 4 0 none 0 4 0)
+    (pin 5 0 none 1 S1 0)
+    (pin 6 0 none 1 D1 0)
+    (pin 7 0 none 1 S2 0)
+    (pin 8 0 none 1 D2 0)
+    (pin 9 0 none 1 S3 0)
+    (pin 10 0 none 1 D3 0)
+    (pin 11 0 none 1 S4 0)
+    (pin 12 0 none 1 D4 0)
+    (pin 13 0 none 1 D5 0)
+    (pin 14 0 none 1 S5 0)
+    (pin 15 0 none 1 D6 0)
+    (pin 16 0 none 1 S6 0)
+    (pin 17 0 none 1 D7 0)
+    (pin 18 0 none 1 S7 0)
+    (pin 19 0 none 1 D8 0)
+    (pin 20 0 none 1 S8 0)
+    (pin 21 0 none 0 21 0)
+    (pin 22 0 none 1 A1 0)
+    (pin 23 0 none 1 'R\S\T\' 0)
+    (pin 24 0 none 1 A0 0)
+    )
+  (logical_part AD7414_0
+    (pin 1 0 none 1 AS 0)
+    (pin 2 0 none 0 2 0)
+    (pin 3 0 none 0 3 0)
+    (pin 4 0 none 1 SCL 0)
+    (pin 5 0 none 1 ALERT 0)
+    (pin 6 0 none 1 SDA 0)
+    )
+  (logical_part ANALOG_DEVICES/ADXL330
+    (pin 1 0 none 1 DNC 0)
+    (pin 2 0 none 1 ST 0)
+    (pin 3 0 none 1 COM 0)
+    (pin 4 0 none 1 DNC 0)
+    (pin 5 0 none 1 COM 0)
+    (pin 6 0 none 1 COM 0)
+    (pin 7 0 none 1 COM 0)
+    (pin 8 0 none 1 ZOUT 0)
+    (pin 9 0 none 1 DNC 0)
+    (pin 10 0 none 1 YOUT 0)
+    (pin 11 0 none 1 DNC 0)
+    (pin 12 0 none 1 XOUT 0)
+    (pin 13 0 none 1 DNC 0)
+    (pin 14 0 none 1 VDD 0)
+    (pin 15 0 none 1 VDD 0)
+    (pin 16 0 none 1 DNC 0)
+    )
+  (logical_part CONN_SOCKET_20X2
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 21 0)
+    (pin 3 0 none 1 2 0)
+    (pin 4 0 none 1 22 0)
+    (pin 5 0 none 1 3 0)
+    (pin 6 0 none 1 23 0)
+    (pin 7 0 none 1 4 0)
+    (pin 8 0 none 1 24 0)
+    (pin 9 0 none 1 5 0)
+    (pin 10 0 none 1 25 0)
+    (pin 11 0 none 1 6 0)
+    (pin 12 0 none 1 26 0)
+    (pin 13 0 none 1 7 0)
+    (pin 14 0 none 1 27 0)
+    (pin 15 0 none 1 8 0)
+    (pin 16 0 none 1 28 0)
+    (pin 17 0 none 1 9 0)
+    (pin 18 0 none 1 29 0)
+    (pin 19 0 none 1 10 0)
+    (pin 20 0 none 1 30 0)
+    (pin 21 0 none 1 11 0)
+    (pin 22 0 none 1 31 0)
+    (pin 23 0 none 1 12 0)
+    (pin 24 0 none 1 32 0)
+    (pin 25 0 none 1 13 0)
+    (pin 26 0 none 1 33 0)
+    (pin 27 0 none 1 14 0)
+    (pin 28 0 none 1 34 0)
+    (pin 29 0 none 1 15 0)
+    (pin 30 0 none 1 35 0)
+    (pin 31 0 none 1 16 0)
+    (pin 32 0 none 1 36 0)
+    (pin 33 0 none 1 17 0)
+    (pin 34 0 none 1 37 0)
+    (pin 35 0 none 1 18 0)
+    (pin 36 0 none 1 38 0)
+    (pin 37 0 none 1 19 0)
+    (pin 38 0 none 1 39 0)
+    (pin 39 0 none 1 20 0)
+    (pin 40 0 none 1 40 0)
+    (pin A 0 none 0 41 0)
+    (pin B 0 none 0 42 0)
+    )
+  (logical_part TI/TPS797XX/SC70
+    (pin 1 0 none 1 PG 0)
+    (pin 2 0 none 1 GND 0)
+    (pin 3 0 none 1 DNC 0)
+    (pin 4 0 none 1 IN 0)
+    (pin 5 0 none 1 OUT 0)
+    )
+  (logical_part HEADER_3
+    (pin 1 0 none 1 1 0)
+    (pin 2 0 none 1 2 0)
+    (pin 3 0 none 1 3 0)
+    )
+  (logical_part BATTERY_CASE
+    (pin 2 0 none 1 '-' 0)
+    (pin 1 0 none 1 + 0)
+    )
+  (logical_part MAX1239_0
+    (pin 1 0 none 1 AIN0 0)
+    (pin 2 0 none 1 AIN1 0)
+    (pin 3 0 none 1 AIN2 0)
+    (pin 4 0 none 1 AIN3 0)
+    (pin 5 0 none 1 AIN4 0)
+    (pin 6 0 none 1 AIN5 0)
+    (pin 7 0 none 1 AIN6 0)
+    (pin 8 0 none 1 AIN7 0)
+    (pin 9 0 none 1 SCL 0)
+    (pin 10 0 none 1 SDA 0)
+    (pin 11 0 none 0 11 0)
+    (pin 12 0 none 0 12 0)
+    (pin 13 0 none 1 AIN11/REF 0)
+    (pin 14 0 none 1 AIN10 0)
+    (pin 15 0 none 1 AIN9 0)
+    (pin 16 0 none 1 AIN8 0)
+    )
+  (logical_part TI/TPS761XX_5P
+    (pin 1 0 none 0 1 0)
+    (pin 2 0 none 0 2 0)
+    (pin 3 0 none 1 EN 0)
+    (pin 4 0 none 1 NC 0)
+    (pin 5 0 none 0 5 0)
+    )
+  (logical_part DIODE
+    (pin 1 0 none 1 A 0)
+    (pin 2 0 none 1 K 0)
+    )
+  (logical_part TOSHIBA/TC7W04FX/8
+    (pin 1 0 none 1 1A 0)
+    (pin 2 0 none 1 3Y 0)
+    (pin 3 0 none 1 2A 0)
+    (pin 4 0 none 1 GND 0)
+    (pin 5 0 none 1 2Y 0)
+    (pin 6 0 none 1 3A 0)
+    (pin 7 0 none 1 1Y 0)
+    (pin 8 0 none 1 VCC 0)
+    )
+  (logical_part_mapping ANALOG_DEVICES/ADXL330(comp ACCEL1))
+  (logical_part_mapping CAP_NP(comp C1))
+  (logical_part_mapping CAP_NP(comp C2))
+  (logical_part_mapping CAP_NP(comp C3))
+  (logical_part_mapping CAP_NP(comp C4))
+  (logical_part_mapping CAP_NP(comp C5))
+  (logical_part_mapping CAP_NP(comp C6))
+  (logical_part_mapping CAP_NP(comp C7))
+  (logical_part_mapping CAP_NP(comp C8))
+  (logical_part_mapping CAP_NP(comp C9))
+  (logical_part_mapping CAP_NP(comp C10))
+  (logical_part_mapping CAP_NP(comp C11))
+  (logical_part_mapping CAP_NP(comp C12))
+  (logical_part_mapping CAP_NP(comp C13))
+  (logical_part_mapping CAP_NP(comp C14))
+  (logical_part_mapping CAP_NP(comp C15))
+  (logical_part_mapping CAP_NP(comp C16))
+  (logical_part_mapping CAP_NP(comp C17))
+  (logical_part_mapping CAP_NP(comp C18))
+  (logical_part_mapping CAP_NP(comp C19))
+  (logical_part_mapping CAP_NP(comp C20))
+  (logical_part_mapping CAP_NP(comp C21))
+  (logical_part_mapping CAPACITOR_POL(comp C22))
+  (logical_part_mapping CAP_NP(comp C23))
+  (logical_part_mapping CAP_NP(comp C24))
+  (logical_part_mapping CAP_NP(comp C25))
+  (logical_part_mapping CAP_NP(comp C26))
+  (logical_part_mapping CAP_NP(comp C27))
+  (logical_part_mapping CAP_NP(comp C28))
+  (logical_part_mapping CAP_NP(comp C29))
+  (logical_part_mapping CAP_NP(comp C30))
+  (logical_part_mapping CAP_NP(comp C31))
+  (logical_part_mapping CAP_NP(comp C32))
+  (logical_part_mapping CAP_NP(comp C33))
+  (logical_part_mapping CAP_NP(comp C34))
+  (logical_part_mapping CAP_NP(comp C35))
+  (logical_part_mapping CAP_NP(comp C36))
+  (logical_part_mapping CAP_NP(comp C37))
+  (logical_part_mapping CAP_NP(comp C38))
+  (logical_part_mapping CAP_NP(comp C39))
+  (logical_part_mapping CAP_NP(comp C40))
+  (logical_part_mapping CAP_NP(comp C41))
+  (logical_part_mapping CAP_NP(comp C42))
+  (logical_part_mapping CAP_NP(comp C43))
+  (logical_part_mapping CAP_NP(comp C44))
+  (logical_part_mapping CAP_NP(comp C45))
+  (logical_part_mapping CAP_NP(comp C46))
+  (logical_part_mapping CAP_NP(comp C47))
+  (logical_part_mapping CAP_NP(comp C48))
+  (logical_part_mapping CAP_NP(comp C49))
+  (logical_part_mapping LED(comp D1))
+  (logical_part_mapping LED(comp D2))
+  (logical_part_mapping LED(comp D3))
+  (logical_part_mapping LED(comp D4))
+  (logical_part_mapping DIODE(comp D5))
+  (logical_part_mapping PHOTODIODE(comp D6))
+  (logical_part_mapping PHOTODIODE(comp D7))
+  (logical_part_mapping PHOTODIODE(comp D8))
+  (logical_part_mapping PHOTODIODE(comp D9))
+  (logical_part_mapping HEADER_3(comp EXT_I2C1))
+  (logical_part_mapping 51_PIN_CONNECTOR_5_ON_MOTE(comp IF1))
+  (logical_part_mapping CONN_SOCKET_20X2(comp J1))
+  (logical_part_mapping CONN_TRBLK_5(comp J2))
+  (logical_part_mapping INDUCTOR(comp L1))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L2))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L3))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L4))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L5))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L6))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L7))
+  (logical_part_mapping 'DK_445-1553-1-ND'(comp L8))
+  (logical_part_mapping MAXIM/MAX3370(comp LV1))
+  (logical_part_mapping MAXIM/MAX3370(comp LV2))
+  (logical_part_mapping FAIRCHILD/NDS8958_DUAL_NP(comp Q1))
+  (logical_part_mapping FAIRCHILD/NDS8958_DUAL_NP(comp Q2))
+  (logical_part_mapping R(comp R1))
+  (logical_part_mapping R(comp R2))
+  (logical_part_mapping R(comp R3))
+  (logical_part_mapping R(comp R4))
+  (logical_part_mapping R(comp R5))
+  (logical_part_mapping R(comp R6))
+  (logical_part_mapping R(comp R7))
+  (logical_part_mapping R(comp R8))
+  (logical_part_mapping R(comp R9))
+  (logical_part_mapping R(comp R10))
+  (logical_part_mapping R(comp R11))
+  (logical_part_mapping R(comp R12))
+  (logical_part_mapping R(comp R13))
+  (logical_part_mapping R(comp R14))
+  (logical_part_mapping R(comp R15))
+  (logical_part_mapping R(comp R16))
+  (logical_part_mapping R(comp R17))
+  (logical_part_mapping R(comp R18))
+  (logical_part_mapping R(comp R19))
+  (logical_part_mapping R(comp R20))
+  (logical_part_mapping R(comp R21))
+  (logical_part_mapping R(comp R22))
+  (logical_part_mapping R(comp R23))
+  (logical_part_mapping R(comp R24))
+  (logical_part_mapping R(comp R25))
+  (logical_part_mapping R(comp R26))
+  (logical_part_mapping R(comp R27))
+  (logical_part_mapping R(comp R28))
+  (logical_part_mapping R(comp R29))
+  (logical_part_mapping R(comp R30))
+  (logical_part_mapping R(comp R31))
+  (logical_part_mapping R(comp R32))
+  (logical_part_mapping R(comp R33))
+  (logical_part_mapping R(comp R34))
+  (logical_part_mapping R(comp R35))
+  (logical_part_mapping R(comp R36))
+  (logical_part_mapping R(comp R37))
+  (logical_part_mapping R(comp R38))
+  (logical_part_mapping R(comp R39))
+  (logical_part_mapping R(comp R40))
+  (logical_part_mapping R(comp R41))
+  (logical_part_mapping R(comp R42))
+  (logical_part_mapping R(comp R43))
+  (logical_part_mapping R(comp R44))
+  (logical_part_mapping R(comp R45))
+  (logical_part_mapping R(comp R46))
+  (logical_part_mapping R(comp R47))
+  (logical_part_mapping R(comp R48))
+  (logical_part_mapping R(comp R49))
+  (logical_part_mapping R(comp R50))
+  (logical_part_mapping R(comp R51))
+  (logical_part_mapping R(comp R52))
+  (logical_part_mapping HEADER_1(comp REF1))
+  (logical_part_mapping EXB2HVXX1JV(comp RN1))
+  (logical_part_mapping PHILIPS/PCA9513(comp U1))
+  (logical_part_mapping PHILIPS/PCA9513(comp U2))
+  (logical_part_mapping ATMEL/ATMEGA48/88/168/MLF32(comp U4))
+  (logical_part_mapping TI/TPS761XX_5P(comp U6))
+  (logical_part_mapping TI/TPS797XX/SC70(comp U7))
+  (logical_part_mapping LM2621_SO(comp U8))
+  (logical_part_mapping MAX1239_0(comp U9))
+  (logical_part_mapping ANALOG_DEVICES/AD8132_0(comp U10))
+  (logical_part_mapping ADG715_SO(comp U11))
+  (logical_part_mapping ANALOG_DEVICES/AD8132_0(comp U12))
+  (logical_part_mapping ADG715_SO(comp U13))
+  (logical_part_mapping ANALOG_DEVICES/AD8132_0(comp U14))
+  (logical_part_mapping MAX518(comp U15))
+  (logical_part_mapping ADG715_SO(comp U16))
+  (logical_part_mapping ANALOG_DEVICES/AD8132_0(comp U17))
+  (logical_part_mapping AD7414_0(comp U18))
+  (logical_part_mapping TOSHIBA/TC7W04FX/8(comp U19))
+  )
+(network
+  (net 3.3V_ACC
+    (pins R16-1 ~FV140-FV U7-5 C12-1 ACCEL1-14 ACCEL1-15 C10-1)
+    )
+  (net 3.3_IN
+    (pins ~FV151-FV ~FV153-FV L1-2 ~FV154-FV ~FV155-FV ~FV152-FV ~FV159-FV
+      ~FV157-FV ~FV147-FV ~FV145-FV RN1-3 RN1-4 RN1-2 RN1-1 C17-1 ~FV150-FV IF1-50
+      ~FV148-FV U4-18 ~FV149-FV C5-1 ~FV158-FV U4-6 ~FV156-FV C7-1 U4-4 ~FV160-FV
+      J1-4 RN1-5 RN1-6 RN1-7 U1-8 ~FV146-FV LV1-1 C2-1 LV2-1 C4-1 ~FV144-FV
+      ~FV143-FV RN1-9 ~FV142-FV BATTERY-1)
+    (type fix)
+    )
+  (net 3.3_LED
+    (pins U19-8 C9-1 U6-5 D3-1 D4-1 D2-1)
+    (rule(width  20.000))
+    )
+  (net 5.0V
+    (pins ~FV108-FV C23-1 ~FV107-FV ~FV106-FV C22-1 ~FV111-FV R46-1 ~FV165-FV
+      U13-2 ~FV164-FV U13-23 U13-22 C8-1 U18-3 ~FV109-FV U11-2 ~FV125-FV U11-23
+      ~FV127-FV ~FV166-FV U9-12 ~FV128-FV ~FV167-FV U16-23 ~FV129-FV C3-1 C45-2
+      ~FV132-FV U16-2 ~FV133-FV U16-5 ~FV134-FV U16-11 ~FV135-FV C1-1 LV1-5
+      ~FV131-FV LV2-5 ~FV130-FV ~FV136-FV U16-14 U11-24 L6-1 ~FV137-FV ~FV126-FV
+      C32-2 ~FV110-FV C43-1 C37-2 ~FV115-FV C25-1 ~FV105-FV R36-1 ~FV118-FV
+      ~FV104-FV C24-1 ~FV117-FV U2-8 ~FV103-FV ~FV124-FV ~FV116-FV ~FV102-FV R22-2
+      ~FV120-FV Q1-3 ~FV121-FV ~FV122-FV Q2-3 ~FV123-FV ~FV112-FV ~FV119-FV
+      ~FV113-FV R14-2 ~FV114-FV R15-2 U6-1)
+    (type fix)
+    )
+  (net ACC_PG
+    (pins R16-2 ~FV139-FV U7-1)
+    )
+  (net ACC_PWR_IN
+    (pins U7-4 C13-1 U16-13)
+    )
+  (net ACC_X
+    (pins ACCEL1-12 C16-1 U9-16)
+    )
+  (net ACC_Y
+    (pins ACCEL1-10 C15-1 U9-15)
+    )
+  (net ACC_Z
+    (pins ACCEL1-8 C14-1 U9-14)
+    )
+  (net AGND_CN
+    (pins ~FV1-FV ~FV4-FV ~FV2-FV ~FV20-FV ~FV28-FV ~FV85-FV ~FV82-FV ~FV60-FV
+      ~FV87-FV ~FV141-FV ~FV66-FV ~FV67-FV ~FV62-FV ~FV64-FV ~FV69-FV ~FV65-FV
+      ~FV37-FV ~FV24-FV ~FV72-FV ~FV70-FV ~FV55-FV ~FV57-FV ~FV38-FV ~FV68-FV
+      ~FV45-FV ~FV46-FV ~FV44-FV ~FV97-FV ~FV98-FV ~FV96-FV ~FV52-FV ~FV51-FV
+      ~FV92-FV ~FV89-FV ~FV53-FV ~FV54-FV ~FV61-FV ~FV50-FV ~FV58-FV ~FV59-FV
+      ~FV56-FV ~FV49-FV ~FV12-FV ~FV83-FV ~FV74-FV ~FV76-FV U15-6 ~FV75-FV
+      ~FV23-FV ~FV27-FV ~FV71-FV ~FV73-FV U15-5 ~FV26-FV ~FV90-FV ~FV91-FV LV2-2
+      ~FV138-FV ~FV22-FV ~FV19-FV ~FV33-FV ~FV77-FV ~FV79-FV ~FV17-FV ~FV18-FV
+      ~FV13-FV ~FV15-FV J2-1 ~FV16-FV ~FV21-FV EXT_I2C1-3 ~FV39-FV C3-2 ~FV42-FV
+      ~FV78-FV IF1-1 ~FV36-FV C2-2 ~FV80-FV ~FV81-FV C4-2 ~FV43-FV ~FV41-FV
+      ~FV99-FV ~FV86-FV ~FV40-FV ~FV88-FV ~FV101-FV ~FV100-FV ~FV84-FV ~FV95-FV
+      ~FV30-FV ~FV11-FV R18-2 ~FV3-FV U8-5 R41-1 U2-4 Q2-1 ~FV94-FV Q1-1 R49-1
+      ~FV93-FV U8-1 C18-2 C47-1 U4-21 C6-2 C23-2 C24-2 C22-2 IF1-51 C25-2 ~FV29-FV
+      C48-2 ~FV31-FV U4-33 U13-4 C20-1 C8-2 ~FV63-FV C37-1 J1-1 J1-39 C26-2 C9-2
+      U10-6 U19-4 ~FV10-FV C43-2 C39-1 ~FV9-FV U18-2 J1-2 J1-40 C32-1 ~FV14-FV
+      C40-2 U11-4 U11-21 U14-6 U7-2 U9-11 C31-1 U16-16 U16-21 U16-22 U16-24 U12-6
+      C33-2 C16-2 C10-2 U1-4 C15-2 ACCEL1-7 U15-2 ACCEL1-6 C45-1 C1-2 U16-4 LV1-2
+      ACCEL1-5 C14-2 ACCEL1-3 ACCEL1-2 C41-1 C13-2 C12-2 U11-22 U6-2 C5-2 ~FV34-FV
+      U13-21 C30-2 R11-1 U4-3 C7-2 U13-24 U17-6 ~FV32-FV C17-2 C36-2 U4-5 ~FV35-FV
+      BATTERY-2)
+    )
+  (net A_CH
+    (pins C30-1 L3-1 L2-1)
+    )
+  (net A_OUT
+    (pins Q1-5 Q1-6 L3-2)
+    (type fix)
+    )
+  (net B_CH
+    (pins L7-1 L4-1 L8-1 C36-1 L5-1)
+    )
+  (net B_OUT
+    (pins Q2-5 Q2-6 L5-2)
+    (type fix)
+    )
+  (net CHANNEL_A_PWR
+    (pins Q1-2 R41-2 U16-6)
+    )
+  (net CHANNEL_B_PWR
+    (pins Q2-2 R49-2 U16-12)
+    )
+  (net COMMON_MODE_A
+    (pins U10-2 C20-2 U16-8)
+    )
+  (net COMMON_MODE_B
+    (pins C39-2 U14-2 U16-10 U12-2 U17-2 C47-2 C31-2)
+    )
+  (net COMMON_MODE_OUT
+    (pins U16-7 U16-9 U15-1)
+    )
+  (net EXT_I2C_ENABLE
+    (pins U2-1 RN1-13 U4-24)
+    )
+  (net EXT_I2C_READY
+    (pins U2-5 U4-23)
+    )
+  (net EXT_I2C_SCL
+    (pins EXT_I2C1-2 U2-3)
+    )
+  (net EXT_I2C_SDA
+    (pins EXT_I2C1-1 U2-6)
+    )
+  (net FRAME_SYNC
+    (pins U4-12 R1-1 R4-2)
+    )
+  (net I2C_SCL
+    (pins U11-1 U15-3 U9-9 LV2-4 U18-4 U16-1 U13-1 U2-2)
+    )
+  (net I2C_SDA
+    (pins U13-3 U2-7 U11-3 U15-4 U18-6 U16-3 U9-10 LV1-4)
+    )
+  (net LED_PWR_EN
+    (pins U6-3 R15-1 R14-1 U16-15)
+    )
+  (net LV_I2C_SCL
+    (pins RN1-11 U1-2 U4-28 J1-5 IF1-21 LV2-3)
+    )
+  (net LV_I2C_SDA
+    (pins IF1-22 U4-27 U1-7 LV1-3 RN1-8 J1-3)
+    )
+  (net M2_INT1
+    (pins IF1-5 R2-2)
+    )
+  (net M2_INT3
+    (pins IF1-3 R1-2)
+    )
+  (net M2_PW0
+    (pins U4-7 R7-2 IF1-29)
+    )
+  (net M2_UART_RXD1
+    (pins IF1-19 R10-2)
+    )
+  (net M2_UART_TXD1
+    (pins IF1-20 R9-2)
+    )
+  (net MOTE_I2C_ENABLE
+    (pins RN1-10 U1-1)
+    )
+  (net N2999761
+    (pins R20-1 U10-8 ~FV48-FV C19-1 D6-1)
+    )
+  (net N3004957
+    (pins R20-2 U10-5 ~FV47-FV C19-2 C21-1 R21-1)
+    )
+  (net N3071270
+    (pins U10-3 L2-2 C26-1)
+    )
+  (net N3107432
+    (pins R27-1 C28-1 D7-1 U12-8)
+    )
+  (net N3107440
+    (pins U12-5 R27-2 C28-2 C29-1 R32-1)
+    )
+  (net N3107508
+    (pins U12-3 L4-2 C33-1)
+    )
+  (net N3108664
+    (pins R40-1 C35-1 D8-1 U14-8)
+    )
+  (net N3108672
+    (pins U14-5 R40-2 R44-1 C38-1 C35-2)
+    )
+  (net N3108740
+    (pins U14-3 L7-2 C40-1)
+    )
+  (net N3109947
+    (pins U17-8 R50-1 D9-1 C44-1)
+    )
+  (net N3109955
+    (pins U17-5 R50-2 C44-2 C46-1 R51-1)
+    )
+  (net N3110023
+    (pins U17-3 L8-2 C48-1)
+    )
+  (net N3122810
+    (pins R28-2 U11-11)
+    )
+  (net N3122850
+    (pins R29-2 U11-14)
+    )
+  (net N3122870
+    (pins U11-16 R30-2)
+    )
+  (net N3122938
+    (pins U11-5 R24-2)
+    )
+  (net N3122950
+    (pins U11-7 R25-2)
+    )
+  (net N3122954
+    (pins R31-2 U11-18)
+    )
+  (net N3122978
+    (pins U11-20 R34-2)
+    )
+  (net N3122988
+    (pins R26-2 U11-9)
+    )
+  (net N3124365
+    (pins U13-11 R39-2)
+    )
+  (net N3124405
+    (pins R42-2 U13-14)
+    )
+  (net N3124425
+    (pins R43-2 U13-16)
+    )
+  (net N3124493
+    (pins R35-2 U13-5)
+    )
+  (net N3124505
+    (pins R37-2 U13-7)
+    )
+  (net N3124509
+    (pins R45-2 U13-18)
+    )
+  (net N3124533
+    (pins U13-20 R47-2)
+    )
+  (net N3124543
+    (pins R38-2 U13-9)
+    )
+  (net N3174711
+    (pins C41-2 L6-2 U15-7)
+    )
+  (net N3226046
+    (pins D1-1 U4-11)
+    )
+  (net N3226078
+    (pins R11-2 D1-2)
+    )
+  (net N3226110
+    (pins ~FV25-FV U4-20 C6-1)
+    )
+  (net N3304800
+    (pins Q1-4 R36-2 Q1-7 Q1-8)
+    )
+  (net N3315610
+    (pins R46-2 Q2-4 Q2-7 Q2-8)
+    )
+  (net N3419600
+    (pins REF1-1 U9-13)
+    )
+  (net N3704738
+    (pins R13-1 D3-2)
+    )
+  (net N3704742
+    (pins U19-7 D4-2)
+    )
+  (net N3706616
+    (pins R12-1 D2-2)
+    )
+  (net N3706984
+    (pins R12-2 U19-2)
+    )
+  (net N3745912
+    (pins U19-5 R13-2)
+    )
+  (net P0_0
+    (pins J1-24 R4-1)
+    )
+  (net P0_1
+    (pins J1-26 R6-1)
+    )
+  (net P0_2
+    (pins J1-28 R8-1)
+    )
+  (net P0_3
+    (pins J1-30 R7-1)
+    )
+  (net P1_0
+    (pins U19-6 J1-20)
+    )
+  (net P1_1
+    (pins U19-3 J1-18)
+    )
+  (net P1_2
+    (pins U19-1 J1-16)
+    )
+  (net P1_4
+    (pins R3-1 J1-12)
+    )
+  (net P1_5
+    (pins R5-1 J1-10)
+    )
+  (net PINGPONG_ALERT
+    (pins U4-32 R6-2 R2-1)
+    )
+  (net PINGPONG_MISO
+    (pins U4-16 J2-3 RN1-15)
+    )
+  (net PINGPONG_MOSI
+    (pins U4-15 J2-2)
+    )
+  (net PINGPONG_RESET
+    (pins U4-29 J2-5 RN1-16)
+    )
+  (net PINGPONG_RX
+    (pins U4-30 R5-2 R9-1)
+    )
+  (net PINGPONG_SCK
+    (pins U4-17 J2-4)
+    )
+  (net PINGPONG_TX
+    (pins U4-31 R3-2 R10-1)
+    )
+  (net PWR_SHDN
+    (pins ~FV163-FV U8-2 U4-8)
+    )
+  (net SENSOR0
+    (pins U9-1 R21-2)
+    )
+  (net SENSOR0_IN
+    (pins R24-1 R25-1 R26-1 R28-1 U10-1 C27-1 D6-2)
+    )
+  (net SENSOR0_OUT
+    (pins C21-2 R23-1 U11-8 U11-6 U11-10 U10-4 C27-2 U11-12)
+    )
+  (net SENSOR1
+    (pins U9-2 R23-2)
+    )
+  (net SENSOR1_IN
+    (pins R31-1 R34-1 R30-1 R29-1 U12-1 C34-1 D7-2)
+    )
+  (net SENSOR1_OUT
+    (pins C34-2 U12-4 U11-17 U11-19 U11-15 C29-2 R33-1 U11-13)
+    )
+  (net SENSOR2
+    (pins U9-3 R32-2)
+    )
+  (net SENSOR2_IN
+    (pins R39-1 R38-1 C42-1 U14-1 R37-1 D8-2 R35-1)
+    )
+  (net SENSOR2_OUT
+    (pins U13-12 U13-10 R48-1 C38-2 U13-8 U13-6 U14-4 C42-2)
+    )
+  (net SENSOR3
+    (pins U9-4 R33-2)
+    )
+  (net SENSOR3_IN
+    (pins R47-1 R45-1 R42-1 R43-1 C49-1 U17-1 D9-2)
+    )
+  (net SENSOR3_OUT
+    (pins R52-1 C46-2 U13-13 U13-15 U13-19 U13-17 U17-4 C49-2)
+    )
+  (net SENSOR4
+    (pins U9-5 R44-2)
+    )
+  (net SENSOR5
+    (pins U9-6 R48-2)
+    )
+  (net SENSOR6
+    (pins R51-2 U9-7)
+    )
+  (net SENSOR7
+    (pins U9-8 R52-2)
+    )
+  (net THERM_ALERT
+    (pins U4-1 R8-2 IF1-6 RN1-12 U18-5)
+    )
+  (net VR_FB
+    (pins ~FV8-FV C11-2 R17-2 ~FV7-FV R18-1 U8-4)
+    )
+  (net VR_FREQ
+    (pins U8-3 ~FV6-FV R19-1)
+    )
+  (net VR_SW
+    (pins D5-1 U8-8 L1-1)
+    )
+  (net VR_TRANS
+    (pins ~FV162-FV ~FV5-FV R22-1 D5-2 C18-1 U8-7 C11-1 ~FV161-FV U8-6 R19-2
+      R17-1)
+    )
+  )
+(wiring
+  (wire(path BOTTOM  8.000  1365.000 203.000  1379.000 217.000  1379.000 221.000)
+    (net 3.3V_ACC)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1379.000 205.000  1379.000 221.000)
+    (net 3.3V_ACC)
+    (type normal)
+    )
+  (wire(polygon TOP  7.867
+        1669.783 1322.533  1713.083 1365.850  1894.167 1365.850  1937.483 1322.533
+       1937.483 1314.667  1669.783 1314.667  1669.783 1322.533)
+    (net 3.3_IN)
+    (turret 122)
+    (type protect)
+    )
+  (wire(path INNER1  8.000  473.000 -74.000  408.000 -9.000  230.000 -9.000
+       173.000 -66.000  173.000 -74.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  115.350 86.850  115.350 129.650  115.000 130.000
+       95.650 130.000  95.650 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  135.050 86.850  135.050 130.000  153.050 130.000
+       154.733 128.267  154.733 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  135.050 86.850  135.050 128.950  133.650 130.000
+       115.350 130.000  115.350 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1621.000 1353.000  1621.000 1304.000  1616.000 1299.000
+       1581.000 1299.000  1584.500 1302.500)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1545.000 1353.000  1545.000 1322.000  1564.500 1302.500
+       1584.500 1302.500)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  630.000 992.133  630.000 942.000  591.000 903.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1733.183 987.217  1733.183 1038.183  1741.000 1046.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  591.000 903.000  607.000 919.000  632.000 919.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1751.000 770.000  1768.000 770.000  1780.000 782.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1713.000 722.000  1713.483 722.483  1713.483 770.683)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1674.000 722.000  1659.000 737.000  1659.000 770.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1674.000 722.000  1674.000 770.600  1674.083 770.683)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2215.000 276.000  2215.517 276.517  2215.517 347.533)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  95.650 86.850  95.650 129.950  75.950 129.950
+       75.950 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  75.950 86.850  75.950 130.000  56.250 130.000
+       56.250 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  56.250 86.850  56.250 130.000  36.550 130.000
+       36.550 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  45.000 -148.000  108.000 -148.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  144.833 -74.000  173.000 -74.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  173.000 -74.000  218.000 -74.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  420.833 -74.000  473.000 -74.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  473.000 -74.000  495.000 -74.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  135.050 31.000  135.050 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  36.550 32.000  36.550 86.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  16.850 185.267  16.850 252.850)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2215.517 347.533  2215.517 417.517)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1545.000 1353.000  1545.000 1300.000)
+    (net 3.3_IN)
+    (type normal)
+    )
+  (wire(path BOTTOM  10.000  1084.000 550.283  1084.000 546.000
+       1090.000 546.000)
+    (net 3.3_LED)
+    (type normal)
+    )
+  (wire(path BOTTOM  20.000  1090.000 546.000  1142.000 546.000)
+    (net 3.3_LED)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1084.000 550.283  1083.200 550.283  1083.200 616.000)
+    (net 3.3_LED)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2018.000 965.000  2034.000 981.000  2034.000 983.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1986.000 932.000  2018.000 964.000  2018.000 965.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1954.000 932.000  1959.000 932.000  1991.000 964.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1954.000 932.000  1986.000 932.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1053.000 874.000  1053.000 885.000  938.000 1000.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  452.000 846.000  452.000 851.417  386.000 851.417)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  239.000 836.000  239.000 851.417  157.667 851.417)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  157.667 825.817  228.817 825.817  239.000 836.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1084.000 790.000  1084.000 843.000  1053.000 874.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1377.000 400.133  1359.133 400.133  1359.000 400.000
+       1355.000 400.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  10.000  558.000 274.417  493.583 274.417)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  493.583 274.417  493.167 274.000  492.000 274.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  329.667 274.417  385.000 274.417  385.000 300.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  10.000  693.000 274.000  558.000 274.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  558.000 274.000  558.000 274.417)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  257.000 176.000  257.000 221.000  265.000 229.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1757.000 58.000  1757.583 58.583  1757.583 122.333)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  314.000 -76.000  312.000 -74.000  292.000 -74.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1681.200 -134.000  1681.200 -118.200  1681.000 -118.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1757.583 -106.000  1757.583 -36.583)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1834.383 -106.000  1834.383 -26.617)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1988.000 -106.000  1988.000 -43.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  15.000 -74.000  73.983 -74.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  73.983 -74.000  100.000 -74.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  349.983 -74.000  349.983 -57.983)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1988.000 61.000  1988.000 122.333)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  329.667 300.000  385.000 300.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  724.000 -80.000  724.000 -106.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  520.000 347.000  540.000 347.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1352.000 455.000  1373.000 455.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  276.000 785.000  276.000 804.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2083.000 908.000  2104.000 908.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  530.000 926.000  530.000 949.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2170.000 952.000  2170.000 982.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  254.000 966.000  254.000 1015.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2170.000 982.000  2170.000 1012.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  938.000 1000.000  938.000 1057.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  254.000 1015.000  254.000 1072.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2205.000 1056.000  2205.000 1100.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  564.000 1095.000  612.000 1095.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  612.000 1095.000  664.000 1095.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  973.000 1095.000  1020.000 1095.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1020.000 1095.000  1070.000 1095.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  386.000 851.417  322.000 851.417)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1954.000 932.000  1954.000 927.000  1959.000 932.000
+       1986.000 932.000)
+    (net 5.0V)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1323.000 203.000  1308.150 217.850  1308.150 219.850)
+    (net ACC_PG)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1308.150 205.000  1308.150 219.850)
+    (net ACC_PG)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2305.000 1311.000  2305.000 1331.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2086.900 1246.867  2117.133 1246.867)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  468.000 1226.000  486.000 1226.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  448.000 1226.000  468.000 1226.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  404.000 1211.000  404.000 1266.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1020.000 1195.000  1020.000 1256.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  543.000 1195.000  612.000 1195.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  938.000 1189.000  938.000 1255.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2275.867 1170.083  2307.917 1170.083)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  404.000 1156.000  404.000 1211.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2206.000 1098.000  2206.000 1139.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  455.000 1085.000  455.000 1107.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1674.083 987.217  1674.000 1046.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1741.000 987.000  1789.000 987.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1978.000 983.000  1978.000 1034.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1915.000 983.000  1978.000 983.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2114.000 982.000  2114.000 1012.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2251.000 964.000  2251.000 1024.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2114.000 952.000  2114.000 982.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  590.633 945.633  590.633 992.133)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2041.000 908.000  2041.000 931.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2020.000 908.000  2041.000 908.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2251.000 904.000  2251.000 964.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  465.000 877.000  465.000 893.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1659.000 854.000  1683.967 878.783)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  321.217 800.217  386.000 800.217)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  613.200 798.100  613.200 815.800)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1028.000 790.000  1028.000 820.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1028.000 759.000  1028.000 790.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  276.000 724.000  276.000 743.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2247.000 662.467  2247.000 713.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2247.000 613.000  2247.000 662.467)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1648.583 604.583  1648.583 662.467)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  574.200 590.100  595.900 590.100)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1198.000 546.000  1198.000 576.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  571.817 525.000  571.817 550.817)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1198.000 516.000  1198.000 546.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1010.000 444.000  1024.950 444.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1415.000 435.000  1415.000 455.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  818.000 418.000  818.000 438.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1414.400 364.400  1414.400 400.133)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2247.000 347.533  2247.000 397.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1648.583 347.533  1648.583 400.583)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  582.000 347.000  582.000 367.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1648.583 297.417  1648.583 347.533)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2247.000 295.000  2247.000 347.533)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  748.000 257.000  769.000 257.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  496.217 223.217  558.000 223.217)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  329.667 223.217  387.783 223.217)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  741.600 187.000  741.600 217.600)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1284.583 179.417  1308.150 179.417)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  232.000 176.000  232.000 227.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  840.000 173.000  840.000 193.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  608.000 156.000  658.000 156.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1936.783 122.333  1936.783 177.783)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1808.783 122.333  1808.783 180.783)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1783.183 122.333  1783.183 202.817)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1715.333 122.333  1732.000 122.333)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1043.750 89.750  1075.933 89.750)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1005.000 71.000  1005.000 90.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1677.000 61.000  1703.000 61.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1470.200 20.200  1470.200 43.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  179.000 2.000  241.000 2.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1677.000 -8.000  1704.000 -8.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1481.483 -77.067  1481.483 -32.517)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  558.000 -97.000  558.000 -40.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1455.883 -123.883  1455.883 -77.067)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1618.000 -134.000  1639.200 -134.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  15.000 -116.000  31.000 -100.000  117.000 -100.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1808.783 -106.000  1808.783 -55.783  1808.000 -55.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  144.833 -99.583  120.417 -99.583  120.000 -100.000
+       117.000 -100.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1430.300 -77.067  1430.300 -38.700  1441.000 -28.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1677.000 -77.000  1701.000 -77.000  1702.000 -78.000
+       1704.000 -78.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1336.000 -14.000  1341.833 -8.167  1387.000 -8.167)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1387.000 17.417  1340.583 17.417  1336.000 22.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  759.000 49.000  760.500 47.500  760.500 27.500
+       759.500 26.500)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1244.000 100.000  1244.000 104.000  1227.000 121.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1544.000 143.000  1545.000 144.000  1545.000 175.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  658.000 156.000  741.600 156.000  741.600 187.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1545.000 175.000  1545.000 204.000  1544.000 205.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  388.000 244.000  383.183 248.817  329.667 248.817)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1414.400 364.400  1415.000 365.000  1415.000 435.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1120.000 687.000  1120.600 687.600  1120.600 718.350)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  20.000  1709.000 770.000  1709.000 852.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1709.000 852.000  1710.000 853.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  157.667 800.217  217.783 800.217  218.000 800.000
+       219.000 800.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  669.000 809.000  702.000 842.000  702.000 861.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1984.000 830.000  1984.000 839.000  2007.000 862.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1659.000 854.000  1659.000 848.617  1654.383 844.000
+       1654.383 770.683)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1659.000 854.000  1650.000 854.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  20.000  1650.000 854.000  1617.000 821.000
+       1617.000 770.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  702.000 861.000  702.000 879.000  668.000 913.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  157.667 877.000  157.667 907.667  183.000 933.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  465.000 877.000  465.000 873.000  412.600 873.000
+       412.600 807.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1683.967 878.783  1659.000 903.750  1659.000 903.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1710.000 904.000  1708.750 902.750  1708.750 854.250
+       1710.000 853.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1789.000 1018.000  1789.000 1011.000
+       1765.000 1011.000  1741.000 987.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1622.000 1148.000  1602.500 1167.500  1584.500 1167.500)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1484.000 1354.000  1484.000 1322.000  1446.000 1322.000
+       1444.500 1320.500  1444.500 1302.500)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1683.967 878.783  1659.000 903.750  1656.000 906.750
+       1708.750 906.750  1710.000 905.500  1710.000 904.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1710.000 853.000  1708.750 854.250  1703.217 859.783
+       1693.783 859.783  1693.783 770.683)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1484.000 1354.000  1484.000 1322.000  1446.000 1322.000
+       1412.000 1322.000  1407.000 1327.000  1407.000 1354.000  1406.000 1355.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2305.000 1311.000  2305.000 1331.000)
+    (net AGND_CN)
+    (type normal)
+    )
+  (wire(path TOP  10.000  837.000 861.000  852.000 861.000)
+    (net A_CH)
+    (type normal)
+    )
+  (wire(path TOP  15.000  852.000 861.000  852.000 958.000)
+    (net A_CH)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1020.000 1145.000  940.000 1145.000  938.000 1147.000)
+    (net CHANNEL_B_PWR)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1158.000 718.350  1190.000 718.350  1190.000 781.000)
+    (net LED_PWR_EN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1190.000 781.000  1190.000 829.000)
+    (net LED_PWR_EN)
+    (type normal)
+    )
+  (wire(path BOTTOM  10.000  846.550 1192.917  846.550 1284.000
+       851.000 1284.000)
+    (net M2_UART_RXD1)
+    (type normal)
+    )
+  (wire(path BOTTOM  10.000  807.167 1192.917  807.167 1284.000
+       802.000 1284.000)
+    (net M2_UART_TXD1)
+    (type normal)
+    )
+  (wire(path TOP  8.000  609.000 457.000  623.000 471.000  623.000 525.000)
+    (net N2999761)
+    (type normal)
+    )
+  (wire(path TOP  8.000  609.000 434.000  609.000 457.000)
+    (net N2999761)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  609.000 434.000  609.000 457.000)
+    (net N2999761)
+    (type normal)
+    )
+  (wire(path TOP  8.000  567.000 457.000  546.217 477.783  546.217 525.000)
+    (net N3004957)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  567.000 434.000  567.000 457.000)
+    (net N3004957)
+    (type normal)
+    )
+  (wire(path TOP  8.000  567.000 434.000  567.000 457.000)
+    (net N3004957)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  386.000 621.000  459.000 621.000)
+    (net N3124365)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  83.000 621.000  157.667 621.000)
+    (net N3124405)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  83.000 672.000  157.667 672.000  157.667 672.217)
+    (net N3124425)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  459.000 774.000  386.000 774.000  386.000 774.617)
+    (net N3124493)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  459.000 723.000  386.000 723.000  386.000 723.417)
+    (net N3124505)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  83.000 723.000  157.667 723.000  157.667 723.417)
+    (net N3124509)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  157.667 774.617  157.667 775.000  83.000 775.000)
+    (net N3124533)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  459.000 672.000  386.000 672.000  386.000 672.217)
+    (net N3124543)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1700.000 1067.000  1700.000 1034.000  1693.783 1027.783
+       1693.783 987.217)
+    (net N3226110)
+    (type normal)
+    )
+  (wire(path BOTTOM  10.000  1064.000 386.000  1064.317 386.000)
+    (net N3706984)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1064.317 386.000  1064.317 444.000)
+    (net N3706984)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  1024.950 550.283  1025.000 550.283  1025.000 609.000)
+    (net N3745912)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2232.000 1180.000  2247.667 1195.667  2275.867 1195.667)
+    (net PWR_SHDN)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2172.000 1304.000  2172.000 1327.000)
+    (net VR_FB)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2172.000 1304.000  2192.000 1324.000)
+    (net VR_FB)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2172.000 1327.000  2172.000 1350.000)
+    (net VR_FB)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2275.867 1221.267  2275.600 1221.000  2233.000 1221.000
+       2234.000 1220.000  2238.000 1220.000)
+    (net VR_FREQ)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2215.000 1221.000  2233.000 1221.000
+       2234.000 1220.000  2238.000 1220.000)
+    (net VR_FREQ)
+    (type normal)
+    )
+  (wire(polygon TOP  7.867
+        1669.783 1137.517  1669.783 1129.633  1713.083 1086.333  1894.167 1086.333
+       1937.483 1129.633  1937.483 1137.517  1669.783 1137.517)
+    (net VR_SW)
+    (turret 122)
+    (type protect)
+    )
+  (wire(path TOP  8.000  2005.000 1141.000  2034.083 1170.083)
+    (net VR_SW)
+    (type normal)
+    )
+  (wire(path TOP  12.000  2034.083 1170.083  2086.900 1170.083)
+    (net VR_SW)
+    (type normal)
+    )
+  (wire(path TOP  30.000  2005.000 1141.000  1831.633 1141.000)
+    (net VR_SW)
+    (type normal)
+    )
+  (wire(path TOP  8.000  1831.633 1141.000  1803.633 1169.000)
+    (net VR_SW)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2130.000 1327.000  2130.000 1350.000)
+    (net VR_TRANS)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2130.000 1305.000  2130.000 1327.000)
+    (net VR_TRANS)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2086.900 1221.267  2145.267 1221.267)
+    (net VR_TRANS)
+    (type normal)
+    )
+  (wire(path BOTTOM  8.000  2173.000 1221.000  2172.733 1221.267
+       2145.267 1221.267)
+    (net VR_TRANS)
+    (type normal)
+    )
+  (wire(path TOP  8.000  2130.000 1305.000  2127.000 1305.000  2108.000 1324.000)
+    (net VR_TRANS)
+    (type normal)
+    )
+  )
+(colors
+  (color 0 color0 0 0 0)
+  (color 1 color1 255 255 0)
+  (color 2 color2 0 255 255)
+  (color 3 color3 255 0 0)
+  (color 4 color4 127 127 127)
+  (color 5 color5 0 127 0)
+  (color 6 color6 0 255 0)
+  (color 7 color7 0 0 255)
+  (color 8 color8 255 0 255)
+  (color 9 color9 127 0 0)
+  (color 10 color10 0 0 127)
+  (color 11 color11 127 0 127)
+  (color 12 color12 127 127 0)
+  (color 13 color13 0 127 127)
+  (color 14 color14 255 255 255)
+  (color 15 color15 0 255 0)
+  (color 16 color16 0 255 255)
+  (color 17 color17 0 127 0)
+  (color 18 color18 127 0 0)
+  (color 19 color19 191 255 191)
+  (color 20 color20 255 193 193)
+  (color 21 color21 234 234 234)
+  (color 22 color22 149 255 149)
+  (color 23 color23 210 255 255)
+  (color 24 color24 213 213 255)
+  (color 25 color25 255 206 255)
+  (color 26 color26 255 166 166)
+  (color 27 color27 164 164 255)
+  (color 28 color28 255 164 255)
+  (color 29 color29 176 255 176)
+  (color 30 color30 255 255 198)
+  (color 31 color31 225 255 255)
+  (color 32 color32 255 196 196)
+  (color 33 color33 179 179 255)
+  (color 34 color34 255 187 255)
+  (color 35 black 0 0 0)
+  (set_color background color0)
+  (set_color highlight color14)
+  (set_color highlight color19)
+  (set_color highlight color20)
+  (set_color highlight color21)
+  (set_color highlight color22)
+  (set_color highlight color23)
+  (set_color highlight color24)
+  (set_color highlight color25)
+  (set_color highlight color26)
+  (set_color highlight color27)
+  (set_color highlight color28)
+  (set_color highlight color29)
+  (set_color highlight color30)
+  (set_color highlight color31)
+  (set_color highlight color32)
+  (set_color highlight color33)
+  (set_color highlight color34)
+  (set_color signal 1 color2)
+  (set_color power 2 color4)
+  (set_color power 3 color5)
+  (set_color signal 5 color7)
+  (set_color signal 15 color3)
+  )
+)

@@ -1,0 +1,169 @@
+(pcb "D:\Program Files\KiCad\AV Board r7a.dsn"
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(2010-05-05 BZR 2356)-stable")
+  )
+  (resolution mil 10)
+  (unit mil)
+  (structure
+    (layer Front
+      (type signal)
+      (property
+        (index 0)
+      )
+    )
+    (layer Back
+      (type signal)
+      (property
+        (index 1)
+      )
+    )
+    (boundary
+      (path pcb 0  6300 -3320  6300 -4790  7500 -4790  7500 -3320  6310 -3320)
+    )
+    (via "Via[0-1]_35:25_mil" "Via[0-1]_35:0_mil")
+    (rule
+      (width 8)
+      (clearance 10.1)
+      (clearance 10.1 (type default_smd))
+      (clearance 2.5 (type smd_smd))
+    )
+  )
+  (placement
+    (component 1pin
+      (place P5 6760 -4550 front 0 (PN P5))
+      (place P4 7270 -4550 front 0 (PN P4))
+      (place P1 6750 -3670 front 0 (PN P1))
+      (place P2 6490 -4550 front 0 (PN P2))
+      (place P8 7270 -3660 front 0 (PN P8))
+      (place P7 6490 -3670 front 0 (PN P7))
+      (place P6 7010 -4550 front 0 (PN P2))
+      (place P3 7010 -3670 front 0 (PN P3))
+    )
+    (component C1V8
+      (place C2 7180 -3980 front 0 (PN 1_uF))
+      (place C1 6550 -4180 front 0 (PN 47_uF))
+    )
+    (component SM1206
+      (place R1 7240 -4230 front 0 (PN 22K))
+      (place R2 6840 -3920 front 0 (PN 75))
+      (place R3 6550 -3920 front 0 (PN 22k))
+    )
+    (component TO18EBC
+      (place Q1 6910 -4290 front 0 (PN 2SC1815))
+    )
+  )
+  (library
+    (image 1pin
+      (outline (path signal 15  90 0  85.5 -27.8  72.8 -52.9  52.9 -72.8  27.8 -85.5  0 -90
+            -27.8 -85.5  -52.9 -72.8  -72.8 -52.9  -85.5 -27.8  -90 0  -85.5 27.8
+            -72.8 52.9  -52.9 72.8  -27.8 85.5  0 90  27.8 85.5  52.9 72.8
+            72.8 52.9  85.5 27.8))
+      (pin Round[A]Pad_160_mil 1 0 0)
+    )
+    (image C1V8
+      (outline (path signal 8  160 0  152.1 -49.4  129.4 -94  94 -129.4  49.4 -152.1  0 -160
+            -49.4 -152.1  -94 -129.4  -129.4 -94  -152.1 -49.4  -160 0  -152.1 49.4
+            -129.4 94  -94 129.4  -49.4 152.1  0 160  49.4 152.1  94 129.4
+            129.4 94  152.1 49.4))
+      (pin Rect[A]Pad_65x65_mil 1 -50 0)
+      (pin Round[A]Pad_65_mil 2 50 0)
+    )
+    (image SM1206
+      (outline (path signal 5  -100 45  -100 -45))
+      (outline (path signal 5  -100 -45  -35 -45))
+      (outline (path signal 5  35 45  100 45))
+      (outline (path signal 5  100 45  100 -45))
+      (outline (path signal 5  100 -45  35 -45))
+      (outline (path signal 5  -35 45  -100 45))
+      (pin Rect[T]Pad_60x80_mil 1 -65 0)
+      (pin Rect[T]Pad_60x80_mil 2 65 0)
+    )
+    (image TO18EBC
+      (outline (path signal 8  120 0  114.1 -37  97 -70.5  70.5 -97  37 -114.1  0 -120
+            -37 -114.1  -70.5 -97  -97 -70.5  -114.1 -37  -120 0  -114.1 37
+            -97 70.5  -70.5 97  -37 114.1  0 120  37 114.1  70.5 97  97 70.5
+            114.1 37))
+      (outline (path signal 12  -105 60  -135 80))
+      (outline (path signal 12  -135 80  -120 100))
+      (outline (path signal 12  -120 100  -90 80))
+      (pin Round[A]Pad_60_mil 2 0 -50)
+      (pin Round[A]Pad_60_mil 3 50 0)
+      (pin Round[A]Pad_60_mil 1 -50 0)
+    )
+    (padstack Round[A]Pad_160_mil
+      (shape (circle Front 160))
+      (shape (circle Back 160))
+      (attach off)
+    )
+    (padstack Round[A]Pad_60_mil
+      (shape (circle Front 60))
+      (shape (circle Back 60))
+      (attach off)
+    )
+    (padstack Round[A]Pad_65_mil
+      (shape (circle Front 65))
+      (shape (circle Back 65))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_60x80_mil
+      (shape (rect Front -30 -40 30 40))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_65x65_mil
+      (shape (rect Front -32.5 -32.5 32.5 32.5))
+      (shape (rect Back -32.5 -32.5 32.5 32.5))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:25_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:0_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+  )
+  (network
+    (net GNDPWR
+      (pins P5-1 P7-1 P6-1 R3-2)
+    )
+    (net "N-000001"
+      (pins P4-1 C2-1)
+    )
+    (net "N-000002"
+      (pins P3-1 C2-2)
+    )
+    (net "N-000003"
+      (pins P1-1 C1-2)
+    )
+    (net "N-000004"
+      (pins P2-1 R2-1)
+    )
+    (net "N-000005"
+      (pins R2-2 R3-1 Q1-3)
+    )
+    (net "N-000006"
+      (pins C1-1 R1-2 Q1-2)
+    )
+    (net "N-000007"
+      (pins P8-1 R1-1 Q1-1)
+    )
+    (class kicad_default "" GNDPWR "N-000001" "N-000002" "N-000003" "N-000004"
+      "N-000005" "N-000006" "N-000007"
+      (circuit
+        (use_via Via[0-1]_35:25_mil)
+      )
+      (rule
+        (width 8)
+        (clearance 10.1)
+      )
+    )
+  )
+  (wiring
+  )
+)

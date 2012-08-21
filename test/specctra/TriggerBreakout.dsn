@@ -1,0 +1,172 @@
+(pcb /home/peter/subversion/caltech/Kicad/projects/CameraTriggerBoards/TriggerBreakout/TriggerBreakout.dsn
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(20100406 SVN-R2509)-final")
+  )
+  (resolution mil 10)
+  (unit mil)
+  (structure
+    (layer Front
+      (type signal)
+      (property
+        (index 0)
+      )
+    )
+    (layer Back
+      (type signal)
+      (property
+        (index 1)
+      )
+    )
+    (boundary
+      (path pcb 0  5025 -2200  6275 -2200  6275 -6200  5025 -6200  5025 -2200)
+    )
+    (plane GND (polygon Back 0  6275 -6200  6275 -2200  5025 -2200  5025 -6200))
+    (plane VCC (polygon Front 0  6275 -6200  6275 -2200  5025 -2200  5025 -6200))
+    (via "Via[0-1]_35:25_mil" "Via[0-1]_35:0_mil")
+    (rule
+      (width 8)
+      (clearance 10.1)
+      (clearance 10.1 (type default_smd))
+      (clearance 2.5 (type smd_smd))
+    )
+  )
+  (placement
+    (component BNC
+      (place P5 5275 -5700 back 90 (PN SIGNAL_3))
+      (place P4 5275 -4700 back 90 (PN SIGNAL_2))
+      (place P3 5275 -3700 back 90 (PN SIGNAL_1))
+      (place P2 5275 -2700 back 90 (PN SIGNAL_0))
+    )
+    (component HEADER_5x2_LARGE
+      (place P1 6075 -4200 front 270 (PN CONN_5X2))
+    )
+    (component MOUNT_HOLE
+      (place MOUNT_HOLE_01 5150 -3200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_02 6150 -3200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_03 5150 -5200 front 0 (PN VAL**))
+      (place MOUNT_HOLE_04 6150 -5200 front 0 (PN VAL**))
+    )
+  )
+  (library
+    (image BNC
+      (outline (path signal 15  300 100  300 -500))
+      (outline (path signal 15  -300 100  -300 -500))
+      (outline (path signal 15  -200 100  -200 130))
+      (outline (path signal 15  -200 130  200 130))
+      (outline (path signal 15  200 130  200 100))
+      (outline (path signal 15  -300 -300  300 -300))
+      (outline (path signal 15  -300 100  300 100))
+      (outline (path signal 15  -300 -500  300 -500))
+      (pin Round[A]Pad_120_mil @1 -200 0)
+      (pin Round[A]Pad_120_mil @2 200 0)
+      (pin Rect[A]Pad_65x65_mil 1 0 -200)
+      (pin Round[A]Pad_65_mil 2 -100 -200)
+      (pin Round[A]Pad_120_mil @3 -200 -400)
+    )
+    (image HEADER_5x2_LARGE
+      (outline (path signal 15  -400 180  -400 -180))
+      (outline (path signal 15  -400 -180  400 -180))
+      (outline (path signal 15  400 -180  400 180))
+      (outline (path signal 15  400 180  -400 180))
+      (outline (path signal 15  -200 -200  -250 -260))
+      (outline (path signal 15  -250 -260  -150 -260))
+      (outline (path signal 15  -150 -260  -200 -200))
+      (pin Rect[A]Pad_70x70_mil 1 -200 -50)
+      (pin Round[A]Pad_70_mil 2 -200 50)
+      (pin Round[A]Pad_70_mil 3 -100 -50)
+      (pin Round[A]Pad_70_mil 4 -100 50)
+      (pin Round[A]Pad_70_mil 5 0 -50)
+      (pin Round[A]Pad_70_mil 6 0 50)
+      (pin Round[A]Pad_70_mil 7 100 -50)
+      (pin Round[A]Pad_70_mil 8 100 50)
+      (pin Round[A]Pad_70_mil 9 200 -50)
+      (pin Round[A]Pad_70_mil 10 200 50)
+    )
+    (image MOUNT_HOLE
+      (pin Round[A]Pad_130_mil @1 0 0)
+    )
+    (padstack Round[A]Pad_120_mil
+      (shape (circle Front 120))
+      (shape (circle Back 120))
+      (attach off)
+    )
+    (padstack Round[A]Pad_130_mil
+      (shape (circle Front 130))
+      (shape (circle Back 130))
+      (attach off)
+    )
+    (padstack Round[A]Pad_65_mil
+      (shape (circle Front 65))
+      (shape (circle Back 65))
+      (attach off)
+    )
+    (padstack Round[A]Pad_70_mil
+      (shape (circle Front 70))
+      (shape (circle Back 70))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_65x65_mil
+      (shape (rect Front -32.5 -32.5 32.5 32.5))
+      (shape (rect Back -32.5 -32.5 32.5 32.5))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_70x70_mil
+      (shape (rect Front -35 -35 35 35))
+      (shape (rect Back -35 -35 35 35))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:25_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:0_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+  )
+  (network
+    (net +5V
+      (pins P1-1)
+    )
+    (net /Signal0
+      (pins P2-1 P1-3)
+    )
+    (net /Signal1
+      (pins P3-1 P1-5)
+    )
+    (net /Signal2
+      (pins P4-1 P1-7)
+    )
+    (net /Signal3
+      (pins P5-1 P1-9)
+    )
+    (net GND
+      (pins P5-2 P4-2 P3-2 P2-2 P1-2 P1-4 P1-6 P1-8 P1-10)
+    )
+    (class kicad_default ""
+      (circuit
+        (use_via Via[0-1]_35:25_mil)
+      )
+      (rule
+        (width 8)
+        (clearance 10.1)
+      )
+    )
+    (class Signal +5V /Signal0 /Signal1 /Signal2 /Signal3 GND
+      (circuit
+        (use_via Via[0-1]_35:25_mil)
+      )
+      (rule
+        (width 32)
+        (clearance 10.1)
+      )
+    )
+  )
+  (wiring
+  )
+)

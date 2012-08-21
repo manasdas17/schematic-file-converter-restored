@@ -1,0 +1,420 @@
+(PCB "Z:/digital-toy/PCB-basic/Eagle-vs-DXP/555-pwm-eagle/555-pwm-eagle.brd"
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad CadSoft)
+    (host_version 'EAGLE Version 5.4.0 Copyright (c) 1988-2009 CadSoft')
+  )
+  (resolution mm 10000)
+  (unit mm)
+  (structure
+    (layer "1#Top"  (type signal))
+    (layer "16#Bottom"  (type signal))
+    (boundary 
+      (rect pcb  0.000000 0.000000 40.640000 30.531000)
+    )
+    (boundary (path signal 0 0.000000 0.000000 40.640000 0.000000))
+    (boundary (path signal 0 40.640000 0.000000 40.640000 30.531000))
+    (boundary (path signal 0 40.640000 30.531000 0.000000 30.531000))
+    (boundary (path signal 0 0.000000 30.531000 0.000000 0.000000))
+    (via
+       "Round1$0.609500"
+       "Round3$0.609600"
+    )
+    (rule (width 0.254000)(clearance 0.254000))
+    (keepout (circ signal 0.803200 1.270000 29.337000))
+    (keepout (circ signal 0.803200 39.497000 29.337000))
+    (keepout (circ signal 0.803200 39.497000 1.143000))
+    (keepout (circ signal 0.803200 1.143000 1.016000))
+    (control
+      (via_at_smd on)
+    )
+  )
+  (placement
+    (place_control (flip_style rotate_first))
+    (component "C0805$resistor" 
+      (place "C1" 21.590000 27.305000 Front 90.000000)
+    )
+    (component "C0805$resistor" 
+      (place "C2" 26.670000 27.305000 Front 90.000000)
+    )
+    (component "E5-13$resistor" 
+      (place "C4" 7.620000 19.304000 Front 0.000000)
+    )
+    (component "DO35-7$diode" 
+      (place "D1" 19.050000 12.700000 Front 90.000000)
+    )
+    (component "DO35-7$diode" 
+      (place "D2" 24.130000 12.700000 Front 270.000000)
+    )
+    (component "DIL-08$st-microelectronics" 
+      (place "IC1" 33.020000 13.970000 Front 180.000000)
+    )
+    (component "SPC4077$con-jack" 
+      (place "J1" 10.922000 6.477000 Front 0.000000)
+    )
+    (component "1X02$pinhead" 
+      (place "JP1" 33.020000 26.670000 Front 0.000000)
+    )
+    (component "CHIP-LED0805$led" 
+      (place "LED1" 15.875000 23.495000 Front 0.000000)
+    )
+    (component "M0805$resistor" 
+      (place "R1" 19.050000 5.080000 Front 90.000000)
+    )
+    (component "M0805$resistor" 
+      (place "R2" 31.750000 21.590000 Front 90.000000)
+    )
+    (component "B64Y$pot" 
+      (place "R3" 21.590000 21.590000 Front 180.000000)
+    )
+    (component "M0805$resistor" 
+      (place "R4" 15.875000 27.432000 Front 270.000000)
+    )
+  )
+  (library
+    (image "SPC4077$con-jack"
+      (pin "Oblong1" "1" -3.000000 0.000000)
+      (pin "Oblong2" "2" 0.000000 -4.800000)
+      (pin "Oblong3" "3" 3.000000 0.000000)
+    )
+    (image "DO35-7$diode"
+      (outline(rect "1#Top" -1.905000 -1.016000 -1.397000 1.016000))
+      (outline(rect "1#Top" 2.286000 -0.254000 2.921000 0.254000))
+      (outline(rect "1#Top" -2.921000 -0.254000 -2.286000 0.254000))
+      (pin "Oblong4" "A" 3.810000 0.000000)
+      (pin "Oblong4" "C" -3.810000 0.000000)
+    )
+    (image "CHIP-LED0805$led"
+      (outline(rect "1#Top" -0.675000 0.000000 -0.525000 0.300000))
+      (outline(rect "1#Top" 0.525000 0.000000 0.675000 0.300000))
+      (outline(rect "1#Top" -0.150000 0.000000 0.150000 0.300000))
+      (pin "Rectangle1" "A" 0.000000 -1.050000)
+      (pin "Rectangle1" "C" 0.000000 1.050000)
+    )
+    (image "1X02$pinhead"
+      (pin "Oblong5" "1" -1.270000 0.000000)
+      (pin "Oblong5" "2" 1.270000 0.000000)
+    )
+    (image "B64Y$pot"
+      (pin "Oblong6" "A" 2.540000 0.000000)
+      (pin "Oblong6" "E" -2.540000 0.000000)
+      (pin "Oblong6" "S" 0.000000 0.000000)
+    )
+    (image "C0805$resistor"
+      (place_keepout(path "1#Top" 0 1.973000 0.983000 1.973000 -0.983000 -1.973000 -0.983000 -1.973000 0.983000 ))
+      (pin "Rectangle2" "1" -0.850000 0.000000)
+      (pin "Rectangle2" "2" 0.850000 0.000000)
+    )
+    (image "E5-13$resistor"
+      (outline(circ "1#Top" 13.970000 0.000000 0.000000))
+      (outline(rect "1#Top" 0.254000 -1.270000 0.889000 1.270000))
+      (pin "Round2" "+" -2.540000 0.000000)
+      (pin "Octagon1" "-" 2.540000 0.000000)
+    )
+    (image "M0805$resistor"
+      (place_keepout(path "1#Top" 0 1.973000 0.983000 1.973000 -0.983000 -1.973000 -0.983000 -1.973000 0.983000 ))
+      (pin "Rectangle3" "1" -0.950000 0.000000)
+      (pin "Rectangle3" "2" 0.950000 0.000000)
+    )
+    (image "DIL-08$st-microelectronics"
+      (pin "Oblong6" "1" -3.810000 -3.810000)
+      (pin "Oblong6" "2" -1.270000 -3.810000)
+      (pin "Oblong6" "3" 1.270000 -3.810000)
+      (pin "Oblong6" "4" 3.810000 -3.810000)
+      (pin "Oblong6" "5" 3.810000 3.810000)
+      (pin "Oblong6" "6" 1.270000 3.810000)
+      (pin "Oblong6" "7" -1.270000 3.810000)
+      (pin "Oblong6" "8" -3.810000 3.810000)
+    )
+    (padstack "ViaDefault$0.609600"
+      (shape (circle signal 1.117600 0 0))
+    )
+    (padstack "Round1$0.609500" 
+      (shape (circle "1#Top" 1.117600 0 0))
+      (shape (circle "16#Bottom" 1.117600 0 0))
+      (attach off)
+    )
+    (padstack "Oblong1" 
+      (shape (path signal 2.184400 0.000000 -1.092200 0.000000 1.092200))
+      (attach off)
+    )
+    (padstack "Oblong2" 
+      (shape (path signal 2.184400 -1.092200 0.000000 1.092200 0.000000))
+      (attach off)
+    )
+    (padstack "Oblong3" 
+      (shape (path signal 2.184400 0.000000 -1.092200 0.000000 1.092200))
+      (attach off)
+    )
+    (padstack "Oblong4" 
+      (shape (path signal 1.320800 -0.660400 0.000000 0.660400 0.000000))
+      (attach off)
+    )
+    (padstack "Rectangle1" 
+      (shape (rect "1#Top" -0.600000 -0.600000 0.600000 0.600000))
+      (attach off)
+    )
+    (padstack "Oblong5" 
+      (shape (path signal 1.524000 0.000000 -0.762000 0.000000 0.762000))
+      (attach off)
+    )
+    (padstack "Oblong6" 
+      (shape (path signal 1.320800 0.000000 -0.660400 0.000000 0.660400))
+      (attach off)
+    )
+    (padstack "Rectangle2" 
+      (shape (rect "1#Top" -0.650000 -0.750000 0.650000 0.750000))
+      (attach off)
+    )
+    (padstack "Round2" 
+      (shape (circle signal 2.540000 0 0))
+      (attach off)
+    )
+    (padstack "Octagon1" 
+      (shape (polygon "1#Top" 0 1.270000 0.526051 0.526051 1.270000 -0.526051 1.270000 -1.270000 0.526051 -1.270000 -0.526051 -0.526051 -1.270000 0.526051 -1.270000 1.270000 -0.526051 ))
+      (shape (polygon "16#Bottom" 0 1.270000 0.526051 0.526051 1.270000 -0.526051 1.270000 -1.270000 0.526051 -1.270000 -0.526051 -0.526051 -1.270000 0.526051 -1.270000 1.270000 -0.526051 ))
+      (attach off)
+    )
+    (padstack "Rectangle3" 
+      (shape (rect "1#Top" -0.650000 -0.800000 0.650000 0.800000))
+      (attach off)
+    )
+    (padstack "Round3$0.609600" 
+      (shape (circle "1#Top" 1.117600 0 0))
+      (shape (circle "16#Bottom" 1.117600 0 0))
+      (attach off)
+    )
+  )
+  (network
+    (net "GND"
+      (pins  "R4"-"1" "C1"-"2" "C2"-"2" "C4"-"+" "IC1"-"1" "JP1"-"2" "J1"-"1")
+    )
+    (net "N$1"
+      (pins  "C1"-"1" "IC1"-"6" "IC1"-"2" "R3"-"S")
+    )
+    (net "N$2"
+      (pins  "D2"-"A" "R1"-"2" "D1"-"C" "IC1"-"7")
+    )
+    (net "N$3"
+      (pins )
+    )
+    (net "N$4"
+      (pins  "R4"-"2" "LED1"-"C")
+    )
+    (net "N$5"
+      (pins  "R2"-"2" "JP1"-"1")
+    )
+    (net "N$6"
+      (pins  "IC1"-"5" "C2"-"1")
+    )
+    (net "N$7"
+      (pins  "D1"-"A" "R3"-"A")
+    )
+    (net "N$8"
+      (pins  "IC1"-"3" "R2"-"1")
+    )
+    (net "N$9"
+      (pins  "D2"-"C" "R3"-"E")
+    )
+    (net "N$10"
+      (pins )
+    )
+    (net "N$11"
+      (pins )
+    )
+    (net "VCC+"
+      (pins  "J1"-"3" "C4"-"-" "R1"-"1" "IC1"-"8" "IC1"-"4" "LED1"-"A")
+    )
+  )
+  (wiring
+    (wire
+      (path "1#Top" 0.609600 7.747000 7.874000 8.890000 7.620000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 5.080000 10.160000 7.747000 7.874000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 5.080000 10.160000 5.080000 19.304000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 5.080000 19.304000 5.080000 26.670000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 5.080000 26.670000 7.620000 29.210000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 7.620000 29.210000 16.510000 29.210000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 16.510000 29.210000 21.590000 29.210000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 21.590000 29.210000 26.670000 29.210000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 26.670000 29.210000 33.020000 29.210000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 34.290000 27.940000 33.020000 29.210000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 34.290000 27.940000 34.290000 26.670000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 34.290000 26.670000 36.830000 24.130000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.609600 36.830000 24.130000 36.830000 17.780000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.254000 16.510000 29.210000 16.510000 27.940000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.254000 21.590000 29.210000 21.590000 27.940000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.254000 26.670000 29.210000 26.670000 27.940000) 
+      (net "GND")
+    )
+    (wire
+      (path "1#Top" 0.254000 21.590000 21.590000 21.590000 26.455000) 
+      (net "N$1")
+    )
+    (wire
+      (path "1#Top" 0.254000 21.590000 13.970000 21.590000 21.590000) 
+      (net "N$1")
+    )
+    (wire
+      (path "1#Top" 0.254000 21.590000 13.970000 29.210000 13.970000) 
+      (net "N$1")
+    )
+    (wire
+      (path "1#Top" 0.254000 29.210000 13.970000 31.750000 12.700000) 
+      (net "N$1")
+    )
+    (wire
+      (path "1#Top" 0.254000 31.750000 12.700000 31.750000 10.160000) 
+      (net "N$1")
+    )
+    (wire
+      (path "1#Top" 0.254000 31.750000 12.700000 34.290000 17.780000) 
+      (net "N$1")
+    )
+    (wire
+      (path "1#Top" 0.254000 19.050000 6.030000 19.050000 8.890000) 
+      (net "N$2")
+    )
+    (wire
+      (path "1#Top" 0.254000 19.050000 8.890000 24.130000 8.890000) 
+      (net "N$2")
+    )
+    (wire
+      (path "1#Top" 0.254000 24.130000 8.890000 24.130000 5.080000) 
+      (net "N$2")
+    )
+    (wire
+      (path "1#Top" 0.254000 24.130000 5.080000 34.290000 5.080000) 
+      (net "N$2")
+    )
+    (wire
+      (path "1#Top" 0.254000 34.290000 5.080000 34.290000 10.160000) 
+      (net "N$2")
+    )
+    (wire
+      (path "1#Top" 0.609600 31.750000 22.540000 31.750000 26.670000) 
+      (net "N$5")
+    )
+    (wire
+      (path "16#Bottom" 0.254000 26.670000 10.160000 26.670000 22.860000) 
+      (net "N$6")
+    )
+    (wire
+      (path "16#Bottom" 0.254000 26.670000 10.160000 29.210000 10.160000) 
+      (net "N$6")
+    )
+    (wire
+      (path "1#Top" 0.254000 26.670000 22.860000 26.670000 26.455000) 
+      (net "N$6")
+    )
+    (via
+      "Round3$0.609600" 26.670000 22.860000
+      (net "N$6")
+    )
+    (wire
+      (path "1#Top" 0.254000 19.050000 16.510000 19.050000 21.590000) 
+      (net "N$7")
+    )
+    (wire
+      (path "1#Top" 0.609600 31.750000 17.780000 31.750000 20.640000) 
+      (net "N$8")
+    )
+    (wire
+      (path "1#Top" 0.254000 24.130000 16.510000 24.130000 21.590000) 
+      (net "N$9")
+    )
+    (wire
+      (path "1#Top" 0.609600 15.875000 24.765000 15.875000 26.416000) 
+      (net "N$11")
+    )
+    (wire
+      (path "1#Top" 0.609600 13.970000 6.350000 10.160000 10.160000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 13.970000 6.350000 19.050000 3.810000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 10.160000 10.160000 10.160000 20.320000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 10.160000 20.320000 11.684000 21.844000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 11.684000 21.844000 15.748000 21.844000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 19.050000 3.810000 19.050000 2.540000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 19.050000 2.540000 36.830000 2.540000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "16#Bottom" 0.609600 36.830000 10.160000 29.210000 17.780000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 36.830000 2.540000 36.830000 10.160000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 15.748000 21.844000 15.875000 21.971000) 
+      (net "VCC+")
+    )
+    (wire
+      (path "1#Top" 0.609600 15.875000 21.971000 15.875000 22.225000) 
+      (net "VCC+")
+    )
+  )
+)

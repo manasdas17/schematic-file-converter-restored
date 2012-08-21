@@ -1,0 +1,417 @@
+(PCB
+C:/psd_data/cartes/genie_electrique/clavier/worklib/clavier1/physical/clavier1.brd
+ (parser
+  (string_quote ')
+  (space_in_quoted_tokens on)
+  (host_cad allegro)
+  (host_version 'v16-1-53D_11/16/2007')
+  (write_resolution MM 10000)
+  (routes_include testpoint)
+  (constant pcb_xlo 0)
+  (constant pcb_ylo 0)
+  (constant pcb_xhi 533.400)
+  (constant pcb_yhi 431.800)
+  (constant board_name
+C:/psd_data/cartes/genie_electrique/clavier/worklib/clavier1/physical/clavier1.brd
+   )
+  (via_rotate_first off))
+ (resolution MM 10000)
+ (time_resolution nsec 1000000)
+ (structure
+  (boundary (rect pcb 0 0 533.400 431.800))
+  (boundary (rect signal 0 0 533.400 431.800))
+  (control (off_grid off)
+   (force_to_terminal_point on)
+   (noise_accumulation RSS)
+   (noise_calculation linear_interpolation)
+   (crosstalk_model CCT1A)
+   (bbv_ctr2ctr on)
+   (roundoff_rotation on)
+   (average_pair_length off)
+   (reroute_order_viols on))
+  (layer TOP
+   (type signal))
+  (layer BOTTOM
+   (type signal))
+  (rule (clearance 0.305))
+  (rule (width 0.305))
+  (via PAD48CIR24
+   (spare PAD35CIR25D PAD60CIR24GE PAD50CIR24 PAD40CIR24))
+  (grid via 0.001)
+  (grid wire 0.001))
+ (placement
+  (place_control (flip_style mirror_first))
+  (component SIP9_CLAVIER_U1
+   (place U1 416.560 287.020 front 270 (property (height 3.810))))
+  (component POINTTEST_J2
+   (place J2 429.260 317.500 front 0 (property (height 3.810))))
+  (component BARRETTE_2X5_J1
+   (place J1 387.985 315.595 front 270 (property (height 3.810))))
+  (component RES500_R1
+   (place R1 415.290 316.230 front 270 (property (height 3.175))))
+  (component DO7_D4
+   (place D4 414.655 311.785 front 0 (property (height 2.718))))
+  (component DO7_D3
+   (place D3 408.940 311.785 front 0 (property (height 2.718))))
+  (component DO7_D2
+   (place D2 403.860 311.785 front 0 (property (height 2.718)))))
+ (library
+  (image SIP9_CLAVIER
+   (pin PAD180CIR140 12 65.001 15.001)
+   (pin PAD180CIR140 11 65.001 -35.001)
+   (pin PAD180CIR140 10 -5.001 -35.001)
+   (pin PAD180CIR140 13 -5.001 15.001)
+   (pin PAD60CIR36GE 9 0 0)
+   (pin PAD60CIR36GE 8 0 -2.540)
+   (pin PAD60CIR36GE 7 0 -5.080)
+   (pin PAD60CIR36GE 6 0 -7.620)
+   (pin PAD60CIR36GE 5 0 -10.160)
+   (pin PAD60CIR36GE 4 0 -12.700)
+   (pin PAD60CIR36GE 3 0 -15.240)
+   (pin PAD60CIR36GE 2 0 -17.780)
+   (pin PAD68RECT36GE 1 0 -20.320)
+   (outline (rect signal -8.860 -39.421 68.141 17.579)))
+  (image SIP9_CLAVIER_U1
+   (pin PAD68RECT36GE 1 0 -20.320)
+   (pin PAD60CIR36GE 2 0 -17.780)
+   (pin PAD60CIR36GE 3 0 -15.240)
+   (pin PAD60CIR36GE 4 0 -12.700)
+   (pin PAD60CIR36GE 5 0 -10.160)
+   (pin PAD60CIR36GE 6 0 -7.620)
+   (pin PAD60CIR36GE 7 0 -5.080)
+   (pin PAD60CIR36GE 8 0 -2.540)
+   (pin PAD60CIR36GE 9 0 0)
+   (pin PAD180CIR140 13 -5.001 15.001)
+   (pin PAD180CIR140 10 -5.001 -35.001)
+   (pin PAD180CIR140 11 65.001 -35.001)
+   (pin PAD180CIR140 12 65.001 15.001)
+   (outline (polygon signal 0 -8.860 -39.421 68.140 -39.421 68.140 17.579
+     -8.860 17.579 -8.860 -39.421)))
+  (image POINTTEST
+   (pin PAD60SQ36D 1 0 0)
+   (outline (polygon signal 0 -1.016 -1.016 1.016 -1.016 1.016 1.016 -1.016
+     1.016 -1.016 -1.016)))
+  (image POINTTEST_J2
+   (pin PAD60SQ36D 1 0 0)
+   (outline (polygon signal 0 -1.016 -1.016 1.016 -1.016 1.016 1.016 -1.016
+     1.016 -1.016 -1.016)))
+  (image BARRETTE_2X5
+   (pin PAD60CIR40 10 2.540 -10.160)
+   (pin PAD60CIR40 9 0 -10.160)
+   (pin PAD60CIR40 8 2.540 -7.620)
+   (pin PAD60CIR40 7 0 -7.620)
+   (pin PAD60CIR40 6 2.540 -5.080)
+   (pin PAD60CIR40 5 0 -5.080)
+   (pin PAD60CIR40 4 2.540 -2.540)
+   (pin PAD60CIR40 3 0 -2.540)
+   (pin PAD60CIR40 2 2.540 0)
+   (pin PAD60SQ40 1 0 0)
+   (outline (rect signal -1.194 -11.709 3.708 1.549)))
+  (image BARRETTE_2X5_J1
+   (pin PAD60SQ40 1 0 0)
+   (pin PAD60CIR40 2 2.540 0)
+   (pin PAD60CIR40 3 0 -2.540)
+   (pin PAD60CIR40 4 2.540 -2.540)
+   (pin PAD60CIR40 5 0 -5.080)
+   (pin PAD60CIR40 6 2.540 -5.080)
+   (pin PAD60CIR40 7 0 -7.620)
+   (pin PAD60CIR40 8 2.540 -7.620)
+   (pin PAD60CIR40 9 0 -10.160)
+   (pin PAD60CIR40 10 2.540 -10.160)
+   (outline (polygon signal 0 -1.194 -11.709 3.708 -11.709 3.708 1.550 -1.194
+     1.550 -1.194 -11.709)))
+  (image RES500
+   (pin PAD60CIR36D 1 0 -12.700)
+   (pin PAD60CIR36D 2 0 0)
+   (outline (rect signal -1.270 -13.970 1.270 1.270)))
+  (image RES500_R1
+   (pin PAD60CIR36D 2 0 0)
+   (pin PAD60CIR36D 1 0 -12.700)
+   (outline (polygon signal 0 -1.270 -13.970 1.270 -13.970 1.270 1.270 -1.270
+     1.270 -1.270 -13.970)))
+  (image DO7
+   (pin PAD55CIR25 2 0 -12.700)
+   (pin PAD55CIR25D 1 0 0)
+   (outline (rect signal -1.397 -13.818 1.575 1.041)))
+  (image DO7_D4
+   (pin PAD55CIR25D 1 0 0)
+   (pin PAD55CIR25 2 0 -12.700)
+   (outline (polygon signal 0 -1.397 -13.818 1.575 -13.818 1.575 1.041 -1.397
+     1.041 -1.397 -13.818)))
+  (image DO7_D3
+   (pin PAD55CIR25D 1 0 0)
+   (pin PAD55CIR25 2 0 -12.700)
+   (outline (polygon signal 0 -1.397 -13.818 1.575 -13.818 1.575 1.041 -1.397
+     1.041 -1.397 -13.818)))
+  (image DO7_D2
+   (pin PAD55CIR25D 1 0 0)
+   (pin PAD55CIR25 2 0 -12.700)
+   (outline (polygon signal 0 -1.397 -13.818 1.575 -13.818 1.575 1.041 -1.397
+     1.041 -1.397 -13.818)))
+  (padstack PAD35CIR25D
+   (shape (circle signal 0.889 0 0)))
+  (padstack PAD60CIR24GE
+   (shape (circle signal 1.524 0 0)))
+  (padstack PAD50CIR24
+   (shape (circle signal 1.270 0 0)))
+  (padstack PAD40CIR24
+   (shape (circle signal 1.016 0 0)))
+  (padstack PAD48CIR24
+   (shape (circle signal 1.219 0 0)))
+  (padstack VIA
+   (shape (circle signal 0.610 0 0)))
+  (padstack PAD60CIR36D
+   (shape (circle signal 1.524 0 0)))
+  (padstack PAD60SQ36D
+   (shape (rect signal -0.7620 -0.7620 0.7620 0.7620)))
+  (padstack PAD55CIR25
+   (shape (circle signal 1.397 0 0)))
+  (padstack PAD55CIR25D
+   (shape (circle signal 1.397 0 0)))
+  (padstack PAD60CIR40
+   (shape (circle signal 1.524 0 0)))
+  (padstack PAD60SQ40
+   (shape (rect signal -0.7620 -0.7620 0.7620 0.7620)))
+  (padstack PAD180CIR140
+   (shape (circle signal 4.572 0 0)))
+  (padstack PAD60CIR36GE
+   (shape (circle signal 1.524 0 0)))
+  (padstack PAD68RECT36GE
+   (shape (rect signal -1.2495 -0.6500 1.2495 0.6500))))
+ (floor_plan)
+ (part_library
+  (logical_part_mapping CLAVIER_12_TOUCHES
+   (comp U1))
+  (logical_part CLAVIER_12_TOUCHES
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 8               1    cct_72740720   0    1                    0 )
+   (pin 10              1    cct_72740680   0    1                    0 )
+   (pin 11              1    cct_72740640   0    1                    0 )
+   (pin 12              1    cct_72740600   0    1                    0 )
+   (pin 13              1    cct_72740560   0    1                    0 )
+   (pin 1               0    G1             1    L4                   0 )
+   (pin 3               0    G1             1    L3                   0 )
+   (pin 5               0    G1             1    L2                   0 )
+   (pin 7               0    G1             1    L1                   0 )
+   (pin 9               0    G1             1    C4                   0 )
+   (pin 4               0    G1             1    C3                   0 )
+   (pin 2               0    G1             1    C2                   0 )
+   (pin 6               0    G1             1    C1                   0 ))
+  (logical_part_mapping CONN_10_ALIM_THRU
+   (comp J1))
+  (logical_part CONN_10_ALIM_THRU
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 10              2    G1             2    VCC                  0 )
+   (pin 8               5    G1             2    P8                   0 )
+   (pin 7               5    G1             2    P7                   0 )
+   (pin 6               5    G1             2    P6                   0 )
+   (pin 5               5    G1             2    P5                   0 )
+   (pin 4               5    G1             2    P4                   0 )
+   (pin 3               5    G1             2    P3                   0 )
+   (pin 2               5    G1             2    P2                   0 )
+   (pin 1               5    G1             2    P1                   0 )
+   (pin 9               2    G1             2    GND                  0 ))
+  (logical_part_mapping DIODE_REDT_THRU
+   (comp D2 D3 D4))
+  (logical_part DIODE_REDT_THRU
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               0    G1             3    K                    0 )
+   (pin 1               0    G1             3    A                    0 ))
+  (logical_part_mapping PT_THRU
+   (comp J2))
+  (logical_part PT_THRU
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 1               5    G1             4    P                    0 ))
+  (logical_part_mapping RES_THRU_500
+   (comp R1))
+  (logical_part RES_THRU_500
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               5    G1             5    B                    1 )
+   (pin 1               5    G1             5    A                    1 )))
+ (network
+  (net NET_1_I3_A
+   (pins R1-2 D2-1 D4-1 D3-1 J2-1))
+  (net NET_1_I15_P7
+   (pins D4-2 U1-9 J1-7))
+  (net NET_1_I15_P6
+   (pins U1-4 J1-6 D3-2))
+  (net NET_1_I15_P5
+   (pins U1-2 U1-6 J1-5 D2-2))
+  (net NET_1_I15_P4
+   (pins U1-1 J1-4))
+  (net NET_1_I15_P3
+   (pins J1-3 U1-3))
+  (net NET_1_I15_P2
+   (pins J1-2 U1-5))
+  (net NET_1_I15_P1
+   (pins J1-1 U1-7))
+  (net VCC
+   (pins R1-1 J1-9))
+  (net GND_SIGNAL
+   (pins J1-10)))
+ (wiring)
+ (colors
+  (color 16 color16 149 0 74)
+  (color 17 color17 255 255 0)
+  (color 18 color18 88 88 88)
+  (color 19 color19 135 113 95)
+  (color 20 color20 172 94 64)
+  (color 21 color21 216 5 21)
+  (color 22 color22 226 128 18)
+  (color 23 color23 181 181 0)
+  (color 24 color24 99 139 58)
+  (color 25 color25 0 162 0)
+  (color 26 color26 0 170 123)
+  (color 27 color27 0 151 183)
+  (color 28 color28 0 112 223)
+  (color 29 color29 0 0 227)
+  (color 30 color30 141 0 217)
+  (color 31 color31 191 0 191)
+  (color 32 color32 215 0 107)
+  (color 33 color33 0 255 0)
+  (color 34 color34 131 131 131)
+  (color 35 color35 156 134 114)
+  (color 36 color36 202 133 106)
+  (color 37 color37 252 78 90)
+  (color 38 color38 239 155 63)
+  (color 39 color39 215 215 0)
+  (color 40 color40 129 180 78)
+  (color 41 color41 0 221 0)
+  (color 42 color42 0 215 155)
+  (color 43 color43 1 192 233)
+  (color 44 color44 51 152 255)
+  (color 45 color45 100 100 255)
+  (color 46 color46 189 66 255)
+  (color 47 color47 242 0 242)
+  (color 48 color48 255 51 153)
+  (color 49 color49 0 0 255)
+  (color 50 color50 172 172 172)
+  (color 51 color51 169 149 131)
+  (color 52 color52 216 160 139)
+  (color 53 color53 252 122 132)
+  (color 54 color54 242 176 104)
+  (color 55 color55 240 240 0)
+  (color 56 color56 157 197 118)
+  (color 57 color57 38 255 38)
+  (color 58 color58 0 244 177)
+  (color 59 color59 17 214 255)
+  (color 60 color60 98 176 254)
+  (color 61 color61 130 130 255)
+  (color 62 color62 206 115 255)
+  (color 63 color63 255 111 255)
+  (color 64 color64 255 119 187)
+  (color 65 color65 255 0 255)
+  (color 66 color66 217 217 217)
+  (color 67 color67 186 169 154)
+  (color 68 color68 231 182 169)
+  (color 69 color69 253 162 168)
+  (color 70 color70 247 199 147)
+  (color 71 color71 255 255 140)
+  (color 72 color72 192 218 167)
+  (color 73 color73 138 255 138)
+  (color 74 color74 117 255 217)
+  (color 75 color75 145 236 255)
+  (color 76 color76 151 203 255)
+  (color 77 color77 176 176 255)
+  (color 78 color78 223 164 255)
+  (color 79 color79 255 168 255)
+  (color 80 color80 255 176 216)
+  (color 81 color81 0 255 255)
+  (color 82 color82 255 255 255)
+  (color 83 color83 202 189 170)
+  (color 84 color84 235 199 190)
+  (color 85 color85 254 197 201)
+  (color 86 color86 251 216 181)
+  (color 87 color87 255 255 187)
+  (color 88 color88 213 231 194)
+  (color 89 color89 189 255 189)
+  (color 90 color90 176 255 230)
+  (color 91 color91 185 241 255)
+  (color 92 color92 191 223 255)
+  (color 93 color93 198 198 255)
+  (color 94 color94 233 191 255)
+  (color 95 color95 255 198 255)
+  (color 96 color96 255 198 255)
+  (color 97 color97 255 0 0)
+  (color 98 color98 250 120 120)
+  (color 0 background 170 210 255)
+  (color 1 blue 0 0 255)
+  (color 2 green 0 255 0)
+  (color 3 violet 175 0 175)
+  (color 4 red 255 0 0)
+  (color 5 magenta 125 0 125)
+  (color 6 white 255 255 255)
+  (color 7 lgtgray 180 180 180)
+  (color 8 drkgray 120 120 120)
+  (color 9 drkblue 0 0 170)
+  (color 10 drkgreen 0 170 0)
+  (color 11 coral 255 127 0)
+  (color 12 drkred 170 0 0)
+  (color 13 lgtmgnta 255 0 255)
+  (color 14 yellow 255 255 0)
+  (color 15 black 0 0 0)
+  (set_color background black)
+  (set_color via drkgreen)
+  (set_color thru drkgray)
+  (set_color select color82)
+  (set_color highlight color58)
+  (set_color antipad white)
+  (set_color guide color59)
+  (set_color histogram grid color82)
+  (set_color histogram segment red)
+  (set_color histogram peak red)
+  (set_color grid via color82)
+  (set_color grid wiring color82)
+  (set_color grid place color82)
+  (set_color grid manuf color82)
+  (set_color grid major route color82)
+  (set_color grid major place color82)
+  (set_color error clearance yellow)
+  (set_color error length yellow)
+  (set_color error crosstalk white)
+  (set_color error balance white)
+  (set_color error placement white)
+  (set_color routability min green)
+  (set_color routability max red)
+  (set_color iroute target white)
+  (set_color testpoint color24)
+  (set_color protect white)
+  (set_color fix component lgtmgnta)
+  (set_color component front color74)
+  (set_color component back magenta)
+  (set_color site white)
+  (set_color ruler drkgray)
+  (set_color rowcolumn white)
+  (set_color viakeepouts color35)
+  (set_color signal 1 color57)
+  (set_color signal 2 color17)))

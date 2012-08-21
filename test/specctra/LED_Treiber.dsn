@@ -1,0 +1,158 @@
+(pcb /home/benny/canon_remote/LED_Treiber.dsn
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(2011-05-25)-stable")
+  )
+  (resolution mil 10)
+  (unit mil)
+  (structure
+    (layer Front
+      (type signal)
+      (property
+        (index 0)
+      )
+    )
+    (layer Back
+      (type signal)
+      (property
+        (index 1)
+      )
+    )
+    (boundary
+      (path pcb 0  5700 -4250  5700 -5100  5700 -5150  6250 -5150  6250 -4250
+            5700 -4250)
+    )
+    (via "Via[0-1]_35:25_mil" "Via[0-1]_35:0_mil")
+    (rule
+      (width 8)
+      (clearance 10.1)
+      (clearance 10.1 (type default_smd))
+      (clearance 2.5 (type smd_smd))
+    )
+  )
+  (placement
+    (component SFH++
+      (place D1 5900 -4550 front 0 (PN LED))
+    )
+    (component SOT23_6
+      (place Q1 5800 -4900 front 0 (PN MOSFET_N))
+    )
+    (component "R4-LARGE_PADS"
+      (place 501 6150 -4550 front 270 (PN R))
+      (place R1 5950 -5050 front 0 (PN R))
+    )
+    (component PIN_ARRAY_3X1
+      (place K1 6050 -4900 front 0 (PN CONN_3))
+    )
+  )
+  (library
+    (image SFH++
+      (pin Rect[T]Pad_129.9x189_mil 2 -78.7 137.8)
+      (pin Rect[T]Pad_129.9x189_mil 2@1 78.7 137.8)
+      (pin Rect[T]Pad_129.9x189_mil 2@2 -78.7 -118.1)
+      (pin Rect[T]Pad_129.9x189_mil 1 78.7 -118.1)
+    )
+    (image SOT23_6
+      (outline (path signal 5  -20 -30  -50 -10))
+      (outline (path signal 5  50 -30  -52.5 -30))
+      (outline (path signal 5  -52.5 -30  -52.5 30))
+      (outline (path signal 5  -52.5 30  50 30))
+      (outline (path signal 5  50 30  50 -30))
+      (pin Rect[T]Pad_27.6x39.4_mil D -37.5 50)
+      (pin Rect[T]Pad_27.6x39.4_mil D@1 0 50)
+      (pin Rect[T]Pad_27.6x39.4_mil S 37.5 50)
+      (pin Rect[T]Pad_27.6x39.4_mil G 37.5 -50)
+      (pin Rect[T]Pad_27.6x39.4_mil D@2 0 -50)
+      (pin Rect[T]Pad_27.6x39.4_mil D@3 -37.5 -50)
+    )
+    (image "R4-LARGE_PADS"
+      (outline (path signal 12  -200 0  -160 0))
+      (outline (path signal 12  -160 0  -160 40))
+      (outline (path signal 12  -160 40  160 40))
+      (outline (path signal 12  160 40  160 -40))
+      (outline (path signal 12  160 -40  -160 -40))
+      (outline (path signal 12  -160 -40  -160 0))
+      (outline (path signal 12  -160 20  -140 40))
+      (outline (path signal 12  200 0  160 0))
+      (pin Round[A]Pad_70_mil 1 -200 0)
+      (pin Round[A]Pad_70_mil 2 200 0)
+    )
+    (image PIN_ARRAY_3X1
+      (outline (path signal 6  -150 -50  -150 50))
+      (outline (path signal 6  -150 50  150 50))
+      (outline (path signal 6  150 50  150 -50))
+      (outline (path signal 6  150 -50  -150 -50))
+      (outline (path signal 6  -50 50  -50 -50))
+      (pin Rect[A]Pad_60x60_mil 1 -100 0)
+      (pin Round[A]Pad_60_mil 2 0 0)
+      (pin Round[A]Pad_60_mil 3 100 0)
+    )
+    (padstack Round[A]Pad_60_mil
+      (shape (circle Front 60))
+      (shape (circle Back 60))
+      (attach off)
+    )
+    (padstack Round[A]Pad_70_mil
+      (shape (circle Front 70))
+      (shape (circle Back 70))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_27.6x39.4_mil
+      (shape (rect Front -13.8 -19.7 13.8 19.7))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_60x60_mil
+      (shape (rect Front -30 -30 30 30))
+      (shape (rect Back -30 -30 30 30))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_129.9x189_mil
+      (shape (rect Front -64.95 -94.5 64.95 94.5))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:25_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+    (padstack "Via[0-1]_35:0_mil"
+      (shape (circle Front 35))
+      (shape (circle Back 35))
+      (attach off)
+    )
+  )
+  (network
+    (net "N-000001"
+      (pins 501-2 K1-3)
+    )
+    (net "N-000002"
+      (pins D1-1 501-1)
+    )
+    (net "N-000003"
+      (pins Q1-S K1-1)
+    )
+    (net "N-000004"
+      (pins D1-2 D1-2@1 D1-2@2 Q1-D Q1-D@1 Q1-D@2 Q1-D@3)
+    )
+    (net "N-000005"
+      (pins R1-2 K1-2)
+    )
+    (net "N-000006"
+      (pins Q1-G R1-1)
+    )
+    (class kicad_default "" "N-000001" "N-000002" "N-000003" "N-000004" "N-000005"
+      "N-000006"
+      (circuit
+        (use_via Via[0-1]_35:25_mil)
+      )
+      (rule
+        (width 8)
+        (clearance 10.1)
+      )
+    )
+  )
+  (wiring
+  )
+)

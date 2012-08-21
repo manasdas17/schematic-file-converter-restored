@@ -1,0 +1,181 @@
+(pcb /media/disk/schematic_board/pedal_power_meter.dsn
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(20090216-final)")
+  )
+  (resolution mil 10)
+  (unit mil)
+  (structure
+    (layer Componente
+      (type signal)
+      (property 
+        (index 0)
+      )
+    )
+    (layer Cobre
+      (type signal)
+      (property 
+        (index 1)
+      )
+    )
+    (boundary
+      (rect pcb 1554 -785.6 2406 -1529.8)
+    )
+    (via "Via[0-1]_45:25_mil")
+    (rule
+      (width 39.4)
+      (clearance 23.7)
+      (clearance 25.7 (type default_smd))
+      (clearance 5.9 (type smd_smd))
+    )
+  )
+  (placement
+    (component "SIL-2"
+      (place P2 2250 -970 front 270 (PN CONN_2))
+      (place P1 1660 -970 front 90 (PN CONN_2))
+    )
+    (component "SIL-3"
+      (place K1 2250 -1290 front 270 (PN CONN_3))
+    )
+    (component SM0805
+      (place R5 1760 -1380 front 0 (PN 6K8))
+      (place R4 2110 -1250 front 90 (PN 68K))
+      (place R3 1760 -1290 front 0 (PN 3K3))
+    )
+    (component SM2512
+      (place R2 1950 -1075 front 180 (PN R01))
+      (place R1 1950 -875 front 180 (PN R01))
+    )
+    (component ZXCT1009
+      (place U1 1950 -1250 front 0 (PN ZXCT1009))
+    )
+  )
+  (library
+    (image "SIL-2"
+      (outline (path signal 12  -100 -50  -100 50))
+      (outline (path signal 12  -100 50  100 50))
+      (outline (path signal 12  100 50  100 -50))
+      (outline (path signal 12  100 -50  -100 -50))
+      (pin Rect[A]Pad_55x55_mil 1 -50 0)
+      (pin Round[A]Pad_55_mil 2 50 0)
+    )
+    (image "SIL-3"
+      (outline (path signal 12  -150 -50  -150 50))
+      (outline (path signal 12  -150 50  150 50))
+      (outline (path signal 12  150 50  150 -50))
+      (outline (path signal 12  150 -50  -150 -50))
+      (outline (path signal 12  -50 50  -50 -50))
+      (pin Rect[A]Pad_55x55_mil 1 -100 0)
+      (pin Round[A]Pad_55_mil 2 0 0)
+      (pin Round[A]Pad_55_mil 3 100 0)
+    )
+    (image SM0805
+      (outline (path signal 5  -60 -30  -60.3 -31.5  -61 -32.9  -62.1 -34  -63.5 -34.7
+            -65 -35  -66.5 -34.7  -67.9 -34  -69 -32.9  -69.7 -31.5  -70 -30
+            -69.7 -28.5  -69 -27.1  -67.9 -26  -66.5 -25.3  -65 -25  -63.5 -25.3
+            -62.1 -26  -61 -27.1  -60.3 -28.5))
+      (outline (path signal 5  -20 -30  -60 -30))
+      (outline (path signal 5  -60 -30  -60 30))
+      (outline (path signal 5  -60 30  -20 30))
+      (outline (path signal 5  20 30  60 30))
+      (outline (path signal 5  60 30  60 -30))
+      (outline (path signal 5  60 -30  20 -30))
+      (pin Rect[T]Pad_35x55_mil 1 -37.5 0)
+      (pin Rect[T]Pad_35x55_mil 2 37.5 0)
+    )
+    (image SM2512
+      (outline (path signal 8  155 -85  65 -85))
+      (outline (path signal 8  65 85  155 85))
+      (outline (path signal 8  -65 -85  -155 -85))
+      (outline (path signal 8  -155 85  -65 85))
+      (outline (path signal 8  -155 -85  -155 85))
+      (outline (path signal 8  155 85  155 -85))
+      (pin Rect[T]Pad_80x160_mil 1 -110 0)
+      (pin Rect[T]Pad_80x160_mil 2 110 0)
+    )
+    (image ZXCT1009
+      (outline (path signal 5  -60 15  60 15))
+      (outline (path signal 5  60 15  60 -15))
+      (outline (path signal 5  60 -15  -60 -15))
+      (outline (path signal 5  -60 -15  -60 15))
+      (pin Rect[T]Pad_36x36_mil 2 -35 40)
+      (pin Rect[T]Pad_36x36_mil 3 35 40)
+      (pin Rect[T]Pad_36x36_mil 1 0 -40)
+    )
+    (padstack Round[A]Pad_55_mil
+      (shape (circle Componente 55))
+      (shape (circle Cobre 55))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_35x55_mil
+      (shape (rect Componente -17.5 -27.5 17.5 27.5))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_36x36_mil
+      (shape (rect Componente -18 -18 18 18))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_55x55_mil
+      (shape (rect Componente -27.5 -27.5 27.5 27.5))
+      (shape (rect Cobre -27.5 -27.5 27.5 27.5))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_80x160_mil
+      (shape (rect Componente -40 -80 40 80))
+      (attach off)
+    )
+    (padstack "Via[0-1]_45:25_mil"
+      (shape (circle Componente 45))
+      (shape (circle Cobre 45))
+      (attach off)
+    )
+  )
+  (network
+    (net "N-000003"
+      (pins P2-1 R4-2 R2-1 R1-1 U1-3)
+    )
+    (net GND
+      (pins P2-2 P1-1 K1-3 R5-1 R3-1)
+    )
+    (net "N-000004"
+      (pins P1-2 R2-2 R1-2 U1-2)
+    )
+    (net "N-000002"
+      (pins K1-1 R3-2 U1-1)
+    )
+    (net "N-000005"
+      (pins K1-2 R5-2 R4-1)
+    )
+    (class kicad_default GND "N-000002" "N-000003" "N-000004" "N-000005"
+      (circuit
+        (use_via Via[0-1]_45:25_mil)
+      )
+      (rule (width 39.4))
+    )
+  )
+  (wiring
+    (wire (path Componente 39.4  2060 -1075  2060 -1180  2030 -1210)(net "N-000003")(type protect))
+    (wire (path Componente 39.4  1985 -1210  2030 -1210  2107.5 -1210  2110 -1212.5)(net "N-000003")(type protect))
+    (wire (path Componente 39.4  2060 -875  2060 -1075)(net "N-000003")(type protect))
+    (wire (path Componente 39.4  2060 -875  2205 -875  2250 -920)(net "N-000003")(type protect))
+    (wire (path Componente 39.4  1722.5 -1380  1722.5 -1290)(net GND)(type protect))
+    (wire (path Componente 39.4  1660 -1020  1660 -1227.5  1722.5 -1290)(net GND)(type protect))
+    (wire (path Componente 39.4  1840 -1075  1840 -1135  1915 -1210)(net "N-000004")(type protect))
+    (wire (path Componente 39.4  1840 -875  1840 -1075)(net "N-000004")(type protect))
+    (wire (path Componente 39.4  1660 -920  1795 -920  1840 -875)(net "N-000004")(type protect))
+    (wire (path Componente 39.4  1950 -1290  1950 -1320)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2340 -1190  2250 -1190)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2380 -1230  2340 -1190)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2380 -1450  2380 -1230)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2320 -1510  2380 -1450)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2180 -1510  2320 -1510)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2150 -1480  2180 -1510)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2150 -1450  2150 -1480)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2080 -1380  2150 -1450)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  2010 -1380  2080 -1380)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  1950 -1320  2010 -1380)(net "N-000002")(type protect))
+    (wire (path Componente 39.4  1950 -1290  1797.5 -1290)(net "N-000002")(type protect))
+  )
+)

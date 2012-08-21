@@ -1,0 +1,464 @@
+(pcb "/home/samy/Documentos/Engenharia Elétrica/PIC/Projetos/KIT16f628a-mini v2/kit628-mini.dsn"
+  (parser
+    (string_quote ")
+    (space_in_quoted_tokens on)
+    (host_cad "Kicad's PCBNEW")
+    (host_version "(2010-00-09 BZR 23xx)-stable")
+  )
+  (resolution mil 10)
+  (unit mil)
+  (structure
+    (layer Componente
+      (type signal)
+      (property
+        (index 0)
+      )
+    )
+    (layer Cobre
+      (type signal)
+      (property
+        (index 1)
+      )
+    )
+    (boundary
+      (path pcb 0  1675 -3225  4425 -3225  4425 -2050  1675 -2050  1675 -3225)
+    )
+    (plane GND (polygon Cobre 0  4425 -3225  4425 -2050  1675 -2050  1675 -3225))
+    (via "Via[0-1]_45:25_mil" "Via[0-1]_45:0_mil")
+    (rule
+      (width 8)
+      (clearance 10.1)
+      (clearance 10.1 (type default_smd))
+      (clearance 2.5 (type smd_smd))
+    )
+  )
+  (placement
+    (component 18dip300
+      (place U2 3550 -2650 front 0 (PN PIC16F628A))
+    )
+    (component bornier2
+      (place P1 1900 -2425 front 90 (PN POWER))
+    )
+    (component C1
+      (place C3 2625 -2300 front 0 (PN 100nF))
+      (place C6 2575 -2475 front 90 (PN 100nF))
+    )
+    (component C1V5
+      (place C5 1875 -2775 front 270 (PN 22uF))
+      (place C4 2100 -2775 front 270 (PN 10uF))
+    )
+    (component D3
+      (place D2 2400 -2700 front 0 (PN 1N4148))
+      (place D1 2400 -2800 front 0 (PN 1N4148))
+      (place D4 2175 -2425 front 90 (PN 1N4001))
+    )
+    (component R3
+      (place R2 2400 -3000 front 0 (PN 1K))
+      (place R1 2400 -2900 front 180 (PN 10K))
+      (place R3 4150 -2650 front 270 (PN 10K))
+    )
+    (component SW_PUSH_SMALL
+      (place SW1 2775 -2875 front 270 (PN SW_PUSH))
+    )
+    (component 1pin
+      (place F2 4320 -3125 front 0 (PN P1))
+      (place F3 1775 -3125 front 0 (PN P1))
+      (place F1 4325 -2150 front 0 (PN P1))
+    )
+    (component "SIL-10"
+      (place P3 3600 -2300 front 0 (PN C1))
+      (place P4 3600 -3000 front 0 (PN C1))
+    )
+    (component "SIL-5"
+      (place P2 2875 -2475 front 270 (PN ICSP))
+    )
+    (component "LED-3MM"
+      (place D3 2100 -3000 front 90 (PN LED))
+    )
+    (component LM78XXV
+      (place U1 2375 -2425 front 0 (PN LM7805))
+    )
+  )
+  (library
+    (image 18dip300
+      (outline (path signal 15  -500 50  -450 50))
+      (outline (path signal 15  -450 50  -450 -50))
+      (outline (path signal 15  -450 -50  -500 -50))
+      (outline (path signal 15  -500 100  500 100))
+      (outline (path signal 15  500 100  500 -100))
+      (outline (path signal 15  500 -100  -500 -100))
+      (outline (path signal 15  -500 -100  -500 100))
+      (pin Rect[A]Pad_55x55_mil 1 -400 -150)
+      (pin Round[A]Pad_55_mil 2 -300 -150)
+      (pin Round[A]Pad_55_mil 3 -200 -150)
+      (pin Round[A]Pad_55_mil 4 -100 -150)
+      (pin Round[A]Pad_55_mil 5 0 -150)
+      (pin Round[A]Pad_55_mil 6 100 -150)
+      (pin Round[A]Pad_55_mil 7 200 -150)
+      (pin Round[A]Pad_55_mil 8 300 -150)
+      (pin Round[A]Pad_55_mil 9 400 -150)
+      (pin Round[A]Pad_55_mil 10 400 150)
+      (pin Round[A]Pad_55_mil 11 300 150)
+      (pin Round[A]Pad_55_mil 12 200 150)
+      (pin Round[A]Pad_55_mil 13 100 150)
+      (pin Round[A]Pad_55_mil 14 0 150)
+      (pin Round[A]Pad_55_mil 15 -100 150)
+      (pin Round[A]Pad_55_mil 16 -200 150)
+      (pin Round[A]Pad_55_mil 17 -300 150)
+      (pin Round[A]Pad_55_mil 18 -400 150)
+    )
+    (image bornier2
+      (outline (path signal 12  200 -100  -200 -100))
+      (outline (path signal 12  200 -150  200 150))
+      (outline (path signal 12  200 150  -200 150))
+      (outline (path signal 12  -200 150  -200 -150))
+      (outline (path signal 12  -200 -150  200 -150))
+      (pin Rect[A]Pad_100x100_mil 2 -100 0)
+      (pin Round[A]Pad_100_mil 1 100 0)
+    )
+    (image C1
+      (outline (path signal 12  -98 50  100 50))
+      (outline (path signal 12  100 50  100 -50))
+      (outline (path signal 12  100 -50  -100 -50))
+      (outline (path signal 12  -100 -50  -100 50))
+      (outline (path signal 12  -100 25  -75 50))
+      (pin Round[A]Pad_55_mil 1 -50 0)
+      (pin Round[A]Pad_55_mil 2 50 0)
+    )
+    (image C1V5
+      (outline (path signal 5  100.1 0  95.2 -30.9  81 -58.8  58.8 -81  30.9 -95.2  0 -100.1
+            -30.9 -95.2  -58.8 -81  -81 -58.8  -95.2 -30.9  -100.1 0  -95.2 30.9
+            -81 58.8  -58.8 81  -30.9 95.2  0 100.1  30.9 95.2  58.8 81
+            81 58.8  95.2 30.9))
+      (pin Rect[A]Pad_55x55_mil 1 -50 0)
+      (pin Round[A]Pad_55_mil 2 50 0)
+    )
+    (image D3
+      (outline (path signal 12  150 0  120 0))
+      (outline (path signal 12  120 0  120 40))
+      (outline (path signal 12  120 40  -120 40))
+      (outline (path signal 12  -120 40  -120 0))
+      (outline (path signal 12  -120 0  -150 0))
+      (outline (path signal 12  -120 0  -120 -40))
+      (outline (path signal 12  -120 -40  120 -40))
+      (outline (path signal 12  120 -40  120 0))
+      (outline (path signal 12  100 40  100 -40))
+      (outline (path signal 12  90 -40  90 40))
+      (pin Rect[A]Pad_55x55_mil 2 150 0)
+      (pin Round[A]Pad_55_mil 1 -150 0)
+    )
+    (image R3
+      (outline (path signal 12  -150 0  -130 0))
+      (outline (path signal 12  150 0  130 0))
+      (outline (path signal 12  130 0  130 40))
+      (outline (path signal 12  130 40  -130 40))
+      (outline (path signal 12  -130 40  -130 -40))
+      (outline (path signal 12  -130 -40  130 -40))
+      (outline (path signal 12  130 -40  130 0))
+      (outline (path signal 12  -130 20  -110 40))
+      (pin Round[A]Pad_55_mil 1 -150 0)
+      (pin Round[A]Pad_55_mil 2 150 0)
+    )
+    (image SW_PUSH_SMALL
+      (outline (path signal 5  100 0  95.1 -30.9  80.9 -58.7  58.7 -80.9  30.9 -95.1  0 -100
+            -30.9 -95.1  -58.7 -80.9  -80.9 -58.7  -95.1 -30.9  -100 0  -95.1 30.9
+            -80.9 58.7  -58.7 80.9  -30.9 95.1  0 100  30.9 95.1  58.7 80.9
+            80.9 58.7  95.1 30.9))
+      (outline (path signal 5  -150 150  150 150))
+      (outline (path signal 5  150 150  150 -150))
+      (outline (path signal 5  150 -150  -150 -150))
+      (outline (path signal 5  -150 150  -150 -150))
+      (pin Round[A]Pad_55_mil 1 150 100)
+      (pin Round[A]Pad_55_mil 2 150 -100)
+      (pin Round[A]Pad_55_mil 1@1 -150 100)
+      (pin Round[A]Pad_55_mil 2@1 -150 -100)
+    )
+    (image 1pin
+      (outline (path signal 15  90 0  85.5 -27.8  72.8 -52.9  52.9 -72.8  27.8 -85.5  0 -90
+            -27.8 -85.5  -52.9 -72.8  -72.8 -52.9  -85.5 -27.8  -90 0  -85.5 27.8
+            -72.8 52.9  -52.9 72.8  -27.8 85.5  0 90  27.8 85.5  52.9 72.8
+            72.8 52.9  85.5 27.8))
+      (pin Round[A]Pad_160_mil 1 0 0)
+    )
+    (image "SIL-10"
+      (outline (path signal 12  -500 -50  -500 50))
+      (outline (path signal 12  -500 50  500 50))
+      (outline (path signal 12  500 50  500 -50))
+      (outline (path signal 12  500 -50  -500 -50))
+      (outline (path signal 12  -400 -50  -400 50))
+      (pin Rect[A]Pad_55x55_mil 1 -450 0)
+      (pin Round[A]Pad_55_mil 2 -350 0)
+      (pin Round[A]Pad_55_mil 3 -250 0)
+      (pin Round[A]Pad_55_mil 4 -150 0)
+      (pin Round[A]Pad_55_mil 5 -50 0)
+      (pin Round[A]Pad_55_mil 6 50 0)
+      (pin Round[A]Pad_55_mil 7 150 0)
+      (pin Round[A]Pad_55_mil 8 250 0)
+      (pin Round[A]Pad_55_mil 9 350 0)
+      (pin Round[A]Pad_55_mil 10 450 0)
+    )
+    (image "SIL-5"
+      (outline (path signal 12  -300 -50  -300 50))
+      (outline (path signal 12  -300 50  200 50))
+      (outline (path signal 12  200 50  200 -50))
+      (outline (path signal 12  200 -50  -300 -50))
+      (outline (path signal 12  -200 -50  -200 50))
+      (pin Rect[A]Pad_55x55_mil 1 -250 0)
+      (pin Round[A]Pad_55_mil 2 -150 0)
+      (pin Round[A]Pad_55_mil 3 -50 0)
+      (pin Round[A]Pad_55_mil 4 50 0)
+      (pin Round[A]Pad_55_mil 5 150 0)
+    )
+    (image "LED-3MM"
+      (outline (path signal 10  72 -50  72 50))
+      (pin Round[A]Pad_66_mil 1 -50 0)
+      (pin Round[A]Pad_66_mil 2 50 0)
+    )
+    (image LM78XXV
+      (outline (path signal 10  75 175  100 175))
+      (outline (path signal 10  100 175  100 -175))
+      (outline (path signal 10  100 -175  75 -175))
+      (outline (path signal 10  -75 175  75 175))
+      (outline (path signal 10  75 175  75 -175))
+      (outline (path signal 10  75 -175  -75 -175))
+      (outline (path signal 10  -75 -175  -75 175))
+      (pin Round[A]Pad_70_mil VI 0 100)
+      (pin Rect[A]Pad_70x70_mil GND 0 0)
+      (pin Round[A]Pad_70_mil VO 0 -100)
+    )
+    (padstack Round[A]Pad_100_mil
+      (shape (circle Componente 100))
+      (shape (circle Cobre 100))
+      (attach off)
+    )
+    (padstack Round[A]Pad_160_mil
+      (shape (circle Componente 160))
+      (shape (circle Cobre 160))
+      (attach off)
+    )
+    (padstack Round[A]Pad_55_mil
+      (shape (circle Componente 55))
+      (shape (circle Cobre 55))
+      (attach off)
+    )
+    (padstack Round[A]Pad_66_mil
+      (shape (circle Componente 66))
+      (shape (circle Cobre 66))
+      (attach off)
+    )
+    (padstack Round[A]Pad_70_mil
+      (shape (circle Componente 70))
+      (shape (circle Cobre 70))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_55x55_mil
+      (shape (rect Componente -27.5 -27.5 27.5 27.5))
+      (shape (rect Cobre -27.5 -27.5 27.5 27.5))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_70x70_mil
+      (shape (rect Componente -35 -35 35 35))
+      (shape (rect Cobre -35 -35 35 35))
+      (attach off)
+    )
+    (padstack Rect[A]Pad_100x100_mil
+      (shape (rect Componente -50 -50 50 50))
+      (shape (rect Cobre -50 -50 50 50))
+      (attach off)
+    )
+    (padstack "Via[0-1]_45:25_mil"
+      (shape (circle Componente 45))
+      (shape (circle Cobre 45))
+      (attach off)
+    )
+    (padstack "Via[0-1]_45:0_mil"
+      (shape (circle Componente 45))
+      (shape (circle Cobre 45))
+      (attach off)
+    )
+  )
+  (network
+    (net /ICSP_VPP
+      (pins U2-4 D2-2 P2-5 P4-4)
+    )
+    (net /RA0
+      (pins U2-17 P3-2)
+    )
+    (net /RA1
+      (pins U2-18 P3-1)
+    )
+    (net /RA2
+      (pins U2-1 P4-1)
+    )
+    (net /RA3
+      (pins U2-2 P4-2)
+    )
+    (net /RA4
+      (pins U2-3 P4-3)
+    )
+    (net /RA6
+      (pins U2-15 P3-4)
+    )
+    (net /RA7
+      (pins U2-16 P3-3)
+    )
+    (net /RB0
+      (pins U2-6 P4-5)
+    )
+    (net /RB1
+      (pins U2-7 P4-6)
+    )
+    (net /RB2
+      (pins U2-8 P4-7)
+    )
+    (net /RB3
+      (pins U2-9 P4-8)
+    )
+    (net /RB4
+      (pins U2-10 R3-1 P3-8)
+    )
+    (net /RB5
+      (pins U2-11 P3-7)
+    )
+    (net /RB6
+      (pins U2-12 P3-6 P2-2)
+    )
+    (net /RB7
+      (pins U2-13 P3-5 P2-1)
+    )
+    (net GND
+      (pins U2-5 P1-1 C3-2 C5-2 C4-2 SW1-1 SW1-1@1 R3-2 P3-10 P2-3 D3-2 P4-10 U1-GND
+        C6-2)
+    )
+    (net "N-000016"
+      (pins R2-1 D3-1)
+    )
+    (net "N-000017"
+      (pins P1-2 D4-1)
+    )
+    (net "N-000018"
+      (pins C4-1 D2-1 D1-1 R1-2 SW1-2 SW1-2@1)
+    )
+    (net "N-000022"
+      (pins C3-1 D4-2 U1-VI)
+    )
+    (net VDD
+      (pins U2-14 C5-1 D1-2 R2-2 R1-1 P3-9 P2-4 P4-9 U1-VO C6-1)
+    )
+    (class kicad_default /ICSP_VPP /RA0 /RA1 /RA2 /RA3 /RA4 /RA6 /RA7 /RB0
+      /RB1 /RB2 /RB3 /RB4 /RB5 /RB6 /RB7 GND "N-000016" "N-000017" "N-000018"
+      "N-000022" NoConnection1 VDD
+      (circuit
+        (use_via Via[0-1]_45:25_mil)
+      )
+      (rule
+        (width 8)
+        (clearance 10.1)
+      )
+    )
+    (class 1
+      (circuit
+        (use_via Via[0-1]_45:25_mil)
+      )
+      (rule
+        (width 50)
+        (clearance 10.1)
+      )
+    )
+    (class 2
+      (circuit
+        (use_via Via[0-1]_45:25_mil)
+      )
+      (rule
+        (width 70)
+        (clearance 10.1)
+      )
+    )
+  )
+  (wiring
+    (wire (path Cobre 30  2875 -2625  3000 -2625)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  3450 -2775  3450 -2800)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  3400 -2725  3450 -2775)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  3075 -2725  3400 -2725)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  3000 -2800  3075 -2725)(net /ICSP_VPP)(type protect))
+    (wire (path Componente 30  3000 -2625  3000 -2800)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  2550 -2700  2550 -2675)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  2600 -2625  2875 -2625)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  2550 -2675  2600 -2625)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  3450 -2800  3450 -3000)(net /ICSP_VPP)(type protect))
+    (wire (path Cobre 30  3250 -2300  3250 -2500)(net /RA0)(type protect))
+    (wire (path Cobre 30  3150 -2300  3150 -2500)(net /RA1)(type protect))
+    (wire (path Cobre 30  3150 -2800  3150 -3000)(net /RA2)(type protect))
+    (wire (path Cobre 30  3250 -2800  3250 -3000)(net /RA3)(type protect))
+    (wire (path Cobre 30  3350 -2800  3350 -3000)(net /RA4)(type protect))
+    (wire (path Cobre 30  3450 -2300  3450 -2500)(net /RA6)(type protect))
+    (wire (path Cobre 30  3350 -2300  3350 -2500)(net /RA7)(type protect))
+    (wire (path Cobre 30  3550 -3000  3550 -2950)(net /RB0)(type protect))
+    (wire (path Cobre 30  3650 -2850  3650 -2800)(net /RB0)(type protect))
+    (wire (path Cobre 30  3550 -2950  3650 -2850)(net /RB0)(type protect))
+    (wire (path Cobre 30  3650 -3000  3650 -2950)(net /RB1)(type protect))
+    (wire (path Cobre 30  3750 -2850  3750 -2800)(net /RB1)(type protect))
+    (wire (path Cobre 30  3650 -2950  3750 -2850)(net /RB1)(type protect))
+    (wire (path Cobre 30  3750 -3000  3750 -2950)(net /RB2)(type protect))
+    (wire (path Cobre 30  3850 -2850  3850 -2800)(net /RB2)(type protect))
+    (wire (path Cobre 30  3750 -2950  3850 -2850)(net /RB2)(type protect))
+    (wire (path Cobre 30  3850 -3000  3850 -2950)(net /RB3)(type protect))
+    (wire (path Cobre 30  3950 -2850  3950 -2800)(net /RB3)(type protect))
+    (wire (path Cobre 30  3850 -2950  3950 -2850)(net /RB3)(type protect))
+    (wire (path Cobre 30  3850 -2300  3850 -2350)(net /RB4)(type protect))
+    (wire (path Cobre 30  3950 -2450  3950 -2500)(net /RB4)(type protect))
+    (wire (path Cobre 30  3850 -2350  3950 -2450)(net /RB4)(type protect))
+    (wire (path Cobre 30  4150 -2500  3950 -2500)(net /RB4)(type protect))
+    (wire (path Cobre 30  3750 -2300  3750 -2350)(net /RB5)(type protect))
+    (wire (path Cobre 30  3850 -2450  3850 -2500)(net /RB5)(type protect))
+    (wire (path Cobre 30  3750 -2350  3850 -2450)(net /RB5)(type protect))
+    (wire (path Cobre 30  3650 -2300  3650 -2350)(net /RB6)(type protect))
+    (wire (path Cobre 30  3750 -2450  3750 -2500)(net /RB6)(type protect))
+    (wire (path Cobre 30  3650 -2350  3750 -2450)(net /RB6)(type protect))
+    (wire (path Cobre 30  3650 -2300  3650 -2250  3565 -2165  2835 -2165  2800 -2200
+            2800 -2300  2825 -2325  2875 -2325)(net /RB6)(type protect))
+    (wire (path Cobre 30  3550 -2300  3550 -2350)(net /RB7)(type protect))
+    (wire (path Cobre 30  3650 -2450  3650 -2500)(net /RB7)(type protect))
+    (wire (path Cobre 30  3550 -2350  3650 -2450)(net /RB7)(type protect))
+    (wire (path Cobre 30  3550 -2300  3550 -2275)(net /RB7)(type protect))
+    (wire (path Cobre 30  3500 -2225  2875 -2225)(net /RB7)(type protect))
+    (wire (path Cobre 30  3550 -2275  3500 -2225)(net /RB7)(type protect))
+    (wire (path Cobre 30  3650 -2500  3650 -2475)(net /RB7)(type protect))
+    (wire (path Cobre 30  2875 -2225  2875 -2225)(net /RB7)(type protect))
+    (wire (path Cobre 30  2100 -3050  2200 -3050  2250 -3000)(net "N-000016")(type protect))
+    (wire (path Cobre 50  1900 -2525  2125 -2525  2175 -2575)(net "N-000017")(type protect))
+    (wire (path Cobre 30  2250 -2900  2275 -2900)(net "N-000018")(type protect))
+    (wire (path Cobre 30  2605 -3095  2675 -3025)(net "N-000018")(type protect))
+    (wire (path Cobre 30  2470 -3095  2605 -3095)(net "N-000018")(type protect))
+    (wire (path Cobre 30  2275 -2900  2470 -3095)(net "N-000018")(type protect))
+    (wire (path Cobre 30  2675 -3025  2675 -2725)(net "N-000018")(type protect))
+    (wire (path Cobre 30  2100 -2725  2225 -2725  2250 -2700  2250 -2800  2250 -2900)(net "N-000018")(type protect))
+    (wire (path Cobre 50  2175 -2275  2325 -2275  2375 -2325  2550 -2325  2575 -2300)(net "N-000022")(type protect))
+    (wire (path Cobre 50  4025 -2575  4175 -2575)(net VDD)(type protect))
+    (wire (path Cobre 50  3950 -2350  3950 -2300)(net VDD)(type protect))
+    (wire (path Cobre 50  4000 -2400  3950 -2350)(net VDD)(type protect))
+    (wire (path Cobre 50  4150 -2400  4000 -2400)(net VDD)(type protect))
+    (wire (path Cobre 50  4225 -2475  4150 -2400)(net VDD)(type protect))
+    (wire (path Cobre 50  4225 -2525  4225 -2475)(net VDD)(type protect))
+    (wire (path Cobre 50  4175 -2575  4225 -2525)(net VDD)(type protect))
+    (wire (path Cobre 50  4025 -2875  3950 -2950)(net VDD)(type protect))
+    (wire (path Cobre 50  3500 -2575  4025 -2575)(net VDD)(type protect))
+    (wire (path Cobre 50  4025 -2875  4025 -2575)(net VDD)(type protect))
+    (wire (path Cobre 50  3950 -2950  3950 -3000)(net VDD)(type protect))
+    (wire (path Cobre 30  2550 -2800  2500 -2800)(net VDD)(type protect))
+    (wire (path Cobre 30  2450 -2750  2450 -2525)(net VDD)(type protect))
+    (wire (path Cobre 30  2500 -2800  2450 -2750)(net VDD)(type protect))
+    (wire (path Cobre 30  2550 -2800  2550 -2900  2550 -3000)(net VDD)(type protect))
+    (wire (path Cobre 50  1875 -2725  1900 -2725)(net VDD)(type protect))
+    (wire (path Cobre 50  2325 -2525  2375 -2525)(net VDD)(type protect))
+    (wire (path Cobre 50  2200 -2650  2325 -2525)(net VDD)(type protect))
+    (wire (path Cobre 50  1975 -2650  2200 -2650)(net VDD)(type protect))
+    (wire (path Cobre 50  1900 -2725  1975 -2650)(net VDD)(type protect))
+    (wire (path Cobre 50  3550 -2500  3550 -2525  3500 -2575  3075 -2575  3025 -2525
+            2875 -2525)(net VDD)(type protect))
+    (wire (path Cobre 50  2575 -2525  2875 -2525)(net VDD)(type protect))
+    (wire (path Cobre 50  2375 -2525  2450 -2525  2575 -2525)(net VDD)(type protect))
+    (via "Via[0-1]_45:25_mil"  3000 -2800 (net /ICSP_VPP)(type protect))
+    (via "Via[0-1]_45:25_mil"  3000 -2625 (net /ICSP_VPP)(type protect))
+  )
+)

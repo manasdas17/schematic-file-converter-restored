@@ -1,0 +1,1004 @@
+(PCB C:\PSD_Data\worklib\carte_generique\physical\carte_pic.brd
+ (parser
+  (string_quote ')
+  (space_in_quoted_tokens on)
+  (host_cad allegro)
+  (host_version 'v14-2-56C_3/25/2002')
+  (write_resolution MIL 10)
+  (routes_include testpoint)
+  (constant pcb_xlo -5500)
+  (constant pcb_ylo -4250)
+  (constant pcb_xhi 5500)
+  (constant pcb_yhi 4250)
+  (constant board_name
+   'C:\PSD_Data\worklib\carte_generique\physical\carte_pic.brd')
+  (via_rotate_first off))
+ (resolution MIL 10)
+ (time_resolution nsec 1000000)
+ (structure
+  (boundary (rect pcb -5500 -4250 5500 4250))
+  (boundary (rect signal -5500 -4250 5500 4250))
+  (place_boundary (rect signal -3700 -3200 3400 1300))
+  (control (off_grid off)
+   (force_to_terminal_point on)
+   (noise_accumulation RSS)
+   (noise_calculation linear_interpolation)
+   (crosstalk_model CCT1A)
+   (bbv_ctr2ctr on)
+   (roundoff_rotation on)
+   (average_pair_length off)
+   (reroute_order_viols on))
+  (layer TOP
+   (type signal))
+  (layer VCC
+   (type power)
+   (use_net Orphan_net))
+  (layer SIG
+   (type signal))
+  (layer GND
+   (type power)
+   (use_net Orphan_net))
+  (layer BOTTOM
+   (type signal))
+  (rule (clearance 5))
+  (rule (width 6))
+  (via VIA1)
+  (grid via 1)
+  (grid wire 1))
+ (placement
+  (place_control (flip_style mirror_first))
+  (component 1206_T_C4
+   (place C4 -1500 -1200 front 0 (property (height 20))))
+  (component 1206_T_C1
+   (place C1 -2100 -600 front 0 (property (height 20))))
+  (component SIL16
+   (place U6))
+  (component BIM_UHF
+   (place U10))
+  (component 1206_T
+   (place C2 (property (height 20)))
+   (place C3 (property (height 20)))
+   (place C7 (property (height 20)))
+   (place C8 (property (height 20)))
+   (place C9 (property (height 20)))
+   (place C10 (property (height 20)))
+   (place C11 (property (height 20)))
+   (place C12 (property (height 20))))
+  (component 1206_T
+   (place C5 (property (height 20)))
+   (place C6 (property (height 20)))
+   (place C13 (property (height 20))))
+  (component C_CMS_63
+   (place C14))
+  (component F_JACK
+   (place J2))
+  (component DB9F
+   (place J1))
+  (component DB9
+   (place J3))
+  (component HE10D
+   (place J4)
+   (place J5))
+  (component SOIC18
+   (place U4))
+  (component SOIC8
+   (place U5))
+  (component SM49
+   (place U8)
+   (place U9))
+  (component '1206_T_-_1206_B'
+   (place R1 (property (height 20)))
+   (place R2 (property (height 20))))
+  (component 'RES500_-_1206_B'
+   (place R3))
+  (component RJ12
+   (place U3))
+  (component SOIC16
+   (place U2))
+  (component PQFP44
+   (place U1)))
+ (library
+  (image '1206_T_-_1206_B' (side front)
+   (pin SMD40_75 2 63 0)
+   (pin SMD40_75 1 -63 0)
+   (outline (polygon signal 0 -85 -40 -85 40 85 40 85 -40 -85 -40)))
+  (image '1206_T_-_1206_B' (side back)
+   (pin SMD40_30 2 62 0)
+   (pin SMD40_30 1 -62 0)
+   (outline (polygon signal 0 -85 -23 -85 21 85 21 85 -23 -85 -23)))
+  (image 'RES500_-_1206_B' (side front)
+   (pin PAD60CIR36D 1 0 -500)
+   (pin PAD60CIR36D 2 0 0)
+   (outline (rect signal -50 -550 50 50)))
+  (image 'RES500_-_1206_B' (side back)
+   (pin SMD40_30 2 62 0)
+   (pin SMD40_30 1 -62 0)
+   (outline (polygon signal 0 -85 -23 -85 21 85 21 85 -23 -85 -23)))
+  (image PQFP44
+   (pin SMD50REC19 22 160 -246 (rotate 270.00))
+   (pin SMD50REC19 21 128 -246 (rotate 270.00))
+   (pin SMD50REC19 20 96 -246 (rotate 270.00))
+   (pin SMD50REC19 19 64 -246 (rotate 270.00))
+   (pin SMD50REC19 18 32 -246 (rotate 270.00))
+   (pin SMD50REC19 17 0 -246 (rotate 270.00))
+   (pin SMD50REC19 16 -32 -246 (rotate 270.00))
+   (pin SMD50REC19 15 -64 -246 (rotate 270.00))
+   (pin SMD50REC19 14 -96 -246 (rotate 270.00))
+   (pin SMD50REC19 13 -128 -246 (rotate 270.00))
+   (pin SMD50REC19 12 -160 -246 (rotate 270.00))
+   (pin SMD50REC19 44 -160 246 (rotate 270.00))
+   (pin SMD50REC19 43 -128 246 (rotate 270.00))
+   (pin SMD50REC19 42 -96 246 (rotate 270.00))
+   (pin SMD50REC19 41 -64 246 (rotate 270.00))
+   (pin SMD50REC19 40 -32 246 (rotate 270.00))
+   (pin SMD50REC19 39 0 246 (rotate 270.00))
+   (pin SMD50REC19 38 32 246 (rotate 270.00))
+   (pin SMD50REC19 37 64 246 (rotate 270.00))
+   (pin SMD50REC19 36 96 246 (rotate 270.00))
+   (pin SMD50REC19 35 128 246 (rotate 270.00))
+   (pin SMD50REC19 34 160 246 (rotate 270.00))
+   (pin SMD50REC19 5 -246 32)
+   (pin SMD50REC19 4 -246 64)
+   (pin SMD50REC19 3 -246 96)
+   (pin SMD50REC19 2 -246 128)
+   (pin SMD50REC19 1 -246 160)
+   (pin SMD50REC19 27 246 -32)
+   (pin SMD50REC19 26 246 -64)
+   (pin SMD50REC19 25 246 -96)
+   (pin SMD50REC19 24 246 -128)
+   (pin SMD50REC19 23 246 -160)
+   (pin SMD50REC19 33 246 160)
+   (pin SMD50REC19 32 246 128)
+   (pin SMD50REC19 31 246 96)
+   (pin SMD50REC19 30 246 64)
+   (pin SMD50REC19 29 246 32)
+   (pin SMD50REC19 28 246 0)
+   (pin SMD50REC19 11 -246 -160)
+   (pin SMD50REC19 10 -246 -128)
+   (pin SMD50REC19 9 -246 -96)
+   (pin SMD50REC19 8 -246 -64)
+   (pin SMD50REC19 7 -246 -32)
+   (pin SMD50REC19 6 -246 0)
+   (outline (polygon signal 0 -172 277 172 277 172 197 197 197 197 172 277 172
+     277 -172 197 -172 197 -197 172 -197 172 -277 -172 -277 -172 -197 -197
+     -197 -197 -172 -277 -172 -277 172 -197 172 -197 197 -172 197 -172 277)))
+  (image SOIC16
+   (pin SMD50_25 15 98 125)
+   (pin SMD50_25 16 98 175)
+   (pin SMD50_25 14 98 75)
+   (pin SMD50_25 12 98 -25)
+   (pin SMD50_25 13 98 25)
+   (pin SMD50_25 11 98 -75)
+   (pin SMD50_25 9 98 -175)
+   (pin SMD50_25 10 98 -125)
+   (pin SMD50_25 1 -98 175)
+   (pin SMD50_25 2 -98 125)
+   (pin SMD50_25 3 -98 75)
+   (pin SMD50_25 4 -98 25)
+   (pin SMD50_25 5 -98 -25)
+   (pin SMD50_25 6 -98 -75)
+   (pin SMD50_25 7 -98 -125)
+   (pin SMD50_25 8 -98 -175)
+   (outline (rect signal -125 -200 125 200)))
+  (image RJ12
+   (pin HOLE120 8 200 -300)
+   (pin HOLE120 7 200 50)
+   (pin PAD50CIR30D 6 -100 -250)
+   (pin PAD50CIR30D 5 0 -200)
+   (pin PAD50CIR30D 4 -100 -150)
+   (pin PAD50CIR30D 3 0 -100)
+   (pin PAD50CIR30D 2 -100 -50)
+   (pin PAD50SQ30D 1 0 0)
+   (outline (rect signal -221 -406 621 156)))
+  (image RES500
+   (pin PAD60CIR36D 1 0 -500)
+   (pin PAD60CIR36D 2 0 0)
+   (outline (rect signal -50 -550 50 50)))
+  (image 1206_B
+   (pin SMD40_30 2 62 0)
+   (pin SMD40_30 1 -62 0)
+   (outline (polygon signal 0 -85 -23 -85 21 85 21 85 -23 -85 -23)))
+  (image SM49
+   (pin SMD140REC200 2 275 0)
+   (pin SMD140REC200 1 -75 0)
+   (outline (rect signal -133 -140 328 140)))
+  (image SOIC8
+   (pin SMD50_25 7 98 25)
+   (pin SMD50_25 8 98 75)
+   (pin SMD50_25 6 98 -25)
+   (pin SMD50_25 5 98 -75)
+   (pin SMD50_25 1 -98 75)
+   (pin SMD50_25 2 -98 25)
+   (pin SMD50_25 3 -98 -25)
+   (pin SMD50_25 4 -98 -75)
+   (outline (rect signal -125 -100 125 100)))
+  (image SOIC18
+   (pin SMD25_50 18 346 0 (rotate 90.00))
+   (pin SMD25_50 17 346 -50 (rotate 90.00))
+   (pin SMD25_50 16 346 -100 (rotate 90.00))
+   (pin SMD25_50 15 346 -150 (rotate 90.00))
+   (pin SMD25_50 14 346 -200 (rotate 90.00))
+   (pin SMD25_50 13 346 -250 (rotate 90.00))
+   (pin SMD25_50 12 346 -300 (rotate 90.00))
+   (pin SMD25_50 11 346 -350 (rotate 90.00))
+   (pin SMD25_50 10 346 -400 (rotate 90.00))
+   (pin SMD25_50 9 0 -400 (rotate 90.00))
+   (pin SMD25_50 8 0 -350 (rotate 90.00))
+   (pin SMD25_50 7 0 -300 (rotate 90.00))
+   (pin SMD25_50 6 0 -250 (rotate 90.00))
+   (pin SMD25_50 5 0 -200 (rotate 90.00))
+   (pin SMD25_50 4 0 -150 (rotate 90.00))
+   (pin SMD25_50 3 0 -100 (rotate 90.00))
+   (pin SMD25_50 2 0 -50 (rotate 90.00))
+   (pin SMD25_50 1 0 0 (rotate 90.00))
+   (outline (polygon signal 0 -35 -430 380 -430 380 35 -35 35 -35 -430)))
+  (image HE10D
+   (pin PAD65CIR42D 10 100 0)
+   (pin PAD65CIR42D 9 100 -100)
+   (pin PAD65CIR42D 8 100 -200)
+   (pin PAD65CIR42D 7 100 -300)
+   (pin PAD65CIR42D 6 100 -400)
+   (pin PAD65CIR42D 5 0 -400)
+   (pin PAD65CIR42D 4 0 -300)
+   (pin PAD65CIR42D 3 0 -200)
+   (pin PAD65CIR42D 2 0 -100)
+   (pin PAD65CIR42D 1 0 0)
+   (outline (rect signal -47 -461 146 61)))
+  (image DB9
+   (pin HOLE130P 11 -702 54)
+   (pin HOLE130P 10 270 54)
+   (pin PAD60CIR36D 9 -378 108)
+   (pin PAD60CIR36D 8 -270 108)
+   (pin PAD60CIR36D 7 -162 108)
+   (pin PAD60CIR36D 6 -54 108)
+   (pin PAD60CIR36D 5 -432 0)
+   (pin PAD60CIR36D 4 -324 0)
+   (pin PAD60CIR36D 3 -216 0)
+   (pin PAD60CIR36D 2 -108 0)
+   (pin PAD60SQ36D 1 0 0)
+   (outline (rect signal -864 -108 432 864)))
+  (image DB9F
+   (pin HOLE130P 11 -702 54)
+   (pin HOLE130P 10 270 54)
+   (pin PAD60CIR36D 6 -378 108)
+   (pin PAD60CIR36D 7 -270 108)
+   (pin PAD60CIR36D 8 -162 108)
+   (pin PAD60CIR36D 9 -54 108)
+   (pin PAD60CIR36D 1 -432 0)
+   (pin PAD60CIR36D 2 -324 0)
+   (pin PAD60CIR36D 3 -216 0)
+   (pin PAD60CIR36D 4 -108 0)
+   (pin PAD60SQ36D 5 0 0)
+   (outline (rect signal -864 -108 432 864)))
+  (image F_JACK
+   (pin PAD62CIR32D 49 -170 90)
+   (pin PAD62CIR32D 48 -170 100)
+   (pin PAD62CIR32D 47 -170 110)
+   (pin PAD62CIR32D 46 -170 120)
+   (pin PAD62CIR32D 45 -170 130)
+   (pin PAD62CIR32D 44 -170 140)
+   (pin PAD62CIR32D 43 -170 150)
+   (pin PAD62CIR32D 42 -170 160)
+   (pin PAD62CIR32D 41 -170 170)
+   (pin PAD62CIR32D 29 40 0)
+   (pin PAD62CIR32D 28 30 0)
+   (pin PAD62CIR32D 27 20 0)
+   (pin PAD62CIR32D 26 10 0)
+   (pin PAD62CIR32D 25 0 0)
+   (pin PAD62CIR32D 24 -10 0)
+   (pin PAD62CIR32D 23 -20 0)
+   (pin PAD62CIR32D 22 -30 0)
+   (pin PAD62CIR32D 21 -40 0)
+   (pin PAD62CIR32D 10 50 250)
+   (pin PAD62CIR32D 9 40 250)
+   (pin PAD62CIR32D 8 30 250)
+   (pin PAD62CIR32D 7 20 250)
+   (pin PAD62CIR32D 6 10 250)
+   (pin PAD62CIR32D 5 0 250)
+   (pin PAD62CIR32D 4 -10 250)
+   (pin PAD62CIR32D 3 -20 250)
+   (pin PAD62CIR32D 2 -30 250)
+   (pin PAD62CIR32D 11 60 250)
+   (pin PAD62CIR32D 30 50 0)
+   (pin PAD62CIR32D 20 -50 0)
+   (pin PAD62CIR32D 50 -170 80)
+   (pin PAD62CIR32D 40 -170 180)
+   (pin PAD62CIR32D 1 -40 250)
+   (outline (rect signal -181 4 181 586)))
+  (image C_CMS_63
+   (pin SMD100RECT260D 2 0 -190)
+   (pin SMD100RECT260D 1 0 0)
+   (outline (rect signal -140 -250 140 60)))
+  (image BIM_UHF
+   (pin PAD80CIR60D 18 1200 0)
+   (pin PAD80CIR60D 17 1200 -100)
+   (pin PAD80CIR60D 16 1200 -200)
+   (pin PAD80CIR60D 15 1200 -300)
+   (pin PAD80CIR60D 14 1200 -400)
+   (pin PAD80CIR60D 13 1200 -500)
+   (pin PAD80CIR60D 12 1200 -600)
+   (pin PAD80CIR60D 11 1200 -700)
+   (pin PAD80CIR60D 10 1200 -800)
+   (pin PAD80CIR60D 9 0 -800)
+   (pin PAD80CIR60D 8 0 -700)
+   (pin PAD80CIR60D 7 0 -600)
+   (pin PAD80CIR60D 6 0 -500)
+   (pin PAD80CIR60D 5 0 -400)
+   (pin PAD80CIR60D 4 0 -300)
+   (pin PAD80CIR60D 3 0 -200)
+   (pin PAD80CIR60D 2 0 -100)
+   (pin PAD80CIR60D 1 0 0)
+   (outline (rect signal -54 -856 1254 56)))
+  (image SIL16
+   (pin PAD40CIR25D 16 0 -1500)
+   (pin PAD40CIR25D 15 0 -1400)
+   (pin PAD40CIR25D 14 0 -1300)
+   (pin PAD40CIR25D 13 0 -1200)
+   (pin PAD40CIR25D 12 0 -1100)
+   (pin PAD40CIR25D 11 0 -1000)
+   (pin PAD40CIR25D 10 0 -900)
+   (pin PAD40CIR25D 9 0 -800)
+   (pin PAD40CIR25D 8 0 -700)
+   (pin PAD40CIR25D 7 0 -600)
+   (pin PAD40CIR25D 6 0 -500)
+   (pin PAD40CIR25D 5 0 -400)
+   (pin PAD40CIR25D 4 0 -300)
+   (pin PAD40CIR25D 3 0 -200)
+   (pin PAD40CIR25D 2 0 -100)
+   (pin PAD40SQ25D 1 0 0)
+   (outline (rect signal -101 -1651 101 151)))
+  (image 1206_T
+   (pin SMD40_75 2 63 0)
+   (pin SMD40_75 1 -63 0)
+   (outline (polygon signal 0 -85 -40 -85 40 85 40 85 -40 -85 -40)))
+  (image 1206_T_C4
+   (pin SMD40_75 1 -63 0)
+   (pin SMD40_75 2 63 0)
+   (outline (polygon signal 0 -85 -40 -85 40 85 40 85 -40 -85 -40)))
+  (image 1206_T_C1
+   (pin SMD40_75 1 -63 0)
+   (pin SMD40_75 2 63 0)
+   (outline (polygon signal 0 -85 -40 -85 40 85 40 85 -40 -85 -40)))
+  (padstack HOLE120
+   (shape (circle TOP 130 0 0))
+   (shape (circle VCC 120 0 0))
+   (shape (circle SIG 120 0 0))
+   (shape (circle GND 120 0 0))
+   (shape (circle BOTTOM 130 0 0)))
+  (padstack PAD50CIR30D
+   (shape (circle signal 50 0 0)))
+  (padstack PAD50SQ30D
+   (shape (rect TOP -25 -25 25 25))
+   (shape (circle VCC 40 0 0))
+   (shape (circle SIG 40 0 0))
+   (shape (circle GND 40 0 0))
+   (shape (rect BOTTOM -25 -25 25 25)))
+  (padstack SMD140REC200
+   (shape (rect TOP -70 -100 70 100)))
+  (padstack SMD25_50
+   (shape (rect TOP -12.5 -25 12.5 25)))
+  (padstack PAD65CIR42D
+   (shape (circle TOP 65 0 0))
+   (shape (circle VCC 55 0 0))
+   (shape (circle SIG 55 0 0))
+   (shape (circle GND 55 0 0))
+   (shape (circle BOTTOM 65 0 0)))
+  (padstack HOLE130P
+   (shape (circle TOP 250 0 0))
+   (shape (circle VCC 130 0 0))
+   (shape (circle SIG 130 0 0))
+   (shape (circle GND 130 0 0))
+   (shape (circle BOTTOM 250 0 0)))
+  (padstack PAD60SQ36D
+   (shape (rect TOP -30 -30 30 30))
+   (shape (circle VCC 55 0 0))
+   (shape (circle SIG 55 0 0))
+   (shape (circle GND 55 0 0))
+   (shape (rect BOTTOM -30 -30 30 30)))
+  (padstack PAD62CIR32D
+   (shape (circle TOP 62 0 0))
+   (shape (circle VCC 55 0 0))
+   (shape (circle SIG 55 0 0))
+   (shape (circle GND 55 0 0))
+   (shape (circle BOTTOM 62 0 0)))
+  (padstack SMD100RECT260D
+   (shape (rect TOP -130 -50 130 50)))
+  (padstack SMD40_75
+   (shape (rect TOP -20 -37.5 20 37.5)))
+  (padstack PAD80CIR60D
+   (shape (circle TOP 80 0 0))
+   (shape (circle VCC 60 0 0))
+   (shape (circle SIG 60 0 0))
+   (shape (circle GND 60 0 0))
+   (shape (circle BOTTOM 80 0 0)))
+  (padstack PAD40CIR25D
+   (shape (circle TOP 40 0 0))
+   (shape (circle VCC 25 0 0))
+   (shape (circle SIG 25 0 0))
+   (shape (circle GND 25 0 0))
+   (shape (circle BOTTOM 40 0 0)))
+  (padstack PAD40SQ25D
+   (shape (rect signal -20 -20 20 20)))
+  (padstack HOLE109U
+   (shape (circle TOP 119 0 0))
+   (shape (circle VCC 109 0 0))
+   (shape (circle SIG 109 0 0))
+   (shape (circle GND 109 0 0))
+   (shape (circle BOTTOM 119 0 0)))
+  (padstack SMD50REC19
+   (shape (rect TOP -25 -9.5 25 9.5)))
+  (padstack VIA1
+   (shape (circle TOP 20 0 0))
+   (shape (circle VCC 20 0 0))
+   (shape (circle SIG 50 0 0))
+   (shape (circle GND 20 0 0))
+   (shape (circle BOTTOM 20 0 0)))
+  (padstack SMD50_25
+   (shape (rect TOP -25 -12.5 25 12.5)))
+  (padstack PAD60CIR36D
+   (shape (circle TOP 60 0 0))
+   (shape (circle VCC 55 0 0))
+   (shape (circle SIG 55 0 0))
+   (shape (circle GND 55 0 0))
+   (shape (circle BOTTOM 60 0 0)))
+  (padstack SMD40_30
+   (shape (rect TOP -20 -15 20 15)))
+  (padstack CIR75_51D
+   (shape (circle signal 75 0 0))))
+ (floor_plan)
+ (part_library
+  (logical_part_mapping AFF_LCD_SIL
+   (comp U6))
+  (logical_part AFF_LCD_SIL
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 15              1    cct_44268996   0    1                    0 )
+   (pin 16              1    cct_44268924   0    1                    0 )
+   (pin 2               2    G1             1    VCC                  0 )
+   (pin 5               3    G1             1    RW                   0 )
+   (pin 4               3    G1             1    RS                   0 )
+   (pin 1               2    G1             1    GND                  0 )
+   (pin 6               3    G1             1    E                    0 )
+   (pin 14              5    G1             1    D7                   0 )
+   (pin 13              5    G1             1    D6                   0 )
+   (pin 12              5    G1             1    D5                   0 )
+   (pin 11              5    G1             1    D4                   0 )
+   (pin 10              5    G1             1    D3                   0 )
+   (pin 9               5    G1             1    D2                   0 )
+   (pin 8               5    G1             1    D1                   0 )
+   (pin 7               5    G1             1    D0                   0 )
+   (pin 3               0    G1             1    CTRL                 0 ))
+  (logical_part_mapping BIM_UHF_THRU
+   (comp U10))
+  (logical_part BIM_UHF_THRU
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 4               1    cct_44265504   0    1                    0 )
+   (pin 5               1    cct_44265432   0    1                    0 )
+   (pin 7               1    cct_44265360   0    1                    0 )
+   (pin 8               1    cct_44265288   0    1                    0 )
+   (pin 6               1    cct_44265216   0    1                    0 )
+   (pin 17              2    G1             2    VCC                  0 )
+   (pin 15              3    G1             2    TXE*                 0 )
+   (pin 14              3    G1             2    TXD                  0 )
+   (pin 16              3    G1             2    RXE*                 0 )
+   (pin 12              4    G1             2    RXD                  0 )
+   (pin 3               2    G1             2    RF_GROUND<1>         0 )
+   (pin 1               2    G1             2    RF_GROUND<0>         0 )
+   (pin 18              2    G1             2    GND<2>               0 )
+   (pin 10              2    G1             2    GND<1>               0 )
+   (pin 9               2    G1             2    GND<0>               0 )
+   (pin 11              4    G1             2    CD*                  0 )
+   (pin 13              0    G1             2    AUDIO                0 )
+   (pin 2               0    G1             2    ANTENNA              0 ))
+  (logical_part_mapping CAP
+   (comp C1 C2 C3 C7 C8 C9 C10 C11 C12))
+  (logical_part CAP
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               5    G1             3    B                    0 )
+   (pin 1               5    G1             3    A                    0 ))
+  (logical_part_mapping CAP_SMD_1206T
+   (comp C4 C5 C6 C13))
+  (logical_part CAP_SMD_1206T
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               5    G1             4    B                    0 )
+   (pin 1               5    G1             4    A                    0 ))
+  (logical_part_mapping CAP_SMD_POL_63
+   (comp C14))
+  (logical_part CAP_SMD_POL_63
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               5    G1             5    B                    0 )
+   (pin 1               5    G1             5    A                    0 ))
+  (logical_part_mapping 'CONN-JACK-FEM_THRU'
+   (comp J2))
+  (logical_part 'CONN-JACK-FEM_THRU'
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 29              2    G1             6    VALIM<9>             0 )
+   (pin 28              2    G1             6    VALIM<8>             0 )
+   (pin 27              2    G1             6    VALIM<7>             0 )
+   (pin 26              2    G1             6    VALIM<6>             0 )
+   (pin 25              2    G1             6    VALIM<5>             0 )
+   (pin 24              2    G1             6    VALIM<4>             0 )
+   (pin 23              2    G1             6    VALIM<3>             0 )
+   (pin 22              2    G1             6    VALIM<2>             0 )
+   (pin 21              2    G1             6    VALIM<1>             0 )
+   (pin 30              2    G1             6    VALIM<10>            0 )
+   (pin 20              2    G1             6    VALIM<0>             0 )
+   (pin 10              2    G1             6    MASSE<9>             0 )
+   (pin 9               2    G1             6    MASSE<8>             0 )
+   (pin 8               2    G1             6    MASSE<7>             0 )
+   (pin 7               2    G1             6    MASSE<6>             0 )
+   (pin 6               2    G1             6    MASSE<5>             0 )
+   (pin 5               2    G1             6    MASSE<4>             0 )
+   (pin 4               2    G1             6    MASSE<3>             0 )
+   (pin 3               2    G1             6    MASSE<2>             0 )
+   (pin 50              2    G1             6    MASSE<21>            0 )
+   (pin 49              2    G1             6    MASSE<20>            0 )
+   (pin 2               2    G1             6    MASSE<1>             0 )
+   (pin 48              2    G1             6    MASSE<19>            0 )
+   (pin 47              2    G1             6    MASSE<18>            0 )
+   (pin 46              2    G1             6    MASSE<17>            0 )
+   (pin 45              2    G1             6    MASSE<16>            0 )
+   (pin 44              2    G1             6    MASSE<15>            0 )
+   (pin 43              2    G1             6    MASSE<14>            0 )
+   (pin 42              2    G1             6    MASSE<13>            0 )
+   (pin 41              2    G1             6    MASSE<12>            0 )
+   (pin 40              2    G1             6    MASSE<11>            0 )
+   (pin 11              2    G1             6    MASSE<10>            0 )
+   (pin 1               2    G1             6    MASSE<0>             0 ))
+  (logical_part_mapping DB9F_THRU_FEMALE
+   (comp J1))
+  (logical_part DB9F_THRU_FEMALE
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 9               1    cct_44256544   0    1                    0 )
+   (pin 10              1    cct_44256472   0    1                    0 )
+   (pin 11              1    cct_44256400   0    1                    0 )
+   (pin 3               4    G1             7    TXD                  0 )
+   (pin 2               3    G1             7    RXD                  0 )
+   (pin 7               4    G1             7    RTS                  0 )
+   (pin 5               2    G1             7    GND                  0 )
+   (pin 4               4    G1             7    DTR                  0 )
+   (pin 6               3    G1             7    DSR                  0 )
+   (pin 8               3    G1             7    CTS                  0 )
+   (pin 1               4    G1             7    CD*                  0 ))
+  (logical_part_mapping DB9M_THRU_MALE_CAN
+   (comp J3))
+  (logical_part DB9M_THRU_MALE_CAN
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 9               2    G1             8    VCC                  0 )
+   (pin 10              1    G1             8    NC<5>                0 )
+   (pin 11              1    G1             8    NC<4>                0 )
+   (pin 8               1    G1             8    NC<3>                0 )
+   (pin 5               1    G1             8    NC<2>                0 )
+   (pin 4               1    G1             8    NC<1>                0 )
+   (pin 1               1    G1             8    NC<0>                0 )
+   (pin 6               2    G1             8    GND<1>               0 )
+   (pin 3               2    G1             8    GND<0>               0 )
+   (pin 2               3    G1             8    CANL                 0 )
+   (pin 7               3    G1             8    CANH                 0 ))
+  (logical_part_mapping HE10_CONN
+   (comp J4 J5))
+  (logical_part HE10_CONN
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 10              2    G1             9    VCC                  0 )
+   (pin 8               5    G1             9    P8                   0 )
+   (pin 7               5    G1             9    P7                   0 )
+   (pin 6               5    G1             9    P6                   0 )
+   (pin 5               5    G1             9    P5                   0 )
+   (pin 4               5    G1             9    P4                   0 )
+   (pin 3               5    G1             9    P3                   0 )
+   (pin 2               5    G1             9    P2                   0 )
+   (pin 1               5    G1             9    P1                   0 )
+   (pin 9               2    G1             9    GND                  0 ))
+  (logical_part_mapping MCP2510_SMD
+   (comp U4))
+  (logical_part MCP2510_SMD
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 9               2    G1             10   VSS                  0 )
+   (pin 18              2    G1             10   VDD                  0 )
+   (pin 1               4    G1             10   TXCAN                0 )
+   (pin 6               3    G1             10   TX2RTS*              0 )
+   (pin 5               3    G1             10   TX1RTS*              0 )
+   (pin 4               3    G1             10   TX0RTS*              0 )
+   (pin 15              4    G1             10   SO                   0 )
+   (pin 14              3    G1             10   SI                   0 )
+   (pin 13              3    G1             10   SCK                  0 )
+   (pin 2               3    G1             10   RXCAN                0 )
+   (pin 10              4    G1             10   RX1BF*               0 )
+   (pin 11              4    G1             10   RX0BF*               0 )
+   (pin 17              3    G1             10   RESET*               0 )
+   (pin 7               4    G1             10   OSC2                 0 )
+   (pin 8               3    G1             10   OSC1                 0 )
+   (pin 12              4    G1             10   INT*                 0 )
+   (pin 16              3    G1             10   CS*                  0 )
+   (pin 3               4    G1             10   CLKOUT               0 ))
+  (logical_part_mapping PCA82C250_SMD
+   (comp U5))
+  (logical_part PCA82C250_SMD
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 5               0    G1             11   VREF                 0 )
+   (pin 3               2    G1             11   VCC                  0 )
+   (pin 1               3    G1             11   TXD                  0 )
+   (pin 4               4    G1             11   RXD                  0 )
+   (pin 8               0    G1             11   RS                   0 )
+   (pin 2               2    G1             11   GND                  0 )
+   (pin 6               5    G1             11   CANL                 0 )
+   (pin 7               5    G1             11   CANH                 0 ))
+  (logical_part_mapping QUARTZ_SMT
+   (comp U8 U9))
+  (logical_part QUARTZ_SMT
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               3    G1             12   B                    0 )
+   (pin 1               3    G1             12   A                    0 ))
+  (logical_part_mapping RES
+   (comp R1 R2))
+  (logical_part RES
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               5    G1             13   B                    0 )
+   (pin 1               5    G1             13   A                    0 ))
+  (logical_part_mapping RES_THRU_500
+   (comp R3))
+  (logical_part RES_THRU_500
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 2               5    G1             14   B                    0 )
+   (pin 1               5    G1             14   A                    0 ))
+  (logical_part_mapping RJ12_ICD_THRU
+   (comp U3))
+  (logical_part RJ12_ICD_THRU
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 7               1    cct_44241256   0    1                    0 )
+   (pin 8               1    cct_44241184   0    1                    0 )
+   (pin 6               2    G1             15   VPP                  0 )
+   (pin 5               2    G1             15   VDD                  0 )
+   (pin 3               5    G1             15   RB7                  0 )
+   (pin 2               4    G1             15   RB6                  0 )
+   (pin 1               4    G1             15   RB3                  0 )
+   (pin 4               2    G1             15   GND                  0 ))
+  (logical_part_mapping MAX232_SMD
+   (comp U2))
+  (logical_part MAX232_SMD
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 7               4    G2             16   T2OUT                0 )
+   (pin 10              3    G2             16   T2IN                 0 )
+   (pin 14              4    G2             16   T1OUT                0 )
+   (pin 11              3    G2             16   T1IN                 0 )
+   (pin 9               4    G2             16   R2OUT                0 )
+   (pin 8               3    G2             16   R2IN                 0 )
+   (pin 12              4    G2             16   R1OUT                0 )
+   (pin 13              3    G2             16   R1IN                 0 )
+   (pin 16              2    G1             17   VCC                  0 )
+   (pin 6               2    G1             17   'V-'                 0 )
+   (pin 2               2    G1             17   V+                   0 )
+   (pin 15              2    G1             17   GND                  0 )
+   (pin 5               0    G1             17   'C2-'                0 )
+   (pin 4               0    G1             17   C2+                  0 )
+   (pin 3               0    G1             17   'C1-'                0 )
+   (pin 1               0    G1             17   C1+                  0 ))
+  (logical_part_mapping PIC16F877A_SMD
+   (comp U1))
+  (logical_part PIC16F877A_SMD
+#      |------------------------------------------------------------------|
+#      |       PIN          |                  GATE                       |
+#      |------------------------------------------------------------------|
+#      |    Physical | Pin  |    Gate    | Gate |       Gate       | Pin  |
+#      |      Pin    | Type |    Name    | Swap |       Pin        | Swap |
+#      |      Name   |      |            | Code |       Name       | Code |
+#      |-------------|------|------------|------|------------------|------|
+   (pin 12              1    cct_44228408   0    1                    0 )
+   (pin 13              1    cct_44228336   0    1                    0 )
+   (pin 33              1    cct_44228264   0    1                    0 )
+   (pin 34              1    cct_44228192   0    1                    0 )
+   (pin 29              2    G6             18   VSS<1>               0 )
+   (pin 6               2    G6             18   VSS<0>               0 )
+   (pin 28              2    G6             18   VDD<1>               0 )
+   (pin 7               2    G6             18   VDD<0>               0 )
+   (pin 31              0    G6             18   OSC2/CLKOUT          0 )
+   (pin 30              0    G6             18   OSC1/CLKIN           0 )
+   (pin 18              3    G6             18   /MCLR/VPP/THV        0 )
+   (pin 5               5    G5             19   RD7/PSP7             0 )
+   (pin 4               5    G5             19   RD6/PSP6             0 )
+   (pin 3               5    G5             19   RD5/PSP5             0 )
+   (pin 2               5    G5             19   RD4/PSP4             0 )
+   (pin 41              5    G5             19   RD3/PSP3             0 )
+   (pin 40              5    G5             19   RD2/PSP2             0 )
+   (pin 39              5    G5             19   RD1/PSP1             0 )
+   (pin 38              5    G5             19   RD0/PSP0             0 )
+   (pin 17              5    G4             20   RB7/PGD              0 )
+   (pin 16              5    G4             20   RB6/PGC              0 )
+   (pin 15              5    G4             20   RB5                  0 )
+   (pin 14              5    G4             20   RB4                  0 )
+   (pin 11              5    G4             20   RB3/PGM              0 )
+   (pin 10              5    G4             20   RB2                  0 )
+   (pin 9               5    G4             20   RB1                  0 )
+   (pin 8               5    G4             20   RB0/INT              0 )
+   (pin 1               5    G3             21   RC7/RX/DT            0 )
+   (pin 44              5    G3             21   RC6/TX/CK            0 )
+   (pin 43              5    G3             21   RC5/SDO              0 )
+   (pin 42              5    G3             21   RC4/SDI/SDA          0 )
+   (pin 37              5    G3             21   RC3/SCK/SCL          0 )
+   (pin 36              5    G3             21   RC2/CCP1             0 )
+   (pin 35              5    G3             21   RC1/T1OSI/CCP2       0 )
+   (pin 32              5    G3             21   RC0/T1OSO/T1CKI      0 )
+   (pin 27              5    G2             22   RE2/AN7/CS           0 )
+   (pin 26              5    G2             22   RE1/AN6/WR           0 )
+   (pin 25              5    G2             22   RE0/AN5/RD           0 )
+   (pin 24              5    G1             23   RA5/AN4              0 )
+   (pin 23              5    G1             23   RA4/T0CKI            0 )
+   (pin 22              5    G1             23   RA3/AN3/VREF+        0 )
+   (pin 21              5    G1             23   'RA2/AN2/VREF-'      0 )
+   (pin 20              5    G1             23   RA1/AN1              0 )
+   (pin 19              5    G1             23   RA0/AN0              0 )))
+ (network
+  (net VPP
+   (pins R2-2 U1-18 U3-6))
+  (net VCC_CIRCLE
+   (pins J2-44 J2-21 J2-20 J2-50 J2-1 U10-17 U2-16 J5-10 R2-1 U1-28 U1-7 C11-1
+    C3-1 C13-2 C13-1 C4-1 C5-1 U3-5 C14-2 C14-1 C6-1 U4-18 U4-17 U6-2 U5-3
+    J2-2 J2-3 J2-4 J2-5 J2-6 J2-7 J2-8 J2-9 J2-10 J2-11 J2-40 J2-41 J2-42
+    J2-43 J2-45 J2-46 J2-47 J2-48 J2-49 J2-22 J2-23 J2-24 J2-25 J2-26 J2-27
+    J2-28 J2-29 J2-30))
+  (net UNNAMED_1_MCP2510_I18_TXCAN
+   (pins U5-1 U4-1))
+  (net UNNAMED_1_MCP2510_I18_RXCAN
+   (pins U5-4 U4-2))
+  (net UNNAMED_1_MCP2510_I18_INT
+   (pins R1-2 U4-12))
+  (net UNNAMED_1_DB9MALECAN_I51_CANL
+   (pins R3-2 J3-2 U5-6))
+  (net UNNAMED_1_DB9MALECAN_I51_CANH
+   (pins R3-1 J3-7 U5-7))
+  (net UNNAMED_1_DB9FEMALE_I5_TXD
+   (pins U2-14 J1-3))
+  (net UNNAMED_1_DB9FEMALE_I5_RXD
+   (pins J1-2 U2-13))
+  (net UNNAMED_1_CAP_I7_B
+   (pins U2-4 C2-2))
+  (net UNNAMED_1_CAP_I7_A
+   (pins U2-5 C2-1))
+  (net UNNAMED_1_CAP_I6_B
+   (pins U2-3 C1-2))
+  (net UNNAMED_1_CAP_I6_A
+   (pins U2-1 C1-1))
+  (net UNNAMED_1_CAP_I65_B
+   (pins U2-2 C11-2))
+  (net UNNAMED_1_CAP_I64_A
+   (pins U2-6 C12-1))
+  (net UNNAMED_1_CAP_I46_A
+   (pins C10-1 U8-2 U4-8))
+  (net UNNAMED_1_CAP_I45_A
+   (pins C9-1 U8-1 U4-7))
+  (net UNNAMED_1_CAP_I40_A
+   (pins U1-30 U9-2 C8-1))
+  (net UNNAMED_1_CAP_I39_A
+   (pins U1-31 U9-1 C7-1))
+  (net TX_HF
+   (pins U1-27 U10-14))
+  (net TXE_HF
+   (pins U1-25 U10-15))
+  (net SPI_CS
+   (pins U1-21 U4-16))
+  (net SDO
+   (pins U4-15 U1-43))
+  (net SDI
+   (pins U1-42 U4-14))
+  (net SCL
+   (pins U1-37 U4-13))
+  (net RX_HF
+   (pins U1-24 U10-12))
+  (net RXE_HF
+   (pins U10-16 U1-26))
+  (net RB7
+   (pins J5-8 U1-17 U3-3))
+  (net RB6
+   (pins J5-7 U1-16 U3-2))
+  (net RB5
+   (pins U1-15 J5-6))
+  (net RB4
+   (pins U1-14 J5-5))
+  (net RB3
+   (pins J5-4 U1-11 U3-1))
+  (net RB2
+   (pins U1-10 J5-3))
+  (net RB1
+   (pins J5-2 U1-9))
+  (net RB0
+   (pins R1-1 J5-1 U1-8))
+  (net GND_SIGNAL
+   (pins U10-18 U10-10 U10-9 U10-3 U10-1 U2-15 J5-9 J3-6 J3-3 U1-29 U1-6 C12-2
+    J1-5 C9-2 C10-2 C3-2 C4-2 C5-2 C8-2 U3-4 C7-2 C6-2 U4-9 U6-3 U6-1 U5-8
+    U5-2))
+  (net D7
+   (pins U6-14 U1-5))
+  (net D6
+   (pins U6-13 U1-4))
+  (net D5
+   (pins U6-12 U1-3))
+  (net D4
+   (pins U6-11 U1-2))
+  (net D3
+   (pins U6-10 U1-41))
+  (net D2
+   (pins U1-40 U6-9 U6-6))
+  (net D1
+   (pins U1-39 U6-8 U6-5))
+  (net D0
+   (pins U1-38 U6-7 U6-4))
+  (net CD_HF
+   (pins U1-23 U10-11))
+  (net AN2
+   (pins U1-22))
+  (net AN1
+   (pins U1-20))
+  (net AN0
+   (pins U1-19))
+  (net TX
+   (pins U2-11 U1-44))
+  (net RX
+   (pins U2-12 U1-1)))
+ (wiring)
+ (colors
+  (color 0 color0 0 0 0)
+  (color 1 color1 252 252 252)
+  (color 2 color2 209 209 211)
+  (color 3 color3 154 150 153)
+  (color 5 color4 97 97 97)
+  (color 7 color5 252 2 3)
+  (color 8 color6 253 57 163)
+  (color 9 color7 255 0 241)
+  (color 11 color8 255 164 163)
+  (color 12 color9 253 140 4)
+  (color 13 color10 250 202 3)
+  (color 14 color11 249 245 114)
+  (color 15 color12 3 254 4)
+  (color 16 color13 161 252 161)
+  (color 17 color14 55 239 217)
+  (color 18 color15 3 220 251)
+  (color 19 color16 10 162 243)
+  (color 20 color17 10 73 252)
+  (color 21 color18 0 3 190)
+  (color 22 color19 174 106 254)
+  (color 23 color20 107 166 124)
+  (color 24 color21 39 94 132)
+  (color 25 color22 137 107 169)
+  (color 26 color23 194 70 81)
+  (color 27 color24 31 115 27)
+  (color 4 redColor 255 0 0)
+  (color 10 darkGreenColor 0 170 0)
+  (color 6 whiteColor 255 255 255)
+  (color 28 darkGrayColor 120 120 120)
+  (color 29 blackColor 0 0 0)
+  (color 30 greenColor 0 255 0)
+  (color 31 blueColor 0 0 255)
+  (color 32 yellowColor 255 255 0)
+  (color 33 lightMagentaColor 255 0 255)
+  (set_color via darkGreenColor)
+  (set_color thru darkGrayColor)
+  (set_color select color5)
+  (set_color highlight color1)
+  (set_color antipad whiteColor)
+  (set_color guide color9)
+  (set_color histogram grid color12)
+  (set_color histogram segment redColor)
+  (set_color histogram peak redColor)
+  (set_color grid via color12)
+  (set_color grid wiring color12)
+  (set_color grid place color12)
+  (set_color grid manuf color12)
+  (set_color grid major route color12)
+  (set_color grid major place color12)
+  (set_color error clearance yellowColor)
+  (set_color error length yellowColor)
+  (set_color error crosstalk whiteColor)
+  (set_color error balance whiteColor)
+  (set_color error placement whiteColor)
+  (set_color routability min greenColor)
+  (set_color routability max redColor)
+  (set_color iroute target whiteColor)
+  (set_color testpoint color3)
+  (set_color protect whiteColor)
+  (set_color fix component lightMagentaColor)
+  (set_color component front color10)
+  (set_color component back color12)
+  (set_color site whiteColor)
+  (set_color ruler darkGrayColor)
+  (set_color rowcolumn whiteColor)
+  (set_color viakeepouts color3)
+  (set_color signal 1 color15)
+  (set_color power 1 color7)
+  (set_color signal 2 color1)
+  (set_color power 2 color11)
+  (set_color signal 3 color12)))
