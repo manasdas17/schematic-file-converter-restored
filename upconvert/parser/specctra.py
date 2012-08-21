@@ -20,15 +20,17 @@
 # limitations under the License.
 
 #
-# Pins can have different shapes in DSN format (padstack), JSON format
-# supports only lines. So make all pin shapes part of the component
+# TODO: !!! The following is incorrect, need to fix !!!
+# Pads can have different shapes in DSN format (padstack), JSON format
+# supports only lines. So make all pad shapes part of the component
 # both in DSN->UPV and UPV->DSN directions.
 #
 
 from upconvert.core.design import Design
-from upconvert.core.components import Component, Symbol, FBody, Pin
-from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
+from upconvert.core.components import Component, Footprint, FBody, Pad
+from upconvert.core.component_instance import ComponentInstance, FootprintAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.trace import Trace
 from upconvert.core.shape import Circle, Line, Rectangle, Polygon, Point, Arc
 
 from string import whitespace
@@ -95,16 +97,16 @@ class Specctra(object):
         for image in struct.library.image:
             component = Component(image.image_id)
             self.design.add_component(image.image_id, component)
-            sym = Symbol()
+            fpt = Footprint()
             body = FBody()
-            component.add_symbol(sym)
-            sym.add_body(body)
-            for pin in image.pin:
-                body.add_pin(Pin(pin.pin_id, self.to_pixels(pin.vertex), self.to_pixels(pin.vertex)))
+            component.add_footprint(fpt)
+            fpt.add_body(body)
+            for pad in image.pin:
+                body.add_pad(Pad(pad.pad_id, self.to_pixels(pad.vertex), self.to_pixels(pad.vertex)))
                 for padstack in struct.library.padstack:
-                    if padstack.padstack_id == pin.padstack_id:
+                    if padstack.padstack_id == pad.padstack_id:
                         shapes = [shape.shape for shape in padstack.shape]
-                        for shape in self._convert_shapes(shapes, self.to_pixels(pin.vertex)):
+                        for shape in self._convert_shapes(shapes, self.to_pixels(pad.vertex)):
                             body.add_shape(shape)
                         break
                             
@@ -128,7 +130,7 @@ class Specctra(object):
                     rotation = mirror.get(int(place.rotation), place.rotation)
                 inst = ComponentInstance(place.component_id, library_id, 0)
                 v = self.to_pixels(place.vertex)
-                symbattr = SymbolAttribute(v[0], v[1], to_piradians(rotation), False)
+                symbattr = FootprintAttribute(v[0], v[1], to_piradians(rotation), False)
                 inst.add_symbol_attribute(symbattr) 
                 self.design.add_component_instance(inst)
 
