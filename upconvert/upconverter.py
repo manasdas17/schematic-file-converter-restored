@@ -145,9 +145,10 @@ class Upconverter(object):
 
 
     @staticmethod
-    def parse(in_file, in_format='openjson', **parser_kwargs):
+    def parse(in_filename, in_format='openjson', **parser_kwargs):
         """ Parse the given input file using the in_format """
 
+        log.debug('parsing %s in format %s', in_filename, in_format)
         try:
             if in_format == 'geda':
                 par = PARSERS[in_format](**parser_kwargs)
@@ -156,7 +157,7 @@ class Upconverter(object):
         except KeyError:
             raise Exception('ERROR: Unsupported input type: %s' % (in_format))
 
-        return par.parse(in_file)
+        return par.parse(in_filename)
 
 
     @staticmethod
