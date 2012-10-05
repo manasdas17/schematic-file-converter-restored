@@ -499,6 +499,9 @@ class Line(Shape):
             "styles": self.styles,
             }
 
+    def __repr__(self):
+        return 'Line(Point({0}, {1}), Point({2}, {3}))'.format(self.p1.x, self.p1.y, self.p2.x, self.p2.y)
+
 
 class Polygon(Shape):
     """ A polygon is just a list of points, drawn as connected in order """
