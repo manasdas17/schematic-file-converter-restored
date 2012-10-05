@@ -193,6 +193,6 @@ class FootprintAttribute:
             "x": int(self.x),
             "y": int(self.y),
             "rotation": self.rotation,
-            "side": side,
+            "side": self.side,
             "annotations": [a.json() for a in self.annotations]
             }
