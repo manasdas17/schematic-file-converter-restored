@@ -20,19 +20,12 @@
 # limitations under the License.
 
 
-from upconvert.core.shape import Arc
-
 
 class Layout:
     """ Represents the design schematic as a PCB Layout. """
 
     def __init__(self):
         self.layers = list()
-
-
-    def generate_netlist(self):
-        """ Generate a netlist from the layout. """
-        pass
 
     def json(self):
         """ Return the layout as JSON """
@@ -107,30 +100,6 @@ class Image:
         """ True if image contains only metadata. """
         return (self.traces or self.fills or self.smears or
                 self.shape_instances) and True or False
-
-
-    def get_trace(self, width, end_pts):
-        """
-        Get a trace given a width and pair of points.
-        Return None if no Trace is found.
-
-        Params:
-            width   - float
-            end_pts - tuple of 2 Points (ie, the endpoints of
-                      the segment we wish to attach)
-
-        """
-        start, end = end_pts
-        for trace in self.traces:
-            for seg in trace.segments:
-                if trace.width == width:
-                    if isinstance(seg, Arc):
-                        seg_ends = seg.ends()
-                    else:
-                        seg_ends = (seg.p1, seg.p2)
-                    if start in seg_ends or end in seg_ends:
-                        return trace
-        return None
 
 
     def json(self):
