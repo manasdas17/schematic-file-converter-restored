@@ -27,11 +27,15 @@ from collections import namedtuple
 from tarfile import TarFile
 from zipfile import ZipFile
 import errno
+import logging
 
 from upconvert.core.shape import Circle, Rectangle, Obround, RegularPolygon
 from upconvert.core.shape import Polygon, Moire, Thermal
-from upconvert.core.shape import Point, Arc
-from upconvert.core.layout import Aperture
+from upconvert.core.shape import Point, Arc, Line
+from upconvert.core.layout import Aperture, Image, Smear
+
+
+log = logging.getLogger('writer.gerber')
 
 
 # exceptions
@@ -107,8 +111,12 @@ class Gerber:
 
     def __init__(self):
         self.coord_format = None
-        self.images = None
+        self._reset()
+
+    def _reset(self):
+        self.images = list()
         self.apertures = list()
+        self.macros = list()
         self.status = {'x':0,
                        'y':0,
                        'interpolation':None,
@@ -121,8 +129,8 @@ class Gerber:
 
     def write(self, design, outfile=None):
         """ Main logic for producing a set of output files. """
+        log.debug('starting gerber write to %s', outfile)
         self._check_design(design)
-        units = design.layout.units #TODO: handle inline units
         if outfile:
             dir_ = path.dirname(outfile)
             if dir_:
@@ -135,15 +143,13 @@ class Gerber:
         if batch:
             cfg_name = self._config_batch(batch, outfile)
             with open(cfg_name, 'w') as cfg:
-                for layer in design.layout.layers:
+                for layer in design.layer_options:
                     member_name = layer.name.lower().replace(' ', '_') + '.ger'
                     with open(batch.rootdir and
                               path.join(batch.rootdir, member_name) or
                               path.join(dir_, member_name), 'w') as member:
-                        self._gerberize(layer, units, member)
-                    cfg.write(LINE.format(', '.join([layer.name,
-                                                     layer.type,
-                                                     member_name])))
+                        self._write_layer(design, layer, member)
+                    cfg.write(LINE.format(', '.join([layer.name, layer.type, member_name])))
             if batch.archive:
                 #TODO: line below doesn't work
                 #batch.add_(batch.rootdir)
@@ -155,10 +161,10 @@ class Gerber:
         else:
             #TODO: check that there's actually only one layer
             with outfile and open(outfile, 'w') or stdout as f:
-                self._gerberize(design.layout.layers[0], units, f)
-    
-    # primary writer support methods
+                self._write_layer(design, design.layer_options[0], f)
 
+
+    # primary writer support methods
     def _get_archive(self, outfile):
         """ Establish zip or tarfile for batch output. """
         batch = None
@@ -197,56 +203,95 @@ class Gerber:
         return cfg_name
 
 
-    def _gerberize(self, layer, units, f):
-        """ Logic for producing a single gerber file. """
-        self.images = layer.images
+
+    def _write_layer(self, design, layer_options, layer_file):
+        """ Write the information for `layer_name` from the design to a single gerber file. """
+
+        # Initialize the writer state for the layer
+        self._reset()
+
+        # decompose layer data into images and the apertures and macros used to represent the images,
+        self._define_images(design, layer_options.name)
+        self._define_macros()
         self._define_apertures()
 
-        # write params
-        f.write(LINE.format(self._get_format_spec(units)))
-        if units != 'inch':
-            f.write(LINE.format(MM_UNITS))
-        for k in layer.macros:
-            f.write(self._get_macro_def(layer.macros[k]))
-        for aperture in self.apertures:
-            f.write(self._get_ap_def(aperture))
+        # write layer parameters
+        layer_file.write(LINE.format(self._get_format_spec(design.layout_units)))
 
+        # include macros and apertures used on the layer
+        for k in self.macros:
+            layer_file.write(self._get_macro_def(self.macros[k]))
+        for aperture in self.apertures:
+            layer_file.write(self._get_ap_def(aperture))
+
+        # FIXME(shamer): What is this check doing?
         # select an arbitrary aperture for trace[0] check
         if self.apertures:
             self.status['aperture'] = self.apertures[0]
-            f.write(LINE.format(FUNCT.format(type='D',
-                                             code=self.apertures[0].code)))
+            layer_file.write(LINE.format(FUNCT.format(type='D', code=self.apertures[0].code)))
 
         # build image layers - main data section
-        for i in range(len(layer.images)):
+        for i in range(len(self.images)):
             for param in self._get_image_meta(i):
-                f.write(param)
-            for block in self._gen_paths(layer.images[i]):
-                f.write(block)
+                layer_file.write(param)
+            for block in self._gen_paths(self.images[i]):
+                layer_file.write(block)
 
         # tidy up
-        f.write(EOF)
+        layer_file.write(EOF)
+
+
+    def  _define_images(self, design, layer_name):
+        """ Define the images that make up the layer information. """
+        log.debug('creating images for layer "%s"', layer_name)
+
+        # trace segments on this layer
+        traces_image = Image(layer_name + '_traces')
+        for segment in design.trace_segments:
+            if segment.layer != layer_name:
+                continue
+            log.debug('Creating smear for trace: %s', segment)
+
+            # Assumes segment is rounded, straignt
+            trace_smear = Smear(Line(segment.p1, segment.p2), Circle(0, 0, segment.width / 2.0))
+            traces_image.smears.append(trace_smear)
+
+        self.images.append(traces_image)
+
+
+        # Component aspects on this layer
+        for components in design.component_instances:
+            pass
+
+        # TODO(shamer)
+        # generated objects with aspects on this layer (thermals, vias, pths)
+        # board outline (if that layer)
+        # fills, paths on the layer
+        # text
 
 
     def _define_apertures(self):
         """ Build the apertures needed to make shapes. """
         for image in self.images:
-            for trace in image.traces:
-                shape = Circle(0 , 0, trace.width / 2.0)
-                self._add_aperture(shape, None)
             for smear in image.smears:
                 self._add_aperture(smear.shape, None)
             for shape_instance in image.shape_instances:
                 self._add_aperture(shape_instance.shape,
                                    shape_instance.hole)
 
+    def _define_macros(self):
+        """ Build the macros needed to make the images. """
+        # TODO(shamer)
+
 
     def _get_format_spec(self, units, max_size=False, max_precision=False):
         """ Generate FS parameter with sensible precision. """
         if units == 'inch':
             int_, dec_ = (2, 4)
-        else:
+        elif units == 'mm':
             int_, dec_ = (3, 3)
+        else:
+            raise ValueError('unknown unit format: ' + units)
         if max_size:
             int_ = 6
         if max_precision:
@@ -401,9 +446,6 @@ class Gerber:
 
     def _gen_paths(self, image):
         """ Generate functions and coordinates. """
-        for trace in image.traces:
-            for block in self._gen_trace(trace):
-                yield block
         for smear in image.smears:
             for block in self._gen_smear(smear):
                 yield block
@@ -425,6 +467,7 @@ class Gerber:
             self.apertures.append(aperture)
 
 
+    ''' TODO(shamer): replace with _gen_smear
     def _gen_trace(self, trace):
         """ Traces are connected lines and arcs. """
         shape = Circle(0 , 0, trace.width / 2.0)
@@ -434,7 +477,7 @@ class Gerber:
         for seg in trace.segments:
             for block in self._draw_seg(seg):
                 yield LINE.format(block)
-
+    '''
 
     def _gen_smear(self, smear):
         """ Smears are lines drawn with rect apertures. """
@@ -544,7 +587,7 @@ class Gerber:
         else:
             self.status['interpolation'] = code
             return FUNCT.format(type='G', code=INTERPOLATION[code])
-            
+
 
     # general methods
 
@@ -575,15 +618,12 @@ class Gerber:
 
 
     def _check_design(self, design):
-        """ Ensure the design contains required information. """
-
+        """ Ensure the design contains the necessary information to generate a gerber. """
         #TODO: check fills for closure and self-intersection
-        if not design.layout:
-            raise MissingLayout
-        if not design.layout.layers:
+        if not design.layer_options:
             raise NoLayersFound
-        if not design.layout.units:
-            raise UnitsNotSpecified
+        return True
+
         for layer in design.layout.layers:
             for image in layer.images:
                 if not (image.traces or
