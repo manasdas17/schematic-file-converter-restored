@@ -87,6 +87,10 @@ class ComponentInstance:
             }
 
 
+    def __repr__(self):
+        return '''<ComponentInstance('{0}', '{1}', {2}, {3})>'''.format(self.instance_id, self.library_id, self.symbol_index, self.footprint_index)
+
+
 class SymbolAttribute:
     """ The instance of a single body.  There should be a SymbolAttribute
     for every body in the symbol that ComponentInstance is an instance of.
