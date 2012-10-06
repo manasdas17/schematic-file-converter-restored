@@ -23,7 +23,6 @@
 from upconvert.core.design_attributes import DesignAttributes
 from upconvert.core.components import Components
 from upconvert.core.shape import Point
-import math
 
 
 class Design:
@@ -33,33 +32,38 @@ class Design:
 
     def __init__(self):
         self.nets = list()
-        self.traces = list()
         self.components = Components()
         self.component_instances = list()
         self.shapes = list()
         self.pins = list()
         self.design_attributes = DesignAttributes()
-        self.layout = None
+
+        # layout specific aspects of the design
+        self.layout_units = 'mm'         # Core units for layout placement are in nano meters
+        self.layer_options = list()
+        self.trace_segments = list()
+        self.paths = list()
+        self.layout_objects = list() # vias, plated through holes...
+        #self.layout = Layout()
+
+
         self.version = dict()
-        self.set_version("0.1.0","Upverter converter")
+        self.set_version('0.1.0', 'Upverter converter')
 
 
     def bounds(self):
         """ Return the min and max point of a design """
         bounds = [net.bounds() for net in self.nets]
-        bounds.extend([anno.bounds() for anno in
-                       self.design_attributes.annotations])
+        bounds.extend([anno.bounds() for anno in self.design_attributes.annotations])
         offset_bounds = lambda (p1, p2), (xo, yo): [Point(p1.x + xo, p1.y + yo),
                                                     Point(p2.x + xo, p2.y + yo)]
         for comp in self.component_instances:
             offsets = [(att.x, att.y) for att in comp.symbol_attributes]
             lib_comp = self.components.components[comp.library_id]
-            bodybounds = [b.bounds() for b in
-                          lib_comp.symbols[comp.symbol_index].bodies]
+            bodybounds = [b.bounds() for b in lib_comp.symbols[comp.symbol_index].bodies]
             # the offsets in symbol_attributes will align and apply to the
             # library components bodies
-            bounds.extend([offset_bounds(b, o) for b, o in zip(bodybounds,
-                                                               offsets)])
+            bounds.extend([offset_bounds(b, o) for b, o in zip(bodybounds, offsets)])
         # flatten out bounds to just a list of Points
         bounds = sum(bounds, [])
         x_values = [pt.x for pt in bounds]
@@ -91,11 +95,6 @@ class Design:
     def add_net(self, net):
         """ Add a net """
         self.nets.append(net)
-
-
-    def add_trace(self, trace):
-        """ Add a trace """
-        self.traces.append(trace)
 
 
     def add_pin(self, pin):
@@ -168,11 +167,13 @@ class Design:
         return {
             "version": self.version,
             "nets": [n.json() for n in self.nets],
-            "traces": [n.json() for n in self.traces],
             "components": self.components.json(),
             "component_instances": [i.json() for i in self.component_instances],
             "shapes": [s.json() for s in self.shapes],
             "pins": [s.json() for s in self.pins],
             "design_attributes": self.design_attributes.json(),
-            "layout": self.layout.json() if self.layout is not None else None
+            # TODO(shamer): write out:
+            # Trace segments
+            # generated objects
+            #"layout": self.layout.json() if self.layout is not None else None
             }
