@@ -24,6 +24,7 @@
 # 0) 1:1 Input of the data model
 
 import json
+import logging
 from upconvert.core.annotation import Annotation
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.components import Component, Symbol, SBody, Pin
@@ -31,9 +32,12 @@ from upconvert.core.design import Design
 from upconvert.core.design_attributes import DesignAttributes, Metadata
 from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, Point
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
+from upconvert.core.layout import Segment, Layer
+
+log = logging.getLogger('parser.openjson')
 
 
-class JSON:
+class JSON(object):
     """ The Open JSON Format Parser
     This is mostly for sanity checks, it reads in the Open JSON format,
     and then outputs it. """
@@ -57,6 +61,7 @@ class JSON:
 
     def parse(self, filename):
         """ Parse the openjson file into the core. """
+        log.debug('Starting parse of %s', filename)
         with open(filename) as f:
             read = json.loads(f.read())
 
@@ -68,6 +73,10 @@ class JSON:
         self.parse_nets(read.get('nets'))
         self.parse_version(read.get('version'))
 
+        # layout aspects
+        self.parse_layer_options(read.get('layer_options'))
+        self.parse_trace_segments(read.get('trace_segments'))
+
         return self.design
 
 
@@ -76,6 +85,20 @@ class JSON:
         file_version = version.get('file_version')
         exporter = version.get('exporter')
         self.design.set_version(file_version, exporter)
+
+
+    def parse_layer_options(self, layer_options_json):
+        for layer_option_json in layer_options_json:
+            self.design.layer_options.append(Layer(layer_option_json['name']))
+
+
+    def parse_trace_segments(self, segments_json):
+        for segment_json in segments_json:
+            # XXX(shamer): conversion from nm to mm
+            p1 = Point(segment_json['p1']['x'] / 1000000.0, segment_json['p1']['y'] / 1000000.0)
+            p2 = Point(segment_json['p2']['x'] / 1000000.0, segment_json['p2']['y'] / 1000000.0)
+            segment = Segment(segment_json['layer'], p1, p2, segment_json['width'] / 1000000.0)
+            self.design.trace_segments.append(segment)
 
 
     def parse_component_instances(self, component_instances):
@@ -92,6 +115,8 @@ class JSON:
             for symbol_attribute in instance.get('symbol_attributes'):
                 attr = self.parse_symbol_attribute(symbol_attribute)
                 inst.add_symbol_attribute(attr)
+
+            # TODO(shamer): get the footprint attributes
 
             # Get the Attributes
             for key, value in instance.get('attributes').items():
@@ -337,3 +362,4 @@ class JSON:
         instance_id = connectedcomponent.get('instance_id')
         pin_number = connectedcomponent.get('pin_number')
         return ConnectedComponent(instance_id, pin_number)
+
