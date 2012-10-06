@@ -42,10 +42,10 @@ Upverter's Open JSON Interchange Format """
 # Dependencies:
 #   Python: 2.6+ (excluding 3.0+)
 #   ArgumentParser
-# 
+#
 #
 # Usage example:
-#   ./upconvert.py -i test/openjson/simple.upv -o example.upv 
+#   ./upconvert.py -i test/openjson/simple.upv -o example.upv
 
 
 import logging
@@ -115,7 +115,7 @@ EXTENSIONS = {
     'eagle': '.sch',
     'eaglexml': '.sch',
     'fritzing': '.fz',
-    'gerber': '.grb',
+    'gerber': '.zip',
     'specctra': '.dsn',
     'image': '.png',
     'bom': '.csv',
