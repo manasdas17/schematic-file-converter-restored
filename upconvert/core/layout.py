@@ -118,6 +118,19 @@ class Image:
             }
 
 
+class Segment:
+    """ A single segment of a trace. """
+
+    def __init__(self, layer, p1, p2, width):
+        self.layer = layer
+        self.p1 = p1
+        self.p2 = p2
+        self.width = width
+
+    def __repr__(self):
+        return '''<Segment('{0}', Point({1}, {2}), Point({3}, {4}), {5})>'''.format(self.layer, self.p1.x, self.p1.y, self.p2.x, self.p2.y, self.width)
+
+
 class Trace:
     """ A collection of connected segments (lines/arcs). """
 
