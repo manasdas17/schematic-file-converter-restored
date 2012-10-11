@@ -33,6 +33,8 @@ class ComponentInstance:
         self.symbol_attributes = list()
         self.footprint_index = footprint_index
         self.footprint_attributes = list()
+        self.gen_obj_attributes = list()
+        self.footprint_pos = None
         self.attributes = dict()
 
 
@@ -49,6 +51,15 @@ class ComponentInstance:
     def add_footprint_attribute(self, footprint_attribute):
         """ Add attribute to a components footprint """
         self.footprint_attributes.append(footprint_attribute)
+
+
+    def add_gen_obj_attribute(self, gen_obj_attribute):
+        """ Add a generated object to the component instance. """
+        self.gen_obj_attributes.append(gen_obj_attribute)
+
+
+    def set_footprint_pos(self, footprint_pos):
+        self.footprint_pos = footprint_pos
 
 
     def get_instance_id(self):
@@ -83,6 +94,8 @@ class ComponentInstance:
             "symbol_attributes":[s.json() for s in self.symbol_attributes],
             "footprint_index" : self.footprint_index,
             "footprint_attributes":[s.json() for s in self.footprint_attributes],
+            "gen_obj_attributes":[s.json() for s in self.gen_obj_attributes],
+            "footprint_pos":self.footprint_pos.json(),
             "attributes" : stringify_attributes(self.attributes)
             }
 
@@ -154,40 +167,29 @@ class FootprintAttribute:
     for every body in the footprint that ComponentInstance is an instance of.
     """
 
-    def __init__(self, x, y, rotation, side="top"):
+    def __init__(self, x, y, rotation, flip, layer):
         self.x = x
         self.y = y
         self.rotation = rotation
-        self.side = side
-        self.annotations = []
-
-
-    def add_annotation(self, annotation):
-        """ Add annotations to the body """
-        self.annotations.append(annotation)
+        self.flip = flip
+        self.layer = layer
 
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the attributes. """
         self.x *= factor
         self.y *= factor
-        for anno in self.annotations:
-            anno.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the attributes. """
         self.x += dx
         self.y += dy
-        for anno in self.annotations:
-            anno.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the attributes. """
         self.y = height - self.y
-        for anno in self.annotations:
-            anno.rebase_y_axis(height)
 
 
     def json(self):
@@ -197,6 +199,93 @@ class FootprintAttribute:
             "x": int(self.x),
             "y": int(self.y),
             "rotation": self.rotation,
-            "side": self.side,
-            "annotations": [a.json() for a in self.annotations]
+            "flip": self.flip,
+            "layer": self.layer,
             }
+
+
+class GenObjAttribute:
+    """ The instance of a single generated object. """
+
+    def __init__(self, x, y, rotation, flip, layer):
+        self.x = x
+        self.y = y
+        self.rotation = rotation
+        self.flip = flip
+        self.layer = layer
+        self.attributes = {}
+
+
+    def add_attribute(self, key, value):
+        self.attributes[key] = value
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the attributes. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the attributes. """
+        self.y = height - self.y
+
+
+    def json(self):
+        """ Return the body as JSON """
+
+        return {
+            "x": int(self.x),
+            "y": int(self.y),
+            "rotation": self.rotation,
+            "flip": self.flip,
+            "layer": self.layer,
+            "attributes" : stringify_attributes(self.attributes)
+            }
+
+
+class FootprintPos:
+    """ The footprint position. """
+
+    def __init__(self, x, y, rotation, flip, side):
+        self.x = x
+        self.y = y
+        self.rotation = rotation
+        self.flip = flip
+        self.side = side
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the attributes. """
+        self.x *= factor
+        self.y *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the attributes. """
+        self.x += dx
+        self.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the attributes. """
+        self.y = height - self.y
+
+
+    def json(self):
+        """ Return the body as JSON """
+
+        return {
+            "x": int(self.x),
+            "y": int(self.y),
+            "rotation": self.rotation,
+            "flip": self.flip,
+            "side": self.side
+            }
+

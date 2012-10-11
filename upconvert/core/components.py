@@ -90,6 +90,11 @@ class Component:
         self.symbols.append(symbol)
 
 
+    def add_footprint(self, footprint):
+        """ Add a footprint to a component """
+        self.footprints.append(footprint)
+
+
     def scale(self, factor):
         """ Scale the x & y coordinates in the component. """
         for symbol in self.symbols:
@@ -162,6 +167,7 @@ class Footprint:
 
     def __init__(self):
         self.bodies = list()
+        self.gen_objs = list()
 
 
     def add_body(self, body):
@@ -169,27 +175,39 @@ class Footprint:
         self.bodies.append(body)
 
 
+    def add_gen_obj(self, gen_obj):
+        """ Add a generated object to a footprint """
+        self.gen_objs.append(gen_obj)
+
+
     def scale(self, factor):
         """ Scale the x & y coordinates in the footprint. """
         for body in self.bodies:
             body.scale(factor)
+        for gen_obj in self.gen_objs:
+            gen_obj.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the footprint. """
         for body in self.bodies:
             body.shift(dx, dy)
+        for gen_obj in self.gen_objs:
+            gen_obj.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the footprint. """
         for body in self.bodies:
             body.rebase_y_axis(height)
+        for gen_obj in self.gen_objs:
+            gen_obj.rebase_y_axis(height)
 
 
     def json(self):
-        """ Return a symbol as JSON """
-        return {"bodies":[b.json() for b in self.bodies]}
+        """ Return a footprint as JSON """
+        return {"bodies":[b.json() for b in self.bodies],
+                "gen_objs": [go.json() for go in self.gen_objs]}
 
 
 class SBody:
@@ -256,16 +274,16 @@ class SBody:
 
 
 class FBody:
-    """ A body of a Symbol of a Component """
+    """ A body of a footprint of a Component """
 
     def __init__(self):
         self.shapes = list()
-        self.pads = list()
+        self.layer = None
 
 
     def bounds(self):
         """ Return the min and max points of the bounding box around a body """
-        points = sum([s.bounds() for s in self.shapes + self.pins], [])
+        points = sum([s.bounds() for s in self.shapes], [])
         x_values = [pt.x for pt in points]
         y_values = [pt.y for pt in points]
         if len(x_values) == 0:
@@ -274,11 +292,6 @@ class FBody:
             y_values = [0]
         return [Point(min(x_values), min(y_values)),
                 Point(max(x_values), max(y_values))]
-
-
-    def add_pad(self, pad):
-        """ Add a pad to a footprint """
-        self.pads.append(pad)
 
 
     def add_shape(self, shape):
@@ -290,31 +303,24 @@ class FBody:
         """ Scale the x & y coordinates in the footprint. """
         for shape in self.shapes:
             shape.scale(factor)
-        for pad in self.pads:
-            pad.scale(factor)
 
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the footprint. """
         for shape in self.shapes:
             shape.shift(dx, dy)
-        for pad in self.pads:
-            pad.shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the footprint. """
         for shape in self.shapes:
             shape.rebase_y_axis(height)
-        for pad in self.pads:
-            pad.rebase_y_axis(height)
 
 
     def json(self):
         """ Return a footprint as JSON """
         return {
             "shapes":[s.json() for s in self.shapes],
-            "pads"  :[p.json() for p in self.pads]
             }
 
 

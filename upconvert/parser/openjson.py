@@ -26,11 +26,12 @@
 import json
 import logging
 from upconvert.core.annotation import Annotation
-from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
-from upconvert.core.components import Component, Symbol, SBody, Pin
+from upconvert.core.component_instance import ComponentInstance, SymbolAttribute, FootprintAttribute, GenObjAttribute, FootprintPos
+from upconvert.core.components import Component, Symbol, SBody, Pin, FBody, Footprint
 from upconvert.core.design import Design
 from upconvert.core.design_attributes import DesignAttributes, Metadata
-from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, Point
+from upconvert.core.generated_object import parse_gen_obj_json
+from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, RoundedSegment, Point
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.layout import Segment, Layer
 
@@ -65,8 +66,8 @@ class JSON(object):
         with open(filename) as f:
             read = json.loads(f.read())
 
-        self.parse_component_instances(read.get('component_instances'))
         self.parse_components(read.get('components'))
+        self.parse_component_instances(read.get('component_instances'))
         if read.get('shapes') is not None:
             self.parse_sch_shapes(read.get('shapes'))
         self.parse_design_attributes(read.get('design_attributes'))
@@ -94,10 +95,9 @@ class JSON(object):
 
     def parse_trace_segments(self, segments_json):
         for segment_json in segments_json:
-            # XXX(shamer): conversion from nm to mm
-            p1 = Point(segment_json['p1']['x'] / 1000000.0, segment_json['p1']['y'] / 1000000.0)
-            p2 = Point(segment_json['p2']['x'] / 1000000.0, segment_json['p2']['y'] / 1000000.0)
-            segment = Segment(segment_json['layer'], p1, p2, segment_json['width'] / 1000000.0)
+            p1 = Point(segment_json['p1']['x'], segment_json['p1']['y'])
+            p2 = Point(segment_json['p2']['x'], segment_json['p2']['y'])
+            segment = Segment(segment_json['layer'], p1, p2, segment_json['width'])
             self.design.trace_segments.append(segment)
 
 
@@ -116,7 +116,16 @@ class JSON(object):
                 attr = self.parse_symbol_attribute(symbol_attribute)
                 inst.add_symbol_attribute(attr)
 
-            # TODO(shamer): get the footprint attributes
+            # TODO(shamer) footprint_pos, fleb and genobj positions are relative to the footprint_pos
+            for footprint_attribute in instance.get('footprint_attributes'):
+                attr = self.parse_footprint_attribute(footprint_attribute)
+                inst.add_footprint_attribute(attr)
+            for gen_obj_attribute in instance.get('gen_obj_attributes'):
+                attr = self.parse_gen_obj_attribute(gen_obj_attribute)
+                inst.add_gen_obj_attribute(attr)
+
+            footprint_pos = self.parse_footprint_pos(instance.get('footprint_pos'))
+            inst.set_footprint_pos(footprint_pos)
 
             # Get the Attributes
             for key, value in instance.get('attributes').items():
@@ -145,8 +154,62 @@ class JSON(object):
             anno = self.parse_annotation(annotation)
             symbol_attr.add_annotation(anno)
 
-        # Return SymbolAttribute to be added to it's ComponentInstance
+        # Return SymbolAttribute to be added to its ComponentInstance
         return symbol_attr
+
+
+    def parse_footprint_attribute(self, footprint_attribute):
+        """ Extract attributes from a footprint. """
+        x = int(footprint_attribute.get('x') or 0)
+        y = int(footprint_attribute.get('y') or 0)
+
+        rotation = float(footprint_attribute.get('rotation'))
+        try:
+            flip = (footprint_attribute.get('flip').lower() == "true")
+        except:
+            flip = False
+
+        layer = footprint_attribute.get('layer')
+
+        footprint_attr = FootprintAttribute(x, y, rotation, flip, layer)
+
+        return footprint_attr
+
+
+    def parse_gen_obj_attribute(self, gen_obj_attribute):
+        """ Extract attributes from a gen_obj. """
+        x = int(gen_obj_attribute.get('x') or 0)
+        y = int(gen_obj_attribute.get('y') or 0)
+
+        rotation = float(gen_obj_attribute.get('rotation'))
+        try:
+            flip = (gen_obj_attribute.get('flip').lower() == "true")
+        except:
+            flip = False
+
+        layer = gen_obj_attribute.get('layer')
+
+        gen_obj_attr = GenObjAttribute(x, y, rotation, flip, layer)
+
+        for key, value in gen_obj_attribute.get('attributes').items():
+            gen_obj_attr.add_attribute(key, value)
+
+        return gen_obj_attr
+
+
+    def parse_footprint_pos(self, footprint_pos_json):
+        """ Extract footprint pos. """
+        x = int(footprint_pos_json.get('x') or 0)
+        y = int(footprint_pos_json.get('y') or 0)
+
+        rotation = float(footprint_pos_json.get('rotation'))
+        try:
+            flip = (footprint_pos_json.get('flip').lower() == "true")
+        except:
+            flip = False
+        side = footprint_pos_json.get('side')
+
+        return FootprintPos(x, y, rotation, flip, side)
 
 
     def parse_annotation(self, annotation):
@@ -171,9 +234,12 @@ class JSON(object):
             # Get attributes
             for key, value in component.get('attributes').items():
                 comp.add_attribute(key, value)
-            for symbol in component.get('symbols'):
-                symb = self.parse_symbol(symbol)
-                comp.add_symbol(symb)
+            for symbol_json in component.get('symbols'):
+                symbol = self.parse_symbol(symbol_json)
+                comp.add_symbol(symbol)
+            for footprint_json in component.get('footprints'):
+                footprint = self.parse_footprint(footprint_json)
+                comp.add_footprint(footprint)
             self.design.add_component(library_id, comp)
 
 
@@ -183,16 +249,44 @@ class JSON(object):
             self.design.add_shape(self.parse_shape(shape))
 
 
-    def parse_symbol(self, symbol):
+    def parse_symbol(self, symbol_json):
         """ Extract a symbol. """
         symb = Symbol()
-        for body in symbol.get('bodies'):
-            bdy = self.parse_body(body)
+        for body in symbol_json.get('bodies'):
+            bdy = self.parse_symbol_body(body)
             symb.add_body(bdy)
         return symb
 
 
-    def parse_body(self, body):
+    def parse_footprint(self, footprint_json):
+        """ Extract the bodies for a footprint. """
+        footprint = Footprint()
+        for body_json in footprint_json.get('bodies'):
+            body = self.parse_footprint_body(body_json)
+            footprint.add_body(body)
+        for gen_obj_json in footprint_json.get('gen_objs'):
+            gen_obj = self.parse_gen_obj(gen_obj_json)
+            footprint.add_gen_obj(gen_obj)
+        return footprint
+
+
+    def parse_gen_obj(self, gen_obj_json):
+        """ Extract the generated object. """
+        gen_obj = parse_gen_obj_json(gen_obj_json)
+        return gen_obj
+
+
+    def parse_footprint_body(self, body_json):
+        """ Extract a body of a symbol. """
+        body = FBody()
+        for shape in body_json.get('shapes'):
+            parsed_shape = self.parse_shape(shape)
+            body.add_shape(parsed_shape)
+        body.layer = body_json.get('layer')
+        return body
+
+
+    def parse_symbol_body(self, body):
         """ Extract a body of a symbol. """
         bdy = SBody()
         for pin in body.get('pins'):
@@ -237,53 +331,58 @@ class JSON(object):
         # pylint: disable=R0914
         # pylint: disable=R0911
 
-        typ = shape.get('type')
-        if 'rectangle' == typ:
+        shape_type = shape.get('type')
+        if 'rectangle' == shape_type:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
             parsed_shape = Rectangle(x, y, width, height)
-        elif 'rounded_rectangle' == typ:
+        elif 'rounded_rectangle' == shape_type:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
             radius = int(shape.get('radius'))
             parsed_shape = RoundedRectangle(x, y, width, height, radius)
-        elif 'arc' == typ:
+        elif 'arc' == shape_type:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             start_angle = float(shape.get('start_angle'))
             end_angle = float(shape.get('end_angle'))
             radius = int(shape.get('radius'))
             parsed_shape = Arc(x, y, start_angle, end_angle, radius)
-        elif 'circle' == typ:
+        elif 'circle' == shape_type:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             radius = int(shape.get('radius'))
             parsed_shape = Circle(x, y, radius)
-        elif 'label' == typ:
+        elif 'label' == shape_type:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             rotation = float(shape.get('rotation'))
             text = shape.get('text')
             align = shape.get('align')
             parsed_shape = Label(x, y, text, align, rotation)
-        elif 'line' == typ:
+        elif 'line' == shape_type:
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
             parsed_shape = Line(p1, p2)
-        elif 'polygon' == typ:
+        elif 'polygon' == shape_type:
             parsed_shape = Polygon()
             for point in shape.get('points'):
                 parsed_shape.add_point(self.parse_point(point))
-        elif 'bezier' == typ:
+        elif 'bezier' == shape_type:
             control1 = self.parse_point(shape.get('control1'))
             control2 = self.parse_point(shape.get('control2'))
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
             parsed_shape = BezierCurve(control1, control2, p1, p2)
+        elif 'rounded_segment' == shape_type:
+            p1 = self.parse_point(shape.get('p1'))
+            p2 = self.parse_point(shape.get('p2'))
+            width = int(shape.get('width'))
+            parsed_shape = RoundedSegment(p1, p2, width)
 
         parsed_shape.styles = shape.get('styles') or {}
         parsed_shape.attributes = shape.get('attributes') or {}

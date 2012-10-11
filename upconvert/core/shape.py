@@ -1046,3 +1046,57 @@ class Obround(Shape):
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
+
+
+class RoundedSegment(Shape):
+    """ A segment with rounded ends. """
+
+    def __init__(self, p1, p2, width):
+        super(RoundedSegment, self).__init__()
+        self.type = "rounded_segment"
+        self.p1 = p1
+        self.p2 = p2
+        self.width = width
+
+
+    def min_point(self):
+        """ Return the min point of the shape """
+        raise NotImplemented('RoundedSegment.min_point() not implemented')
+
+
+    def max_point(self):
+        """ Return the max point of the shape """
+        raise NotImplemented('RoundedSegment.max_point() not implemented')
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the rounded segment. """
+        self.p1.scale(factor)
+        self.p2.scale(factor)
+        self.width *= factor
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the rounded segment. """
+        self.p1.x += dx
+        self.p1.y += dy
+        self.p2.x += dx
+        self.p2.y += dy
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the segment. """
+        self.p1.y = height - self.p1.y
+        self.p2.y = height - self.p2.y
+
+
+    def json(self):
+        """ Return the rounded segment as JSON """
+        return {
+            "type": self.type,
+            "width": int(self.width),
+            "p1": self.p1.json(),
+            "p2": self.p2.json()
+            }
+
+
