@@ -258,9 +258,9 @@ class Gerber:
 
         self.images.append(traces_image)
 
-
         # Component aspects on this layer
-        for components in design.component_instances:
+        # a separate image is used for each component
+        for component in design.component_instances:
             pass
 
         # TODO(shamer)
@@ -372,21 +372,21 @@ class Gerber:
         shape = aperture.shape
         if isinstance(shape, Circle):
             type_ = SHAPE_TAGS['circle']['char']
-            mods = [shape.radius * 2]
+            mods = [self._convert_units(shape.radius) * 2]
         elif isinstance(shape, Rectangle):
             type_ = SHAPE_TAGS['rectangle']['char']
-            mods = [shape.width,
-                    shape.height]
+            mods = [self._convert_units(shape.width),
+                    self._convert_units(shape.height)]
         elif isinstance(shape, Obround):
             type_ = SHAPE_TAGS['obround']['char']
-            mods = [shape.width,
-                    shape.height]
+            mods = [self._convert_units(shape.width),
+                    self._convert_units(shape.height)]
         elif isinstance(shape, RegularPolygon):
             rot = shape.rotation
             rotation = rot and (2 - rot) * 180 or 0
             type_ = SHAPE_TAGS['reg_polygon']['char']
-            mods = [shape.outer_diameter,
-                    shape.vertices,
+            mods = [self._convert_units(shape.outer_diameter),
+                    shape.vertices, # FIXME(shamer): positions need to have their units converted
                     rotation]
         elif isinstance(shape, str):
             type_ = shape
@@ -395,9 +395,9 @@ class Gerber:
         # add hole mods
         hole = aperture.hole
         if isinstance(hole, Circle):
-            hole_mods = [hole.radius]
+            hole_mods = [self._convert_units(hole.radius)]
         elif hole:
-            hole_mods = [hole.width, hole.height]
+            hole_mods = [self._convert_units(hole.width), self._convert_units(hole.height)]
         else:
             hole_mods = []
         mods += hole_mods
@@ -592,11 +592,16 @@ class Gerber:
     # general methods
 
     def _fix(self, ord_):
-        """ Convert a float ordinate according to spec. """
+        """ Convert a float ordinate according to spec. Adjust from the core units to the units of the file. """
         dec = self.coord_format['dec']
         spec = '{{0}}{{1:0<{0}}}'.format(dec)
-        padded_ord = spec.format(*str(round(ord_, dec)).split('.'))
+        unit_ord_ = self._convert_units(ord_)
+        padded_ord = spec.format(*str(round(unit_ord_, dec)).split('.'))
         return int(padded_ord) and padded_ord or '0'
+
+    def _convert_units(self, num):
+        """ Convert from the core units (nm) to those of the current gerber being written. """
+        return num / 1000000.0
 
 
     def _check_mq(self, seg):
