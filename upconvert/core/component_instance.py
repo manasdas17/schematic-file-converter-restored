@@ -203,6 +203,9 @@ class FootprintAttribute:
             "layer": self.layer,
             }
 
+    def __repr__(self):
+        return '''<FootprintAttribute({0}, {1}, {2}, {3}, '{4}')>'''.format(self.x, self.y, self.rotation, self.flip, self.layer)
+
 
 class GenObjAttribute:
     """ The instance of a single generated object. """
@@ -277,6 +280,8 @@ class FootprintPos:
         """ Rebase the y coordinate in the attributes. """
         self.y = height - self.y
 
+    def __repr__(self):
+        return '''<FootprintPos({0}, {1}, {2}, {3}, '{4}')>'''.format(self.x, self.y, self.rotation, self.flip, self.side)
 
     def json(self):
         """ Return the body as JSON """
