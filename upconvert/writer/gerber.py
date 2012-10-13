@@ -260,8 +260,19 @@ class Gerber:
 
         # Component aspects on this layer
         # a separate image is used for each component
-        for component in design.component_instances:
-            pass
+        for component_instance in design.component_instances:
+            component = design.components.components[component_instance.library_id]
+            component_image = Image(layer_name + ' component ' + component_instance.instance_id)
+            footprint_pos = component_instance.footprint_pos
+
+            for idx, footprint_attr in enumerate(component_instance.footprint_attributes):
+                if footprint_attr.layer == layer_name:
+                    footprint_body = component.footprints[component_instance.footprint_index].bodies[idx]
+                    log.debug('adding footprint attribute: %s, %d shapes', footprint_attr, len(footprint_body.shapes))
+                    for shape in footprint_body.shapes:
+                        component_image.add_shape(shape, footprint_pos, footprint_attr.rotation, footprint_attr.flip)
+            if component_image.not_empty():
+                self.images.append(component_image)
 
         # TODO(shamer)
         # generated objects with aspects on this layer (thermals, vias, pths)
@@ -467,18 +478,6 @@ class Gerber:
             self.apertures.append(aperture)
 
 
-    ''' TODO(shamer): replace with _gen_smear
-    def _gen_trace(self, trace):
-        """ Traces are connected lines and arcs. """
-        shape = Circle(0 , 0, trace.width / 2.0)
-        select = self._select_aperture(shape, None)
-        if select:
-            yield LINE.format(select)
-        for seg in trace.segments:
-            for block in self._draw_seg(seg):
-                yield LINE.format(block)
-    '''
-
     def _gen_smear(self, smear):
         """ Smears are lines drawn with rect apertures. """
         select = self._select_aperture(smear.shape, None)
@@ -601,6 +600,7 @@ class Gerber:
 
     def _convert_units(self, num):
         """ Convert from the core units (nm) to those of the current gerber being written. """
+        # FIXME(shamer): adjust to actual units of gerber, is hard coded to mm
         return num / 1000000.0
 
 
