@@ -19,6 +19,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import copy
+import logging
+from upconvert.core.shape import Circle, Label, Line
+
+log = logging.getLogger('core.layout')
 
 
 class Layout:
@@ -90,7 +95,6 @@ class Image:
         self.x_step = None
         self.y_repeats = 1
         self.y_step = None
-        self.traces = list()
         self.fills = list()
         self.smears = list()
         self.shape_instances = list()
@@ -98,8 +102,34 @@ class Image:
 
     def not_empty(self):
         """ True if image contains only metadata. """
-        return (self.traces or self.fills or self.smears or
-                self.shape_instances) and True or False
+        return (self.fills or self.smears or self.shape_instances) and True or False
+
+
+    def add_shape(self, shape, offset, rotation, flip):
+        """ Add a shape to the image. (might be added as a smear or fill) """
+        # Copy the shape so it can be mutated without affecting other instances
+        shapecpy = copy.deepcopy(shape)
+
+        effective_rotation = (rotation + offset.rotation) % 2.0
+        if effective_rotation != 0:
+            log.debug('rotating %s pi radians', effective_rotation)
+            shapecpy.rotate(effective_rotation)
+        effective_flip = flip ^ offset.flip
+        if effective_flip:
+            log.debug('flipping shape %s', flip)
+            shapecpy.flip(effective_flip)
+
+        shapecpy.shift(offset.x, offset.y)
+        if isinstance(shapecpy, Line):
+            if rotation != 0:
+                log.debug('adding rotated line %s, %s', shape, rotation)
+            # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
+            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.25 * 1000000)))
+
+        elif isinstance(shapecpy, Label):
+            # TODO(shamer): add as arcs
+            pass
+
 
 
     def json(self):
@@ -111,7 +141,6 @@ class Image:
             "x_step": self.x_step,
             "y_repeats": self.y_repeats,
             "y_step": self.y_step,
-            "traces": [t.json() for t in self.traces],
             "fills": [f.json() for f in self.fills],
             "smears": [s.json() for s in self.smears],
             "shape_instances": [i.json() for i in self.shape_instances]
@@ -129,22 +158,6 @@ class Segment:
 
     def __repr__(self):
         return '''<Segment('{0}', Point({1}, {2}), Point({3}, {4}), {5})>'''.format(self.layer, self.p1.x, self.p1.y, self.p2.x, self.p2.y, self.width)
-
-
-class Trace:
-    """ A collection of connected segments (lines/arcs). """
-
-    def __init__(self, width, segments=None):
-        self.width = width
-        self.segments = segments or []
-
-
-    def json(self):
-        """ Return the trace as JSON """
-        return {
-            "width": self.width,
-            "segments": [s.json() for s in self.segments]
-            }
 
 
 class Fill:
