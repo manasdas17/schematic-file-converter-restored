@@ -342,6 +342,9 @@ class Circle(Shape):
         y = self.y + self.radius
         return Point(x, y)
 
+    def rotate(self, rotation):
+        pass # Rotation of  a circle is a noop
+
 
     def scale(self, factor):
         """ Scale the x & y coordinates in the circle. """
@@ -408,6 +411,10 @@ class Label(Shape):
         return Point(self.x, self.y)
 
 
+    def rotate(self, rotation):
+        self.rotation += rotation
+
+
     def scale(self, factor):
         """ Scale the x & y coordinates in the label. """
         self.x *= factor
@@ -469,6 +476,10 @@ class Line(Shape):
         if self.p2.y > y:
             y = self.p2.y
         return Point(x, y)
+
+    def rotate(self, rotation):
+        self.p1.rotate(rotation)
+        self.p2.rotate(rotation)
 
 
     def scale(self, factor):
@@ -963,6 +974,21 @@ class Point:
         delta_x = self.x - other.x
         delta_y = self.y - other.y
         return sqrt(delta_x**2 + delta_y**2)
+
+
+    def rotate(self, rotation):
+        if rotation == 0:
+          return
+
+        self.x, self.y = self.y, self.x
+        if rotation == 0.5 or rotation == -1.5:
+          self.y = -self.y;
+        elif rotation == -0.5 or rotation == 1.5:
+          self.x = -self.x;
+        elif rotation == 1 or rotation == -1:
+          self.x, self.y = -self.y, -self.x
+        else:
+          raise ValueError('non 0.5 multiple rotation')
 
 
     def scale(self, factor):
