@@ -29,7 +29,7 @@ from os import path
 
 from upconvert.core.design import Design
 from upconvert.core.layout import Layout, Layer, Image, Macro, Primitive
-from upconvert.core.layout import Trace, Fill, Smear, ShapeInstance, Aperture
+from upconvert.core.layout import Fill, Smear, ShapeInstance, Aperture
 from upconvert.core.shape import Line, Arc, Point, Circle, Rectangle
 from upconvert.core.shape import Obround, RegularPolygon, Polygon, Moire, Thermal
 
@@ -336,7 +336,8 @@ class Gerber:
                     wid = aperture.shape.radius * 2
                     trace = self.trace_buff.get_trace(wid, seg)
                     if trace is None:
-                        trace = Trace(wid)
+                        # FIXME(shamer): fill into segments not old Trace class
+                        #trace = Trace(wid)
                         self.img_buff.traces.append(trace)
                     trace.segments.append(seg)
                     self.trace_buff.add_segment(seg, trace)
