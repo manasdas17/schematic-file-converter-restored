@@ -21,7 +21,7 @@
 
 import copy
 import logging
-from upconvert.core.shape import Circle, Label, Line
+from upconvert.core.shape import Circle, Label, Line, Point, Rectangle
 
 log = logging.getLogger('core.layout')
 
@@ -121,10 +121,19 @@ class Image:
 
         shapecpy.shift(offset.x, offset.y)
         if isinstance(shapecpy, Line):
-            if rotation != 0:
-                log.debug('adding rotated line %s, %s', shape, rotation)
             # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
             self.smears.append(Smear(shapecpy, Circle(0, 0, 0.25 * 1000000)))
+
+        elif isinstance(shapecpy, Circle):
+            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
+
+        elif isinstance(shapecpy, Rectangle):
+            # XXX(shamer): rectangles in gerbers are positioned around their centers
+            shapecpy.x += shapecpy.width / 2
+            shapecpy.y -= shapecpy.height / 2
+            shapecpy.width = abs(shapecpy.width)
+            shapecpy.height = abs(shapecpy.height)
+            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
 
         elif isinstance(shapecpy, Label):
             # TODO(shamer): add as arcs
@@ -157,7 +166,7 @@ class Segment:
         self.width = width
 
     def __repr__(self):
-        return '''<Segment('{0}', Point({1}, {2}), Point({3}, {4}), {5})>'''.format(self.layer, self.p1.x, self.p1.y, self.p2.x, self.p2.y, self.width)
+        return '''<Segment(layer='{0}', p1={1}, p2={2}, width{3})>'''.format(self.layer, self.p1, self.p2, self.width)
 
 
 class Fill:
