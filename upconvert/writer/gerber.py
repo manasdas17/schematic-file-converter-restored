@@ -271,6 +271,19 @@ class Gerber:
                     log.debug('adding footprint attribute: %s, %d shapes', footprint_attr, len(footprint_body.shapes))
                     for shape in footprint_body.shapes:
                         component_image.add_shape(shape, footprint_pos, footprint_attr.rotation, footprint_attr.flip)
+
+            for idx, gen_obj_attr in enumerate(component_instance.gen_obj_attributes):
+                gen_obj = component.footprints[component_instance.footprint_index].gen_objs[idx]
+                # FIXME(shamer): check for unplaced generated objects.
+
+                # XXX(shamer): body attr is only being used to hold the layer, other placement details are contained
+                # elsewhere
+                for body_attr, body in gen_obj.bodies(footprint_pos, gen_obj_attr.attributes):
+                    if body_attr.layer == layer_name:
+                        log.debug('adding body for generated object: %s, %s', footprint_pos, gen_obj_attr)
+                        for shape in body.shapes:
+                            component_image.add_shape(shape, footprint_pos, gen_obj_attr.rotation, gen_obj_attr.flip)
+
             if component_image.not_empty():
                 self.images.append(component_image)
 
