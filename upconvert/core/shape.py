@@ -437,6 +437,9 @@ class Circle(Shape):
             "styles": self.styles,
             }
 
+    def __repr__(self):
+        return '<Circle(x={0}, y={1}, radius={2})>'.format(self.x, self.y, self.radius)
+
 
 class Label(Shape):
     """ Text label with x, y location, alignment, rotation and text.
@@ -573,7 +576,7 @@ class Line(Shape):
             }
 
     def __repr__(self):
-        return 'Line(Point({0}, {1}), Point({2}, {3}))'.format(self.p1.x, self.p1.y, self.p2.x, self.p2.y)
+        return 'Line(Point(x={0}, y={1}), Point(x={2}, y={3}))'.format(self.p1.x, self.p1.y, self.p2.x, self.p2.y)
 
 
 class Polygon(Shape):
@@ -1008,7 +1011,7 @@ class Point:
 
 
     def __repr__(self):
-        return 'Point(%d, %d)' % (self.x, self.y)
+        return 'Point(x=%d, y=%d)' % (self.x, self.y)
 
 
     def __eq__(self, other):
