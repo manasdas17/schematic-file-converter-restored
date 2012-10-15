@@ -324,6 +324,11 @@ class FBody:
             }
 
 
+    def rotate(self, rotation):
+        for shape in self.shapes:
+            shape.rotate(rotation)
+
+
 class Pin:
     """ Pins are the parts of SBodies (/symbols/components) that connect
     to nets. Basically a line segment, with a null end and a connect end
