@@ -252,6 +252,9 @@ class GenObjAttribute:
             "attributes" : stringify_attributes(self.attributes)
             }
 
+    def __repr__(self):
+        return '''<GenObjAttribute({0}, {1}, {2}, {3}, '{4}', {5})>'''.format(self.x, self.y, self.rotation, self.flip, self.layer, self.attributes)
+
 
 class FootprintPos:
     """ The footprint position. """
@@ -281,7 +284,7 @@ class FootprintPos:
         self.y = height - self.y
 
     def __repr__(self):
-        return '''<FootprintPos({0}, {1}, {2}, {3}, '{4}')>'''.format(self.x, self.y, self.rotation, self.flip, self.side)
+        return '''<FootprintPos(x={0}, y={1}, rotation={2}, flip={3}, side='{4}')>'''.format(self.x, self.y, self.rotation, self.flip, self.side)
 
     def json(self):
         """ Return the body as JSON """
