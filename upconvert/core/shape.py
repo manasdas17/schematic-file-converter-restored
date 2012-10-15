@@ -122,6 +122,32 @@ class Rectangle(Shape):
             }
 
 
+    def rotate(self, rotation):
+        if rotation == 0:
+          return
+
+        self.x, self.y = self.y, self.x
+        if rotation == 0.5 or rotation == -1.5:
+          self.y = -self.y;
+        elif rotation == -0.5 or rotation == 1.5:
+          self.x = -self.x;
+        elif rotation == 1 or rotation == -1:
+          self.x, self.y = -self.y, -self.x
+        else:
+          raise ValueError('non 0.5 multiple rotation')
+
+        self.width, self.height = self.height, self.width
+        if rotation == 0.5 or rotation == -1.5:
+          self.height = -self.height;
+        elif rotation == -0.5 or rotation == 1.5:
+          self.width = -self.width;
+        elif rotation == 1 or rotation == -1:
+          self.width, self.height = -self.height, -self.width
+        else:
+          raise ValueError('non 0.5 multiple rotation')
+
+
+
 class RoundedRectangle(Shape):
     """ A rectangle with rounded corners, defined by x, y of top left corner
     and width, height and corner radius"""
@@ -207,6 +233,31 @@ class RoundedRectangle(Shape):
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
+
+
+    def rotate(self, rotation):
+        if rotation == 0:
+          return
+
+        self.x, self.y = self.y, self.x
+        if rotation == 0.5 or rotation == -1.5:
+          self.y = -self.y;
+        elif rotation == -0.5 or rotation == 1.5:
+          self.x = -self.x;
+        elif rotation == 1 or rotation == -1:
+          self.x, self.y = -self.y, -self.x
+        else:
+          raise ValueError('non 0.5 multiple rotation')
+
+        self.width, self.height = self.height, self.width
+        if rotation == 0.5 or rotation == -1.5:
+          self.height = -self.heigth;
+        elif rotation == -0.5 or rotation == 1.5:
+          self.width = -self.width;
+        elif rotation == 1 or rotation == -1:
+          self.width, self.height = -self.height, -self.width
+        else:
+          raise ValueError('non 0.5 multiple rotation')
 
 
 class Arc(Shape):
@@ -343,7 +394,18 @@ class Circle(Shape):
         return Point(x, y)
 
     def rotate(self, rotation):
-        pass # Rotation of  a circle is a noop
+        if rotation == 0 or rotation == 2:
+            return
+
+        self.x, self.y = self.y, self.x
+        if rotation == 0.5 or rotation == -1.5:
+          self.y = -self.y;
+        elif rotation == -0.5 or rotation == 1.5:
+          self.x = -self.x;
+        elif rotation == 1 or rotation == -1:
+          self.x, self.y = -self.y, -self.x
+        else:
+          raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
 
 
     def scale(self, factor):
