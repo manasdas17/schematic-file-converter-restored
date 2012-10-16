@@ -104,7 +104,7 @@ class Image:
         shapecpy.shift(offset.x, offset.y)
         if isinstance(shapecpy, Line):
             # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
-            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.25 * 1000000)))
+            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.15 * 1000000)))
 
         elif isinstance(shapecpy, Circle):
             self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
