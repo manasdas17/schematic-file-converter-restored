@@ -21,7 +21,7 @@
 
 import copy
 import logging
-from upconvert.core.shape import Circle, Label, Line, Point, Rectangle
+from upconvert.core.shape import Circle, Label, Line, Point, Rectangle, RoundedRectangle
 
 log = logging.getLogger('core.layout')
 
@@ -31,12 +31,6 @@ class Layout:
 
     def __init__(self):
         self.layers = list()
-
-    def json(self):
-        """ Return the layout as JSON """
-        return {
-            "layers": [layer.json() for layer in self.layers]
-            }
 
 
 class Layer:
@@ -50,18 +44,6 @@ class Layer:
         self.macros = dict()
         self.vias = list()
         self.components = list()
-
-
-    def json(self):
-        """ Return the layer as JSON """
-        return {
-            "type": self.type,
-            "images": [i.json() for i in self.images],
-            "apertures": [self.apertures[k].json() for k in self.apertures],
-            "macros": [self.macros[m].json() for m in self.macros],
-            "vias": [v.json() for v in self.vias],
-            "components": [c.json() for c in self.components]
-            }
 
 
 class Image:
@@ -98,11 +80,11 @@ class Image:
         self.fills = list()
         self.smears = list()
         self.shape_instances = list()
-
+        self.complex_instances = list()
 
     def not_empty(self):
         """ True if image contains only metadata. """
-        return (self.fills or self.smears or self.shape_instances) and True or False
+        return (self.fills or self.smears or self.shape_instances or self.complex_instances) and True or False
 
 
     def add_shape(self, shape, offset, rotation, flip):
@@ -135,25 +117,29 @@ class Image:
             shapecpy.height = abs(shapecpy.height)
             self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
 
+        elif isinstance(shapecpy, RoundedRectangle):
+            # Rounded rectangle is added as a macro with two rectangles to fill out the body and four circles to make up
+            # the corners. `roundrect` is assumed to already be centered.
+            primitives = []
+            radius = abs(shapecpy.radius)
+            inner_height = abs(shapecpy.height) - (radius * 2)
+            inner_width = abs(shapecpy.width) - (radius * 2)
+            half_width = inner_width / 2.0
+            half_height = inner_height / 2.0
+
+            primitives.append(Primitive(1, 0.0, Rectangle(0, 0, abs(inner_width), abs(shapecpy.height))))
+            primitives.append(Primitive(1, 0.0, Rectangle(0, 0, abs(shapecpy.width), abs(inner_height))))
+            primitives.append(Primitive(1, 0.0, Circle(-half_width, half_height, shapecpy.radius)))
+            primitives.append(Primitive(1, 0.0, Circle(half_width, half_height, shapecpy.radius)))
+            primitives.append(Primitive(1, 0.0, Circle(half_width, -half_height, shapecpy.radius)))
+            primitives.append(Primitive(1, 0.0, Circle(-half_width, -half_height, shapecpy.radius)))
+
+            self.complex_instances.append(ComplexInstance(Point(shapecpy.x + (shapecpy.width / 2), shapecpy.y - (shapecpy.height / 2)), primitives))
+
         elif isinstance(shapecpy, Label):
             # TODO(shamer): add as arcs
             pass
 
-
-
-    def json(self):
-        """ Return the image as JSON """
-        return {
-            "name": self.name,
-            "is_additive": self.is_additive and 'true' or 'false',
-            "x_repeats": self.x_repeats,
-            "x_step": self.x_step,
-            "y_repeats": self.y_repeats,
-            "y_step": self.y_step,
-            "fills": [f.json() for f in self.fills],
-            "smears": [s.json() for s in self.smears],
-            "shape_instances": [i.json() for i in self.shape_instances]
-            }
 
 
 class Segment:
@@ -183,27 +169,12 @@ class Fill:
         self.segments = segments or list()
 
 
-    def json(self):
-        """ Return the trace as JSON """
-        return {
-            "segments": [s.json() for s in self.segments]
-            }
-
-
 class Smear:
     """ A line drawn by a rectangular aperture. """
 
     def __init__(self, line, shape):
         self.line = line
         self.shape = shape
-
-
-    def json(self):
-        """ Return the smear as JSON """
-        return {
-            "line": self.line.json(),
-            "shape": self.shape.json()
-            }
 
 
 class ShapeInstance:
@@ -225,15 +196,16 @@ class ShapeInstance:
         self.hole = aperture.hole
 
 
-    def json(self):
-        """ Return the shape instance as JSON """
-        return {
-            "x": self.x,
-            "y": self.y,
-            "shape": (isinstance(self.shape, str) and
-                      self.shape or self.shape.json()),
-            "hole": self.hole and self.hole.json()
-            }
+class ComplexInstance:
+    """
+    A complex instance of a collection of primitive shapes.
+
+    """
+
+    def __init__(self, point, primitives):
+        self.x = point.x
+        self.y = point.y
+        self.primitives = primitives
 
 
 class Aperture:
@@ -258,31 +230,30 @@ class Aperture:
 
     def __init__(self, code, shape, hole):
         self.code = code
-        self.shape = shape
+
+        #XXX(shamer): aperture doesn't include the offset/placement of the shape
+        shapecpy = copy.deepcopy(shape)
+        shapecpy.x = 0
+        shapecpy.y = 0
+
+        self.shape = shapecpy
         self.hole = hole
 
 
     def __eq__(self, other):
         """ Compare 2 apertures. """
-        if (isinstance(self.shape, str) or
-            isinstance(other.shape, str)):
-            equal = self.shape == other.shape
-        else:
-            equal = (self.shape.__dict__ == other.shape.__dict__ and
-                     (self.hole == other.hole or
-                      (self.hole and other.hole and
-                       self.hole.__dict__ == other.hole.__dict__)))
-        return equal
+        if not isinstance(other, Aperture):
+            return False
+
+        same_shape = self.shape.__dict__ == other.shape.__dict__
+        same_hole = (self.hole == other.hole or
+                     (self.hole and other.hole and
+                      self.hole.__dict__ == other.hole.__dict__))
+        return same_shape and same_hole
 
 
-    def json(self):
-        """ Return the aperture as JSON """
-        return {
-            "code": self.code,
-            "shape": (isinstance(self.shape, str) and
-                      self.shape or self.shape.json()),
-            "hole": self.hole and self.hole.json()
-            }
+    def __repr__(self):
+        return '<Aperture(code={0}, shape={1}, hole={2})>'.format(self.code, self.shape, self.hole)
 
 
 class Macro:
@@ -294,17 +265,30 @@ class Macro:
     from prior shapes, not subsequent shapes.
 
     """
+    # TODO(shamer): How can parameters get stored?
     def __init__(self, name, primitives):
         self.name = name
         self.primitives = primitives
 
+    def __eq__(self, other):
+        return self.primitives == other.primitives
 
-    def json(self):
-        """ Return the macro as JSON """
-        return {
-            "name": self.name,
-            "primitives": [prim.json() for prim in self.primitives]
-            }
+
+
+class MacroAperture:
+    """ An aperture utilizing a macro with specific parameters. """
+
+    def __init__(self, code, name, params=None):
+        self.code = code
+        self.name = name
+        self.params = params
+
+
+    def __eq__(self, other):
+        if not isinstance(other, MacroAperture):
+            return False
+
+        return (self.name == other.name and self.params == other.params)
 
 
 class Primitive:
@@ -315,11 +299,7 @@ class Primitive:
         self.rotation = rotation
         self.shape = shape
 
-
-    def json(self):
-        """ Return the primitive as JSON """
-        return {
-            "is_additive": self.is_additive and 'true' or 'false',
-            "rotation": self.rotation,
-            "shape": self.shape.json()
-            }
+    def __eq__(self, other):
+        return (self.is_additive == other.is_additive and
+                self.rotation == other.rotation and
+                self.shape == other.shape)
