@@ -32,7 +32,7 @@ import logging
 from upconvert.core.shape import Circle, Rectangle, Obround, RegularPolygon
 from upconvert.core.shape import Polygon, Moire, Thermal
 from upconvert.core.shape import Point, Arc, Line
-from upconvert.core.layout import Aperture, Image, Smear
+from upconvert.core.layout import Aperture, Image, Macro, MacroAperture, Smear
 
 
 log = logging.getLogger('writer.gerber')
@@ -86,7 +86,7 @@ INTERPOLATION = {'LINEAR': '01',
                  'CLOCKWISE_CIRCULAR': '02',
                  'ANTICLOCKWISE_CIRCULAR': '03'}
 SHAPE_TAGS = {'circle': {'int': 1, 'char': 'C'},
-              'rectangle': {'int': 22, 'char': 'R'},
+              'rectangle': {'int': 21, 'char': 'R'},
               'obround': {'char': 'O'},
               'reg_polygon': {'int': 5, 'char': 'P'},
               'polygon': {'int': 4},
@@ -212,17 +212,22 @@ class Gerber:
 
         # decompose layer data into images and the apertures and macros used to represent the images,
         self._define_images(design, layer_options.name)
-        self._define_macros()
-        self._define_apertures()
+        self._define_image_macros()
+        self._define_image_apertures()
 
         # write layer parameters
         layer_file.write(LINE.format(self._get_format_spec(design.layout_units)))
 
         # include macros and apertures used on the layer
-        for k in self.macros:
-            layer_file.write(self._get_macro_def(self.macros[k]))
+        for macro in self.macros:
+            layer_file.write(self._get_macro_def(macro))
         for aperture in self.apertures:
-            layer_file.write(self._get_ap_def(aperture))
+            if isinstance(aperture, MacroAperture):
+                layer_file.write(self._get_macro_ap_def(aperture))
+            elif isinstance(aperture, Aperture):
+                layer_file.write(self._get_shape_ap_def(aperture))
+            else:
+                raise TypeError('unexpected aperture class')
 
         # FIXME(shamer): What is this check doing?
         # select an arbitrary aperture for trace[0] check
@@ -294,18 +299,31 @@ class Gerber:
         # text
 
 
-    def _define_apertures(self):
+    def _define_image_macros(self):
+        """ Build the macros needed to make the images. """
+        for image in self.images:
+            for complex_instance in image.complex_instances:
+                self._add_macro(complex_instance)
+
+
+    def _add_macro(self, complex_instance):
+        """ Add a macro definition for a complex collection of shapes. """
+        # FIXME(shamer): pick a unique macro name
+        macro = Macro('FAKEMACRONAME', complex_instance.primitives)
+        if macro not in self.macros:
+            self.macros.append(macro)
+
+
+    def _define_image_apertures(self):
         """ Build the apertures needed to make shapes. """
         for image in self.images:
             for smear in image.smears:
-                self._add_aperture(smear.shape, None)
+                self._add_shape_aperture(smear.shape, None)
             for shape_instance in image.shape_instances:
-                self._add_aperture(shape_instance.shape,
+                self._add_shape_aperture(shape_instance.shape,
                                    shape_instance.hole)
-
-    def _define_macros(self):
-        """ Build the macros needed to make the images. """
-        # TODO(shamer)
+            for complex_instance in image.complex_instances:
+                self._add_macro_aperture(complex_instance)
 
 
     def _get_format_spec(self, units, max_size=False, max_precision=False):
@@ -337,49 +355,50 @@ class Gerber:
             if isinstance(shape, Circle):
                 mods = [SHAPE_TAGS['circle']['int'],
                         exposure,
-                        shape.radius * 2,
-                        shape.x,
-                        shape.y]
+                        self._convert_units(shape.radius * 2),
+                        self._convert_units(shape.x),
+                        self._convert_units(shape.y)]
             elif isinstance(shape, Rectangle):
                 mods = [SHAPE_TAGS['rectangle']['int'],
                         exposure,
-                        shape.width,
-                        shape.height,
-                        shape.x,
-                        shape.y - shape.height,
+                        self._convert_units(shape.width),
+                        self._convert_units(shape.height),
+                        self._convert_units(shape.x),
+                        self._convert_units(shape.y),
                         rotation]
             elif isinstance(shape, Polygon):
-                vertices = [(p.x, p.y) for p in shape.points]
+                vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.points]
                 v_args = [vertices[i / 2][i % 2]
                           for i in range(len(vertices) * 2)]
                 mods = [SHAPE_TAGS['polygon']['int'],
                         exposure] + v_args + [rotation]
             elif isinstance(shape, RegularPolygon):
+                vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.vertices]
                 mods = [SHAPE_TAGS['reg_polygon']['int'],
                         exposure,
-                        shape.vertices,
-                        shape.x,
-                        shape.y,
-                        shape.outer_diameter,
+                        vertices,
+                        self._convert_units(shape.x),
+                        self._convert_units(shape.y),
+                        self._convert_units(shape.outer_diameter),
                         rotation]
             elif isinstance(shape, Moire):
                 mods = [SHAPE_TAGS['moire']['int'],
-                        shape.x,
-                        shape.y,
-                        shape.outer_diameter,
-                        shape.ring_thickness,
-                        shape.gap_thickness,
-                        shape.max_rings,
-                        shape.hair_thickness,
-                        shape.hair_length,
+                        self._convert_units(shape.x),
+                        self._convert_units(shape.y),
+                        self._convert_units(shape.outer_diameter),
+                        self._convert_units(shape.ring_thickness),
+                        self._convert_units(shape.gap_thickness),
+                        self._convert_units(shape.max_rings),
+                        self._convert_units(shape.hair_thickness),
+                        self._convert_units(shape.hair_length),
                         rotation]
             elif isinstance(shape, Thermal):
                 mods = [SHAPE_TAGS['thermal']['int'],
-                        shape.x,
-                        shape.y,
-                        shape.outer_diameter,
-                        shape.inner_diameter,
-                        shape.gap_thickness,
+                        self._convert_units(shape.x),
+                        self._convert_units(shape.y),
+                        self._convert_units(shape.outer_diameter),
+                        self._convert_units(shape.inner_diameter),
+                        self._convert_units(shape.gap_thickness),
                         rotation]
             mods = ','.join(str(m) for m in mods)
             prim_def = PRIMITIVE.format(mods=mods)
@@ -389,7 +408,7 @@ class Gerber:
         return LINE.format(macro_def)
 
 
-    def _get_ap_def(self, aperture):
+    def _get_shape_ap_def(self, aperture):
         """ Convert aperture based on core shapes to gerber. """
 
         # get type and shape mods
@@ -435,6 +454,14 @@ class Gerber:
         return LINE.format(ap_def)
 
 
+    def _get_macro_ap_def(self, macro_aperture):
+        """ Convert aperture based on core shapes to gerber. """
+        ap_def = APERTURE.format(code=macro_aperture.code,
+                                 type=macro_aperture.name,
+                                 mods='')
+        return LINE.format(ap_def)
+
+
     def _get_image_meta(self, i):
         """ Generate layer params for the image layer. """
         image = self.images[i]
@@ -476,6 +503,9 @@ class Gerber:
         for shin in image.shape_instances:
             for block in self._gen_shape_instance(shin):
                 yield block
+        for complex_instance in image.complex_instances:
+            for block in self._gen_complex_instance(complex_instance):
+                yield block
         if image.fills:
             for block in self._gen_fills(image.fills):
                 yield block
@@ -483,7 +513,7 @@ class Gerber:
 
     # secondary writer support methods
 
-    def _add_aperture(self, shape, hole):
+    def _add_shape_aperture(self, shape, hole):
         """ Generate D code and store aperture. """
         next_ap = len(self.apertures) + 10
         aperture = Aperture(next_ap, shape, hole)
@@ -491,9 +521,18 @@ class Gerber:
             self.apertures.append(aperture)
 
 
+    def _add_macro_aperture(self, complex_instance):
+        """ Generate D code and store aperture. """
+        next_ap = len(self.apertures) + 10
+        name = 'FAKEMACRONAME'
+        aperture = MacroAperture(next_ap, name, complex_instance.primitives)
+        if aperture not in self.apertures:
+            self.apertures.append(aperture)
+
+
     def _gen_smear(self, smear):
         """ Smears are lines drawn with rect apertures. """
-        select = self._select_aperture(smear.shape, None)
+        select = self._select_shape_aperture(smear.shape, None)
         if select:
             yield LINE.format(select)
         for block in self._draw_seg(smear.line):
@@ -502,11 +541,21 @@ class Gerber:
 
     def _gen_shape_instance(self, shin):
         """ A snapshot of an aperture or macro. """
-        select = self._select_aperture(shin.shape,
-                                       shin.hole)
+        select = self._select_shape_aperture(shin.shape,
+                                             shin.hole)
         if select:
             yield LINE.format(select)
         block = self._flash(shin.x, shin.y)
+        yield LINE.format(block)
+
+
+    def _gen_complex_instance(self, complex_instance):
+        """ An instance of a complex collection of primitives. """
+        select = self._select_macro_aperture(complex_instance)
+
+        if select:
+            yield LINE.format(select)
+        block = self._flash(complex_instance.x, complex_instance.y)
         yield LINE.format(block)
 
 
@@ -522,9 +571,22 @@ class Gerber:
         yield LINE.format(fill_mode_off)
 
 
-    def _select_aperture(self, shape, hole):
+    def _select_shape_aperture(self, shape, hole):
         """ Change the current aperture if necessary. """
         selection = Aperture(None, shape, hole)
+        if selection == self.status['aperture']:
+            return None
+        else:
+            index = self.apertures.index(selection)
+            self.status['aperture'] = self.apertures[index]
+            return FUNCT.format(type='D',
+                                code=self.status['aperture'].code)
+
+
+    def _select_macro_aperture(self, complex_instance):
+        """ Change the current aperture if necessary. """
+        macro_name = 'FAKEMACRONAME'
+        selection = MacroAperture(None, macro_name, complex_instance.primitives)
         if selection == self.status['aperture']:
             return None
         else:
