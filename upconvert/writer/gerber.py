@@ -426,9 +426,10 @@ class Gerber:
         elif isinstance(shape, RegularPolygon):
             rot = shape.rotation
             rotation = rot and (2 - rot) * 180 or 0
+            vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.vertices]
             type_ = SHAPE_TAGS['reg_polygon']['char']
             mods = [self._convert_units(shape.outer_diameter),
-                    shape.vertices, # FIXME(shamer): positions need to have their units converted
+                    vertices,
                     rotation]
         elif isinstance(shape, str):
             type_ = shape
