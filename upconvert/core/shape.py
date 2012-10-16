@@ -69,6 +69,12 @@ class Rectangle(Shape):
         self.width = width
         self.height = height
 
+    def __eq__(self, other):
+        return (self.type == other.type and
+                self.x == other.x and self.y == other.y and
+                self.width == other.width and
+                self.height == other.height)
+
 
     def min_point(self):
         """ Return the min point of the shape """
@@ -183,21 +189,21 @@ class RoundedRectangle(Shape):
         return cls(x, y, width, height, radius)
 
 
-    def as_arcs_lines(self):                                                    
-        """ a list of arcs and lines that trace out the rectangle """           
-        x, y, h, w = self.x, self.y, self.height, self.width                    
-        rad, dia = self.radius, self.radius * 2                                 
-                                                                                
-        hor = [(px, py) for py in [y, y - h] for px in [x + rad, x + w - rad]]  
-        ver = [(px, py) for px in [x, x + w] for py in [y - rad, y - h + rad]]  
-        lines = [Line(Point(p0), Point(p1)) for (p1, p0) in                     
-                 [hor[:2], hor[2:], ver[:2], ver[2:]]]                          
-                                                                                
-        arc_pts = [(cx, cy) for cx in [x + rad, x + w - rad]                    
-                            for cy in [y - rad, y - h + rad]]                   
-        arcs = [Arc(cx, cy, ang, (ang+0.5) % 2, rad) for ((cx, cy), ang) in     
-                zip(arc_pts, [1, 0.5, 1.5, 0])]                                 
-                                                                                
+    def as_arcs_lines(self):
+        """ a list of arcs and lines that trace out the rectangle """
+        x, y, h, w = self.x, self.y, self.height, self.width
+        rad, dia = self.radius, self.radius * 2
+
+        hor = [(px, py) for py in [y, y - h] for px in [x + rad, x + w - rad]]
+        ver = [(px, py) for px in [x, x + w] for py in [y - rad, y - h + rad]]
+        lines = [Line(Point(p0), Point(p1)) for (p1, p0) in
+                 [hor[:2], hor[2:], ver[:2], ver[2:]]]
+
+        arc_pts = [(cx, cy) for cx in [x + rad, x + w - rad]
+                            for cy in [y - rad, y - h + rad]]
+        arcs = [Arc(cx, cy, ang, (ang+0.5) % 2, rad) for ((cx, cy), ang) in
+                zip(arc_pts, [1, 0.5, 1.5, 0])]
+
         return arcs + lines
 
 
@@ -378,6 +384,12 @@ class Circle(Shape):
         self.x = x
         self.y = y
         self.radius = abs(radius)
+
+
+    def __eq__(self, other):
+        return (self.type == other.type and
+                self.x == other.x and self.y == other.y and
+                self.radius == other.radius)
 
 
     def min_point(self):
