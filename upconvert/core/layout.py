@@ -134,7 +134,10 @@ class Image:
             primitives.append(Primitive(1, 0.0, Circle(half_width, -half_height, shapecpy.radius)))
             primitives.append(Primitive(1, 0.0, Circle(-half_width, -half_height, shapecpy.radius)))
 
-            self.complex_instances.append(ComplexInstance(Point(shapecpy.x + (shapecpy.width / 2), shapecpy.y - (shapecpy.height / 2)), primitives))
+            instance_name = 'RR-H{height}-W{width}-R{radius}'.format(height=abs(shapecpy.height),
+                                                                     width=abs(shapecpy.width),
+                                                                     radius=radius)
+            self.complex_instances.append(ComplexInstance(instance_name, Point(shapecpy.x + (shapecpy.width / 2), shapecpy.y - (shapecpy.height / 2)), primitives))
 
         elif isinstance(shapecpy, Label):
             # TODO(shamer): add as arcs
@@ -202,7 +205,8 @@ class ComplexInstance:
 
     """
 
-    def __init__(self, point, primitives):
+    def __init__(self, name, point, primitives):
+        self.name = name
         self.x = point.x
         self.y = point.y
         self.primitives = primitives

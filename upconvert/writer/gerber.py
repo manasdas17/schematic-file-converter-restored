@@ -308,8 +308,7 @@ class Gerber:
 
     def _add_macro(self, complex_instance):
         """ Add a macro definition for a complex collection of shapes. """
-        # FIXME(shamer): pick a unique macro name
-        macro = Macro('FAKEMACRONAME', complex_instance.primitives)
+        macro = Macro(complex_instance.name, complex_instance.primitives)
         if macro not in self.macros:
             self.macros.append(macro)
 
@@ -524,8 +523,7 @@ class Gerber:
     def _add_macro_aperture(self, complex_instance):
         """ Generate D code and store aperture. """
         next_ap = len(self.apertures) + 10
-        name = 'FAKEMACRONAME'
-        aperture = MacroAperture(next_ap, name, complex_instance.primitives)
+        aperture = MacroAperture(next_ap, complex_instance.name, complex_instance.primitives)
         if aperture not in self.apertures:
             self.apertures.append(aperture)
 
@@ -585,8 +583,7 @@ class Gerber:
 
     def _select_macro_aperture(self, complex_instance):
         """ Change the current aperture if necessary. """
-        macro_name = 'FAKEMACRONAME'
-        selection = MacroAperture(None, macro_name, complex_instance.primitives)
+        selection = MacroAperture(None, complex_instance.name, complex_instance.primitives)
         if selection == self.status['aperture']:
             return None
         else:
