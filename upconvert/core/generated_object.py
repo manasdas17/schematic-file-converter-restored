@@ -30,10 +30,10 @@ _parser_types = {}
 
 
 def parse_gen_obj_json(gen_obj_json):
-    try:
-        return _parser_types[gen_obj_json['attributes']['type']](gen_obj_json)
-    except KeyError:
+    obj_type = gen_obj_json['attributes']['type']
+    if obj_type not in _parser_types:
         raise ValueError('No parser for generated object json')
+    return _parser_types[obj_type](gen_obj_json)
 
 
 class GeneratedObject:
@@ -65,7 +65,7 @@ class PadStack(GeneratedObject):
                         int(gen_obj_json['y']),
                         gen_obj_json['layer'],
                         float(gen_obj_json['rotation']),
-                        gen_obj_json['flip'] == 'true', # FIXME(shamer): should this be a bool?
+                        gen_obj_json['flip'],
                         gen_obj_json['attributes'])
 _parser_types[PadStack.type_name] = PadStack.parse_gen_obj_json
 
@@ -79,7 +79,7 @@ class PlatedThroughHole(GeneratedObject):
                                  int(gen_obj_json['y']),
                                  gen_obj_json['layer'],
                                  float(gen_obj_json['rotation']),
-                                 gen_obj_json['flip'] == 'true', # FIXME(shamer): should this be a bool?
+                                 gen_obj_json['flip'],
                                  gen_obj_json['attributes'])
 
     def bodies(self, offset, instance_attributes):
@@ -202,7 +202,7 @@ class Via(GeneratedObject):
                    int(gen_obj_json['y']),
                    gen_obj_json['layer'],
                    float(gen_obj_json['rotation']),
-                   gen_obj_json['flip'] == 'true', # FIXME(shamer): should this be a bool?
+                   gen_obj_json['flip'],
                    gen_obj_json['attributes'])
 
     def bodies(self, offset, instance_attributes):
@@ -239,10 +239,10 @@ class Via(GeneratedObject):
         bodies.append((FootprintAttribute(0, 0, 0, False, 'hole'), hole))
 
         # circles of diameter 'plating_diameter' on each connection layer
-        for layerName in attached_layers:
+        for layer_name in attached_layers:
             connected_layer = FBody()
             connected_layer.add_shape(Circle(pos.x, pos.y, plating_diameter / 2))
-            bodies.append((FootprintAttribute(0, 0, 0, False, connected_layer), connected_layer))
+            bodies.append((FootprintAttribute(0, 0, 0, False, layer_name), connected_layer))
 
         return bodies
 
