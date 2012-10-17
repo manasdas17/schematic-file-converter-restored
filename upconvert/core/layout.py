@@ -94,11 +94,9 @@ class Image:
 
         effective_rotation = (rotation + offset.rotation) % 2.0
         if effective_rotation != 0:
-            log.debug('rotating %s pi radians', effective_rotation)
             shapecpy.rotate(effective_rotation)
         effective_flip = flip ^ offset.flip
         if effective_flip:
-            log.debug('flipping shape %s', flip)
             shapecpy.flip(effective_flip)
 
         shapecpy.shift(offset.x, offset.y)
@@ -141,7 +139,7 @@ class Image:
 
         elif isinstance(shapecpy, Label):
             # TODO(shamer): add as arcs
-            pass
+            log.debug('%s', shapecpy)
 
 
 

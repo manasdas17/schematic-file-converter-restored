@@ -180,7 +180,6 @@ class PlatedThroughHole(GeneratedObject):
                 connected_layer.add_shape(Circle(pad_pos.x, pad_pos.y, plating_diameter / 2))
             bodies.append((FootprintAttribute(0, 0, 0, False, layer_name), connected_layer))
 
-        log.debug('rotating genobj by %s', offset.rotation)
         for body_attr, body in bodies:
             body.rotate(offset.rotation)
             if offset.flip:
