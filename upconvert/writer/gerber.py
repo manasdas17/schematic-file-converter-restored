@@ -29,10 +29,11 @@ from zipfile import ZipFile
 import errno
 import logging
 
+from upconvert.core.component_instance import FootprintPos
+from upconvert.core.layout import Aperture, Image, Macro, MacroAperture, Smear
 from upconvert.core.shape import Circle, Rectangle, Obround, RegularPolygon
 from upconvert.core.shape import Polygon, Moire, Thermal
 from upconvert.core.shape import Point, Arc, Line
-from upconvert.core.layout import Aperture, Image, Macro, MacroAperture, Smear
 
 
 log = logging.getLogger('writer.gerber')
@@ -260,6 +261,16 @@ class Gerber:
             # Assumes segment is rounded, straignt
             trace_smear = Smear(Line(segment.p1, segment.p2), Circle(0, 0, segment.width / 2.0))
             traces_image.smears.append(trace_smear)
+
+        # Generated objects in the design (vias, PTHs)
+        zero_pos = FootprintPos(0, 0, 0.0, False, 'top')
+        for gen_obj in design.layout_objects:
+            # XXX(shamer): body attr is only being used to hold the layer, other placement details are contained
+            # elsewhere
+            for body_attr, body in gen_obj.bodies(zero_pos, {}):
+                if body_attr.layer == layer_name:
+                    for shape in body.shapes:
+                        traces_image.add_shape(shape, zero_pos, gen_obj.rotation, gen_obj.flip)
 
         self.images.append(traces_image)
 

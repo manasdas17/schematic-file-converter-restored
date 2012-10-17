@@ -77,6 +77,7 @@ class JSON(object):
         # layout aspects
         self.parse_layer_options(read.get('layer_options'))
         self.parse_trace_segments(read.get('trace_segments'))
+        self.parse_layout_objects(read.get('gen_objs'))
 
         return self.design
 
@@ -99,6 +100,12 @@ class JSON(object):
             p2 = Point(segment_json['p2']['x'], segment_json['p2']['y'])
             segment = Segment(segment_json['layer'], p1, p2, segment_json['width'])
             self.design.trace_segments.append(segment)
+
+
+    def parse_layout_objects(self, gen_objs_json):
+        for gen_obj_json in gen_objs_json:
+            gen_obj = parse_gen_obj_json(gen_obj_json)
+            self.design.layout_objects.append(gen_obj)
 
 
     def parse_component_instances(self, component_instances):
