@@ -458,13 +458,16 @@ class Label(Shape):
     Alignment can be 'left','right', or 'center'. """
     # pylint: disable=W0223
 
-    def __init__(self, x, y, text, align, rotation): # pylint: disable=R0913
+    def __init__(self, x, y, text, align, baseline, rotation): # pylint: disable=R0913
         super(Label, self).__init__()
         self.type = "label"
         self.x = x
         self.y = y
         self.text = text
-        self.rotation = rotation # TODO verify correct value
+        self.rotation = rotation
+
+        self.baseline = baseline
+
         # Parse , TODO maybe clean this up some, dont need to accept
         #   all of these inputs, converting to lowercase would be enough
         if align in ["left", "Left"]:
@@ -474,8 +477,7 @@ class Label(Shape):
         elif align in ["center", "Center", "centered", "Centered", "middle"]:
             self.align = "center"
         else:
-            raise ValueError("Label requires the align to be either " +
-                    "\"left\", \"right\", or \"center\" ")
+            raise ValueError('Label requires the align to be either "left", "right", or "center"')
 
 
     def min_point(self):
@@ -514,6 +516,7 @@ class Label(Shape):
         return {
             "type": self.type,
             "align": self.align,
+            "baseline": self.align,
             "rotation": self.rotation,
             "text": self.text,
             "x": int(self.x),
@@ -521,6 +524,11 @@ class Label(Shape):
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
             }
+
+
+    def __repr__(self):
+        return '<Label(x={x}, y={y}, text="{text}", align="{align}", baseline="{baseline}", rotation={rotation})>'.format(**self.__dict__)
+
 
 
 class Line(Shape):

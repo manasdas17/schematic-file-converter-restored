@@ -328,8 +328,9 @@ class JSON(object):
         y = int(label.get('y'))
         text = label.get('text')
         align = label.get('align')
+        baseline = label.get('baseline')
         rotation = float(label.get('rotation'))
-        parsed_label = Label(x, y, text, align, rotation)
+        parsed_label = Label(x, y, text, align, baseline, rotation)
         parsed_label.styles = label.get('styles') or {}
         return parsed_label
 
@@ -365,12 +366,7 @@ class JSON(object):
             radius = int(shape.get('radius'))
             parsed_shape = Circle(x, y, radius)
         elif 'label' == shape_type:
-            x = int(shape.get('x'))
-            y = int(shape.get('y'))
-            rotation = float(shape.get('rotation'))
-            text = shape.get('text')
-            align = shape.get('align')
-            parsed_shape = Label(x, y, text, align, rotation)
+            parsed_shape = self.parse_label(shape)
         elif 'line' == shape_type:
             p1 = self.parse_point(shape.get('p1'))
             p2 = self.parse_point(shape.get('p2'))
