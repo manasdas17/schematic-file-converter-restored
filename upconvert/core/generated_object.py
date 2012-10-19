@@ -67,7 +67,47 @@ class PadStack(GeneratedObject):
                         float(gen_obj_json['rotation']),
                         gen_obj_json['flip'],
                         gen_obj_json['attributes'])
+
+
+    def bodies(self, offset, instance_attributes):
+        bodies = []
+
+        attached_layers = self.get_attr('attached_layers', '', instance_attributes).split(',')
+        width = self.get_int_attr('width', 0, instance_attributes)
+        height = self.get_int_attr('height', 0, instance_attributes)
+        radius = self.get_int_attr('radius', 0, instance_attributes)
+        shape_type = self.get_attr('shape', '', instance_attributes)
+
+        pos = Point(self.x, self.y)
+        # Back out the rotation on the position of the object so it can be re-applied on the shapes
+        pos.rotate(-offset.rotation)
+
+        for layer_name in attached_layers:
+            layer_name = offset.side + ' ' + layer_name
+            pad = FBody()
+
+            if shape_type == 'rectangle':
+                pad.add_shape(Rectangle(pos.x, pos.y, width, height))
+            elif shape_type == 'rounded rectangle':
+                pad.add_shape(RoundedRectangle(pos.x, pos.y, width, height, radius))
+            elif shape_type == 'circle':
+                pad.add_shape(Circle(pos.x, pos.y, radius))
+            else:
+                raise ValueError('unexpected shape type for padstack')
+
+            bodies.append((FootprintAttribute(0, 0, 0, False, layer_name), pad))
+
+        for body_attr, body in bodies:
+            body.rotate(offset.rotation)
+            if offset.flip:
+                body.flip(offset.flip)
+        return bodies
+
+
+    def __repr__(self):
+        return '''<Padstack({0}, {1}, '{2}', {3}, {4}, {5})>'''.format(self.x, self.y, self.layer, self.rotation, self.flip, self.attributes)
 _parser_types[PadStack.type_name] = PadStack.parse_gen_obj_json
+
 
 
 class PlatedThroughHole(GeneratedObject):
@@ -154,7 +194,7 @@ class PlatedThroughHole(GeneratedObject):
             create_solder_mask_expansion = lambda : RoundedRectangle(sme_pos.x, sme_pos.y, solder_mask_width, solder_mask_height, plating_radius)
 
         else:
-            raise ValueError('unexpected shape for plated through hole')
+            raise ValueError('unexpected shape for plated through hole "{0}"'.format(plating_shape))
 
         # cirle of radius 'solder_mask_expansion' + ('plating_diameter' / 2) in the top and bottom silkscreen layers
         solder_mask_radius = solder_mask_expansion + (plating_diameter / 2)
@@ -248,7 +288,6 @@ class Via(GeneratedObject):
     def __repr__(self):
         return '''<Via({0}, {1}, '{2}', {3}, {4}, {5})>'''.format(self.x, self.y, self.layer, self.rotation, self.flip, self.attributes)
 _parser_types[Via.type_name] = Via.parse_gen_obj_json
-
 
 
 
