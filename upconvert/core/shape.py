@@ -257,7 +257,7 @@ class RoundedRectangle(Shape):
 
         self.width, self.height = self.height, self.width
         if rotation == 0.5 or rotation == -1.5:
-          self.height = -self.heigth;
+          self.height = -self.height;
         elif rotation == -0.5 or rotation == 1.5:
           self.width = -self.width;
         elif rotation == 1 or rotation == -1:
