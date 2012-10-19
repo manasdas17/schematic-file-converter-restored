@@ -458,7 +458,7 @@ class Label(Shape):
     Alignment can be 'left','right', or 'center'. """
     # pylint: disable=W0223
 
-    def __init__(self, x, y, text, align, baseline, rotation): # pylint: disable=R0913
+    def __init__(self, x, y, text, font_size, font_family, align, baseline, rotation): # pylint: disable=R0913
         super(Label, self).__init__()
         self.type = "label"
         self.x = x
@@ -467,6 +467,8 @@ class Label(Shape):
         self.rotation = rotation
 
         self.baseline = baseline
+        self.font_size = font_size
+        self.font_family = font_family
 
         # Parse , TODO maybe clean this up some, dont need to accept
         #   all of these inputs, converting to lowercase would be enough
@@ -515,6 +517,7 @@ class Label(Shape):
         """ Return the label as JSON """
         return {
             "type": self.type,
+            "font": self.font,
             "align": self.align,
             "baseline": self.align,
             "rotation": self.rotation,

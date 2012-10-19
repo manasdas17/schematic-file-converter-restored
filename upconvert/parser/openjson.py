@@ -327,10 +327,12 @@ class JSON(object):
         x = int(label.get('x'))
         y = int(label.get('y'))
         text = label.get('text')
+        font_size = label.get('font_size')
+        font_family = label.get('font_family')
         align = label.get('align')
         baseline = label.get('baseline')
         rotation = float(label.get('rotation'))
-        parsed_label = Label(x, y, text, align, baseline, rotation)
+        parsed_label = Label(x, y, text, font_size, font_family, align, baseline, rotation)
         parsed_label.styles = label.get('styles') or {}
         return parsed_label
 
