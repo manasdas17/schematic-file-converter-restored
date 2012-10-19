@@ -21,6 +21,8 @@
 
 import copy
 import logging
+
+import freetype
 from upconvert.core.shape import Circle, Label, Line, Point, Rectangle, RoundedRectangle
 
 log = logging.getLogger('core.layout')
@@ -69,6 +71,8 @@ class Image:
         2. the area(s) to be negated (as a subtractive image)
         3. the traces to be laid within the negated area(s)
     """
+    face = freetype.Face('./Vera.ttf')
+
 
     def __init__(self, name='Untitled Image', is_additive=True):
         self.name = name
@@ -102,7 +106,7 @@ class Image:
         shapecpy.shift(offset.x, offset.y)
         if isinstance(shapecpy, Line):
             # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
-            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.15 * 1000000)))
+            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.05 * 1000000)))
 
         elif isinstance(shapecpy, Circle):
             self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
@@ -138,9 +142,72 @@ class Image:
             self.complex_instances.append(ComplexInstance(instance_name, Point(shapecpy.x + (shapecpy.width / 2), shapecpy.y - (shapecpy.height / 2)), primitives))
 
         elif isinstance(shapecpy, Label):
-            # TODO(shamer): add as arcs
-            log.debug('%s', shapecpy)
 
+            # TODO(shamer): cache positions segments for glyphs
+
+            # TODO(shamer) select the correct font based off of the label.font_family
+            self.face.set_char_size(int(shapecpy.font_size * 0.8)) #FIXME(shamer): font is taller than in browser
+
+            label_contours = []
+
+            x_offset = 0 + int(shapecpy.font_size * 0.15) #FIXME(shamer) manual adjustment
+            y_offset = 0 - int(shapecpy.font_size * 0.15)
+            for i, c in enumerate('R1'): #shapecpy.text):
+                self.face.load_char(c)
+                slot = self.face.glyph
+                outline = slot.outline
+
+                glyph_contours = []
+
+                start, end = 0, 0
+                # Iterate over each contour separately. Characters like 'g' have multiple contours as they cannot be
+                # walked with a contiguous set of arcs. The contours list contains the index of the point that the
+                # contour starts on.
+                for contour_idx in range(len(outline.contours)):
+                    end = outline.contours[contour_idx]
+                    points = [Point(t[0], t[1]) for t in outline.points[start:end+1]]
+                    tags = outline.tags[start:end+1]
+                    # Close the contour by repeating the last point.
+                    points.append(copy.deepcopy(points[0]))
+                    tags.append(copy.deepcopy(tags[0]))
+
+                    segments = [[points[0], ], ]
+                    # Group points into segments. The tag identifies real vs control points.
+                    for point_idx in range(1, len(points) ):
+                        segments[-1].append(points[point_idx])
+                        if tags[point_idx] & (1 << 0) and point_idx < (len(points)-1):
+                            segments.append([copy.deepcopy(points[point_idx]),])
+
+                    # take the fist and last points of each segment (the non-control points). To approximate the curves
+                    # using straight lines.
+                    glyph_contours.append([[segment[0], segment[-1]] for segment in segments])
+
+                    start = end+1
+
+                # update the segments in the glyph with the x_offset
+                for contour_segments in glyph_contours:
+                    for segments in contour_segments:
+                        for point in segments:
+                            point.x += x_offset
+                            point.y += y_offset
+                label_contours.extend(glyph_contours)
+
+                x_offset += slot.advance.x
+                # adjust amount to advance with kerning offset
+                if i + 1 < len(shapecpy.text):
+                    next_c = shapecpy.text[i + 1]
+                    x_offset += self.face.get_kerning(c, next_c).x
+                    log.debug('advancing %d, with kerning %d for %s, %s', slot.advance.x, self.face.get_kerning(c, next_c).x, c, next_c)
+
+            for contour_segments in label_contours:
+                for segments in contour_segments:
+                    if shapecpy.rotation:
+                        segments[0].rotate(shapecpy.rotation)
+                        segments[1].rotate(shapecpy.rotation)
+                    segments[0].shift(shapecpy.x, shapecpy.y)
+                    segments[1].shift(shapecpy.x, shapecpy.y)
+                    line = Line(segments[0], segments[1])
+                    self.smears.append(Smear(line, Circle(0, 0, 0.05 * 1000000)))
 
 
 class Segment:
