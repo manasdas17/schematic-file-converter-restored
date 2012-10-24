@@ -20,7 +20,11 @@
 # limitations under the License.
 
 
+import logging
 from math import sqrt, pi, sin, cos, asin, acos
+
+log = logging.getLogger('core.shape')
+
 
 class Shape(object):
     """a Shape with metadata and a list of shape parts
@@ -61,19 +65,21 @@ class Shape(object):
 class Rectangle(Shape):
     """ A rectangle, defined by x, y of top left corner and width, height"""
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, is_centered=False):
         super(Rectangle, self).__init__()
         self.type = "rectangle"
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.is_centered = is_centered
 
     def __eq__(self, other):
         return (self.type == other.type and
                 self.x == other.x and self.y == other.y and
                 self.width == other.width and
-                self.height == other.height)
+                self.height == other.height and
+                self.is_centered == other.is_centered)
 
 
     def min_point(self):
@@ -86,6 +92,12 @@ class Rectangle(Shape):
         """ Return the max point of the shape """
         return Point(max(self.x, self.x + self.width),
                      max(self.y, self.y + self.height))
+
+
+    def move(self, x, y):
+        """ Move the circle to an explicit position. """
+        self.x = x
+        self.y = y
 
 
     @classmethod
@@ -125,22 +137,24 @@ class Rectangle(Shape):
             "y": int(self.y),
             #"attributes": stringify_attributes(self.attributes),
             "styles": self.styles,
+            "is_centered": self.is_centered,
             }
 
 
-    def rotate(self, rotation):
+    def rotate(self, rotation, in_place=False):
         if rotation == 0:
           return
 
-        self.x, self.y = self.y, self.x
-        if rotation == 0.5 or rotation == -1.5:
-          self.y = -self.y;
-        elif rotation == -0.5 or rotation == 1.5:
-          self.x = -self.x;
-        elif rotation == 1 or rotation == -1:
-          self.x, self.y = -self.y, -self.x
-        else:
-          raise ValueError('non 0.5 multiple rotation')
+        if not in_place:
+            self.x, self.y = self.y, self.x
+            if rotation == 0.5 or rotation == -1.5:
+              self.y = -self.y;
+            elif rotation == -0.5 or rotation == 1.5:
+              self.x = -self.x;
+            elif rotation == 1 or rotation == -1:
+              self.x, self.y = -self.y, -self.x
+            else:
+              raise ValueError('non 0.5 multiple rotation')
 
         self.width, self.height = self.height, self.width
         if rotation == 0.5 or rotation == -1.5:
@@ -178,6 +192,12 @@ class RoundedRectangle(Shape):
         """ Return the max point of the shape """
         return Point(max(self.x, self.x + self.width),
                      max(self.y, self.y + self.height))
+
+
+    def move(self, x, y):
+        """ Move the rounded rectangle to an explicit position. """
+        self.x = x
+        self.y = y
 
 
     @classmethod
@@ -241,19 +261,20 @@ class RoundedRectangle(Shape):
             }
 
 
-    def rotate(self, rotation):
+    def rotate(self, rotation, in_place=False):
         if rotation == 0:
-          return
+            return
 
-        self.x, self.y = self.y, self.x
-        if rotation == 0.5 or rotation == -1.5:
-          self.y = -self.y;
-        elif rotation == -0.5 or rotation == 1.5:
-          self.x = -self.x;
-        elif rotation == 1 or rotation == -1:
-          self.x, self.y = -self.y, -self.x
-        else:
-          raise ValueError('non 0.5 multiple rotation')
+        if not in_place:
+            self.x, self.y = self.y, self.x
+            if rotation == 0.5 or rotation == -1.5:
+              self.y = -self.y;
+            elif rotation == -0.5 or rotation == 1.5:
+              self.x = -self.x;
+            elif rotation == 1 or rotation == -1:
+              self.x, self.y = -self.y, -self.x
+            else:
+              raise ValueError('non 0.5 multiple rotation')
 
         self.width, self.height = self.height, self.width
         if rotation == 0.5 or rotation == -1.5:
@@ -333,6 +354,12 @@ class Arc(Shape):
         return Point(int(round(x)), int(round(y)))
 
 
+    def move(self, x, y):
+        """ Move the arc to an explicit position. """
+        self.x = x
+        self.y = y
+
+
     def ends(self):
         """ Calculate arc endpoints. """
         points = {}
@@ -405,19 +432,27 @@ class Circle(Shape):
         y = self.y + self.radius
         return Point(x, y)
 
-    def rotate(self, rotation):
+
+    def move(self, x, y):
+        """ Move the circle to an explicit position. """
+        self.x = x
+        self.y = y
+
+
+    def rotate(self, rotation, in_place=False):
         if rotation == 0 or rotation == 2:
             return
 
-        self.x, self.y = self.y, self.x
-        if rotation == 0.5 or rotation == -1.5:
-          self.y = -self.y;
-        elif rotation == -0.5 or rotation == 1.5:
-          self.x = -self.x;
-        elif rotation == 1 or rotation == -1:
-          self.x, self.y = -self.y, -self.x
-        else:
-          raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
+        if not in_place:
+            self.x, self.y = self.y, self.x
+            if rotation == 0.5 or rotation == -1.5:
+              self.y = -self.y;
+            elif rotation == -0.5 or rotation == 1.5:
+              self.x = -self.x;
+            elif rotation == 1 or rotation == -1:
+              self.x, self.y = -self.y, -self.x
+            else:
+              raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
 
 
     def scale(self, factor):
@@ -470,6 +505,10 @@ class Label(Shape):
         self.font_size = font_size
         self.font_family = font_family
 
+        self._min_point = None
+        self._max_point = None
+        self._segments = []
+
         # Parse , TODO maybe clean this up some, dont need to accept
         #   all of these inputs, converting to lowercase would be enough
         if align in ["left", "Left"]:
@@ -492,8 +531,60 @@ class Label(Shape):
         return Point(self.x, self.y)
 
 
-    def rotate(self, rotation):
-        self.rotation += rotation
+    def move(self, x, y):
+        """ Move the label to an explicit position. """
+        self.x = x
+        self.y = y
+
+
+    def rotate(self, rotation, in_place=False):
+        if rotation == 0 or rotation == 2:
+            return
+
+        if in_place:
+            assert self._min_point
+            assert self._max_point
+            assert self._segments
+
+            # Calculate the absolute midpoint of the shape
+            mid_x = ((self._max_point.x - self._min_point.x) / 2) + self._min_point.x
+            mid_y = ((self._max_point.y - self._min_point.y) / 2) + self._min_point.y
+
+            # Rotate the segments in the label about the center point of the shape
+            for segments in self._segments:
+                segments[0].shift(-mid_x, -mid_y)
+                segments[1].shift(-mid_x, -mid_y)
+                segments[0].rotate(rotation)
+                segments[1].rotate(rotation)
+                segments[0].shift(mid_x, mid_y)
+                segments[1].shift(mid_x, mid_y)
+
+            # Rotate the label point about the center point
+            anchor = Point(self.x, self.y)
+            anchor.rotate(rotation, about=Point(mid_x, mid_y))
+            self.x = anchor.x
+            self.y = anchor.y
+
+        else:
+            if self._segments:
+                for segments in self._segments:
+                    segments[0].rotate(rotation)
+                    segments[1].rotate(rotation)
+                self._min_point.rotate(rotation)
+                self._max_point.rotate(rotation)
+
+            else:
+                self.rotation += rotation
+
+            self.x, self.y = self.y, self.x
+            if rotation == 0.5 or rotation == -1.5:
+              self.y = -self.y;
+            elif rotation == -0.5 or rotation == 1.5:
+              self.x = -self.x;
+            elif rotation == 1 or rotation == -1:
+              self.x, self.y = -self.y, -self.x
+            else:
+              raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
 
 
     def scale(self, factor):
@@ -501,11 +592,25 @@ class Label(Shape):
         self.x *= factor
         self.y *= factor
 
+        if self._min_point:
+            self._min_point.scale(factor)
+        if self._max_point:
+            self._max_point.scale(factor)
+
 
     def shift(self, dx, dy):
         """ Shift the x & y coordinates in the label. """
         self.x += dx
         self.y += dy
+
+        if self._min_point:
+            self._min_point.shift(dx, dy)
+        if self._max_point:
+            self._max_point.shift(dx, dy)
+        if self._segments:
+            for segments in self._segments:
+                segments[0].shift(dx, dy)
+                segments[1].shift(dx, dy)
 
 
     def rebase_y_axis(self, height):
@@ -530,7 +635,7 @@ class Label(Shape):
 
 
     def __repr__(self):
-        return '<Label(x={x}, y={y}, text="{text}", align="{align}", baseline="{baseline}", rotation={rotation})>'.format(**self.__dict__)
+        return '<Label(x={x}, y={y}, text="{text}", font_size={font_size}, font_family="{font_family}", align="{align}", baseline="{baseline}", rotation={rotation})>'.format(**self.__dict__)
 
 
 
@@ -565,9 +670,29 @@ class Line(Shape):
             y = self.p2.y
         return Point(x, y)
 
-    def rotate(self, rotation):
+
+    def move(self, x, y):
+        """ Move the line to an explicit position. """
+        dx = x - self.p1.x
+        dy = y - self.p1.y
+
+        self.p1.x += dx
+        self.p2.x += dx
+        self.p1.y += dy
+        self.p2.y += dy
+
+
+    def rotate(self, rotation, in_place=False):
+        dx = self.p1.x
+        dy = self.p1.y
+        if in_place:
+            self.shift(-dx, -dy)
+
         self.p1.rotate(rotation)
         self.p2.rotate(rotation)
+
+        if in_place:
+            self.shift(dx, dy)
 
 
     def scale(self, factor):
@@ -631,6 +756,16 @@ class Polygon(Shape):
             x = max([pt.x for pt in self.points])
             y = max([pt.y for pt in self.points])
         return Point(x, y)
+
+
+    def move(self, x, y):
+        """ Move the polygon to an explicit position. """
+        dx = x - self.point[0].x
+        dy = y - self.point[0].y
+
+        for point in self.points:
+            point.x -= dx
+            point.y -= dy
 
 
     def add_point(self, x, y=None):
@@ -730,6 +865,21 @@ class BezierCurve(Shape):
         return Point(self._memo_cache['max_point'][cache_key])
 
 
+    def move(self, x, y):
+        """ Move the bezier to an explicit position. """
+        dx = self.p1.x - x
+        dy = self.p1.y - y
+
+        self.p1.x += dx
+        self.p2.x += dx
+        self.control1.x += dx
+        self.control2.x += dx
+        self.p1.y += dy
+        self.p2.y += dy
+        self.control1.y += dy
+        self.control2.y += dy
+
+
     def build(self, control1x, control1y, control2x, control2y, p1x, # pylint: disable=R0913
             p1y, p2x, p2y):
         """ Build the bezier curve """
@@ -815,6 +965,12 @@ class Moire(Shape):
         return Point(x, y)
 
 
+    def move(self, x, y):
+        """ Move the moire to an explicit position. """
+        self.x = x
+        self.y = y
+
+
     def _half_box(self):
         """ Return half the width of the bounding square. """
         rad = self.outer_diameter / 2.0
@@ -888,6 +1044,12 @@ class Thermal(Shape):
         x = self.x + self._half_box()
         y = self.y + self._half_box()
         return Point(x, y)
+
+
+    def move(self, x, y):
+        """ Move the thernal to an explicit position. """
+        self.x = x
+        self.y = y
 
 
     def _half_box(self):
@@ -966,6 +1128,12 @@ class RegularPolygon(Shape):
         x = self.x + self._max_dist(0)
         y = self.y + self._max_dist(1.5)
         return Point(x, y)
+
+
+    def move(self, x, y):
+        """ Move the polygon to an explicit position. """
+        self.x = x
+        self.y = y
 
 
     def _max_dist(self, axis_rads):
@@ -1064,9 +1232,12 @@ class Point:
         return sqrt(delta_x**2 + delta_y**2)
 
 
-    def rotate(self, rotation):
-        if rotation == 0:
+    def rotate(self, rotation, about=None):
+        if rotation == 0 or rotation == 2:
           return
+
+        if about:
+            self.shift(-about.x, -about.y)
 
         self.x, self.y = self.y, self.x
         if rotation == 0.5 or rotation == -1.5:
@@ -1077,6 +1248,9 @@ class Point:
           self.x, self.y = -self.y, -self.x
         else:
           raise ValueError('non 0.5 multiple rotation')
+
+        if about:
+            self.shift(about.x, about.y)
 
 
     def scale(self, factor):
@@ -1130,6 +1304,12 @@ class Obround(Shape):
         return Point(x, y)
 
 
+    def move(self, x, y):
+        """ Move the oval to an explicit position. """
+        self.x = x
+        self.y = y
+
+
     def scale(self, factor):
         """ Scale the x & y coordinates in the oval. """
         self.x *= factor
@@ -1181,6 +1361,17 @@ class RoundedSegment(Shape):
     def max_point(self):
         """ Return the max point of the shape """
         raise NotImplemented('RoundedSegment.max_point() not implemented')
+
+
+    def move(self, x, y):
+        """ Move the bezier to an explicit position. """
+        dx = self.p1.x - x
+        dy = self.p1.y - y
+
+        self.p1.x += dx
+        self.p2.x += dx
+        self.p1.y += dy
+        self.p2.y += dy
 
 
     def scale(self, factor):
