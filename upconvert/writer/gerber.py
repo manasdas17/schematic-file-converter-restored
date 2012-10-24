@@ -87,7 +87,8 @@ INTERPOLATION = {'LINEAR': '01',
                  'CLOCKWISE_CIRCULAR': '02',
                  'ANTICLOCKWISE_CIRCULAR': '03'}
 SHAPE_TAGS = {'circle': {'int': 1, 'char': 'C'},
-              'rectangle': {'int': 21, 'char': 'R'},
+              'center_rectangle': {'int': 21, 'char': 'R'},
+              'rectangle': {'int': 22, 'char': 'R'},
               'obround': {'char': 'O'},
               'reg_polygon': {'int': 5, 'char': 'P'},
               'polygon': {'int': 4},
@@ -270,7 +271,7 @@ class Gerber:
             for body_attr, body in gen_obj.bodies(zero_pos, {}):
                 if body_attr.layer == layer_name:
                     for shape in body.shapes:
-                        traces_image.add_shape(shape, zero_pos, gen_obj.rotation, gen_obj.flip)
+                        traces_image.add_shape(shape, gen_obj, body_attr)
 
         self.images.append(traces_image)
 
@@ -286,7 +287,7 @@ class Gerber:
                     footprint_body = component.footprints[component_instance.footprint_index].bodies[idx]
                     log.debug('adding footprint attribute: %s, %d shapes', footprint_attr, len(footprint_body.shapes))
                     for shape in footprint_body.shapes:
-                        component_image.add_shape(shape, footprint_pos, footprint_attr.rotation, footprint_attr.flip)
+                        component_image.add_shape(shape, footprint_pos, footprint_attr)
 
             for idx, gen_obj_attr in enumerate(component_instance.gen_obj_attributes):
                 gen_obj = component.footprints[component_instance.footprint_index].gen_objs[idx]
@@ -298,7 +299,7 @@ class Gerber:
                     if body_attr.layer == layer_name:
                         log.debug('adding body for generated object: %s, %s', footprint_pos, gen_obj_attr)
                         for shape in body.shapes:
-                            component_image.add_shape(shape, footprint_pos, gen_obj_attr.rotation, gen_obj_attr.flip)
+                            component_image.add_shape(shape, footprint_pos, body_attr)
 
             if component_image.not_empty():
                 self.images.append(component_image)
@@ -368,7 +369,15 @@ class Gerber:
                         self._convert_units(shape.radius * 2),
                         self._convert_units(shape.x),
                         self._convert_units(shape.y)]
-            elif isinstance(shape, Rectangle):
+            elif isinstance(shape, Rectangle) and shape.is_centered:
+                mods = [SHAPE_TAGS['center_rectangle']['int'],
+                        exposure,
+                        self._convert_units(shape.width),
+                        self._convert_units(shape.height),
+                        self._convert_units(shape.x),
+                        self._convert_units(shape.y),
+                        rotation]
+            elif isinstance(shape, Rectangle) and not shape.is_centered:
                 mods = [SHAPE_TAGS['rectangle']['int'],
                         exposure,
                         self._convert_units(shape.width),
