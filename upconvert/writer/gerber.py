@@ -271,7 +271,7 @@ class Gerber:
             for body_attr, body in gen_obj.bodies(zero_pos, {}):
                 if body_attr.layer == layer_name:
                     for shape in body.shapes:
-                        traces_image.add_shape(shape, gen_obj, body_attr)
+                        traces_image.add_shape(shape, zero_pos, body_attr)
 
         self.images.append(traces_image)
 
