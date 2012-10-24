@@ -99,7 +99,7 @@ class Image:
         # XXX(shamer): a label needs to be rendered before in-place rotations are made so the bounding box for the shape
         # are known
         if isinstance(shapecpy, Label):
-            self.face.set_char_size(int(shapecpy.font_size)) #FIXME(shamer): font is taller than in browser
+            self.face.set_char_size(int(shapecpy.font_size))
 
             label_contours = []
 
@@ -202,8 +202,8 @@ class Image:
             shapecpy.flip(offset.flip, in_place=True)
 
         if isinstance(shapecpy, Line):
-            # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
-            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.05 * 1000000)))
+            # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.15mm
+            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.15 * 1000000)))
 
         elif isinstance(shapecpy, Circle):
             self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
@@ -246,11 +246,13 @@ class Image:
             # FIXME((shamer): make baseline shift
 
             # TODO(shamer) select the correct font based off of the label.font_family
-            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, Circle(0, 0, 1000000 / 5), None)))
+
+            # Debugging, used to show the anchor point of the label
+            #self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, Circle(0, 0, 1000000 / 5), None)))
 
             for segments in shapecpy._segments:
                 line = Line(segments[0], segments[1])
-                self.smears.append(Smear(line, Circle(0, 0, 0.05 * 1000000)))
+                self.smears.append(Smear(line, Circle(0, 0, 0.15 * 1000000)))
 
 
 class Segment:
