@@ -71,7 +71,7 @@ class Image:
         2. the area(s) to be negated (as a subtractive image)
         3. the traces to be laid within the negated area(s)
     """
-    face = freetype.Face('./Vera.ttf')
+    face = freetype.Face('./arial.ttf')
 
 
     def __init__(self, name='Untitled Image', is_additive=True):
@@ -91,68 +91,21 @@ class Image:
         return (self.fills or self.smears or self.shape_instances or self.complex_instances) and True or False
 
 
-    def add_shape(self, shape, offset, rotation, flip):
+    def add_shape(self, shape, parent_offset, offset):
         """ Add a shape to the image. (might be added as a smear or fill) """
         # Copy the shape so it can be mutated without affecting other instances
         shapecpy = copy.deepcopy(shape)
 
-        effective_rotation = (rotation + offset.rotation) % 2.0
-        if effective_rotation != 0:
-            shapecpy.rotate(effective_rotation)
-        effective_flip = flip ^ offset.flip
-        if effective_flip:
-            shapecpy.flip(effective_flip)
-
-        shapecpy.shift(offset.x, offset.y)
-        if isinstance(shapecpy, Line):
-            # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
-            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.05 * 1000000)))
-
-        elif isinstance(shapecpy, Circle):
-            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
-
-        elif isinstance(shapecpy, Rectangle):
-            # XXX(shamer): rectangles in gerbers are positioned around their centers
-            shapecpy.x += shapecpy.width / 2
-            shapecpy.y -= shapecpy.height / 2
-            shapecpy.width = abs(shapecpy.width)
-            shapecpy.height = abs(shapecpy.height)
-            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
-
-        elif isinstance(shapecpy, RoundedRectangle):
-            # Rounded rectangle is added as a macro with two rectangles to fill out the body and four circles to make up
-            # the corners. `roundrect` is assumed to already be centered.
-            primitives = []
-            radius = abs(shapecpy.radius)
-            inner_height = abs(shapecpy.height) - (radius * 2)
-            inner_width = abs(shapecpy.width) - (radius * 2)
-            half_width = inner_width / 2.0
-            half_height = inner_height / 2.0
-
-            primitives.append(Primitive(1, 0.0, Rectangle(0, 0, abs(inner_width), abs(shapecpy.height))))
-            primitives.append(Primitive(1, 0.0, Rectangle(0, 0, abs(shapecpy.width), abs(inner_height))))
-            primitives.append(Primitive(1, 0.0, Circle(-half_width, half_height, shapecpy.radius)))
-            primitives.append(Primitive(1, 0.0, Circle(half_width, half_height, shapecpy.radius)))
-            primitives.append(Primitive(1, 0.0, Circle(half_width, -half_height, shapecpy.radius)))
-            primitives.append(Primitive(1, 0.0, Circle(-half_width, -half_height, shapecpy.radius)))
-
-            instance_name = 'RR-H{height}-W{width}-R{radius}'.format(height=abs(shapecpy.height),
-                                                                     width=abs(shapecpy.width),
-                                                                     radius=radius)
-            self.complex_instances.append(ComplexInstance(instance_name, Point(shapecpy.x + (shapecpy.width / 2), shapecpy.y - (shapecpy.height / 2)), primitives))
-
-        elif isinstance(shapecpy, Label):
-
-            # TODO(shamer): cache positions segments for glyphs
-
-            # TODO(shamer) select the correct font based off of the label.font_family
-            self.face.set_char_size(int(shapecpy.font_size * 0.8)) #FIXME(shamer): font is taller than in browser
+        # XXX(shamer): a label needs to be rendered before in-place rotations are made so the bounding box for the shape
+        # are known
+        if isinstance(shapecpy, Label):
+            self.face.set_char_size(int(shapecpy.font_size)) #FIXME(shamer): font is taller than in browser
 
             label_contours = []
 
-            x_offset = 0 + int(shapecpy.font_size * 0.15) #FIXME(shamer) manual adjustment
-            y_offset = 0 - int(shapecpy.font_size * 0.15)
-            for i, c in enumerate('R1'): #shapecpy.text):
+            x_offset = 0
+            y_offset = 0
+            for i, c in enumerate('C2'): #shapecpy.text):
                 self.face.load_char(c)
                 slot = self.face.glyph
                 outline = slot.outline
@@ -197,17 +150,107 @@ class Image:
                 if i + 1 < len(shapecpy.text):
                     next_c = shapecpy.text[i + 1]
                     x_offset += self.face.get_kerning(c, next_c).x
-                    log.debug('advancing %d, with kerning %d for %s, %s', slot.advance.x, self.face.get_kerning(c, next_c).x, c, next_c)
 
+            # Calculate the bounding fox the label from the segments
+            min_point = [2**100, 2**100]
+            max_point = [-2**100, -2**100]
             for contour_segments in label_contours:
                 for segments in contour_segments:
+                    min_point[0] = min(segments[0].x, segments[1].x, min_point[0])
+                    max_point[0] = max(segments[0].x, segments[1].x, max_point[0])
+            min_point[1] = 0
+            max_point[1] = int(shapecpy.font_size)
+            shapecpy._min_point = Point(min_point[0], min_point[1])
+            shapecpy._max_point = Point(max_point[0], max_point[1])
+            if shapecpy.align == 'center':
+                shapecpy._min_point.shift(-(x_offset / 2), 0)
+                shapecpy._max_point.shift(-(x_offset / 2), 0)
+            if shapecpy.rotation:
+                shapecpy._min_point.rotate(shapecpy.rotation)
+                shapecpy._max_point.rotate(shapecpy.rotation)
+            shapecpy._min_point.shift(shapecpy.x, shapecpy.y)
+            shapecpy._max_point.shift(shapecpy.x, shapecpy.y)
+
+
+            # Update the segments for pre-render shifts, rotates, alignment
+            for contour_segments in label_contours:
+                for segments in contour_segments:
+                    if shapecpy.align == 'center':
+                        segments[0].shift(-(x_offset / 2), 0)
+                        segments[1].shift(-(x_offset / 2), 0)
+
                     if shapecpy.rotation:
                         segments[0].rotate(shapecpy.rotation)
                         segments[1].rotate(shapecpy.rotation)
+
                     segments[0].shift(shapecpy.x, shapecpy.y)
                     segments[1].shift(shapecpy.x, shapecpy.y)
-                    line = Line(segments[0], segments[1])
-                    self.smears.append(Smear(line, Circle(0, 0, 0.05 * 1000000)))
+                    shapecpy._segments.append(segments)
+
+
+
+        shapecpy.shift(offset.x, offset.y)
+        if parent_offset.rotation != 0:
+            shapecpy.rotate(parent_offset.rotation)
+        if parent_offset.flip:
+            shapecpy.flip(parent_offset.flip)
+        shapecpy.shift(parent_offset.x, parent_offset.y)
+
+        if offset.rotation != 0:
+            shapecpy.rotate(offset.rotation, in_place=True)
+        if offset.flip:
+            shapecpy.flip(offset.flip, in_place=True)
+
+        if isinstance(shapecpy, Line):
+            # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.25mm
+            self.smears.append(Smear(shapecpy, Circle(0, 0, 0.05 * 1000000)))
+
+        elif isinstance(shapecpy, Circle):
+            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
+
+        elif isinstance(shapecpy, Rectangle):
+            #shapecpy.x += shapecpy.width
+            #shapecpy.y -= shapecpy.height / 2
+            shapecpy.width = abs(shapecpy.width)
+            shapecpy.height = abs(shapecpy.height)
+            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
+
+        elif isinstance(shapecpy, RoundedRectangle):
+            # Rounded rectangle is added as a macro with two rectangles to fill out the body and four circles to make up
+            # the corners. `roundrect` is assumed to already be centered.
+            primitives = []
+            radius = abs(shapecpy.radius)
+            inner_height = abs(shapecpy.height) - (radius * 2)
+            inner_width = abs(shapecpy.width) - (radius * 2)
+            half_width = inner_width / 2.0
+            half_height = inner_height / 2.0
+
+            high_rect = Rectangle(0, 0, abs(inner_width), abs(shapecpy.height), is_centered=True)
+            wide_rect = Rectangle(0, 0, abs(shapecpy.width), abs(inner_height), is_centered=True)
+            primitives.append(Primitive(1, 0.0, high_rect))
+            primitives.append(Primitive(1, 0.0, wide_rect))
+            primitives.append(Primitive(1, 0.0, Circle(-half_width, half_height, shapecpy.radius)))
+            primitives.append(Primitive(1, 0.0, Circle(half_width, half_height, shapecpy.radius)))
+            primitives.append(Primitive(1, 0.0, Circle(half_width, -half_height, shapecpy.radius)))
+            primitives.append(Primitive(1, 0.0, Circle(-half_width, -half_height, shapecpy.radius)))
+
+            instance_name = 'RR-H{height}-W{width}-R{radius}'.format(height=abs(shapecpy.height),
+                                                                     width=abs(shapecpy.width),
+                                                                     radius=radius)
+            self.complex_instances.append(ComplexInstance(instance_name,
+                                                          Point(shapecpy.x, shapecpy.y),
+                                                          primitives))
+
+        elif isinstance(shapecpy, Label):
+            # TODO(shamer): cache positions segments for glyphs
+            # FIXME((shamer): make baseline shift
+
+            # TODO(shamer) select the correct font based off of the label.font_family
+            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, Circle(0, 0, 1000000 / 5), None)))
+
+            for segments in shapecpy._segments:
+                line = Line(segments[0], segments[1])
+                self.smears.append(Smear(line, Circle(0, 0, 0.05 * 1000000)))
 
 
 class Segment:
