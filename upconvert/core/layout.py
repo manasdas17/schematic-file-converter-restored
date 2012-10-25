@@ -175,9 +175,11 @@ class Image:
             if shapecpy.align == 'center':
                 shapecpy._min_point.shift(-(x_offset / 2), 0)
                 shapecpy._max_point.shift(-(x_offset / 2), 0)
-            if shapecpy.rotation:
-                shapecpy._min_point.rotate(shapecpy.rotation)
-                shapecpy._max_point.rotate(shapecpy.rotation)
+            if shapecpy._rotation:
+                shapecpy._min_point.rotate(shapecpy._rotation)
+                shapecpy._max_point.rotate(shapecpy._rotation)
+            if shapecpy._flip:
+                shapecpy.flip(shapecpy._flip)
             shapecpy._min_point.shift(shapecpy.x, shapecpy.y)
             shapecpy._max_point.shift(shapecpy.x, shapecpy.y)
 
@@ -189,9 +191,13 @@ class Image:
                         segments[0].shift(-(x_offset / 2), 0)
                         segments[1].shift(-(x_offset / 2), 0)
 
-                    if shapecpy.rotation:
-                        segments[0].rotate(shapecpy.rotation)
-                        segments[1].rotate(shapecpy.rotation)
+                    if shapecpy._rotation:
+                        segments[0].rotate(shapecpy._rotation)
+                        segments[1].rotate(shapecpy._rotation)
+
+                    if shapecpy._flip:
+                        segments[0].flip(shapecpy._flip)
+                        segments[1].flip(shapecpy._flip)
 
                     segments[0].shift(shapecpy.x, shapecpy.y)
                     segments[1].shift(shapecpy.x, shapecpy.y)
