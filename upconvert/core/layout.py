@@ -21,6 +21,7 @@
 
 import copy
 import logging
+import re
 
 import freetype
 from upconvert.core.shape import Circle, Label, Line, Point, Rectangle, RoundedRectangle
@@ -72,6 +73,7 @@ class Image:
         3. the traces to be laid within the negated area(s)
     """
     face = freetype.Face('./arial.ttf')
+    attr_re = re.compile(r'{{[^}]*}}')
 
 
     def __init__(self, name='Untitled Image', is_additive=True):
@@ -91,7 +93,14 @@ class Image:
         return (self.fills or self.smears or self.shape_instances or self.complex_instances) and True or False
 
 
-    def add_shape(self, shape, parent_offset, offset):
+    def resolve_text(self, text, attr_source):
+        ''' Resolve attribute placeholders in a piece of text using an attr_source method. '''
+        for attr in self.attr_re.findall(text):
+            text = text.replace(attr, attr_source(attr[2:-2]), 1)
+        return text
+
+
+    def add_shape(self, shape, parent, parent_offset, offset):
         """ Add a shape to the image. (might be added as a smear or fill) """
         # Copy the shape so it can be mutated without affecting other instances
         shapecpy = copy.deepcopy(shape)
@@ -105,7 +114,8 @@ class Image:
 
             x_offset = 0
             y_offset = 0
-            for i, c in enumerate('C2'): #shapecpy.text):
+            label_text = self.resolve_text(shapecpy.text, parent.get_attribute)
+            for i, c in enumerate(label_text):
                 self.face.load_char(c)
                 slot = self.face.glyph
                 outline = slot.outline
@@ -147,8 +157,8 @@ class Image:
 
                 x_offset += slot.advance.x
                 # adjust amount to advance with kerning offset
-                if i + 1 < len(shapecpy.text):
-                    next_c = shapecpy.text[i + 1]
+                if i + 1 < len(label_text):
+                    next_c = label_text[i + 1]
                     x_offset += self.face.get_kerning(c, next_c).x
 
             # Calculate the bounding fox the label from the segments

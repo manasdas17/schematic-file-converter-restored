@@ -26,9 +26,10 @@ from upconvert.utils.stringify import stringify_attributes
 class ComponentInstance:
     """ An instance of a component with a specific symbol """
 
-    def __init__(self, instance_id, library_id, symbol_index, footprint_index=0):
+    def __init__(self, instance_id, library_component, library_id, symbol_index, footprint_index=0):
         self.instance_id = instance_id
         self.library_id = library_id
+        self.library_component = library_component
         self.symbol_index = symbol_index
         self.symbol_attributes = list()
         self.footprint_index = footprint_index
@@ -41,6 +42,17 @@ class ComponentInstance:
     def add_attribute(self, key, value):
         """ Add attribute to a component """
         self.attributes[key] = value
+
+
+    def get_attribute(self, key):
+        if key in self.attributes:
+            return self.attributes[key]
+
+        elif key in self.library_component.attributes:
+            return self.library_component.attributes[key]
+
+        else:
+            return '??'
 
 
     def add_symbol_attribute(self, symbol_attribute):

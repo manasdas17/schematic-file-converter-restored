@@ -82,6 +82,10 @@ class Design:
         self.version['exporter'] = exporter
 
 
+    def get_attribute(self, attr_name):
+        return self.design_attributes.attributes.get(attr_name, '??')
+
+
     def add_component_instance(self, component_instance):
         """ Add an instance """
         self.component_instances.append(component_instance)

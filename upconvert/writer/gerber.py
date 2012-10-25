@@ -271,7 +271,7 @@ class Gerber:
             for body_attr, body in gen_obj.bodies(zero_pos, {}):
                 if body_attr.layer == layer_name:
                     for shape in body.shapes:
-                        traces_image.add_shape(shape, zero_pos, body_attr)
+                        traces_image.add_shape(shape, design, zero_pos, body_attr)
 
         self.images.append(traces_image)
 
@@ -287,7 +287,7 @@ class Gerber:
                     footprint_body = component.footprints[component_instance.footprint_index].bodies[idx]
                     log.debug('adding footprint attribute: %s, %d shapes', footprint_attr, len(footprint_body.shapes))
                     for shape in footprint_body.shapes:
-                        component_image.add_shape(shape, footprint_pos, footprint_attr)
+                        component_image.add_shape(shape, component_instance, footprint_pos, footprint_attr)
 
             for idx, gen_obj_attr in enumerate(component_instance.gen_obj_attributes):
                 gen_obj = component.footprints[component_instance.footprint_index].gen_objs[idx]
@@ -299,7 +299,7 @@ class Gerber:
                     if body_attr.layer == layer_name:
                         log.debug('adding body for generated object: %s, %s', footprint_pos, gen_obj_attr)
                         for shape in body.shapes:
-                            component_image.add_shape(shape, footprint_pos, body_attr)
+                            component_image.add_shape(shape, component_instance, footprint_pos, body_attr)
 
             if component_image.not_empty():
                 self.images.append(component_image)

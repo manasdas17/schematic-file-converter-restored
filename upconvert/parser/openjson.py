@@ -116,7 +116,7 @@ class JSON(object):
             library_id = instance.get('library_id')
             symbol_index = int(instance.get('symbol_index'))
             # Make the ComponentInstance()
-            inst = ComponentInstance(instance_id, library_id, symbol_index)
+            inst = ComponentInstance(instance_id, self.design.components.components[library_id], library_id, symbol_index)
 
             # Get the SymbolAttributes
             for symbol_attribute in instance.get('symbol_attributes'):
