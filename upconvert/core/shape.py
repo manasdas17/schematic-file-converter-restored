@@ -167,6 +167,13 @@ class Rectangle(Shape):
           raise ValueError('non 0.5 multiple rotation')
 
 
+    def flip(self, do_flip, about=None):
+        if not about:
+            about = Point(0, 0)
+        self.width = -self.width
+        self.x = -(self.x - about.x) + about.x
+
+
 
 class RoundedRectangle(Shape):
     """ A rectangle with rounded corners, defined by x, y of top left corner
@@ -285,6 +292,13 @@ class RoundedRectangle(Shape):
           self.width, self.height = -self.height, -self.width
         else:
           raise ValueError('non 0.5 multiple rotation')
+
+
+    def flip(self, do_flip, about=None):
+        if not about:
+            about = Point(0, 0)
+        self.width = -self.width
+        self.x = -(self.x - about.x) + about.x
 
 
 class Arc(Shape):
@@ -455,6 +469,12 @@ class Circle(Shape):
               raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
 
 
+    def flip(self, do_flip, about=None):
+        if not about:
+            about = Point(0, 0)
+        self.x = -(self.x - about.x) + about.x
+
+
     def scale(self, factor):
         """ Scale the x & y coordinates in the circle. """
         self.x *= factor
@@ -493,13 +513,14 @@ class Label(Shape):
     Alignment can be 'left','right', or 'center'. """
     # pylint: disable=W0223
 
-    def __init__(self, x, y, text, font_size, font_family, align, baseline, rotation): # pylint: disable=R0913
+    def __init__(self, x, y, text, font_size, font_family, align, baseline, rotation=0.0, flip=False):
         super(Label, self).__init__()
         self.type = "label"
         self.x = x
         self.y = y
         self.text = text
-        self.rotation = rotation
+        self._rotation = rotation
+        self._flip = flip
 
         self.baseline = baseline
         self.font_size = font_size
@@ -574,7 +595,7 @@ class Label(Shape):
                 self._max_point.rotate(rotation)
 
             else:
-                self.rotation += rotation
+                self._rotation += rotation
 
             self.x, self.y = self.y, self.x
             if rotation == 0.5 or rotation == -1.5:
@@ -585,6 +606,19 @@ class Label(Shape):
               self.x, self.y = -self.y, -self.x
             else:
               raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
+
+
+    def flip(self, do_flip, about=None):
+        if not about:
+            about = Point(0, 0)
+        self.x = -(self.x - about.x) + about.x
+        self._flip ^= do_flip
+        if self._segments:
+            for segments in self._segments:
+                segments[0].flip(do_flip, about)
+                segments[1].flip(do_flip, about)
+            self._min_point.flip(do_flip, about)
+            self._max_point.flip(do_flip, about)
 
 
     def scale(self, factor):
@@ -625,7 +659,7 @@ class Label(Shape):
             "font": self.font,
             "align": self.align,
             "baseline": self.align,
-            "rotation": self.rotation,
+            "rotation": self._rotation,
             "text": self.text,
             "x": int(self.x),
             "y": int(self.y),
@@ -635,7 +669,7 @@ class Label(Shape):
 
 
     def __repr__(self):
-        return '<Label(x={x}, y={y}, text="{text}", font_size={font_size}, font_family="{font_family}", align="{align}", baseline="{baseline}", rotation={rotation})>'.format(**self.__dict__)
+        return '<Label(x={x}, y={y}, text="{text}", font_size={font_size}, font_family="{font_family}", align="{align}", baseline="{baseline}", rotation={_rotation})>'.format(**self.__dict__)
 
 
 
@@ -693,6 +727,13 @@ class Line(Shape):
 
         if in_place:
             self.shift(dx, dy)
+
+
+    def flip(self, do_flip, about=None):
+        if not about:
+            about = Point(0, 0)
+        self.p1.flip(do_flip, about)
+        self.p2.flip(do_flip, about)
 
 
     def scale(self, factor):
@@ -1251,6 +1292,12 @@ class Point:
 
         if about:
             self.shift(about.x, about.y)
+
+
+    def flip(self, do_flip, about=None):
+        if not about:
+            about = Point(0, 0)
+        self.x = -(self.x - about.x) + about.x
 
 
     def scale(self, factor):
