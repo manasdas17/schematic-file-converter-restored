@@ -210,10 +210,7 @@ class JSON(object):
         y = int(footprint_pos_json.get('y') or 0)
 
         rotation = float(footprint_pos_json.get('rotation'))
-        try:
-            flip = (footprint_pos_json.get('flip').lower() == "true")
-        except:
-            flip = False
+        flip = footprint_pos_json.get('flip')
         side = footprint_pos_json.get('side')
 
         return FootprintPos(x, y, rotation, flip, side)
