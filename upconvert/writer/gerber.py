@@ -281,8 +281,13 @@ class Gerber:
             component = design.components.components[component_instance.library_id]
             component_image = Image(layer_name + ' component ' + component_instance.instance_id)
             footprint_pos = component_instance.footprint_pos
+            if footprint_pos.side is None:
+                continue
 
             for idx, footprint_attr in enumerate(component_instance.footprint_attributes):
+                log.debug('footprint pos: %s, side %s, flip %s', footprint_attr.layer, footprint_pos.side, footprint_pos.flip)
+                if footprint_attr.layer:
+                    footprint_attr.layer = footprint_attr.layer.replace('top', footprint_pos.side)
                 if footprint_attr.layer == layer_name:
                     footprint_body = component.footprints[component_instance.footprint_index].bodies[idx]
                     log.debug('adding footprint attribute: %s, %d shapes', footprint_attr, len(footprint_body.shapes))
