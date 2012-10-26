@@ -213,9 +213,12 @@ class Image:
         shapecpy.shift(parent_offset.x, parent_offset.y)
 
         if offset.rotation != 0:
-            shapecpy.rotate(offset.rotation, in_place=True)
+            if parent_offset.flip:
+                shapecpy.rotate(-offset.rotation, in_place=True)
+            else:
+                shapecpy.rotate(offset.rotation, in_place=True)
         if offset.flip:
-            shapecpy.flip(offset.flip, in_place=True)
+            shapecpy.flip(offset.flip)
 
         if isinstance(shapecpy, Line):
             # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.15mm
