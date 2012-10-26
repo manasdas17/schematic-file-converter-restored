@@ -85,7 +85,7 @@ class PadStack(GeneratedObject):
             pad = FBody()
 
             if shape_type == 'rectangle':
-                pad.add_shape(Rectangle(pos.x, pos.y, width, height))
+                pad.add_shape(Rectangle(pos.x + (width / 2), pos.y - (height / 2), width, height))
             elif shape_type == 'rounded rectangle':
                 pad.add_shape(RoundedRectangle(pos.x + (width / 2), pos.y - (height / 2), width, height, radius))
             elif shape_type == 'circle':
