@@ -561,6 +561,7 @@ class Label(Shape):
     def rotate(self, rotation, in_place=False):
         if rotation == 0 or rotation == 2:
             return
+        self._rotation += rotation
 
         if in_place:
             assert self._min_point
@@ -593,9 +594,6 @@ class Label(Shape):
                     segments[1].rotate(rotation)
                 self._min_point.rotate(rotation)
                 self._max_point.rotate(rotation)
-
-            else:
-                self._rotation += rotation
 
             self.x, self.y = self.y, self.x
             if rotation == 0.5 or rotation == -1.5:
