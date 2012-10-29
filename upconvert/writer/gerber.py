@@ -67,6 +67,10 @@ class NotBatch(ValueError):
 
 
 # constants
+POS_UNITS_PER_MM = 1000 * 1000
+POS_UNITS_PER_MIL = 25400
+POS_UNITS_PER_CM = POS_UNITS_PER_MM * 10
+POS_UNITS_PER_IN = POS_UNITS_PER_MIL * 1000
 
 LINE = '{0}\r\n'
 FORMAT_SPEC = '%FSLAX{int}{dec}Y{int}{dec}*%'
@@ -212,8 +216,31 @@ class Gerber:
         # Initialize the writer state for the layer
         self._reset()
 
-        # decompose layer data into images and the apertures and macros used to represent the images,
-        self._define_images(design, layer_options.name)
+        # FIXME(shamer): hack to add the board outline from design level attributes
+        if layer_options.name == 'mechanical details':
+            design_attrs = design.design_attributes.attributes
+            if '_board_height' in design_attrs and '_board_width' in design_attrs:
+                log.debug('creating board outline')
+                outline_image = Image('board_outline')
+                height = self._parse_units(design_attrs['_board_height'])
+                width = self._parse_units(design_attrs['_board_width'])
+
+                outline_width = 0.15 * 1000000
+
+                bottom = Smear(Line(Point(0, 0), Point(width, 0)), Circle(0, 0, outline_width))
+                right =  Smear(Line(Point(width, 0), Point(width, height)), Circle(0, 0, outline_width))
+                top =  Smear(Line(Point(width, height), Point(0, height)), Circle(0, 0, outline_width))
+                left =  Smear(Line(Point(0, height), Point(0, 0)), Circle(0, 0, outline_width))
+                outline_image.smears.append(bottom)
+                outline_image.smears.append(right)
+                outline_image.smears.append(top)
+                outline_image.smears.append(left)
+                self.images.append(outline_image)
+
+        else:
+            # decompose layer data into images and the apertures and macros used to represent the images,
+            self._define_images(design, layer_options.name)
+
         self._define_image_macros()
         self._define_image_apertures()
 
@@ -700,6 +727,20 @@ class Gerber:
         """ Convert from the core units (nm) to those of the current gerber being written. """
         # FIXME(shamer): adjust to actual units of gerber, is hard coded to mm
         return num / 1000000.0
+
+
+    def _parse_units(self, unitstr):
+        parts = unitstr.split(' ')
+        num = float(parts[0])
+        units = parts[1].lower()
+        if units == 'in':
+            return int(num * POS_UNITS_PER_IN)
+        elif units == 'mm':
+            return int(num * POS_UNITS_PER_MM)
+        elif units == 'cm':
+            return int(num * POS_UNITS_PER_CM)
+        elif units == 'mil':
+            return int(num * POS_UNITS_PER_MM)
 
 
     def _check_mq(self, seg):
