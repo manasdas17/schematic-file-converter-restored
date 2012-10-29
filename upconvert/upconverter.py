@@ -67,7 +67,7 @@ from upconvert.parser import openjson as openjson_p, kicad as kicad_p, geda as g
     specctra as specctra_p
 from upconvert.writer import openjson as openjson_w, kicad as kicad_w, geda as geda_w, \
     eagle as eagle_w, eaglexml as eaglexml_w, gerber as gerber_w, specctra as specctra_w, \
-    bom_csv as bom_w, netlist_csv as netlist_w
+    bom_csv as bom_w, netlist_csv as netlist_w, ncdrill as ncdrill_w
 
 
 # Try to include image writer support
@@ -102,6 +102,7 @@ WRITERS = {
     'eagle': eagle_w.Eagle,
     'eaglexml': eaglexml_w.EagleXML,
     'gerber': gerber_w.Gerber,
+    'ncdrill': ncdrill_w.NCDrill,
     'specctra': specctra_w.Specctra,
     'image':  image_parser,
     'bom': bom_w.BOM,
@@ -116,6 +117,7 @@ EXTENSIONS = {
     'eaglexml': '.sch',
     'fritzing': '.fz',
     'gerber': '.zip',
+    'ncdrill': '.drill',
     'specctra': '.dsn',
     'image': '.png',
     'bom': '.csv',
