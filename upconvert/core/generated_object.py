@@ -91,8 +91,13 @@ class PadStack(GeneratedObject):
         pos = Point(self.x, self.y)
 
         for layer_name in attached_layers:
-            layer_name = offset.side + ' ' + layer_name
+            layer_name = layer_name
             pad = FBody()
+
+            # invert top/bottom if the footprint is on the bottom of the board
+            if offset.side == 'bottom':
+                rev_sides = {'top': 'bottom', 'bottom': 'top'}
+                layer_name = ' '.join([rev_sides.get(piece, piece) for piece in layer_name.split(' ')])
 
             if shape_type == 'rectangle':
                 pad.add_shape(Rectangle(pos.x + (width / 2), pos.y - (height / 2), width, height))
@@ -289,3 +294,81 @@ class CenterCross(GeneratedObject):
     def bodies(self, offset, instance_attributes):
         return []
 _parser_types[CenterCross.type_name] = CenterCross.parse_gen_obj_json
+
+
+
+class Path:
+    """ A path formed from connected points. """
+
+    def __init__(self, layer, points, width, is_closed):
+        self.layer = layer
+        self.points = points
+        self.width = width
+        self.is_closed = is_closed
+
+
+    def min_point(self):
+        """ Return the min point of the shape """
+        if len(self.points) < 1:
+            # by convention
+            x, y = 0, 0
+        else:
+            x = min([pt.x for pt in self.points])
+            y = min([pt.y for pt in self.points])
+        return Point(x, y)
+
+
+    def max_point(self):
+        """ Return the max point of the shape """
+        if len(self.points) < 1:
+            # by convention
+            x, y = 0, 0
+        else:
+            x = max([pt.x for pt in self.points])
+            y = max([pt.y for pt in self.points])
+        return Point(x, y)
+
+
+    def move(self, x, y):
+        """ Move the polygon to an explicit position. """
+        dx = x - self.point[0].x
+        dy = y - self.point[0].y
+
+        for point in self.points:
+            point.x -= dx
+            point.y -= dy
+
+
+    def add_point(self, x, y=None):
+        """ Add a point to the polygon """
+        self.points.append(Point(x, y))
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the polygon. """
+        for point in self.points:
+            point.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the polygon. """
+        for point in self.points:
+            point.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the polygon. """
+        for point in self.points:
+            point.rebase_y_axis(height)
+
+
+    def json(self):
+        """ Return the polygon as JSON """
+        return {
+            "points": [point.json() for point in self.points],
+            "layer": self.layer,
+            "width": self.width,
+            "is_closed": self.is_closed,
+            }
+
+
