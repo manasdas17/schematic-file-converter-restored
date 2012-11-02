@@ -86,6 +86,7 @@ COORD_EXT = 'X{x}Y{y}I{i}J{j}*'
 STEALTH = 'X{x}Y{y}D02*'
 FLASH = 'X{x}Y{y}D03*'
 MM_UNITS = '%MOMM*%'
+IN_UNITS = '%MOIN*%'
 EOF = 'M02*'
 INTERPOLATION = {'LINEAR': '01',
                  'CLOCKWISE_CIRCULAR': '02',
@@ -246,6 +247,12 @@ class Gerber:
 
         # write layer parameters
         layer_file.write(LINE.format(self._get_format_spec(design.layout_units)))
+        if design.layout_units == 'mm':
+            layer_file.write(LINE.format(MM_UNITS))
+        elif design.layout_units == 'in':
+            layer_file.write(LINE.format(IN_UNITS))
+        else:
+            raise UnitsNotSpecified('acceptable units not specified')
 
         # include macros and apertures used on the layer
         for macro in self.macros:
