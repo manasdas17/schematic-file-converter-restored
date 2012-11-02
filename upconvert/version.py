@@ -30,6 +30,6 @@ def version():
         with open('version', 'r') as f:
             vrsn = f.read().strip()
     except Exception: #pylint: disable=W0703
-        vrsn = '0.6.1'
-    
+        vrsn = '0.7.0'
+
     return vrsn
