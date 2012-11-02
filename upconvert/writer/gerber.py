@@ -26,6 +26,7 @@ from shutil import rmtree
 from collections import namedtuple
 from tarfile import TarFile
 from zipfile import ZipFile
+import copy
 import errno
 import logging
 
@@ -320,13 +321,16 @@ class Gerber:
 
             for idx, footprint_attr in enumerate(component_instance.footprint_attributes):
                 log.debug('footprint pos: %s, side %s, flip %s', footprint_attr.layer, footprint_pos.side, footprint_pos.flip)
+                fp_attr_cpy = copy.deepcopy(footprint_attr)
                 if footprint_attr.layer:
-                    footprint_attr.layer = footprint_attr.layer.replace('top', footprint_pos.side)
-                if footprint_attr.layer == layer_name:
+                    if footprint_pos.side == 'bottom':
+                        rev_sides = {'top': 'bottom', 'bottom': 'top'}
+                        fp_attr_cpy.layer = ' '.join([rev_sides.get(piece, piece) for piece in footprint_attr.layer.split(' ')])
+                if fp_attr_cpy.layer == layer_name:
                     footprint_body = component.footprints[component_instance.footprint_index].bodies[idx]
-                    log.debug('adding footprint attribute: %s, %d shapes', footprint_attr, len(footprint_body.shapes))
+                    log.debug('adding footprint attribute: %s, %d shapes', fp_attr_cpy, len(footprint_body.shapes))
                     for shape in footprint_body.shapes:
-                        component_image.add_shape(shape, component_instance, footprint_pos, footprint_attr)
+                        component_image.add_shape(shape, component_instance, footprint_pos, fp_attr_cpy)
 
             for idx, gen_obj_attr in enumerate(component_instance.gen_obj_attributes):
                 gen_obj = component.footprints[component_instance.footprint_index].gen_objs[idx]
