@@ -218,30 +218,8 @@ class Gerber:
         # Initialize the writer state for the layer
         self._reset()
 
-        # FIXME(shamer): hack to add the board outline from design level attributes
-        if layer_options.name == 'mechanical details':
-            design_attrs = design.design_attributes.attributes
-            if '_board_height' in design_attrs and '_board_width' in design_attrs:
-                log.debug('creating board outline')
-                outline_image = Image('board_outline')
-                height = self._parse_units(design_attrs['_board_height'])
-                width = self._parse_units(design_attrs['_board_width'])
-
-                outline_width = 0.15 * 1000000
-
-                bottom = Smear(Line(Point(0, 0), Point(width, 0)), Circle(0, 0, outline_width))
-                right =  Smear(Line(Point(width, 0), Point(width, height)), Circle(0, 0, outline_width))
-                top =  Smear(Line(Point(width, height), Point(0, height)), Circle(0, 0, outline_width))
-                left =  Smear(Line(Point(0, height), Point(0, 0)), Circle(0, 0, outline_width))
-                outline_image.smears.append(bottom)
-                outline_image.smears.append(right)
-                outline_image.smears.append(top)
-                outline_image.smears.append(left)
-                self.images.append(outline_image)
-
-        else:
-            # decompose layer data into images and the apertures and macros used to represent the images,
-            self._define_images(design, layer_options.name)
+        # decompose layer data into images and the apertures and macros used to represent the images,
+        self._define_images(design, layer_options.name)
 
         self._define_image_macros()
         self._define_image_apertures()
@@ -347,10 +325,21 @@ class Gerber:
             if component_image.not_empty():
                 self.images.append(component_image)
 
+        # paths on the layer
+        for path in design.paths:
+            if layer_name == path.layer:
+                log.debug('adding body for path: %s points, %s, %s, is closed: %s', len(path.points), path.width, path.layer, path.is_closed)
+                path_image = Image('path')
+                start = path.points[0]
+                for point in path.points[1:]:
+                    path_image.add_shape(Line(start, point), Circle(0, 0, path.width), zero_pos, zero_pos)
+                    start = point
+                if path.is_closed:
+                    path_image.add_shape(Line(path.points[0], path.points[-1]), Circle(0, 0, path.width), zero_pos, zero_pos)
+                self.images.append(path_image)
+
         # TODO(shamer)
         # generated objects with aspects on this layer (thermals, vias, pths)
-        # board outline (if that layer)
-        # fills, paths on the layer
         # text
 
 
