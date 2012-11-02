@@ -157,7 +157,7 @@ class Gerber:
                               path.join(batch.rootdir, member_name) or
                               path.join(dir_, member_name), 'w') as member:
                         self._write_layer(design, layer, member)
-                    cfg.write(LINE.format(', '.join([layer.name, layer.type, member_name])))
+                    cfg.write(LINE.format(', '.join([layer.name, member_name])))
             if batch.archive:
                 #TODO: line below doesn't work
                 #batch.add_(batch.rootdir)
