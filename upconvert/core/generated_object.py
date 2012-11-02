@@ -287,7 +287,7 @@ class CenterCross(GeneratedObject):
                            int(gen_obj_json['y']),
                            gen_obj_json['layer'],
                            float(gen_obj_json['rotation']),
-                           gen_obj_json['flip'] == 'true', # FIXME(shamer): should this be a bool?
+                           gen_obj_json['flip'],
                            gen_obj_json['attributes'])
 
 
