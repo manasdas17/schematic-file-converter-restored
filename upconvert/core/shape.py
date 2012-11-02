@@ -654,7 +654,8 @@ class Label(Shape):
         """ Return the label as JSON """
         return {
             "type": self.type,
-            "font": self.font,
+            "font_family": self.font_family,
+            "font_size": self.font_size,
             "align": self.align,
             "baseline": self.align,
             "rotation": self._rotation,
