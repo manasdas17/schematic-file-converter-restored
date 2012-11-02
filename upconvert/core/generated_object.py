@@ -55,6 +55,16 @@ class GeneratedObject:
     def get_int_attr(self, name, default, instance_attributes):
         return int(self.get_attr(name, default, instance_attributes))
 
+    def json(self):
+        return {'x': self.x,
+                'y': self.y,
+                'layer': self.layer,
+                'rotation': self.rotation,
+                'flip': self.flip,
+                'attributes': self.attributes}
+
+
+
 
 class PadStack(GeneratedObject):
     type_name = 'padstack'
@@ -274,6 +284,7 @@ class CenterCross(GeneratedObject):
                            float(gen_obj_json['rotation']),
                            gen_obj_json['flip'] == 'true', # FIXME(shamer): should this be a bool?
                            gen_obj_json['attributes'])
+
 
     def bodies(self, offset, instance_attributes):
         return []
