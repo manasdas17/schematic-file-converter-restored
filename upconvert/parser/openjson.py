@@ -30,7 +30,7 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.components import Component, Symbol, SBody, Pin, FBody, Footprint
 from upconvert.core.design import Design
 from upconvert.core.design_attributes import DesignAttributes, Metadata
-from upconvert.core.generated_object import parse_gen_obj_json
+from upconvert.core.generated_object import parse_gen_obj_json, Path
 from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, RoundedSegment, Point
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.layout import Segment, Layer
@@ -78,6 +78,7 @@ class JSON(object):
         self.parse_layer_options(read.get('layer_options'))
         self.parse_trace_segments(read.get('trace_segments'))
         self.parse_layout_objects(read.get('gen_objs'))
+        self.parse_paths(read.get('paths'))
 
         return self.design
 
@@ -100,6 +101,16 @@ class JSON(object):
             p2 = Point(segment_json['p2']['x'], segment_json['p2']['y'])
             segment = Segment(segment_json['layer'], p1, p2, segment_json['width'])
             self.design.trace_segments.append(segment)
+
+
+    def parse_paths(self, paths_json):
+        for path_json in paths_json:
+            points = [Point(point_json['x'], point_json['y']) for point_json in path_json['points']]
+            width = path_json['width']
+            is_closed = path_json['is_closed']
+            layer = path_json['layer']
+            path = Path(layer, points, width, is_closed)
+            self.design.paths.append(path)
 
 
     def parse_layout_objects(self, gen_objs_json):
