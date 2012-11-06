@@ -160,7 +160,7 @@ class JSON(object):
 
             footprint_json = instance.get('footprint_pos')
             if footprint_json:
-                footprint_pos = self.parse_footprint_pos()
+                footprint_pos = self.parse_footprint_pos(footprint_json)
             else:
                 footprint_pos = None
             inst.set_footprint_pos(footprint_pos)
