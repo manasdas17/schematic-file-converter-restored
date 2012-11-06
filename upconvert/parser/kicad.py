@@ -232,7 +232,7 @@ class KiCAD(object):
 
             line = f.readline()
 
-        inst = ComponentInstance(reference, name.upper(), convert - 1)
+        inst = ComponentInstance(reference, library_part, name.upper(), convert - 1)
         symbattr = SymbolAttribute(compx, -compy, rotation, flip)
         for ann in annotations:
             symbattr.add_annotation(ann)
@@ -562,7 +562,7 @@ class ComponentParser(object):
         else:
             align = 'left'
 
-        return Label(x, y, text, align, angle)
+        return Label(x, y, text, align=align, rotation=angle)
 
 
     def parse_x_line(self, parts):
@@ -601,6 +601,6 @@ class ComponentParser(object):
             label = None
         else:
             label = Label(label_x, label_y,
-                          name, 'center', label_rotation)
+                          name, align='center', rotation=label_rotation)
 
         return Pin(num, (p1x, p1y), (p2x, p2y), label)

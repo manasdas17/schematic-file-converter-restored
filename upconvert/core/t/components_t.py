@@ -203,7 +203,7 @@ class PinTests(unittest.TestCase):
 
     def test_pin_label_bounds(self):
         '''Test bounds() for a pin with a label'''
-        lab = Label(0, 0, 'foo', 'left', 0)
+        lab = Label(0, 0, 'foo', align='left', rotation=0)
         mkbounds(lab, 1, 3, 2, 6)
         pin = Pin(0, Point(2, 2), Point(4, 3), lab)
         top_left, bottom_right = pin.bounds()

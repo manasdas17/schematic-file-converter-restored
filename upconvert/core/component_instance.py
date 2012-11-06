@@ -99,7 +99,7 @@ class ComponentInstance:
 
     def json(self):
         """ Return a component as JSON """
-        return {
+        json = {
             "instance_id" : self.instance_id,
             "library_id" : self.library_id,
             "symbol_index" : self.symbol_index,
@@ -107,9 +107,11 @@ class ComponentInstance:
             "footprint_index" : self.footprint_index,
             "footprint_attributes":[s.json() for s in self.footprint_attributes],
             "gen_obj_attributes":[s.json() for s in self.gen_obj_attributes],
-            "footprint_pos":self.footprint_pos.json(),
             "attributes" : stringify_attributes(self.attributes)
             }
+        if self.footprint_pos is not None:
+            json["footprint_pos"] = self.footprint_pos.json()
+        return json
 
 
     def __repr__(self):

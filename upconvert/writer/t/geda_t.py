@@ -405,7 +405,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
             ]
         )
 
-        label = shape.Label(10, 0, 'p1', 'left', 0.5)
+        label = shape.Label(10, 0, 'p1', align='left', rotation=0.5)
 
         pin = components.Pin('E', (0, 0), (0, 30), label=label)
         command = self.geda_writer._create_pin(1, pin)
@@ -531,7 +531,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
 
     def test_convert_label(self):
         """ Tests converting Lable objects to label commands. """
-        label = shape.Label(0, 0, 'test label', 'center', 0.0)
+        label = shape.Label(0, 0, 'test label', align='center', rotation=0.0)
         command = self.geda_writer._convert_label(label)
         self.assertEquals(
             command,
@@ -541,7 +541,7 @@ class GEDAWriterTests(GEDAWriterTestCase):
             ]
         )
 
-        label = shape.Label(0, 0, 'test label', 'left', 0.5)
+        label = shape.Label(0, 0, 'test label', align='left', rotation=0.5)
         command = self.geda_writer._convert_label(label)
         self.assertEquals(
             command,

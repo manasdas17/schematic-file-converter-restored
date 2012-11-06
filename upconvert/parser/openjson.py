@@ -91,11 +91,17 @@ class JSON(object):
 
 
     def parse_layer_options(self, layer_options_json):
+        if layer_options_json is None:
+            return None
+
         for layer_option_json in layer_options_json:
             self.design.layer_options.append(Layer(layer_option_json['name']))
 
 
     def parse_trace_segments(self, segments_json):
+        if segments_json is None:
+            return None
+
         for segment_json in segments_json:
             p1 = Point(segment_json['p1']['x'], segment_json['p1']['y'])
             p2 = Point(segment_json['p2']['x'], segment_json['p2']['y'])
@@ -104,6 +110,9 @@ class JSON(object):
 
 
     def parse_paths(self, paths_json):
+        if paths_json is None:
+            return None
+
         for path_json in paths_json:
             points = [Point(point_json['x'], point_json['y']) for point_json in path_json['points']]
             width = path_json['width']
@@ -114,6 +123,9 @@ class JSON(object):
 
 
     def parse_layout_objects(self, gen_objs_json):
+        if gen_objs_json is None:
+            return None
+
         for gen_obj_json in gen_objs_json:
             gen_obj = parse_gen_obj_json(gen_obj_json)
             self.design.layout_objects.append(gen_obj)
@@ -121,6 +133,10 @@ class JSON(object):
 
     def parse_component_instances(self, component_instances):
         """ Extract the component instances. """
+
+        if component_instances is None:
+            return None
+
         for instance in component_instances:
             # Get instance_id, library_id and symbol_index
             instance_id = instance.get('instance_id')
@@ -130,19 +146,23 @@ class JSON(object):
             inst = ComponentInstance(instance_id, self.design.components.components[library_id], library_id, symbol_index)
 
             # Get the SymbolAttributes
-            for symbol_attribute in instance.get('symbol_attributes'):
+            for symbol_attribute in instance.get('symbol_attributes', []):
                 attr = self.parse_symbol_attribute(symbol_attribute)
                 inst.add_symbol_attribute(attr)
 
             # TODO(shamer) footprint_pos, fleb and genobj positions are relative to the footprint_pos
-            for footprint_attribute in instance.get('footprint_attributes'):
+            for footprint_attribute in instance.get('footprint_attributes', []):
                 attr = self.parse_footprint_attribute(footprint_attribute)
                 inst.add_footprint_attribute(attr)
-            for gen_obj_attribute in instance.get('gen_obj_attributes'):
+            for gen_obj_attribute in instance.get('gen_obj_attributes', []):
                 attr = self.parse_gen_obj_attribute(gen_obj_attribute)
                 inst.add_gen_obj_attribute(attr)
 
-            footprint_pos = self.parse_footprint_pos(instance.get('footprint_pos'))
+            footprint_json = instance.get('footprint_pos')
+            if footprint_json:
+                footprint_pos = self.parse_footprint_pos()
+            else:
+                footprint_pos = None
             inst.set_footprint_pos(footprint_pos)
 
             # Get the Attributes
@@ -220,7 +240,7 @@ class JSON(object):
         x = int(footprint_pos_json.get('x') or 0)
         y = int(footprint_pos_json.get('y') or 0)
 
-        rotation = float(footprint_pos_json.get('rotation'))
+        rotation = float(footprint_pos_json.get('rotation', 0))
         flip = footprint_pos_json.get('flip')
         side = footprint_pos_json.get('side')
 
@@ -247,12 +267,12 @@ class JSON(object):
             name = component.get('name')
             comp = Component(name)
             # Get attributes
-            for key, value in component.get('attributes').items():
+            for key, value in component.get('attributes', []).items():
                 comp.add_attribute(key, value)
-            for symbol_json in component.get('symbols'):
+            for symbol_json in component.get('symbols', []):
                 symbol = self.parse_symbol(symbol_json)
                 comp.add_symbol(symbol)
-            for footprint_json in component.get('footprints'):
+            for footprint_json in component.get('footprints', []):
                 footprint = self.parse_footprint(footprint_json)
                 comp.add_footprint(footprint)
             self.design.add_component(library_id, comp)

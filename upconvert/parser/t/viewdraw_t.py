@@ -182,7 +182,7 @@ class ViewDrawBaseTests(unittest.TestCase):
         self.assertEqual(k, 'shape')
         self.assertEqual(v.type, 'label')
         self.assertEqual((v.x, v.y), (3, 4))
-        self.assertAlmostEqual(v.rotation, 1.5)
+        self.assertAlmostEqual(v._rotation, 1.5)
         self.assertEqual(v.text, 'hello world')
 
     def test_version(self):
@@ -302,7 +302,7 @@ class ViewDrawSymTests(unittest.TestCase):
         # NOTE not sure if this test is too coupled to internal
         # state/architecture. Fix it if there's a better way
         def fake_label(args):
-            return ('label', Label(1, 2, args, 'left', 0))
+            return ('label', Label(1, 2, args, align='left', rotation=0))
 
         p = self.sym.parsenode
         def parsenode_shim(cmd):
@@ -316,7 +316,7 @@ class ViewDrawSymTests(unittest.TestCase):
         self.assertEqual((label.x, label.y), (1, 2))
         self.assertEqual(label.text, 'testlabel')
         self.assertEqual(label.align, 'left')
-        self.assertEqual(label.rotation, 0)
+        self.assertEqual(label._rotation, 0)
 
     def test_label(self):
         """ Test parsing a text label """
@@ -327,7 +327,7 @@ class ViewDrawSymTests(unittest.TestCase):
         self.assertEqual((v.x, v.y), (2, 3))
         self.assertEqual(v.text, 'foobar')
         self.assertEqual(v.align, 'left')
-        self.assertEqual(v.rotation, 0)
+        self.assertEqual(v._rotation, 0)
 
     def test_label_inverted(self):
         """ Test parsing a label (for a pin) for an inverted signal """

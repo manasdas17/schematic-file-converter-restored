@@ -284,7 +284,7 @@ $EndDescr
                      make_length(shape.x + shape.width),
                      make_length(shape.y - shape.height)))
         elif shape.type == 'label':
-            angle = round(shape.rotation * 1800)
+            angle = round(shape._rotation * 1800)
             align = shape.align[0].upper()
             return ('T %d %d %d 20 0 %%(unit)d %%(convert)d %s Normal 0 %s C\n' %
                     (angle, make_length(shape.x), make_length(shape.y),

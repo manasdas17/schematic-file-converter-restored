@@ -162,7 +162,7 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(labels[0].x / EAGLE_SCALE, self.make_length("5.08"))
         self.assertEqual(labels[0].y / EAGLE_SCALE, self.make_length("-2.54"))
         self.assertEqual(labels[0].text, 'USB')
-        self.assertEqual(labels[0].rotation, 1.5)
+        self.assertEqual(labels[0]._rotation, 1.5)
 
 
     @use_file('E1AA60D5.sch')
@@ -178,7 +178,7 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].label.text, '(ADC3)PB4')
         self.assertEqual(pins[0].label.x / EAGLE_SCALE, 0)
         self.assertEqual(pins[0].label.y / EAGLE_SCALE, 18)
-        self.assertEqual(pins[0].label.rotation, 0.0)
+        self.assertEqual(pins[0].label._rotation, 0.0)
 
         cpt = self.get_component('diode:ZENER-DIODE:logical')
         pins = cpt.symbols[0].bodies[0].pins

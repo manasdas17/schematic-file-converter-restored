@@ -109,7 +109,7 @@ class Specctra(object):
                         for shape in self._convert_shapes(shapes, self.to_pixels(pad.vertex)):
                             body.add_shape(shape)
                         break
-                            
+
             for outline in image.outline:
                 for shape in self._convert_shapes([outline.shape]):
                     body.add_shape(shape)
@@ -128,7 +128,7 @@ class Specctra(object):
                     rotation = place.rotation
                 else:
                     rotation = mirror.get(int(place.rotation), place.rotation)
-                inst = ComponentInstance(place.component_id, library_id, 0)
+                inst = ComponentInstance(place.component_id, component, library_id, 0)
                 v = self.to_pixels(place.vertex)
                 symbattr = FootprintAttribute(v[0], v[1], to_piradians(rotation), False)
                 inst.add_symbol_attribute(symbattr) 

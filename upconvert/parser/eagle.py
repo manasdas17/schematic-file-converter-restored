@@ -2541,6 +2541,7 @@ class Eagle:
                                    self.get_unique_string())) # to avoid same name collisions
             value_names.append(_pp.value)
             _ci = ComponentInstance(instance_id=_pp.name,
+                                    library_component=None, # FIXME(shamer): where is the actual library component?
                                     library_id=_libid,
                                     symbol_index=0)    # There appears to only have the possibility
                                                                 # 1 symbol per component, so I will

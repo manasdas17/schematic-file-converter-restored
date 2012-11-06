@@ -186,7 +186,7 @@ class ViewDrawBase:
         x, y, _size, rot, _anchor, text = args.split(' ', 5)
         # TODO sort out alignment
         rot, _flip = self.rot_and_flip(rot)
-        return ('shape', Label(int(x), int(y), text, 'left', rot))
+        return ('shape', Label(int(x), int(y), text, align='left', rotation=rot))
 
     def parse_ver(self, args):
         """ Returns the ViewDraw output file format version. """
@@ -379,7 +379,7 @@ class ViewDrawSch(ViewDrawBase):
             libkey = self.scaled_component(libname, libnum, scale)
         else:
             libkey = self.lookup(libname, libnum)
-        thisinst = ComponentInstance(inst, libkey, 0)
+        thisinst = ComponentInstance(inst, None, libkey, 0) #FIXME(shamer): where is the actual library component?
         rot, flip = self.rot_and_flip(rot)
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
                                                       rot, flip))

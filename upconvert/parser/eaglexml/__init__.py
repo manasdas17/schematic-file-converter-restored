@@ -217,7 +217,7 @@ class EagleXML(object):
             elif content == '>VALUE':
                 ann_map['value'] = Annotation(content, x, y, rotation, 'true')
             else:
-                body.add_shape(Label(x, y, content, 'left', rotation))
+                body.add_shape(Label(x, y, content, align='left', rotation=rotation))
 
         return body, pin_map, ann_map
 
@@ -306,7 +306,7 @@ class EagleXML(object):
             x, y = (null_x + distance, null_y)
             rotation = 0.0
 
-        return Label(x, y, pin.name, 'center', rotation)
+        return Label(x, y, pin.name, align='center', rotation=rotation)
 
 
     def make_component_instances(self, root):
@@ -333,8 +333,7 @@ class EagleXML(object):
 
         cpt = self.design.components.components[library_id]
 
-        self.part2inst[part.name] = ComponentInstance(instance.part,
-                                                      library_id, 0)
+        self.part2inst[part.name] = ComponentInstance(instance.part, part, library_id, 0)
 
         # pre-create symbol attributes, to be filled in during
         # instance processing

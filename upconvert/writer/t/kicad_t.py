@@ -110,7 +110,7 @@ class KiCADTests(unittest.TestCase):
         correctly.
         """
 
-        inst = ComponentInstance('id', 'libid', 1)
+        inst = ComponentInstance('id', None, 'libid', 1)
         inst.add_symbol_attribute(SymbolAttribute(3, 4, 0.5, False))
         writer = KiCAD()
         buf = StringIO()
@@ -204,7 +204,7 @@ $EndComp
             + str(int(200 / MULT)) + ' D 60 60 %(unit)d %(convert)d B\n')
 
         pin = Pin('2', (0, 1300), (0, 1500),
-                  Label(0, 0, 'name', 'center', 0))
+                  Label(0, 0, 'name', align='center', rotation=0))
         line = writer.get_pin_line(pin)
         self.assertEqual(
             line, 'X name 2 0 '

@@ -40,7 +40,7 @@ class ComponentInstanceTests(unittest.TestCase):
 
     def test_create_new_instance(self):
         """ Test the creation of a new empty instance. """
-        inst = ComponentInstance('001', '002', '003')
+        inst = ComponentInstance('001', None, '002', '003')
         assert inst.instance_id == '001'
         assert inst.library_id == '002'
         assert inst.symbol_index == '003'

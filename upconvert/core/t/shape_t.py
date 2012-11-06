@@ -242,12 +242,12 @@ class LabelTests(unittest.TestCase):
 
     def test_create_new_label(self):
         """ Test the creation of a new empty label. """
-        lbl = Label(0, 1, 'abc', 'left', 2)
+        lbl = Label(0, 1, 'abc', align='left', rotation=2)
         assert lbl.x == 0
         assert lbl.y == 1
         assert lbl.text == 'abc'
         assert lbl.align == 'left'
-        assert lbl.rotation == 2
+        assert lbl._rotation == 2
 
     def test_label_min_point(self):
         '''Test Label.min_point()'''
@@ -554,6 +554,6 @@ class PointTests(unittest.TestCase):
     def test_point_repr(self):
         '''repr(Point) --> Point($x, $y)'''
         pt = Point(8, 7)
-        self.assertEqual(repr(pt), 'Point(8, 7)')
+        self.assertEqual(repr(pt), 'Point(x=8, y=7)')
         pt = Point(-3, -4)
-        self.assertEqual(repr(pt), 'Point(-3, -4)')
+        self.assertEqual(repr(pt), 'Point(x=-3, y=-4)')

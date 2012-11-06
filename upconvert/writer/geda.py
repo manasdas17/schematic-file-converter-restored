@@ -645,7 +645,7 @@ class GEDA:
                 pin.label.x,
                 pin.label.y,
                 alignment=pin.label.align,
-                angle=pin.label.rotation
+                angle=pin.label._rotation
             )
             command += attribute
 
@@ -794,7 +794,7 @@ class GEDA:
             x=label.x,
             y=label.y,
             alignment=label.align,
-            angle=label.rotation,
+            angle=label._rotation,
         )
         kwargs.update(label.styles)
         return self._create_text(**kwargs)

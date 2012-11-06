@@ -513,7 +513,7 @@ class Label(Shape):
     Alignment can be 'left','right', or 'center'. """
     # pylint: disable=W0223
 
-    def __init__(self, x, y, text, font_size, font_family, align, baseline, rotation=0.0, flip=False):
+    def __init__(self, x, y, text, font_size=10, font_family='sans-serif', align='left', baseline='alphabetic', rotation=0.0, flip=False):
         super(Label, self).__init__()
         self.type = "label"
         self.x = x

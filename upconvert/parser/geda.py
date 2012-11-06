@@ -127,8 +127,8 @@ class GEDAText(object):
             text_x,
             self.params.get('y', 0),
             self.content,
-            'left',
-            self.params.get('angle', 0),
+            align='left',
+            rotation=self.params.get('angle', 0),
         )
         return self.store_styles_in_label(label)
 
@@ -557,6 +557,7 @@ class GEDA:
         if attributes is not None:
             instance = ComponentInstance(
                 get_instance_id(attributes.get('refdes', component.name)),
+                component,
                 component.name,
                 0
             )
@@ -565,6 +566,7 @@ class GEDA:
         else:
             instance = ComponentInstance(
                 get_instance_id(component.name),
+                component,
                 component.name,
                 0
             )
@@ -1194,8 +1196,8 @@ class GEDA:
                 connect_end[0],
                 connect_end[1],
                 attributes.get('_pinlabel'),
-                'left',
-                0.0
+                align='left',
+                rotation=0.0
             )
 
         pin = components.Pin(

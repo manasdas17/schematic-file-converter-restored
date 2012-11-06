@@ -263,7 +263,7 @@ class Fritzing(object):
             x, y = rotate_component(cpt, matrix, x, y)
             rotation = MATRIX2ROTATION.get(matrix, 0.0)
 
-        compinst = ComponentInstance(title, idref, 0)
+        compinst = ComponentInstance(title, cpt, idref, 0)
 
         compinst.add_symbol_attribute(
             SymbolAttribute(make_x(x), make_y(y), rotation, False))
