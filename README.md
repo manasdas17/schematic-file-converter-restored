@@ -83,6 +83,7 @@ Format Wish List
 * OrCad
 * Drill Data in Excellon format
 * Existing supported formats - layout data
+* DipTrace
 
 
 The Concept
@@ -94,7 +95,7 @@ The Concept
 Interchange Format Documentation
 ---------------
 
-  The converter is based on the Upverter Open JSON Format fully documented at http://upverter.com/resources/open-json-format/. We hope that someday all of the major providers of schematic capture software will support interoperability with open formats like this one.
+  The converter is based on the Upverter Open JSON Format fully documented at http://support.upverter.com/customer/portal/articles/553504-documentation-for-open-json-format. We hope that someday all of the major providers of schematic capture software will support interoperability with open formats like this one.
 
 
 Key Contributors
