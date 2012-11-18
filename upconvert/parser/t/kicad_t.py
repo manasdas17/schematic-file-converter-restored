@@ -101,7 +101,7 @@ class KiCADTests(unittest.TestCase):
         Test that no duplicate nets are present.
         """
 
-        self.assertEqual(len(self.design.nets), 83)
+        self.assertEqual(len(self.design.nets), 82)
         self.assertEqual(len(self.design.nets),
                          len(set(n.net_id for n in self.design.nets)))
 
