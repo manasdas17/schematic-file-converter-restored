@@ -125,6 +125,21 @@ class EagleXMLTests(unittest.TestCase):
                          self.make_length("-1.651") - self.make_length("-2.54"))
 
 
+    @use_file('S12G_Micro_20EVB_RevA.sch')
+    def test_component_body_rectangles_rot(self):
+        """ The right rotations are applied to Rectangles on SBody objects. """
+
+        cpt = self.get_component('myLibrary:L:logical')
+        rect = [s for s in cpt.symbols[0].bodies[0].shapes
+                if s.type == 'rectangle'][0]
+        self.assertEqual(rect.x / EAGLE_SCALE, self.make_length("-3.556"))
+        self.assertEqual(rect.y / EAGLE_SCALE, self.make_length("1.016"))
+        self.assertEqual(rect.width / EAGLE_SCALE,
+                         self.make_length("3.556") - self.make_length("-3.556"))
+        self.assertEqual(rect.height / EAGLE_SCALE,
+                         self.make_length("1.016") - self.make_length("-1.016"))
+
+
     @use_file('450B679C.sch')
     def test_component_body_polygons(self):
         """ The right component Rectangles are created on SBody objects. """

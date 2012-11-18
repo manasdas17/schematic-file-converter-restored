@@ -45,6 +45,7 @@
 # TODO: handle physical component representation
 
 from collections import defaultdict
+from math import sin, cos, pi
 
 from upconvert.core.design import Design
 from upconvert.core.annotation import Annotation
@@ -179,11 +180,14 @@ class EagleXML(object):
                                  self.make_length(wire.y2))))
 
         for rect in symbol.rectangle:
-            x = self.make_length(rect.x1)
-            y = self.make_length(rect.y1)
-            width = self.make_length(rect.x2) - x
-            height = self.make_length(rect.y2) - y
-            body.add_shape(Rectangle(x, y + height, width, height))
+            rotation = self.make_angle('0' if rect.rot is None else rect.rot)
+            x1, y1 = rotate_point((self.make_length(rect.x1),
+                                   self.make_length(rect.y1)), rotation)
+            x2, y2 = rotate_point((self.make_length(rect.x2),
+                                   self.make_length(rect.y2)), rotation)
+            ux, uy = min(x1, x2), max(y1, y2)
+            lx, ly = max(x1, x2), min(y1, y2)
+            body.add_shape(Rectangle(ux, uy, lx - ux, uy - ly))
 
         for poly in symbol.polygon:
             map(body.add_shape, self.make_shapes_for_poly(poly))
@@ -493,3 +497,17 @@ def get_subattr(obj, name, default=None):
         obj = getattr(obj, attr, None)
 
     return default if obj is None else obj
+
+
+def rotate_point((x, y), angle):
+    """
+    Return the point rotated by the given openjson angle (clockwise).
+    """
+
+    radians = -angle * pi
+
+    mat = [(int(cos(radians)), -int(sin(radians))),
+           (int(sin(radians)), int(cos(radians)))]
+
+    return (x * mat[0][0] + y * mat[0][1],
+            x * mat[1][0] + y * mat[1][1])
