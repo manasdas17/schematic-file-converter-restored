@@ -302,8 +302,8 @@ class RoundedRectangle(Shape):
 
 
 class Arc(Shape):
-    """ arc defined by center point x, y and two angles between which an
-    arc is drawn """
+    """ arc defined by center point x, y, two angles between which an
+    arc is drawn, and a radius """
 
     def __init__(self, x, y, start_angle, end_angle, radius): # pylint: disable=R0913
         super(Arc, self).__init__()
