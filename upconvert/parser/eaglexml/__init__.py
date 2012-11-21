@@ -45,14 +45,14 @@
 # TODO: handle physical component representation
 
 from collections import defaultdict
-from math import sin, cos, pi
+from math import atan2, sin, cos, pi, sqrt, radians
 
 from upconvert.core.design import Design
 from upconvert.core.annotation import Annotation
 from upconvert.core.components import Component, Symbol, SBody, Pin
 from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
-from upconvert.core.shape import Circle, Label, Line, Rectangle, Polygon
+from upconvert.core.shape import Arc, Circle, Label, Line, Rectangle, Polygon
 
 from upconvert.parser.eaglexml.generated_g import parse
 
@@ -174,10 +174,7 @@ class EagleXML(object):
                   if s.name == symbol_name][0]
 
         for wire in symbol.wire:
-            body.add_shape(Line((self.make_length(wire.x1),
-                                 self.make_length(wire.y1)),
-                                (self.make_length(wire.x2),
-                                 self.make_length(wire.y2))))
+            body.add_shape(self.make_shape_for_wire(wire))
 
         for rect in symbol.rectangle:
             rotation = self.make_angle('0' if rect.rot is None else rect.rot)
@@ -224,6 +221,57 @@ class EagleXML(object):
                 body.add_shape(Label(x, y, content, align='left', rotation=rotation))
 
         return body, pin_map, ann_map
+
+
+    def make_shape_for_wire(self, wire):
+        """ Generate an openjson shape for an eaglexml wire. """
+
+        if wire.curve is None:
+            return Line((self.make_length(wire.x1),
+                         self.make_length(wire.y1)),
+                        (self.make_length(wire.x2),
+                         self.make_length(wire.y2)))
+
+        curve, x1, y1, x2, y2 = map(float, (wire.curve, wire.x1, wire.y1, wire.x2, wire.y2))
+
+        if curve < 0:
+            curve = -curve
+            negative = True
+            mult = -1.0
+        else:
+            negative = False
+            mult = 1.0
+
+        if curve > 180.0:
+            major_arc = True
+            curve = 360.0 - curve
+            mult *= -1.0
+        else:
+            major_arc = False
+
+        chordlen = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2))
+
+        radius = chordlen / (2.0 * sin(radians(curve) / 2))
+
+        mx, my = (x1 + x2) / 2, (y1 + y2) / 2 # midpoint between arc points
+
+        h = sqrt(pow(radius, 2) - pow(chordlen / 2, 2)) # height of isoceles
+
+        # calculate center point
+        cx = mx + mult * h * (y1 - y2) / chordlen
+        cy = my + mult * h * (x2 - x1) / chordlen
+
+        if negative:
+            start_angle = atan2(y2 - cy, x2 - cx)
+            end_angle = start_angle + radians(curve) - (pi if major_arc else 0.0)
+        else:
+            start_angle = atan2(y1 - cy, x1 - cx)
+            end_angle = start_angle + radians(curve) + (pi if major_arc else 0.0)
+
+        return Arc(self.make_length(cx), self.make_length(cy),
+                   round(start_angle / pi, 3) % 2.0,
+                   round(end_angle / pi, 3) % 2.0,
+                   self.make_length(radius))
 
 
     def make_shapes_for_poly(self, poly):
@@ -359,8 +407,6 @@ class EagleXML(object):
         """ Fill out an openjson symbol attribute from an eagle instance
         and an openjson instance. """
 
-        # TODO: handle mirror
-
         cpt = self.design.components.components[openjson_inst.library_id]
 
         attr = openjson_inst.symbol_attributes[self.cptgate2body_index[cpt, instance.gate]]
@@ -453,7 +499,7 @@ class EagleXML(object):
             if symattr.flip:
                 point = (symattr.x - pin.p2.y, symattr.y - pin.p2.x)
         elif symattr.rotation == 1.0:
-            point = (symattr.x - pin.p2.x, symattr.y + pin.p2.y)
+            point = (symattr.x - pin.p2.x, symattr.y - pin.p2.y)
             if symattr.flip:
                 point = (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
         elif symattr.rotation == 1.5:
@@ -504,10 +550,10 @@ def rotate_point((x, y), angle):
     Return the point rotated by the given openjson angle (clockwise).
     """
 
-    radians = -angle * pi
+    rads = -angle * pi
 
-    mat = [(int(cos(radians)), -int(sin(radians))),
-           (int(sin(radians)), int(cos(radians)))]
+    mat = [(int(cos(rads)), -int(sin(rads))),
+           (int(sin(rads)), int(cos(rads)))]
 
     return (x * mat[0][0] + y * mat[0][1],
             x * mat[1][0] + y * mat[1][1])
