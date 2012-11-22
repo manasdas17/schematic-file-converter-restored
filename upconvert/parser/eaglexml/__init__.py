@@ -490,24 +490,10 @@ class EagleXML(object):
         cpt = self.design.components.components[inst.library_id]
         pin = self.cptgate2pin_map[cpt, pinref.gate][pinref.pin]
 
-        if symattr.rotation == 0.0:
-            point = (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
-            if symattr.flip:
-                point = (symattr.x - pin.p2.x, symattr.y + pin.p2.y)
-        elif symattr.rotation == 0.5:
-            point = (symattr.x + pin.p2.y, symattr.y - pin.p2.x)
-            if symattr.flip:
-                point = (symattr.x - pin.p2.y, symattr.y - pin.p2.x)
-        elif symattr.rotation == 1.0:
-            point = (symattr.x - pin.p2.x, symattr.y - pin.p2.y)
-            if symattr.flip:
-                point = (symattr.x + pin.p2.x, symattr.y + pin.p2.y)
-        elif symattr.rotation == 1.5:
-            point = (symattr.x - pin.p2.y, symattr.y + pin.p2.x)
-            if symattr.flip:
-                point = (symattr.x + pin.p2.y, symattr.y + pin.p2.x)
+        ox, oy = rotate_point((pin.p2.x, pin.p2.y), symattr.rotation,
+                              flip=symattr.flip)
 
-        return point
+        return (symattr.x + ox, symattr.y + oy)
 
 
     def connect_pinref(self, pinref, point):
@@ -545,9 +531,11 @@ def get_subattr(obj, name, default=None):
     return default if obj is None else obj
 
 
-def rotate_point((x, y), angle):
+def rotate_point((x, y), angle, flip=False):
     """
     Return the point rotated by the given openjson angle (clockwise).
+    If flip is True, then do a vertical flip around the y axis after
+    the rotation.
     """
 
     rads = -angle * pi
@@ -555,5 +543,5 @@ def rotate_point((x, y), angle):
     mat = [(int(cos(rads)), -int(sin(rads))),
            (int(sin(rads)), int(cos(rads)))]
 
-    return (x * mat[0][0] + y * mat[0][1],
+    return ((x * mat[0][0] + y * mat[0][1]) * (-1 if flip else 1),
             x * mat[1][0] + y * mat[1][1])
