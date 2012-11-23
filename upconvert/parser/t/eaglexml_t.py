@@ -285,6 +285,15 @@ class EagleXMLTests(unittest.TestCase):
                          [self.make_point_name("0", "7.62")])
 
 
+    @use_file('S12G_Micro_20EVB_RevA.sch')
+    def test_net_points_connected_flip_rot(self):
+        """ The right net points are connected for a flipped and rotated part. """
+        net = [n for n in self.design.nets if n.net_id == 'PT1'][0]
+        pt = net.points[self.make_point_name("162.56", "33.02")]
+        self.assertEqual(sorted(pt.connected_points),
+                         [self.make_point_name("162.56", "30.48")])
+
+
     @use_file('E1AA60D5.sch')
     def test_net_points_connected_components(self):
         """ The right net points are connected to the right components. """
@@ -354,6 +363,14 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(s.start_angle, 0.75)
         self.assertEqual(s.end_angle, 1.25)
         self.assertEqual(s.radius, parser.make_length('35.915'))
+
+        w = wire(x1='0', y1='25.4', x2='0', y2='-25.4', curve='-180')
+        s = parser.make_shape_for_wire(w)
+        self.assertEqual(s.x, 0)
+        self.assertEqual(s.y, 0)
+        self.assertEqual(s.start_angle, 1.5)
+        self.assertEqual(s.end_angle, 0.5)
+        self.assertEqual(s.radius, parser.make_length('25.4'))
 
         w = wire(x1='25.4', y1='0', x2='-25.4', y2='0', curve='270')
         s = parser.make_shape_for_wire(w)
