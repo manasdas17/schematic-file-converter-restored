@@ -336,29 +336,22 @@ class EagleXML(object):
         if not pin.name or pin.visible not in ('pin', 'both', None):
             return None
 
-        distance = int(self.SCALE * (len(pin.name) * 10) / 2)
+        distance = int(self.SCALE * (len(pin.name) * 5) / 2)
 
-        if pin.rot is not None:
-            if pin.rot.endswith('R90'):
-                x, y = (null_x, null_y + distance)
-                rotation = 1.5
-            elif pin.rot.endswith('R180'):
-                x, y = (null_x - distance, null_y)
-                rotation = 0.0
-            elif pin.rot.endswith('R270'):
-                x, y = (null_x, null_y - distance)
-                rotation = 0.5
-            else:
-                x, y = (null_x + distance, null_y)
-                rotation = 0.0
+        rotation = self.make_angle(pin.rot or '0')
 
-            if pin.rot.startswith('M'):
-                x = -x
-        else:
-            x, y = (null_x + distance, null_y)
+        ox, oy = rotate_point((distance, -3), rotation,
+                              flip=pin.rot and pin.rot.startswith('M'))
+
+        if rotation == 1.0:
             rotation = 0.0
+            oy -= 6
+        elif rotation == 0.5:
+            rotation = 1.5
+            ox += 6
 
-        return Label(x, y, pin.name, align='center', rotation=rotation)
+        return Label(null_x + ox, null_y + oy, pin.name,
+                     align='center', rotation=rotation)
 
 
     def make_component_instances(self, root):
