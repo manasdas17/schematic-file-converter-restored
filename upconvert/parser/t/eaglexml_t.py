@@ -192,8 +192,8 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].p2.x / EAGLE_SCALE, self.make_length("17.78"))
         self.assertEqual(pins[0].p2.y / EAGLE_SCALE, self.make_length("2.54"))
         self.assertEqual(pins[0].label.text, '(ADC3)PB4')
-        self.assertEqual(pins[0].label.x / EAGLE_SCALE, 0)
-        self.assertEqual(pins[0].label.y / EAGLE_SCALE, 18)
+        self.assertEqual(pins[0].label.x / EAGLE_SCALE, 45.0)
+        self.assertEqual(pins[0].label.y / EAGLE_SCALE, 15.0)
         self.assertEqual(pins[0].label._rotation, 0.0)
 
         cpt = self.get_component('diode:ZENER-DIODE:logical')
