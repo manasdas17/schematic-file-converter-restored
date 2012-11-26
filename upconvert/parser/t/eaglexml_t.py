@@ -250,6 +250,17 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(anns[1].y / EAGLE_SCALE, -23)
 
 
+    @use_file('pcb_switch_switch.sch')
+    def test_component_instance_annotations_multi_gates(self):
+        """ Component instance annotations with multiple gates are correct. """
+        inst = self.get_instance('X1')
+        values = []
+        for attr in inst.symbol_attributes:
+            for ann in attr.annotations:
+                values.append(ann.value)
+        self.assertEqual(set(values), set(['SW', 'X1-1', 'X1-2']))
+
+
     @use_file('E1AA60D5.sch')
     def test_nets(self):
         """ The right nets are created. """

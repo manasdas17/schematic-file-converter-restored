@@ -418,6 +418,8 @@ class EagleXML(object):
             ann = Annotation('', ann.x, ann.y, ann.rotation, ann.visible)
             if name == 'name':
                 ann.value = openjson_inst.instance_id
+                if len(openjson_inst.symbol_attributes) > 1:
+                    ann.value += instance.gate or ''
                 attr.add_annotation(ann)
             elif name == 'value' and 'value' in openjson_inst.attributes:
                 ann.value = openjson_inst.attributes['value']
