@@ -195,10 +195,23 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].label.x / EAGLE_SCALE, 45.0)
         self.assertEqual(pins[0].label.y / EAGLE_SCALE, 15.0)
         self.assertEqual(pins[0].label._rotation, 0.0)
-
+        self.assertEqual([p.pin_number for p in pins],
+                         ['(ADC3)PB4', '(ADC2)PB3', '(ADC0)PB5',
+                          '(ADC1)PB2', '(OCP)PB1', '(AREF)PB0',
+                          'VCC', 'GND'])
         cpt = self.get_component('diode:ZENER-DIODE:logical')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(pins[0].label, None)
+        self.assertEqual([p.pin_number for p in pins], ['A', 'C'])
+
+
+    @use_file('Shock Controller.sch')
+    def test_component_body_pin_deduplicate(self):
+        """ Duplicate pin names on different gates are de-duplicated. """
+
+        cpt = self.get_component('con-molex:22-?-04:logical')
+        pin_numbers = [p.pin_number for b in cpt.symbols[0].bodies for p in b.pins]
+        self.assertEqual(pin_numbers, ['S-1', 'S-2', 'S-3', 'S-4'])
 
 
     @use_file('E1AA60D5.sch')

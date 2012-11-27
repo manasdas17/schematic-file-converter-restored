@@ -153,8 +153,11 @@ class EagleXML(object):
         symbol = Symbol()
         cpt.add_symbol(symbol)
 
+        assignment = PinNumberAssignment(lib, deviceset)
+
         for i, gate in enumerate(get_subattr(deviceset, 'gates.gate')):
-            body, pin_map, ann_map = self.make_body_from_symbol(lib, gate.symbol)
+            body, pin_map, ann_map = self.make_body_from_symbol(
+                lib, gate.symbol, assignment.get_pin_number_lookup(gate.name))
             symbol.add_body(body)
             cpt.add_attribute('eaglexml_symbol_%d' % i, gate.symbol)
             cpt.add_attribute('eaglexml_gate_%d' % i, gate.name)
@@ -165,7 +168,7 @@ class EagleXML(object):
         return cpt
 
 
-    def make_body_from_symbol(self, lib, symbol_name):
+    def make_body_from_symbol(self, lib, symbol_name, pin_number_lookup):
         """ Construct an openjson SBody from an eagle symbol in a library. """
 
         body = SBody()
@@ -199,7 +202,8 @@ class EagleXML(object):
             null_point = self.get_pin_null_point(connect_point,
                                                  pin.length, pin.rot)
             label = self.get_pin_label(pin, null_point)
-            pin_map[pin.name] = Pin(pin.name, null_point, connect_point, label)
+            pin_map[pin.name] = Pin(pin_number_lookup(pin.name), null_point,
+                                    connect_point, label)
             if pin.direction:
                 pin_map[pin.name].add_attribute('eaglexml_direction', pin.direction)
             if pin.visible:
@@ -540,3 +544,44 @@ def rotate_point((x, y), angle, flip=False):
 
     return ((x * mat[0][0] + y * mat[0][1]) * (-1 if flip else 1),
             x * mat[1][0] + y * mat[1][1])
+
+
+class PinNumberAssignment(object):
+    """
+    An assignment of pin numbers to a collection of gates and pin names.
+    """
+
+    def __init__(self, lib, deviceset):
+        self.lookups = {} # (gate name, pin name) -> pin number
+        self.reservations = {} # pin number -> (gate name, pin name)
+        self.sequences = {} # pin name -> next sequence number
+
+        for gate in get_subattr(deviceset, 'gates.gate'):
+            symbol = [s for s in get_subattr(lib, 'symbols.symbol')
+                      if s.name == gate.symbol][0]
+            for pin in symbol.pin:
+                self.assign_pin_number(gate.name, pin.name)
+
+    def assign_pin_number(self, gate_name, pin_name):
+        if pin_name in self.sequences or pin_name in self.reservations:
+            if pin_name in self.reservations:
+                self.start_sequence(pin_name)
+            pin_number = pin_name + '-' + str(self.sequences[pin_name])
+            self.sequences[pin_name] += 1
+        else:
+            pin_number = pin_name
+
+        self.lookups[gate_name,  pin_name] = pin_number
+        self.reservations[pin_number] = (gate_name, pin_name)
+
+    def start_sequence(self, pin_number):
+        gate_name, pin_name = self.reservations.pop(pin_number)
+        pin_number += '-1'
+        self.lookups[gate_name,  pin_name] = pin_number
+        self.reservations[pin_number] = (gate_name, pin_name)
+        self.sequences[pin_name] = 2
+
+    def get_pin_number_lookup(self, gate_name):
+        def lookup(pin_name):
+            return self.lookups[gate_name, pin_name]
+        return lookup
