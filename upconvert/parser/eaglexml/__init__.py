@@ -217,9 +217,9 @@ class EagleXML(object):
             y = self.make_length(text.y)
             content = '' if text.valueOf_ is None else text.valueOf_
             rotation = self.make_angle('0' if text.rot is None else text.rot)
-            if content == '>NAME':
+            if content.lower() == '>name':
                 ann_map['name'] = Annotation(content, x, y, rotation, 'true')
-            elif content == '>VALUE':
+            elif content.lower() == '>value':
                 ann_map['value'] = Annotation(content, x, y, rotation, 'true')
             else:
                 body.add_shape(Label(x, y, content, align='left', rotation=rotation))
