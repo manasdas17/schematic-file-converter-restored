@@ -263,6 +263,15 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(anns[1].y / EAGLE_SCALE, -23)
 
 
+    @use_file('WiFi.sch')
+    def test_component_instance_annotations_case_insensitive(self):
+        """ Component instance annotations are correct. """
+        inst = self.get_instance('U$1')
+        anns = inst.symbol_attributes[0].annotations
+        self.assertEqual(len(anns), 1)
+        self.assertEqual(anns[0].value, 'U$1')
+
+
     @use_file('pcb_switch_switch.sch')
     def test_component_instance_annotations_multi_gates(self):
         """ Component instance annotations with multiple gates are correct. """
