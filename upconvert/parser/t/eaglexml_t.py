@@ -234,6 +234,13 @@ class EagleXMLTests(unittest.TestCase):
 
 
     @use_file('E1AA60D5.sch')
+    def test_component_instance_refdes(self):
+        """ Component instance refdes is correct. """
+        inst = self.get_instance('GND3')
+        self.assertEqual(inst.get_attribute('refdes'), 'GND3')
+
+
+    @use_file('E1AA60D5.sch')
     def test_component_instance_position(self):
         """ Component instance position is correct. """
         inst = self.get_instance('GND3')

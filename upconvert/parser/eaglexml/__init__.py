@@ -383,6 +383,7 @@ class EagleXML(object):
         cpt = self.design.components.components[library_id]
 
         self.part2inst[part.name] = ComponentInstance(instance.part, part, library_id, 0)
+        self.part2inst[part.name].add_attribute('refdes', part.name)
 
         # pre-create symbol attributes, to be filled in during
         # instance processing
