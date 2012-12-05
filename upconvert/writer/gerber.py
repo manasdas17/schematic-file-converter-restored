@@ -28,6 +28,7 @@ from tarfile import TarFile
 from zipfile import ZipFile
 import copy
 import errno
+import freetype
 import logging
 
 from upconvert.core.component_instance import FootprintPos
@@ -119,6 +120,7 @@ class Gerber:
 
     def __init__(self):
         self.coord_format = None
+        self.face = freetype.Face('./arial.ttf')
         self._reset()
 
     def _reset(self):
@@ -266,7 +268,7 @@ class Gerber:
         log.debug('creating images for layer "%s"', layer_name)
 
         # trace segments on this layer
-        traces_image = Image(layer_name + '_traces')
+        traces_image = Image(layer_name + '_traces', font_renderer=self.face)
         for segment in design.trace_segments:
             if segment.layer != layer_name:
                 continue
@@ -292,7 +294,7 @@ class Gerber:
         # a separate image is used for each component
         for component_instance in design.component_instances:
             component = design.components.components[component_instance.library_id]
-            component_image = Image(layer_name + ' component ' + component_instance.instance_id)
+            component_image = Image(layer_name + ' component ' + component_instance.instance_id, font_renderer=self.face)
             footprint_pos = component_instance.footprint_pos
             if footprint_pos.side is None:
                 continue
@@ -329,7 +331,7 @@ class Gerber:
         for path in design.paths:
             if layer_name == path.layer:
                 log.debug('adding body for path: %s points, %s, %s, is closed: %s', len(path.points), path.width, path.layer, path.is_closed)
-                path_image = Image('path')
+                path_image = Image('path', font_renderer=self.face)
                 start = path.points[0]
                 for point in path.points[1:]:
                     path_image.add_shape(Line(start, point), Circle(0, 0, path.width), zero_pos, zero_pos)

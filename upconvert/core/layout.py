@@ -20,10 +20,10 @@
 # limitations under the License.
 
 import copy
+import freetype
 import logging
 import re
 
-import freetype
 from upconvert.core.shape import Circle, Label, Line, Point, Rectangle, RoundedRectangle
 
 log = logging.getLogger('core.layout')
@@ -72,11 +72,10 @@ class Image:
         2. the area(s) to be negated (as a subtractive image)
         3. the traces to be laid within the negated area(s)
     """
-    face = freetype.Face('./arial.ttf')
     attr_re = re.compile(r'{{[^}]*}}')
 
 
-    def __init__(self, name='Untitled Image', is_additive=True):
+    def __init__(self, name='Untitled Image', is_additive=True, font_renderer=None):
         self.name = name
         self.is_additive = is_additive
         self.x_repeats = 1
@@ -87,6 +86,7 @@ class Image:
         self.smears = list()
         self.shape_instances = list()
         self.complex_instances = list()
+        self.face = font_renderer
 
     def not_empty(self):
         """ True if image contains only metadata. """
@@ -116,7 +116,7 @@ class Image:
             y_offset = 0
             label_text = self.resolve_text(shapecpy.text, parent.get_attribute)
             for i, c in enumerate(label_text):
-                self.face.load_char(c)
+                self.face.load_char(c, flags=freetype.ft_enums.FT_LOAD_NO_BITMAP)
                 slot = self.face.glyph
                 outline = slot.outline
 
