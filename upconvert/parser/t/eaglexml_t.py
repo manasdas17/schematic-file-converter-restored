@@ -80,28 +80,28 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_library_components(self):
         """ A deviceset should have a matching component. """
-        self.assertTrue('atmel:TINY15L:logical'
+        self.assertTrue('atmel:TINY15L:P'
                         in self.design.components.components)
 
 
     @use_file('E1AA60D5.sch')
     def test_component_symbols(self):
-        """ A logical component should have 1 symbol. """
+        """ A component should have 1 symbol. """
         self.assertEqual(
-            len(self.get_component('atmel:TINY15L:logical').symbols), 1)
+            len(self.get_component('atmel:TINY15L:P').symbols), 1)
 
 
     @use_file('D9CD1423.sch')
     def test_component_bodies(self):
         """ A deviceset with 2 gates should have 2 bodies. """
-        cpt = self.get_component('Discrete:010-DUAL-N-MOSFET*:logical')
+        cpt = self.get_component('Discrete:010-DUAL-N-MOSFET*:_1206-8')
         self.assertEqual(len(cpt.symbols[0].bodies), 2)
 
 
     @use_file('E1AA60D5.sch')
     def test_component_body_lines(self):
         """ The right component Lines are created on SBody objects. """
-        cpt = self.get_component('atmel:TINY15L:logical')
+        cpt = self.get_component('atmel:TINY15L:P')
         lines = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'line']
         self.assertEqual(len(lines), 4)
@@ -114,7 +114,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_component_body_rectangles(self):
         """ The right component Rectangles are created on SBody objects. """
-        cpt = self.get_component('resistor:CPOL-EU:logical')
+        cpt = self.get_component('resistor:CPOL-EU:E2.5-6')
         rects = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'rectangle']
         self.assertEqual(len(rects), 1)
@@ -130,7 +130,7 @@ class EagleXMLTests(unittest.TestCase):
     def test_component_body_rectangles_rot(self):
         """ The right rotations are applied to Rectangles on SBody objects. """
 
-        cpt = self.get_component('myLibrary:L:logical')
+        cpt = self.get_component('myLibrary:L:0805')
         rect = [s for s in cpt.symbols[0].bodies[0].shapes
                 if s.type == 'rectangle'][0]
         self.assertEqual(rect.x / EAGLE_SCALE, self.make_length("-3.556"))
@@ -145,7 +145,7 @@ class EagleXMLTests(unittest.TestCase):
     def test_component_body_polygons(self):
         """ The right component Rectangles are created on SBody objects. """
 
-        cpt = self.get_component('adafruit:LED:logical')
+        cpt = self.get_component('adafruit:LED:5MM')
         polys = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'polygon']
         self.assertEqual(len(polys), 2)
@@ -158,7 +158,7 @@ class EagleXMLTests(unittest.TestCase):
     def test_component_body_circles(self):
         """ The right component Circles are created on SBody objects. """
 
-        cpt = self.get_component('CONNECTER:HEADER_1X10:logical')
+        cpt = self.get_component('CONNECTER:HEADER_1X10:DD')
         circs = [s for s in cpt.symbols[0].bodies[0].shapes
                  if s.type == 'circle']
         self.assertEqual(len(circs), 9)
@@ -171,7 +171,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_component_body_labels(self):
         """ The right component Labels are created on SBody objects. """
-        cpt = self.get_component('con-berg:PN87520:logical')
+        cpt = self.get_component('con-berg:PN87520:')
         labels = [s for s in cpt.symbols[0].bodies[0].shapes
                   if s.type == 'label']
         self.assertEqual(len(labels), 1)
@@ -184,7 +184,7 @@ class EagleXMLTests(unittest.TestCase):
     @use_file('E1AA60D5.sch')
     def test_component_body_pins(self):
         """ The right component Pins are created on SBody objects. """
-        cpt = self.get_component('atmel:TINY15L:logical')
+        cpt = self.get_component('atmel:TINY15L:P')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(len(pins), 8)
         self.assertEqual(pins[0].p1.x / EAGLE_SCALE, 90)
@@ -196,22 +196,25 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].label.y / EAGLE_SCALE, 15.0)
         self.assertEqual(pins[0].label._rotation, 0.0)
         self.assertEqual([p.pin_number for p in pins],
+                         ['2', '3', '1', '7', '6', '5', '8', '4'])
+        self.assertEqual([p.label.text for p in pins],
                          ['(ADC3)PB4', '(ADC2)PB3', '(ADC0)PB5',
                           '(ADC1)PB2', '(OCP)PB1', '(AREF)PB0',
                           'VCC', 'GND'])
-        cpt = self.get_component('diode:ZENER-DIODE:logical')
+        cpt = self.get_component('diode:ZENER-DIODE:DO35Z10')
         pins = cpt.symbols[0].bodies[0].pins
         self.assertEqual(pins[0].label, None)
         self.assertEqual([p.pin_number for p in pins], ['A', 'C'])
 
 
     @use_file('Shock Controller.sch')
-    def test_component_body_pin_deduplicate(self):
-        """ Duplicate pin names on different gates are de-duplicated. """
+    def test_component_body_pin_duplicate_names(self):
+        """ Duplicate pin names on different gates are de-duplicated
+        with pin numbers. """
 
-        cpt = self.get_component('con-molex:22-?-04:logical')
+        cpt = self.get_component('con-molex:22-?-04:27-2041')
         pin_numbers = [p.pin_number for b in cpt.symbols[0].bodies for p in b.pins]
-        self.assertEqual(pin_numbers, ['S-1', 'S-2', 'S-3', 'S-4'])
+        self.assertEqual(pin_numbers, ['1', '2', '3', '4'])
 
 
     @use_file('E1AA60D5.sch')
@@ -341,7 +344,7 @@ class EagleXMLTests(unittest.TestCase):
         pt = net.points[self.make_point_name("76.2", "68.58")]
         self.assertEqual(len(pt.connected_components), 1)
         self.assertEqual(pt.connected_components[0].instance_id, 'IC1')
-        self.assertEqual(pt.connected_components[0].pin_number, '(ADC1)PB2')
+        self.assertEqual(pt.connected_components[0].pin_number, '7')
 
 
     @use_file('D9CD1423.sch')

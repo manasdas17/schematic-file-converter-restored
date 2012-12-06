@@ -260,10 +260,8 @@ class EagleXML(object):
     def add_component_to_deviceset(self, cpt_name, cpt, lib, deviceset):
         """ Add the openjson component to the eagle library and deviceset objects. """
 
-        if cpt.attributes.get('eaglexml_type', 'logical') == 'physical':
-            self.add_physical_component_to_deviceset(cpt, lib, deviceset)
-        else:
-            self.add_logical_component_to_deviceset(cpt_name, cpt, lib, deviceset)
+        self.add_logical_component_to_deviceset(cpt_name, cpt, lib, deviceset)
+        self.add_physical_component_to_deviceset(cpt, lib, deviceset)
 
         self.cpt2lib[cpt_name] = lib
         self.cpt2deviceset[cpt_name] = deviceset
@@ -273,7 +271,8 @@ class EagleXML(object):
         """ Add the openjson component to the eagle library and deviceset objects
         as a logical device with gates. """
 
-        symbol_names = set() # set of names used for eaglexml symbols
+        # set of names used for eaglexml symbols
+        symbol_names = set([s.name for s in lib.symbols.symbol])
         gate_names = set() # set of names used for eaglemxl gates
         self.cpt2pinnames[cpt_name] = []
 

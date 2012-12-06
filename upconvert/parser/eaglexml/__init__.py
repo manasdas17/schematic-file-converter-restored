@@ -32,15 +32,17 @@
 #
 # Eagle components are mapped to OpenJSON components as follows:
 #
-#   + Each eaglexml deviceset becomes a single openjson component
-#     named LIBNAME:DEVICESETNAME:logical which represents the
-#     logical aspect of the device (the symbols and gates).
+#   + Each eaglexml device in a deviceset becomes a single openjson
+#     component named LIBNAME:DEVICESETNAME:DEVICENAME which represents
+#     the logical gates and, eventually, the physical package for that
+#     device. The pin numbers of the logical Symbol come from the pad
+#     names on the physical eaglexml device.
 #
 #   + There is one openjson Symbol in the logical component.
 #
 #   + The openjson Symbols for logical components have one openjson
-#     SBody for each eaglemxl gate, in the order listed in the eaglexml
-#     file.
+#     SBody for each eaglemxl gate, in the order listed in the
+#     eaglexml file.
 #
 # TODO: handle physical component representation
 
@@ -136,24 +138,31 @@ class EagleXML(object):
 
         for lib in get_subattr(root, 'drawing.schematic.libraries.library', ()):
             for deviceset in get_subattr(lib, 'devicesets.deviceset', ()):
-                cpt = self.make_deviceset_component(lib, deviceset)
-                self.design.components.add_component(cpt.name, cpt)
+                for cpt in self.make_deviceset_components(lib, deviceset):
+                    self.design.components.add_component(cpt.name, cpt)
 
 
-    def make_deviceset_component(self, lib, deviceset):
-        """ Construct an openjson component for an eaglexml deviceset
-        in a library."""
+    def make_deviceset_components(self, lib, deviceset):
+        """ Construct openjson components for each device in an
+        eaglexml deviceset in a library."""
 
-        cpt = Component(lib.name + ':' + deviceset.name + ':logical')
+        for device in deviceset.devices.device:
+            yield self.make_device_component(lib, deviceset, device)
 
-        cpt.add_attribute('eaglexml_type', 'logical')
+
+    def make_device_component(self, lib, deviceset, device):
+        """ Construct an openjson component for a device in a deviceset. """
+
+        cpt = Component(lib.name + ':' + deviceset.name + ':' + device.name)
+
         cpt.add_attribute('eaglexml_library', lib.name)
         cpt.add_attribute('eaglexml_deviceset', deviceset.name)
+        cpt.add_attribute('eaglexml_device', device.name)
 
         symbol = Symbol()
         cpt.add_symbol(symbol)
 
-        assignment = PinNumberAssignment(lib, deviceset)
+        assignment = PinNumberAssignment(device)
 
         for i, gate in enumerate(get_subattr(deviceset, 'gates.gate')):
             body, pin_map, ann_map = self.make_body_from_symbol(
@@ -378,7 +387,7 @@ class EagleXML(object):
         if part.name in self.part2inst:
             return self.part2inst[part.name]
 
-        library_id = part.library + ':' + part.deviceset + ':logical'
+        library_id = part.library + ':' + part.deviceset + ':' + part.device
 
         cpt = self.design.components.components[library_id]
 
@@ -552,37 +561,16 @@ class PinNumberAssignment(object):
     An assignment of pin numbers to a collection of gates and pin names.
     """
 
-    def __init__(self, lib, deviceset):
-        self.lookups = {} # (gate name, pin name) -> pin number
-        self.reservations = {} # pin number -> (gate name, pin name)
-        self.sequences = {} # pin name -> next sequence number
+    def __init__(self, device):
+        self.gatepin2pad = {} # (gate name, pin name) -> pad number
 
-        for gate in get_subattr(deviceset, 'gates.gate'):
-            symbol = [s for s in get_subattr(lib, 'symbols.symbol')
-                      if s.name == gate.symbol][0]
-            for pin in symbol.pin:
-                self.assign_pin_number(gate.name, pin.name)
+        if device.connects is None:
+            return
 
-    def assign_pin_number(self, gate_name, pin_name):
-        if pin_name in self.sequences or pin_name in self.reservations:
-            if pin_name in self.reservations:
-                self.start_sequence(pin_name)
-            pin_number = pin_name + '-' + str(self.sequences[pin_name])
-            self.sequences[pin_name] += 1
-        else:
-            pin_number = pin_name
-
-        self.lookups[gate_name,  pin_name] = pin_number
-        self.reservations[pin_number] = (gate_name, pin_name)
-
-    def start_sequence(self, pin_number):
-        gate_name, pin_name = self.reservations.pop(pin_number)
-        pin_number += '-1'
-        self.lookups[gate_name,  pin_name] = pin_number
-        self.reservations[pin_number] = (gate_name, pin_name)
-        self.sequences[pin_name] = 2
+        for connect in device.connects.connect:
+            self.gatepin2pad[connect.gate, connect.pin] = connect.pad
 
     def get_pin_number_lookup(self, gate_name):
         def lookup(pin_name):
-            return self.lookups[gate_name, pin_name]
+            return self.gatepin2pad.get((gate_name, pin_name), pin_name)
         return lookup
