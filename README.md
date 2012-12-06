@@ -63,7 +63,7 @@ Supported Formats
 * KiCad
 * gEDA
 * Fritzing
-* RS274-X Gerber
+* RS274-X Gerber (see note)
 * Eagle
 * Eagle XML             (in testing)
 * ViewDraw / DxDesigner (in testing)
@@ -74,6 +74,8 @@ Supported Formats
 * Altium                (in development)
 * Telesis Netlist       (in development)
 
+Gerber Export Note:
+Gerber export requires the arial.ttf font in the working directory the converter is run from.
 
 Format Wish List
 ---------------
