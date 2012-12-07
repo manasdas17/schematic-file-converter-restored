@@ -181,6 +181,19 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(labels[0]._rotation, 1.5)
 
 
+    @use_file('msp430_f249_ctk.sch')
+    def test_component_body_labels_mirrored(self):
+        """ The right component Labels are created on SBody objects. """
+        cpt = self.get_component('TI_MSP430_v16:F24[X/10]---PM64:')
+        labels = [s for s in cpt.symbols[0].bodies[0].shapes
+                  if s.type == 'label' and s.text == 'P4.6/TB6']
+        self.assertEqual(len(labels), 1)
+        self.assertEqual(labels[0].x / EAGLE_SCALE, self.make_length("36.83"))
+        self.assertEqual(labels[0].y / EAGLE_SCALE, self.make_length("0.0"))
+        self.assertEqual(labels[0]._rotation, 0.0)
+        self.assertEqual(labels[0].align, 'right')
+
+
     @use_file('E1AA60D5.sch')
     def test_component_body_pins(self):
         """ The right component Pins are created on SBody objects. """
@@ -192,7 +205,7 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(pins[0].p2.x / EAGLE_SCALE, self.make_length("17.78"))
         self.assertEqual(pins[0].p2.y / EAGLE_SCALE, self.make_length("2.54"))
         self.assertEqual(pins[0].label.text, '(ADC3)PB4')
-        self.assertEqual(pins[0].label.x / EAGLE_SCALE, 45.0)
+        self.assertEqual(pins[0].label.x / EAGLE_SCALE, 85.0)
         self.assertEqual(pins[0].label.y / EAGLE_SCALE, 15.0)
         self.assertEqual(pins[0].label._rotation, 0.0)
         self.assertEqual([p.pin_number for p in pins],
@@ -430,6 +443,7 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(s.start_angle, 0.75)
         self.assertEqual(s.end_angle, 0.25)
         self.assertEqual(s.radius, parser.make_length('35.915'))
+
 
     def get_component(self, library_id):
         """ Return the component given its id. """

@@ -189,7 +189,7 @@ class EagleXML(object):
             body.add_shape(self.make_shape_for_wire(wire))
 
         for rect in symbol.rectangle:
-            rotation = self.make_angle('0' if rect.rot is None else rect.rot)
+            rotation = make_angle('0' if rect.rot is None else rect.rot)
             x1, y1 = rotate_point((self.make_length(rect.x1),
                                    self.make_length(rect.y1)), rotation)
             x2, y2 = rotate_point((self.make_length(rect.x2),
@@ -225,13 +225,17 @@ class EagleXML(object):
             x = self.make_length(text.x)
             y = self.make_length(text.y)
             content = '' if text.valueOf_ is None else text.valueOf_
-            rotation = self.make_angle('0' if text.rot is None else text.rot)
+            rotation = make_angle('0' if text.rot is None else text.rot)
+            align = 'right' if is_mirrored(text.rot) else 'left'
+            if rotation == 0.5:
+                rotation = 1.5
             if content.lower() == '>name':
                 ann_map['name'] = Annotation(content, x, y, rotation, 'true')
             elif content.lower() == '>value':
                 ann_map['value'] = Annotation(content, x, y, rotation, 'true')
             else:
-                body.add_shape(Label(x, y, content, align='left', rotation=rotation))
+                body.add_shape(Label(x, y, content, align=align,
+                                     rotation=rotation))
 
         return body, pin_map, ann_map
 
@@ -335,7 +339,7 @@ class EagleXML(object):
         else:
             coords = (x + distance, y)
 
-        if rotation.startswith('M'):
+        if is_mirrored(rotation):
             x, y = coords
             coords = (-x, y)
 
@@ -349,22 +353,27 @@ class EagleXML(object):
         if not pin.name or pin.visible not in ('pin', 'both', None):
             return None
 
-        distance = int(self.SCALE * (len(pin.name) * 5) / 2)
+        rotation = make_angle(pin.rot or '0')
 
-        rotation = self.make_angle(pin.rot or '0')
+        ox, oy = rotate_point((5, 0), rotation, flip=is_mirrored(pin.rot))
 
-        ox, oy = rotate_point((distance, -3), rotation,
-                              flip=pin.rot and pin.rot.startswith('M'))
+        align = 'left'
 
-        if rotation == 1.0:
-            rotation = 0.0
-            oy -= 6
+        if rotation == 0.0:
+            oy = -3
         elif rotation == 0.5:
             rotation = 1.5
-            ox += 6
+            align = 'right'
+            ox = 3
+        elif rotation == 1.0:
+            rotation = 0.0
+            align = 'right'
+            oy = -3
+        elif rotation == 1.5:
+            ox = 3
 
         return Label(null_x + ox, null_y + oy, pin.name,
-                     align='center', rotation=rotation)
+                     align=align, rotation=rotation)
 
 
     def make_component_instances(self, root):
@@ -420,8 +429,8 @@ class EagleXML(object):
 
         attr.x = self.make_length(instance.x)
         attr.y = self.make_length(instance.y)
-        attr.flip = (instance.rot is not None and instance.rot.startswith('M'))
-        attr.rotation = self.make_angle(instance.rot or '0')
+        attr.flip = is_mirrored(instance.rot)
+        attr.rotation = make_angle(instance.rot or '0')
 
         if instance.smashed == 'yes':
             annotations = self.iter_instance_annotations(instance)
@@ -450,7 +459,7 @@ class EagleXML(object):
             name = ob.name.lower()
             x = self.make_length(ob.x)
             y = self.make_length(ob.y)
-            rotation = self.make_angle('0' if ob.rot is None else ob.rot)
+            rotation = make_angle('0' if ob.rot is None else ob.rot)
             ann = Annotation(ob.name, x, y, rotation, 'true')
             yield (name, ann)
 
@@ -522,12 +531,20 @@ class EagleXML(object):
         return int(round(float(value) * self.MULT * self.SCALE))
 
 
-    def make_angle(self, value):
-        """ Make an openjson angle measurement from an eagle angle. """
+def make_angle(value):
+    """ Make an openjson angle measurement from an eagle angle. """
 
-        angle = float(value.lstrip('MSR')) / 180
+    angle = float(value.lstrip('MSR')) / 180
 
-        return angle if angle == 0.0 else 2.0 - angle
+    return angle if angle == 0.0 else 2.0 - angle
+
+
+def is_mirrored(rot):
+    """
+    Return True if an eaglexml rotation is mirrored.
+    """
+
+    return rot and rot.startswith('M')
 
 
 def get_subattr(obj, name, default=None):
