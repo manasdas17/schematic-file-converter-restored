@@ -67,7 +67,7 @@ class Component:
     """ The Component class represents a single kind of part (component).
     It can have multiple graphical representations (Symbols), each with
     multiple sections (Bodies).
-    The 'components' of a design is basically it's library of available
+    The 'components' of a design is basically its library of available
     parts.  The actual placed parts on the design are 'Instances' of
     components, and reference their respective component via a unique
     library_id.
