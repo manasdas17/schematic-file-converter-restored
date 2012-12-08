@@ -316,7 +316,7 @@ class ViewDrawSch(ViewDrawBase):
             ckt.add_shape(shape)
             if isinstance(shape, Label):
                 ann = Annotation(shape.text, shape.x, shape.y,
-                                 shape.rotation, True)
+                                 shape._rotation, True)
                 ckt.design_attributes.add_annotation(ann)
 
         for k, v, annot in tree['attr']:
