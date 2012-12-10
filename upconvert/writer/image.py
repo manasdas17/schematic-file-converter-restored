@@ -81,7 +81,7 @@ class Worker:
 
     def draw_design(self):
         """ Render the design into 2 images """
-        if len(self.design.traces) > 0:
+        if len(self.design.trace_segments) > 0:
             self.draw_layout()
         else:
             self.draw_schematic()

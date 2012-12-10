@@ -316,7 +316,7 @@ class ViewDrawSch(ViewDrawBase):
             ckt.add_shape(shape)
             if isinstance(shape, Label):
                 ann = Annotation(shape.text, shape.x, shape.y,
-                                 shape.rotation, True)
+                                 shape._rotation, True)
                 ckt.design_attributes.add_annotation(ann)
 
         for k, v, annot in tree['attr']:
@@ -379,7 +379,8 @@ class ViewDrawSch(ViewDrawBase):
             libkey = self.scaled_component(libname, libnum, scale)
         else:
             libkey = self.lookup(libname, libnum)
-        thisinst = ComponentInstance(inst, None, libkey, 0) #FIXME(shamer): where is the actual library component?
+        thisinst = ComponentInstance(inst, self.lib.components[libkey],
+                                     libkey, 0)
         rot, flip = self.rot_and_flip(rot)
         thisinst.add_symbol_attribute(SymbolAttribute(int(x), int(y),
                                                       rot, flip))
