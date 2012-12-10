@@ -376,6 +376,26 @@ class EagleXMLTests(unittest.TestCase):
         self.assertEqual(symattr.annotations[1].rotation, 0.0)
 
 
+    @use_file('msp430_f249_ctk.sch')
+    def test_smashed_annotations_offset(self):
+        """ The right annotations are created for smashed components. """
+        inst = self.get_instance('SV3')
+        symattr = inst.symbol_attributes[0]
+        self.assertEqual(len(symattr.annotations), 2)
+        self.assertEqual(symattr.annotations[0].value, '14 PIN JTAG')
+        self.assertEqual(symattr.annotations[0].x / EAGLE_SCALE,
+                         self.parser.make_length("110.49") - self.parser.make_length('118.11'))
+        self.assertEqual(symattr.annotations[0].y / EAGLE_SCALE,
+                         self.parser.make_length("127") - self.parser.make_length('139.7'))
+        self.assertEqual(symattr.annotations[0].rotation, 0.0)
+        self.assertEqual(symattr.annotations[1].value, 'SV3')
+        self.assertEqual(symattr.annotations[1].x / EAGLE_SCALE,
+                         self.parser.make_length("114.3") - self.parser.make_length('118.11'))
+        self.assertEqual(symattr.annotations[1].y / EAGLE_SCALE,
+                         self.parser.make_length("150.622") - self.parser.make_length('139.7'))
+        self.assertEqual(symattr.annotations[1].rotation, 0.0)
+
+
     def test_arc_shape(self):
         """ Arc shapes are generated correctly. """
         parser = EagleXML()

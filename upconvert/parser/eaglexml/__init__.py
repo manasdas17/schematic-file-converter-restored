@@ -457,8 +457,8 @@ class EagleXML(object):
 
         for ob in instance.attribute:
             name = ob.name.lower()
-            x = self.make_length(ob.x)
-            y = self.make_length(ob.y)
+            x = self.make_length(ob.x) - self.make_length(instance.x)
+            y = self.make_length(ob.y) - self.make_length(instance.y)
             rotation = make_angle('0' if ob.rot is None else ob.rot)
             ann = Annotation(ob.name, x, y, rotation, 'true')
             yield (name, ann)
