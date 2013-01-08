@@ -34,11 +34,53 @@ class Shape(object):
         self.type = None
         self.attributes = dict()
         self.styles = dict()
+        self.rotation = 0
+        self.flip_horizontal = False
+        self.x = 0
+        self.y = 0
+
+    def rotate(self, rotation, in_place=False):
+        self.rotation += rotation
+
+        if not in_place:
+            self.x, self.y = self.y, self.x
+            if rotation == 0.5 or rotation == -1.5:
+                self.y = -self.y;
+            elif rotation == -0.5 or rotation == 1.5:
+                self.x = -self.x;
+            elif rotation == 1 or rotation == -1:
+                self.x, self.y = -self.y, -self.x
+            else:
+                # p'x = cos(theta) * px - sin(theta) * py
+                # p'y = sin(theta) * px + cos(theta) * py
+                # (reversed to reverse the first reversal.)
+                theta = rotation * pi;
+                x = sin(theta) * self.x + cos(theta) * self.y;
+                y = cos(theta) * self.x - sin(theta) * self.y;
+                self.x = x;
+                self.y = y;
+
+
+    def __eq__(self, other):
+        return (self.x == other.x and
+                self.y == other.y and
+                self.rotation == other.rotation and
+                self.flip_horizontal == other.flip_horizontal)
+
+
+    def flip(self):
+        self.flip_horizontal = not self.flip_horizontal
 
 
     def add_attribute(self, key, value):
         """ Add attribute to a shape """
         self.attributes[key] = value
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates of the shape. """
+        self.x += dx
+        self.y += dy
 
 
     def bounds(self):
@@ -74,12 +116,13 @@ class Rectangle(Shape):
         self.height = height
         self.is_centered = is_centered
 
+
     def __eq__(self, other):
-        return (self.type == other.type and
-                self.x == other.x and self.y == other.y and
-                self.width == other.width and
-                self.height == other.height and
-                self.is_centered == other.is_centered)
+        return (super(Rectangle, self).__eq__(other) and
+                (self.type == other.type and
+                 self.width == other.width and
+                 self.height == other.height and
+                 self.is_centered == other.is_centered))
 
 
     def min_point(self):
@@ -145,17 +188,9 @@ class Rectangle(Shape):
         if rotation == 0:
           return
 
-        if not in_place:
-            self.x, self.y = self.y, self.x
-            if rotation == 0.5 or rotation == -1.5:
-              self.y = -self.y;
-            elif rotation == -0.5 or rotation == 1.5:
-              self.x = -self.x;
-            elif rotation == 1 or rotation == -1:
-              self.x, self.y = -self.y, -self.x
-            else:
-              raise ValueError('non 0.5 multiple rotation')
+        super(Rectangle, self).rotate(rotation, in_place)
 
+        """
         self.width, self.height = self.height, self.width
         if rotation == 0.5 or rotation == -1.5:
           self.height = -self.height;
@@ -165,6 +200,7 @@ class Rectangle(Shape):
           self.width, self.height = -self.height, -self.width
         else:
           raise ValueError('non 0.5 multiple rotation')
+        """
 
 
     def flip(self, do_flip, about=None):
@@ -187,6 +223,14 @@ class RoundedRectangle(Shape):
         self.width = width
         self.height = height
         self.radius = radius
+
+
+    def __eq__(self, other):
+        return (super(RoundedRectangle, self).__eq__(other) and
+                (self.type == other.type and
+                 self.width == other.width and
+                 self.height == other.height and
+                 self.radius == other.radius))
 
 
     def min_point(self):
@@ -243,12 +287,6 @@ class RoundedRectangle(Shape):
         self.radius *= factor
 
 
-    def shift(self, dx, dy):
-        """ Shift the x & y coordinates in the rounded rectangle. """
-        self.x += dx
-        self.y += dy
-
-
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the rectangle. """
         self.y = height - self.y
@@ -270,19 +308,11 @@ class RoundedRectangle(Shape):
 
     def rotate(self, rotation, in_place=False):
         if rotation == 0:
-            return
+          return
 
-        if not in_place:
-            self.x, self.y = self.y, self.x
-            if rotation == 0.5 or rotation == -1.5:
-              self.y = -self.y;
-            elif rotation == -0.5 or rotation == 1.5:
-              self.x = -self.x;
-            elif rotation == 1 or rotation == -1:
-              self.x, self.y = -self.y, -self.x
-            else:
-              raise ValueError('non 0.5 multiple rotation')
+        super(RoundedRectangle, self).rotate(rotation, in_place)
 
+        """
         self.width, self.height = self.height, self.width
         if rotation == 0.5 or rotation == -1.5:
           self.height = -self.height;
@@ -292,6 +322,7 @@ class RoundedRectangle(Shape):
           self.width, self.height = -self.height, -self.width
         else:
           raise ValueError('non 0.5 multiple rotation')
+        """
 
 
     def flip(self, do_flip, about=None):
@@ -313,6 +344,14 @@ class Arc(Shape):
         self.start_angle = start_angle
         self.end_angle = end_angle
         self.radius = radius
+
+
+    def __eq__(self, other):
+        return (super(Arc, self).__eq__(other) and
+                (self.type == other.type and
+                 self.start_angle == other.start_angle and
+                 self.end_angle == other.end_angle and
+                 self.radius == other.radius))
 
 
     def _contains_angle(self, theta):
@@ -391,12 +430,6 @@ class Arc(Shape):
         self.radius *= factor
 
 
-    def shift(self, dx, dy):
-        """ Shift the x & y coordinates in the arc. """
-        self.x += dx
-        self.y += dy
-
-
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the arc. """
         self.y = height - self.y
@@ -428,9 +461,10 @@ class Circle(Shape):
 
 
     def __eq__(self, other):
-        return (self.type == other.type and
-                self.x == other.x and self.y == other.y and
-                self.radius == other.radius)
+        return (super(Circle, self).__eq__(other) and
+                (self.type == other.type and
+                 self.x == other.x and self.y == other.y and
+                 self.radius == other.radius))
 
 
     def min_point(self):
@@ -454,19 +488,7 @@ class Circle(Shape):
 
 
     def rotate(self, rotation, in_place=False):
-        if rotation == 0 or rotation == 2:
-            return
-
-        if not in_place:
-            self.x, self.y = self.y, self.x
-            if rotation == 0.5 or rotation == -1.5:
-              self.y = -self.y;
-            elif rotation == -0.5 or rotation == 1.5:
-              self.x = -self.x;
-            elif rotation == 1 or rotation == -1:
-              self.x, self.y = -self.y, -self.x
-            else:
-              raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
+        super(Circle, self).rotate(rotation, in_place)
 
 
     def flip(self, do_flip, about=None):
@@ -480,12 +502,6 @@ class Circle(Shape):
         self.x *= factor
         self.y *= factor
         self.radius *= factor
-
-
-    def shift(self, dx, dy):
-        """ Shift the x & y coordinates in the circle. """
-        self.x += dx
-        self.y += dy
 
 
     def rebase_y_axis(self, height):
@@ -519,8 +535,6 @@ class Label(Shape):
         self.x = x
         self.y = y
         self.text = text
-        self._rotation = rotation
-        self._flip = flip
 
         self.baseline = baseline
         self.font_size = font_size
@@ -542,6 +556,16 @@ class Label(Shape):
             raise ValueError('Label requires the align to be either "left", "right", or "center"')
 
 
+    def __eq__(self, other):
+        return (super(Label, self).__eq__(other) and
+                (self.type == other.type and
+                 self.text == other.text and
+                 self.font_size == other.font_size and
+                 self.font_family == other.font_family and
+                 self.align == other.align and
+                 self.baseline == other.baseline))
+
+
     def min_point(self):
         """ As a hack, return the label's position. """
         return Point(self.x, self.y)
@@ -561,7 +585,9 @@ class Label(Shape):
     def rotate(self, rotation, in_place=False):
         if rotation == 0 or rotation == 2:
             return
-        self._rotation += rotation
+        self.rotation += rotation
+
+        # FIXME(shamer) use base class rotation
 
         if in_place:
             assert self._min_point
@@ -603,14 +629,21 @@ class Label(Shape):
             elif rotation == 1 or rotation == -1:
               self.x, self.y = -self.y, -self.x
             else:
-              raise ValueError('non 0.5 multiple rotation: {0}'.format(rotation))
+                # p'x = cos(theta) * px - sin(theta) * py
+                # p'y = sin(theta) * px + cos(theta) * py
+                # (reversed to reverse the first reversal.)
+                theta = rotation * pi;
+                x = sin(theta) * self.x + cos(theta) * self.y;
+                y = cos(theta) * self.x - sin(theta) * self.y;
+                self.x = x;
+                self.y = y;
 
 
     def flip(self, do_flip, about=None):
         if not about:
             about = Point(0, 0)
         self.x = -(self.x - about.x) + about.x
-        self._flip ^= do_flip
+        self.flip_horizontal ^= do_flip
         if self._segments:
             for segments in self._segments:
                 segments[0].flip(do_flip, about)
@@ -630,21 +663,6 @@ class Label(Shape):
             self._max_point.scale(factor)
 
 
-    def shift(self, dx, dy):
-        """ Shift the x & y coordinates in the label. """
-        self.x += dx
-        self.y += dy
-
-        if self._min_point:
-            self._min_point.shift(dx, dy)
-        if self._max_point:
-            self._max_point.shift(dx, dy)
-        if self._segments:
-            for segments in self._segments:
-                segments[0].shift(dx, dy)
-                segments[1].shift(dx, dy)
-
-
     def rebase_y_axis(self, height):
         """ Rebase the y coordinate in the label. """
         self.y = height - self.y
@@ -658,7 +676,7 @@ class Label(Shape):
             "font_size": self.font_size,
             "align": self.align,
             "baseline": self.align,
-            "rotation": self._rotation,
+            "rotation": self.rotation,
             "text": self.text,
             "x": int(self.x),
             "y": int(self.y),
@@ -668,7 +686,7 @@ class Label(Shape):
 
 
     def __repr__(self):
-        return '<Label(x={x}, y={y}, text="{text}", font_size={font_size}, font_family="{font_family}", align="{align}", baseline="{baseline}", rotation={_rotation})>'.format(**self.__dict__)
+        return '<Label(x={x}, y={y}, text="{text}", font_size={font_size}, font_family="{font_family}", align="{align}", baseline="{baseline}", rotation={rotation})>'.format(**self.__dict__)
 
 
 
@@ -680,6 +698,13 @@ class Line(Shape):
         self.type = "line"
         self.p1 = Point(p1)
         self.p2 = Point(p2)
+
+
+    def __eq__(self, other):
+        return (super(Line, self).__eq__(other) and
+                (self.type == other.type and
+                 self.p1 == other.p1 and
+                 self.p2 == other.p2))
 
 
     def min_point(self):
@@ -716,6 +741,8 @@ class Line(Shape):
 
 
     def rotate(self, rotation, in_place=False):
+        self.rotation += rotation
+
         dx = self.p1.x
         dy = self.p1.y
         if in_place:
@@ -774,6 +801,12 @@ class Polygon(Shape):
         super(Polygon, self).__init__()
         self.type = "polygon"
         self.points = points or list()
+
+
+    def __eq__(self, other):
+        return (super(Polygon, self).__eq__(other) and
+                (self.type == other.type and
+                 self.points == other.points))
 
 
     def min_point(self):
@@ -852,6 +885,15 @@ class BezierCurve(Shape):
         self.p1 = Point(p1)
         self.p2 = Point(p2)
         self._memo_cache = {'min_point': {}, 'max_point': {}}
+
+
+    def __eq__(self, other):
+        return (super(BezierCurve, self).__eq__(other) and
+                (self.type == other.type and
+                 self.control1 == other.control1 and
+                 self.control2 == other.control2 and
+                 self.p1 == other.p1 and
+                 self.p2 == other.p2))
 
 
     def _line(self):
@@ -988,7 +1030,6 @@ class Moire(Shape):
         self.max_rings = max_rings
         self.hair_thickness = hair_thickness
         self.hair_length = hair_length
-        self.rotation = rotation
 
 
     def min_point(self):
@@ -1156,6 +1197,13 @@ class RegularPolygon(Shape):
         self.rotation = rotation
 
 
+    def __eq__(self, other):
+        return (super(RegularPolygon, self).__eq__(other) and
+                (self.type == other.type and
+                 self.outter_diameter == other.outter_diameter and
+                 self.vertices == other.vertices))
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x + self._max_dist(1)
@@ -1281,13 +1329,20 @@ class Point:
 
         self.x, self.y = self.y, self.x
         if rotation == 0.5 or rotation == -1.5:
-          self.y = -self.y;
+            self.y = -self.y;
         elif rotation == -0.5 or rotation == 1.5:
-          self.x = -self.x;
+            self.x = -self.x;
         elif rotation == 1 or rotation == -1:
-          self.x, self.y = -self.y, -self.x
+            self.x, self.y = -self.y, -self.x
         else:
-          raise ValueError('non 0.5 multiple rotation')
+            # p'x = cos(theta) * px - sin(theta) * py
+            # p'y = sin(theta) * px + cos(theta) * py
+            # (reversed to reverse the first reversal.)
+            theta = rotation * pi;
+            x = sin(theta) * self.x + cos(theta) * self.y;
+            y = cos(theta) * self.x - sin(theta) * self.y;
+            self.x = x;
+            self.y = y;
 
         if about:
             self.shift(about.x, about.y)
@@ -1336,6 +1391,13 @@ class Obround(Shape):
         self.height = height
 
 
+    def __eq__(self, other):
+        return (super(Obround, self).__eq__(other) and
+                (self.type == other.type and
+                 self.width == other.width and
+                 self.height == other.height))
+
+
     def min_point(self):
         """ Return the min point of the shape """
         x = self.x - self.width / 2.0
@@ -1362,12 +1424,6 @@ class Obround(Shape):
         self.y *= factor
         self.width *= factor
         self.height *= factor
-
-
-    def shift(self, dx, dy):
-        """ Shift the x & y coordinates in the oval. """
-        self.x += dx
-        self.y += dy
 
 
     def rebase_y_axis(self, height):
@@ -1397,6 +1453,13 @@ class RoundedSegment(Shape):
         self.p1 = p1
         self.p2 = p2
         self.width = width
+
+
+    def __eq__(self, other):
+        return (super(RoundedSegment, self).__eq__(other) and
+                (self.type == other.type and
+                 self.p1 == other.p1 and
+                 self.p2 == other.p2))
 
 
     def min_point(self):
