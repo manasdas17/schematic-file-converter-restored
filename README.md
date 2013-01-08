@@ -64,6 +64,7 @@ Supported Formats
 * gEDA
 * Fritzing
 * RS274-X Gerber (see note)
+* NC Drill
 * Eagle
 * Eagle XML             (in testing)
 * ViewDraw / DxDesigner (in testing)
@@ -83,7 +84,6 @@ Format Wish List
   This is the list of formats we wish we supported, and will work on or finish someday soon. We are looking for developers to help us so please ping us if you're interested!
 
 * OrCad
-* Drill Data in Excellon format
 * Existing supported formats - layout data
 * DipTrace
 
