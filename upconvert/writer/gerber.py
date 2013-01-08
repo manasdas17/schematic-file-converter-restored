@@ -300,7 +300,7 @@ class Gerber:
                 continue
 
             for idx, footprint_attr in enumerate(component_instance.footprint_attributes):
-                log.debug('footprint pos: %s, side %s, flip %s', footprint_attr.layer, footprint_pos.side, footprint_pos.flip)
+                log.debug('footprint pos: %s, side %s, flip %s', footprint_attr.layer, footprint_pos.side, footprint_pos.flip_horizontal)
                 fp_attr_cpy = copy.deepcopy(footprint_attr)
                 if footprint_attr.layer:
                     if footprint_pos.side == 'bottom':
@@ -393,10 +393,9 @@ class Gerber:
         for primitive in macro.primitives:
             shape = primitive.shape
             exposure = primitive.is_additive
-            rotation = (isinstance(shape, (Moire, Thermal)) and
-                        shape.rotation or
-                        primitive.rotation)
-            rotation = rotation and (2 - rotation) * 180 or 0
+            rotation = shape.rotation #or primitive.rotation
+            rotation = int((2 - rotation) * 180 or 0)
+
             if isinstance(shape, Circle):
                 mods = [SHAPE_TAGS['circle']['int'],
                         exposure,
@@ -479,7 +478,7 @@ class Gerber:
                     self._convert_units(shape.height)]
         elif isinstance(shape, RegularPolygon):
             rot = shape.rotation
-            rotation = rot and (2 - rot) * 180 or 0
+            rotation = int(rot and (2 - rot) * 180 or 0)
             vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.vertices]
             type_ = SHAPE_TAGS['reg_polygon']['char']
             mods = [self._convert_units(shape.outer_diameter),
