@@ -161,29 +161,6 @@ class Image:
                     next_c = label_text[i + 1]
                     x_offset += self.face.get_kerning(c, next_c).x
 
-            # Calculate the bounding fox the label from the segments
-            min_point = [2**100, 2**100]
-            max_point = [-2**100, -2**100]
-            for contour_segments in label_contours:
-                for segments in contour_segments:
-                    min_point[0] = min(segments[0].x, segments[1].x, min_point[0])
-                    max_point[0] = max(segments[0].x, segments[1].x, max_point[0])
-            min_point[1] = 0
-            max_point[1] = int(shapecpy.font_size)
-            shapecpy._min_point = Point(min_point[0], min_point[1])
-            shapecpy._max_point = Point(max_point[0], max_point[1])
-            if shapecpy.align == 'center':
-                shapecpy._min_point.shift(-(x_offset / 2), 0)
-                shapecpy._max_point.shift(-(x_offset / 2), 0)
-            if shapecpy._rotation:
-                shapecpy._min_point.rotate(shapecpy._rotation)
-                shapecpy._max_point.rotate(shapecpy._rotation)
-            if shapecpy._flip:
-                shapecpy.flip(shapecpy._flip)
-            shapecpy._min_point.shift(shapecpy.x, shapecpy.y)
-            shapecpy._max_point.shift(shapecpy.x, shapecpy.y)
-
-
             # Update the segments for pre-render shifts, rotates, alignment
             for contour_segments in label_contours:
                 for segments in contour_segments:
@@ -191,25 +168,37 @@ class Image:
                         segments[0].shift(-(x_offset / 2), 0)
                         segments[1].shift(-(x_offset / 2), 0)
 
-                    if shapecpy._rotation:
-                        segments[0].rotate(shapecpy._rotation)
-                        segments[1].rotate(shapecpy._rotation)
+                    if shapecpy.rotation:
+                        segments[0].rotate(shapecpy.rotation)
+                        segments[1].rotate(shapecpy.rotation)
 
-                    if shapecpy._flip:
-                        segments[0].flip(shapecpy._flip)
-                        segments[1].flip(shapecpy._flip)
+                    if shapecpy.flip_horizontal:
+                        segments[0].flip(shapecpy.flip_horizontal)
+                        segments[1].flip(shapecpy.flip_horizontal)
 
-                    segments[0].shift(shapecpy.x, shapecpy.y)
-                    segments[1].shift(shapecpy.x, shapecpy.y)
                     shapecpy._segments.append(segments)
+
+            # Calculate the bounding fox the label from the segments
+            min_point = [2**100, 2**100]
+            max_point = [-2**100, -2**100]
+            for contour_segments in label_contours:
+                for segments in contour_segments:
+                    min_point[0] = min(segments[0].x, segments[1].x, min_point[0])
+                    max_point[0] = max(segments[0].x, segments[1].x, max_point[0])
+                    min_point[1] = min(segments[0].y, segments[1].y, min_point[1])
+                    max_point[1] = max(segments[0].y, segments[1].y, max_point[1])
+            shapecpy._min_point = Point(min_point[0], min_point[1])
+            shapecpy._max_point = Point(max_point[0], max_point[1])
+
+
 
 
 
         shapecpy.shift(offset.x, offset.y)
         if parent_offset.rotation != 0:
             shapecpy.rotate(parent_offset.rotation)
-        if parent_offset.flip:
-            shapecpy.flip(parent_offset.flip)
+        if parent_offset.flip_horizontal:
+            shapecpy.flip(parent_offset.flip_horizontal)
         shapecpy.shift(parent_offset.x, parent_offset.y)
 
         if offset.rotation != 0:
@@ -232,7 +221,17 @@ class Image:
             #shapecpy.y -= shapecpy.height / 2
             shapecpy.width = abs(shapecpy.width)
             shapecpy.height = abs(shapecpy.height)
-            self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
+            if shapecpy.rotation != 0:
+                instance_name = 'Rect-{width}-{height}-{rotation}'.format(height=shapecpy.height, width=shapecpy.width,
+                                                                          rotation=shapecpy.rotation)
+                shapecpycpy = copy.deepcopy(shapecpy)
+                shapecpycpy.x = 0
+                shapecpycpy.y = 0
+                shapecpycpy.is_centered = True
+                primitives = [Primitive(1, 0.0, shapecpycpy)]
+                self.complex_instances.append(ComplexInstance(instance_name, Point(shapecpy.x, shapecpy.y), primitives))
+            else:
+                self.shape_instances.append(ShapeInstance(Point(shapecpy.x, shapecpy.y), Aperture(None, shapecpy, None)))
 
         elif isinstance(shapecpy, RoundedRectangle):
             # Rounded rectangle is added as a macro with two rectangles to fill out the body and four circles to make up
@@ -253,6 +252,10 @@ class Image:
             primitives.append(Primitive(1, 0.0, Circle(half_width, -half_height, shapecpy.radius)))
             primitives.append(Primitive(1, 0.0, Circle(-half_width, -half_height, shapecpy.radius)))
 
+            # rotate the positioning of the rounded corners (the circles)
+            for primitive in primitives:
+                primitive.shape.rotate(shapecpy.rotation)
+
             instance_name = 'RR-H{height}-W{width}-R{radius}'.format(height=abs(shapecpy.height),
                                                                      width=abs(shapecpy.width),
                                                                      radius=radius)
@@ -271,6 +274,7 @@ class Image:
 
             for segments in shapecpy._segments:
                 line = Line(segments[0], segments[1])
+                line.shift(shapecpy.x, shapecpy.y)
                 self.smears.append(Smear(line, Circle(0, 0, 0.15 * 1000000)))
 
 
