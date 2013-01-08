@@ -277,7 +277,7 @@ class FootprintPos:
         self.x = x
         self.y = y
         self.rotation = rotation
-        self.flip = flip
+        self.flip_horizontal = flip
         self.side = side
 
 
@@ -298,7 +298,7 @@ class FootprintPos:
         self.y = height - self.y
 
     def __repr__(self):
-        return '''<FootprintPos(x={0}, y={1}, rotation={2}, flip={3}, side='{4}')>'''.format(self.x, self.y, self.rotation, self.flip, self.side)
+        return '''<FootprintPos(x={0}, y={1}, rotation={2}, flip={3}, side='{4}')>'''.format(self.x, self.y, self.rotation, self.flip_horizontal, self.side)
 
     def json(self):
         """ Return the body as JSON """
@@ -307,7 +307,7 @@ class FootprintPos:
             "x": int(self.x),
             "y": int(self.y),
             "rotation": self.rotation,
-            "flip": self.flip,
+            "flip": self.flip_horizontal,
             "side": self.side
             }
 
