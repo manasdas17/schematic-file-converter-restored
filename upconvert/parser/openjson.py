@@ -30,7 +30,7 @@ from upconvert.core.component_instance import ComponentInstance, SymbolAttribute
 from upconvert.core.components import Component, Symbol, SBody, Pin, FBody, Footprint
 from upconvert.core.design import Design
 from upconvert.core.design_attributes import DesignAttributes, Metadata
-from upconvert.core.generated_object import parse_gen_obj_json, Path
+from upconvert.core.generated_object import parse_gen_obj_json, Path, Pour
 from upconvert.core.shape import Rectangle, RoundedRectangle, Arc, Circle, Label, Line, Polygon, BezierCurve, RoundedSegment, Point
 from upconvert.core.net import Net, NetPoint, ConnectedComponent
 from upconvert.core.layout import Segment, Layer
@@ -79,6 +79,7 @@ class JSON(object):
         self.parse_trace_segments(read.get('trace_segments'))
         self.parse_layout_objects(read.get('gen_objs'))
         self.parse_paths(read.get('paths'))
+        self.parse_pours(read.get('pours'))
 
         return self.design
 
@@ -120,6 +121,25 @@ class JSON(object):
             layer = path_json['layer']
             path = Path(layer, points, width, is_closed)
             self.design.paths.append(path)
+
+
+    def parse_pours(self, pours_json):
+        if pours_json is None:
+            return None
+
+        for pour_json in pours_json:
+            points = [Point(point_json['x'], point_json['y']) for point_json in pour_json['points']]
+
+            layer = pour_json['layer']
+            subtractive_shapes = [];
+            if 'subtractive_shapes' in pour_json:
+                print pour_json['subtractive_shapes']
+                subtractive_shapes = [self.parse_shape(shape_json) for shape_json in pour_json['subtractive_shapes']]
+            if 'readded_shapes' in pour_json:
+                readded_shapes = [self.parse_shape(shape_json) for shape_json in pour_json['readded_shapes']]
+
+            pour = Pour(layer, points, subtractive_shapes, readded_shapes)
+            self.design.pours.append(pour)
 
 
     def parse_layout_objects(self, gen_objs_json):
