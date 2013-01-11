@@ -36,7 +36,7 @@ def parse_gen_obj_json(gen_obj_json):
     return _parser_types[obj_type](gen_obj_json)
 
 
-class GeneratedObject:
+class GeneratedObject(object):
 
     def __init__(self, x, y, layer, rotation, flip, attributes):
         self.x = x
@@ -297,7 +297,7 @@ _parser_types[CenterCross.type_name] = CenterCross.parse_gen_obj_json
 
 
 
-class Path:
+class Path(object):
     """ A path formed from connected points. """
 
     def __init__(self, layer, points, width, is_closed):
@@ -369,6 +369,82 @@ class Path:
             "layer": self.layer,
             "width": self.width,
             "is_closed": self.is_closed,
+            }
+
+
+
+class Pour(object):
+    """ A pour formed from connected points with additive and subtractive shapes. """
+
+    def __init__(self, layer, points, subtractive_shapes, readded_shapes):
+        self.layer = layer
+        self.points = points
+        self.subtractive_shapes = subtractive_shapes
+        self.readded_shapes = readded_shapes
+
+
+    def min_point(self):
+        """ Return the min point of the shape """
+        if len(self.points) < 1:
+            # by convention
+            x, y = 0, 0
+        else:
+            x = min([pt.x for pt in self.points])
+            y = min([pt.y for pt in self.points])
+        return Point(x, y)
+
+
+    def max_point(self):
+        """ Return the max point of the shape """
+        if len(self.points) < 1:
+            # by convention
+            x, y = 0, 0
+        else:
+            x = max([pt.x for pt in self.points])
+            y = max([pt.y for pt in self.points])
+        return Point(x, y)
+
+
+    def move(self, x, y):
+        """ Move the polygon to an explicit position. """
+        dx = x - self.point[0].x
+        dy = y - self.point[0].y
+
+        for point in self.points:
+            point.x -= dx
+            point.y -= dy
+
+
+    def add_point(self, x, y=None):
+        """ Add a point to the polygon """
+        self.points.append(Point(x, y))
+
+
+    def scale(self, factor):
+        """ Scale the x & y coordinates in the pour. """
+        for point in self.points:
+            point.scale(factor)
+
+
+    def shift(self, dx, dy):
+        """ Shift the x & y coordinates in the pour. """
+        for point in self.points:
+            point.shift(dx, dy)
+
+
+    def rebase_y_axis(self, height):
+        """ Rebase the y coordinate in the pour. """
+        for point in self.points:
+            point.rebase_y_axis(height)
+
+
+    def json(self):
+        """ Return the polygon as JSON """
+        return {
+            "points": [point.json() for point in self.points],
+            "layer": self.layer,
+            "subtractive_shapes": [subtractive_shape.json() for subtractive_shape in self.subtractive_shapes],
+            "readded_shapes": [readded_shape.json() for readded_shape in self.readded_shapes],
             }
 
 
