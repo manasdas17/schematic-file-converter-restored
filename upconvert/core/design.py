@@ -43,6 +43,7 @@ class Design:
         self.layer_options = list()
         self.trace_segments = list()
         self.paths = list()
+        self.pours = list()
         self.layout_objects = list() # vias, plated through holes...
         #self.layout = Layout()
 
