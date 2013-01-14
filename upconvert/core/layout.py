@@ -37,16 +37,14 @@ class Layout:
 
 
 class Layer:
-    """ A layer in the layout (ie, a PCB layer). """
+    """ A layer in the gerber (not a layer in the design). """
 
-    def __init__(self, name='', type_=''):
+    def __init__(self, name='', polarity='dark'):
         self.name = name
-        self.type = type_ # copper/mask/silk/drill
+        self.polarity = polarity
         self.images = list()
         self.apertures = dict()
         self.macros = dict()
-        self.vias = list()
-        self.components = list()
 
 
 class Image:
@@ -191,9 +189,6 @@ class Image:
             shapecpy._max_point = Point(max_point[0], max_point[1])
 
 
-
-
-
         shapecpy.shift(offset.x, offset.y)
         if parent_offset.rotation != 0:
             shapecpy.rotate(parent_offset.rotation)
@@ -206,8 +201,8 @@ class Image:
                 shapecpy.rotate(-offset.rotation, in_place=True)
             else:
                 shapecpy.rotate(offset.rotation, in_place=True)
-        if offset.flip:
-            shapecpy.flip(offset.flip)
+        if offset.flip_horizontal:
+            shapecpy.flip(offset.flip_horizontal)
 
         if isinstance(shapecpy, Line):
             # FIXME(shamer): line  doesn't have an explicit width. Gets used for outlines. Defaulted to 0.15mm
@@ -222,8 +217,10 @@ class Image:
             shapecpy.width = abs(shapecpy.width)
             shapecpy.height = abs(shapecpy.height)
             if shapecpy.rotation != 0:
-                instance_name = 'Rect-{width}-{height}-{rotation}'.format(height=shapecpy.height, width=shapecpy.width,
-                                                                          rotation=shapecpy.rotation)
+                instance_name = 'Rect-W{width}-H{height}-RO{rotation}'.format(height=shapecpy.height,
+                                                                              width=shapecpy.width,
+                                                                              rotation=shapecpy.rotation)
+                # XXX(shamer): additional copy is made so the x, y can be reset for use as a ComplexInstance
                 shapecpycpy = copy.deepcopy(shapecpy)
                 shapecpycpy.x = 0
                 shapecpycpy.y = 0
@@ -256,9 +253,10 @@ class Image:
             for primitive in primitives:
                 primitive.shape.rotate(shapecpy.rotation)
 
-            instance_name = 'RR-H{height}-W{width}-R{radius}'.format(height=abs(shapecpy.height),
-                                                                     width=abs(shapecpy.width),
-                                                                     radius=radius)
+            instance_name = 'RR-H{height}-W{width}-R{radius}-RO{rotation}'.format(height=abs(shapecpy.height),
+                                                                                  width=abs(shapecpy.width),
+                                                                                  radius=radius,
+                                                                                  rotation=shapecpy.rotation)
             self.complex_instances.append(ComplexInstance(instance_name,
                                                           Point(shapecpy.x, shapecpy.y),
                                                           primitives))
@@ -295,14 +293,14 @@ class Fill:
     """
     A closed loop of connected segments (lines/arcs).
 
-    The segments define the outline of the fill. They
-    must be contiguous, listed in order (ie, each seg
-    connects with the previous seg and the next seg)
+    The outline points define the outline of the fill. They
+    must be contiguous, listed in order (ie, each point
+    connects with the previous point and the next point)
     and not intersect each other.
     """
 
-    def __init__(self, segments=None):
-        self.segments = segments or list()
+    def __init__(self, outline_points=None):
+        self.outline_points = outline_points or list()
 
 
 class Smear:
