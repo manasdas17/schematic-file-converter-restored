@@ -133,7 +133,6 @@ class JSON(object):
             layer = pour_json['layer']
             subtractive_shapes = [];
             if 'subtractive_shapes' in pour_json:
-                print pour_json['subtractive_shapes']
                 subtractive_shapes = [self.parse_shape(shape_json) for shape_json in pour_json['subtractive_shapes']]
             if 'readded_shapes' in pour_json:
                 readded_shapes = [self.parse_shape(shape_json) for shape_json in pour_json['readded_shapes']]
@@ -436,6 +435,9 @@ class JSON(object):
             p2 = self.parse_point(shape.get('p2'))
             width = int(shape.get('width'))
             parsed_shape = RoundedSegment(p1, p2, width)
+
+        parsed_shape.rotation = shape.get('rotation', 0.0)
+        parsed_shape.flip_horizontal = shape.get('flip_horizontal', False)
 
         parsed_shape.styles = shape.get('styles') or {}
         parsed_shape.attributes = shape.get('attributes') or {}
