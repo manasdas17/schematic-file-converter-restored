@@ -181,11 +181,11 @@ class FootprintAttribute:
     for every body in the footprint that ComponentInstance is an instance of.
     """
 
-    def __init__(self, x, y, rotation, flip, layer):
+    def __init__(self, x, y, rotation, flip_horizontal, layer):
         self.x = x
         self.y = y
         self.rotation = rotation
-        self.flip = flip
+        self.flip_horizontal = flip_horizontal
         self.layer = layer
 
 
@@ -213,12 +213,12 @@ class FootprintAttribute:
             "x": int(self.x),
             "y": int(self.y),
             "rotation": self.rotation,
-            "flip": self.flip,
+            "flip_horizontal": self.flip_horizontal,
             "layer": self.layer,
             }
 
     def __repr__(self):
-        return '''<FootprintAttribute({0}, {1}, {2}, {3}, '{4}')>'''.format(self.x, self.y, self.rotation, self.flip, self.layer)
+        return '''<FootprintAttribute({0}, {1}, {2}, {3}, '{4}')>'''.format(self.x, self.y, self.rotation, self.flip_horizontal, self.layer)
 
 
 class GenObjAttribute:
