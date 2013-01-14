@@ -32,7 +32,7 @@ import freetype
 import logging
 
 from upconvert.core.component_instance import FootprintPos
-from upconvert.core.layout import Aperture, Image, Macro, MacroAperture, Smear
+from upconvert.core.layout import Aperture, Image, Macro, MacroAperture, Smear, Fill
 from upconvert.core.shape import Circle, Rectangle, Obround, RegularPolygon
 from upconvert.core.shape import Polygon, Moire, Thermal
 from upconvert.core.shape import Point, Arc, Line
@@ -127,6 +127,7 @@ class Gerber:
         self._reset()
 
     def _reset(self):
+        self.layers = list()
         self.images = list()
         self.apertures = list()
         self.macros = list()
@@ -226,8 +227,8 @@ class Gerber:
         # decompose layer data into images and the apertures and macros used to represent the images,
         self._define_images(design, layer_options.name)
 
-        self._define_image_macros()
-        self._define_image_apertures()
+        self._define_macros()
+        self._define_apertures()
 
         # write layer parameters
         layer_file.write(LINE.format(self._get_format_spec(design.layout_units)))
@@ -255,9 +256,15 @@ class Gerber:
             self.status['aperture'] = self.apertures[0]
             layer_file.write(LINE.format(FUNCT.format(type='D', code=self.apertures[0].code)))
 
-        # build image layers - main data section
+        for i in range(len(self.layers)):
+            for param in self._get_image_meta(i, self.layers):
+                layer_file.write(param)
+            for block in self._gen_paths(self.layers[i]):
+                layer_file.write(block)
+
+        # build non-layer images - main data section
         for i in range(len(self.images)):
-            for param in self._get_image_meta(i):
+            for param in self._get_image_meta(i, self.images):
                 layer_file.write(param)
             for block in self._gen_paths(self.images[i]):
                 layer_file.write(block)
@@ -292,6 +299,58 @@ class Gerber:
                         traces_image.add_shape(shape, design, zero_pos, body_attr)
 
         self.images.append(traces_image)
+
+
+        # Pours on this layer
+        for pour in design.pours:
+            log.debug('adding body for pour: %s points, %s', len(pour.points), pour.layer)
+            if layer_name == pour.layer:
+                log.debug('adding body for pour: %s points, %s subtractive shapes', len(pour.points), len(pour.subtractive_shapes))
+                fill_image = Image('pour fill', font_renderer=self.face)
+                fill_image.fills.append(Fill(pour.points))
+                self.images.append(fill_image)
+
+                subtractive_image = Image('pour subtractive shapes', font_renderer=self.face, is_additive=False)
+                for shape in pour.subtractive_shapes:
+                    if shape.type == 'rounded_segment':
+                        trace_smear = Smear(Line(shape.p1, shape.p2), Circle(0, 0, shape.width / 2.0))
+                        subtractive_image.smears.append(trace_smear)
+                    else:
+                        subtractive_image.add_shape(shape, None, FootprintPos(0, 0, 0.0, False, ''), FootprintPos(0, 0, 0.0, False, ''))
+                self.images.append(subtractive_image)
+
+                readded_image = Image('pour readded shapes', font_renderer=self.face, is_additive=True)
+                for shape in pour.readded_shapes:
+                    if shape.type == 'rounded_segment':
+                        trace_smear = Smear(Line(shape.p1, shape.p2), Circle(0, 0, shape.width / 2.0))
+                        readded_image.smears.append(trace_smear)
+                    else:
+                        readded_image.add_shape(shape, None, FootprintPos(0, 0, 0.0, False, ''), FootprintPos(0, 0, 0.0, False, ''))
+                self.images.append(readded_image)
+
+        # trace segments on this layer
+        traces_image = Image(layer_name + '_traces', font_renderer=self.face)
+        for segment in design.trace_segments:
+            if segment.layer != layer_name:
+                continue
+            log.debug('Creating smear for trace: %s', segment)
+
+            # Assumes segment is rounded, straignt
+            trace_smear = Smear(Line(segment.p1, segment.p2), Circle(0, 0, segment.width / 2.0))
+            traces_image.smears.append(trace_smear)
+
+        # Generated objects in the design (vias, PTHs)
+        zero_pos = FootprintPos(0, 0, 0.0, False, 'top')
+        for gen_obj in design.layout_objects:
+            # XXX(shamer): body attr is only being used to hold the layer, other placement details are contained
+            # elsewhere
+            for body_attr, body in gen_obj.bodies(zero_pos, {}):
+                if body_attr.layer == layer_name:
+                    for shape in body.shapes:
+                        traces_image.add_shape(shape, design, zero_pos, body_attr)
+
+        self.images.append(traces_image)
+
 
         # Component aspects on this layer
         # a separate image is used for each component
@@ -343,16 +402,22 @@ class Gerber:
                     path_image.add_shape(Line(path.points[0], path.points[-1]), Circle(0, 0, path.width), zero_pos, zero_pos)
                 self.images.append(path_image)
 
-        # TODO(shamer)
-        # generated objects with aspects on this layer (thermals, vias, pths)
+        # TODO(shamer):
         # text
 
 
-    def _define_image_macros(self):
-        """ Build the macros needed to make the images. """
+    def _define_macros(self):
+        """ Define the macros used in the design. """
         for image in self.images:
-            for complex_instance in image.complex_instances:
-                self._add_macro(complex_instance)
+            self._define_image_macros(image)
+        for layer in self.layers:
+            self._define_image_macros(layer)
+
+
+    def _define_image_macros(self, image):
+        """ Build the macros needed to make the image. """
+        for complex_instance in image.complex_instances:
+            self._add_macro(complex_instance)
 
 
     def _add_macro(self, complex_instance):
@@ -362,16 +427,23 @@ class Gerber:
             self.macros.append(macro)
 
 
-    def _define_image_apertures(self):
-        """ Build the apertures needed to make shapes. """
+    def _define_apertures(self):
+        """ Define the apertures used in the design. """
         for image in self.images:
-            for smear in image.smears:
-                self._add_shape_aperture(smear.shape, None)
-            for shape_instance in image.shape_instances:
-                self._add_shape_aperture(shape_instance.shape,
-                                   shape_instance.hole)
-            for complex_instance in image.complex_instances:
-                self._add_macro_aperture(complex_instance)
+            self._define_image_apertures(image)
+        for layer in self.layers:
+            self._define_image_apertures(layer)
+
+
+    def _define_image_apertures(self, image):
+        """ Build the apertures needed to make shapes. """
+        for smear in image.smears:
+            self._add_shape_aperture(smear.shape, None)
+        for shape_instance in image.shape_instances:
+            self._add_shape_aperture(shape_instance.shape,
+                               shape_instance.hole)
+        for complex_instance in image.complex_instances:
+            self._add_macro_aperture(complex_instance)
 
 
     def _get_format_spec(self, units, max_size=False, max_precision=False):
@@ -518,10 +590,13 @@ class Gerber:
         return LINE.format(ap_def)
 
 
-    def _get_image_meta(self, i):
+    def _get_image_meta(self, image_idx, images):
         """ Generate layer params for the image layer. """
-        image = self.images[i]
-        prev_additive = i > 0 and self.images[i - 1].is_additive or True
+        image = images[image_idx]
+        prev_additive = True
+        if image_idx > 0:
+            prev_additive = images[image_idx - 1].is_additive
+
         if image.name:
             meta = PARAM.format(name='LN',
                                 val=image.name)
@@ -619,9 +694,9 @@ class Gerber:
         fill_mode_on = FUNCT.format(type='G', code='36')
         yield LINE.format(fill_mode_on)
         for fill in fills:
-            for seg in fill.segments:
-                for block in self._draw_seg(seg):
-                    yield LINE.format(block)
+            for point in fill.outline_points:
+                yield LINE.format(COORD.format(x=self._fix(point.x),
+                                               y=self._fix(point.y)))
         fill_mode_off = FUNCT.format(type='G', code='37')
         yield LINE.format(fill_mode_off)
 
