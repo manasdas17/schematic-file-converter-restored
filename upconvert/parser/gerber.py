@@ -212,7 +212,7 @@ class Gerber:
                 cfg_name = infile
                 cfg = open(cfg_name, 'r')
 
-            # define multiple layers from archivea 
+            # define multiple layers from archive
             else:
                 archive = openarchive(infile)
                 batch = archive.namelist if is_zip else archive.getnames
