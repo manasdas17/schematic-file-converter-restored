@@ -197,7 +197,7 @@ class Image:
         shapecpy.shift(parent_offset.x, parent_offset.y)
 
         if offset.rotation != 0:
-            if parent_offset.flip:
+            if parent_offset.flip_horizontal:
                 shapecpy.rotate(-offset.rotation, in_place=True)
             else:
                 shapecpy.rotate(offset.rotation, in_place=True)
