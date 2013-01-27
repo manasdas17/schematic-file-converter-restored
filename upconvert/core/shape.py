@@ -598,7 +598,7 @@ class Label(Shape):
             mid_x = ((self._max_point.x - self._min_point.x) / 2) + self._min_point.x
             mid_y = ((self._max_point.y - self._min_point.y) / 2) + self._min_point.y
 
-            # Rotate the segments in the label about the center point of the shape
+            # Rotate the segments in the label about the midpoint of the shape
             for segments in self._segments:
                 segments[0].shift(-mid_x, -mid_y)
                 segments[1].shift(-mid_x, -mid_y)
@@ -606,12 +606,6 @@ class Label(Shape):
                 segments[1].rotate(rotation)
                 segments[0].shift(mid_x, mid_y)
                 segments[1].shift(mid_x, mid_y)
-
-            # Rotate the label point about the center point
-            anchor = Point(self.x, self.y)
-            anchor.rotate(rotation, about=Point(mid_x, mid_y))
-            self.x = anchor.x
-            self.y = anchor.y
 
         else:
             if self._segments:
