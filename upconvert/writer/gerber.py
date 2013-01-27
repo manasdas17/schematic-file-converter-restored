@@ -402,8 +402,15 @@ class Gerber:
                     path_image.add_shape(Line(path.points[0], path.points[-1]), Circle(0, 0, path.width), zero_pos, zero_pos)
                 self.images.append(path_image)
 
-        # TODO(shamer):
-        # text
+        # stand alone text on the layer
+        text_image = Image('text', font_renderer=self.face)
+        for text in design.pcb_text:
+            if layer_name == text.layer:
+                log.debug('adding body for text: "%s"', text.value)
+                text_image.add_shape(text.label, design, text, zero_pos)
+
+        if text_image.not_empty():
+            self.images.append(text_image)
 
 
     def _define_macros(self):
