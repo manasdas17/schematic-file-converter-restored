@@ -26,10 +26,13 @@ from upconvert.core.shape import Point
 class Annotation:
     """ The Annotation class represents all cases of annotations """
 
-    def __init__(self, value, x, y, rotation, visible): # pylint: disable=R0913
+    def __init__(self, value, x, y, rotation, visible, layer='default', flip_horizontal=False, label=None): # pylint: disable=R0913
         self.value = value
         self.x = x
         self.y = y
+        self.flip_horizontal = flip_horizontal
+        self.label = label
+        self.layer = layer
         self.rotation = rotation
         self.visible = visible
 
@@ -65,10 +68,15 @@ class Annotation:
 
     def json(self):
         """ Return an annotation as JSON """
-        return {
+        anno_json =  {
             "value": self.value,
             "x": int(self.x),
             "y": int(self.y),
+            "layer": self.layer,
+            "flip": self.flip_horizontal,
             "rotation": self.rotation,
             "visible": self.visible
             }
+        if self.label is not None:
+            anno_json["label"] = self.label.json()
+        return anno_json

@@ -44,6 +44,7 @@ class Design:
         self.trace_segments = list()
         self.paths = list()
         self.pours = list()
+        self.pcb_text = list()
         self.layout_objects = list() # vias, plated through holes...
         #self.layout = Layout()
 

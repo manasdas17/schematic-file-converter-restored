@@ -80,6 +80,7 @@ class JSON(object):
         self.parse_layout_objects(read.get('gen_objs'))
         self.parse_paths(read.get('paths'))
         self.parse_pours(read.get('pours'))
+        self.parse_pcb_text(read.get('text'))
 
         return self.design
 
@@ -139,6 +140,15 @@ class JSON(object):
 
             pour = Pour(layer, points, subtractive_shapes, readded_shapes)
             self.design.pours.append(pour)
+
+
+    def parse_pcb_text(self, text_json):
+        if text_json is None:
+            return None
+
+        for text_instance_json in text_json:
+            anno = self.parse_annotation(text_instance_json)
+            self.design.pcb_text.append(anno)
 
 
     def parse_layout_objects(self, gen_objs_json):
@@ -271,13 +281,16 @@ class JSON(object):
         value = annotation.get('value')
         x = int(annotation.get('x'))
         y = int(annotation.get('y'))
+        label = self.parse_label(annotation.get('label'))
+        layer = annotation.get('layer', 'default')
         rotation = float(annotation.get('rotation'))
+        flip_horizontal = annotation.get('flip', False)
         visible = annotation.get('visible')
         if visible is not None and visible.lower() == 'false':
             visible = 'false'
         else:
             visible = 'true'
-        return Annotation(value, x, y, rotation, visible)
+        return Annotation(value, x, y, rotation, visible, layer=layer, flip_horizontal=flip_horizontal, label=label)
 
 
     def parse_components(self, components):
