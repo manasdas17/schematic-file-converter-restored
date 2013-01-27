@@ -273,7 +273,7 @@ class Image:
             for segments in shapecpy._segments:
                 line = Line(segments[0], segments[1])
                 line.shift(shapecpy.x, shapecpy.y)
-                self.smears.append(Smear(line, Circle(0, 0, 0.15 * 1000000)))
+                self.smears.append(Smear(line, Circle(0, 0, 0.1016 * 1000000))) # 4 Mils
 
 
 class Segment:
