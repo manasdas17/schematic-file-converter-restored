@@ -133,17 +133,17 @@ class NCDrill:
         if parent_attr:
             if parent_attr.rotation != 0:
                 pos.rotate(parent_attr.rotation)
-            if parent_attr.flip:
-                pos.flip(parent_attr.flip)
+            if parent_attr.flip_horizontal:
+                pos.flip(parent_attr.flip_horizontal)
             pos.shift(parent_attr.x, parent_attr.y)
 
         if body_attr.rotation != 0:
-            if parent_attr and parent_attr.flip:
+            if parent_attr and parent_attr.flip_horizontal:
                 pos.rotate(-body_attr.rotation, in_place=True)
             else:
                 pos.rotate(body_attr.rotation, in_place=True)
-        if body_attr.flip:
-            shape.flip(body_attr.flip)
+        if body_attr.flip_horizontal:
+            shape.flip(body_attr.flip_horizontal)
 
         log.debug('adding %d hole at %d, %d', shape.radius * 2, pos.x, pos.y)
         if shape.radius not in self._holes:
@@ -178,7 +178,7 @@ class NCDrill:
                 continue
 
             for idx, footprint_attr in enumerate(component_instance.footprint_attributes):
-                log.debug('footprint pos: %s, side %s, flip %s', footprint_attr.layer, footprint_pos.side, footprint_pos.flip)
+                log.debug('footprint pos: %s, side %s, flip %s', footprint_attr.layer, footprint_pos.side, footprint_pos.flip_horizontal)
                 if footprint_attr.layer:
                     footprint_attr.layer = footprint_attr.layer.replace('top', footprint_pos.side)
                 if footprint_attr.layer == hole_layer:
