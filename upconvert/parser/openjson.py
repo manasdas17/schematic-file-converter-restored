@@ -384,6 +384,8 @@ class JSON(object):
 
     def parse_label(self, label):
         """ Extract a label. """
+        if label is None:
+            return None
         x = int(label.get('x'))
         y = int(label.get('y'))
         text = label.get('text')
