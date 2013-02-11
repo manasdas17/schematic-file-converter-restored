@@ -126,7 +126,9 @@ class NCDrill:
 
     def _add_hole(self, parent_attr, body_attr, shape):
         if not isinstance(shape, Circle):
-            raise Unwritable('all holes must be circular')
+            log.error('holes must be circular, found %s', shape)
+            return
+            #raise Unwritable('all holes must be circular')
 
         pos = Point(shape.x, shape.y)
         pos.shift(body_attr.x, body_attr.y)
