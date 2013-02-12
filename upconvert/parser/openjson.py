@@ -404,12 +404,18 @@ class JSON(object):
         # pylint: disable=R0914
         # pylint: disable=R0911
 
+        rotation = shape.get('rotation', 0.0)
+        flip_horizontal = shape.get('flip_horizontal', False)
+
         shape_type = shape.get('type')
         if 'rectangle' == shape_type:
             x = int(shape.get('x'))
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
+            if flip_horizontal:
+                x -= width
+                width = -width
             parsed_shape = Rectangle(x, y, width, height)
         elif 'rounded_rectangle' == shape_type:
             x = int(shape.get('x'))
@@ -417,6 +423,9 @@ class JSON(object):
             height = int(shape.get('height'))
             width = int(shape.get('width'))
             radius = int(shape.get('radius'))
+            if flip_horizontal:
+                x -= width
+                width = -width
             parsed_shape = RoundedRectangle(x, y, width, height, radius)
         elif 'arc' == shape_type:
             x = int(shape.get('x'))
@@ -452,8 +461,8 @@ class JSON(object):
             width = int(shape.get('width'))
             parsed_shape = RoundedSegment(p1, p2, width)
 
-        parsed_shape.rotation = shape.get('rotation', 0.0)
-        parsed_shape.flip_horizontal = shape.get('flip_horizontal', False)
+        parsed_shape.rotation = rotation
+        parsed_shape.flip_horizontal = flip_horizontal
 
         parsed_shape.styles = shape.get('styles') or {}
         parsed_shape.attributes = shape.get('attributes') or {}
