@@ -93,21 +93,22 @@ class PadStack(GeneratedObject):
         for layer_name in attached_layers:
             layer_name = layer_name
             pad = FBody()
-
             # invert top/bottom if the footprint is on the bottom of the board
             if offset.side == 'bottom':
                 rev_sides = {'top': 'bottom', 'bottom': 'top'}
                 layer_name = ' '.join([rev_sides.get(piece, piece) for piece in layer_name.split(' ')])
 
             if shape_type == 'rectangle':
-                pad.add_shape(Rectangle(pos.x + (width / 2), pos.y - (height / 2), width, height))
+                pad.add_shape(Rectangle((width / 2), -(height / 2), width, height))
             elif shape_type == 'rounded rectangle':
-                pad.add_shape(RoundedRectangle(pos.x + (width / 2), pos.y - (height / 2), width, height, radius))
+                pad.add_shape(RoundedRectangle((width / 2), -(height / 2), width, height, radius))
             elif shape_type == 'circle':
-                pad.add_shape(Circle(pos.x, pos.y, radius))
+                pad.add_shape(Circle(0, 0, radius))
             else:
                 raise ValueError('unexpected shape type for padstack')
 
+            pad.rotate(self.rotation)
+            pad.shift(pos.x, pos.y)
             bodies.append((FootprintAttribute(0, 0, 0, False, layer_name), pad))
 
         return bodies
