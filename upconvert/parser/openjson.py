@@ -351,6 +351,8 @@ class JSON(object):
             parsed_shape = self.parse_shape(shape)
             body.add_shape(parsed_shape)
         body.layer = body_json.get('layer')
+        body.rotation = body_json.get('rotation', 0)
+        body.flip_horizontal = body_json.get('flip_horizontal', False)
         return body
 
 

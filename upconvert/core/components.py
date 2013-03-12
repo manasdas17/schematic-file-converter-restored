@@ -279,6 +279,8 @@ class FBody:
     def __init__(self):
         self.shapes = list()
         self.layer = None
+        self.rotation = 0
+        self.flip_horizontal = False
 
 
     def bounds(self):
@@ -321,10 +323,14 @@ class FBody:
         """ Return a footprint as JSON """
         return {
             "shapes":[s.json() for s in self.shapes],
+            "rotation": self.rotation,
+            "flip": self.flip_horizontal,
+            "layer": self.layer
             }
 
 
     def rotate(self, rotation):
+        self.rotation = (self.rotation + rotation) % 2
         for shape in self.shapes:
             shape.rotate(rotation)
 

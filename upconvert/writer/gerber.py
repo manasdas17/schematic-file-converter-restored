@@ -366,13 +366,23 @@ class Gerber:
                 fp_attr_cpy = copy.deepcopy(footprint_attr)
                 if footprint_attr.layer:
                     if footprint_pos.side == 'bottom':
-                        rev_sides = {'top': 'bottom', 'bottom': 'top'}
+                        # XXX(shamer): don't flip, just take the footprint side. This is a temporary fix to address the
+                        # tool not saving the layer correctly for moves on the bottom.
+                        #rev_sides = {'top': 'bottom', 'bottom': 'top'}
+                        rev_sides = {'top': footprint_pos.side, 'bottom': footprint_pos.side}
                         fp_attr_cpy.layer = ' '.join([rev_sides.get(piece, piece) for piece in footprint_attr.layer.split(' ')])
                 if fp_attr_cpy.layer == layer_name:
                     footprint_body = component.footprints[component_instance.footprint_index].bodies[idx]
                     log.debug('adding footprint attribute: %s, %d shapes', fp_attr_cpy, len(footprint_body.shapes))
+                    body_pos = copy.deepcopy(footprint_pos)
+                    if footprint_pos.flip_horizontal != footprint_body.flip_horizontal:
+                        body_pos.rotation = (footprint_pos.rotation - footprint_body.rotation) % 2
+                    else:
+                        body_pos.rotation = (footprint_pos.rotation + footprint_body.rotation) % 2
+                    body_pos.flip_horizontal = (footprint_pos.flip_horizontal != footprint_body.flip_horizontal)
+
                     for shape in footprint_body.shapes:
-                        component_image.add_shape(shape, component_instance, footprint_pos, fp_attr_cpy)
+                        component_image.add_shape(shape, component_instance, body_pos, fp_attr_cpy)
 
             for idx, gen_obj_attr in enumerate(component_instance.gen_obj_attributes):
                 gen_obj = component.footprints[component_instance.footprint_index].gen_objs[idx]
