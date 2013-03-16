@@ -85,7 +85,8 @@ SR_MODS = 'X{x}Y{y}I{i}J{j}'
 FUNCT = '{type}{code}*'
 COORD = 'X{x}Y{y}*'
 COORD_EXT = 'X{x}Y{y}I{i}J{j}*'
-STEALTH = 'X{x}Y{y}D02*'
+PLOT = 'X{x}Y{y}D01*'
+MOVE = 'X{x}Y{y}D02*'
 FLASH = 'X{x}Y{y}D03*'
 LAYER_NAME = '%LN{layer_name}*%'
 LAYER_POLARITY_CLEAR = '%LPC*%'
@@ -491,58 +492,58 @@ class Gerber:
             if isinstance(shape, Circle):
                 mods = [SHAPE_TAGS['circle']['int'],
                         exposure,
-                        self._convert_units(shape.radius * 2),
-                        self._convert_units(shape.x),
-                        self._convert_units(shape.y)]
+                        self._convert_units_str(shape.radius * 2),
+                        self._convert_units_str(shape.x),
+                        self._convert_units_str(shape.y)]
             elif isinstance(shape, Rectangle) and shape.is_centered:
                 mods = [SHAPE_TAGS['center_rectangle']['int'],
                         exposure,
-                        self._convert_units(shape.width),
-                        self._convert_units(shape.height),
-                        self._convert_units(shape.x),
-                        self._convert_units(shape.y),
+                        self._convert_units_str(shape.width),
+                        self._convert_units_str(shape.height),
+                        self._convert_units_str(shape.x),
+                        self._convert_units_str(shape.y),
                         rotation]
             elif isinstance(shape, Rectangle) and not shape.is_centered:
                 mods = [SHAPE_TAGS['rectangle']['int'],
                         exposure,
-                        self._convert_units(shape.width),
-                        self._convert_units(shape.height),
-                        self._convert_units(shape.x),
-                        self._convert_units(shape.y),
+                        self._convert_units_str(shape.width),
+                        self._convert_units_str(shape.height),
+                        self._convert_units_str(shape.x),
+                        self._convert_units_str(shape.y),
                         rotation]
             elif isinstance(shape, Polygon):
-                vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.points]
+                vertices = [(self._convert_units_str(p.x), self._convert_units_str(p.y)) for p in shape.points]
                 v_args = [vertices[i / 2][i % 2]
                           for i in range(len(vertices) * 2)]
                 mods = [SHAPE_TAGS['polygon']['int'],
                         exposure] + v_args + [rotation]
             elif isinstance(shape, RegularPolygon):
-                vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.vertices]
+                vertices = [(self._convert_units_str(p.x), self._convert_units_str(p.y)) for p in shape.vertices]
                 mods = [SHAPE_TAGS['reg_polygon']['int'],
                         exposure,
                         vertices,
-                        self._convert_units(shape.x),
-                        self._convert_units(shape.y),
-                        self._convert_units(shape.outer_diameter),
+                        self._convert_units_str(shape.x),
+                        self._convert_units_str(shape.y),
+                        self._convert_units_str(shape.outer_diameter),
                         rotation]
             elif isinstance(shape, Moire):
                 mods = [SHAPE_TAGS['moire']['int'],
-                        self._convert_units(shape.x),
-                        self._convert_units(shape.y),
-                        self._convert_units(shape.outer_diameter),
-                        self._convert_units(shape.ring_thickness),
-                        self._convert_units(shape.gap_thickness),
-                        self._convert_units(shape.max_rings),
-                        self._convert_units(shape.hair_thickness),
-                        self._convert_units(shape.hair_length),
+                        self._convert_units_str(shape.x),
+                        self._convert_units_str(shape.y),
+                        self._convert_units_str(shape.outer_diameter),
+                        self._convert_units_str(shape.ring_thickness),
+                        self._convert_units_str(shape.gap_thickness),
+                        self._convert_units_str(shape.max_rings),
+                        self._convert_units_str(shape.hair_thickness),
+                        self._convert_units_str(shape.hair_length),
                         rotation]
             elif isinstance(shape, Thermal):
                 mods = [SHAPE_TAGS['thermal']['int'],
-                        self._convert_units(shape.x),
-                        self._convert_units(shape.y),
-                        self._convert_units(shape.outer_diameter),
-                        self._convert_units(shape.inner_diameter),
-                        self._convert_units(shape.gap_thickness),
+                        self._convert_units_str(shape.x),
+                        self._convert_units_str(shape.y),
+                        self._convert_units_str(shape.outer_diameter),
+                        self._convert_units_str(shape.inner_diameter),
+                        self._convert_units_str(shape.gap_thickness),
                         rotation]
             mods = ','.join(str(m) for m in mods)
             prim_def = PRIMITIVE.format(mods=mods)
@@ -559,21 +560,21 @@ class Gerber:
         shape = aperture.shape
         if isinstance(shape, Circle):
             type_ = SHAPE_TAGS['circle']['char']
-            mods = [self._convert_units(shape.radius) * 2]
+            mods = [self._convert_units_str(shape.radius * 2)]
         elif isinstance(shape, Rectangle):
             type_ = SHAPE_TAGS['rectangle']['char']
-            mods = [self._convert_units(shape.width),
-                    self._convert_units(shape.height)]
+            mods = [self._convert_units_str(shape.width),
+                    self._convert_units_str(shape.height)]
         elif isinstance(shape, Obround):
             type_ = SHAPE_TAGS['obround']['char']
-            mods = [self._convert_units(shape.width),
-                    self._convert_units(shape.height)]
+            mods = [self._convert_units_str(shape.width),
+                    self._convert_units_str(shape.height)]
         elif isinstance(shape, RegularPolygon):
             rot = shape.rotation
             rotation = int(rot and (2 - rot) * 180 or 0)
-            vertices = [(self._convert_units(p.x), self._convert_units(p.y)) for p in shape.vertices]
+            vertices = [(self._convert_units_str(p.x), self._convert_units_str(p.y)) for p in shape.vertices]
             type_ = SHAPE_TAGS['reg_polygon']['char']
-            mods = [self._convert_units(shape.outer_diameter),
+            mods = [self._convert_units_str(shape.outer_diameter),
                     vertices,
                     rotation]
         elif isinstance(shape, str):
@@ -583,9 +584,9 @@ class Gerber:
         # add hole mods
         hole = aperture.hole
         if isinstance(hole, Circle):
-            hole_mods = [self._convert_units(hole.radius)]
+            hole_mods = [self._convert_units_str(hole.radius)]
         elif hole:
-            hole_mods = [self._convert_units(hole.width), self._convert_units(hole.height)]
+            hole_mods = [self._convert_units_str(hole.width), self._convert_units_str(hole.height)]
         else:
             hole_mods = []
         mods += hole_mods
@@ -711,9 +712,13 @@ class Gerber:
         fill_mode_on = FUNCT.format(type='G', code='36')
         yield LINE.format(fill_mode_on)
         for fill in fills:
-            for point in fill.outline_points:
-                yield LINE.format(COORD.format(x=self._fix(point.x),
-                                               y=self._fix(point.y)))
+            # Move to the first point in the outline
+            yield LINE.format(MOVE.format(x=self._fix(fill.outline_points[0].x),
+                                          y=self._fix(fill.outline_points[0].y)))
+
+            for point in fill.outline_points[1:]:
+                yield LINE.format(PLOT.format(x=self._fix(point.x),
+                                              y=self._fix(point.y)))
         fill_mode_off = FUNCT.format(type='G', code='37')
         yield LINE.format(fill_mode_off)
 
@@ -790,7 +795,7 @@ class Gerber:
         """ Move the 'photo plotter head' without 'drawing'. """
         loc = Point(self.status['x'], self.status['y'])
         return ((not loc == point) and
-                STEALTH.format(x=self._fix(point.x),
+                MOVE.format(x=self._fix(point.x),
                                y=self._fix(point.y)))
 
 
@@ -819,10 +824,16 @@ class Gerber:
         padded_ord = spec.format(*str(round(unit_ord_, dec)).split('.'))
         return int(padded_ord) and padded_ord or '0'
 
+
     def _convert_units(self, num):
         """ Convert from the core units (nm) to those of the current gerber being written. """
         # FIXME(shamer): adjust to actual units of gerber, is hard coded to mm
-        return num / 1000000.0
+        return (num / 1000000.0)
+
+
+    def _convert_units_str(self, num):
+        """ Convert from the core units (nm) to a string of those of the current gerber being written. """
+        return ('%.10f' % self._convert_units(num)).rstrip('0')
 
 
     def _parse_units(self, unitstr):
