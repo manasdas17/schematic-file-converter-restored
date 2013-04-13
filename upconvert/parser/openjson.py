@@ -415,9 +415,6 @@ class JSON(object):
             y = int(shape.get('y'))
             height = int(shape.get('height'))
             width = int(shape.get('width'))
-            if flip_horizontal:
-                x -= width
-                width = -width
             parsed_shape = Rectangle(x, y, width, height)
         elif 'rounded_rectangle' == shape_type:
             x = int(shape.get('x'))
@@ -425,9 +422,6 @@ class JSON(object):
             height = int(shape.get('height'))
             width = int(shape.get('width'))
             radius = int(shape.get('radius'))
-            if flip_horizontal:
-                x -= width
-                width = -width
             parsed_shape = RoundedRectangle(x, y, width, height, radius)
         elif 'arc' == shape_type:
             x = int(shape.get('x'))

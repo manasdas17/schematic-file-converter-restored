@@ -204,11 +204,11 @@ class Rectangle(Shape):
 
 
     def flip(self, do_flip, about=None):
+        super(Rectangle, self).flip()
         if not about:
             about = Point(0, 0)
         self.width = -self.width
         self.x = -(self.x - about.x) + about.x
-
 
 
 class RoundedRectangle(Shape):

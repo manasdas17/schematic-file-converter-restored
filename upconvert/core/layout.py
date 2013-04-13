@@ -220,6 +220,9 @@ class Image:
                 instance_name = 'Rect-W{width}-H{height}-RO{rotation}'.format(height=shapecpy.height,
                                                                               width=shapecpy.width,
                                                                               rotation=shapecpy.rotation)
+                if shapecpy.flip_horizontal:
+                    instance_name += '-F'
+
                 # XXX(shamer): additional copy is made so the x, y can be reset for use as a ComplexInstance
                 shapecpycpy = copy.deepcopy(shapecpy)
                 shapecpycpy.x = 0
@@ -257,6 +260,9 @@ class Image:
                                                                                   width=abs(shapecpy.width),
                                                                                   radius=radius,
                                                                                   rotation=shapecpy.rotation)
+            if shapecpy.flip_horizontal:
+                instance_name += '-F'
+
             self.complex_instances.append(ComplexInstance(instance_name,
                                                           Point(shapecpy.x, shapecpy.y),
                                                           primitives))

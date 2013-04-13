@@ -502,7 +502,7 @@ class Gerber:
                         self._convert_units_str(shape.height),
                         self._convert_units_str(shape.x),
                         self._convert_units_str(shape.y),
-                        rotation]
+                        rotation if not shape.flip_horizontal else -rotation]
             elif isinstance(shape, Rectangle) and not shape.is_centered:
                 mods = [SHAPE_TAGS['rectangle']['int'],
                         exposure,
