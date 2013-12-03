@@ -142,9 +142,9 @@ class Altium:
                 # after any "=" as value.
                 for prop in property_list:
                     if prop:
-                        property_val = p.split("=")[0]
+                        property_val = prop.split("=")[0]
                         # The negative list index is to handle the cases with "==" instead of "=".
-                        value = p.split("=")[-1]
+                        value = prop.split("=")[-1]
                         # Add the property to the result dictionary.
                         result[property_val] = value
                 # Add the dictionary to the list of parts.
