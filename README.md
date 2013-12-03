@@ -1,7 +1,9 @@
+**WARNING:  Upverter is in the process of overhauling our UPV format to a new version.  We don't expect to maintain the current version, however we look forward to sharing our new version with you when it's ready to go!**
+
+
 The Upverter Universal Format Converter
 =======================================
 A command line python anything-in anything-out file converter to go between the multitude of electrical circuit schematic file formats. This project was started by Upverter (http://upverter.com).
-
 
 Folder Contents
 ---------------
