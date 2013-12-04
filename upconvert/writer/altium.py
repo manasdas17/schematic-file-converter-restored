@@ -23,7 +23,7 @@
 class Altium(object):
     """ The Altium Format Writer """
 
-    def write(self, design, filename):
+    def write(self, filename):
         """ Write the design to the Altium format """
 
         with open(filename, "w") as f:
