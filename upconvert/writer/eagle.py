@@ -233,7 +233,7 @@ class Eagle: # pylint: disable=R0902
             if self.linkedsign:
                 _vis_act_link += self.linkedsignmask
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -317,7 +317,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _schematic = self.no_embed_str + b'\0\0\0\x09'
+            _schematic = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.schematic:
                 _schematic = ''
             elif self.max_embed_len >= len(self.schematic):
@@ -372,7 +372,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -411,7 +411,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -450,7 +450,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -489,7 +489,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -527,7 +527,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -565,7 +565,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_nlen >= len(self.name):
@@ -573,7 +573,7 @@ class Eagle: # pylint: disable=R0902
             else:
                 Eagle.attr_jar_append(self.name)
 
-            _desc = self.no_embed_str + b'\0\0\0\x09'
+            _desc = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.desc:
                 _desc = ''
             elif self.max_embed_dlen >= len(self.desc):
@@ -614,7 +614,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -661,7 +661,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len1 >= len(self.name):
@@ -669,7 +669,7 @@ class Eagle: # pylint: disable=R0902
             else:
                 Eagle.attr_jar_append(self.name)
 
-            _value = self.no_embed_str + b'\0\0\0\x09'
+            _value = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.value:
                 _value = ''
             elif self.max_embed_len2 >= len(self.value):
@@ -733,7 +733,7 @@ class Eagle: # pylint: disable=R0902
             if self.uservalue:
                 _signs += self.uservalue_sign_mask
 
-            _prefix = self.no_embed_str + b'\0\0\0\x09'
+            _prefix = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.prefix:
                 _prefix = ''
             elif self.max_embed_len1 >= len(self.prefix):
@@ -741,7 +741,7 @@ class Eagle: # pylint: disable=R0902
             else:
                 Eagle.attr_jar_append(self.prefix)
 
-            _desc = self.no_embed_str + b'\0\0\0\x09'
+            _desc = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.description:
                 _desc = ''
             elif self.max_embed_len2 >= len(self.description):
@@ -749,7 +749,7 @@ class Eagle: # pylint: disable=R0902
             else:
                 Eagle.attr_jar_append(self.description)
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len3 >= len(self.name):
@@ -788,7 +788,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -913,7 +913,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _attrstechs = self.no_embed_str + b'\0\0\0\x09'
+            _attrstechs = self.no_embed_str + r'\0\0\0' + b'\x09'
             if 0 < len(self.technologies):
                 _at2 = self.delim_techs + self.delim_techs.join(self.technologies)
                 if self.max_embed_len >= len(_at2):
@@ -1347,7 +1347,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -1477,7 +1477,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -1561,7 +1561,7 @@ class Eagle: # pylint: disable=R0902
             """
             _ret_val = None
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -1641,7 +1641,7 @@ class Eagle: # pylint: disable=R0902
                     _addlevel = _ll
                     break
 
-            _name = self.no_embed_str + b'\0\0\0\x09'
+            _name = self.no_embed_str + r'\0\0\0' + b'\x09'
             if None == self.name:
                 _name = ''
             elif self.max_embed_len >= len(self.name):
@@ -1703,7 +1703,7 @@ class Eagle: # pylint: disable=R0902
             elif self.max_embed_len >= len(self.value):
                 _value = self.value
             else:
-                _value = self.no_embed_str + b'\0\0\0\x09'
+                _value = self.no_embed_str + r'\0\0\0' + b'\x09'
                 Eagle.attr_jar_append(self.value)
 
             _ret_val = struct.pack(self.template,
@@ -1980,7 +1980,7 @@ class Eagle: # pylint: disable=R0902
             if self.max_embed_len >= len(_str):
                 _str2 = _str
             else:
-                _str2 = self.no_embed_str + b'\0\0\0\x09'
+                _str2 = self.no_embed_str + r'\0\0\0' + b'\x09'
                 Eagle.attr_jar_append(_str)
 
             _ret_val = struct.pack(self.template,
@@ -2088,7 +2088,7 @@ class Eagle: # pylint: disable=R0902
                     _ndx += 1
                 _cls.append(_val)
 
-            _name = self.name + b'\0'
+            _name = self.name + r'\0'
 
             _ret_val = struct.pack(self.template2x % str(len(_name)),
                                    self.leadint, 
@@ -2107,7 +2107,7 @@ class Eagle: # pylint: disable=R0902
 
     blocksize = 24
     noregblockconst = b'\x13\x12\x99\x19'
-    noregdelimeter = b'\0'
+    noregdelimeter = r'\0'
 
     def __init__(self):
         """ Construct a writer object and initialize it.
