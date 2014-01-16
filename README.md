@@ -6,19 +6,19 @@ A command line python anything-in anything-out file converter to go between the 
 Folder Contents
 ---------------
 
-* `core/` - All of the converter code
+* `upconvert/core/` - All of the converter code
 * `doc/` - Everything related to documentation
-* `library/` - Library files for the software packages that dont export complete files
-* `parser/` - All of the in code
+* `upconvert/library/` - Library files for the software packages that dont export complete files
+* `upconvert/parser/` - All of the in code
 * `test/` - A set of test files for each format
-* `writer/` - All of the out code
+* `upconvert/writer/` - All of the out code
 
 
 Usage
 ---------------
 
 ```bash
-usage: upconvert.py [-h] [-i INPUT] [-f TYPE] [-o OUTPUT] [-s SYMDIRS [SYMDIRS ...]] [-t TYPE]
+usage: python2 -m upconvert.upconverter [-h] [-i INPUT] [-f TYPE] [-o OUTPUT] [-s SYMDIRS [SYMDIRS ...]] [-t TYPE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -47,7 +47,7 @@ Where to Get Help
 ---------------
 
 ```bash
-./upconvert.py -h
+python2 -m upconvert.upconverter -h
 ```
 
   Github: Submit an issue, or pull request.
