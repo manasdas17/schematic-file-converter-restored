@@ -2,7 +2,7 @@
 """ A universal hardware design file format converter using 
 Upverter's Open JSON Interchange Format """
 
-# upconvert.py - A universal hardware design file format converter using
+# upconvert - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
 # Development:  github.com/upverter/schematic-file-converter
 #

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 """ The Telesis Format Writer """
 
-# upconvert.py - A universal hardware design file format converter using
+# upconvert - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
 # Development:  github.com/upverter/schematic-file-converter
 #
