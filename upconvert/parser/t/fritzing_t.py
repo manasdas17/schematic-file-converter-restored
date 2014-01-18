@@ -2,7 +2,7 @@
 #pylint: disable=R0904
 """ The fritzing parser test class """
 
-# upconvert.py - A universal hardware design file format converter using
+# upconvert - A universal hardware design file format converter using
 # Format:       upverter.com/resources/open-json-format/
 # Development:  github.com/upverter/schematic-file-converter
 #
